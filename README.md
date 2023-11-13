@@ -1,4 +1,4 @@
-# Landings
+# Hosters
 
 ## Project Setup
 
