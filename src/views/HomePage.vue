@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Home Page</h1>
+      <h1>Home Page Hoster</h1>
       <p>{{ testMessage }}</p>
     </div>
   </template>
