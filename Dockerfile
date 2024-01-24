@@ -1,9 +1,6 @@
-# Etapa de construcción
-FROM node:lts-alpine
+FROM node:18
 
 RUN npm install -g http-server
-
-RUN mkdir /app
 
 WORKDIR /app
 
@@ -17,5 +14,4 @@ RUN npm run build
 
 EXPOSE 8080
 
-#CMD ["http-server", "dist", "-p", "80"]
-CMD npm run serve
+CMD ["serve", "-s", "dist"]
