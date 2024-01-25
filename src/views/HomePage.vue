@@ -2,6 +2,7 @@
     <div>
       <h1>Home Page Hoster</h1>
       <p>{{ testMessage }}</p>
+        <p>prueba de git</p>
     </div>
   </template>
   
