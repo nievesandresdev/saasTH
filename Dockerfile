@@ -1,17 +1,15 @@
-# Usar imagen base de Nginx
-FROM nginx:stable-alpine
+FROM node:18-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-# Establecer el directorio de trabajo en el directorio donde Nginx sirve los archivos
-WORKDIR /usr/share/nginx/html
+# etapa de producción
+FROM nginx:1.13.12-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Eliminar archivos predeterminados de Nginx
-RUN rm -rf ./*
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar los archivos estáticos construidos
-COPY dist .
-
-# Exponer el puerto 80
 EXPOSE 80
-
-# Iniciar Nginx en primer plano
 CMD ["nginx", "-g", "daemon off;"]
