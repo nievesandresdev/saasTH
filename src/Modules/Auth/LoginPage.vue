@@ -1,17 +1,16 @@
 <template>
   <section id="collaborator-login">
-    <!-- <notify v-if="$page.props.flash" :key="$page.props.flash.id"/> -->
     <LoadingAuth :show="false"/>
-    <div class="flex items-center container-fluid-landing h-screen">
+    <div class="flex items-center container-fluid-landing h-screen font-montserrat">
       <div class="hidden lg:flex justify-around w-full h-min">
         <div class="flex items-center login-hicitty w-max h-min">
           <div>
             <img class="hoster-logo mx-auto cursor-pointer" src="/assets/img/hoster/th_logo.png" alt="" @click="redirect">
-            <div class="my-10  mx-auto" style="width: 300px;">
-              <div class="p-6 text-center border border-gray-300 rounded-xl my-10  mx-auto">
-                <h3 class="text-lg font-light">¿Necesitas ayuda?</h3>
+            <div class="my-10 mx-auto" style="width: 300px;">
+              <div class="p-6 text-center border border-gray-300 rounded-xl my-10 mx-auto">
+                <h3 class="text-lg font-medium">¿Necesitas ayuda?</h3>
                 <p class="text-sm mt-2">Encontrarás atención especializada enviando un whatsapp al siguiente teléfono:</p>
-                <h3 class="text-base font-normal mt-2">(+34) 624 149 605</h3>
+                <h3 class="text-base font-medium mt-2">(+34) 624 149 605</h3>
                 <p class="text-sm mt-2">Horario de atención:</p>
                 <p class="text-sm">8:30 - 14:30</p>
               </div>
@@ -26,12 +25,12 @@
         <div class="login-form-collaborator">
           <div class="form-card bg-white shadow rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
             <form @submit.prevent="submit">
-              <h1 class="text-xl lg:text-22xl  hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
+              <h1 class="text-xl lg:text-22xl hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
               <div class="hmb-4 lg:mb-6 flex flex-col">
                 <label class="font-medium text-lg mb-1">Correo electrónico</label>
                 <input 
                   type="text"
-                  class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-300  text-black border-black focus:border-black" 
+                  class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                   :placeholder="placeholderEmail" 
                   autocomplete="on" 
                   v-model="form.email" 
@@ -46,19 +45,19 @@
                   <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)">
                   <input 
                     :type="visible_pass ? 'text' : 'password'"
-                    class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-300 text-black border-black focus:border-black" 
+                    class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                     id="password" 
                     :placeholder="placeholderPassword"
                     v-model="form.password" required
                   >
                 </div>
               </div>
-              <div class="row justify-content-lg-between">
+              <div class="flex justify-between">
                 <div class="form-remember col-10 col-lg-4 text-left">
                   <input type="checkbox" v-model="form.remember" class="border mr-1 h-6 w-5 rounded">
                   <p class="inline text-sm">Recuérdame</p>
                 </div>
-                <div class="forgot-password text-left text-lg-right  col-10 col-lg-6 pt-1">
+                <div class="forgot-password text-left text-lg-right col-10 col-lg-6 pt-1">
                   <a href="javascript:void(0)" class="text-sm font-medium" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
                 </div>
               </div>
@@ -82,14 +81,49 @@
         <p class="text-lg font-medium mt-8 text-center">La visualización en dispositivos móviles no es posible.</p>
         <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
       </div>
-    </div>   
+    </div>  
+    <ModalWindow :isVisible="showModal" @close="closeModalPass">
+      <template #content>
+        <form @submit.prevent="forgotPass">
+          <div class="mb-4 flex flex-col">
+              <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
+              <p class="text-center text-sm mb-4">
+                  ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
+              </p>
+              <div class="flex flex-col">
+                  <label for="correo" class="font-medium text-sm">Correo electrónico</label>
+                  <input
+                      v-model="forgot.email"
+                      type="text"
+                      class="rounded border-1 w-100 py-2 text-sm"
+                      :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
+                      placeholder="Correo Electrónico"
+                      required
+                      autofocus
+                      autocomplete="username"
+                  >                
+              </div>
+          </div>
+          <div class="px-8 flex justify-center">
+              <button 
+                type="submit" 
+                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+                :disabled="form.processing"
+                :class="{ 'opacity-25': forgot.processing }"
+              >
+              Enviar
+            </button>
+          </div>
+      </form>
+      </template>
+    </ModalWindow>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-//import { usePage, useForm } from '@inertiajs/inertia-vue3';
 import LoadingAuth from './Components/LoadingAuth.vue';
+import ModalWindow from '@/components/ModalWindow.vue'; // Ajusta la ruta según sea necesario
 
 const form = ref({
   email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
@@ -99,16 +133,18 @@ const form = ref({
 
 const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
-const showValidation = ref(true);
-/* const forgot = ref({ email: '' });
-const errorsKey = ref([]); */
+
 const visiblePass = ref(false);
+const showModal = ref(false);
+
+const forgot = ref({
+  email: '',
+  processing: false,
+});
 
 onMounted(() => {
   console.log(localStorage.getItem("pass_email_form"));
 });
-
-
 
 const showPass = (id, bool) => {
   visiblePass.value = bool;
@@ -116,14 +152,30 @@ const showPass = (id, bool) => {
   input.type = input.type === 'password' ? 'text' : 'password';
 };
 
-
 const openForgotPasswordModal = () => {
-  showValidation.value = false;
+  showModal.value = true;
 };
 
+const closeModalPass = () => {
+  showModal.value = false;
+  forgot.value.email = '';
+};
+
+const forgotPass = () => {
+  forgot.value.processing = true;
+  // Aquí iría tu lógica para enviar el correo
+  setTimeout(() => {
+    forgot.value.processing = false;
+    closeModalPass();
+  }, 2000);
+};
 
 </script>
+
 <style scoped>
+*> :not(i){
+  font-family:Montserrat;
+}
 
 .login-form-collaborator .form-collaborator-text::after,
 .login-form-collaborator .form-collaborator-text::before{
@@ -178,4 +230,5 @@ const openForgotPasswordModal = () => {
         right:-5%;
     }
 }
+
 </style>

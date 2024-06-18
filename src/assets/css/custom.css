@@ -25,6 +25,10 @@ button:focus {
   border-width: 0;
 }
 
+[type='checkbox']:checked {
+  background-color: #34a98f !important;
+}
+
 .icon-green {
   filter: invert(41%) sepia(70%) saturate(352%) hue-rotate(116deg) brightness(94%) contrast(96%);
 }

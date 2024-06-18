@@ -10,6 +10,9 @@ module.exports = {
         // fontFamily: {
         //     sans: ['Nunito', ...defaultTheme.fontFamily.sans],
         // },
+        fontFamily: {
+          montserrat: ['Montserrat', 'sans-serif'],
+        },
         colors: {
             black: '#333333',
         },
