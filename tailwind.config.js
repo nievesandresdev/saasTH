@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 // const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -61,7 +60,6 @@ module.exports = {
     //     ],
     // },
 }
-=======
 module.exports = {
   content: [
     "./index.html",
@@ -73,4 +71,3 @@ module.exports = {
   plugins: [require('@tailwindcss/forms')],
 }
 
->>>>>>> Stashed changes
