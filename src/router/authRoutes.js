@@ -3,7 +3,7 @@ import LoginPage from '@/Modules/Auth/LoginPage.vue';
 
 const authRoutes = [
   {
-    path: '/',
+    path: '/login',
     name: 'LoginPage',
     component: LoginPage
   },

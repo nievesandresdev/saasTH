@@ -83,47 +83,50 @@
       </div>
     </div>  
     <ModalWindow :isVisible="showModal" @close="closeModalPass" size="md">
-      <template #content>
-        <form @submit.prevent="forgotPass">
-          <div class="mb-4 flex flex-col">
-              <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
-              <p class="text-center text-sm mb-4">
-                  ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
-              </p>
-              <div class="flex flex-col">
-                  <label for="correo" class="font-medium text-sm">Correo electrónico</label>
-                  <input
-                      v-model="forgot.email"
-                      type="text"
-                      class="rounded border-1 w-100 py-2 text-sm"
-                      :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
-                      placeholder="Correo Electrónico"
-                      required
-                      autofocus
-                      autocomplete="username"
-                  >                
-              </div>
+    <template #content>
+      <form @submit.prevent="forgotPass">
+        <div class="mb-4 flex flex-col">
+          <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
+          <p class="text-center text-sm mb-4">
+            ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
+          </p>
+          <div class="flex flex-col">
+            <label for="correo" class="font-medium text-sm">Correo electrónico</label>
+            <input
+              v-model="forgot.email"
+              type="text"
+              class="rounded border-1 w-100 py-2 text-sm"
+              :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
+              placeholder="Correo Electrónico"
+              required
+              autofocus
+              autocomplete="username"
+            >                
           </div>
-          <div class="px-8 flex justify-center">
-              <button 
-                type="submit" 
-                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-                :disabled="form.processing"
-                :class="{ 'opacity-25': forgot.processing }"
-              >
-              Enviar
-            </button>
-          </div>
+          <div v-if="forgot.message" class="text-center text-green-600 mt-2">{{ forgot.message }}</div>
+          <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
+        </div>
+        <div class="px-8 flex justify-center">
+          <button 
+            type="submit" 
+            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+            :disabled="forgot.processing"
+            :class="{ 'opacity-25': forgot.processing }"
+          >
+            Enviar
+          </button>
+        </div>
       </form>
-      </template>
-    </ModalWindow>
+    </template>
+  </ModalWindow>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import LoadingAuth from './Components/LoadingAuth.vue';
-import ModalWindow from '@/components/ModalWindow.vue'; // Ajusta la ruta según sea necesario
+import ModalWindow from '@/components/ModalWindow.vue'; 
+import { resetPassword } from '@/api/services/auth';
 
 const form = ref({
   email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
@@ -135,10 +138,10 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(false);
+const showModal = ref(true);
 
 const forgot = ref({
-  email: '',
+  email: 'francisco20990@gmail.com',
   processing: false,
 });
 
@@ -161,13 +164,24 @@ const closeModalPass = () => {
   forgot.value.email = '';
 };
 
-const forgotPass = () => {
-  forgot.value.processing = true;
-  // 
-  setTimeout(() => {
+const forgotPass = async () => {
+  const response = await resetPassword({ email: forgot.value.email });
+
+  console.log(response);
+  /* forgot.value.processing = true;
+  forgot.value.message = '';
+  forgot.value.error = '';
+  forgot.value.errors = null;
+
+  try {
+    const response = await resetPassword({ email: forgot.value.email });
+    forgot.value.message = response.data.message;
+  } catch (error) {
+    forgot.value.error = error.response?.data?.message || 'Ha ocurrido un error';
+    forgot.value.errors = error.response?.data?.errors || null;
+  } finally {
     forgot.value.processing = false;
-    closeModalPass();
-  }, 2000);
+  } */
 };
 
 </script>

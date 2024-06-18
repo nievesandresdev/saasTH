@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { i18n } from '@/i18n'
+import { usePreloaderStore } from '@/stores/modules/preloader';
 
 // const locale = localStorage.getItem('locale') || 'es'
 const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
 const URL_BASE_BACKEND_HELPER = process.env.VUE_APP_API_URL_BACKEND_HELPER
 const X_KEY_API = process.env.VUE_APP_X_KEY_API
+
+function getPreloaderStore() {// función auxiliar que devuelve el store de preloader
+  return usePreloaderStore();
+}
 
 axios.interceptors.request.use(config => {
   if (config.showPreloader !== false) {
@@ -32,17 +37,18 @@ axios.interceptors.response.use(response => {
 
 
 export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
+  console.log('SLUG_API', 'lleguexxxs')
   let api_url_backend =  SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER
 
-  const localeStore = 'es';
-  const locale = localeStore.localeCurrent ?? 'es';
+  //const localeStore = 'es';
+  //const locale = localeStore.localeCurrent ?? 'es';
     // const { token } = localStorage
-    const subdomain = localStorage.getItem('subdomain') || null
+    //const subdomain = localStorage.getItem('subdomain') || null
     const defaultHeaders = {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
-      'Accept-Language': locale,
-      'Hotel-SUBDOMAIN': subdomain,
+      'Accept-Language': 'es',
+      //'Hotel-SUBDOMAIN': subdomain,
       'x-key-api': X_KEY_API,
     //   Authorization: 'Bearer ' + `${token}`,
     }
