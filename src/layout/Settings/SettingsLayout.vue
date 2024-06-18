@@ -1,5 +1,5 @@
 <template>
-    <nav class="h-full w-full bg-gray-300">
+    <nav class="h-full w-full bg-white shadow-menu">
         <div class="py-3">
             <p class="text-base font-semibold leading-[120%] py-[10.5px] px-4">WebApp</p>
         </div>
@@ -224,7 +224,7 @@ import { reactive, onMounted } from 'vue'
               },
               {
                   title: 'destino',
-                  icon: '/assets/icons/1.TH.CAMERA.svg',
+                  icon: '/assets/icons/1.TH.DESTINO.svg',
                   expanded: false,
                   group: [
                     {
@@ -405,5 +405,8 @@ const page_url = 'x'
 a:hover{
   color:#333;
   text-decoration: none;
+}
+.shadow-menu{
+  box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
 }
 </style>

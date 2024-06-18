@@ -45,7 +45,7 @@ button:focus {
 }
 
 .icon-white{
-  filter: grayscale(100%) invert(100%) saturate(100%);
+  filter: brightness(0) invert(1);
 }
 
 .icon-orange{
@@ -68,4 +68,8 @@ button:focus {
   white-space: nowrap; /* Evita el salto de línea */
   overflow: hidden; /* Oculta el texto que sobrepasa el ancho del contenedor */
   text-overflow: ellipsis; /* Agrega los tres puntos al final del texto truncado */
+}
+
+.shadow-hoster{
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }
