@@ -13,6 +13,7 @@ body{
 p,a{
     font-family: 'Montserrat', sans-serif !important;
 }
+
 /* Eliminar el anillo (outline) predeterminado en todos los elementos de entrada al enfocar */
 input:focus,
 textarea:focus,
@@ -25,6 +26,10 @@ button:focus {
 
 button:focus {
   border-width: 0;
+}
+
+[type='checkbox']:checked {
+  background-color: #34a98f !important;
 }
 
 .icon-green {
@@ -72,4 +77,57 @@ button:focus {
 
 .shadow-hoster{
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+}
+.container-fluid-landing {
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+@media (min-width:300px){
+    .container-fluid-landing {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (max-width:767px){
+    .container-fluid {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (min-width:768px) and (max-width:1440px){
+    .container-fluid {
+        padding-left: 80px;
+        padding-right: 80px
+    }
+}
+@media (min-width:768px) {
+  .container-fluid-landing {
+    width: 100%;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+@media (min-width:1280px) {
+  .container-fluid{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
+  .container-fluid-landing{
+    max-width: 100%;
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
+ 
+}
+@media (min-width:1441px) {
+  .container-fluid-landing{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
 }
