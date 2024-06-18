@@ -3,19 +3,16 @@ import App from './App.vue'
 import router from './router';
 import { createHead } from '@vueuse/head'
 
-<<<<<<< Updated upstream
 import './assets/css/style.css'; 
 import './assets/css/custom.css'; 
 import './assets/css/buttons.css'; 
 import './assets/css/inputs.css'; 
 import './assets/css/colors.css';
-=======
 //estilos generales
 import './assets/css/main.css'
 
 
 const app = createApp(App);
->>>>>>> Stashed changes
 
 import './assets/css/tailwind.css';
 
