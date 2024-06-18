@@ -82,7 +82,7 @@
         <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
       </div>
     </div>  
-    <ModalWindow :isVisible="showModal" @close="closeModalPass">
+    <ModalWindow :isVisible="showModal" @close="closeModalPass" size="md">
       <template #content>
         <form @submit.prevent="forgotPass">
           <div class="mb-4 flex flex-col">
@@ -163,7 +163,7 @@ const closeModalPass = () => {
 
 const forgotPass = () => {
   forgot.value.processing = true;
-  // Aquí iría tu lógica para enviar el correo
+  // 
   setTimeout(() => {
     forgot.value.processing = false;
     closeModalPass();
