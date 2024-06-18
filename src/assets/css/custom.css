@@ -1,0 +1,123 @@
+html, body,
+h1,h2,h3,h4,h5,h6,
+p{
+    margin: 0;
+    padding: 0;
+}
+body{
+  background-color: #fff;
+}
+*> :not(i){
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Eliminar el anillo (outline) predeterminado en todos los elementos de entrada al enfocar */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+  outline: none;
+  border-width: 1px;
+  box-shadow: none !important;
+}
+
+button:focus {
+  border-width: 0;
+}
+
+.icon-green {
+  filter: invert(41%) sepia(70%) saturate(352%) hue-rotate(116deg) brightness(94%) contrast(96%);
+}
+
+.icon-blue{
+  filter: invert(73%) sepia(29%) saturate(397%) hue-rotate(157deg) brightness(91%) contrast(98%);
+}
+
+.icon-inactive{
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+.icon-black{
+  filter: invert(74%) sepia(69%) saturate(3672%) hue-rotate(355deg) brightness(101%) contrast(102%);
+}
+
+.icon-white{
+  filter: grayscale(100%) invert(100%) saturate(100%);
+}
+
+.icon-orange{
+  filter: invert(74%) sepia(69%) saturate(3672%) hue-rotate(355deg) brightness(101%) contrast(102%);
+}
+
+.icon-gray{
+  filter: grayscale(100%);
+}
+
+/* truncar textos */
+.truncate-2 {
+  overflow: hidden; /* oculta cualquier contenido que se desborde del contenedor */
+  text-overflow: ellipsis; /* agrega tres puntos suspensivos al final del texto */
+  display: -webkit-box; /* para mostrar el contenido en varias líneas*/
+  -webkit-line-clamp: 2; /* para establecer el número máximo de líneas a 2 */
+  -webkit-box-orient: vertical; /* para establecer la dirección de la caja en vertical */
+}
+.truncate-1 {
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Oculta el texto que sobrepasa el ancho del contenedor */
+  text-overflow: ellipsis; /* Agrega los tres puntos al final del texto truncado */
+}
+
+.container-fluid-landing {
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+@media (min-width:300px){
+    .container-fluid-landing {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (max-width:767px){
+    .container-fluid {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (min-width:768px) and (max-width:1440px){
+    .container-fluid {
+        padding-left: 80px;
+        padding-right: 80px
+    }
+}
+@media (min-width:768px) {
+  .container-fluid-landing {
+    width: 100%;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+@media (min-width:1280px) {
+  .container-fluid{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
+  .container-fluid-landing{
+    max-width: 100%;
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
+ 
+}
+@media (min-width:1441px) {
+  .container-fluid-landing{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
+}
