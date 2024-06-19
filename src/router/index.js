@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // Importaciones de las rutas específicas por módulo
 import authRoutes from './authRoutes'
+import dashboardRoutes from './dashboardRoutes'
+
 import settingsGroupRoutes from './settingsGroupRoutes'
 // Importaciones de stores
 
@@ -14,6 +16,7 @@ const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFo
 // Configuración de rutas
 const routes = [
   ...authRoutes,
+  ...dashboardRoutes,
   //grupo para la seccion de configuraciones
   ...settingsGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
