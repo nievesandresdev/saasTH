@@ -6,12 +6,12 @@ const dashboardRoutes = [
     {
       path: '/dashboard',
       component: AppLayout,
+      meta: { sidebarRight: 'SidebarMockup'},
       children: [
         {
           name: 'DashboardIndex',
           path: '',
-          component: Index,
-          meta: { sidebarRight: 'SidebarMockup'},  
+          component: Index
         },
       ],
     },

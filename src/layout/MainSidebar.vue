@@ -1,5 +1,5 @@
 <template>
-    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white">
+    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full overflow-y-auto">
         <!-- select hotel -->
         <div class="flex flex-shrink-0 p-2">
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
@@ -20,7 +20,7 @@
             </div>
         </button>
         <template v-for="(section, index) in menu_links" :key="index">
-            <div class="mt-4 py-2.5 h-10 w-0 group-hover:w-[188px] overflow-hidden group-hover:pl-3 transition-all duration-500 ease-in-out">
+            <div class="mt-4 py-2.5 min-h-[40px] h-10  w-0 group-hover:w-[188px] overflow-hidden group-hover:pl-3 transition-all duration-500 ease-in-out">
                 <p class="text-sm font-semibold">
                     {{ section.title }}
                 </p>
@@ -42,7 +42,7 @@
         </template>
 
         <!-- help, user and news -->
-        <div class="mt-auto mb-4">
+        <div class="mt-auto mb-4 pt-4">
             <button 
                 v-for="(button, indexButton) in user_buttons" :key="indexButton"
                 class="rounded-[10px] flex items-center p-1 max-h-[40px]"
