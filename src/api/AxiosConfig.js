@@ -37,7 +37,7 @@ axios.interceptors.response.use(response => {
 
 
 export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
-  console.log('SLUG_API', 'lleguexxxs')
+  console.log('TESTAPIHTTP', 'lleguexxxs')
   let api_url_backend =  SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER
 
   //const localeStore = 'es';

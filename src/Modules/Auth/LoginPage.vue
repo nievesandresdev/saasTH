@@ -119,6 +119,17 @@
       </form>
     </template>
   </ModalWindow>
+
+  <!-- modal alert -->
+  <ModalWindow v-if="showTokenExpiredModal" :isVisible="showTokenExpiredModal" @close="showTokenExpiredModal = false">
+      <template #content>
+        <div class="p-4">
+          <h2 class="text-lg font-medium">Oh lo siento</h2>
+          <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
+          <button @click="showTokenExpiredModal = false">Cerrar</button>
+        </div>
+      </template>
+    </ModalWindow>
   </section>
 </template>
 
@@ -127,6 +138,7 @@ import { ref, onMounted } from 'vue';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import ModalWindow from '@/components/ModalWindow.vue'; 
 import { resetPassword } from '@/api/services/auth';
+import { useRoute } from 'vue-router';
 
 const form = ref({
   email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
@@ -140,12 +152,19 @@ const placeholderPassword = ref('********');
 const visiblePass = ref(false);
 const showModal = ref(true);
 
+
+const showTokenExpiredModal = ref(false);
+const route = useRoute();
+
 const forgot = ref({
   email: 'francisco20990@gmail.com',
   processing: false,
 });
 
 onMounted(() => {
+  if (route.query.tokenExpired) {
+    showTokenExpiredModal.value = true;
+  }
   console.log(localStorage.getItem("pass_email_form"));
 });
 
