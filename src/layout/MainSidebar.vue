@@ -3,24 +3,31 @@
         <!-- select hotel -->
         <div class="flex flex-shrink-0 p-2">
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
-            <div class="w-0 group-hover:w-[188px] overflow-hidden group-hover:pl-4 flex items-center transition-all duration-500 ease-in-out">
+            <div 
+                :class="`flex items-center ${widthMenu} ${displayedMenu ? 'pl-4' : 'group-hover:pl-4'}`"
+            >
                 <p class="text-lg font-semibold ml-2 whitespace-nowrap text-left leading-[120%]">Nombre Hotel</p>
                 <img class="w-3 h-3 ml-auto" src="/assets/icons/1.TH.I.dropdown.svg" alt="">
             </div>
         </div>
         
         <!-- links -->
-        <button 
+        <router-link
             class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
-            :class="{'hbg-green-600 shadow-lg':false,'hover-gray-100':!false}"
+            :class="{'hbg-green-600 shadow-lg':$route.name == 'DashboardIndex','hover-gray-100':$route.name !== 'DashboardIndex'}"
+            to="/dashboard"
         >
-            <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':false}">
-            <div class="w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out">
-                <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':false}">Dashboard</p>
+            <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':$route.name == 'DashboardIndex'}">
+            <div :class="widthMenu">
+                <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':$route.name == 'DashboardIndex'}">
+                    Dashboard
+                </p>
             </div>
-        </button>
+        </router-link>
         <template v-for="(section, index) in menu_links" :key="index">
-            <div class="mt-4 py-2.5 min-h-[40px] h-10  w-0 group-hover:w-[188px] overflow-hidden group-hover:pl-3 transition-all duration-500 ease-in-out">
+            <div 
+                :class="`mt-4 py-2.5 min-h-[40px] h-10 ${widthMenu} ${displayedMenu ? 'pl-3' : 'group-hover:pl-3'}`"
+            >
                 <p class="text-sm font-semibold">
                     {{ section.title }}
                 </p>
@@ -28,16 +35,17 @@
             <div 
                 class="rounded-[10px] hbg-green-200"
             >
-                <button
+                <router-link
                     v-for="(link, indexLink) in section.group" :key="indexLink"
+                    :to="link.url"
                     class="rounded-[10px] flex items-center p-2"
                     :class="{'hbg-green-600 shadow-lg':link.selected,'hover-gray-100':!link.selected}"
                 >
                     <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':link.selected}">
-                    <div class="w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out">
+                    <div :class="widthMenu">
                         <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':link.selected}">{{link.title}}</p>
                     </div>
-                </button>
+                </router-link>
             </div>
         </template>
 
@@ -52,7 +60,7 @@
                     class="w-8 h-8 rounded-full" :src="button.icon"
                     :class="{'icon-white':false,'border border-white':false}"
                 >
-                <div class="w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out">
+                <div :class="widthMenu">
                     <p 
                         class="text-sm font-semibold ml-2 text-left leading-[120%]"
                         :class="{'text-white': false}"
@@ -64,7 +72,10 @@
     </div>
 </template>
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const menu_links = reactive([
     {
@@ -73,17 +84,20 @@ const menu_links = reactive([
             {
                 title: 'Estancias',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Reseñas',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Análisis',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             
         ],
@@ -94,27 +108,32 @@ const menu_links = reactive([
             {
                 title: 'WebApp',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Comunicaciones',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Plataformas externas',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Datos',
                 icon: '1.TH.DASHBOARD',
-                selected : true
+                selected : false,
+                url : '/dashboard'
             },
             {
                 title: 'Equipo',
                 icon: '1.TH.DASHBOARD',
-                selected : false
+                selected : false,
+                url : '/usuarios/configuracion/notificaciones'
             },
         ],
     },  
@@ -138,4 +157,13 @@ const user_buttons = reactive([
         border : true
     },
 ])
+
+const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
+const widthMenu = computed(() => {
+    let withStyles = 'w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out';
+    if(displayedMenu.value){
+        withStyles = 'w-[188px]';
+    }
+    return withStyles;
+});
 </script>
