@@ -1,5 +1,5 @@
 <template>
-    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg">
+    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white">
         <!-- select hotel -->
         <div class="flex flex-shrink-0 p-2">
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">

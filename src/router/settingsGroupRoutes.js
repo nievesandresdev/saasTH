@@ -7,7 +7,7 @@ const settingsGroupRoutes = [
   {
     path: '/configuracion',
     component: AppLayout,
-    meta: { sidebar: 'SettingsLayout', sidebarWidth: '236px' },  
+    meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
     children: [
       ...chatSettingsRoutes,
     ]
