@@ -120,7 +120,7 @@
   </ModalWindow>
 
   <!-- modal alert -->
-  <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="showAlertModal = false" size="md">
+  <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="md">
     <template #content>
       <div class="p-4" v-if="route.query.tokenExpired">
         <h2 class="text-lg font-medium">Oh lo siento</h2>
@@ -129,20 +129,33 @@
           <button 
             type="button" 
             class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            @click="showAlertModal = false"
+            @click="closeAlertModal()"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+      <div class="p-4" v-else-if="route.query.changePassword">
+        <h2 class="text-lg font-medium">Contraseña cambiada!</h2>
+        <p>Se ha cambiado la contraseña exitosamente</p>
+        <div class="px-8 flex justify-center mt-7">
+          <button 
+            type="button" 
+            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+            @click="closeAlertModal()"
           >
             Cerrar
           </button>
         </div>
       </div>
       <div class="p-4" v-else-if="forgot.success">
-        <h2 class="text-lg font-medium">{{ forgot.title }}</h2>
+        <h2 class="text-lg font-medium mt-3">{{ forgot.title }}</h2>
         <p>{{ forgot.msg }}</p>
         <div class="px-8 flex justify-center mt-7">
           <button 
             type="button" 
             class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            @click="showAlertModal = false"
+            @click="closeAlertModal()"
           >
             Cerrar
           </button>
@@ -158,7 +171,7 @@ import { ref, onMounted } from 'vue';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import ModalWindow from '@/components/ModalWindow.vue'; 
 import { resetPassword } from '@/api/services/auth';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 
 const form = ref({
   email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
@@ -175,6 +188,7 @@ const showModal = ref(false);
 
 const showAlertModal = ref(false);
 const route = useRoute();
+const router = useRouter();
 
 const forgot = ref({
   email: '',
@@ -188,11 +202,16 @@ const forgot = ref({
 
 
 onMounted(() => {
-  if (route.query.tokenExpired) {
+  if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
   }
   console.log(localStorage.getItem("pass_email_form"));
 });
+
+const closeAlertModal = () => { //se quita la variable tokenExpired y changePassword de la url y cierra el modal
+  showAlertModal.value = false;
+  router.replace({ query: { ...route.query, tokenExpired: undefined,changePassword: undefined} });
+};
 
 const showPass = (id, bool) => {
   visiblePass.value = bool;

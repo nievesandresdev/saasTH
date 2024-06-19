@@ -36,13 +36,10 @@ axios.interceptors.response.use(response => {
 });
 
 
-export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
+/* export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => { asi estaba antes 19/06/2024 2:40pm
   let api_url_backend =  SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER
 
-  //const localeStore = 'es';
-  //const locale = localeStore.localeCurrent ?? 'es';
-    // const { token } = localStorage
-    //const subdomain = localStorage.getItem('subdomain') || null
+  
     const defaultHeaders = {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
@@ -73,6 +70,44 @@ let paramAxios = {
     serviceResponse = buildErrorMessage(error)
   }
   return serviceResponse
+} */
+
+export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
+  const api_url_backend = SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER;
+
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Accept-Language': 'es',
+    'x-key-api': X_KEY_API,
+  };
+
+  if (!options.headers) {
+    options.headers = defaultHeaders;
+  }
+
+  let paramAxios = {
+    method,
+    url: `${api_url_backend}/${endpoint}`,
+    ...options,
+  };
+
+  if (method.toLowerCase() === 'get') {
+    paramAxios.params = data;
+  } else {
+    paramAxios.data = data;
+  }
+
+  let serviceResponse = {};
+  const servicePromise = axios(paramAxios);
+
+  try {
+    const [materializedPromise] = await Promise.all([servicePromise]);
+    serviceResponse = { ...materializedPromise.data };
+  } catch (error) {
+    serviceResponse = buildErrorMessage(error);
+  }
+  return serviceResponse;
 }
 
 function buildErrorMessage (error) {
