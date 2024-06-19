@@ -83,53 +83,73 @@
       </div>
     </div>  
     <ModalWindow :isVisible="showModal" @close="closeModalPass" size="md">
-    <template #content>
-      <form @submit.prevent="forgotPass">
-        <div class="mb-4 flex flex-col">
-          <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
-          <p class="text-center text-sm mb-4">
-            ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
-          </p>
-          <div class="flex flex-col">
-            <label for="correo" class="font-medium text-sm">Correo electrónico</label>
-            <input
-              v-model="forgot.email"
-              type="text"
-              class="rounded border-1 w-100 py-2 text-sm"
-              :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
-              placeholder="Correo Electrónico"
-              required
-              autofocus
-              autocomplete="username"
-            >                
+      <template #content>
+        <form @submit.prevent="forgotPass">
+          <div class="mb-4 flex flex-col">
+            <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
+            <p class="text-center text-sm mb-4">
+              ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
+            </p>
+            <div class="flex flex-col">
+              <label for="correo" class="font-medium text-sm">Correo electrónico</label>
+              <input
+                v-model="forgot.email"
+                type="email"
+                class="rounded border-1 w-100 py-2 text-sm"
+                :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
+                placeholder="Correo Electrónico"
+                required
+                autofocus
+                autocomplete="username"
+              >                
+            </div>
+            <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
           </div>
-          <div v-if="forgot.message" class="text-center text-green-600 mt-2">{{ forgot.message }}</div>
-          <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
-        </div>
-        <div class="px-8 flex justify-center">
-          <button 
-            type="submit" 
-            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            :disabled="forgot.processing"
-            :class="{ 'opacity-25': forgot.processing }"
-          >
-            Enviar
-          </button>
-        </div>
-      </form>
-    </template>
+          <div class="px-8 flex justify-center">
+            <button 
+              type="submit" 
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+              :disabled="forgot.processing"
+              :class="{ 'opacity-25': forgot.processing }"
+            >
+              Enviar
+            </button>
+          </div>
+        </form>
+      </template>
   </ModalWindow>
 
   <!-- modal alert -->
-  <ModalWindow v-if="showTokenExpiredModal" :isVisible="showTokenExpiredModal" @close="showTokenExpiredModal = false">
-      <template #content>
-        <div class="p-4">
-          <h2 class="text-lg font-medium">Oh lo siento</h2>
-          <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
-          <button @click="showTokenExpiredModal = false">Cerrar</button>
+  <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="showAlertModal = false" size="md">
+    <template #content>
+      <div class="p-4" v-if="route.query.tokenExpired">
+        <h2 class="text-lg font-medium">Oh lo siento</h2>
+        <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
+        <div class="px-8 flex justify-center mt-7">
+          <button 
+            type="button" 
+            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+            @click="showAlertModal = false"
+          >
+            Cerrar
+          </button>
         </div>
-      </template>
-    </ModalWindow>
+      </div>
+      <div class="p-4" v-else-if="forgot.success">
+        <h2 class="text-lg font-medium">{{ forgot.title }}</h2>
+        <p>{{ forgot.msg }}</p>
+        <div class="px-8 flex justify-center mt-7">
+          <button 
+            type="button" 
+            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+            @click="showAlertModal = false"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </template>
+  </ModalWindow>
   </section>
 </template>
 
@@ -150,20 +170,26 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(true);
+const showModal = ref(false);
 
 
-const showTokenExpiredModal = ref(false);
+const showAlertModal = ref(false);
 const route = useRoute();
 
 const forgot = ref({
-  email: 'francisco20990@gmail.com',
+  email: '',
   processing: false,
+  success: false,
+  msg : '',
+  error: '',
+  errors: null,
+  title: ''
 });
+
 
 onMounted(() => {
   if (route.query.tokenExpired) {
-    showTokenExpiredModal.value = true;
+    showAlertModal.value = true;
   }
   console.log(localStorage.getItem("pass_email_form"));
 });
@@ -184,23 +210,27 @@ const closeModalPass = () => {
 };
 
 const forgotPass = async () => {
-  const response = await resetPassword({ email: forgot.value.email });
-
-  console.log(response);
-  /* forgot.value.processing = true;
-  forgot.value.message = '';
+  forgot.value.processing = true;
   forgot.value.error = '';
   forgot.value.errors = null;
 
-  try {
-    const response = await resetPassword({ email: forgot.value.email });
-    forgot.value.message = response.data.message;
-  } catch (error) {
-    forgot.value.error = error.response?.data?.message || 'Ha ocurrido un error';
-    forgot.value.errors = error.response?.data?.errors || null;
-  } finally {
-    forgot.value.processing = false;
-  } */
+    try {
+      const response = await resetPassword({ email: forgot.value.email});
+      forgot.value.msg = response.data.message;
+      if(response.ok){
+        forgot.value.title = '¡Correo enviado!';
+      }else{
+        forgot.value.title = '¡Error!';
+      }
+      forgot.value.success = true;
+      showAlertModal.value = true;
+      closeModalPass();
+    } catch (error) {
+      forgot.value.error = error.response?.data?.message || 'Ha ocurrido un error';
+      forgot.value.errors = error.response?.data?.errors || null;
+    } finally {
+      forgot.value.processing = false;
+    }
 };
 
 </script>
@@ -262,6 +292,60 @@ const forgotPass = async () => {
     .login-form-collaborator .form-collaborator-text::after{
         right:-5%;
     }
+}
+
+.container-fluid-landing {
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+@media (min-width:300px){
+    .container-fluid-landing {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (max-width:767px){
+    .container-fluid {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+@media (min-width:768px) and (max-width:1440px){
+    .container-fluid {
+        padding-left: 80px;
+        padding-right: 80px
+    }
+}
+@media (min-width:768px) {
+  .container-fluid-landing {
+    width: 100%;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+@media (min-width:1280px) {
+  .container-fluid{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
+  .container-fluid-landing{
+    max-width: 100%;
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
+ 
+}
+@media (min-width:1441px) {
+  .container-fluid-landing{
+      max-width: 1280px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: auto !important;
+  }
 }
 
 </style>

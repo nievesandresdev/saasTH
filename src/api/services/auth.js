@@ -1,4 +1,4 @@
 import { apiHttp } from '../AxiosConfig'
 
 
-export const resetPassword = () => apiHttp('POST', `forgot-password`)
+export const resetPassword = (data) => apiHttp('POST', `forgot-password`,data)
