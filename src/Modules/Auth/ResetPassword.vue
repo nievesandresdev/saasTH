@@ -22,7 +22,7 @@
           </div>
             <div class="login-form-collaborator">
                 <div class="form-card bg-white shadow rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
-                  <form @submit.prevent="submit">
+                  <form @submit.prevent="resetPassword">
                     <h1 class="text-xl lg:text-22xl  hmb-4 lg:mb-6 font-medium text-center">Restaurar contraseña</h1>
                     <div class="hmb-4 lg:mb-6 flex flex-col">
                       <label class="font-medium text-lg mb-1">Correo electrónico</label>
@@ -31,7 +31,8 @@
                         class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                         :placeholder="placeholderEmail" 
                         autocomplete="on" 
-                        v-model="email" 
+                        v-model="email"
+                        readonly 
                         required
                       >
                     </div>
@@ -65,7 +66,7 @@
                         >
                       </div>
                     </div>
-                    
+                    <div class="mb-2 text-red-500 text-sm text-center">{{ error }}</div>
                     <div class="mt-6 lg:mt-8 text-center">
                       <button 
                         type="submit" 
@@ -83,8 +84,8 @@
   </template>
   
   <script setup>
-  import { ref, onMounted ,reactive} from 'vue';
-  import {  verifyToken } from '@/api/services/auth';
+  import { ref, onMounted} from 'vue';
+  import {  verifyToken,changePassword } from '@/api/services/auth';
   import { useRoute,useRouter } from 'vue-router';
   
   const route = useRoute();
@@ -92,16 +93,12 @@
   const token = ref(route.params.token);
   const email = ref(route.query.email);
 
-/*   const processing = ref(false);
-  const message = ref('');
-  const error = ref('');
-  const errors = ref({}); */
   const error = ref('');
 
   const visible_pass = ref(false);
   const visible_pass_confirm = ref(false);
 
-  const form = reactive({
+  const form = ref({
     email: '',
     password: '',
     password_confirmation: '',
@@ -127,11 +124,8 @@
       router.push({ name: 'LoginPage', query: { tokenExpired: true } });
     }
   } catch (err) {
-    console.log('ssknhserror',err);
     error.value = err.response?.data?.message || 'El token de restablecimiento de contraseña es inválido o ha expirado.';
-    //router.push({ name: 'LoginPage', query: { tokenExpired: true } });
   }
-  //router.push({ name: 'LoginPage', query: { tokenExpired: true } });
 };
 
 onMounted(() => {
@@ -140,26 +134,26 @@ onMounted(() => {
   
   const resetPassword = async () => {
 
-    alert('resetPassword');
-    /* processing.value = true;
-    message.value = '';
-    error.value = '';
-    errors.value = {};
-  
     try {
-      const response = await resetPassword({
+      const response = await changePassword({
         token: token.value,
         email: email.value,
-        password: password.value,
-        password_confirmation: password_confirmation.value
+        password: form.value.password,
+        password_confirmation: form.value.password_confirmation,
       });
-      message.value = response.data.message;
+      if (response.ok) {
+        router.push({ name: 'LoginPage', query: { changePassword: true } });
+      }
+
+      if(response.code == 422){
+        error.value = response.data.message;
+      }
+      
     } catch (err) {
       error.value = err.response?.data?.message || 'Ha ocurrido un error';
-      errors.value = err.response?.data?.errors || {};
     } finally {
-      processing.value = false;
-    } */
+      //form.value.processing.value = false;
+    }
   };
   </script>
   
