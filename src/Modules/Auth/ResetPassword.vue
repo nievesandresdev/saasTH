@@ -1,86 +1,136 @@
 <template>
-    <div>
-      <form @submit.prevent="resetPassword">
-        <div class="mb-4">
-          <h1 class="text-lg font-medium text-center mb-4">Restablece tu contraseña</h1>
-          <div v-if="message" class="text-center text-green-600 mt-2">{{ message }}</div>
-          <div v-if="error" class="text-center text-red-600 mt-2">{{ error }}</div>
-          <div class="flex flex-col mb-4">
-            <label for="email" class="font-medium text-sm">Correo electrónico</label>
-            <input
-              v-model="email"
-              type="email"
-              class="rounded border-1 w-full py-2 text-sm"
-              :class="errors.email ? 'border-red-400' : 'border-gray-400'"
-              placeholder="Correo Electrónico"
-              required
-              autofocus
-              autocomplete="username"
-            >
+    <section class=" flex items-center container-fluid-landing h-screen"> 
+        <div class="grid grid-cols-2 w-full h-min">
+          <div class="flex items-center login-hicitty w-max h-min">
+            <div>
+              <img class="hoster-logo mx-auto cursor-pointer" src="/assets/img/hoster/th_logo.png" alt="" @click="redirect">
+              <div class="my-10 mx-auto" style="width: 300px;">
+                <div class="p-6 text-center border border-gray-300 rounded-xl my-10 mx-auto">
+                  <h3 class="text-lg font-medium">¿Necesitas ayuda?</h3>
+                  <p class="text-sm mt-2">Encontrarás atención especializada enviando un whatsapp al siguiente teléfono:</p>
+                  <h3 class="text-base font-medium mt-2">(+34) 624 149 605</h3>
+                  <p class="text-sm mt-2">Horario de atención:</p>
+                  <p class="text-sm">8:30 - 14:30</p>
+                </div>
+              </div>
+              <div class="w-full text-center">
+                <a target="_blank" href="https://www.linkedin.com/company/hicitty/">
+                  <img class="h-8 w-8 inline-block" src="/assets/img/hoster/linkedin_black.svg" alt="">
+                </a>
+              </div>
+            </div>
           </div>
-          <div class="flex flex-col mb-4">
-            <label for="password" class="font-medium text-sm">Nueva Contraseña</label>
-            <input
-              v-model="password"
-              type="password"
-              class="rounded border-1 w-full py-2 text-sm"
-              :class="errors.password ? 'border-red-400' : 'border-gray-400'"
-              placeholder="Nueva Contraseña"
-              required
-              autocomplete="new-password"
-            >
-          </div>
-          <div class="flex flex-col mb-4">
-            <label for="password_confirmation" class="font-medium text-sm">Confirmar Contraseña</label>
-            <input
-              v-model="password_confirmation"
-              type="password"
-              class="rounded border-1 w-full py-2 text-sm"
-              :class="errors.password_confirmation ? 'border-red-400' : 'border-gray-400'"
-              placeholder="Confirmar Contraseña"
-              required
-              autocomplete="new-password"
-            >
-          </div>
-          <div class="flex justify-center">
-            <button 
-              type="submit" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              :disabled="processing"
-              :class="{ 'opacity-25': processing }"
-            >
-              Restablecer Contraseña
-            </button>
-          </div>
+            <div class="login-form-collaborator">
+                <div class="form-card bg-white shadow rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
+                  <form @submit.prevent="submit">
+                    <h1 class="text-xl lg:text-22xl  hmb-4 lg:mb-6 font-medium text-center">Restaurar contraseña</h1>
+                    <div class="hmb-4 lg:mb-6 flex flex-col">
+                      <label class="font-medium text-lg mb-1">Correo electrónico</label>
+                      <input 
+                        type="text"
+                        class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                        :placeholder="placeholderEmail" 
+                        autocomplete="on" 
+                        v-model="email" 
+                        required
+                      >
+                    </div>
+                    <div class="mb-2">
+                      <label class="font-medium text-lg mb-1">Contraseña</label>
+                      <div class="relative w-100 collaborator-box">
+                        <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                        <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
+                        <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)">
+                        <input 
+                          :type="visible_pass ? 'text' : 'password'"
+                          class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                          id="password" 
+                          placeholder="Contraseña"
+                          v-model="form.password" required
+                        >
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <label class="font-medium text-lg mb-1">Repetir Contraseña</label>
+                      <div class="relative w-100 collaborator-box">
+                        <img v-if="form.password_confirmation == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                        <img v-if="form.password_confirmation !== '' && visible_pass_confirm" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password_confirmation')">
+                        <img v-if="form.password_confirmation !== '' && !visible_pass_confirm" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password_confirmation')">
+                        <input 
+                          :type="visible_pass_confirm ? 'text' : 'password'"
+                          class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                          id="password_confirmation" 
+                          placeholder="Confirma tu contraseña"
+                          v-model="form.password_confirmation" required
+                        >
+                      </div>
+                    </div>
+                    
+                    <div class="mt-6 lg:mt-8 text-center">
+                      <button 
+                        type="submit" 
+                        class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium" 
+                        :disabled="form.processing"
+                      >
+                        Restaurar contraseña
+                      </button>
+                    </div>
+                  </form>
+                </div>
+            </div>
         </div>
-      </form>
-    </div>
+    </section>
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
-  //import { resetPassword, verifyToken } from '../api/services/auth';
+  import { ref, onMounted ,reactive} from 'vue';
+  import {  verifyToken } from '@/api/services/auth';
   import { useRoute,useRouter } from 'vue-router';
   
   const route = useRoute();
   const router = useRouter();
   const token = ref(route.params.token);
   const email = ref(route.query.email);
-  const password = ref('');
-  const password_confirmation = ref('');
-  const processing = ref(false);
+
+/*   const processing = ref(false);
   const message = ref('');
   const error = ref('');
-  const errors = ref({});
+  const errors = ref({}); */
+  const error = ref('');
+
+  const visible_pass = ref(false);
+  const visible_pass_confirm = ref(false);
+
+  const form = reactive({
+    email: '',
+    password: '',
+    password_confirmation: '',
+    remember: false,
+    processing: false,
+  });
+
+  const showPass = (id) => {
+    if (id == 'password') {
+        visible_pass.value = !visible_pass.value
+    } else {
+        visible_pass_confirm.value = !visible_pass_confirm.value
+    }
+      let x = document.getElementById(id);
+      x.type = x.type == 'password' ? 'text' : 'password'; 
+    
+};
   
   const checkTokenValidity = async () => {
-  /* try {
-    await verifyToken(token.value, email.value);
+  try {
+    const response = await verifyToken({ token: token.value, email: email.value });
+    if(!response.ok){
+      router.push({ name: 'LoginPage', query: { tokenExpired: true } });
+    }
   } catch (err) {
+    console.log('ssknhserror',err);
     error.value = err.response?.data?.message || 'El token de restablecimiento de contraseña es inválido o ha expirado.';
-    router.push({ name: 'LoginPage', query: { tokenExpired: true } });
-  } */
- console.log('checkTokenValidity',token);
+    //router.push({ name: 'LoginPage', query: { tokenExpired: true } });
+  }
   //router.push({ name: 'LoginPage', query: { tokenExpired: true } });
 };
 
@@ -114,6 +164,58 @@ onMounted(() => {
   </script>
   
   <style scoped>
-  /* Agrega tus estilos personalizados aquí */
+    .container-fluid-landing {
+      width: 100%;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    @media (min-width:300px){
+        .container-fluid-landing {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+        }
+    }
+    @media (max-width:767px){
+        .container-fluid {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+        }
+    }
+    @media (min-width:768px) and (max-width:1440px){
+        .container-fluid {
+            padding-left: 80px;
+            padding-right: 80px
+        }
+    }
+    @media (min-width:768px) {
+      .container-fluid-landing {
+        width: 100%;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+      }
+    }
+
+    @media (min-width:1280px) {
+      .container-fluid{
+          max-width: 1280px;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin: auto !important;
+      }
+      .container-fluid-landing{
+        max-width: 100%;
+        padding-left: 80px !important;
+        padding-right: 80px !important;
+      }
+    
+    }
+    @media (min-width:1441px) {
+      .container-fluid-landing{
+          max-width: 1280px;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin: auto !important;
+      }
+    }
   </style>
   
