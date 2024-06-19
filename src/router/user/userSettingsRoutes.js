@@ -1,4 +1,6 @@
+//views
 const NotificationsSettings = () => import('@/Modules/User/Settings/NotificationsSettings');
+const UsersSettings = () => import('@/Modules/User/Settings/UsersSettings');
 
 const userSettingsRoutes = [
   {
@@ -8,6 +10,11 @@ const userSettingsRoutes = [
         name: 'UserNotificationsSettings',
         path: 'notificaciones',
         component: NotificationsSettings
+      },
+      {
+        name: 'UsersSettings',
+        path: 'usuarios',
+        component: UsersSettings
       },
     ],
   },
