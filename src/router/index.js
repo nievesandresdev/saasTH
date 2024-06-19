@@ -16,7 +16,7 @@ const routes = [
   ...authRoutes,
   //grupo para la seccion de configuraciones
   ...settingsGroupRoutes,
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
+  // { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 
 // Creación del router utilizando el modo historial del navegador
