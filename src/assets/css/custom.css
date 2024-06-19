@@ -79,3 +79,23 @@ button:focus {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }
 
+:root {
+  --scrollbar-bg: #F3F3F3;
+  --scrollbar-thumb: #A0A0A0;
+  --scrollbar-thumb-radius: 22.5px;
+  --scrollbar-width: 12px;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-thumb-radius);
+  border: 3px solid var(--scrollbar-bg);
+}
