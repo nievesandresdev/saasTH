@@ -3,7 +3,7 @@ const GeneralSettings = () => import('@/Modules/Chat/Settings/GeneralSettings');
 
 const chatSettingsRoutes = [
   {
-    path: 'chat',
+    path: 'configuracion',
     meta: { sidebarRight: 'SidebarMockup'},  
     children: [
       {

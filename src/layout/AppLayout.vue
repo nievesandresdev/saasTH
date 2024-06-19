@@ -5,14 +5,14 @@
         :class="showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'"
     >
         <!-- hole for collapse main sidebar -->
-        <div class="w-16 flex-shrink-0 h-full"></div>
+        <div v-if="!displayedMenu" class="w-16 flex-shrink-0 h-full"></div>
         <!-- hole for left sidebar section -->
         <div class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`"></div>
 
         <!-- container side left -->
+        <!-- para el menu estado desplayed se posicion sticky -->
         <aside 
-            class="flex-shrink-0 fixed left-0 z-[500] flex"
-            :class="showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'"
+            :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[500] flex ${showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
         >
             <MainSidebar />
             <!-- container dinamic side left -->
@@ -49,6 +49,7 @@ const showSuscriptionBanner = false;
 const currentLeftSidebar = computed(() => route.meta.sidebar);
 const currentRightSidebar = computed(() => route.meta.sidebarRight);
 const sidebarWidthz = computed(() => route.meta.sidebarWidth);
+const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
 </script>
 <style scoped>
 .h-without-banner{

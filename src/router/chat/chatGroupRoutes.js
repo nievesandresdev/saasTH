@@ -5,7 +5,7 @@ const AppLayout = () => import('@/layout/AppLayout');
 
 const settingsGroupRoutes = [
   {
-    path: '/configuracion',
+    path: '/chat',
     component: AppLayout,
     meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
     children: [
