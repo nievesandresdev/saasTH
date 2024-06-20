@@ -11,7 +11,7 @@
           v-if="!section?.disabled"
         >
             <li class="pl-6 py-[11.5px] text-sm font-semibold">
-              <h5 class="uppercase ">{{ section.title }}</h5>
+              <h5 class="text-sm font-semibold uppercase leading-[124%]">{{ section.title }}</h5>
             </li>
             <template
               v-for="(menu, index_menu) in section.group"
@@ -28,8 +28,8 @@
                   class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-gray-100"
                 >
                   <div class="flex items-center">
-                    <img :src="menu.icon" class="inline-block w-[20px] h-[20px] mr-2">
-                    <span class="text-sm font-medium ">{{ menu.title }}</span>
+                    <img :src="menu.icon" class="inline-block w-6 h-6 mr-2">
+                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.dropdown.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
@@ -83,7 +83,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm capitalize">{{ menu.title }}</span>
+                    <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span>
                   </div>
                 </a>
               </li>
@@ -116,8 +116,8 @@
                             class="text-sm font-medium flex items-center justify-between py-[8px] px-[24px] hover-gray-100"
                           >
                             <div class="flex items-center">
-                              <img :src="menu.icon" class="inline-block w-[20px] h-[20px] mr-2">
-                              <span class="text-sm font-medium ">{{ menu.title }}</span>
+                              <img :src="menu.icon" class="inline-block w-6 h-6 mr-2">
+                              <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
                             </div>
                             <img :src="menu.expanded ? '/vendor_asset/img/hoster/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/vendor_asset/img/hoster/icons/1.TH.I.DROPDOWN.svg'" class="inline-block w-[12px] h-[12px]">
                           </a>
@@ -168,7 +168,7 @@
                           >
                             <div class="flex items-center">
                               <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                              <span class="text-sm capitalize">{{ menu.title }}</span>
+                              <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span>
                             </div>
                           </a>
                         </li>
@@ -204,51 +204,51 @@ import { reactive, onMounted } from 'vue'
           title: 'Costumer experience',
           group: [
               {
-                  title: 'hotel',
-                  icon: '/assets/icons/1.TH.DIRECTORIO.svg',
+                  title: 'Alojamiento',
+                  icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                   expanded: false,
                   group: [
                       {
                           title: 'perfil',
-                          icon: '/vendor_asset/img/hoster/icons/1.TH.I.perfil.svg',
+                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.hotel.profile',
                           include: '/perfil'
                       },
                       {
                           title: 'instalaciones',
-                          icon: '/vendor_asset/img/hoster/icons/1.TH.icon.instalaciones.svg',
+                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.plataform.facility.show',
                           include: '/instalaciones'
                       },
                   ],
               },
               {
-                  title: 'destino',
+                  title: 'Destino',
                   icon: '/assets/icons/1.TH.DESTINO.svg',
                   expanded: false,
                   group: [
                     {
                       title: 'qué visitar',
-                      icon: '/vendor_asset/img/icons/black_places.svg',
+                      icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
                       include: '/guia-de-la-ciudad',
                     },
                     {
                       title: 'dónde comer',
-                      icon: '/vendor_asset/img/icons/restaurantes.svg',
+                      icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
                       include: '/guia-de-la-ciudad',
                     },
                     {
                       title: 'ocio',
-                      icon: '/vendor_asset/img/icons/ocio.svg',
+                      icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
                       include: '/guia-de-la-ciudad',
                     },
                   ],
               },
               {
-                  title: 'experiencias',
+                  title: 'Experiencias',
                   to: 'hoster.plataform.experiences',
                   icon: '/assets/icons/1.TH.CAMERA.svg',
                   include: '/experiencias'
@@ -259,6 +259,30 @@ import { reactive, onMounted } from 'vue'
                   icon: '/assets/icons/1.TH.CHAT.NEW.svg',
                   include: '/chat'
               },
+          ],
+      },
+      {
+          title: 'Reputación online',
+          group: [
+              {
+                  title: 'Seguimiento',
+                  icon: '/assets/icons/1.TH.SEGUIMIENTO.svg',
+                  expanded: false,
+                  group: [
+                      {
+                          title: 'perfil',
+                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
+                          to: 'hoster.hotel.profile',
+                          include: '/perfil'
+                      },
+                      {
+                          title: 'instalaciones',
+                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
+                          to: 'hoster.plataform.facility.show',
+                          include: '/instalaciones'
+                      },
+                  ],
+              }
           ],
       },
       {
@@ -302,15 +326,15 @@ import { reactive, onMounted } from 'vue'
                   include: '/personalizacion'
               },
               {
-                  title: 'Estancias',
+                  title: 'Textos legales',
                   to: '',
                   icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
                   include: '/estancias'
               },
               {
-                  title: 'Húespedes',
+                  title: 'Galería de imágenes',
                   to: '',
-                  icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
+                  icon: '/assets/icons/1.TH.IMAGES.svg',
                   include: '/huespedes'
               },
           ],

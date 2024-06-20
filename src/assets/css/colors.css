@@ -62,6 +62,9 @@
     .hbg-green-800 {
         background-color: var(--h-green-800);
     }
+    .htext-green-800 {
+        color: var(--h-green-800);
+    }
 
     
 

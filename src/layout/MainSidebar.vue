@@ -1,7 +1,7 @@
 <template>
-    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full overflow-y-auto">
+    <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full">
         <!-- select hotel -->
-        <div class="flex flex-shrink-0 p-2">
+        <div class="flex flex-shrink-0 p-2 shadow-xl">
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
             <div 
                 :class="`flex items-center ${widthMenu} ${displayedMenu ? 'pl-4' : 'group-hover:pl-4'}`"
@@ -11,65 +11,66 @@
             </div>
         </div>
         
-        <!-- links -->
-        <router-link
-            class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
-            :class="{'hbg-green-600 shadow-lg':$route.name == 'DashboardIndex','hover-gray-100':$route.name !== 'DashboardIndex'}"
-            to="/dashboard"
-        >
-            <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':$route.name == 'DashboardIndex'}">
-            <div :class="widthMenu">
-                <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':$route.name == 'DashboardIndex'}">
-                    Dashboard
-                </p>
-            </div>
-        </router-link>
-        <template v-for="(section, index) in menu_links" :key="index">
-            <div 
-                :class="`mt-4 py-2.5 min-h-[40px] h-10 ${widthMenu} ${displayedMenu ? 'pl-3' : 'group-hover:pl-3'}`"
+        <div class="overflow-y-auto bg-white">
+            <!-- links -->
+            <router-link
+                class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
+                :class="{'hbg-green-600 shadow-lg':$route.name == 'DashboardIndex','hover-gray-100':$route.name !== 'DashboardIndex'}"
+                to="/dashboard"
             >
-                <p class="text-sm font-semibold">
-                    {{ section.title }}
-                </p>
-            </div>
-            <div 
-                class="rounded-[10px] hbg-green-200"
-            >
-                <router-link
-                    v-for="(link, indexLink) in section.group" :key="indexLink"
-                    :to="link.url"
-                    class="rounded-[10px] flex items-center p-2"
-                    :class="{'hbg-green-600 shadow-lg':link.selected,'hover-gray-100':!link.selected}"
-                >
-                    <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':link.selected}">
-                    <div :class="widthMenu">
-                        <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':link.selected}">{{link.title}}</p>
-                    </div>
-                </router-link>
-            </div>
-        </template>
-
-        <!-- help, user and news -->
-        <div class="mt-auto mb-4 pt-4">
-            <button 
-                v-for="(button, indexButton) in user_buttons" :key="indexButton"
-                @click="button.action && button.action()"
-                class="rounded-[10px] flex items-center p-1 max-h-[40px]"
-                :class="{'hbg-green-600 shadow-lg':false,'hover-gray-100':false}"
-            >
-                <img 
-                    class="w-8 h-8 rounded-full" :src="button.icon"
-                    :class="{'icon-white':false,'border border-white':false}"
-                >
+                <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':$route.name == 'DashboardIndex'}">
                 <div :class="widthMenu">
-                    <p 
-                        class="text-sm font-semibold ml-2 text-left leading-[120%]"
-                        :class="{'text-white': false}"
-                    >{{button.title}}</p>
+                    <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':$route.name == 'DashboardIndex'}">
+                        Dashboard
+                    </p>
                 </div>
-            </button>
+            </router-link>
+            <template v-for="(section, index) in menu_links" :key="index">
+                <div 
+                    :class="`mt-4 py-2.5 min-h-[40px] h-10 ${widthMenu} ${displayedMenu ? 'pl-3' : 'group-hover:pl-3'}`"
+                >
+                    <p class="text-sm font-semibold">
+                        {{ section.title }}
+                    </p>
+                </div>
+                <div 
+                    class="rounded-[10px] hbg-green-200"
+                >
+                    <router-link
+                        v-for="(link, indexLink) in section.group" :key="indexLink"
+                        :to="link.url"
+                        class="rounded-[10px] flex items-center p-2"
+                        :class="{'hbg-green-600 shadow-lg':link.selected,'hover-gray-100':!link.selected}"
+                    >
+                        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':link.selected}">
+                        <div :class="widthMenu">
+                            <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':link.selected}">{{link.title}}</p>
+                        </div>
+                    </router-link>
+                </div>
+            </template>
+
+            <!-- help, user and news -->
+            <div class="mt-auto mb-4 pt-4">
+                <button 
+                    v-for="(button, indexButton) in user_buttons" :key="indexButton"
+                    @click="button.action && button.action()"
+                    class="rounded-[10px] flex items-center p-1 max-h-[40px]"
+                    :class="{'hbg-green-600 shadow-lg':false,'hover-gray-100':false}"
+                >
+                    <img 
+                        class="w-8 h-8 rounded-full" :src="button.icon"
+                        :class="{'icon-white':false,'border border-white':false}"
+                    >
+                    <div :class="widthMenu">
+                        <p 
+                            class="text-sm font-semibold ml-2 text-left leading-[120%]"
+                            :class="{'text-white': false}"
+                        >{{button.title}}</p>
+                    </div>
+                </button>
+            </div>
         </div>
-        
     </div>
 </template>
 <script setup>
