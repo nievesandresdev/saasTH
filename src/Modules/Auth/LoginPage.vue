@@ -1,6 +1,6 @@
 <template>
   <section id="collaborator-login">
-    <LoadingAuth :show="false"/>
+    <LoadingAuth :show="loadingPage"/>
     <div class="flex items-center container-fluid-landing h-screen font-montserrat">
       <div class="hidden lg:flex justify-around w-full h-min">
         <div class="flex items-center login-hicitty w-max h-min">
@@ -24,16 +24,17 @@
         </div>
         <div class="login-form-collaborator">
           <div class="form-card bg-white shadow rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
-            <form @submit.prevent="submit">
+            <form @submit.prevent="handleLogin">
               <h1 class="text-xl lg:text-22xl hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
               <div class="hmb-4 lg:mb-6 flex flex-col">
                 <label class="font-medium text-lg mb-1">Correo electrónico</label>
                 <input 
-                  type="text"
+                  type="email"
                   class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                   :placeholder="placeholderEmail" 
                   autocomplete="on" 
                   v-model="form.email" 
+                  :class="{'border-red-400 text-red-400 placeholder-red-400' : errorLogin}"
                   required
                 >
               </div>
@@ -48,6 +49,7 @@
                     class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                     id="password" 
                     :placeholder="placeholderPassword"
+                    :class="{'border-red-400 text-red-400 placeholder-red-400' : errorLogin}"
                     v-model="form.password" required
                   >
                 </div>
@@ -170,7 +172,7 @@
 import { ref, onMounted } from 'vue';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import ModalWindow from '@/components/ModalWindow.vue'; 
-import { resetPassword } from '@/api/services/auth';
+import { resetPassword,login } from '@/api/services/auth';
 import { useRoute,useRouter } from 'vue-router';
 
 const form = ref({
@@ -189,6 +191,8 @@ const showModal = ref(false);
 const showAlertModal = ref(false);
 const route = useRoute();
 const router = useRouter();
+const errorLogin = ref(false);
+const loadingPage = ref(false);
 
 const forgot = ref({
   email: '',
@@ -251,6 +255,33 @@ const forgotPass = async () => {
       forgot.value.processing = false;
     }
 };
+
+const handleLogin = async () => {
+  form.value.processing = true
+  form.value.error = null
+  loadingPage.value = true
+
+  try {
+    const response = await login({
+      email: form.value.email,
+      password: form.value.password
+    })
+
+    if (response.ok) {
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      router.push('/dashboard')
+    } else {
+      errorLogin.value = true
+    }
+    loadingPage.value = false
+  } catch (error) {
+    form.value.error = error.response?.data?.message || 'Ha ocurrido un error'
+  } finally {
+    form.value.processing = false
+  }
+}
+  
 
 </script>
 

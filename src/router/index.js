@@ -11,6 +11,11 @@ import userGroupRoutes from './user/userGroupRoutes'
 // Utilidades generales y funciones
 // import utils from '@/utils/utils.js' --> example
 
+function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return !!token;
+}
+
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue')
 
@@ -37,8 +42,14 @@ const router = createRouter({
   
 })
 
-// Guard global que se ejecuta antes de cada cambio de ruta
-router.beforeEach(() => {
-  //
+// Middleware de navegación
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login' && isAuthenticated()) {
+    next('/dashboard');
+  } else if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated()) {
+    next({ name: 'LoginPage' })
+  } else {
+    next();
+  }
 });
 export default router;

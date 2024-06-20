@@ -1,6 +1,6 @@
 <template>
     <div v-if="show" id="component_preloaders" class="component_preloader">
-        <img class="w-56 component_preloader__logo" src="/vendor_asset/img/hoster/th_logo.png" alt="logo">
+        <img class="w-56 component_preloader__logo" src="/assets/img/hoster/th_logo.png" alt="logo">
         <!-- <div class="component_preloader__loader">
             <div class="component_spinner"></div>
             
@@ -9,16 +9,10 @@
         <span class="absolute text-4xl mt-52 font-normal" style="color: #0B6357;">Cargando...</span>
     </div>
 </template>
-<script>
-export default {
-    props:['show'],
-    created(){
-        // $(window).on('load',function() 
-        // {          
-        //     $("#component_preloaders").fadeOut(100);
-        // });
-    }
-}
+<script setup>
+defineProps({
+  show: Boolean,
+})
 </script>
 <style scoped>
 .loader {

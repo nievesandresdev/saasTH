@@ -53,6 +53,7 @@
         <div class="mt-auto mb-4 pt-4">
             <button 
                 v-for="(button, indexButton) in user_buttons" :key="indexButton"
+                @click="button.action && button.action()"
                 class="rounded-[10px] flex items-center p-1 max-h-[40px]"
                 :class="{'hbg-green-600 shadow-lg':false,'hover-gray-100':false}"
             >
@@ -73,9 +74,11 @@
 </template>
 <script setup>
 import { reactive, computed } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router'
+import { logout } from '@/api/services/auth';
 
 const route = useRoute();
+const router = useRouter()
 
 const menu_links = reactive([
     {
@@ -156,6 +159,21 @@ const user_buttons = reactive([
         selected : false,
         border : true
     },
+    {
+        title: 'Cerrar sesión',
+        icon: null, 
+        selected: false,
+        action: async () => {
+            try {
+                await logout()
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+                router.push('/login')
+            } catch (error) {
+                console.error('Error al cerrar sesión', error)
+            }
+        }
+    }
 ])
 
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
