@@ -135,8 +135,8 @@ const menu_links = reactive([
             {
                 title: 'Equipo',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
-                url : '/usuarios/configuracion/notificaciones'
+                selected : route.name == 'UsersSettings' || route.name == 'UserNotificationsSettings',
+                url : '/usuarios/configuracion/usuarios'
             },
         ],
     },  
