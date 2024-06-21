@@ -87,7 +87,6 @@ function closeModal() {
 
 const isFormIncomplete = ref(false);
 
-
 const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Usuario' },
@@ -112,11 +111,6 @@ const prevStep = () => {
 };
 
 
-
-
-
-
-//const modal_add = ref(true)
 const containerTop = ref(0)
 
 onMounted(async () => {
@@ -127,10 +121,7 @@ onMounted(async () => {
         containerTop.value = sectionExpElement.offsetTop
     }
 
-    //form.hotels = page.props.hotels;
 })
-
-
 
 </script>
 
