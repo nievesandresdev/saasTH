@@ -99,3 +99,17 @@ button:focus {
   border-radius: var(--scrollbar-thumb-radius);
   border: 3px solid var(--scrollbar-bg);
 }
+
+.no-scrollbar::-webkit-scrollbar{
+  display: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  background-color: transparent;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

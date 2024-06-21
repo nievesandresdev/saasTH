@@ -19,3 +19,7 @@ export const queryPath = 'query'
 export const querySettingsPath = 'query-settings'
 export const stayAccessPath = 'stayAccess'
 export const requestSettingsPath = 'request-settings'
+
+//hoster
+export const hosterPath = 'hoster'
+export const chatSettingsPath = 'settings'

@@ -2,6 +2,9 @@
     <h1 class="font-semibold text-3xl">
         dashboard
     </h1>
+    <pre>
+        {{$route.fullPath}}
+    </pre>
     <button 
         class="bg-red-200 p-2 rounded"
         @click="defineMockupData"
