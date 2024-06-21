@@ -1,21 +1,55 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/HomePage.vue';
-import AboutUs from '@/views/AboutUs.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+// Importaciones de las rutas específicas por módulo
+import authRoutes from './authRoutes'
+import dashboardRoutes from './dashboardRoutes'
+//grupos de rutas
+import chatGroupRoutes from './chat/chatGroupRoutes'
+import userGroupRoutes from './user/userGroupRoutes'
+// Importaciones de stores
 
+
+// Utilidades generales y funciones
+// import utils from '@/utils/utils.js' --> example
+
+function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return !!token;
+}
+
+// Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
+const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue')
+
+// Configuración de rutas
+const routes = [
+  ...authRoutes,
+  ...dashboardRoutes,
+  //grupos de rutas por modulo
+  ...chatGroupRoutes,
+  ...userGroupRoutes,
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
+]
+
+// Creación del router utilizando el modo historial del navegador
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'homePage',
-      component: Home
-    },
-    {
-      path: '/about-us',
-      name: 'aboutUs',
-      component: AboutUs
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(to, from, savedPosition) {// Controla el comportamiento del desplazamiento de la página
+    if (savedPosition) {
+      return savedPosition;
     }
-  ]
-});
+    return { top: 0 };
+  }
+  
+})
 
+// Middleware de navegación
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login' && isAuthenticated()) {
+    next('/dashboard');
+  } else if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated()) {
+    next({ name: 'LoginPage' })
+  } else {
+    next();
+  }
+});
 export default router;
