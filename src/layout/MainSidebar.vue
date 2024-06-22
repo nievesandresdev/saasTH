@@ -75,11 +75,11 @@
 </template>
 <script setup>
 import { reactive, computed } from 'vue'
-import { useRoute,useRouter } from 'vue-router'
-import { logout } from '@/api/services/auth';
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/modules/auth/login'
 
 const route = useRoute();
-const router = useRouter()
+const authStore = useAuthStore() 
 
 const menu_links = reactive([
     {
@@ -165,14 +165,7 @@ const user_buttons = reactive([
         icon: null, 
         selected: false,
         action: async () => {
-            try {
-                await logout()
-                localStorage.removeItem('token')
-                localStorage.removeItem('user')
-                router.push('/login')
-            } catch (error) {
-                console.error('Error al cerrar sesión', error)
-            }
+            await authStore.logout() 
         }
     }
 ])

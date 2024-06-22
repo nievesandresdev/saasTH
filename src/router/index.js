@@ -12,7 +12,7 @@ import userGroupRoutes from './user/userGroupRoutes'
 // import utils from '@/utils/utils.js' --> example
 
 function isAuthenticated() {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   return !!token;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <section id="collaborator-login">
-    <LoadingAuth :show="loadingPage"/>
+    <LoadingAuth :show="authStore.loading"/>
     <div class="flex items-center container-fluid-landing h-screen font-montserrat">
       <div class="hidden lg:flex justify-around w-full h-min">
         <div class="flex items-center login-hicitty w-max h-min">
@@ -34,7 +34,7 @@
                   :placeholder="placeholderEmail" 
                   autocomplete="on" 
                   v-model="form.email" 
-                  :class="{'border-red-400 text-red-400 placeholder-red-400' : errorLogin}"
+                  :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                   required
                 >
               </div>
@@ -49,7 +49,7 @@
                     class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                     id="password" 
                     :placeholder="placeholderPassword"
-                    :class="{'border-red-400 text-red-400 placeholder-red-400' : errorLogin}"
+                    :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                     v-model="form.password" required
                   >
                 </div>
@@ -67,7 +67,7 @@
                 <button 
                   type="submit" 
                   class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium" 
-                  :disabled="form.processing"
+                  :disabled="authStore.loading"
                 >
                   Iniciar sesión
                 </button>
@@ -119,66 +119,68 @@
           </div>
         </form>
       </template>
-  </ModalWindow>
+    </ModalWindow>
 
-  <!-- modal alert -->
-  <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="md">
-    <template #content>
-      <div class="p-4" v-if="route.query.tokenExpired">
-        <h2 class="text-lg font-medium">Oh lo siento</h2>
-        <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
-        <div class="px-8 flex justify-center mt-7">
-          <button 
-            type="button" 
-            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            @click="closeAlertModal()"
-          >
-            Cerrar
-          </button>
+    <!-- modal alert -->
+    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="md">
+      <template #content>
+        <div class="p-4" v-if="route.query.tokenExpired">
+          <h2 class="text-lg font-medium">Oh lo siento</h2>
+          <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
+          <div class="px-8 flex justify-center mt-7">
+            <button 
+              type="button" 
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+              @click="closeAlertModal()"
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="p-4" v-else-if="route.query.changePassword">
-        <h2 class="text-lg font-medium">Contraseña cambiada!</h2>
-        <p>Se ha cambiado la contraseña exitosamente</p>
-        <div class="px-8 flex justify-center mt-7">
-          <button 
-            type="button" 
-            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            @click="closeAlertModal()"
-          >
-            Cerrar
-          </button>
+        <div class="p-4" v-else-if="route.query.changePassword">
+          <h2 class="text-lg font-medium">¡Contraseña cambiada!</h2>
+          <p>Se ha cambiado la contraseña exitosamente</p>
+          <div class="px-8 flex justify-center mt-7">
+            <button 
+              type="button" 
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+              @click="closeAlertModal()"
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="p-4" v-else-if="forgot.success">
-        <h2 class="text-lg font-medium mt-3">{{ forgot.title }}</h2>
-        <p>{{ forgot.msg }}</p>
-        <div class="px-8 flex justify-center mt-7">
-          <button 
-            type="button" 
-            class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-            @click="closeAlertModal()"
-          >
-            Cerrar
-          </button>
+        <div class="p-4" v-else-if="forgot.success">
+          <h2 class="text-lg font-medium mt-3">{{ forgot.title }}</h2>
+          <p>{{ forgot.msg }}</p>
+          <div class="px-8 flex justify-center mt-7">
+            <button 
+              type="button" 
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+              @click="closeAlertModal()"
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
-      </div>
-    </template>
-  </ModalWindow>
+      </template>
+    </ModalWindow>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useAuthStore } from '@/stores/modules/auth/login';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import ModalWindow from '@/components/ModalWindow.vue'; 
-import { resetPassword,login } from '@/api/services/auth';
-import { useRoute,useRouter } from 'vue-router';
+import { resetPassword } from '@/api/services/auth';
+import { useRoute, useRouter } from 'vue-router';
 
+const authStore = useAuthStore();
 const form = ref({
-  email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
-  password: localStorage.getItem("pass_email_form") ? localStorage.getItem("pass_email_form") : '',
-  remember: localStorage.getItem("remember_form") ? (localStorage.getItem("remember_form") === 'true') : false
+  email: sessionStorage.getItem("user_email_form") ? sessionStorage.getItem("user_email_form") : '',
+  password: sessionStorage.getItem("pass_email_form") ? sessionStorage.getItem("pass_email_form") : '',
+  remember: sessionStorage.getItem("remember_form") ? (sessionStorage.getItem("remember_form") === 'true') : false
 });
 
 const placeholderEmail = ref('Introduce tu email');
@@ -187,12 +189,9 @@ const placeholderPassword = ref('********');
 const visiblePass = ref(false);
 const showModal = ref(false);
 
-
 const showAlertModal = ref(false);
 const route = useRoute();
 const router = useRouter();
-const errorLogin = ref(false);
-const loadingPage = ref(false);
 
 const forgot = ref({
   email: '',
@@ -204,17 +203,15 @@ const forgot = ref({
   title: ''
 });
 
-
 onMounted(() => {
   if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
   }
-  console.log(localStorage.getItem("pass_email_form"));
 });
 
-const closeAlertModal = () => { //se quita la variable tokenExpired y changePassword de la url y cierra el modal
+const closeAlertModal = () => {
   showAlertModal.value = false;
-  router.replace({ query: { ...route.query, tokenExpired: undefined,changePassword: undefined} });
+  router.replace({ query: { ...route.query, tokenExpired: undefined, changePassword: undefined } });
 };
 
 const showPass = (id, bool) => {
@@ -237,53 +234,41 @@ const forgotPass = async () => {
   forgot.value.error = '';
   forgot.value.errors = null;
 
-    try {
-      const response = await resetPassword({ email: forgot.value.email});
-      forgot.value.msg = response.data.message;
-      if(response.ok){
-        forgot.value.title = '¡Correo enviado!';
-      }else{
-        forgot.value.title = '¡Error!';
-      }
-      forgot.value.success = true;
-      showAlertModal.value = true;
-      closeModalPass();
-    } catch (error) {
-      forgot.value.error = error.response?.data?.message || 'Ha ocurrido un error';
-      forgot.value.errors = error.response?.data?.errors || null;
-    } finally {
-      forgot.value.processing = false;
+  try {
+    const response = await resetPassword({ email: forgot.value.email });
+    forgot.value.msg = response.data.message;
+    if (response.ok) {
+      forgot.value.title = '¡Correo enviado!';
+    } else {
+      forgot.value.title = '¡Error!';
     }
+    forgot.value.success = true;
+    showAlertModal.value = true;
+    closeModalPass();
+  } catch (error) {
+    forgot.value.error = error.response?.data?.message || 'Ha ocurrido un error';
+    forgot.value.errors = error.response?.data?.errors || null;
+  } finally {
+    forgot.value.processing = false;
+  }
 };
 
 const handleLogin = async () => {
-  form.value.processing = true
-  form.value.error = null
-  loadingPage.value = true
+  await authStore.login({
+    email: form.value.email,
+    password: form.value.password
+  });
 
-  try {
-    const response = await login({
-      email: form.value.email,
-      password: form.value.password
-    })
+  console.log('errorloginpage',authStore.errorLogin)
 
-    if (response.ok) {
-      localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-      router.push('/dashboard')
-    } else {
-      errorLogin.value = true
-    }
-    loadingPage.value = false
-  } catch (error) {
-    form.value.error = error.response?.data?.message || 'Ha ocurrido un error'
-  } finally {
-    form.value.processing = false
-  }
+  if (authStore.token) {
+    router.push('/dashboard');
+  } 
 }
-  
-
 </script>
+
+
+
 
 <style scoped>
 *> :not(i){
