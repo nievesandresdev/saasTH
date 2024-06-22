@@ -11,7 +11,7 @@
             </div>
         </div>
         
-        <div class="overflow-y-auto bg-white">
+        <div class="overflow-y-auto bg-white no-scrollbar">
             <!-- links -->
             <router-link
                 class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
@@ -40,11 +40,11 @@
                         v-for="(link, indexLink) in section.group" :key="indexLink"
                         :to="link.url"
                         class="rounded-[10px] flex items-center p-2"
-                        :class="{'hbg-green-600 shadow-lg':link.selected,'hover-gray-100':!link.selected}"
+                        :class="{'hbg-green-600 shadow-lg':$route.fullPath.includes(link.include),'hover-gray-100':!$route.fullPath.includes(link.include)}"
                     >
-                        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':link.selected}">
+                        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':$route.fullPath.includes(link.include)}">
                         <div :class="widthMenu">
-                            <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':link.selected}">{{link.title}}</p>
+                            <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':$route.fullPath.includes(link.include)}">{{link.title}}</p>
                         </div>
                     </router-link>
                 </div>
@@ -74,33 +74,33 @@
     </div>
 </template>
 <script setup>
-import { reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'
 
 const route = useRoute();
 const authStore = useAuthStore() 
 
-const menu_links = reactive([
+const menu_links = ref([
     {
         title: 'Operación',
         group: [
             {
                 title: 'Estancias',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Reseñas',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Análisis',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             
@@ -112,58 +112,58 @@ const menu_links = reactive([
             {
                 title: 'WebApp',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Comunicaciones',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Plataformas externas',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Datos',
                 icon: '1.TH.DASHBOARD',
-                selected : false,
+                include : '-',
                 url : '/dashboard'
             },
             {
                 title: 'Equipo',
                 icon: '1.TH.DASHBOARD',
-                selected : route.name == 'UsersSettings' || route.name == 'UserNotificationsSettings',
+                include : '/usuarios/configuracion',
                 url : '/usuarios/configuracion/usuarios'
             },
         ],
     },  
 ])
 
-const user_buttons = reactive([
+const user_buttons = ref([
     {
         title: 'Ayuda',
         icon: '/assets/icons/1.TH.AYUDA.MM.svg',
-        selected : false
+        include : '-',
     },
     {
         title: 'Novedades',
         icon: '/assets/icons/1.TH.NOVEDADES.MM.svg',
-        selected : false
+        include : '-',
     },
     {
         title: 'Manuel Gimenez',
         icon: 'https://ui-avatars.com/api/?name=NA&color=fff&background=3D5F87',
-        selected : false,
+        include : '-',
         border : true
     },
     {
         title: 'Cerrar sesión',
         icon: null, 
-        selected: false,
+        include : '-',
         action: async () => {
             await authStore.logout() 
         }
