@@ -6,6 +6,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     const user = ref(JSON.parse(sessionStorage.getItem('user')) || null);
     const token = ref(sessionStorage.getItem('token') || '');
+    const current_hotel = ref(sessionStorage.getItem('current_hotel') || '');
+    const current_subdomain = ref(sessionStorage.getItem('current_subdomain') || '')
     const errorLogin = ref(null);
     const loading = ref(false);
 
@@ -19,18 +21,26 @@ export const useAuthStore = defineStore('auth', () => {
           const response = await loginService(credentials);
           
           if (response.ok) {
-            console.log('ssdsfsfsResponde',response.ok);
             this.token = response.data.token;
             this.user = response.data.user;
             this.errorLogin = null;
+
+            //set session token and user data
             sessionStorage.setItem('token', this.token);
             sessionStorage.setItem('user', JSON.stringify(this.user));
+            //current_hotel
+            sessionStorage.setItem('current_hotel',response.data.user.current_hotel);
+            //current_subdomain
+            sessionStorage.setItem('current_subdomain',response.data.user.curent_subdmain_hotel);
+
             this.$router.push('/dashboard')
+
           } else {
+
             this.errorLogin = 'Credenciales incorrectas';
+
           }
 
-          console.log('credentials445',this.errorLogin);
         } catch (error) {
           this.errorLogin = error.response?.data?.message || 'Ha ocurrido un error';
         } finally {
@@ -43,6 +53,8 @@ export const useAuthStore = defineStore('auth', () => {
         token.value = '';
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
+        sessionStorage.removeItem('current_hotel');
+        sessionStorage.removeItem('current_subdomain');
         this.$router.push('/login')
     }
 
@@ -53,6 +65,8 @@ export const useAuthStore = defineStore('auth', () => {
         loading,
         login,
         logout,
+        current_hotel,
+        current_subdomain
     };
   
 });

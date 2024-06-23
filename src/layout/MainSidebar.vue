@@ -155,8 +155,8 @@ const user_buttons = ref([
         include : '-',
     },
     {
-        title: 'Manuel Gimenez',
-        icon: 'https://ui-avatars.com/api/?name=NA&color=fff&background=3D5F87',
+        title: authStore.user.name+' '+authStore.user.lastname,
+        icon: 'https://ui-avatars.com/api/?name=NA&color=fff&background='+authStore.user.color,
         include : '-',
         border : true
     },

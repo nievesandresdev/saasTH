@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { i18n } from '@/i18n'
 import { usePreloaderStore } from '@/stores/modules/preloader';
+import { useAuthStore } from '@/stores/modules/auth/login'
+
 
 // const locale = localStorage.getItem('locale') || 'es'
 const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
@@ -16,9 +18,11 @@ axios.interceptors.request.use(config => {
     const preloader = getPreloaderStore();
     preloader.requestStarted();
   }
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
+
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
+    config.headers['Hotel-SUBDOMAIN'] = useAuthStore.current_subdomain
   }
   return config;
 }, error => {

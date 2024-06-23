@@ -258,12 +258,7 @@ const handleLogin = async () => {
     email: form.value.email,
     password: form.value.password
   });
-
-  console.log('errorloginpage',authStore.errorLogin)
-
-  if (authStore.token) {
-    router.push('/dashboard');
-  } 
+  
 }
 </script>
 
