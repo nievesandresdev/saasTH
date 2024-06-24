@@ -82,11 +82,12 @@ let paramAxios = {
 
 export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
   const api_url_backend = SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER;
-
+  const subdomain = sessionStorage.getItem('current_subdomain') || null
   const defaultHeaders = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
+    'hotelsubdomain': subdomain,
     'x-key-api': X_KEY_API,
   };
 
@@ -99,7 +100,6 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     url: `${api_url_backend}/${endpoint}`,
     ...options,
   };
-
   if (method.toLowerCase() === 'get') {
     paramAxios.params = data;
   } else {
