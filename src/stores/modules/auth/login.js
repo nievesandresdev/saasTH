@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { login as loginService } from '@/api/services/auth';
+import { login as loginService,logout as LogoutService } from '@/api/services/auth';
 import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -48,14 +48,18 @@ export const useAuthStore = defineStore('auth', () => {
         }
       }
 
-    function logout() {
-        user.value = null;
-        token.value = '';
+    async function logout() {
+      const response = await LogoutService();
+
+      if (response.ok) {
+        this.token = '';
+        this.user = null;
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('current_hotel');
         sessionStorage.removeItem('current_subdomain');
         this.$router.push('/login')
+      }
     }
 
     return {
