@@ -38,6 +38,49 @@
                     <hr class="mb-5">
                         <div v-if="currentStep === 1">
 
+                            <div class="flex flex-col text-black">
+                                <span class="text-sm font-medium">Elige tu tipo de usuario</span>
+                                <span class="text-sm font-normal mt-2">Aquí podrás elegir el tipo de usuario que quieres crear.</span>
+                            </div>
+
+                            <div class="relative mt-2">
+                                <div class="relative w-full">
+                                <input
+                                    type="text"
+                                    @click="toggleModal"
+                                    :value="selectedHotelName"
+                                    readonly
+                                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-700 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                                    placeholder="Selecciona el tipo de usuario deseado..."
+                                />
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <!-- 1.TH.I.dropdown icon -->
+                                    <!-- <svg
+                                    class="h-4 w-4 text-gray-700"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"
+                                    />
+                                    </svg> -->
+                                    <img src="/assets/icons/1.TH.I.dropdownBig.svg" >
+                                </div>
+                                </div>
+                                <transition name="modal-fade">
+                                    <ModalSelect
+                                        v-if="isModalOpen"
+                                        :options="seletedHotelPermissions"
+                                        @close="toggleModal"
+                                        @select="selectHotel"
+                                    />
+                                </transition>
+                            </div>
+
+                            
+
                         </div>
                         <div v-if="currentStep === 2">
                             
@@ -48,6 +91,9 @@
                 </div>
 
             </div>
+
+            
+
 
             <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
                 <button
@@ -66,32 +112,51 @@
                     {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
                 </button>
             </div>
-
         </div>
     </transition>
 
 
 </template>
 <script setup>
-import {  ref, onMounted,nextTick,defineEmits } from 'vue'
+import { ref, onMounted, nextTick, defineEmits } from 'vue'
+import ModalSelect from './ModalSelect.vue';
 
 const emits = defineEmits(['close']);
+
+
+const seletedHotelPermissions = ref([
+    { id: 1, name: 'Usuario Administrador' },
+    { id: 2, name: 'Usuario Operador' },
+    // Add more options as needed
+]);
+
+const selectedHotelName = ref('Selecciona el tipo de usuario deseado...');
+const isModalOpen = ref(false);
+
+const toggleModal = () => {
+    isModalOpen.value = !isModalOpen.value;
+};
+
+const selectHotel = (hotel) => {
+    selectedHotelName.value = hotel.name;
+    isModalOpen.value = false;
+};
 
 const props = defineProps({
     modal_add: Boolean
 })
 
 function closeModal() {
-  emits('close');
+    emits('close');
 }
 
 const isFormIncomplete = ref(false);
 
 const currentStep = ref(1);
 const steps = [
-  { number: 1, label: 'Usuario' },
-  { number: 2, label: 'Hoteles' },
-  { number: 3, label: 'Accesos' }
+    { number: 1, label: 'Usuario' },
+    { number: 2, label: 'Hoteles' },
+    { number: 3, label: 'Accesos' }
 ];
 
 /* const permissions = [
@@ -103,11 +168,11 @@ const steps = [
 
 
 const nextStep = () => {
-  if (currentStep.value < steps.length) currentStep.value++;
+    if (currentStep.value < steps.length) currentStep.value++;
 };
 
 const prevStep = () => {
-  if (currentStep.value > 1) currentStep.value--;
+    if (currentStep.value > 1) currentStep.value--;
 };
 
 
@@ -126,44 +191,63 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
-.add{
-        width: 500px;
-        position: fixed;
-        // height: max-content;
-        // min-height: 100%;
-    }
+.add {
+    width: 500px;
+    position: fixed;
+    // height: max-content;
+    // min-height: 100%;
+}
 
-    .v-enter-active,
-    .v-leave-active {
-        transition: transform 0.5s ease;
-    }
+.v-enter-active,
+.v-leave-active {
+    transition: transform 0.5s ease;
+}
 
-    .v-enter-from,
-    .v-leave-to {
-        transform: translateX(100%);
-    }
+.v-enter-from,
+.v-leave-to {
+    transform: translateX(100%);
+}
 
 
 
-    .scrolling-sticky {
-        &::-webkit-scrollbar {
+.scrolling-sticky {
+    &::-webkit-scrollbar {
         -webkit-appearance: none;
-        }
-        &::-webkit-scrollbar:vertical {
-            width:16px;
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: #BFBFBF;
-            border-radius: 20px;
-            border: 4px solid #fff;
-        }
-        &::-webkit-scrollbar-track {
-            border-radius: 10px;
-            background-color: #fff;
-        }
-        &::-webkit-scrollbar:horizontal{
-            width:0;
-            height: 0;
-        }
     }
+
+    &::-webkit-scrollbar:vertical {
+        width: 16px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #BFBFBF;
+        border-radius: 20px;
+        border: 4px solid #fff;
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+        width: 0;
+        height: 0;
+    }
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+    transition: opacity 0.4s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+    opacity: 0;
+}
+
+.modal-fade-enter-to,
+.modal-fade-leave-from {
+    opacity: 1;
+}
 </style>
