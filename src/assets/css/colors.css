@@ -59,6 +59,9 @@
     .hborder-green-600 {
         background-color: var(--h-green-600);
     }
+    .hborder-green-700 {
+        border-color: var(--h-green-700);
+    }
     .hbg-green-800 {
         background-color: var(--h-green-800);
     }
