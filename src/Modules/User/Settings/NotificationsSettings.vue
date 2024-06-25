@@ -31,7 +31,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox :modelValue="emailOwnerChecked" @change="updateEmailsForRole('Associate', emailOwnerChecked)" />
+                                <Checkbox v-model="allChecked.chat.Associate" @change="maskAllEmailsForRole('chat','Associate')"/>
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox :modelValue="emailAdminChecked" @change="updateEmailsForRole('Administrator', emailAdminChecked)" />
+                                <Checkbox v-model="allChecked.chat.Administrator" @change="maskAllEmailsForRole('chat','Administrator')"/>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox :modelValue="emailOperatorChecked" @change="updateEmailsForRole('Operator', emailOperatorChecked)" />
+                                <Checkbox v-model="allChecked.chat.Operator" @change="maskAllEmailsForRole('chat','Operator')"/>
 
                             </div>
                         </div>
@@ -77,7 +77,7 @@
         </div>
 
         <!-- chat -->
-        <div v-if="chatSettings.email_notify_new_message_to" class="mt-6">
+        <div v-if="!loadData" class="mt-6">
             <h2 class="text-base font-medium leading-[120%]">Chat</h2>
             <div class="shadow-hoster rounded-[10px] bg-white py-6 mt-4">
                 <!-- new chat -->
@@ -90,17 +90,17 @@
                         <!-- owner -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_new_message_to', 'Associate')" @update:modelValue="updateChatSetting('email_notify_new_message_to', 'Associate', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysChat.email_notify_new_message_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
                         </div>
                         <!-- administrator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_new_message_to', 'Administrator')" @update:modelValue="updateChatSetting('email_notify_new_message_to', 'Administrator', $event)"/>
+                            <Checkbox  v-model="boolBoxToKeysChat.email_notify_new_message_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
                         </div>
                         <!-- operator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_new_message_to', 'Operator')" @update:modelValue="updateChatSetting('email_notify_new_message_to', 'Operator', $event)"/>
+                            <Checkbox  v-model="boolBoxToKeysChat.email_notify_new_message_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
                         </div>
                     </div>
                 </div>
@@ -114,17 +114,17 @@
                         <!-- owner -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_pending_chat_to', 'Associate')" @update:modelValue="updateChatSetting('email_notify_pending_chat_to', 'Associate', $event)"/>
+                            <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
                         </div>
                         <!-- administrator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_pending_chat_to', 'Administrator')" @update:modelValue="updateChatSetting('email_notify_pending_chat_to', 'Administrator', $event)"/>
+                            <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
                         </div>
                         <!-- operator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_pending_chat_to', 'Operator')" @update:modelValue="updateChatSetting('email_notify_pending_chat_to', 'Operator', $event)"/>
+                            <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
                         </div>
                     </div>
                 </div>
@@ -138,17 +138,17 @@
                         <!-- owner -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_not_answered_chat_to', 'Associate')" @update:modelValue="updateChatSetting('email_notify_not_answered_chat_to', 'Associate', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
                         </div>
                         <!-- administrator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_not_answered_chat_to', 'Administrator')" @update:modelValue="updateChatSetting('email_notify_not_answered_chat_to', 'Administrator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
                         </div>
                         <!-- operator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isChatSChecked('email_notify_not_answered_chat_to', 'Operator')" @update:modelValue="updateChatSetting('email_notify_not_answered_chat_to', 'Operator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox v-model="test"/>
+                                <Checkbox v-model="allChecked.queries.Associate" @change="maskAllEmailsForRole('queries','Associate')"/>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox v-model="test"/>
+                                <Checkbox v-model="allChecked.queries.Administrator" @change="maskAllEmailsForRole('queries','Administrator')"/>
                             </div>
                         </div>
                     </div>
@@ -208,7 +208,7 @@
                         <div class="flex-grow">
                             <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                             <div class="mt-1 text-center">
-                                <Checkbox v-model="test"/>
+                                <Checkbox v-model="allChecked.queries.Operator" @change="maskAllEmailsForRole('queries','Operator')"/>
                             </div>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
         </div>
 
         <!-- feedback -->
-        <div v-if="querySettings.email_notify_new_feedback_to" class="mt-6">
+        <div v-if="!loadData" class="mt-6">
             <h2 class="text-base font-medium leading-[120%]">Seguimiento</h2>
             <div class="shadow-hoster rounded-[10px] bg-white py-6 mt-4">
                 <!-- new feedback -->
@@ -230,17 +230,17 @@
                         <!-- owner -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_new_feedback_to', 'Associate')" @update:modelValue="updateQuerySetting('email_notify_new_feedback_to', 'Associate', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/>
                         </div>
                         <!-- administrator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_new_feedback_to', 'Administrator')" @update:modelValue="updateQuerySetting('email_notify_new_feedback_to', 'Administrator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/>
                         </div>
                         <!-- operator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_new_feedback_to', 'Operator')" @update:modelValue="updateQuerySetting('email_notify_new_feedback_to', 'Operator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/>
                         </div>
                     </div>
                 </div>
@@ -254,17 +254,17 @@
                         <!-- owner -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_pending_feedback_to', 'Associate')" @update:modelValue="updateQuerySetting('email_notify_pending_feedback_to', 'Associate', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/>
                         </div>
                         <!-- administrator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_pending_feedback_to', 'Administrator')" @update:modelValue="updateQuerySetting('email_notify_pending_feedback_to', 'Administrator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/>
                         </div>
                         <!-- operator -->
                         <div class="flex justify-between flex-grow">
                             <Checkbox v-model="plataformDefault" isDisabled/>
-                            <Checkbox :modelValue="isSQChecked('email_notify_pending_feedback_to', 'Operator')" @update:modelValue="updateQuerySetting('email_notify_pending_feedback_to', 'Operator', $event)"/>
+                            <Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/>
                         </div>
                     </div>
                 </div>
@@ -272,10 +272,10 @@
         </div>
 
     </section>
-    <ChangesBar />
+    <ChangesBar :existingChanges="changes" :validChanges="valid"/>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick, computed  } from 'vue'
 import MenuSettings from './components/MenuSettings.vue';
 import Checkbox from '@/components/Forms/Checkbox.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
@@ -287,18 +287,63 @@ const querySettingsStore = useQuerySettingsStore();
 const chatSettingsStore = useChatSettingsStore();
 
 const plataformDefault = ref(true)
+const loadData = ref(true)
 const querySettings = ref([])
 const chatSettings = ref([])
 
-const emailOwnerChecked = ref(false);
-const emailAdminChecked = ref(false);
-const emailOperatorChecked = ref(false);
+const allChecked = ref({
+    chat:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    },
+    queries:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    },
+});
+
+const boolBoxToKeysChat = ref({
+    email_notify_new_message_to:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    },
+    email_notify_pending_chat_to:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    },
+    email_notify_not_answered_chat_to:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    }
+});
+
+const boolBoxToKeysQueries = ref({
+    email_notify_new_feedback_to:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    },
+    email_notify_pending_feedback_to:{
+        Associate:false,
+        Administrator:false,
+        Operator:false,
+    }
+});
+
+const boxToKeysChatRef = ref(null)
+const boxToKeysQueriesRef = ref(null)
 
 
 onMounted(async () => {
     await getQuerySettings();
     await getChatSettings();
-    ['Associate', 'Administrator', 'Operator'].forEach(checkAndUpdateMasterCheckbox);
+    await nextTick();
+    matchDataWithBoxes()
 })
 
 const getQuerySettings = async() =>{
@@ -309,87 +354,104 @@ const getChatSettings = async() =>{
     chatSettings.value = await chatSettingsStore.$getAll();
 }
 
+const matchDataWithBoxes = () =>{
+    let keysChat = Object.keys(boolBoxToKeysChat.value);
+    let keysFeedback = Object.keys(boolBoxToKeysQueries.value);
+    let keyRoles = ['Associate','Administrator','Operator'];
 
-const isSQChecked = (settingKey, role) => {
-    if(querySettings.value[settingKey]){
-        return querySettings.value[settingKey].includes(role);
-    }
-    return false;
-    
-}
-
-const updateQuerySetting = (settingKey, role, isChecked) => {
-    if (isChecked) {
-        if (!querySettings.value[settingKey].includes(role)) {
-            querySettings.value[settingKey].push(role);
-        }
-    } else {
-        const index = querySettings.value[settingKey].indexOf(role);
-        if (index > -1) {
-            querySettings.value[settingKey].splice(index, 1);
-        }
-    }
-}
-
-const isChatSChecked = (settingKey, role) => {
-    if(chatSettings.value[settingKey]){
-        return chatSettings.value[settingKey].includes(role);
-    }
-    return false;
-    
-}
-
-const updateChatSetting = (settingKey, role, isChecked) => {
-    if (isChecked) {
-        if (!chatSettings.value[settingKey].includes(role)) {
-            chatSettings.value[settingKey].push(role);
-        }
-    } else {
-        const index = chatSettings.value[settingKey].indexOf(role);
-        if (index > -1) {
-            chatSettings.value[settingKey].splice(index, 1);
-        }
-    }
-}
-const updateEmailsForRole = (role, newValue) => {
-    const settingsKeys = [
-        'email_notify_new_message_to',
-        'email_notify_pending_chat_to',
-        'email_notify_not_answered_chat_to'
-    ];
-
-    settingsKeys.forEach(key => {
-        if (newValue === false) {
-            chatSettings.value[key][role] = false;
-        } else {
-            chatSettings.value[key][role] = true;
-        }
+    keysChat.forEach(key => {
+        keyRoles.forEach(role => {
+            const newState = chatSettings.value[key].includes(role);
+            const updatedRoleStates = {
+                ...boolBoxToKeysChat.value[key],
+                [role]: newState
+            };
+            boolBoxToKeysChat.value[key] = { ...updatedRoleStates };
+        });
     });
-    checkAndUpdateMasterCheckbox(role);
+    boxToKeysChatRef.value = JSON.stringify(boolBoxToKeysChat.value);
+    keysFeedback.forEach(key => {
+        keyRoles.forEach(role => {
+            const newState = querySettings.value[key].includes(role);
+            const updatedRoleStates = {
+                ...boolBoxToKeysQueries.value[key],
+                [role]: newState
+            };
+            boolBoxToKeysQueries.value[key] = { ...updatedRoleStates };
+        });
+    });
+    boxToKeysQueriesRef.value = JSON.stringify(boolBoxToKeysQueries.value);
+    loadData.value = false;
 }
 
-const checkAndUpdateMasterCheckbox = (role) => {
-    const settingsKeys = [
-        'email_notify_new_message_to',
-        'email_notify_pending_chat_to',
-        'email_notify_not_answered_chat_to'
-    ];
-    console.log('chatSettings.value',chatSettings.value)
-    const allChecked = settingsKeys.every(key => chatSettings.value[key][role]);
-    const anyChecked = settingsKeys.some(key => chatSettings.value[key][role]);
-    console.log('role',role)
-    console.log('allChecked',allChecked)
-    console.log('anyChecked',anyChecked)
-    if (role === 'Associate') {
-        emailOwnerChecked.value = allChecked;
-    } else if (role === 'Administrator') {
-        emailAdminChecked.value = allChecked;
-    } else if (role === 'Operator') {
-        emailOperatorChecked.value = allChecked;
+//marcar todas las casillas
+const maskAllEmailsForRole = (model, role) => {
+    let keys, data;
+
+    if (model === 'chat') {
+        keys = Object.keys(boolBoxToKeysChat.value);
+        data = boolBoxToKeysChat.value;
+    } else {
+        keys = Object.keys(boolBoxToKeysQueries.value);
+        data = boolBoxToKeysQueries.value;
     }
 
-    // Si todos están desactivados, se puede usar `anyChecked` para manipular el comportamiento inverso
+    keys.forEach(key => {
+        let newState = allChecked.value[model][role];
+        if (model === 'chat') {
+            boolBoxToKeysChat.value[key][role] = newState;
+        } else {
+            boolBoxToKeysQueries.value[key][role] = newState;
+        }   
+    });
 }
 
+const reviewAllCheckup = (model, role) => {
+    let keys, data;
+
+    if (model === 'chat') {
+        keys = Object.keys(boolBoxToKeysChat.value);
+        data = boolBoxToKeysChat.value;
+    } else {
+        keys = Object.keys(boolBoxToKeysQueries.value);
+        data = boolBoxToKeysQueries.value;
+    }
+
+    const everyChecked = keys.every(key => data[key][role]);
+    const anyChecked = keys.some(key => data[key][role]);
+
+    // Prepara un nuevo objeto para forzar la reactividad
+    let updatedState = {};
+
+    if (model === 'chat') {
+        updatedState = { ...allChecked.value.chat, [role]: everyChecked };
+        console.log('updatedState',updatedState)
+        allChecked.value.chat = updatedState; // Reasigna el objeto actualizado
+    } else {
+        updatedState = { ...allChecked.value.queries, [role]: everyChecked };
+        allChecked.value.queries = updatedState; // Reasigna el objeto actualizado
+    }
+
+    if (!anyChecked) {
+        if (model === 'chat') {
+            allChecked.value.chat = { ...allChecked.value.chat, [role]: false };
+        } else {
+            allChecked.value.queries = { ...allChecked.value.queries, [role]: false };
+        }
+    }
+}
+
+const changes = computed(()=>{
+    if(boxToKeysQueriesRef.value){
+        let result = JSON.stringify(boolBoxToKeysQueries.value) !== boxToKeysQueriesRef.value || JSON.stringify(boolBoxToKeysChat.value) !==  boxToKeysChatRef.value;
+        return result;
+    }
+    return false;
+})
+
+const valid = computed(()=>{
+    if(boxToKeysQueriesRef.value && boxToKeysChatRef.value && changes.value) return true
+    return false;
+})
 
 </script>
