@@ -37,47 +37,60 @@
                     </div>
                     <hr class="mb-5">
                         <div v-if="currentStep === 1">
-
                             <div class="flex flex-col text-black">
                                 <span class="text-sm font-medium">Elige tu tipo de usuario</span>
                                 <span class="text-sm font-normal mt-2">Aquí podrás elegir el tipo de usuario que quieres crear.</span>
                             </div>
-
                             <div class="relative mt-2">
                                 <div class="relative w-full">
-                                <input
-                                    type="text"
-                                    @click="toggleModal"
-                                    :value="selectedHotelName"
-                                    readonly
-                                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-700 font-medium text-sm px-4 py-2.5 cursor-pointer"
-                                    placeholder="Selecciona el tipo de usuario deseado..."
-                                />
-                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                    <!-- 1.TH.I.dropdown icon -->
-                                    <!-- <svg
-                                    class="h-4 w-4 text-gray-700"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"
+                                    <input
+                                        type="text"
+                                        @click="toggleModalSelect"
+                                        :value="selectedRoleName"
+                                        readonly
+                                        class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                                        placeholder="Selecciona el tipo de usuario deseado..."
                                     />
-                                    </svg> -->
-                                    <img src="/assets/icons/1.TH.I.dropdownBig.svg" >
-                                </div>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                        <img src="/assets/icons/1.TH.I.dropdownBig.svg" >
+                                    </div>
                                 </div>
                                 <transition name="modal-fade">
                                     <ModalSelect
-                                        v-if="isModalOpen"
-                                        :options="seletedHotelPermissions"
-                                        @close="toggleModal"
-                                        @select="selectHotel"
+                                        :open="isModalOpen"
+                                        :options="seletedRoleUser"
+                                        @close="toggleModalSelect"
+                                        @select="selectRole"
                                     />
                                 </transition>
                             </div>
+                            <div class="relative mt-4">
+                                <div class="flex flex-col text-black">
+                                    <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
+                                </div>
+                                <div class="relative w-full">
+                                    <input
+                                        type="text"
+                                        @click="toggleModalWorkPosition"
+                                        :value="selectedWorkPositionName"
+                                        readonly
+                                        class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                                        placeholder="Selecciona el tipo de usuario deseado..."
+                                    />
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                        <img src="/assets/icons/1.TH.I.dropdownBig.svg" >
+                                    </div>
+                                </div>
+                                <transition name="modal-fade">
+                                    <ModalCrud
+                                        :options="work_positions"
+                                        :open="isModalCrudOpen"
+                                        @close="toggleModalWorkPosition"
+                                        @select="selectWorkPosition"
+                                    />
+                                </transition>
+                            </div>
+
 
                             
 
@@ -120,31 +133,55 @@
 <script setup>
 import { ref, onMounted, nextTick, defineEmits } from 'vue'
 import ModalSelect from './ModalSelect.vue';
+import ModalCrud from './ModalCrud.vue';
 
 const emits = defineEmits(['close']);
 
+const props = defineProps({
+    modal_add: Boolean,
+    work_positions : Array
+})
 
-const seletedHotelPermissions = ref([
-    { id: 1, name: 'Usuario Administrador' },
-    { id: 2, name: 'Usuario Operador' },
+
+const seletedRoleUser = ref([
+    { id: 1, name: 'Usuario Propietario',description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.'},
+    { id: 2, name: 'Usuario Administrador' , description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.'},
+    { id: 3, name: 'Usuario Operador',description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.'}
     // Add more options as needed
 ]);
 
-const selectedHotelName = ref('Selecciona el tipo de usuario deseado...');
-const isModalOpen = ref(false);
+/* const workPositionOptions = ref([
+  { id: 1, name: 'Recepción' },
+  { id: 2, name: 'Marketing' },
+  { id: 3, name: 'Gestor de reseñas' }
+]); */
 
-const toggleModal = () => {
+const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
+const selectedWorkPositionName = ref('Elige el puesto de trabajo');
+const isModalOpen = ref(false);
+const isModalCrudOpen = ref(false);
+
+const toggleModalSelect = () => {
     isModalOpen.value = !isModalOpen.value;
 };
 
-const selectHotel = (hotel) => {
-    selectedHotelName.value = hotel.name;
+const toggleModalWorkPosition = () => {
+    console.log('toggleModalWorkPosition')
+    isModalCrudOpen.value = !isModalCrudOpen.value;
+};
+
+const selectRole = (rol) => {
+    selectedRoleName.value = rol.name;
     isModalOpen.value = false;
 };
 
-const props = defineProps({
-    modal_add: Boolean
-})
+const selectWorkPosition = (position) => {
+    selectedWorkPositionName.value = position.name;
+    isModalCrudOpen.value = false;
+};
+
+
+
 
 function closeModal() {
     emits('close');
@@ -165,6 +202,8 @@ const steps = [
     {name: 'Reseñas' , tooltip : 'Permite al usuario visualizar y responder nuevas reseñas.' , value: 'resenas'},
     {name: 'Análisis', tooltip : 'Permite al usuario acceder al análisis de tu resputación online' , value: 'analisis'},
 ] */
+
+
 
 
 const nextStep = () => {
