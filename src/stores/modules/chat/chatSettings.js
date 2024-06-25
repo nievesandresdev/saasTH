@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import {
     getAllApi,
+    updateNotificationsEmailApi
 } from '@/api/services/chat/chatSettings.services'
 
 export const useChatSettingsStore = defineStore('chatSettings', () => {
@@ -19,11 +20,19 @@ export const useChatSettingsStore = defineStore('chatSettings', () => {
         }
     }
 
+    async function $updateNotificationsEmail(data) {
+        console.log('data',data)
+        const response = await updateNotificationsEmailApi(data)
+        console.log('updateNotificationsEmail',response)
+        const { ok } = response;
+        return ok;
+    }
 
 
     //
     return {
         $getAll,
+        $updateNotificationsEmail
     }
 
 })
