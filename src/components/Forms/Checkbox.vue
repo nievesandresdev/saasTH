@@ -17,37 +17,37 @@
             @click="toggleCheck"
         ></div>
     </div>
-    
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  
-  const props = defineProps({
+</template>
+
+<script setup>
+import { ref, watch } from 'vue';
+
+const props = defineProps({
     modelValue: Boolean,
     isDisabled: {
-        type:Boolean,
+        type: Boolean,
         default: false
     },
     sizeClasses: {
-        type:String,
+        type: String,
         default: 'w-4 h-4'
     },
-  });
-  
-  const isChecked = ref(props.modelValue);
-  
-  const emit = defineEmits(['update:modelValue']);
-  
-  function toggleCheck() {
-    if(!props.isDisabled){
+});
+
+const isChecked = ref(props.modelValue);
+
+const emit = defineEmits(['update:modelValue', 'change']);
+
+// Watcher para actualizar isChecked cuando modelValue cambia
+watch(() => props.modelValue, (newValue) => {
+    isChecked.value = newValue;
+}, { immediate: true });
+
+function toggleCheck() {
+    if (!props.isDisabled) {
         isChecked.value = !isChecked.value;
         emit('update:modelValue', isChecked.value);
+        emit('change');
     }
-  }
-  </script>
-  
-  <style scoped>
-  /* Si necesitas estilos específicos que no se pueden aplicar con Tailwind, agrégalos aquí */
-  </style>
-  
+}
+</script>
