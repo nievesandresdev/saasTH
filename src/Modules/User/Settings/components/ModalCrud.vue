@@ -12,6 +12,7 @@
       <div @click="workPositionMModalCreate" class="text-center px-4 py-2 mt-2 text-sm text-black border border-black m-3 rounded-md cursor-pointer hover:bg-gray-50">
         Crear puesto de trabajo
       </div>
+      
     </div>
     <div v-else class="p-4">
       <div class="flex justify-between items-center mb-4">
@@ -37,43 +38,29 @@
         <button
           @click="saveWorkPosition"
           :disabled="!editingWorkPosition.name"
-          :class="['hbtn-cta', 'px-4', 'py-2', 'text-black', 'font-medium', 'rounded-md', { 'bg-gray-300': !editingWorkPosition.name, 'cursor-not-allowed': !editingWorkPosition.name }]"
+          :class="['hbtn-cta', 'px-4', 'py-2', 'text-white', 'font-medium', 'rounded-md', { 'bg-gray-300': !editingWorkPosition.name, 'cursor-not-allowed': !editingWorkPosition.name }]"
         >
           {{ editingWorkPosition.id ? 'Guardar' : 'Crear' }}
         </button>
       </div>
     </div>
   </div>
-  <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal" size="sm">
-    <template #content>
-      <div class="p-4">
-        <h2 class="text-lg font-medium">Cambios sin guardar</h2>
-        <p>Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?</p>
-        <div class="flex justify-end mt-4">
-          <button 
-            type="button" 
-            class="px-4 py-2 border border-black rounded-md text-black hover:bg-gray-100 mr-2" 
-            @click="confirmCloseModal"
-          >
-            Cerrar
-          </button>
-          <button 
-            type="button" 
-            class="hbtn-cta w-auto px-4 py-2 rounded-lg text-base font-medium" 
-            @click="saveWorkPosition"
-          >
-            Guardar
-          </button>
-        </div>
-      </div>
-    </template>
-  </ModalWindow>
+  
+  <ModalNoSave 
+      :open="showAlertModal" 
+      text="Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?" 
+      title="Cambios sin guardar" 
+      textbtn="Guardar" 
+      type="save_changes"
+      @saveChanges="saveWorkPosition"
+      @close="closeAlertModal"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { defineProps, defineEmits } from 'vue';
-import ModalWindow from '@/components/ModalWindow.vue'; 
+import ModalNoSave from '@/components/ModalNoSave.vue'; 
 import { createWorkPosition, updateWorkPosition, deleteWPosition } from '@/api/services/users/userSettings.service';
 
 const props = defineProps({
@@ -149,6 +136,7 @@ const checkForUnsavedChanges = () => {
     showAlertModal.value = true;
   } else {
     isEditing.value = false;
+    closeModal();
   }
 };
 
@@ -166,3 +154,8 @@ const closeModal = () => {
 };
 </script>
 
+<style scoped>
+.hbtn-cta {
+  background-color: #fbc02d; /* Cambia este color según tu estilo */
+}
+</style>

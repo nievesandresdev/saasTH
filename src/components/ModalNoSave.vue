@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-      <div v-if="visitNow" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div v-if="open" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
           <div class="absolute inset-0 bg-[#00000080]"></div>
         </div>
@@ -15,7 +15,10 @@
               <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
             </div>
             <div class="mt-4 flex justify-between" v-if="type !== 'exit'">
-                <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                <!-- <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                    Salir sin guardar
+                </button> antes-->
+                <button @click.prevent="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
                     Salir sin guardar
                 </button>
                 
@@ -53,7 +56,7 @@
     type: String
   });
   
-  const emit = defineEmits(['saveChanges']);
+  const emit = defineEmits(['saveChanges', 'close']);
   const showModal = ref(false);
   const visitNow = ref(false);
   const intendedRoute = ref(null);  // Almacena la ruta intentada
@@ -66,6 +69,7 @@
   
   function closeModal() {
     visitNow.value = false;
+    emit('close');
   }
   
   function saveChanges() {
