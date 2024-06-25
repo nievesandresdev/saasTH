@@ -1,6 +1,7 @@
 <template>
     <transition name="fade">
-      <div v-if="open" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <!-- <div v-if="visitNow" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"> -->
+        <div v-if="open" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"></div>
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
           <div class="absolute inset-0 bg-[#00000080]"></div>
         </div>
