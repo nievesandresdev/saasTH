@@ -38,7 +38,7 @@
         <button
           @click="saveWorkPosition"
           :disabled="!editingWorkPosition.name"
-          :class="['hbtn-cta', 'px-4', 'py-2', 'text-white', 'font-medium', 'rounded-md', { 'bg-gray-300': !editingWorkPosition.name, 'cursor-not-allowed': !editingWorkPosition.name }]"
+          :class="['hbtn-cta', 'px-4', 'py-2', 'text-black', 'font-medium', 'rounded-md', { 'bg-gray-300': !editingWorkPosition.name, 'cursor-not-allowed': !editingWorkPosition.name }]"
         >
           {{ editingWorkPosition.id ? 'Guardar' : 'Crear' }}
         </button>
@@ -51,9 +51,9 @@
       text="Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?" 
       title="Cambios sin guardar" 
       textbtn="Guardar" 
-      type="save_changes"
+      type="exit_save"
       @saveChanges="saveWorkPosition"
-      @close="closeAlertModal"
+      @close="confirmCloseModal"
   />
 </template>
 

@@ -14,7 +14,7 @@
             <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
             <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
           </div>
-          <div class="mt-4 flex justify-between" v-if="type !== 'exit'">
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save'">
               <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
@@ -26,6 +26,15 @@
                   {{ textbtn }}
               </button>
           </div>
+          <div class="mt-4 flex justify-between" v-if="type === 'exit_save'">
+              <button @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir sin guardar
+              </button>
+              
+              <button  @click="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+                  {{ textbtn ?? 'Guardar cambios' }}
+              </button>
+          </div>
           <div class="mt-4 flex justify-between" v-if="type == 'exit'">
               <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Cancelar
@@ -35,7 +44,6 @@
               </button>
           </div>
       </div>
-
     </div>
   </transition>
 </template>
@@ -53,19 +61,25 @@ const props = defineProps({
   type: String
 });
 
-const emit = defineEmits(['saveChanges']);
+const emit = defineEmits(['saveChanges', 'close']);
 const showModal = ref(false);
 const visitNow = ref(false);
 const intendedRoute = ref(null);  // Almacena la ruta intentada
 
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
+  if (props.type === 'exit_save') {
+    visitNow.value = newVal;
+  } else {
+    visitNow.value = false;
+  }
 });
 
 const router = useRouter();
 
 function closeModal() {
   visitNow.value = false;
+  emit('close');
 }
 
 function saveChanges() {
@@ -93,7 +107,6 @@ router.beforeEach((to, from, next) => {
   }
 });
 </script>
-
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {
