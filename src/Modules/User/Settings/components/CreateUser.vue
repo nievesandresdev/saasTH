@@ -83,7 +83,7 @@
                                 </div>
                                 <transition name="modal-fade">
                                     <ModalCrud
-                                        :options="work_positions"
+                                        :data="work_positions"
                                         :open="isModalCrudOpen"
                                         @close="toggleModalWorkPosition"
                                         @select="selectWorkPosition"
@@ -179,8 +179,6 @@ const selectWorkPosition = (position) => {
     selectedWorkPositionName.value = position.name;
     isModalCrudOpen.value = false;
 };
-
-
 
 
 function closeModal() {
