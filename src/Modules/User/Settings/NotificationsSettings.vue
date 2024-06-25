@@ -380,8 +380,8 @@ const updateSettingsFromCheckBoxes = async () => {
 
     try {
         // Aquí asumo que tienes métodos en tus stores para actualizar estos ajustes
-        console.log('updatedChatSettings',updatedChatSettings)
-        console.log('updatedQuerySettings',updatedQuerySettings)
+        querySettings.value = updatedQuerySettings;
+        chatSettings.value = updatedChatSettings;
     } catch (error) {
         console.error('Error updating settings:', error);
     }
@@ -389,7 +389,7 @@ const updateSettingsFromCheckBoxes = async () => {
 
 const submit = async () => {
     await updateSettingsFromCheckBoxes();
-    // Continuar con cualquier otro proceso de submit que necesites
+    await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
 };
 
 const cancelChanges = () =>{
