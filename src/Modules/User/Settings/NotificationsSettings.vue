@@ -271,14 +271,27 @@
             </div>
         </div>
 
+
+        <ModalNoSave
+            :id="'not-saved'"
+            :open="changes &&  valid"
+            text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+            textbtn="Guardar"
+            @saveChanges="submit"
+            type="save_changes"
+        />
     </section>
-    <ChangesBar :existingChanges="changes" :validChanges="valid"/>
+    <ChangesBar 
+        :existingChanges="changes" :validChanges="valid"
+        @cancel="cancelChanges" @submit="submit"
+    />
 </template>
 <script setup>
 import { ref, onMounted, nextTick, computed  } from 'vue'
 import MenuSettings from './components/MenuSettings.vue';
 import Checkbox from '@/components/Forms/Checkbox.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue'
 //store
 import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
@@ -345,6 +358,15 @@ onMounted(async () => {
     await nextTick();
     matchDataWithBoxes()
 })
+
+const submit = () =>{
+    
+}
+
+const cancelChanges = () =>{
+    boolBoxToKeysChat.value = JSON.parse(boxToKeysChatRef.value);
+    boolBoxToKeysQueries.value = JSON.parse(boxToKeysQueriesRef.value);
+}
 
 const getQuerySettings = async() =>{
     querySettings.value = await querySettingsStore.$getAll();
@@ -425,7 +447,6 @@ const reviewAllCheckup = (model, role) => {
 
     if (model === 'chat') {
         updatedState = { ...allChecked.value.chat, [role]: everyChecked };
-        console.log('updatedState',updatedState)
         allChecked.value.chat = updatedState; // Reasigna el objeto actualizado
     } else {
         updatedState = { ...allChecked.value.queries, [role]: everyChecked };
