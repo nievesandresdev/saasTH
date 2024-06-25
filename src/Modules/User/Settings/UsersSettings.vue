@@ -121,7 +121,7 @@
         </div>
     </div>
 
-    <CreateUser :modal_add="modal_add" @close="closeModal" />
+    <CreateUser :modal_add="modal_add" @close="closeModal" :work_positions="workPositionsData" />
 </template>
 
 <script setup>
@@ -129,9 +129,11 @@ import { ref } from 'vue';
 import MenuSettings from './components/MenuSettings.vue';
 import CreateUser from './components/CreateUser.vue';
 import ButtonFilter from '@/components/Buttons/ButtonFilter.vue';
+import { getWorkPosition  } from '@/api/services/users/userSettings.service';
 
 const modal_add = ref(false);
 const visibleDropdown = ref(null);
+const workPositionsData = ref([]);
 
 const data_filter = ref ({
     search_terms: '',
@@ -198,7 +200,15 @@ const submit_filters = () => {
 const createUser = () => {
     modal_add.value = true
     visibleDropdown.value = null
-    console.log('createUser',modal_add.value);
+
+    workPositions();
+
+}
+
+//const getWorkposition async
+const workPositions = async () => {
+    const response = await getWorkPosition();
+    workPositionsData.value = response.data.work_positions;
 }
 
 const closeModal = () => {
