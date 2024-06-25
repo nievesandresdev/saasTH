@@ -1,111 +1,105 @@
 <template>
-    <transition name="fade">
-      <!-- <div v-if="visitNow" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"> -->
-        <div v-if="open" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"></div>
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-[#00000080]"></div>
-        </div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        
-        <div class="inline-block bg-white rounded-[10px] text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-[344px] p-4">  
-            <img class="h-6 w-6 cursor-pointer ml-auto" @click="closeModal" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
-
-            <div class="text-center">
-              <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
-              <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
-              <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
-            </div>
-            <div class="mt-4 flex justify-between" v-if="type !== 'exit'">
-                <!-- <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
-                    Salir sin guardar
-                </button> antes-->
-                <button @click.prevent="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
-                    Salir sin guardar
-                </button>
-                
-                <button v-if="type == 'save_changes'" @click="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
-                    {{ textbtn ?? 'Guardar cambios' }}
-                </button>
-                <button v-else @click="closeModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
-                    {{ textbtn }}
-                </button>
-            </div>
-            <div class="mt-4 flex justify-between" v-if="type == 'exit'">
-                <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
-                    Cancelar
-                </button>
-                <button @click.prevent="goLink" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
-                    Salir
-                </button>
-            </div>
-        </div>
-
+  <transition name="fade">
+    <div v-if="visitNow" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-[#00000080]"></div>
       </div>
-    </transition>
-  </template>
-  
-  <script setup>
-  import { ref, watch } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  
-  const props = defineProps({
-    id: String,
-    open: Boolean,
-    text: String,
-    title: String,
-    textbtn: String,
-    type: String
-  });
-  
-  const emit = defineEmits(['saveChanges', 'close']);
-  const showModal = ref(false);
-  const visitNow = ref(false);
-  const intendedRoute = ref(null);  // Almacena la ruta intentada
-  
-  watch(() => props.open, (newVal) => {
-    showModal.value = newVal;
-  });
-  
-  const router = useRouter();
-  
-  function closeModal() {
-    visitNow.value = false;
-    emit('close');
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      
+      <div class="inline-block bg-white rounded-[10px] text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-[344px] p-4">  
+          <img class="h-6 w-6 cursor-pointer ml-auto" @click="closeModal" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
+
+          <div class="text-center">
+            <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
+            <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
+            <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
+          </div>
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit'">
+              <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir sin guardar
+              </button>
+              
+              <button v-if="type == 'save_changes'" @click="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+                  {{ textbtn ?? 'Guardar cambios' }}
+              </button>
+              <button v-else @click="closeModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+                  {{ textbtn }}
+              </button>
+          </div>
+          <div class="mt-4 flex justify-between" v-if="type == 'exit'">
+              <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Cancelar
+              </button>
+              <button @click.prevent="goLink" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+                  Salir
+              </button>
+          </div>
+      </div>
+
+    </div>
+  </transition>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const props = defineProps({
+  id: String,
+  open: Boolean,
+  text: String,
+  title: String,
+  textbtn: String,
+  type: String
+});
+
+const emit = defineEmits(['saveChanges']);
+const showModal = ref(false);
+const visitNow = ref(false);
+const intendedRoute = ref(null);  // Almacena la ruta intentada
+
+watch(() => props.open, (newVal) => {
+  showModal.value = newVal;
+});
+
+const router = useRouter();
+
+function closeModal() {
+  visitNow.value = false;
+}
+
+function saveChanges() {
+  emit('saveChanges');
+  closeModal();
+}
+
+function goLink() {
+  if (intendedRoute.value) {
+      showModal.value = false;
+      closeModal()
+      router.push(intendedRoute.value).catch(err => {
+          console.error('Routing error:', err);
+      });
   }
-  
-  function saveChanges() {
-    emit('saveChanges');
-    closeModal();
+}
+
+router.beforeEach((to, from, next) => {
+  if (showModal.value && !visitNow.value) {
+    intendedRoute.value = to.fullPath; // Guarda la ruta completa a la que se intentaba acceder
+    visitNow.value = true;
+    next(false); // Detiene la navegación actual
+  } else {
+    next();
   }
-  
-  function goLink() {
-    if (intendedRoute.value) {
-        showModal.value = false;
-        closeModal()
-        router.push(intendedRoute.value).catch(err => {
-            console.error('Routing error:', err);
-        });
-    }
-  }
-  
-  router.beforeEach((to, from, next) => {
-    if (showModal.value && !visitNow.value) {
-      intendedRoute.value = to.fullPath; // Guarda la ruta completa a la que se intentaba acceder
-      visitNow.value = true;
-      next(false); // Detiene la navegación actual
-    } else {
-      next();
-    }
-  });
-  </script>
-  
-  
-  <style scoped>
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-  </style>
-  
+});
+</script>
+
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
