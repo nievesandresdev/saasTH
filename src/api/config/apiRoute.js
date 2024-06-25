@@ -2,6 +2,9 @@
 
 export const authPath = 'auth'
 
+//users
+export const userPath = 'users'
+
 export const homePath = 'home'
 export const hotelPath = 'hotel'
 export const staySurveyPath = 'staySurvey'

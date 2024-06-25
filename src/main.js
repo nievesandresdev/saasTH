@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import { createHead } from '@vueuse/head'
 
+
 // estilos generales
 import './assets/css/main.css'
 
