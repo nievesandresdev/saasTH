@@ -1,5 +1,5 @@
 <template>
-  <div :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open">
+  <div ref="modalRef" :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open">
     <div v-if="!isEditing">
       <div
         v-for="option in props.data"
@@ -12,7 +12,6 @@
       <div @click="workPositionMModalCreate" class="text-center px-4 py-2 mt-2 text-sm text-black border border-black m-3 rounded-md cursor-pointer hover:bg-gray-50">
         Crear puesto de trabajo
       </div>
-      
     </div>
     <div v-else class="p-4">
       <div class="flex justify-between items-center mb-4">
@@ -47,18 +46,18 @@
   </div>
   
   <ModalNoSave 
-      :open="showAlertModal" 
-      text="Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?" 
-      title="Cambios sin guardar" 
-      textbtn="Guardar" 
-      type="exit_save"
-      @saveChanges="saveWorkPosition"
-      @close="confirmCloseModal"
+    :open="showAlertModal" 
+    text="Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?" 
+    title="Cambios sin guardar" 
+    textbtn="Guardar" 
+    type="exit_save"
+    @saveChanges="saveWorkPosition"
+    @close="confirmCloseModal"
   />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import ModalNoSave from '@/components/ModalNoSave.vue'; 
 import { createWorkPosition, updateWorkPosition, deleteWPosition } from '@/api/services/users/userSettings.service';
@@ -82,6 +81,8 @@ const isEditing = ref(false);
 const editingWorkPosition = ref({ id: null, name: '' });
 const originalWorkPosition = ref({ id: null, name: '' });
 const showAlertModal = ref(false);
+const modalRef = ref(null);
+const inputRef = ref(null);
 
 const selectOption = (option) => {
   emit('select', option);
@@ -152,6 +153,20 @@ const closeAlertModal = () => {
 const closeModal = () => {
   emit('close');
 };
+
+const handleClickOutside = (event) => {
+  if (modalRef.value && !modalRef.value.contains(event.target)) {
+    closeModal();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
