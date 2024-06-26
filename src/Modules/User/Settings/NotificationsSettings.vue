@@ -389,7 +389,14 @@ const updateSettingsFromCheckBoxes = async () => {
 
 const submit = async () => {
     await updateSettingsFromCheckBoxes();
-    await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
+    let saveChatSettings = await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
+    let saveQuerySettings = await querySettingsStore.$updateNotificationsEmail(querySettings.value)
+    console.log('saveChatSettings',saveChatSettings)
+    matchDataWithBoxes();
+    if(saveChatSettings && saveQuerySettings){
+
+    }
+    
 };
 
 const cancelChanges = () =>{
@@ -418,6 +425,8 @@ const matchDataWithBoxes = () =>{
                 [role]: newState
             };
             boolBoxToKeysChat.value[key] = { ...updatedRoleStates };
+            //actualizar checbox's generales
+            reviewAllCheckup('chat', role)
         });
     });
     boxToKeysChatRef.value = JSON.stringify(boolBoxToKeysChat.value);
@@ -429,6 +438,8 @@ const matchDataWithBoxes = () =>{
                 [role]: newState
             };
             boolBoxToKeysQueries.value[key] = { ...updatedRoleStates };
+            //actualizar checbox's generales
+            reviewAllCheckup('queries', role)
         });
     });
     boxToKeysQueriesRef.value = JSON.stringify(boolBoxToKeysQueries.value);
@@ -458,6 +469,7 @@ const maskAllEmailsForRole = (model, role) => {
 }
 
 const reviewAllCheckup = (model, role) => {
+
     let keys, data;
 
     if (model === 'chat') {

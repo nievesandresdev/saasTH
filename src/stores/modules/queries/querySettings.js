@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import {
     getAllApi,
+    updateNotificationsEmailApi
 } from '@/api/services/queries/querySettings.services'
 
 export const useQuerySettingsStore = defineStore('querySettings', () => {
@@ -19,11 +20,19 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
         }
     }
 
+    async function $updateNotificationsEmail(data) {
+        const response = await updateNotificationsEmailApi(data)
+        console.log('response',response)
+        const { ok } = response;
+        return ok;
+    }
+
 
 
     //
     return {
         $getAll,
+        $updateNotificationsEmail
     }
 
 })
