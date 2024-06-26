@@ -13,7 +13,7 @@
     </section>
 
     <!-- body view -->
-    <section class="p-6 mb-6">
+    <section class="p-6 mb-6 overflow-y-auto h-[62vh]">
 
         <!-- customer experience -->
         <div class="flex justify-between items-center pb-4 border-b hborder-gray-400">
@@ -399,7 +399,7 @@ const submit = async () => {
     console.log('saveChatSettings',saveChatSettings)
     matchDataWithBoxes();
     if(saveChatSettings && saveQuerySettings){
-        toast.warningToast('Actualizado','top-right');
+        toast.warningToast('Cambios guardados con éxito','top-right');
     }
     
 };

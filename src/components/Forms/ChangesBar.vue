@@ -4,7 +4,7 @@
             <button 
                 class="text-base leading-[110%] font-medium underline"
                 :class="{'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200' : existingChanges}"
-                :disabled="!existingChanges"
+                    :disabled="!existingChanges"
                 @click="cancelChanges"
             >
                 Cancelar

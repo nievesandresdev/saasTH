@@ -115,10 +115,6 @@ button:focus {
 }
 
 /* custom toast */
-.Vue-Toastification__container .top-right{
-  top: 0;
-  right: 0;
-}
 .warning-toast {
   background-color: #FFD453; /* Color de fondo */
   border-radius: 10px; /* Bordes redondeados */
@@ -127,8 +123,8 @@ button:focus {
   min-width: 0;
   min-height: 0;
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 0;
+  right: 0;
 }
 
 /* Estilos para el cuerpo del toast */
