@@ -105,6 +105,7 @@ const saveWorkPosition = async () => {
     if (response.ok) {
       const index = props.data.findIndex((item) => item.id === editingWorkPosition.value.id);
       props.data[index] = { ...response.data.wPosition };
+      originalWorkPosition.value = { ...response.data.wPosition };
     } else {
       console.log('Error!');
     }
@@ -112,6 +113,7 @@ const saveWorkPosition = async () => {
     const response = await createWorkPosition(editingWorkPosition.value);
     if (response.ok) {
       props.data.push({ ...response.data.wPosition });
+      originalWorkPosition.value = { ...response.data.wPosition };
     } else {
       console.log('Error!');
     }
@@ -132,9 +134,9 @@ const deleteWorkPosition = async (option) => {
 };
 
 const checkForUnsavedChanges = () => {
-  if (editingWorkPosition.value.name !== originalWorkPosition.value.name) {
+  if (editingWorkPosition.value.name != originalWorkPosition.value.name) {
     showAlertModal.value = true;
-    editWorkPosition.value = { ...originalWorkPosition.value };
+    
   } else {
     isEditing.value = false;
     closeModal();
