@@ -13,7 +13,7 @@
     </section>
 
     <!-- body view -->
-    <section class="p-6 mb-6">
+    <section class="p-6 mb-6 overflow-y-auto h-[62vh]">
 
         <!-- customer experience -->
         <div class="flex justify-between items-center pb-4 border-b hborder-gray-400">
@@ -294,9 +294,14 @@ import MenuSettings from './components/MenuSettings.vue';
 import Checkbox from '@/components/Forms/Checkbox.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import ModalNoSave from '@/components/ModalNoSave.vue'
+//composable
+import { useToastAlert } from '@/composables/useToastAlert'
 //store
 import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
+
+
+const toast = useToastAlert();
 
 const querySettingsStore = useQuerySettingsStore();
 const chatSettingsStore = useChatSettingsStore();
@@ -389,7 +394,14 @@ const updateSettingsFromCheckBoxes = async () => {
 
 const submit = async () => {
     await updateSettingsFromCheckBoxes();
-    await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
+    let saveChatSettings = await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
+    let saveQuerySettings = await querySettingsStore.$updateNotificationsEmail(querySettings.value)
+    console.log('saveChatSettings',saveChatSettings)
+    matchDataWithBoxes();
+    if(saveChatSettings && saveQuerySettings){
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    }
+    
 };
 
 const cancelChanges = () =>{
@@ -418,6 +430,8 @@ const matchDataWithBoxes = () =>{
                 [role]: newState
             };
             boolBoxToKeysChat.value[key] = { ...updatedRoleStates };
+            //actualizar checbox's generales
+            reviewAllCheckup('chat', role)
         });
     });
     boxToKeysChatRef.value = JSON.stringify(boolBoxToKeysChat.value);
@@ -429,6 +443,8 @@ const matchDataWithBoxes = () =>{
                 [role]: newState
             };
             boolBoxToKeysQueries.value[key] = { ...updatedRoleStates };
+            //actualizar checbox's generales
+            reviewAllCheckup('queries', role)
         });
     });
     boxToKeysQueriesRef.value = JSON.stringify(boolBoxToKeysQueries.value);
@@ -458,6 +474,7 @@ const maskAllEmailsForRole = (model, role) => {
 }
 
 const reviewAllCheckup = (model, role) => {
+
     let keys, data;
 
     if (model === 'chat') {

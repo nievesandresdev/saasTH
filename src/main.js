@@ -3,6 +3,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createHead } from '@vueuse/head'
+import Toast from "vue-toastification";
+import 'vue-toastification/dist/index.css';
 
 
 // estilos generales
@@ -21,6 +23,7 @@ pinia.use(({ store }) => {
 function initializeApp () {
   const app = createApp(App)
 
+  app.use(Toast)
   app.use(pinia)
   app.use(i18n)
   app.use(router)
