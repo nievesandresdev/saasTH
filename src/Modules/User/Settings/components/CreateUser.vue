@@ -67,24 +67,28 @@
                 </div>
                 <div class="relative w-full">
                   <input
-                    type="text"
-                    @click="toggleModalWorkPosition"
-                    :value="selectedWorkPositionName"
-                    readonly
-                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
-                    placeholder="Selecciona el tipo de usuario deseado..."
-                  />
+                      type="text"
+                      id="workPositionInput"
+                      @click.stop="toggleModalWorkPosition"
+                      :value="selectedWorkPositionName"
+                      readonly
+                      class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                      placeholder="Selecciona el tipo de usuario deseado..."
+                    />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                     <img src="/assets/icons/1.TH.I.dropdownBig.svg">
                   </div>
                 </div>
                 <transition name="modal-fade">
-                  <ModalCrud
-                    :data="work_positions"
-                    :open="isModalCrudOpen"
-                    @close="toggleModalWorkPosition"
-                    @select="selectWorkPosition"
-                  />
+                  <div id="modalWorkPosition">
+                    <ModalCrud
+                      :data="work_positions"
+                      :open="isModalCrudOpen"
+                      @close="closeModalWorkPosition"
+                      @test="closeModalWorkPosition"
+                      @select="selectWorkPosition"
+                    />
+                  </div>
                 </transition>
               </div>
             </div>
@@ -119,9 +123,10 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits,onUnmounted } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
+  
   
   const emits = defineEmits(['close']);
   
@@ -152,6 +157,22 @@
   const closeModalWorkPosition = () => {
     isModalCrudOpen.value = false;
   }
+
+  /**eventos para dar click en el div para abrir modal not save */
+    /* const handleClickOutside = (event) => {
+      if (modalWorkPosition.value && !modalWorkPosition.value.contains(event.target) && isModalCrudOpen.value) {
+        isModalCrudOpen.value = false;
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener('click', handleClickOutside);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('click', handleClickOutside);
+    }); */
+  /**fin modal no save events */
   
   const selectRole = (rol) => {
     selectedRoleName.value = rol.name;

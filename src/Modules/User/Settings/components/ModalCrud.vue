@@ -1,5 +1,5 @@
 <template>
-  <div ref="modalRef" :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open">
+  <div ref="modalContainerRef" :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open">
     <div v-if="!isEditing">
       <div
         v-for="option in props.data"
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onUnmounted, watch } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import ModalNoSave from '@/components/ModalNoSave.vue'; 
 import { createWorkPosition, updateWorkPosition, deleteWPosition } from '@/api/services/users/userSettings.service';
@@ -75,14 +75,13 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select']);
+const emit = defineEmits(['close', 'select', 'test']);
 
 const isEditing = ref(false);
 const editingWorkPosition = ref({ id: null, name: '' });
 const originalWorkPosition = ref({ id: null, name: '' });
 const showAlertModal = ref(false);
-const modalRef = ref(null);
-const inputRef = ref(null);
+const modalContainerRef = ref(null);
 
 const selectOption = (option) => {
   emit('select', option);
@@ -135,6 +134,7 @@ const deleteWorkPosition = async (option) => {
 const checkForUnsavedChanges = () => {
   if (editingWorkPosition.value.name !== originalWorkPosition.value.name) {
     showAlertModal.value = true;
+    editWorkPosition.value = { ...originalWorkPosition.value };
   } else {
     isEditing.value = false;
     closeModal();
@@ -144,6 +144,7 @@ const checkForUnsavedChanges = () => {
 const confirmCloseModal = () => {
   isEditing.value = false;
   closeAlertModal();
+  closeModal();
 };
 
 const closeAlertModal = () => {
@@ -155,22 +156,34 @@ const closeModal = () => {
 };
 
 const handleClickOutside = (event) => {
-  if (modalRef.value && !modalRef.value.contains(event.target)) {
-    closeModal();
+  const inputElement = document.getElementById('workPositionInput');
+  if (modalContainerRef.value && !modalContainerRef.value.contains(event.target) && inputElement && !inputElement.contains(event.target)) {
+    checkForUnsavedChanges();
   }
 };
 
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+const addEventListener = () => {
+  document.addEventListener('mousedown', handleClickOutside);
+};
+
+const removeEventListener = () => {
+  document.removeEventListener('mousedown', handleClickOutside);
+  emit('test', false);
+};
+
+watch(() => props.open, (newVal) => {
+  if (newVal) {
+    addEventListener();
+  } else {
+    if (isEditing.value) {
+      checkForUnsavedChanges();
+    } else {
+      removeEventListener();
+    }
+  }
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  removeEventListener();
 });
 </script>
-
-<style scoped>
-.hbtn-cta {
-  background-color: #fbc02d; /* Cambia este color según tu estilo */
-}
-</style>
