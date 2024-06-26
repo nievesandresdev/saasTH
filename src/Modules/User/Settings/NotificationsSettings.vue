@@ -294,9 +294,14 @@ import MenuSettings from './components/MenuSettings.vue';
 import Checkbox from '@/components/Forms/Checkbox.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import ModalNoSave from '@/components/ModalNoSave.vue'
+//composable
+import { useToastAlert } from '@/composables/useToastAlert'
 //store
 import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
+
+
+const toast = useToastAlert();
 
 const querySettingsStore = useQuerySettingsStore();
 const chatSettingsStore = useChatSettingsStore();
@@ -394,7 +399,7 @@ const submit = async () => {
     console.log('saveChatSettings',saveChatSettings)
     matchDataWithBoxes();
     if(saveChatSettings && saveQuerySettings){
-
+        toast.warningToast('Actualizado','top-right');
     }
     
 };
