@@ -75,7 +75,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select', 'test']);
+const emit = defineEmits(['close', 'select']);
 
 const isEditing = ref(false);
 const editingWorkPosition = ref({ id: null, name: '' });
@@ -170,7 +170,6 @@ const addEventListener = () => {
 
 const removeEventListener = () => {
   document.removeEventListener('mousedown', handleClickOutside);
-  emit('test', false);
 };
 
 watch(() => props.open, (newVal) => {

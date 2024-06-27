@@ -15,7 +15,6 @@ export const useAuthStore = defineStore('auth', () => {
     async function login(credentials) {
         this.loading = true;
         this.errorLogin = null;
-
   
         try {
           const response = await loginService(credentials);
@@ -29,16 +28,13 @@ export const useAuthStore = defineStore('auth', () => {
             sessionStorage.setItem('token', this.token);
             sessionStorage.setItem('user', JSON.stringify(this.user));
             //current_hotel
-            sessionStorage.setItem('current_hotel',response.data.user.current_hotel);
+            sessionStorage.setItem('current_hotel',JSON.stringify(response.data.user.hotels));
             //current_subdomain
             sessionStorage.setItem('current_subdomain',response.data.user.curent_subdmain_hotel);
-
             this.$router.push('/dashboard')
 
           } else {
-
             this.errorLogin = 'Credenciales incorrectas';
-
           }
 
         } catch (error) {
