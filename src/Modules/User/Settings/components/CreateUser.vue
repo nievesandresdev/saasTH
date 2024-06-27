@@ -85,7 +85,6 @@
                       :data="work_positions"
                       :open="isModalCrudOpen"
                       @close="closeModalWorkPosition"
-                      @test="closeModalWorkPosition"
                       @select="selectWorkPosition"
                     />
                   </div>
@@ -188,8 +187,19 @@
                 </div>
             </div> <!-- fin step 1-->
             <div v-if="currentStep === 2">
-              <!-- Contenido del paso 2 -->
-            </div>
+              <div class="flex flex-col mb-8 text-left">
+                  <strong class="mb-5 text-xl">Hoteles</strong>
+                  <span class="font-normal">
+                      Selecciona los alojamientos en donde se encontrará activo este usuario.
+                  </span>
+              </div>
+              <div class="space-y-2">
+                  <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.name" class="flex items-center justify-between mb-4 rounded-lg">
+                      <span class="text-sm font-[500]">{{ hotel.name }}</span>
+                      <input type="checkbox" :value="hotel.id" v-model="form.hotels" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" @change="handleSelection(hotel)">
+                  </div>
+              </div>
+          </div>
             <div v-if="currentStep === 3">
               <!-- Contenido del paso 3 -->
             </div>
@@ -204,11 +214,17 @@
           >
             Anterior
           </button>
-          <button
+          <!-- <button
             class="px-4 py-2.5 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
+          >
+            {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
+          </button> -->
+          <button
+            class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
+            @click="currentStep === 3 ? handleStoreUser() : nextStep()"
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button>
@@ -218,9 +234,11 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits,computed,watch } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
+  import { useUserStore } from '@/stores/modules/users/users'
+
   
   
   const emits = defineEmits(['close']);
@@ -229,6 +247,8 @@
     modal_add: Boolean,
     work_positions: Array
   });
+
+  const userStore = useUserStore();
 
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);
@@ -243,7 +263,9 @@
     phone: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    hotels: [],
+    access: []
   });
   
   const seletedRoleUser = ref([
@@ -270,37 +292,118 @@
     isModalCrudOpen.value = false;
   }
 
-  /**eventos para dar click en el div para abrir modal not save */
-    /* const handleClickOutside = (event) => {
-      if (modalWorkPosition.value && !modalWorkPosition.value.contains(event.target) && isModalCrudOpen.value) {
-        isModalCrudOpen.value = false;
-      }
-    };
-
-    onMounted(() => {
-      window.addEventListener('click', handleClickOutside);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener('click', handleClickOutside);
-    }); */
-  /**fin modal no save events */
-  
   const selectRole = (rol) => {
     selectedRoleName.value = rol.name;
+    form.value.role = rol.name;
     isModalOpen.value = false;
+
   };
   
   const selectWorkPosition = (position) => {
     selectedWorkPositionName.value = position.name;
+    form.value.work_position_id = position.id;
     isModalCrudOpen.value = false;
+
   };
   
   function closeModal() {
     emits('close');
   }
   
-  const isFormIncomplete = ref(false);
+  const isFormIncomplete = computed(() => {
+    //email
+    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
+
+    //contrase;a
+    //const isValidPassword = form.password.length >= 8 && form.password === form.password_confirmation;
+
+   if (currentStep.value === 1) {
+       return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
+           !form.value.password_confirmation || !form.value.phone || !form.value.prefix || !form.value.role || !form.value.work_position_id;
+    } else if (currentStep.value === 2) {
+        return !form.value.hotels.length;
+    } else if (currentStep.value === 3) {
+        return !form.value.access.length;
+  }
+
+});
+  const errorPhone = ref(false);
+
+  const errorPrefix = ref(false);
+
+  const validatePhone = (event) => {
+    const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
+    form.value.phone = newValue;
+    errorPhone.value = newValue.length === 0;
+
+    // Verifica el valor del prefijo
+    if (newValue.length > 0 && !form.value.prefix) {
+      errorPrefix.value = true;
+    } else {
+      errorPrefix.value = false;
+    }
+  };
+
+  // Watch para validar el prefijo cuando cambia el teléfono
+  watch(() => form.value.phone, (newVal) => {
+    if (newVal.length > 0 && !form.value.prefix) {
+      errorPrefix.value = true;
+    } else {
+      errorPrefix.value = false;
+    }
+  });
+
+  // Watch para verificar si se seleccionó un prefijo
+  watch(() => form.value.prefix, (newVal) => {
+    if (newVal) {
+      errorPrefix.value = false;
+    }
+  });
+
+  watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword, newPasswordConfirmation]) => {
+      errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
+      errorPasswordMatch.value = !(newPassword === newPasswordConfirmation);
+  });
+
+  const errorEmailText = ref(false);
+
+  watch(() => form.value.email, (newVal) => {
+      const emailRegex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      errorEmail.value = !emailRegex.test(newVal);
+      errorEmailText.value = 'Introduce un email correcto';
+  });
+
+  const selectedHotelP = ref(null)
+  const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
+
+
+  function handleSelection(hotelData) {
+    console.log(`Hotel seleccionado: ${hotelData.name}`);
+
+    const index = seletedHotelPermissions.value.findIndex(hotel => hotel.id === hotelData.id);
+    if (index !== -1) {
+      seletedHotelPermissions.value.splice(index, 1);
+
+      //eliminar de jsonData
+      const indexHotel = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelData.id));
+      if (indexHotel !== -1) {
+          jsonHotel.value.splice(indexHotel, 1);
+      }
+
+    } else {
+      seletedHotelPermissions.value.push({ id: hotelData.id, name: hotelData.name });
+      jsonHotel.value.push(
+          {
+          [hotelData.id]: {}
+          }
+      )
+    }
+
+
+
+  console.log('jsonHotelhandleSelection', jsonHotel.value);
+
+}
   
   const currentStep = ref(1);
   const steps = [
@@ -311,6 +414,7 @@
   
   const nextStep = () => {
     if (currentStep.value < steps.length) currentStep.value++;
+
   };
   
   const prevStep = () => {

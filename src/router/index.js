@@ -8,7 +8,6 @@ import userGroupRoutes from './user/userGroupRoutes'
 import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
 // Importaciones de stores
 
-
 // Utilidades generales y funciones
 // import utils from '@/utils/utils.js' --> example
 
@@ -22,6 +21,7 @@ const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFo
 
 // Configuración de rutas
 const routes = [
+  { path: '/', redirect: '/login' }, // Redirigir la raíz a /login
   ...authRoutes,
   ...dashboardRoutes,
   //grupos de rutas por modulo
@@ -35,7 +35,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {// Controla el comportamiento del desplazamiento de la página
+  scrollBehavior(to, from, savedPosition) { // Controla el comportamiento del desplazamiento de la página
     if (savedPosition) {
       return savedPosition;
     }
