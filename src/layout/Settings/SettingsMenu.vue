@@ -19,7 +19,6 @@
             >
               <li
                 v-if="menu?.group"
-                class="group"
                 :key="index_menu"
               >
                 <a
@@ -41,32 +40,34 @@
                       :class="page_url.includes(`typeplace=${data_type_places?.[index_sub_menu]?.id}`) || page_url == '/tablero-hoster/plataforma/guia-de-la-ciudad' && data_type_places?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     >
                     <!-- !load_page && -->
-                      <a
-                        href="javascript:void(0)"
-                        class="w-full h-full block pl-[44px] pr-[24px] py-[8px]"
+                      <div
+                        class="w-full h-full block pl-[44px] pr-[24px] py-[8px] cursor-pointer"
                         @click="data_type_places?.[index_sub_menu]?.id ? goLinkWithRoute(route('hoster.plataform.cityguide', { typeplace: data_type_places?.[index_sub_menu]?.id })) : ''"
                       >
                         <div class="flex items-center">
                           <img :src="sub_menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
                           <span class="text-sm normal-case">{{ sub_menu.title }} </span>
                         </div>
-                      </a>
+                      </div>
                     </li>
                     <li
                       v-else
-                      class=" w-full h-full hover-gray-100"
-                      :class="page_url.includes(sub_menu.include) ? 'hbg-green-200' : ''"
+                      class=" w-full h-full"
+                      :class="sub_menu.selected ? 'hbg-green-200' : 'hover-gray-100'"
                     >
-                      <a
-                        href="javascript:void(0)"
-                        class="w-full h-full block pl-[44px] pr-[24px] py-[8px]"
+                    <!-- else -->
+                      <div
+                        class="w-full block px-6 cursor-pointer"
                         @click="goLink(sub_menu.to)"
                       >
-                        <div class="flex items-center">
-                          <img :src="sub_menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                          <span class="text-sm normal-case">{{ sub_menu.title }}</span>
+                        <div class="flex items-center h-10 relative">
+                          <div class="w-6 h-full relative">
+                            <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
+                            <div v-if="sub_menu.selected" class="w-[3px] h-6 bg-[#2A8973] absolute inset-0 mx-auto my-2 rounded-full"></div>
+                          </div>
+                          <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }}</span>
                         </div>
-                      </a>
+                      </div>
                     </li>
                   </template>
                 </ul>
@@ -188,9 +189,11 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
+import { useRoute } from 'vue-router';
 // import DropdownHotel from '@/Pages/Associates/Layouts/DropdownHotel.vue';
 // import TooltipResponsive from '@/Components/TooltipResponsive.vue'
 
+  const route = useRoute();
   const status_subscription = false
 //   const buttonRefs = ref([]);
 //   const applyHoverEffect = (index) => {
@@ -212,13 +215,13 @@ import { reactive, onMounted } from 'vue'
                           title: 'perfil',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.hotel.profile',
-                          include: '/perfil'
+                          selected: false
                       },
                       {
                           title: 'instalaciones',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.plataform.facility.show',
-                          include: '/instalaciones'
+                          selected: false
                       },
                   ],
               },
@@ -267,19 +270,19 @@ import { reactive, onMounted } from 'vue'
               {
                   title: 'Seguimiento',
                   icon: '/assets/icons/1.TH.SEGUIMIENTO.svg',
-                  expanded: false,
+                  expanded: ['ReviewRequestSettingsIndex'].includes(route.name),
                   group: [
                       {
-                          title: 'perfil',
+                          title: 'Feedback',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.hotel.profile',
-                          include: '/perfil'
+                          selected: false
                       },
                       {
-                          title: 'instalaciones',
+                          title: 'Solicitudes',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                           to: 'hoster.plataform.facility.show',
-                          include: '/instalaciones'
+                          selected: ['ReviewRequestSettingsIndex'].includes(route.name)
                       },
                   ],
               }

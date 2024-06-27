@@ -40,11 +40,11 @@
                         v-for="(link, indexLink) in section.group" :key="indexLink"
                         :to="link.url"
                         class="rounded-[10px] flex items-center p-2"
-                        :class="{'hbg-green-600 shadow-lg':$route.fullPath.includes(link.include),'hover-gray-100':!$route.fullPath.includes(link.include)}"
+                        :class="{'hbg-green-600 shadow-lg':link.include.includes($route.name),'hover-gray-100':!link.include.includes($route.name)}"
                     >
-                        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':$route.fullPath.includes(link.include)}">
+                        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white':link.include.includes($route.name)}">
                         <div :class="widthMenu">
-                            <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':$route.fullPath.includes(link.include)}">{{link.title}}</p>
+                            <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white':link.include.includes($route.name)}">{{link.title}}</p>
                         </div>
                     </router-link>
                 </div>
@@ -88,19 +88,19 @@ const menu_links = ref([
             {
                 title: 'Estancias',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             {
                 title: 'Reseñas',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             {
                 title: 'Análisis',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             
@@ -112,31 +112,31 @@ const menu_links = ref([
             {
                 title: 'WebApp',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['ReviewRequestSettingsIndex'],
                 url : '/dashboard'
             },
             {
                 title: 'Comunicaciones',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             {
                 title: 'Plataformas externas',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             {
                 title: 'Datos',
                 icon: '1.TH.DASHBOARD',
-                include : '-',
+                include : ['-'],
                 url : '/dashboard'
             },
             {
                 title: 'Equipo',
                 icon: '1.TH.DASHBOARD',
-                include : '/usuarios/configuracion',
+                include : ['UserNotificationsSettings','UsersSettings'],
                 url : '/usuarios/configuracion/usuarios'
             },
         ],
@@ -147,23 +147,23 @@ const user_buttons = ref([
     {
         title: 'Ayuda',
         icon: '/assets/icons/1.TH.AYUDA.MM.svg',
-        include : '-',
+        include : ['-'],
     },
     {
         title: 'Novedades',
         icon: '/assets/icons/1.TH.NOVEDADES.MM.svg',
-        include : '-',
+        include : ['-'],
     },
     {
         title: authStore.user.name+' '+authStore.user.lastname,
         icon: 'https://ui-avatars.com/api/?name=NA&color=fff&background='+authStore.user.color,
-        include : '-',
+        include : ['-'],
         border : true
     },
     {
         title: 'Cerrar sesión',
         icon: null, 
-        include : '-',
+        include : ['-'],
         action: async () => {
             await authStore.logout() 
         }
