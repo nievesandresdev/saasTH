@@ -5,6 +5,7 @@ import dashboardRoutes from './dashboardRoutes'
 //grupos de rutas
 import chatGroupRoutes from './chat/chatGroupRoutes'
 import userGroupRoutes from './user/userGroupRoutes'
+import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
 // Importaciones de stores
 
 
@@ -26,6 +27,7 @@ const routes = [
   //grupos de rutas por modulo
   ...chatGroupRoutes,
   ...userGroupRoutes,
+  ...reviewsRequestsGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 
