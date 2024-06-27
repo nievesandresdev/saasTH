@@ -28,7 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
             sessionStorage.setItem('token', this.token);
             sessionStorage.setItem('user', JSON.stringify(this.user));
             //current_hotel
-            sessionStorage.setItem('current_hotel',JSON.stringify(response.data.user.hotels));
+            sessionStorage.setItem('current_hotel',JSON.stringify(response.data.user.current_hotel));
             //current_subdomain
             sessionStorage.setItem('current_subdomain',response.data.user.curent_subdmain_hotel);
             this.$router.push('/dashboard')
