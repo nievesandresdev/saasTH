@@ -91,7 +91,102 @@
                   </div>
                 </transition>
               </div>
-            </div>
+
+              <div class="mt-4">
+                    <label class="text-sm font-medium">Nombre *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.name"
+                            type="text"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            placeholder="Nombre del usuario"
+                        />
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Apelido *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.lastname"
+                            type="text"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            placeholder="Apellido del usuario"
+                        />
+                    </div>
+                </div>
+                <div class="mt-4">
+                  <label class="text-sm font-medium">Teléfono móvil</label>
+                    <div class="flex rounded">
+                        <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border-r-[1px] border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-700  font-medium text-sm px-4 py-2.5">
+                            <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
+                        </select>
+                            <input type="text"
+                                placeholder="Número de teléfono"
+                                class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
+                                :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
+                                v-model="form.phone"
+                                @input="validatePhone"
+                            >
+                    </div>
+                    <div class="flex justify-end mt-1 text-red-600" v-if="errorPhone">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                        <small> Introduce solo números en el campo de teléfono</small>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Correo electrónico *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.email"
+                            type="email"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            placeholder="Correo con el que iniciara sesión"
+                        />
+                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <small v-text="errorEmailText"></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Contraseña *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.password"
+                            type="password"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            placeholder="Contraseña de acceso"
+                        />
+                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorPassword">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <small>Debe tener minimo 8 caracteres</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Confirmar contraseña *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.password_confirmation"
+                            type="password"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            placeholder="Repite la contraseña"
+                        />
+                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorPasswordMatch">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <small>Debe tener minimo 8 caracteres</small>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- fin step 1-->
             <div v-if="currentStep === 2">
               <!-- Contenido del paso 2 -->
             </div>
@@ -123,7 +218,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits,onUnmounted } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   
@@ -134,12 +229,29 @@
     modal_add: Boolean,
     work_positions: Array
   });
+
+  const errorPasswordMatch = ref(false);
+  const errorPassword = ref(false);
+  const errorEmail = ref(false);
+
+  const form = ref({
+    work_position_id: null,
+    role : null,
+    name: '',
+    lastname: '',
+    prefix: null,
+    phone: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+  });
   
   const seletedRoleUser = ref([
     { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
     { id: 2, name: 'Usuario Administrador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
     { id: 3, name: 'Usuario Operador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' }
   ]);
+  const prefixes = ref([null,'+1', '+34', '+91'])
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
   const selectedWorkPositionName = ref('Elige el puesto de trabajo');
@@ -209,7 +321,6 @@
   
   onMounted(async () => {
     await nextTick();
-  
     const sectionExpElement = document.getElementById('layout-hoster');
     if (sectionExpElement) {
       containerTop.value = sectionExpElement.offsetTop;
