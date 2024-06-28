@@ -197,45 +197,46 @@
                   <!-- Checkbox para "Todos los hoteles" -->
                   <div class="flex items-center justify-between mb-4 rounded-lg">
                       <span class="text-sm font-bold">Todos los hoteles</span>
-                      <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+                      <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
                   </div>
                   <!-- Checkboxes para los hoteles individuales -->
-                  <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.name" class="flex items-center justify-between mb-4 rounded-lg ml-2">
+                  <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.name" class="flex items-center justify-between mb-4 rounded-lg">
                       <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                      <input type="checkbox" :value="hotel.id" v-model="form.hotels" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" @change="handleSelection(hotel)">
+                      <input type="checkbox" :value="hotel.id" v-model="form.hotels" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" @change="handleSelection(hotel)" :disabled="isRoleOne">
                   </div>
               </div>
-            </div>
-            <div v-if="currentStep === 3">
-                <div class="flex flex-col mb-8 text-left">
-                    <strong class="mb-5 text-xl">Accesos</strong>
-                    <span class="font-normal">
-                        Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
-                    </span>
-                </div>
-                <div class="space-y-6">
-                    <!-- Sección de Operación -->
-                    <div>
-                        <span class="block mb-2 font-semibold text-lg">Operación</span>
-                        <div class="space-y-2 ml-2">
-                            <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
-                                <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sección de Administración -->
-                    <div>
-                        <span class="block mb-2 font-semibold text-lg">Administración</span>
-                        <div class="space-y-2 ml-2">
-                            <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
-                                <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
+
+          <div v-if="currentStep === 3">
+              <div class="flex flex-col mb-8 text-left">
+                  <strong class="mb-5 text-xl">Accesos</strong>
+                  <span class="font-normal">
+                      Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
+                  </span>
+              </div>
+              <div class="space-y-6">
+                  <!-- Sección de Operación -->
+                  <div>
+                      <span class="block mb-2 font-semibold text-lg">Operación</span>
+                      <div class="space-y-2">
+                          <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
+                              <span class="text-sm font-[500]">{{ item.name }}</span>
+                              <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Sección de Administración -->
+                  <div>
+                      <span class="block mb-2 font-semibold text-lg">Administración</span>
+                      <div class="space-y-2">
+                          <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
+                              <span class="text-sm font-[500]">{{ item.name }}</span>
+                              <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
           </div>
         </div>
   
@@ -286,6 +287,7 @@
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);
   const errorEmail = ref(false);
+  const isRoleOne = ref(false);
 
   const form = ref({
     work_position_id: null,
@@ -341,7 +343,12 @@ const adminAccess = ref([
 
   const selectRole = (rol) => {
     selectedRoleName.value = rol.name;
-    form.value.role = rol.name;
+    form.value.role = rol.id;
+    if (rol.id === 1) {
+        isRoleOne.value = true;
+    } else {
+        isRoleOne.value = false;
+    }
     isModalOpen.value = false;
 
   };
@@ -423,39 +430,61 @@ const adminAccess = ref([
   const selectedHotelP = ref(null)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
 
+
+
   const selectAllHotels = ref(false);
-  const handleSelectAll = () => {
-    if (selectAllHotels.value) {
+  
+  watch(() => form.value.role, (newRole) => {
+    if (newRole === 1) {
+        selectAllHotels.value = true;
+        handleSelectAll(true);
+    }
+}, { immediate: true });
+
+const handleSelectAll = (initial = false) => {
+    const allSelected = selectAllHotels.value;
+
+    // Manejar la selección de todos los hoteles
+    if (allSelected || initial) {
         userStore.$getHotels(['id','name']).forEach(hotel => {
             if (!form.value.hotels.includes(hotel.id)) {
                 form.value.hotels.push(hotel.id);
-                handleSelection(hotel);
+                handleSelection(hotel, true);
             }
         });
     } else {
         form.value.hotels = [];
+        jsonHotel.value = [];
         userStore.$getHotels(['id','name']).forEach(hotel => {
-            handleSelection(hotel);
+            handleSelection(hotel, false);
         });
     }
+
+    // Manejar la selección de todos los accesos
+    operationAccess.value.forEach(access => {
+        access.selected = allSelected || initial;
+    });
+    adminAccess.value.forEach(access => {
+        access.selected = allSelected || initial;
+    });
 };
 
-  const handleSelection = (hotel, add = null) => {
-      const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotel.id));
-      
-      if (add === null) {
-          add = form.value.hotels.includes(hotel.id);
-      }
+const handleSelection = (hotel, add = null) => {
+    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotel.id));
 
-      if (add && index === -1) {
-          jsonHotel.value.push({ [hotel.id]: {} });
-      } else if (!add && index !== -1) {
-          jsonHotel.value.splice(index, 1);
-      }
+    if (add === null) {
+        add = form.value.hotels.includes(hotel.id);
+    }
 
-      console.log(`Hotel seleccionado: ${hotel.name}`);
-      console.log('jsonHotelhandleSelection', jsonHotel.value);
-  };
+    if (add && index === -1) {
+        jsonHotel.value.push({ [hotel.id]: {} });
+    } else if (!add && index !== -1) {
+        jsonHotel.value.splice(index, 1);
+    }
+
+    console.log(`Hotel seleccionado: ${hotel.name}`);
+    console.log('jsonHotelhandleSelection', jsonHotel.value);
+};
   
   const currentStep = ref(1);
   const steps = [
