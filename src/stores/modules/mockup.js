@@ -2,17 +2,20 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue'
 
 export const useMockupStore = defineStore('mockupStore', () => {
+
+  const GUEST_URL = process.env.VUE_APP_GUEST_URL
   const iframeUrlRef = ref(null);
   const infoText1Ref = ref(null);
   const infoTextIcon1Ref = ref(null);
 
-  function $setIframeUrl(link) {
-      console.log('Updating iframeUrl:', link)
-      iframeUrlRef.value = link + '&mockup=true';
+  function $setIframeUrl(uri, params = 'test=null') {
+      let subdomain = sessionStorage.getItem('current_subdomain');
+      let completeURL =GUEST_URL+`${uri}?subdomain=${subdomain}&mockup=true&${params}`
+      console.log('completeURL:', completeURL)
+      iframeUrlRef.value = completeURL;
   }
 
   function $setInfo1(text, iconUrl) {
-      console.log('Updating infoText1:', text);
       infoText1Ref.value = text;
       infoTextIcon1Ref.value = iconUrl;
   }

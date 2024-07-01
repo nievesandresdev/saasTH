@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { useMockupStore } from '@/stores/modules/settings/mockup';
+import { useMockupStore } from '@/stores/modules/mockup';
 
 const store = useMockupStore();
 </script>
