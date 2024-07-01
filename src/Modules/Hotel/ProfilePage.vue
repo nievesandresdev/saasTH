@@ -1,0 +1,501 @@
+<template>
+    <div class="h-screen px-[24px] bg-[#FAFAFA]">
+        <div class="pb-[104px]">
+            <section class="flex justify-between py-[20px] border-b border-[#BFBFBF]">
+                <div class="space-x-2 flex">
+                    <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
+                    <BaseTooltipResponsive
+                        size="l"
+                        :top="25"
+                        :right="0"
+                    >
+                        <template #button>
+                            <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                            </template>
+                            <template #content>
+                            <p class="text-sm leading-[150%] font-normal">
+                                Con el interruptor "Mostrar al huésped" controlas la visibilidad de cierta información para el huésped.
+                            </p>
+                            <p class="mt-2 text-sm leading-[150%] font-normal">
+                                Si está encendido, tu huésped podrá ver en la WebApp de tu alojamiento la información que añadas en esta vista.
+                            </p>
+                        </template>
+                    </BaseTooltipResponsive>
+                </div>
+                <div class="flex items-center">
+                    <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+                    <ToggleShowProfile
+                        :showProfile="form.show_profile"
+                        @updateShowHotel="updateShowHotel"
+                    />
+                </div>
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
+                <div class="flex space-x-[16px]">
+                    <div class="flex-1">
+                        <label class="text-sm font-medium mb-2 inline-block">Tipo de alojamiento</label>
+                        <BaseSelectField
+                            :id="'type_lodging'"
+                            :textLabel="'Tipo de alojamiento'"
+                            v-model="form.type"
+                            :options="typeLodging"
+                            mandatory
+                            :error="false"
+                        />
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
+                        <BaseSelectField
+                            :id="'type_lodging'"
+                            :textLabel="'Elige categoría'"
+                            v-model="form.category"
+                            :options="categoryLodging"
+                            mandatory
+                            :error="false"
+                        />
+                    </div>
+                </div>
+                <div class="space-y-2 w-[389px]">
+                    <label class="text-sm font-medium inline-block">Nombre de alojamiento</label>
+                    <p class="text-sm">No introduzcas el tipo de alojamiento en el nombre</p>
+                    <BaseTextField
+                        v-model="form.name"
+                        placeholder="Nombre de alojamiento"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        name="name"
+                        :errors="errors"
+                        @blur:validate="validate('name')"
+                    />
+                </div>
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium inline-block">Descripción Alojamiento</label>
+                    <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
+                    <BaseTextareaField
+                        v-model="form.description"
+                        placeholder="Nombre..."
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        name="name"
+                        :errors="errors"
+                        @blur:validate="validate('description')"
+                    />
+                </div>
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+                <div class="flex space-x-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <label class="text-sm font-medium inline-block">Teléfono principal</label>
+                            <BaseTooltipResponsive
+                                size="l"
+                                :top="-85"
+                                :left="0"
+                            >
+                                <template #button>
+                                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                                    </template>
+                                    <template #content>
+                                    <p class="text-sm leading-[150%] font-normal">
+                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón “Llamar a recepción” en tu WebApp
+                                    </p>
+                                </template>
+                            </BaseTooltipResponsive>
+                        </div>
+                        <BasePhoneField
+                            v-model="form.phone"
+                            name="phone"
+                            :errors="errors"
+                            @blur:validate="validate('phone')"
+                        />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium inline-block">Teléfono principal</label>
+                        <BasePhoneField
+                            v-model="form.phone_optional"
+                            name="phone_optional"
+                            :errors="errors"
+                            @blur:validate="validate('phone_optional')"
+                        />
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium inline-block">Email</label>
+                    <BaseTextField
+                        v-model="form.email"
+                        placeholder="Introduce email contacto del alojamiento"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        name="email"
+                        :errors="errors"
+                        @blur:validate="validate('email')"
+                    />
+                </div>
+                <div class="space-y-2">
+                    <ProfilePageSectionMap ref="profilePageSectionMap" />
+                </div>
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+                <div class="max-w-profile">
+                    <h2 class="font-medium text-lg">Horario Check in / Check out</h2>
+                    <p class="text-sm htext-gray-500 text-justify mt-2">
+                        Horario general de check in y check out de tu alojamiento. Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check in y Check Out para cada estancia en particular cuando lo necesites.
+                    </p>
+                    <div class="w-[411px] mt-[24px] space-y-4">
+                        <div class="flex space-x-[24px]">
+                            <div class="flex items-center">
+                                <label class="text-sm font-medium w-20 mr-6">Check in</label>
+                                <BaseTimeField
+                                    ref="checkin"
+                                    v-model="form.checkin"
+                                    :id="'checkin'"
+                                />
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-[12px] font-semibold w-[113px] mr-6">Hasta <span class="htext-gray-500">(opcional)</span></label>
+                                <div>
+                                    <BaseTimeField
+                                        ref="checkin_optional"
+                                        v-model="form.checkin_until"
+                                        :id="'checkin_optional'"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-[24px]">
+                            <div class="flex items-center">
+                                <label class="text-sm font-medium w-20 mr-6">Check Out</label>
+                                <BaseTimeField
+                                    ref="checkin"
+                                    v-model="form.checkout"
+                                    :id="'checkin'"
+                                />
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-[12px] font-semibold w-[113px] mr-6">Hasta <span class="htext-gray-500">(opcional)</span></label>
+                                <div>
+                                    <BaseTimeField
+                                        ref="checkout_optional"
+                                        v-model="form.checkout_until"
+                                        :id="'checkout_optional'"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <p
+                        class="mt-2 text-xs htext-alert-negative flex items-center"
+                    >
+                        <img
+                            src="/vendor_asset/img/hoster/icons/1.TH.WARNING.svg"
+                            alt="icon alert red"
+                            class="inline w-4 h-4 mr-2"
+                        />
+                        Introduce hora de check in y check out
+                    </p> -->
+                </div>
+
+
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+                <div class="max-w-profile">
+                    <h2 class="font-medium text-lg">Servicio de WiFi</h2>
+                    <div class="flex justify-between mt-2">
+                        <p class="text-sm htext-gray-500 text-justify">
+                            Comunica a tus huéspedes si tu alojamiento cuenta con servicio de WiFi gratuito
+                        </p>
+                        <BaseSwichInput id="toggle-wifi" v-model="form.with_wifi" />
+                    </div>
+                </div>
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+                <h2 class="font-medium text-lg">Fotos</h2>
+                <profilePageSectionPhotos />
+            </section>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
+                <h2 class="font-medium text-lg">Redes sociales</h2>
+                <div class="space-y-4 w-[585px]">
+                    <BaseTextField
+                        v-model="form.urlInstagram"
+                        placeholder="Instagram URL"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        prepend-inner-icon="/assets/icons/1.TH.INSTAGRAM.COLOR.svg"
+                        name="urlInstagram"
+                        @blur:validate="validate('urlInstagram')"
+                    />
+                    <BaseTextField
+                        v-model="form.urlFacebook"
+                        placeholder="Facebook URL"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        prepend-inner-icon="/assets/icons/1.TH.FACEBOOK.COLOR.svg"
+                        name="urlFacebook"
+                        @blur:validate="validate('urlFacebook')"
+                    />
+                    <BaseTextField
+                        v-model="form.urlPinterest"
+                        placeholder="Pinterest URL"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        prepend-inner-icon="/assets/icons/1.TH.PINTEREST.COLOR.svg"
+                        name="urlPinterest"
+                        @blur:validate="validate('urlPinterest')"
+                    />
+                    <BaseTextField
+                        v-model="form.urlX"
+                        placeholder="X URL"
+                        class-content="flex-1"
+                        class-input="text-sm h-[44px]"
+                        prepend-inner-icon="/assets/icons/1.TH.X.svg"
+                        name="urlX"
+                        @blur:validate="validate('urlX')"
+                    />
+                </div>
+            </section>
+
+        </div>
+        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-end z-10">
+            <!-- <button
+                class="hbtn-primary px-4 py-3 text-sm"
+            >
+                Cancelar
+            </button> -->
+            <button
+                class="px-4 text-sm font-medium h-11 hbtn-cta"
+                :disabled="formInvalid || !isChanged"
+                :class="{'cta-disabled': formInvalid || !isChanged}"
+            >
+                Guardar
+            </button>
+        </div>
+    </div>
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="isChanged"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
+</template>
+
+<script setup>
+    import { ref, reactive, onMounted, provide, computed } from 'vue';
+    //COMPONENTS
+    import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
+    import ToggleShowProfile from '@/Modules/Hotel/Components/ToggleShowProfile.vue';
+    import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
+    import BaseTextField from "@/components/Forms/BaseTextField.vue";
+    import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
+    import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+    import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
+    import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+    //
+    import ModalNoSave from '@/components/ModalNoSave.vue'
+    import ProfilePageSectionMap from "./ProfilePageSectionMap.vue";
+    import ProfilePageSectionPhotos from "./ProfilePageSectionPhotos.vue";
+
+    import { useFormValidation } from '@/composables/useFormValidation'
+    import * as rules from '@/utils/rules';
+
+    // STATE
+    import { useHotelStore } from '@/stores/modules/hotel';
+    const hotelStorage = useHotelStore();
+    // const { hotelData } = hotelStorage;
+    import { useMockupStore } from '@/stores/modules/settings/mockup';
+    const mockupStore = useMockupStore();
+
+    //DATA
+    const form = reactive({
+        hotel_id: null,
+        name: null,
+        type: null,
+        category: null,
+        email: null,
+        phone: null,
+        phone_optional: null,
+        address: null,
+        metting_point_latitude: null,
+        metting_point_longitude: null,
+        checkin: null,
+        checkin_until: null,
+        checkout: null,
+        checkout_until: null,
+        description: null,
+        delete_imgs: [],
+        urlInstagram: null,
+        urlPinterest: null,
+        urlFacebook: null,
+        urlX: null,
+        city: null,
+        // images_hotel: JSON.parse(JSON.stringify(data_images.value)),
+        images_hotel: [],
+        show_profile: null,
+        with_wifi: false,
+    });
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const formRules = {
+        name: [value => value.trim() ? true : 'Introduce el nombre de tu alojamiento'],
+        email: [value => emailPattern.test(value) ? true : 'Formato de e-mail permitido ej: xxxx@email.com'],
+        phone: [value => (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')  ? true : 'La cantidad de dígitos ingresada es incorrecta'],
+        phone_optional: [value => !value || (!!value && (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')) ? true : 'La cantidad de dígitos ingresada es incorrecta'],
+    };
+
+    const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
+
+    const hotelData = reactive({});
+    const profilePageSectionMap = ref(null);
+
+    const categoryLodging = computed(()=>{
+        let options = [
+            { value: 1, label: "1 estrella" },
+            { value: 2, label: "2 estrellas" },
+            { value: 3, label: "3 estrellas" },
+            { value: 4, label: "4 estrellas" },
+            { value: 5, label: "5 estrellas" }
+        ];
+        if (form.type == "Hostal" || form.type == "Pensión") {
+            options = [
+            { value: 1, label: "1 estrella" },
+            { value: 2, label: "2 estrellas" },
+            { value: 3, label: "3 estrellas" }
+            ];
+        }
+        return options;
+    });
+
+    const typeLodging = [
+        { value: "Hotel", label: "Hotel", disabled: false },
+        { value: "Hostal", label: "Hostal", disabled: false },
+        { value: "Pensión", label: "Pensión", disabled: false },
+        {
+            value: "Complejo de apartamentos",
+            label: "Complejo de apartamentos",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+        {
+            value: "Apartamento turístico",
+            label: "Apartamento turístico",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+        {
+            value: "Vivienda con fines turísticos",
+            label: "Vivienda con fines turísticos",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+    ]
+
+
+    provide('form', form)
+    provide('hotelData', hotelData)
+
+    onMounted(() => {
+        loadHotel()
+        mockupStore.$setIframeUrl('https://nobuhotelsevillatest.test.thehoster.io/webapp/?g=9')
+        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    })
+
+    // COMPUTED
+    const isChanged = computed(()=>{
+        let imagesSaved = JSON.stringify(hotelData.images);
+        let imagesForm = JSON.stringify(form.images_hotel);
+        let c =
+            form.name !== hotelData.name || form.type !== hotelData.type ||
+            Number(form.category) !== Number(hotelData.category) ||
+            normalize(form.email) !== normalize(hotelData.email) ||
+            normalize(form.phone) !== normalize(hotelData.phone) ||
+            normalize(form.phone_optional) !== normalize(hotelData?.phone_optional) ||
+            Boolean(form.with_wifi) !== Boolean(hotelData.with_wifi) ||
+            normalize(form.address) !== hotelData.address ||
+            normalize(form.checkin) !== hotelData.checkin ||
+            normalize(form.checkin_until) !== hotelData.checkin_until ||
+            normalize(form.checkout) !== hotelData.checkout ||
+            normalize(form.checkout_until) !== hotelData.checkout_until ||
+            normalize(form.description) !== hotelData.description ||
+            normalize(form.urlInstagram) !== hotelData.instagram_url ||
+            normalize(form.urlPinterest) !== hotelData.pinterest_url ||
+            normalize(form.urlFacebook) !== hotelData.facebook_url ||
+            normalize(form.urlFacebook) !== hotelData.facebook_url ||
+            normalize(form.urlX) !== hotelData.x_url ||
+            imagesForm !== imagesForm ||
+            Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
+        return c;
+    });
+
+    //FUNCTIONS
+
+    function defineMockupData() {
+        mockupStore.$setIframeUrl('/consultas')
+        mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+        toast.warningToast('texto','top-right')
+    }
+
+    const normalize = (value) => {
+      return value === "" || value === null || value === undefined ? null : value;
+    }
+
+    async function loadHotel () {
+        const hotel = await hotelStorage.$findByParams()
+        Object.assign(hotelData, hotel)
+        loadForm(hotel)
+        loadMap()
+    } 
+
+    function loadMap () {
+        if (profilePageSectionMap.value?.initGoogleMap) {
+            profilePageSectionMap.value.initGoogleMap()
+        }
+    }
+
+    function loadForm(hotel) {
+        form.hotel_id = hotel.id || null;
+        form.name = hotel.name || null;
+        form.type = hotel.type || null;
+        form.category = hotel.category || null;
+        form.email = hotel.email || null;
+        form.phone = hotel.phone || null;
+        form.phone_optional = hotel.phone_optional || null;
+        form.address = hotel.address || null;
+        form.metting_point_latitude = hotel.metting_point_latitude || null;
+        form.metting_point_longitude = hotel.metting_point_longitude || null;
+        form.checkin = hotel.checkin || null;
+        form.checkin_until = hotel.checkin_until || null;
+        form.checkout = hotel.checkout || null;
+        form.checkout_until = hotel.checkout_until || null;
+        form.description = hotel.description || null;
+        form.urlInstagram = hotel.instagram_url || null;
+        form.urlPinterest = hotel.pinterest_url || null;
+        form.urlFacebook = hotel.facebook_url || null;
+        form.urlX = hotel.x_url || null;
+        form.city = hotel.city || null;
+        form.images_hotel = hotel.images || [];
+        form.show_profile = hotel.show_profile || null;
+    }
+
+    
+
+    function updateShowHotel (val) {
+        form.show_profile = val
+        loadIframe()
+    }
+
+    const validate = (field) => {
+        validateField(field)
+    }
+    
+    function loadIframe () {
+
+    }
+
+    function submit () {
+        console.log('submit')
+    }
+
+
+</script>

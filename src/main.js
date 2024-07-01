@@ -6,7 +6,6 @@ import { createHead } from '@vueuse/head'
 import Toast from "vue-toastification";
 import 'vue-toastification/dist/index.css';
 
-
 // estilos generales
 import './assets/css/main.css'
 
