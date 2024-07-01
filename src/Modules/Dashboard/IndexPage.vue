@@ -25,7 +25,7 @@ onMounted(()=>{
 })
 
 function defineMockupData() {
-    mockupStore.$setIframeUrl('/consultas')
+    mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
     mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     toast.warningToast('texto','top-right')
 }

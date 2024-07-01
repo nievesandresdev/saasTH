@@ -4,14 +4,18 @@ import { ref, computed } from 'vue'
 export const useMockupStore = defineStore('mockupStore', () => {
 
   const GUEST_URL = process.env.VUE_APP_GUEST_URL
+  const ENVIROMENT = process.env.VUE_APP_ENVIROMENT
   const iframeUrlRef = ref(null);
   const infoText1Ref = ref(null);
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=null') {
       let subdomain = sessionStorage.getItem('current_subdomain');
-      let completeURL =GUEST_URL+`${uri}?subdomain=${subdomain}&mockup=true&${params}`
-      console.log('completeURL:', completeURL)
+      let urlBase = GUEST_URL;
+      if(ENVIROMENT == 'test'){
+        urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
+      }
+      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&mockup=true&${params}`
       iframeUrlRef.value = completeURL;
   }
 
