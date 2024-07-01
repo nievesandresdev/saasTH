@@ -254,20 +254,20 @@
           >
             Anterior
           </button>
-          <!-- <button
+          <button
             class="px-4 py-2.5 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
-          </button> -->
-          <button
+          </button>
+          <!-- <button
             class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
-          </button>
+          </button> -->
         </div>
       </div>
     </transition>
@@ -568,7 +568,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
         }
     });
 
-    form.value.hotelPermissions = jsonHotel.value;
+    form.value.access = jsonHotel.value;
     //console.log('jsonHotelhandleCheckPermission', jsonHotel.value);
 };
 
@@ -604,7 +604,7 @@ const handleUpdateAllPermissions = (add) => {
         });
     });
 
-    form.value.hotelPermissions = jsonHotel.value;
+    form.value.access = jsonHotel.value;
 };
 
 if (form.value.role === 1) {
@@ -634,6 +634,15 @@ if (form.value.role === 1) {
   const prevStep = () => {
     if (currentStep.value > 1) currentStep.value--;
   };
+
+  const handleStoreUser = async () => {
+    //await updateSettingsFromCheckBoxes();
+    let store = await userStore.$storeUser(form.value);
+    console.log('saveUserStore',store)
+    if (store) {
+      closeModal();
+    }
+};
   
   const containerTop = ref(0);
   
