@@ -194,9 +194,9 @@ const handleGetUsers = async () => {
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
 };
 
-const handleUpdateUsers = async () => {
+/* const handleUpdateUsers = async () => {
   console.log('handleUpdateUsers');
-};
+}; */
 
 const handlePageChange = (page) => {
   currentPage.value = page;
@@ -290,10 +290,10 @@ const toggleDropdown = (index) => {
   } */
 };
 
-const openModalEdit = (data) => {
+/* const openModalEdit = (data) => {
     console.log('openModalEdit',data);
     visibleDropdown.value = null
-}
+} */
 
 const modal_show_user = ref(false);
 const selectedUser = ref(null);
