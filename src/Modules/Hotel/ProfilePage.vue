@@ -6,18 +6,15 @@
                     <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
                     <BaseTooltipResponsive
                         size="l"
-                        :top="25"
-                        :right="0"
+                        :top="55"
+                        :left="-0"
                     >
                         <template #button>
                             <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
                             </template>
                             <template #content>
                             <p class="text-sm leading-[150%] font-normal">
-                                Con el interruptor "Mostrar al huésped" controlas la visibilidad de cierta información para el huésped.
-                            </p>
-                            <p class="mt-2 text-sm leading-[150%] font-normal">
-                                Si está encendido, tu huésped podrá ver en la WebApp de tu alojamiento la información que añadas en esta vista.
+                                Aquí podrás gestionar la información del perfil de tu alojamiento. Ésta será la información que verán tus huéspedes en tu WebApp.
                             </p>
                         </template>
                     </BaseTooltipResponsive>
@@ -332,7 +329,7 @@
         city: null,
         // images_hotel: JSON.parse(JSON.stringify(data_images.value)),
         images_hotel: [],
-        show_profile: null,
+        show_profile: false,
         with_wifi: false,
     });
     const isloadingForm = ref(false);
@@ -469,14 +466,15 @@
         form.urlX = hotel.x_url || null;
         form.city = hotel.city || null;
         form.images_hotel = hotel.images || [];
-        form.show_profile = hotel.show_profile || null;
+        form.show_profile = hotel.show_profile || false;
+        form.with_wifi = hotel.with_wifi || false;
     }
 
     
 
     function updateShowHotel (val) {
         form.show_profile = val
-        reloadIframe()
+        mockupStore.$reloadIframe()
     }
 
     const validate = (field) => {
@@ -491,7 +489,7 @@
 
     async function submit () {
         isloadingForm.value = true
-        // console.log(form)
+        // console.log({...form})
         const response  = await hotelStorage.$updateProfile(form);
         // console.log(response, 'response')
         const  {ok, data} = response ?? {}

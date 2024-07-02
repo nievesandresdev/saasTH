@@ -17,7 +17,7 @@
     </label>
     <BaseTooltipResponsive
         size="l"
-        :top="25"
+        :top="50"
         :right="0"
     >
         <template #button>
