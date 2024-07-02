@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser } from '@/api/services/users/userSettings.service';
 import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -32,19 +32,34 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /**
-   * 
-   * guardar usuario
+    * guardar usuario
    */
   async function $storeUser(data) {
-
     const response = await createUser(data);
-    const { ok } = response;
-    return ok;
+    return response;
+  }
+
+  /**
+    * actualizar usuario
+   */
+  async function $updateUser(data) {
+    const response = await updateUser(data);
+    return response;
+  }
+  
+  /**
+    * get usuarios
+  */
+  async function $getUsers(data){
+    const response = await getUsers(data);
+    return response;
   }
 
 
   return {
     $getHotels,
-    $storeUser
+    $storeUser,
+    $getUsers,
+    $updateUser
   };
 });

@@ -1,7 +1,7 @@
 <template>
     <transition>
       <div
-        v-if="modalAdd"
+        v-if="modalEdit"
         class="absolute bg-white shadow-xl add flex-column"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
         ref="ref_section_add"
@@ -9,7 +9,7 @@
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-4 mt-4">
             <div class="flex-1 text-center">
-              <h1 class="font-[600] text-xl">Crear usuario</h1>
+              <h1 class="font-[600] text-xl">Editar usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal">
@@ -164,40 +164,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4">
-                    <label class="text-sm font-medium">Contraseña *</label>
-                    <div class="relative">
-                        <input
-                            v-model="form.password"
-                            type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
-                            placeholder="Contraseña de acceso"
-                        />
-                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorPassword">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <small>Debe tener minimo 8 caracteres</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <label class="text-sm font-medium">Confirmar contraseña *</label>
-                    <div class="relative">
-                        <input
-                            v-model="form.password_confirmation"
-                            type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
-                            placeholder="Repite la contraseña"
-                        />
-                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorPasswordMatch">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <small>Debe tener minimo 8 caracteres</small>
-                        </div>
-                    </div>
-                </div>
             </div> <!-- fin step 1-->
             <div v-if="currentStep === 2">
                 <div class="flex flex-col mb-8 text-left">
@@ -220,7 +186,6 @@
                         <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
-                <!-- <pre>{{ jsonHotel }}</pre> -->
             </div>
 
             <div v-if="currentStep === 3">
@@ -254,7 +219,6 @@
                         </div>
                     </div>
                 </div>
-                <pre>{{ jsonHotel }}</pre>
             </div>
           </div>
         </div>
@@ -269,15 +233,15 @@
           </button>
           <button
             class="px-4 py-2.5 font-medium rounded w-full text-black"
-            @click="currentStep === 3 ? handleStoreUser() : nextStep()"
+            @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
-            {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
+            {{ currentStep === 3 ? 'Guardar Cambios' : 'Siguiente' }}
           </button>
           <!-- <button
             class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
-            @click="currentStep === 3 ? handleStoreUser() : nextStep()"
+            @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button> -->
@@ -287,7 +251,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits,computed,watch } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits,computed,watch,defineProps } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
@@ -295,12 +259,37 @@
   import { useToastAlert } from '@/composables/useToastAlert'
 
   
-  const emits = defineEmits(['close','store']);
+  const emits = defineEmits(['close','update']);
   
   const props = defineProps({
-    modalAdd: Boolean,
-    workPositions: Array
+    modalEdit: Boolean,
+    workPositions: Array,
+    dataUser : Object
   });
+
+
+  watch(() => props.modalEdit, (newVal) => {
+  if (newVal) {
+    initializeForm();
+  }
+});
+
+
+const form = ref({
+  user_id: null,
+  work_position_id: null,
+  role: null,
+  name: '',
+  lastname: '',
+  prefix: null,
+  phone: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+  hotels: [],
+  access: []
+});
+
 
   const userStore = useUserStore();
   const toast = useToastAlert();
@@ -310,19 +299,68 @@
   const errorEmail = ref(false);
   const isRoleOne = ref(false);
 
-  const form = ref({
-    work_position_id: null,
-    role : null,
-    name: '',
-    lastname: '',
-    prefix: null,
-    phone: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    hotels: [],
-    access: []
-  });
+
+  
+  const handleChecked = ref(false)
+  const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
+
+  const initializeForm = () => {
+    if (props.dataUser) {
+        form.value.user_id = props.dataUser.id || null;
+        form.value.work_position_id = props.dataUser.work_position_id || null;
+        form.value.role = props.dataUser.role.id || null;
+        form.value.name = props.dataUser.name || '';
+        form.value.lastname = props.dataUser.lastname || '';
+        form.value.prefix = props.dataUser.prefix || null;
+        form.value.phone = props.dataUser.phone || '';
+        form.value.email = props.dataUser.email || '';
+        form.value.hotels = props.dataUser.hotels || [];
+        form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
+
+        selectedRoleName.value = 'Usuario '+props.dataUser.role.name
+        selectedWorkPositionName.value = props.dataUser.work_position
+       
+        props.dataUser.hotels.forEach(hotel => {
+            handleSelection(hotel);
+            
+        });
+
+        // Función para actualizar accesos
+        const updateAccess = () => {
+            const permissions = form.value.access;
+
+            console.log('permissions',permissions)
+
+            // Validar y actualizar operationAccess
+            operationAccess.value.forEach(item => {
+                if (permissions[item.value] && permissions[item.value].status) {
+                    item.selected = true;
+                    handleCheckPermission(item.value, item.selected);
+                }
+            });
+
+            // Validar y actualizar adminAccess (ejemplo adicional, modificar según tus datos)
+            adminAccess.value.forEach(item => {
+                if (permissions[item.value] && permissions[item.value].status) {
+                    item.selected = true;
+                    handleCheckPermission(item.value, item.selected);
+                }
+            });
+
+            
+        };
+
+        // Llamar a la función para actualizar el acceso
+        updateAccess();
+        jsonHotel.value = props.dataUser.hotelPermissions;
+
+        
+    }else{
+        console.log('no dataUser');
+    }
+
+};
+
   
   const seletedRoleUser = ref([
     { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
@@ -337,19 +375,19 @@
   const isModalCrudOpen = ref(false);
   const rolAlert = ref(0);
 
-  const operationAccess = ref([
-    { name: 'Estancias', selected: false , value : 'estancias' },
-    { name: 'Reseñas', selected: false, value: 'resenas' },
-    { name: 'Análisis', selected: false , value: 'analisis' },
-]);
+    const operationAccess = ref([
+        { name: 'Estancias', selected: false , value : 'estancias' },
+        { name: 'Reseñas', selected: false, value: 'resenas' },
+        { name: 'Análisis', selected: false , value: 'analisis' },
+    ]);
 
-const adminAccess = ref([
-    { name: 'WebApp', selected: false , value: 'webapp' },
-    { name: 'Comunicaciones', selected: false , value: 'comunicaciones' },
-    { name: 'Plataformas externas', selected: false , value: 'plataformas_externas' },
-    { name: 'Datos', selected: false , value: 'datos' },
-    { name: 'Equipo', selected: false , value: 'equipo' },
-]);
+    const adminAccess = ref([
+        { name: 'WebApp', selected: false , value: 'webapp' },
+        { name: 'Comunicaciones', selected: false , value: 'comunicaciones' },
+        { name: 'Plataformas externas', selected: false , value: 'plataformas_externas' },
+        { name: 'Datos', selected: false , value: 'datos' },
+        { name: 'Equipo', selected: false , value: 'equipo' },
+    ]);
   
   const toggleModalSelect = () => {
     isModalOpen.value = !isModalOpen.value;
@@ -398,11 +436,9 @@ const adminAccess = ref([
       const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
 
       //contrase;a
-      const isValidPassword = form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
-            !form.value.password_confirmation || !form.value.phone || !form.value.prefix || !form.value.role || !form.value.work_position_id  || !isValidPassword;
+        return !form.value.name || !form.value.lastname || !form.value.email ||  !form.value.phone || !form.value.prefix || !form.value.role || !form.value.work_position_id;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
@@ -456,8 +492,6 @@ const adminAccess = ref([
       errorEmailText.value = 'Introduce un email correcto';
   });
 
-  const handleChecked = ref(false)
-  const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
 
 
 
@@ -483,7 +517,7 @@ const adminAccess = ref([
     }else{
         selectAllHotels.value = false;
         //handleSelectAll(true);
-        jsonHotel.value = [];
+        //jsonHotel.value = [];
         handleChecked.value = false;
     }
 }, { immediate: true });
@@ -516,6 +550,7 @@ const handleSelectAll = (initial = false) => {
 
 const handleSelection = (hotelId, add = null) => {
     const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
+    //console.log('handleSelectionX',hotelId,add,index)
 
     //console.log('index', index,form.value.hotels,hotelId);
 
@@ -559,7 +594,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
     form.value.hotels.forEach(hotelId => {
         const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
         
-
+        console.log('indexXvX',jsonHotel.value)
         if (index !== -1) { // Si existe el hotel
             if (!isSelected) {
                 // eliminar de jsonhotel
@@ -651,13 +686,14 @@ if (form.value.role === 1) {
     if (currentStep.value > 1) currentStep.value--;
   };
 
-  const handleStoreUser = async () => {
-  let store = await userStore.$storeUser(form.value);
+  const handleUpdateUser = async () => {
+    form.value.access = jsonHotel.value;
+  let store = await userStore.$updateUser(form.value);
 
   if (store.ok) {
     clearForm()
-    toast.warningToast('Usuario creado correctamente','top-right')
-    emits('store');
+    toast.warningToast('Usuario editado correctamente','top-right')
+    emits('update');
 
 
   } else {
@@ -716,7 +752,13 @@ const clearForm = () => {
     errorPassword.value = false;
     errorPasswordMatch.value = false;
     errorEmail.value = false;
+    
   });
+
+  onMounted(() => {
+    initializeForm();
+  });
+
   </script>
   
   <style lang="scss">
