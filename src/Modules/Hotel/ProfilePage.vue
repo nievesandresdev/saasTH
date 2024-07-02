@@ -79,8 +79,6 @@
                         class-content="flex-1"
                         class-input="text-sm h-[44px]"
                         name="name"
-                        :errors="errors"
-                        @blur:validate="validate('description')"
                     />
                 </div>
             </section>
@@ -224,7 +222,6 @@
                         class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.INSTAGRAM.COLOR.svg"
                         name="urlInstagram"
-                        @blur:validate="validate('urlInstagram')"
                     />
                     <BaseTextField
                         v-model="form.urlFacebook"
@@ -233,7 +230,6 @@
                         class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.FACEBOOK.COLOR.svg"
                         name="urlFacebook"
-                        @blur:validate="validate('urlFacebook')"
                     />
                     <BaseTextField
                         v-model="form.urlPinterest"
@@ -242,7 +238,6 @@
                         class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.PINTEREST.COLOR.svg"
                         name="urlPinterest"
-                        @blur:validate="validate('urlPinterest')"
                     />
                     <BaseTextField
                         v-model="form.urlX"
@@ -251,7 +246,6 @@
                         class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.X.svg"
                         name="urlX"
-                        @blur:validate="validate('urlX')"
                     />
                 </div>
             </section>
@@ -266,7 +260,8 @@
             <button
                 class="px-4 text-sm font-medium h-11 hbtn-cta"
                 :disabled="formInvalid || !isChanged"
-                :class="{'cta-disabled': formInvalid || !isChanged}"
+                :class="{'cta-disabled':formInvalid || !isChanged}"
+                @click="submit"
             >
                 Guardar
             </button>
@@ -305,8 +300,12 @@
     import { useHotelStore } from '@/stores/modules/hotel';
     const hotelStorage = useHotelStore();
     // const { hotelData } = hotelStorage;
-    import { useMockupStore } from '@/stores/modules/settings/mockup';
+    import { useMockupStore } from '@/stores/modules/mockup';
     const mockupStore = useMockupStore();
+
+    // COMPOSABLES
+    import { useToastAlert } from '@/composables/useToastAlert'
+    const toast = useToastAlert();
 
     //DATA
     const form = reactive({
@@ -397,8 +396,7 @@
 
     onMounted(() => {
         loadHotel()
-        mockupStore.$setIframeUrl('https://nobuhotelsevillatest.test.thehoster.io/webapp/?g=9')
-        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+        loadMockup()
     })
 
     // COMPUTED
@@ -421,20 +419,13 @@
             normalize(form.urlInstagram) !== hotelData.instagram_url ||
             normalize(form.urlPinterest) !== hotelData.pinterest_url ||
             normalize(form.urlFacebook) !== hotelData.facebook_url ||
-            normalize(form.urlFacebook) !== hotelData.facebook_url ||
             normalize(form.urlX) !== hotelData.x_url ||
-            imagesForm !== imagesForm ||
+            // imagesForm !== imagesForm ||
             Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
         return c;
     });
 
     //FUNCTIONS
-
-    function defineMockupData() {
-        mockupStore.$setIframeUrl('/consultas')
-        mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
-        toast.warningToast('texto','top-right')
-    }
 
     const normalize = (value) => {
       return value === "" || value === null || value === undefined ? null : value;
@@ -445,7 +436,7 @@
         Object.assign(hotelData, hotel)
         loadForm(hotel)
         loadMap()
-    } 
+    }
 
     function loadMap () {
         if (profilePageSectionMap.value?.initGoogleMap) {
@@ -462,8 +453,8 @@
         form.phone = hotel.phone || null;
         form.phone_optional = hotel.phone_optional || null;
         form.address = hotel.address || null;
-        form.metting_point_latitude = hotel.metting_point_latitude || null;
-        form.metting_point_longitude = hotel.metting_point_longitude || null;
+        form.metting_point_latitude = hotel.latitude || null;
+        form.metting_point_longitude = hotel.logitude || null;
         form.checkin = hotel.checkin || null;
         form.checkin_until = hotel.checkin_until || null;
         form.checkout = hotel.checkout || null;
@@ -489,13 +480,21 @@
         validateField(field)
     }
     
-    function loadIframe () {
-
+    function loadMockup () {
+        mockupStore.$setIframeUrl('/sobre-nosotros')
+        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
     }
+    // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
-    function submit () {
-        console.log('submit')
+    async function submit () {
+        console.log(form, 'submit')
+        // const response  = await hotelStorage.$updateProfile(form);
+        // console.log(response, 'response')
+        // const  {ok, data} = response ?? {}
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        loadMockup()
     }
 
 
 </script>
+

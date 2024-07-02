@@ -48,6 +48,16 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
+    async function $updateProfile (data) {
+        // console.log('findByParamsApi',localStorage.getItem('subdomain'))
+        const response = await hotelService.updateProfileApi(data)
+        return response
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
     
 
 
@@ -58,6 +68,7 @@ export const useHotelStore = defineStore('hotel', () => {
         subdomain,
         formatImage,
         $findByParams,
+        $updateProfile,
     }
 
 })

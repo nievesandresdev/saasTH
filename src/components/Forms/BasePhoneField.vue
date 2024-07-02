@@ -17,7 +17,7 @@
                 style="border:none; !important;" 
                 v-model="code"
                 @keyup="search_codes"
-                :placeholder="'Teléfono de contacto'"
+                :placeholder="'+ Código país'"
             >
             <div v-if="code" class="dropdown-code absolute left-0 z-50 w-full top-10 hbg-white-100 overflow-hidden">
                 <p 

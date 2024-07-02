@@ -13,7 +13,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useToastAlert } from '@/composables/useToastAlert'
-import { useMockupStore } from '@/stores/modules/settings/mockup'
+import { useMockupStore } from '@/stores/modules/mockup'
 
 const mockupStore = useMockupStore();
 
