@@ -19,6 +19,15 @@ export const useMockupStore = defineStore('mockupStore', () => {
       iframeUrlRef.value = completeURL;
   }
 
+  function $reloadIframe() {
+      const currentUrl = iframeUrlRef.value;
+      console.log('currentUrl',currentUrl)
+      iframeUrlRef.value = '';
+      setTimeout(() => {
+          iframeUrlRef.value = currentUrl;
+      }, 100);
+  }
+
   function $setInfo1(text, iconUrl) {
       infoText1Ref.value = text;
       infoTextIcon1Ref.value = iconUrl;
@@ -34,6 +43,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
     $setIframeUrl,
     infoText1,
     infoTextIcon1,
-    $setInfo1
+    $setInfo1,
+    $reloadIframe
   };
 });
