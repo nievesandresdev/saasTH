@@ -1,19 +1,22 @@
 <template>
     <div class="mt-6 flex justify-between items-center">
-        <h1 class="text-lg font-medium">Feedback en {{ status }}</h1>
+        <h1 class="text-lg font-medium">Feedback en {{ status }} </h1>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
             <p class="text-sm font-semibold">Mostrar feedback al huésped</p>
-            <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0">
+            <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0 mr-4">
                 <input
-                    type="checkbox"
-                    id="toggle"
-                    class="sr-only"
                     :checked="defaultToggle"
-                    @input="toggle"
+                    type="checkbox"
+                    class="sr-only"
+                    id="toggle"
+                    @change="toggle"
                 />
-                <div class="block hbg-gray-400 w-[1.875rem] h-[1.125rem] rounded-full hborder-gray-400"></div>
-                <div class="dot absolute left-[0.125rem] top-[0.125rem] hbg-white-100 w-3.5 h-3.5 rounded-full transition"></div>
-                
+                <div
+                :class="['block w-[1.875rem] h-[1.125rem] rounded-full', defaultToggle ? 'bg-[#34A98F]' : 'bg-gray-400']"
+                ></div>
+                <div
+                :class="['dot absolute top-[0.125rem] w-3.5 h-3.5 rounded-full transition bg-white', defaultToggle ? 'transform translate-x-full' : 'left-[0.125rem]']"
+                ></div>
             </label>
             <Tooltip
                 size="l"
