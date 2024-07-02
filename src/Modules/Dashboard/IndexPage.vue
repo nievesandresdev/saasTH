@@ -25,7 +25,7 @@ onMounted(()=>{
 })
 
 function defineMockupData() {
-    mockupStore.$setIframeUrl('https://nobuhotelsevillatest.test.thehoster.io/webapp/consultas?g=9')
+    mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
     mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     toast.warningToast('texto','top-right')
 }

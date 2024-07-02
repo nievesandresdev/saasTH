@@ -22,7 +22,7 @@
                 <Editor 
                     v-if="form.msg_title"
                     v-model="form.msg_title['es']"
-                    placeholder="Debes añadir un texto"
+                    placeholder="Debes introducir un texto"
                     showCounter
                     mandatory
                     :maxLength="300"
@@ -36,7 +36,7 @@
                 <Editor 
                     v-if="form.msg_text"
                     v-model="form.msg_text['es']"
-                    placeholder="Debes añadir un texto"
+                    placeholder="Debes introducir un texto"
                     showCounter
                     mandatory
                     :maxLength="300"
@@ -106,16 +106,21 @@ import Checkbox from '@/components/Forms/Checkbox.vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 //STORES
 import { useRequestSettingStore } from '@/stores/modules/reviewRequests/reviewRequestSettings'
+import { useMockupStore } from '@/stores/modules/mockup'
 
+const mockupStore = useMockupStore();
 const requestSettingStore = useRequestSettingStore();
 const toast = useToastAlert();
 
 // const urlBase = usePage().props.value.url_base_huesped
 // const hotelSubdomain = usePage().props.value.currentHotel.subdomain
 onMounted(async ()=>{
+    mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
+    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
     assignValuesToForm();
 })
+
 
 const settings = ref(null);
 const anyEmpty = ref([]);
@@ -141,6 +146,7 @@ const submit = async () =>{
     let request  = await requestSettingStore.$updateData(form);
     if(request){
         settingsRef.value = JSON.parse(JSON.stringify(form))
+        mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
 }
