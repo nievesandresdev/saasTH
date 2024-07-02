@@ -259,8 +259,8 @@
             </button> -->
             <button
                 class="px-4 text-sm font-medium h-11 hbtn-cta"
-                :disabled="formInvalid || !isChanged"
-                :class="{'cta-disabled':formInvalid || !isChanged}"
+                :disabled="isloadingForm || formInvalid || !isChanged"
+                :class="{'cta-disabled':isloadingForm || formInvalid || !isChanged}"
                 @click="submit"
             >
                 Guardar
@@ -335,6 +335,7 @@
         show_profile: null,
         with_wifi: false,
     });
+    const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const formRules = {
         name: [value => value.trim() ? true : 'Introduce el nombre de tu alojamiento'],
@@ -354,15 +355,17 @@
             { value: 2, label: "2 estrellas" },
             { value: 3, label: "3 estrellas" },
             { value: 4, label: "4 estrellas" },
-            { value: 5, label: "5 estrellas" }
+            { value: 6, label: "4 estrellas Superior" },
+            { value: 5, label: "5 estrellas" },
+            { value: 7, label: "5 estrellas Gran Lujo" },
         ];
-        if (form.type == "Hostal" || form.type == "Pensión") {
-            options = [
-            { value: 1, label: "1 estrella" },
-            { value: 2, label: "2 estrellas" },
-            { value: 3, label: "3 estrellas" }
-            ];
-        }
+        // if (form.type == "Hostal" || form.type == "Pensión") {
+        //     options = [
+        //     { value: 1, label: "1 estrella" },
+        //     { value: 2, label: "2 estrellas" },
+        //     { value: 3, label: "3 estrellas" }
+        //     ];
+        // }
         return options;
     });
 
@@ -473,7 +476,7 @@
 
     function updateShowHotel (val) {
         form.show_profile = val
-        loadIframe()
+        reloadIframe()
     }
 
     const validate = (field) => {
@@ -487,12 +490,19 @@
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
     async function submit () {
-        console.log(form, 'submit')
-        // const response  = await hotelStorage.$updateProfile(form);
+        isloadingForm.value = true
+        // console.log(form)
+        const response  = await hotelStorage.$updateProfile(form);
         // console.log(response, 'response')
-        // const  {ok, data} = response ?? {}
-        toast.warningToast('Cambios guardados con éxito','top-right');
-        loadMockup()
+        const  {ok, data} = response ?? {}
+        await loadHotel()
+        isloadingForm.value = false
+        if (ok) {
+            toast.warningToast('Cambios guardados con éxito','top-right');
+        } else {
+            toast.warningToast(data?.message,'top-right');
+        }
+        mockupStore.$reloadIframe()
     }
 
 
