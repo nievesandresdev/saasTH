@@ -12,6 +12,7 @@
                     :class="{'border-dark':formFilter.search_terms}"
                     @keyup.prevent="filter_search()"
                     @keypress.enter="submit_filters"
+                    @input="updateSearchTerms"
                 >
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                     <svg class="w-6 h-6 text-[#333333] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -76,21 +77,24 @@
                         @mouseover="hoverTable(index)"
                         @mouseleave="hoverTable(index)"
                         :key="user.id"
-                        class=" border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
+                        class=" border-b dark:bg-gray-800 dark:border-gray-700 bg-white hover:bg-[#F9FFFD]"
                         :class="{'bg-[#ECF9F5]': selectedShow == user.id, 'shadow-sm': hoverSelected == index}"
                     >
                         <th @click="openModalShow(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ user.name }}
                         </th>
                         <td @click="openModalShow(user)" class="px-6 py-4">
-                            {{ getRoleName(user.role.name) }}
+                            {{ $getRoleName(user.role.name) }}
                         </td>
                         <td @click="openModalShow(user)" class="px-6 py-4">
                             {{ user.work_position }}
                         </td>
                         <td @click="openModalShow(user)" class="px-6 py-4">
-                            <span class="px-4 py-2 font-[600] text-[12px] text-[#0B6357] bg-green-100 rounded-full">
+                            <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[12px] text-[#0B6357] bg-green-100 rounded-full">
                                 Activo
+                            </span>
+                            <span v-else class="px-4 py-2 font-[600] text-[12px] text-[#C53030] bg-red-100 rounded-full">
+                                Inactivo
                             </span>
                         </td>
                         <td class="px-6 py-4 relative" >
@@ -100,7 +104,7 @@
                                 <circle cx="5" cy="12" r="2" fill="currentColor"/>
                             </svg>
                             <div v-if="visibleDropdown === index"  class="absolute left-0 w-48 bg-white rounded-md shadow-md py-1 z-50">
-                                <a href="#" @click="openModalEdit(user)" class=" px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="#" @click="editUser(user)" class=" px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil mr-2" viewBox="0 0 16 16">
                                         <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                                     </svg>
@@ -119,21 +123,50 @@
                 </tbody>
             </table>
         </div>
+        <Pagination
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            :per-page="15"
+            @update:page="handlePageChange"
+        />
     </div>
 
-    <CreateUser :modal_add="modal_add" @close="closeModal" :work_positions="workPositionsData" />
+    <CreateUser 
+        :modal-add="modalAdd" 
+        @close="closeModal" 
+        @store="handleGetUsers" 
+        :work-positions="workPositionsData" 
+    />
+
+    <EditUser 
+        :modal-edit="modalEdit"
+        @close="closeModalEdit" 
+        @update="handleGetUsers" 
+        :work-positions="workPositionsData" 
+        :data-user="dataEdit" 
+     />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import MenuSettings from './components/MenuSettings.vue';
 import CreateUser from './components/CreateUser.vue';
+import EditUser from './components/EditUser.vue';
+import Pagination from './components/Pagination.vue';
 import ButtonFilter from '@/components/Buttons/ButtonFilter.vue';
 import { getWorkPosition  } from '@/api/services/users/userSettings.service';
+ import { useUserStore } from '@/stores/modules/users/users'
 
-const modal_add = ref(false);
+const modalAdd = ref(false);
+const modalEdit = ref(false);
 const visibleDropdown = ref(null);
 const workPositionsData = ref([]);
+
+const userStore = useUserStore();
+
+onMounted(() => {
+    handleGetUsers();
+});
 
 const data_filter = ref ({
     search_terms: '',
@@ -144,44 +177,36 @@ const formFilter = ref({
     search_terms: ''
 });
 
-const data = ref([
-    {
-        id: 1,
-        name: 'Juan Perez',
-        role: {
-            id: 1,
-            name: 'Administrator'
-        },
-        work_position: 'Gerente'
-    },
-    {
-        id: 2,
-        name: 'Maria Lopez',
-        role: {
-            id: 2,
-            name: 'Operator'
-        },
-        work_position: 'Operador'
-    },
-    {
-        id: 3,
-        name: 'Pedro Ramirez',
-        role: {
-            id: 3,
-            name: 'Owner'
-        },
-        work_position: 'Dueño'
-    },
-    {
-        id: 4,
-        name: 'Josefa Martinez',
-        role: {
-            id: 4,
-            name: 'Inactive'
-        },
-        work_position: 'Inactivo'
-    }
-]);
+const data = ref([]);
+const dataEdit = ref(null);
+const currentPage = ref(1);
+const totalPages = ref(1);
+
+const handleGetUsers = async () => {
+  let params = {
+    search_terms: data_filter.value.search_terms,
+    type: data_filter.value.type,
+    page: currentPage.value,
+    per_page: 15,
+  };
+  const response = await userStore.$getUsers(params);
+  data.value = response.data.users;
+  totalPages.value = Math.ceil(response.data.total / response.data.per_page);
+};
+
+const handleUpdateUsers = async () => {
+  console.log('handleUpdateUsers');
+};
+
+const handlePageChange = (page) => {
+  currentPage.value = page;
+  handleGetUsers();
+};
+
+const updateSearchTerms = () => {
+  data_filter.value.search_terms = formFilter.value.search_terms;
+  handleGetUsers();
+}
 
 const filter_search = () => {
     console.log('filter_search',formFilter.value.search_terms);
@@ -189,20 +214,25 @@ const filter_search = () => {
 
 
 const change_type = (type) => {
-    console.log('change_type',type);
-    data_filter.value.type = type
-}
+  data_filter.value.type = type;
+  handleGetUsers();
+};
 
 const submit_filters = () => {
     console.log('submit_filters');
 }
 
 const createUser = () => {
-    modal_add.value = true
+    modalAdd.value = true
     visibleDropdown.value = null
-
     workPositions();
+}
 
+const editUser = (data) => {
+    dataEdit.value = data;
+    modalEdit.value = true
+    visibleDropdown.value = null
+    workPositions();
 }
 
 //const getWorkposition async
@@ -212,7 +242,11 @@ const workPositions = async () => {
 }
 
 const closeModal = () => {
-    modal_add.value = false
+    modalAdd.value = false
+}
+
+const closeModalEdit = () => {
+    modalEdit.value = false
 }
 
 let selectedShow = ref(null);
@@ -278,11 +312,4 @@ function openModalDelete(user){
     visibleDropdown.value = null
 }
 
-const getRoleName = (roleName) => {
-  return roleName === 'Associate'
-    ? 'Director'
-    : roleName === 'Administrator'
-    ? 'Administrador'
-    : 'Operador';
-};
 </script>

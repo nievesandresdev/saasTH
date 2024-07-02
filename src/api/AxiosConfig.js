@@ -97,10 +97,15 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
  let paramAxios = {
    method,
    url: `${api_url_backend}/${endpoint}`,
-   data,
-   params: data,
+  //  data,
+  //  params: data,
    ...options,
- } 
+ }
+ if (method == 'get') {
+   Object.assign(paramAxios, {params: data})
+ } else {
+  Object.assign(paramAxios, {data})
+ }
   const servicePromise = axios(paramAxios)
 
   try {

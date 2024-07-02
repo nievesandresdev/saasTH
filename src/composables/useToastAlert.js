@@ -14,6 +14,19 @@ export function useToastAlert() {
             hideProgressBar: true,
         });
     };
+
+    //error
+    const errorToast = (text, position) => {
+        toast(text, {
+            toastClassName: "error-toast",
+            bodyClassName: "error-toast-body",
+            position: position,
+            timeout: 3000,
+            icon: false,
+            closeButton: false,  
+            hideProgressBar: true,
+        });
+    };
  
-    return { warningToast };
+    return { warningToast, errorToast};
   }
