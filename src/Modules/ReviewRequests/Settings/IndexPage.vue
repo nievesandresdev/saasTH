@@ -22,7 +22,7 @@
                 <Editor 
                     v-if="form.msg_title"
                     v-model="form.msg_title['es']"
-                    placeholder="Debes añadir un texto"
+                    placeholder="Debes introducir un texto"
                     showCounter
                     mandatory
                     :maxLength="300"
@@ -36,7 +36,7 @@
                 <Editor 
                     v-if="form.msg_text"
                     v-model="form.msg_text['es']"
-                    placeholder="Debes añadir un texto"
+                    placeholder="Debes introducir un texto"
                     showCounter
                     mandatory
                     :maxLength="300"
@@ -67,12 +67,12 @@
                 <p class="text-sm font-medium leading-[110%]">La solicitud de reseña se mostrará a los huéspedes</p>
                 <div class="mt-4">
                     <div class="flex items-center gap-2">
-                        <RadioButton value="positive queries" v-model="form.request_to"/>
+                        <RadioButton :value="DEFAULT_GOOD_STRING" v-model="form.request_to"/>
                         <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno</p>
                         <span class="text-[10px] leading-[110%] ml-1 htext-green-600">Recomendado</span>
                     </div>
                     <div class="flex items-center gap-2 mt-2">
-                        <RadioButton value="positive, normal and not answered queries" v-model="form.request_to"/>
+                        <RadioButton :value="DEFAULT_DEFAULT_STRING" v-model="form.request_to"/>
                         <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno, neutral y no respondido</p>
                     </div>
                 </div>
@@ -86,25 +86,41 @@
         @cancel="cancelChanges" 
         @submit="submit"
     />
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import RadioButton from '@/components/Forms/RadioButton.vue';
-import ModalNotSaved from '@/components/ModalNoSave.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue'
 import Editor from '@/components/Forms/Editor.vue'
 import Checkbox from '@/components/Forms/Checkbox.vue'
-
+//composable
+import { useToastAlert } from '@/composables/useToastAlert'
+//STORES
 import { useRequestSettingStore } from '@/stores/modules/reviewRequests/reviewRequestSettings'
+import { useMockupStore } from '@/stores/modules/mockup'
 
+const mockupStore = useMockupStore();
 const requestSettingStore = useRequestSettingStore();
+const toast = useToastAlert();
 
 // const urlBase = usePage().props.value.url_base_huesped
 // const hotelSubdomain = usePage().props.value.currentHotel.subdomain
 onMounted(async ()=>{
+    mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
+    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
     assignValuesToForm();
 })
+
 
 const settings = ref(null);
 const anyEmpty = ref([]);
@@ -112,6 +128,8 @@ const anyOverLimit = ref([]);
 const beforeUrl = ref({link: null,force: false})
 const settingsRef = ref(null);
 const textFull = ref(true);
+const DEFAULT_GOOD_STRING = JSON.stringify(['GOOD','VERYGOOD'])
+const DEFAULT_DEFAULT_STRING = JSON.stringify(['GOOD','VERYGOOD','NORMAL','NOTANSWERED'])
 // const urlMockup = ref(`${urlBase}/consultas/fakeLinkOtas?mockup=true&subdomain=${hotelSubdomain}`);
 
 const form = reactive({
@@ -123,26 +141,18 @@ const form = reactive({
     otas_enabled: null
 });
 
-function submit(){
+const submit = async () =>{
     form.otas_enabled = { google: form.otas_enabled_google, tripadvisor: form.otas_enabled_tripadvisor};
-    console.log('submit')
-    beforeUrl.value.force = true
-    Inertia.post(route('requests.configuration.update_settings'), form, {
-        onSuccess: (page) => {
-            console.log('se hicieron los cambios')
-            beforeUrl.value.force = false
-            settingsRef.value = JSON.parse(JSON.stringify(form));
-            var iframe = document.getElementById('iframeMockup');
-            iframe.src = urlMockup.value;
-        }
-    });
+    let request  = await requestSettingStore.$updateData(form);
+    if(request){
+        settingsRef.value = JSON.parse(JSON.stringify(form))
+        mockupStore.$reloadIframe();
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    }
 }
 
 function cancelChanges(){
-    beforeUrl.value.force = true
-    Inertia.visit(route('requests.configuration.index'), {
-        preserveScroll: false,
-    })
+    assignValuesToForm();
 }
 
 function assignValuesToForm(){

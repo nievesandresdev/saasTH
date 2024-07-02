@@ -396,7 +396,6 @@ const submit = async () => {
     await updateSettingsFromCheckBoxes();
     let saveChatSettings = await chatSettingsStore.$updateNotificationsEmail(chatSettings.value)
     let saveQuerySettings = await querySettingsStore.$updateNotificationsEmail(querySettings.value)
-    console.log('saveChatSettings',saveChatSettings)
     matchDataWithBoxes();
     if(saveChatSettings && saveQuerySettings){
         toast.warningToast('Cambios guardados con éxito','top-right');
