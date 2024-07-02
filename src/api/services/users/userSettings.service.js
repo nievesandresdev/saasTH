@@ -10,6 +10,7 @@ export const updateWorkPosition = (data) => apiHttp('POST', `${userPath}/work-po
 export const deleteWPosition = (data) => apiHttp('POST', `${userPath}/work-position/delete`, data)
 
 //users
-export const getUsers = () => apiHttp('GET', `${userPath}/users`)
+export const getUsers = (params) => apiHttp('GET', `${userPath}/getUsers`,params , { showPreloader: false })
 export const createUser = (data) => apiHttp('POST', `${userPath}/store`, data)
+export const updateUser = (data) => apiHttp('POST', `${userPath}/update`, data)
 
