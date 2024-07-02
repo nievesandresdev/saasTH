@@ -41,7 +41,7 @@
     </div>
     <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined)" class="flex justify-between">
       <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600 flex items-center">
-          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.svg">
+          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
           {{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}
       </p>
     </div>

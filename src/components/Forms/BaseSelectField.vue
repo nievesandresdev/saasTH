@@ -59,7 +59,7 @@
       </div>
     </div>
     <p v-if="error" class="mt-1 text-xs htext-alert-negative flex">
-      <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.svg">
+      <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
       {{ texterror }}
     </p>
   </div>

@@ -17,7 +17,7 @@
         />
         <p v-if="!form.address" class="mt-2 text-xs htext-alert-negative flex items-center">
             <img
-                src="/assets/icons/1.TH.WARNING.svg"
+                src="/assets/icons/1.TH.WARNING.RED.svg"
                 alt="icon alert red"
                 class="inline w-4 h-4 mr-2"
             />
