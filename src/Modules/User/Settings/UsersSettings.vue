@@ -84,7 +84,7 @@
                             {{ user.name }}
                         </th>
                         <td @click="openModalShow(user)" class="px-6 py-4">
-                            {{ getRoleName(user.role.name) }}
+                            {{ $getRoleName(user.role.name) }}
                         </td>
                         <td @click="openModalShow(user)" class="px-6 py-4">
                             {{ user.work_position }}
@@ -312,11 +312,4 @@ function openModalDelete(user){
     visibleDropdown.value = null
 }
 
-const getRoleName = (roleName) => {
-  return roleName === 'Associate'
-    ? 'Propietario'
-    : roleName === 'Administrator'
-    ? 'Administrador'
-    : 'Operador';
-};
 </script>

@@ -84,7 +84,7 @@
         <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
       </div>
     </div>  
-    <ModalWindow :isVisible="showModal" @close="closeModalPass" size="md">
+    <ModalWindow :isVisible="showModal" @close="closeModalPass" size="sm">
       <template #content>
         <form @submit.prevent="forgotPass">
           <div class="mb-4 flex flex-col">
@@ -122,7 +122,7 @@
     </ModalWindow>
 
     <!-- modal alert -->
-    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="md">
+    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="xs">
       <template #content>
         <div class="p-4" v-if="route.query.tokenExpired">
           <h2 class="text-lg font-medium">Oh lo siento</h2>

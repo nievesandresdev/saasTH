@@ -1,10 +1,11 @@
 <template>
     <transition name="modal-fade">
-      <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50" @click.self="closeModal">
+      <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-[600]" @click.self="closeModal">
         <div :class="modalSizeClass" class="bg-white rounded-lg shadow-xl mx-auto transform transition-all">
-          <div class="p-6">
+          <div :class="paddingContent">
             <slot name="content"></slot>
           </div>
+            <slot v-if="footer" name="footer"></slot>
         </div>
       </div>
     </transition>
@@ -19,7 +20,15 @@
     size: {
       type: String,
       default: 'md',
-    }
+    },
+    paddingContent : {
+      type: String,
+      default: 'p-6'
+    },
+    footer: {
+      type: String,
+      default: null,
+    },
   });
   
   const closeModal = () => {
@@ -29,11 +38,13 @@
   const modalSizeClass = computed(() => {
     switch (props.size) {
       case 'sm':
-        return 'max-w-sm';
+        return 'w-1/5';
       case 'lg':
-        return 'max-w-3xl';
+        return 'w-1/2';
+      case 'xs':
+        return 'w-1/6';
       default:
-        return 'max-w-md';
+        return 'w-1/4';
     }
   });
   </script>
