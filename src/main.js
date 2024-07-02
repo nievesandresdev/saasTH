@@ -5,8 +5,11 @@ import { createHead } from '@vueuse/head'
 import Toast from "vue-toastification";
 import 'vue-toastification/dist/index.css';
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 9cc864c14e22925c69e6095d4181e8a884b0dfe1
 // estilos generales
 import './assets/css/main.css'
 

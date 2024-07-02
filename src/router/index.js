@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import authRoutes from './authRoutes'
 import dashboardRoutes from './dashboardRoutes'
 //grupos de rutas
+import hotelGroupRoutes from './hotel/hotelGroupRoutes'
 import chatGroupRoutes from './chat/chatGroupRoutes'
 import userGroupRoutes from './user/userGroupRoutes'
 import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
@@ -25,6 +26,7 @@ const routes = [
   ...authRoutes,
   ...dashboardRoutes,
   //grupos de rutas por modulo
+  ...hotelGroupRoutes,
   ...chatGroupRoutes,
   ...userGroupRoutes,
   ...reviewsRequestsGroupRoutes,
