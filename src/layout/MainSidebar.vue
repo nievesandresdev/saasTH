@@ -112,7 +112,9 @@ const menu_links = ref([
             {
                 title: 'WebApp',
                 icon: '1.TH.DASHBOARD',
-                include : ['ReviewRequestSettingsIndex'],
+                include : [
+                    'ReviewRequestSettingsIndex','SettingsPreStayPage','StayPage','SettingsPostStayPage'
+                ],
                 url : '/dashboard'
             },
             {
