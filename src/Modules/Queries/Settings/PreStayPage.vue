@@ -75,20 +75,16 @@ import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 //store
 import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
+import { useMockupStore } from '@/stores/modules/mockup'
 
-
+const mockupStore = useMockupStore();
 const toast = useToastAlert();
-
 const querySettingsStore = useQuerySettingsStore();
 
 
 //data
 const queriesTexts = ref(null);
-const beforeUrl = ref({link: null,force: false})
-const urlMockup = ref(null);
-const copyMockup = ref(null);
 const anyEmpty = ref([]);
-const anyOverLimit = ref([]);
 const copyTexts = ref(null);
 const form = reactive({
     pre_stay_activate:null,
@@ -96,18 +92,13 @@ const form = reactive({
     pre_stay_comment:null,
 })
 const forceUpdate = ref(0);
-//static 
-const desactiveCopy = {text:'Para visualizar, activa la opción de mostrar feedback al huésped', icon:'/vendor_asset/img/hoster/icons/1.TH.MOBILE.svg'}
-const activeCopy = {text:'Edita y guarda para aplicar tus cambios', icon:'/vendor_asset/img/hoster_landing/icons/info.svg'}
-// const urlBase = usePage().props.value.url_base_huesped
-// const hotelSubdomain = usePage().props.value.currentHotel.subdomain
+
 onMounted(async() => {
     queriesTexts.value = await querySettingsStore.$getPreStaySettings();
     // console.log('queriesTexts.value',queriesTexts.value)
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
-    // defineMockup(queriesTexts.value.pre_stay_activate)
-    // defineCopyMockup(queriesTexts.value.pre_stay_activate)
+    defineMockup(queriesTexts.value.pre_stay_activate)
 })
 
 //functions
@@ -119,26 +110,22 @@ function assignValuesToForm(){
     }
 }
 
-function submit(){
-    console.log('submit')
+async function submit(){
+    let request  = await querySettingsStore.$updatePreStaySettings(form);
+    if(request){
+        copyTexts.value = JSON.stringify(form);
+        defineMockup(form.pre_stay_activate)
+        mockupStore.$reloadIframe();
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    }
 }
 
 function handleEmpty(event,input) {
-    // console.log('handleEmpty',event)
     if(event){
         anyEmpty.value.push(input)
     }else{
         anyEmpty.value = anyEmpty.value.filter(item => item !== input)
     }
-}
-
-function handleLimit(event,input) {
-    if(event){
-        anyOverLimit.value.push(input)
-    }else{
-        anyOverLimit.value = anyOverLimit.value.filter(item => item !== input)
-    }
-    console.log('handleLimit',anyOverLimit.value)
 }
 
 function cancelChanges(){
@@ -149,28 +136,18 @@ function cancelChanges(){
     forceUpdate.value++;
 }
 
-
-function defineCopyMockup(bool){
-    if(!bool){
-        copyMockup.value = desactiveCopy;
-    }else{
-        copyMockup.value = activeCopy;
-    }
-}
-
 function defineMockup(bool){
-    var iframe = document.getElementById('iframeMockup');
     if(bool){
-        urlMockup.value = `${urlBase}/consultas/fake?period=pre-stay&mockup=true&subdomain=${hotelSubdomain}`
+        mockupStore.$setIframeUrl('/consultas/fake','period=pre-stay')
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }else{
-        urlMockup.value = `${urlBase}?&subdomain=${hotelSubdomain}&mockup=true`
+        mockupStore.$setIframeUrl('')
+        mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar feedback al huésped', '/assets/icons/1.TH.MOBILE.svg')
     }
-    iframe.src = urlMockup.value;
+    
 }
 
-provide('customCopy',copyMockup)
 //computed
-
 const changes = computed(()=>{
     let stringForm = JSON.stringify(form)
     return copyTexts.value !== stringForm

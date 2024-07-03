@@ -7,3 +7,4 @@ import {
 export const getAllApi = () => apiHttp('GET', `${querySettingsPath}/getAll`, [])
 export const updateNotificationsEmailApi = (data) => apiHttp('POST', `${querySettingsPath}/${hosterPath}/updateNotificationsEmail`, data)
 export const getPreStaySettingsApi = () => apiHttp('GET', `${querySettingsPath}/${hosterPath}/getPreStaySettings`, [])
+export const updatePreStaySettingsApi = (data) => apiHttp('POST', `${querySettingsPath}/${hosterPath}/updatePreStaySettings`, data)

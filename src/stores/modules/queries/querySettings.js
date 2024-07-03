@@ -4,7 +4,8 @@ import { ref } from 'vue'
 import {
     getAllApi,
     updateNotificationsEmailApi,
-    getPreStaySettingsApi
+    getPreStaySettingsApi,
+    updatePreStaySettingsApi
 } from '@/api/services/queries/querySettings.services'
 
 export const useQuerySettingsStore = defineStore('querySettings', () => {
@@ -30,17 +31,29 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
         }
     }
 
+    async function $updatePreStaySettings (data) {
+        console.log('updatePreStaySettings',data)
+        const response = await updatePreStaySettingsApi(data)
+        console.log('response',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
     async function $updateNotificationsEmail() {
         const response = await updateNotificationsEmailApi()
         const { ok } = response;
         return ok;
     }
+    
 
     //
     return {
         $getAll,
         $updateNotificationsEmail,
-        $getPreStaySettings
+        $getPreStaySettings,
+        $updatePreStaySettings
     }
 
 })
