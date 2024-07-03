@@ -2,7 +2,7 @@ const IndexPage = () => import('@/Modules/ReviewRequests/Settings/IndexPage');
 
 const ReviewRequestSettings = [
   {
-    path: 'configuracion',
+    path: 'webapp',
     meta: { sidebarRight: 'SidebarMockup'},  
     children: [
       {
