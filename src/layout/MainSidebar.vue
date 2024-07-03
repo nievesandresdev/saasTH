@@ -73,42 +73,42 @@
     </div>
   </div>
 
-  <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" size="sm" padding-content="p-4" footer="true">
-    <template #content>
-      <div>
-        <div class="flex justify-end w-full">
-          <button @click="closeModalProfile">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="text-center">
-          <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
-          <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
-          <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
-          <div class="mt-4 flex justify-evenly gap-4">
-            <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
-              <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
-              Ver Suscripción
-            </button>
-            <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
-              <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
-              Ajustes de cuenta
-            </button>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template #footer>
-      <div class="border-t border-[#BFBFBF] mt-1 pt-4 w-full px-8 py-4">
-        <button class="flex items-center py-2 ml-2 text-gray-700 w-full font-medium text-sm" @click.stop="logout">
-          <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
-          Cerrar sesión
+  <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" :width="'369px'" padding-content="p-6" footer="true">
+  <template #content>
+    <div>
+      <div class="flex justify-end w-full">
+        <button @click="closeModalProfile">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
-    </template>
-  </ModalWindow>
+      <div class="text-center">
+        <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
+        <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
+        <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
+        <div class="mt-4 flex justify-between gap-4">
+          <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+            <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
+            Ver Suscripción
+          </button>
+          <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+            <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
+            Ajustes de cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template #footer>
+    <div class="border-t border-[#BFBFBF] mt-1 pt-4 w-full p-6">
+      <button class="flex items-center py-2 text-gray-700 w-full font-medium text-sm" @click.stop="logout">
+        <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
+        Cerrar sesión
+      </button>
+    </div>
+  </template>
+</ModalWindow>
 </template>
 
 <script setup>

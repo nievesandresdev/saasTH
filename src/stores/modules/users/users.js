@@ -31,6 +31,13 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
+  /*
+  *avatar ui
+  */
+ function $avatar(){
+   return true;
+ }
+
   /**
     * guardar usuario
    */
