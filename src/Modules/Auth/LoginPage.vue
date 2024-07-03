@@ -258,7 +258,16 @@ const handleLogin = async () => {
     email: form.value.email,
     password: form.value.password
   });
-  
+
+  if (form.value.remember) {
+    sessionStorage.setItem("user_email_form", form.value.email);
+    sessionStorage.setItem("pass_email_form", form.value.password);
+    sessionStorage.setItem("remember_form", form.value.remember);
+  } else {
+    sessionStorage.removeItem("user_email_form");
+    sessionStorage.removeItem("pass_email_form");
+    sessionStorage.removeItem("remember_form");
+  }
 }
 </script>
 

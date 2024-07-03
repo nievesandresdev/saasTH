@@ -69,46 +69,64 @@
             >{{button.title}}</p>
           </div>
         </button>
+
+        <!-- User Name -->
+        <button 
+          @click="modalProfile = true"
+          class="rounded-[10px] flex items-center p-1 max-h-[40px]"
+          :class="{'hbg-green-600 shadow-lg': route.name === 'UserPanel', 'hover-gray-100': route.name !== 'UserPanel'}"
+        >
+          <img 
+            class="w-8 h-8 rounded-full" :src="userStore.$userAvatar()"
+            :class="{'icon-white': false, 'border border-white': route.name === 'UserPanel'}"
+          >
+          <div :class="widthMenu">
+            <p 
+              class="text-sm font-semibold ml-2 text-left leading-[120%]"
+              :class="{'text-white': route.name === 'UserPanel'}"
+            >{{ `${authStore.user.name} ${authStore.user.lastname}` }}</p>
+          </div>
+        </button>
       </div>
     </div>
   </div>
 
   <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" :width="'369px'" padding-content="p-6" footer="true">
-  <template #content>
-    <div>
-      <div class="flex justify-end w-full">
-        <button @click="closeModalProfile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <div class="text-center">
-        <img :src="`${userStore.$userAvatar()}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
-        <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
-        <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
-        <div class="mt-4 flex justify-between gap-4">
-          <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
-            <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
-            Ver Suscripción
-          </button>
-          <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
-            <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
-            Ajustes de cuenta
+    <template #content>
+      <div>
+        <div class="flex justify-end w-full">
+          <button @click="closeModalProfile">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
+        <div class="text-center">
+          <img :src="`${userStore.$userAvatar()}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
+          <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
+          <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
+          <div class="mt-4 flex justify-between gap-4">
+            <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+              <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
+              Ver Suscripción
+            </button>
+            <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+              <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
+              Ajustes de cuenta
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </template>
-  <template #footer>
-    <div class="border-t border-[#BFBFBF] mt-1 pt-4 w-full p-6">
-      <button class="flex items-center py-2 text-gray-700 w-full font-medium text-sm" @click.stop="logout">
-        <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
-        Cerrar sesión
-      </button>
-    </div>
-  </template>
-</ModalWindow>
+    </template>
+    <template #footer>
+      <div class="border-t border-[#BFBFBF] mt-1 pt-4 w-full p-6">
+        <button class="flex items-center py-2 text-gray-700 w-full font-medium text-sm" @click.stop="logout">
+          <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
+          Cerrar sesión
+        </button>
+      </div>
+    </template>
+  </ModalWindow>
 </template>
 
 <script setup>
@@ -211,8 +229,8 @@ const user_buttons = ref([
     icon: '/assets/icons/1.TH.NOVEDADES.MM.svg',
     include: ['-'],
   },
-  {
-    title: `${authStore.user.name} ${authStore.user.lastname}`,
+  /* {
+    title: 'Perfil',
     icon: `${userStore.$userAvatar()}`,
     include: ['UserPanel'],
     border: true,
@@ -220,7 +238,7 @@ const user_buttons = ref([
       modalProfile.value = true
     },
     active: computed(() => route.name === 'UserPanel'),
-  },
+  }, */
 ])
 
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false)

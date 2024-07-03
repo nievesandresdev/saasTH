@@ -1,61 +1,62 @@
+// stores/auth.js (o login.js)
 import { defineStore } from 'pinia';
-import { login as loginService,logout as LogoutService } from '@/api/services/auth';
-import { ref } from 'vue'
+import { login as loginService, logout as LogoutService } from '@/api/services/auth';
+import { ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
-
     const user = ref(JSON.parse(sessionStorage.getItem('user')) || null);
     const token = ref(sessionStorage.getItem('token') || '');
-    const current_hotel = ref(sessionStorage.getItem('current_hotel') || '');
-    const current_subdomain = ref(sessionStorage.getItem('current_subdomain') || '')
+    const current_hotel = ref(JSON.parse(sessionStorage.getItem('current_hotel')) || '');
+    const current_subdomain = ref(sessionStorage.getItem('current_subdomain') || '');
     const errorLogin = ref(null);
     const loading = ref(false);
 
-
     async function login(credentials) {
-        this.loading = true;
-        this.errorLogin = null;
-  
+        loading.value = true;
+        errorLogin.value = null;
+
         try {
-          const response = await loginService(credentials);
-          
-          if (response.ok) {
-            this.token = response.data.token;
-            this.user = response.data.user;
-            this.errorLogin = null;
+            const response = await loginService(credentials);
 
-            //set session token and user data
-            sessionStorage.setItem('token', this.token);
-            sessionStorage.setItem('user', JSON.stringify(this.user));
-            //current_hotel
-            sessionStorage.setItem('current_hotel',JSON.stringify(response.data.user.current_hotel));
-            //current_subdomain
-            sessionStorage.setItem('current_subdomain',response.data.user.curent_subdmain_hotel);
-            this.$router.push('/dashboard')
+            if (response.ok) {
+                token.value = response.data.token;
+                user.value = response.data.user;
+                errorLogin.value = null;
 
-          } else {
-            this.errorLogin = 'Credenciales incorrectas';
-          }
+                // Set session token and user data
+                sessionStorage.setItem('token', token.value);
+                sessionStorage.setItem('user', JSON.stringify(user.value));
+                sessionStorage.setItem('current_hotel', JSON.stringify(response.data.user.current_hotel));
+                sessionStorage.setItem('current_subdomain', response.data.user.current_subdmain_hotel);
+                this.$router.push('/dashboard');
+            } else {
+                errorLogin.value = 'Credenciales incorrectas';
+            }
 
         } catch (error) {
-          this.errorLogin = error.response?.data?.message || 'Ha ocurrido un error';
+            errorLogin.value = error.response?.data?.message || 'Ha ocurrido un error';
         } finally {
-          this.loading = false;
+            loading.value = false;
         }
-      }
+    }
+
+    function $setUser(data) {
+        user.value = data;
+        sessionStorage.setItem('user', JSON.stringify(data));
+    }
 
     async function logout() {
-      const response = await LogoutService();
+        const response = await LogoutService();
 
-      if (response.ok) {
-        this.token = '';
-        this.user = null;
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('current_hotel');
-        sessionStorage.removeItem('current_subdomain');
-        this.$router.push('/login')
-      }
+        if (response.ok) {
+            token.value = '';
+            user.value = null;
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
+            sessionStorage.removeItem('current_hotel');
+            sessionStorage.removeItem('current_subdomain');
+            this.$router.push('/login');
+        }
     }
 
     return {
@@ -66,7 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         logout,
         current_hotel,
-        current_subdomain
+        current_subdomain,
+        $setUser
     };
-  
 });

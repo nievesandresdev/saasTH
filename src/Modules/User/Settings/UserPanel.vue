@@ -7,17 +7,25 @@
             <div class="hidden lg:flex w-full h-min">
                 <div class="w-1/2">
                     <div class="form-card bg-white shadow-md rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
-                        <form @submit.prevent="handleLogin">
+                        <form @submit.prevent="handleUpdateProfile">
                             <h1 class="text-lg font-semibold text-center flex mb-6">Información de perfil</h1>
                             <div class="hmb-4 mb-6 flex flex-col">
-                                <label class="font-medium text-sm mb-1">Nombre y Apellidos</label>
+                                <label class="font-medium text-sm mb-1">Nombre</label>
                                 <input 
                                     type="text"
-                                    class="w-100 rounded h-11  py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
-                                    :placeholder="placeholderEmail" 
+                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                                     autocomplete="on" 
                                     v-model="form.name" 
-                                    :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
+                                    required
+                                >
+                            </div>
+                            <div class="hmb-4 mb-6 flex flex-col">
+                                <label class="font-medium text-sm mb-1">Apellidos</label>
+                                <input 
+                                    type="text"
+                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                    autocomplete="on" 
+                                    v-model="form.lastname" 
                                     required
                                 >
                             </div>
@@ -25,13 +33,18 @@
                                 <label class="font-medium text-sm mb-1">Correo electrónico</label>
                                 <input 
                                     type="email"
-                                    class="w-100 rounded h-11  py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                                     :placeholder="placeholderEmail" 
                                     autocomplete="on" 
                                     v-model="form.email" 
-                                    :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                                     required
                                 >
+                                <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                    </svg>
+                                    <small v-text="errorEmailText"></small>
+                                </div>
                             </div>
                             <div class="mb-6">
                                 <label class="text-sm font-medium">Teléfono móvil</label>
@@ -56,20 +69,19 @@
                             </div>
                             <div class="mb-2">
                                 <div class="flex mb-1">
-                                    <span class="font-medium text-sm">Contraseña</span>
+                                    <span class="font-medium text-sm">Contraseña Actual</span>
                                     <span v-show="!changePassword" @click="showChangePass()" class="text-sm font-medium ml-auto cursor-pointer">Cambiar contraseña</span>
                                     <span v-show="changePassword" @click="showChangePass()" class="text-sm font-medium ml-auto cursor-pointer">Cancelar</span>
                                 </div>
                                 <div class="relative w-100 collaborator-box">
-                                    <img v-if="changePassword && form.password !== '' && visible_pass.password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('password')">
-                                    <img v-if="changePassword && form.password !== '' && !visible_pass.password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('password')">
+                                    <img v-if="changePassword && form.current_password !== '' && visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('current_password')">
+                                    <img v-if="changePassword && form.current_password !== '' && !visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('current_password')">
                                     <input 
-                                        :type="visible_pass.password ? 'text' : 'password'"
-                                        class="w-full rounded h-11  py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
-                                        id="password" 
+                                        :type="visible_pass.current_password ? 'text' : 'password'"
+                                        class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                        id="current_password" 
                                         :placeholder="placeholderPassword"
-                                        :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
-                                        v-model="form.password"
+                                        v-model="form.current_password"
                                         :disabled="!changePassword"
                                         required
                                     >
@@ -78,7 +90,7 @@
                             <section v-if="changePassword">
                                 <div class="mb-2">
                                     <div class="flex mb-1">
-                                        <span class="font-medium text-lg">Nueva contraseña</span>
+                                        <span class="font-medium text-sm">Nueva contraseña</span>
                                     </div>
                                     <div class="relative w-100 collaborator-box">
                                         <img v-if="form.new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
@@ -86,17 +98,16 @@
                                         <img v-if="form.new_password !== '' && !visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('new_password')">
                                         <input 
                                             :type="visible_pass.new_password ? 'text' : 'password'"
-                                            class="w-full rounded h-11  py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                            class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                                             id="new_password" 
                                             :placeholder="placeholderPassword"
-                                            :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                                             v-model="form.new_password" required
                                         >
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <div class="flex mb-1">
-                                        <span class="font-medium text-lg">Confirmar nueva contraseña</span>
+                                        <span class="font-medium text-sm">Confirmar nueva contraseña</span>
                                     </div>
                                     <div class="relative w-100 collaborator-box">
                                         <img v-if="form.confirm_new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
@@ -104,10 +115,9 @@
                                         <img v-if="form.confirm_new_password !== '' && !visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('confirm_new_password')">
                                         <input 
                                             :type="visible_pass.confirm_new_password ? 'text' : 'password'"
-                                            class="w-full rounded h-11  py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                            class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                                             id="confirm_new_password" 
                                             :placeholder="placeholderPassword"
-                                            :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                                             v-model="form.confirm_new_password" required
                                         >
                                     </div>
@@ -131,23 +141,32 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
+import { useUserStore } from '@/stores/modules/users/users';
+import { useToastAlert } from '@/composables/useToastAlert';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+const userStore = useUserStore();
+const toast = useToastAlert();
+const router = useRouter();
 
 const form = ref({
-    name: `${authStore.user.name} ${authStore.user.lastname}`,
-    email: authStore.user.email,
+    name: authStore.user?.name || '',
+    lastname: authStore.user?.lastname || '',
+    email: authStore.user?.email || '',
+    current_password: '',
     password: '',
     new_password: '',
     confirm_new_password: '',
-    prefix: authStore.user.prefix,
-    phone: authStore.user.phone,
-    remember: false,
+    prefix: authStore.user?.prefix || '',
+    phone: authStore.user?.phone || '',
 });
 
+
 const visible_pass = ref({
+    current_password: false,
     password: false,
     new_password: false,
     confirm_new_password: false,
@@ -156,9 +175,10 @@ const visible_pass = ref({
 const changePassword = ref(false);
 const errorPrefix = ref(false);
 const errorPhone = ref(false);
-const prefixes = ref(['+34', '+1', '+91']); 
+const errorEmail = ref(false);
+const prefixes = ref(['+34', '+1', '+91']);
 
-const formInitialState = JSON.stringify(form.value);
+let formInitialState = JSON.stringify(form.value);
 
 const toggleVisibility = (field) => {
     visible_pass.value[field] = !visible_pass.value[field];
@@ -168,21 +188,68 @@ const showChangePass = () => {
     if (changePassword.value) {
         form.value.new_password = '';
         form.value.confirm_new_password = '';
-        form.value.password = '';
+        form.value.current_password = '';
         visible_pass.value.new_password = false;
         visible_pass.value.confirm_new_password = false;
-        visible_pass.value.password = false;
+        visible_pass.value.current_password = false;
     }
     changePassword.value = !changePassword.value;
 };
 
-const validatePhone = () => {
-    const phoneRegex = /^[0-9]*$/;
-    errorPhone.value = !phoneRegex.test(form.value.phone);
-};
+const validatePhone = (event) => {
+    const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
+    form.value.phone = newValue;
+    errorPhone.value = newValue.length === 0;
 
-const handleLogin = () => {
-    console.log('Login');
+    // Verifica el valor del prefijo
+    if (newValue.length > 0 && !form.value.prefix) {
+      errorPrefix.value = true;
+    } else {
+      errorPrefix.value = false;
+    }
+  };
+
+// Watch para validar el prefijo cuando cambia el teléfono
+watch(() => form.value.phone, (newVal) => {
+    if (newVal.length > 0 && !form.value.prefix) {
+        errorPrefix.value = true;
+    } else {
+        errorPrefix.value = false;
+    }
+});
+
+// Watch para verificar si se seleccionó un prefijo
+watch(() => form.value.prefix, (newVal) => {
+    if (newVal) {
+        errorPrefix.value = false;
+    }
+});
+
+const errorEmailText = ref(false);
+
+  watch(() => form.value.email, (newVal) => {
+      const emailRegex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      errorEmail.value = !emailRegex.test(newVal);
+      errorEmailText.value = 'Introduce un email correcto';
+  });
+
+const handleUpdateProfile = async () => {
+    const response = await userStore.$updateProfile(form.value);
+    if (response.ok) {
+        authStore.$setUser(response.data.user);
+        toast.warningToast(response.data.message, 'top-right');
+        
+        // Restablecer el estado inicial del formulario
+        formInitialState = JSON.stringify(form.value);
+        isSaveDisabled.value = true;
+        changePassword.value = false;
+        form.value.current_password = '';
+        form.value.new_password = '';
+        form.value.confirm_new_password = '';
+        
+    } else {
+        toast.errorToast(response.data.methodException, 'top-right');
+    }
 };
 
 const isSaveDisabled = ref(true);
@@ -194,8 +261,7 @@ watch(form, (newVal, oldVal) => {
 
 const isFormValid = () => {
     const fieldsFilled = form.value.name && form.value.email && form.value.prefix && form.value.phone;
-    const passwordValid = !changePassword.value || (form.value.password && form.value.new_password && form.value.confirm_new_password && form.value.new_password === form.value.confirm_new_password);
+    const passwordValid = !changePassword.value || (form.value.current_password && form.value.new_password && form.value.confirm_new_password && form.value.new_password === form.value.confirm_new_password);
     return fieldsFilled && !errorPhone.value && passwordValid;
 };
-
 </script>
