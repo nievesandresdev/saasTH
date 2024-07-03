@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser,getUsers,updateUser } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser,updateProfile } from '@/api/services/users/userSettings.service';
 import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -62,12 +62,21 @@ export const useUserStore = defineStore('user', () => {
     return response;
   }
 
+  /**
+   * /update-profile
+   */
+  async function $updateProfile(data){
+    const response = await updateProfile(data);
+    return response;
+  }
+
 
   return {
     $getHotels,
     $storeUser,
     $getUsers,
     $updateUser,
+    $updateProfile,
     $userAvatar
   };
 });
