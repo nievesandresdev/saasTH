@@ -155,7 +155,7 @@ import EditUser from './components/EditUser.vue';
 import Pagination from './components/Pagination.vue';
 import ButtonFilter from '@/components/Buttons/ButtonFilter.vue';
 import { getWorkPosition  } from '@/api/services/users/userSettings.service';
- import { useUserStore } from '@/stores/modules/users/users'
+import { useUserStore } from '@/stores/modules/users/users'
 
 const modalAdd = ref(false);
 const modalEdit = ref(false);

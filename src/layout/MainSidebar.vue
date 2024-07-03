@@ -84,7 +84,7 @@
         </button>
       </div>
       <div class="text-center">
-        <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
+        <img :src="`${userStore.$userAvatar()}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
         <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
         <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
         <div class="mt-4 flex justify-between gap-4">
@@ -115,11 +115,13 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'
+import { useUserStore } from '@/stores/modules/users/users'
 import ModalWindow from '@/components/ModalWindow.vue'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const modalProfile = ref(false)
 
@@ -211,7 +213,7 @@ const user_buttons = ref([
   },
   {
     title: `${authStore.user.name} ${authStore.user.lastname}`,
-    icon: `https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`,
+    icon: `${userStore.$userAvatar()}`,
     include: ['UserPanel'],
     border: true,
     action: () => {

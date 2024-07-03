@@ -34,8 +34,8 @@ export const useUserStore = defineStore('user', () => {
   /*
   *avatar ui
   */
- function $avatar(){
-   return true;
+ function $userAvatar(){
+   return `https://ui-avatars.com/api/?name=${user.value.name}&color=fff&background=${user.value.color}`
  }
 
   /**
@@ -67,6 +67,7 @@ export const useUserStore = defineStore('user', () => {
     $getHotels,
     $storeUser,
     $getUsers,
-    $updateUser
+    $updateUser,
+    $userAvatar
   };
 });
