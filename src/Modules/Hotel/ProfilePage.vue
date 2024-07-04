@@ -130,6 +130,9 @@
                 </div>
                 <div class="space-y-2">
                     <ProfilePageSectionMap ref="profilePageSectionMap" />
+                    {{`log: ${form.metting_point_longitude}`}}
+                    {{`lat: ${form.metting_point_latitude}`}}
+                    {{`address: ${form.address}`}}
                 </div>
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
@@ -397,6 +400,7 @@
     onMounted(() => {
         loadHotel()
         loadMockup()
+        console.log(hotelData, 'hotelData')
     })
 
     // COMPUTED
@@ -454,7 +458,7 @@
         form.phone_optional = hotel.phone_optional || null;
         form.address = hotel.address || null;
         form.metting_point_latitude = hotel.latitude || null;
-        form.metting_point_longitude = hotel.logitude || null;
+        form.metting_point_longitude = hotel.longitude || null;
         form.checkin = hotel.checkin || null;
         form.checkin_until = hotel.checkin_until || null;
         form.checkout = hotel.checkout || null;
@@ -488,9 +492,12 @@
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
     async function submit () {
-        isloadingForm.value = true
-        // console.log({...form})
-        const response  = await hotelStorage.$updateProfile(form);
+        // isloadingForm.value = true
+        form.metting_point_latitude = form.metting_point_latitude?.toString()
+        form.metting_point_longitude = form.metting_point_longitude?.toString()
+        const body = {...form}
+        console.log(body, 'body')
+        const response  = await hotelStorage.$updateProfile(body);
         // console.log(response, 'response')
         const  {ok, data} = response ?? {}
         await loadHotel()

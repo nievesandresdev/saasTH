@@ -1,5 +1,5 @@
 <template>
-    <label :for="id" class="relative cursor-pointer mb-0 mr-4">
+    <label :for="id" class="relative cursor-pointer">
         <input
             :checked="modelValue"
             type="checkbox"
@@ -20,7 +20,7 @@
 import { ref, computed, onMounted,watch, inject } from 'vue';
 
 // EMITS
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'change:value'])
 
 //DATA PROPS
 const props = defineProps({
@@ -39,6 +39,7 @@ const value = computed({
 
 function updateValue(val) {
   value.value = !value.value
+  emit('change:value')
 }
 
 </script>

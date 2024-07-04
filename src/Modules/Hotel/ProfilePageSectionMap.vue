@@ -97,7 +97,6 @@
 
           marker.setPosition(place.geometry.location);
           marker.setVisible(true);
-
           if (place.address_components) {
             address = [
               (place.address_components[0] &&
@@ -119,6 +118,10 @@
           for (let index = 0; index < address.length; index++) {
             addresString = address[index] + "," + addresString;
           }
+                    // console.log(`log: ${marker.getPosition().lng()}`)
+                    // console.log(`lat: ${marker.getPosition().lat()}`)
+                    // console.log(`address: ${addresString.slice(0, -1)}`)
+
           vueform.metting_point_latitude = marker.getPosition().lat();
           vueform.metting_point_longitude = marker.getPosition().lng();
           vueform.metting_point_reference = place.name;
