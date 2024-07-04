@@ -84,7 +84,7 @@
             <p 
               class="text-sm font-semibold ml-2 text-left leading-[120%]"
               :class="{'text-white': route.name === 'UserPanel'}"
-            >{{ `${authStore.user.name} ${authStore.user.lastname}` }}</p>
+            >{{ authStore.fullName }}</p>
           </div>
         </button>
       </div>

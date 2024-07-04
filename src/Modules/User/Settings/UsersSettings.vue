@@ -80,16 +80,16 @@
                         class=" border-b dark:bg-gray-800 dark:border-gray-700 bg-white hover:bg-[#F9FFFD]"
                         :class="{'bg-[#ECF9F5]': selectedShow == user.id, 'shadow-sm': hoverSelected == index}"
                     >
-                        <th @click="openModalShow(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th @click="showUser(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ user.name }}
                         </th>
-                        <td @click="openModalShow(user)" class="px-6 py-4">
+                        <td @click="showUser(user)" class="px-6 py-4">
                             {{ $getRoleName(user.role.name) }}
                         </td>
-                        <td @click="openModalShow(user)" class="px-6 py-4">
+                        <td @click="showUser(user)" class="px-6 py-4">
                             {{ user.work_position }}
                         </td>
-                        <td @click="openModalShow(user)" class="px-6 py-4">
+                        <td @click="showUser(user)" class="px-6 py-4">
                             <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[12px] text-[#0B6357] bg-green-100 rounded-full">
                                 Activo
                             </span>
@@ -98,7 +98,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 relative" >
-                            <svg @click="toggleDropdown(index)" class="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg @click="toggleDropdown(index,user)" class="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="2" fill="currentColor"/>
                                 <circle cx="19" cy="12" r="2" fill="currentColor"/>
                                 <circle cx="5" cy="12" r="2" fill="currentColor"/>
@@ -134,7 +134,8 @@
     <CreateUser 
         :modal-add="modalAdd" 
         @close="closeModal" 
-        @store="handleGetUsers" 
+        @store="handleGetUsers"
+        @alert="confirmCreateUser" 
         :work-positions="workPositionsData" 
     />
 
@@ -145,6 +146,63 @@
         :work-positions="workPositionsData" 
         :data-user="dataEdit" 
      />
+
+    <ShowUser 
+        :modal-show="modalShow" 
+        @close="modalShow = false" 
+        :data-user="selectedUser" 
+        @update="editUser"
+        @delete="openModalDelete"
+    />
+
+     <ModalWindow v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()">
+        <template #content>
+            <div class="flex justify-end w-full">
+            <button @click="closeConfirmCreateUser">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            </div>
+            <div class="flex flex-col items-center p-4">
+                <img src="/assets/icons/TH.CHECK.svg" alt="Check Icon" class="mb-4 w-8 h-8" />
+                <h2 class="text-xl font-semibold mb-2 text-center">¡Felicidades! Usuario creado correctamente</h2>
+                <p class="text-center text-gray-600">
+                Se enviará un email de bienvenida con las credenciales a la dirección de correo designada.
+                </p>
+            </div>
+        </template>
+    </ModalWindow>
+
+    <ModalWindow v-if="deleteUser" :isVisible="deleteUser" @close="closeDeleteUser">
+        <template #content>
+            <div class="flex justify-start">
+                <button @click="closeDeleteUser">
+                    <img
+                        src="/assets/icons/1.TH.CLOSE.svg"
+                        class="w-6 h-6"
+                    >
+                </button>
+            </div>
+            <div class="flex justify-center">
+                <img
+                    src="/assets/icons/warning.svg"
+                    class="w-8 h-8"
+                >
+            </div>
+            <p class="text-lg font-bold mt-4 text-center mb-2">¿Desea eliminar al usuario<br> {{userData.name }} {{ userData.profile?.lastname }}?</p>
+            <p class="text-sm text-center">Estás a punto de eliminar un usuario. Este proceso es irreversible y eliminará todos los datos asociados con el usuario. Si solo necesitas bloquear su acceso a un hotel, considera desvincularlo del mismo desde el menú editar usuario.</p>
+            <div class="flex justify-between mt-4">
+                <button @click="closeDeleteUser" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                    Cancelar
+                </button>
+                <button @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4">
+                    Eliminar usuario
+                </button>
+            </div>
+        </template>
+    </ModalWindow>
+     
 </template>
 
 <script setup>
@@ -152,17 +210,43 @@ import { ref,onMounted } from 'vue';
 import MenuSettings from './components/MenuSettings.vue';
 import CreateUser from './components/CreateUser.vue';
 import EditUser from './components/EditUser.vue';
+import ShowUser from './components/ShowUser.vue';
 import Pagination from './components/Pagination.vue';
 import ButtonFilter from '@/components/Buttons/ButtonFilter.vue';
 import { getWorkPosition  } from '@/api/services/users/userSettings.service';
- import { useUserStore } from '@/stores/modules/users/users'
+import { useUserStore } from '@/stores/modules/users/users'
+import ModalWindow from '@/components/ModalWindow.vue'
+import { useToastAlert } from '@/composables/useToastAlert'
+import { $isAdmin, $isOperator } from '@/utils/helpers';
 
 const modalAdd = ref(false);
 const modalEdit = ref(false);
+const modalShow = ref(false);
+const deleteUser = ref(false);
 const visibleDropdown = ref(null);
 const workPositionsData = ref([]);
 
+const selectedUser = ref(null);
+const userData = ref({})
+
+const openConfirmCreateUser = ref(false);
+
 const userStore = useUserStore();
+const toast = useToastAlert();
+
+const confirmCreateUser = () => {
+    openConfirmCreateUser.value = true
+}
+
+const closeConfirmCreateUser = () => {
+    openConfirmCreateUser.value = false
+}
+
+const closeDeleteUser = () => {
+    deleteUser.value = false
+}
+
+
 
 onMounted(() => {
     handleGetUsers();
@@ -235,6 +319,14 @@ const editUser = (data) => {
     workPositions();
 }
 
+const showUser = (data) => {
+    console.log('showUserConsole',data);
+    selectedUser.value = data
+    modalShow.value = true
+    visibleDropdown.value = null
+
+}
+
 //const getWorkposition async
 const workPositions = async () => {
     const response = await getWorkPosition();
@@ -261,55 +353,38 @@ const hoverTable = (index) => {
     }
 };
 
-const toggleDropdown = (index) => {
+const toggleDropdown = (index,user) => {
 
-    if (visibleDropdown.value === index) {
+    if (user.role.name == 'Associate' && ($isAdmin() || $isOperator())) {
         visibleDropdown.value = null;
-    } else {
-        visibleDropdown.value = index;
+    }else{
+        if (visibleDropdown.value === index || user.del == 1) {
+            visibleDropdown.value = null;
+        } else {
+            visibleDropdown.value = index;
+        }
     }
-  /* const currentUserRole = user.role.name;
-  const authRole = usePage().props.value.auth.role;
-  const userId = user.id */
-
-  /* if(usePage().props.value.auth.user.id == userId){
-    console.log('Eres tu mismo')
-    return
-  }
-
-  if (authRole === 'Administrator') {
-    if (currentUserRole === 'Operator') {
-      visibleDropdown.value = visibleDropdown.value === index ? null : index;
-    } else {
-      console.log('no');
-    }
-  } else if (authRole === 'Associate') {
-    visibleDropdown.value = visibleDropdown.value === index ? null : index;
-  } else {
-    console.error('no es');
-  } */
 };
 
-/* const openModalEdit = (data) => {
-    console.log('openModalEdit',data);
-    visibleDropdown.value = null
-} */
 
-const modal_show_user = ref(false);
-const selectedUser = ref(null);
-
-const openModalShow = (data) => {
-    modal_show_user.value = true
-    selectedUser.value = data
-    visibleDropdown.value = null
-    selectedShow.value = data.id
-
-}
-
-const userData = ref({})
 function openModalDelete(user){
     userData.value = user
     visibleDropdown.value = null
+    deleteUser.value = true
 }
 
+const submitDelete = async () => {
+    const params = {
+        user_id: userData.value.id
+    }
+    const response = await userStore.$deleteUser(params);
+
+    if(response.ok){
+        handleGetUsers();
+        deleteUser.value = false
+        toast.warningToast(response.data.message,'top-right');
+    }else{
+        toast.errorToast(response.data.message,'top-right');
+    }
+}
 </script>

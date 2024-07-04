@@ -254,7 +254,6 @@
                         </div>
                     </div>
                 </div>
-                <pre>{{ jsonHotel }}</pre>
             </div>
           </div>
         </div>
@@ -295,7 +294,7 @@
   import { useToastAlert } from '@/composables/useToastAlert'
 
   
-  const emits = defineEmits(['close','store']);
+  const emits = defineEmits(['close','store','alert']);
   
   const props = defineProps({
     modalAdd: Boolean,
@@ -656,9 +655,9 @@ if (form.value.role === 1) {
 
   if (store.ok) {
     clearForm()
-    toast.warningToast('Usuario creado correctamente','top-right')
+    //toast.warningToast('Usuario creado correctamente','top-right')
     emits('store');
-
+    emits('alert');
 
   } else {
     toast.errorToast(store.data.methodException,'top-right')

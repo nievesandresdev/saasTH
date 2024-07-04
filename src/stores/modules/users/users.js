@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser,getUsers,updateUser,updateProfile,getUser } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser } from '@/api/services/users/userSettings.service';
 import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -78,6 +78,14 @@ export const useUserStore = defineStore('user', () => {
     return response;
   }
 
+  /**
+   * eliminar
+   */
+  async function $deleteUser(data){
+    const response = await deleteUser(data);
+    return response;
+  }
+
 
   return {
     $getHotels,
@@ -86,6 +94,7 @@ export const useUserStore = defineStore('user', () => {
     $updateUser,
     $updateProfile,
     $userAvatar,
-    $getUser
+    $getUser,
+    $deleteUser
   };
 });

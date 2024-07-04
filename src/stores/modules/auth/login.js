@@ -1,7 +1,7 @@
 // stores/auth.js (o login.js)
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
     const user = ref(JSON.parse(sessionStorage.getItem('user')) || null);
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         if (response.ok) {
             token.value = '';
-            user.value = null;
+            //user.value = null;
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
             sessionStorage.removeItem('current_hotel');
@@ -58,6 +58,10 @@ export const useAuthStore = defineStore('auth', () => {
             this.$router.push('/login');
         }
     }
+
+    const fullName = computed(() => {
+        return `${user.value.name} ${user.value.lastname}`;
+    });
 
     return {
         user,
@@ -68,6 +72,7 @@ export const useAuthStore = defineStore('auth', () => {
         logout,
         current_hotel,
         current_subdomain,
-        $setUser
+        $setUser,
+        fullName
     };
 });
