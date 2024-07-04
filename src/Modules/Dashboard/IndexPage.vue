@@ -1,19 +1,17 @@
 <template>
-    <h1 class="font-semibold text-3xl">
-        dashboard
-    </h1>
-    <pre>
-        {{$route.fullPath}}
-    </pre>
-    <button 
-        class="bg-red-200 p-2 rounded"
-        @click="defineMockupData"
-    >cambiar</button>
+    <div class="px-6">
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard</h1>
+        <div class="border-b border-[#BFBFBF] mb-5"></div>
+        <CustomerExperience />
+    </div>
+    
 </template>
 <script setup>
 import { onMounted } from 'vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useMockupStore } from '@/stores/modules/mockup'
+import CustomerExperience from './components/CustomerExperience.vue'
+
 
 const mockupStore = useMockupStore();
 
