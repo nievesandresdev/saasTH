@@ -12,7 +12,7 @@
 <script setup>
     import { ref } from 'vue'
     const { size, top, right, left, color, size_custom } = defineProps({
-        //S M L
+        //S M L XS
         size: {
             type: String,
             default: 's'
