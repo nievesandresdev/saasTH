@@ -1,0 +1,55 @@
+<template>
+    <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px]">
+        <div class="space-x-2 flex">
+            <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
+            <BaseTooltipResponsive
+                size="l"
+                :top="55"
+                :left="-0"
+            >
+                <template #button>
+                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                    </template>
+                    <template #content>
+                    <p class="text-sm leading-[150%] font-normal">
+                        Aquí podrás gestionar las instalaciones que forman parte de tu alojamiento y ofrecer su información esencial. Ésta será la información que verán tus huéspedes en tu WebApp.
+                    </p>
+                </template>
+            </BaseTooltipResponsive>
+        </div>
+        <div class="flex items-center">
+            <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+           
+                <BaseSwichInput v-model="formShowtoGuest.show" class="mr-4" />
+            <BaseTooltipResponsive
+                size="l"
+                :top="50"
+                :right="0"
+            >
+                <template #button>
+                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                    </template>
+                    <template #content>
+                    <p class="text-sm leading-[150%] font-normal">
+                        Con el interruptor "Mostrar al huésped" controlas la visibilidad de cierta información para el huésped.
+                    </p>
+                    <p class="mt-2 text-sm leading-[150%] font-normal">
+                        Mientras se encuentre apagado, tus huéspedes dejarán de ver el contenido de esta sección en tu WebApp.
+                    </p>
+                </template>
+            </BaseTooltipResponsive>
+        </div>
+    </section>
+</template>
+
+<script setup>
+    import { ref, reactive, onMounted, provide, computed } from 'vue';
+    //COMPONENTS
+    import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+    import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+
+    // DATA
+    const formShowtoGuest = reactive({
+        show: false,
+    })
+</script>
