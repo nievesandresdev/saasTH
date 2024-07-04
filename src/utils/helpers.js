@@ -38,9 +38,23 @@ const $isOperator = () => {
     return authStore.user.role === 'Operator';
 };
 
+const $nameLanguage = (lang) => {
+  switch (lang) {
+    case 'es':
+      return 'Español';
+    case 'en':
+      return 'Inglés';
+    case 'fr':
+      return 'Francés';
+    default:
+      return '--';
+  }
+}
+
 export {
     $getRoleName,
     $isAssociate,
     $isAdmin,
-    $isOperator
+    $isOperator,
+    $nameLanguage
 };

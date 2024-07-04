@@ -5,6 +5,9 @@ export const authPath = 'auth'
 //users
 export const userPath = 'users'
 
+//dashboard
+export const dashboardPath = 'dashboard'
+
 export const homePath = 'home'
 export const hotelPath = 'hotel'
 export const staySurveyPath = 'staySurvey'
