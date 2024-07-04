@@ -185,7 +185,7 @@ const menu_links = ref([
         include: [
           'ReviewRequestSettingsIndex',
           'SettingsPreStayPage',
-          'StayPage',
+          'SettingsStayPage',
           'SettingsPostStayPage',
         ],
         url: '/dashboard',
