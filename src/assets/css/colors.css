@@ -57,16 +57,16 @@
         background-color: var(--h-green-600);
     }
     .hborder-green-600 {
-        background-color: var(--h-green-600);
+        border-color: var(--h-green-600);
     }
     .hborder-green-700 {
         border-color: var(--h-green-700);
     }
-    .hbg-green-800 {
-        background-color: var(--h-green-800);
-    }
     .htext-green-800 {
         color: var(--h-green-800);
+    }
+    .hbg-green-800 {
+        background-color: var(--h-green-800);
     }
 
     
@@ -90,17 +90,30 @@
     .hbg-gray-500 {
         background-color: var(--h-gray-500);
     }
-    .htext-gray-300 {
-        color: var(--h-gray-300);
+    .hborder-color-gray-400 {
+        border-color: var(--h-gray-400);
     }
     .hborder-gray-400 {
-        border-color: var(--h-gray-400);
+        border: 1px solid var(--h-gray-400);
+    }
+    .hborder-bottom-gray-400 {
+        border-bottom: 1px solid var(--h-gray-400);
+    }
+    .hborder-top-gray-400 {
+        border-top: 1px solid var(--h-gray-400);
     }
     .htext-gray-400 {
         color: var(--h-gray-400);
     }
-    .icon-gray-500{
-        filter: invert(74%) sepia(1%) saturate(277%) hue-rotate(8deg) brightness(86%) contrast(93%);
+    .htext-gray-500 {
+        color: var(--h-gray-500);
+    }
+    .hborder-color-gray-300 {
+        border-color: var(--h-gray-300);
+    }
+
+    .htext-gray-300 {
+        color: var(--h-gray-300);
     }
     /*
         ***
@@ -114,7 +127,6 @@
     .hbg-alert-negative {
         background-color: var(--alert-negative);
     }
-    .hborder-alert-negative:focus,
     .hborder-alert-negative:hover,
     .hborder-alert-negative {
         border: 1px solid var(--alert-negative) !important;
@@ -126,7 +138,7 @@
         background-color: var(--alert-alert);
     }
     .hborder-warning {
-        border-color: var(--alert-alert);
+        border: 1px solid var(--alert-alert);
     }
 
     .hbg-yellow {
@@ -154,15 +166,31 @@
     .htext-black-100{
         color: var(--h-black-100);
     }
+    .hover-htext-black-100:hover{  
+        color: var(--h-black-100);
+    }
     .hover-htext-black-200:hover,
     .htext-black-200{
         color: var(--h-black-200);
     }
     .hborder-black-100{
-        border-color:var(--h-black-100);
+        border: 1px solid var(--h-black-100);
     }
     .hbg-gray-400{
         background-color: var(--h-gray-400);
+    }
+
+    /*
+        ***
+        green colors
+        ***
+    */
+
+    .hbg-green-200{
+        background-color: var(--h-green-200);
+    }
+    .htext-green-200{
+        color: var(--h-green-200);
     }
 
 /*

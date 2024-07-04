@@ -1,10 +1,10 @@
 <template>
     <div class="space-y-[24px]">
-        <div class="list-component w-full xl:max-w-[639px] 3xl:max-w-[1083px] flex flex-wrap gap-6 mt-6">
+        <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
             <div
                 v-for="(item, index) in hiddenFacilities"
                 :key="index"
-                class="text-center rounded-[10px] cursor-pointer w-[197px] overflow-hidden relative hbg-white-100 relative"
+                class="text-center rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100 relative"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
             >

@@ -1,6 +1,24 @@
 <template>
     <div class="space-y-[24px]">
-        <div class="list-component w-full xl:max-w-[639px] 3xl:max-w-[1083px] flex flex-wrap gap-6 mt-6">
+        <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
+            <label 
+                for="fileInput"
+                class="relative w-[224px] rounded-[6px] border hborder-black-100 cursor-pointer gallery-file flex justify-center items-center"
+            >   
+                <h5 class="text-base font-medium text-center flex flex-col items-center justify-center">
+                    <div class="icon w-[240px] inline-block mb-2 " />
+                    Crear instalación
+                </h5>
+                <input
+                    type="file"
+                    accept=".jpg, .jpeg, .png, .svg" 
+                    id="fileInput"
+                    multiple
+                    style="display: none;"
+                    @change="handleFiles"
+                    ref="fileInput"
+                />
+            </label>
             <div
                 v-for="(item, index) in visibleFacilities"
                 :key="index"
@@ -10,7 +28,7 @@
                 @dragstart="handlerDragStart(index, $event)"
                 @dragend="handlerDragEnd"
                 ref="draggableCard"
-                class="text-center rounded-[10px] cursor-pointer w-[197px] overflow-hidden relative hbg-white-100 relative"
+                class="text-center rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100 relative"
                 :class="{'shadow-draginng border border-gray-300' : item.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
@@ -136,7 +154,7 @@ async function updateOrder () {
 
 </script>
 
-<style scoped>
+<style lang="scss">
 .shadow-card{
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }
@@ -155,5 +173,25 @@ async function updateOrder () {
 }
 .hover-swich{
     box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
+}
+.gallery-file {
+    & .icon {
+        width: 20px;
+        height: 20px;
+        background-image: url('/public/assets/icons/1.TH.PLUS.svg');
+        background-size: cover;
+    }
+    &:hover {
+        border-color: var(--h-green-600);
+
+        & > h5 {
+            color: var(--h-green-600);
+        }
+
+        & .icon {
+            background-image: url('/public/assets/icons/1.TH.PLUS.GREEN.svg');
+        }
+
+    } 
 }
 </style>
