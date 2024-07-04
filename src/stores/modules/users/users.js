@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser,getUsers,updateUser } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser } from '@/api/services/users/userSettings.service';
 import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -31,6 +31,13 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
+  /*
+  *avatar ui
+  */
+ function $userAvatar(){
+   return `https://ui-avatars.com/api/?name=${user.value.name}&color=fff&background=${user.value.color}`
+ }
+
   /**
     * guardar usuario
    */
@@ -55,11 +62,39 @@ export const useUserStore = defineStore('user', () => {
     return response;
   }
 
+  /**
+   * get user data with id
+   */
+  async function $getUser(){
+    const response = await getUser();
+    return response;
+  }
+
+  /**
+   * /update-profile
+   */
+  async function $updateProfile(data){
+    const response = await updateProfile(data);
+    return response;
+  }
+
+  /**
+   * eliminar
+   */
+  async function $deleteUser(data){
+    const response = await deleteUser(data);
+    return response;
+  }
+
 
   return {
     $getHotels,
     $storeUser,
     $getUsers,
-    $updateUser
+    $updateUser,
+    $updateProfile,
+    $userAvatar,
+    $getUser,
+    $deleteUser
   };
 });

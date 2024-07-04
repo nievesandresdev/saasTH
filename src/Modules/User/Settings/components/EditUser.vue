@@ -304,6 +304,8 @@ const form = ref({
   const handleChecked = ref(false)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
 
+  
+
   const initializeForm = () => {
     if (props.dataUser) {
         form.value.user_id = props.dataUser.id || null;
@@ -317,6 +319,15 @@ const form = ref({
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
 
+        /* const firstHotel = computed(() => {
+            if (props.dataUser?.hotels && props.dataUser.hotels.length > 0) {
+              const hotel = props.dataUser.hotels[0]
+              const hotelId = Object.keys(hotel)[0]
+              return { id: hotelId, data: hotel[hotelId] }
+            }
+            return null
+          }) */
+
         selectedRoleName.value = 'Usuario '+props.dataUser.role.name
         selectedWorkPositionName.value = props.dataUser.work_position
        
@@ -329,7 +340,7 @@ const form = ref({
         const updateAccess = () => {
             const permissions = form.value.access;
 
-            console.log('permissions',permissions)
+            /* console.log('permissions',permissions,firstHotel.value) */
 
             // Validar y actualizar operationAccess
             operationAccess.value.forEach(item => {
@@ -429,6 +440,8 @@ const form = ref({
   
   function closeModal() {
     emits('close');
+    currentStep.value = 1;
+
   }
   
   const isFormIncomplete = computed(() => {

@@ -53,7 +53,7 @@
                     <li
                       v-else
                       class=" w-full h-full"
-                      :class="sub_menu.selected ? 'hbg-green-200' : 'hover-gray-100'"
+                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-gray-100'"
                     >
                     <!-- else -->
                       <div
@@ -63,7 +63,7 @@
                         <div class="flex items-center h-10 relative">
                           <div class="w-6 h-full relative">
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
-                            <div v-if="sub_menu.selected" class="w-[3px] h-6 bg-[#2A8973] absolute inset-0 mx-auto my-2 rounded-full"></div>
+                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="w-[3px] h-6 bg-[#2A8973] absolute inset-0 mx-auto my-2 rounded-full"></div>
                           </div>
                           <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }}</span>
                         </div>
@@ -189,11 +189,12 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter  } from 'vue-router';
 // import DropdownHotel from '@/Pages/Associates/Layouts/DropdownHotel.vue';
 // import TooltipResponsive from '@/Components/TooltipResponsive.vue'
 
   const route = useRoute();
+  const router = useRouter();
   const status_subscription = false
 //   const buttonRefs = ref([]);
 //   const applyHoverEffect = (index) => {
@@ -270,19 +271,17 @@ import { useRoute } from 'vue-router';
               {
                   title: 'Seguimiento',
                   icon: '/assets/icons/1.TH.SEGUIMIENTO.svg',
-                  expanded: ['ReviewRequestSettingsIndex'].includes(route.name),
+                  expanded: ['ReviewRequestSettingsIndex','SettingsPreStayPage','StayPage','SettingsPostStayPage'].includes(route.name),
                   group: [
                       {
                           title: 'Feedback',
-                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-                          to: 'hoster.hotel.profile',
-                          selected: false
+                          to: 'SettingsPreStayPage',
+                          selectedArr: ['SettingsPreStayPage','StayPage','SettingsPostStayPage']
                       },
                       {
                           title: 'Solicitudes',
-                          icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-                          to: 'hoster.plataform.facility.show',
-                          selected: ['ReviewRequestSettingsIndex'].includes(route.name)
+                          to: 'ReviewRequestSettingsIndex',
+                          selectedArr: ['ReviewRequestSettingsIndex']
                       },
                   ],
               }
@@ -416,8 +415,8 @@ const page_url = 'x'
     })
   }
 
-  function goLink() {
-    // Inertia.get(route(name_url))
+  function goLink(viewName) {
+    router.push({ name: viewName});
   }
 
   function goLinkWithRoute() {

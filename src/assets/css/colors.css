@@ -56,8 +56,9 @@
     .hbg-green-600 {
         background-color: var(--h-green-600);
     }
+    .hover-hborder-green-600:hover,
     .hborder-green-600 {
-        border-color: var(--h-green-600);
+        border-color: var(--h-green-600) !important;
     }
     .hborder-green-700 {
         border-color: var(--h-green-700);
@@ -130,6 +131,9 @@
     .hborder-alert-negative:hover,
     .hborder-alert-negative {
         border: 1px solid var(--alert-negative) !important;
+    }
+    .hborder-negative {
+        border-color: var(--alert-negative) !important;
     }
     .htext-warning {
         color: var(--alert-alert);

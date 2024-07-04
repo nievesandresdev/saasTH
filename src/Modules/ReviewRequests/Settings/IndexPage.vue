@@ -116,7 +116,7 @@ const toast = useToastAlert();
 // const hotelSubdomain = usePage().props.value.currentHotel.subdomain
 onMounted(async ()=>{
     mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
-    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
     assignValuesToForm();
 })
