@@ -276,7 +276,7 @@ import { useRoute, useRouter  } from 'vue-router';
                       {
                           title: 'Feedback',
                           to: 'SettingsPreStayPage',
-                          selectedArr: ['SettingsPreStayPage','StayPage','SettingsPostStayPage']
+                          selectedArr: ['SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
                       },
                       {
                           title: 'Solicitudes',
