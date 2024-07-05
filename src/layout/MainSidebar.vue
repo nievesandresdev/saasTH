@@ -157,7 +157,7 @@ const menu_links = ref([
     title: 'Operación',
     group: [
       {
-        title: 'Estancias',
+        title: 'Estancias ',
         icon: '1.TH.ESTANCIAS.MM',
         include: ['StayHomePage'],
         url: '/estancias',
