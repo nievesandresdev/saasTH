@@ -5,6 +5,7 @@
 <script setup>
 import { computed, defineProps } from 'vue';
 import SettingsMenu from '@/layout/Settings/SettingsMenu.vue';
+import StayList from '@/Modules/Stay/components/StayList.vue'
 
 const props = defineProps({
 sidebarName: String
@@ -13,6 +14,7 @@ sidebarName: String
 // mapeo de nombres de componentes a componentes
 const componentMap = {
 SettingsMenu,
+StayList
 };
 
 // computed property para determinar cuál componente renderizar
