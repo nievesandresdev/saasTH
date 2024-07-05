@@ -3,6 +3,6 @@ import {
     dashboardPath,
 } from '../../config/apiRoute'
 
-export const dataCustomerExperience = (params) => apiHttp('GET', `${dashboardPath}/dataCustomerExperience`,params)
+export const dataCustomerExperience = () => apiHttp('GET', `${dashboardPath}/dataCustomerExperience`)
 //feedback
-export const dataFeedback = (params) => apiHttp('GET', `${dashboardPath}/dataFeedback`,params)
+export const dataFeedback = () => apiHttp('GET', `${dashboardPath}/dataFeedback`)

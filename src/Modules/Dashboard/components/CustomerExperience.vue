@@ -19,7 +19,7 @@
         </div>
         <!-- contenido -->
         <div class="grid grid-cols-4 gap-4 mt-4">
-            <div class="bg-white border-2 rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                 <div class="bg-[#D9E8F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">PRE-STAY</span>
                     <Tooltip  :top="25" :left="5" size="xs" :class="'z-[600]'">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border-2 rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">STAY</span>
                     <Tooltip  :top="25" :left="5" size="xs" :class="'z-[600]'">
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border-2 rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                 <div class="bg-[#F2F2F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">POST-STAY</span>
                     <Tooltip  :top="25" :left="5" size="xs" :class="'z-[600]'">
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border-2 rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                 <div class="p-4 mt-4">
                     <div v-for="(lang,index) in languages" :key="index" class="flex items-center gap-2">
                         <img :src="`/assets/icons/flags/${index}.svg`" class="w-4 h-4">
@@ -111,11 +111,9 @@
 <script setup>
 import Tooltip from '@/components/Tooltip.vue'
 import { onMounted, ref } from 'vue'
-import { useUserStore } from '@/stores/modules/users/users'
 import { dataCustomerExperience } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert'
 
-const userStore = useUserStore();
 const toast = useToastAlert();
 
 const countPreStay = ref(0);
@@ -132,10 +130,10 @@ onMounted(async () => {
 })
 
 const handleData = async () => {
-    const params = {
+    /* const params = {
         hotel: userStore.$getDataHotel(['id'])
-    }
-    const response = await dataCustomerExperience(params);
+    } */
+    const response = await dataCustomerExperience();
     if(response.ok){
         countPreStay.value = response.data.preStay;
         countStay.value = response.data.inStay;

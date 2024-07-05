@@ -33,9 +33,17 @@
                     </div>
                     <!--caritas STAY -->
                     <div class="grid grid-cols-5">
-                        <div v-for="feeling in feelingsInStay" :key="feeling.name" class="w-full p-2 flex flex-col items-center">
+                        <div 
+                            v-for="feeling in feelingsInStay" 
+                            :key="feeling.name" 
+                            class="w-full p-2 flex flex-col items-center"
+                            :class="{
+                                'rounded-bottom-border': feeling.percentage.isMax
+                            
+                            }"
+                        >
                             <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{ feeling.percentage }}%</span>
+                            <span class="text-sm font-medium">{{ feeling.percentage.percentage }}%</span>
                         </div>
                     </div>
                 </div>
@@ -45,26 +53,70 @@
                     </div>
                     <!--caritas POST-STAY -->
                     <div class="grid grid-cols-5">
-                        <div v-for="feeling in feelingsPostStay" :key="feeling.name" class="w-full p-2 flex flex-col items-center">
+                        <div 
+                            v-for="feeling in feelingsPostStay" 
+                            :key="feeling.name" 
+                            class="w-full p-2 flex flex-col items-center"
+                            :class="{
+                                'rounded-bottom-border': feeling.percentage.isMax
+                            
+                            }"
+                        >
                             <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{ feeling.percentage }}%</span>
+                            <span class="text-sm font-medium">{{ feeling.percentage.percentage }}%</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="bg-white border-2 rounded-lg overflow-hidden row-span-2">
-                <div class="p-4">
-                    <div class="flex items-center gap-2">
-                        <img src="/assets/icons/dashboard/door_tag-hotel-heart-love-valentine.svg" class="w-4 h-4">
-                        <span class="text-sm font-medium">{{ countStay }} Estancias</span>
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2 ">
+                <div class="p-4 mt-2">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-1 items-center w-1/3">
+                            <img src="/assets/icons/otas/Booking.svg" alt="">
+                            <span class="text-sm font-medium">Booking</span>
+                        </div>
+                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
+                            <span>1930</span>
+                            <span>Reseñas</span>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 mt-1">
-                        <img src="/assets/icons/dashboard/1.TH.HUESPEDES.svg" class="w-4 h-4">
-                        <span class="text-sm font-medium">{{ guestsStay }} Huéspedes</span>
+                    <div class="flex justify-between items-center mt-3">
+                        <div class="flex gap-1 items-center w-1/3">
+                            <img src="/assets/icons/otas/Google.svg" alt="">
+                            <span class="text-sm font-medium">Google</span>
+                        </div>
+                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
+                            <span>1930</span>
+                            <span>Reseñas</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-3">
+                        <div class="flex gap-1 items-center w-1/3">
+                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="">
+                            <span class="text-sm font-medium">Tripadvisor</span>
+                        </div>
+                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
+                            <span>1930</span>
+                            <span>Reseñas</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-3">
+                        <div class="flex gap-1 items-center w-1/3">
+                            <img src="/assets/icons/otas/Expedia.svg" alt="">
+                            <span class="text-sm font-medium">Expedia</span>
+                        </div>
+                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
+                            <span>1930</span>
+                            <span>Reseñas</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-white border-2 rounded-lg overflow-hidden row-span-2">
+            <!-- <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">TheHoster REVIEW INDEX™</span>
                     <Tooltip  :top="25" :left="5" size="xs" :class="'z-[600]'">
@@ -93,11 +145,9 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useUserStore } from '@/stores/modules/users/users'
 import { dataFeedback } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert'
 
-const userStore = useUserStore();
 const toast = useToastAlert();
 
 const feelingsInStay = ref([
@@ -121,25 +171,43 @@ onMounted(async () => {
 })
 
 const handleDataFeedback = async () => {
-    const params = {
+    /* const params = {
         hotel: userStore.$getDataHotel(['id'])
-    }
-    const response = await dataFeedback(params);
+    } */
+    const response = await dataFeedback();
     if(response.ok){
         const inStay = response.data.inStay;
         const postStay = response.data.postStay;
         
         feelingsInStay.value = feelingsInStay.value.map(feeling => ({
             name: feeling.name,
-            percentage: inStay[feeling.name] == 0 ? '--' : inStay[feeling.name]
+            percentage: inStay[feeling.name] == 0 ? '--' : inStay[feeling.name],
         }));
         
         feelingsPostStay.value = feelingsPostStay.value.map(feeling => ({
             name: feeling.name,
-            percentage: postStay[feeling.name] == 0 ? '--' : postStay[feeling.name]
+            percentage: postStay[feeling.name] == 0 ? '--' : postStay[feeling.name],
         }));
+        console.log(feelingsPostStay.value)
     } else {
         toast.errorToast(response.data.message, 'top-right')
     }
 }
 </script>
+<style scoped>
+    .rounded-bottom-border {
+        position: relative; 
+    }
+
+    .rounded-bottom-border::after {
+        content: ''; 
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 35px; 
+        height: 7px; 
+        background-color: #0B6357; 
+        border-radius: 10px 10px 0 0;
+    }
+</style>

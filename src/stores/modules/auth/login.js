@@ -51,16 +51,18 @@ export const useAuthStore = defineStore('auth', () => {
         if (response.ok) {
             token.value = '';
             user.value = null;
+            
+            this.$router.push('/login');
+
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
             sessionStorage.removeItem('current_hotel');
             sessionStorage.removeItem('current_subdomain');
-            this.$router.push('/login');
         }
     }
 
     const fullName = computed(() => {
-        return `${user.value.name} ${user.value.lastname}`;
+        return `${user?.value?.name} ${user?.value?.lastname}`;
     });
 
     
