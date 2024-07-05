@@ -91,7 +91,7 @@
             <div class="bg-white border-2 rounded-lg overflow-hidden">
                 <div class="p-4 mt-4">
                     <div v-for="(lang,index) in languages" :key="index" class="flex items-center gap-2">
-                        <img :src="`/assets/icons/dashboard/flags/${index}.svg`" class="w-4 h-4">
+                        <img :src="`/assets/icons/flags/${index}.svg`" class="w-4 h-4">
                         <span class="text-base font-semibold">{{ lang.percentaje }}%</span><span class="text-sm font-medium"> - {{ $nameLanguage(lang.name) }}</span>
                     </div> 
                     <!-- <div class="flex items-center gap-2 mt-1">
@@ -111,11 +111,11 @@
 <script setup>
 import Tooltip from '@/components/Tooltip.vue'
 import { onMounted, ref } from 'vue'
-import { useAuthStore } from '@/stores/modules/auth/login'
+import { useUserStore } from '@/stores/modules/users/users'
 import { dataCustomerExperience } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert'
 
-const authStore = useAuthStore();
+const userStore = useUserStore();
 const toast = useToastAlert();
 
 const countPreStay = ref(0);
@@ -125,12 +125,15 @@ const guestsPreStay = ref(0);
 const guestsStay = ref(0);
 const guestsPostStay = ref(0);
 
-
 const languages = ref([]);
 
 onMounted(async () => {
+   await handleData(); 
+})
+
+const handleData = async () => {
     const params = {
-        hotel: authStore.current_hotel
+        hotel: userStore.$getDataHotel(['id'])
     }
     const response = await dataCustomerExperience(params);
     if(response.ok){
@@ -145,8 +148,8 @@ onMounted(async () => {
 
         languages.value = response.data.languages;
     }else{
-        toast.errorToast(response.data.methodException, 'top-right')
+        toast.errorToast(response.data.message, 'top-right')
     }
-    
-})
+}
+
 </script>

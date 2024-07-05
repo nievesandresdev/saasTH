@@ -31,6 +31,19 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
+  function $getDataHotel(attributes = []) {
+    if (attributes.length === 0) {
+        return user.value.current_hotel;
+    }
+
+    return attributes.reduce((result, attr) => {
+        if (user.value.current_hotel.hasOwnProperty(attr)) {
+            result[attr] = user.value.current_hotel[attr];
+        }
+        return result;
+    }, {});
+}
+
   /*
   *avatar ui
   */
@@ -95,6 +108,7 @@ export const useUserStore = defineStore('user', () => {
     $updateProfile,
     $userAvatar,
     $getUser,
-    $deleteUser
+    $deleteUser,
+    $getDataHotel
   };
 });
