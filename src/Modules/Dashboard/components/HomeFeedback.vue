@@ -39,7 +39,6 @@
                             class="w-full p-2 flex flex-col items-center"
                             :class="{
                                 'rounded-bottom-border': feeling.percentage.isMax
-                            
                             }"
                         >
                             <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
@@ -59,7 +58,6 @@
                             class="w-full p-2 flex flex-col items-center"
                             :class="{
                                 'rounded-bottom-border': feeling.percentage.isMax
-                            
                             }"
                         >
                             <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
@@ -116,37 +114,44 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">TheHoster REVIEW INDEX™</span>
-                    <Tooltip  :top="25" :left="5" size="xs" :class="'z-[600]'">
-                        <template v-slot:button>
-                        <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
-                        </template>
-                        <template v-slot:content>
-                        <p class="text-sm">Tooltip Text</p>
-                        </template>
-                    </Tooltip>
                 </div>
-                <div class="p-4">
-                    <div class="flex items-center gap-2">
-                        <img src="/assets/icons/dashboard/door_tag-hotel-heart-love-valentine.svg" class="w-4 h-4">
-                        <span class="text-sm font-medium">{{ countPostStay }} Estancias</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1">
-                        <img src="/assets/icons/dashboard/1.TH.HUESPEDES.svg" class="w-4 h-4">
-                        <span class="text-sm font-medium">{{ guestsPostStay }} Huéspedes</span>
+                <div class="p-4 flex gap-4 items-center">
+                    <CircleProgress
+                        :size="120"
+                        :percent="average"
+                        border-width="22"
+                        border-bg-width	="22"
+                        :linecap="'line'"
+                        :fill-color="'#34A98F'"
+                        :empty-color="'#ECF9F5'"
+                        class="transformCircle"
+                    />
+                        
+                    <div class="flex flex-col gap-2 w-1/2">
+                        <span class="text-sm">Promedio de todas las OTAs vinculadas a tu hotel</span>
+                        <div class="flex items-center">
+                            <span class="text-2xl font-semibold">{{ average }}</span>
+                            <span class="text-[23.642px] font-semibold">/</span>
+                            <span class="text-base font-semibold flex mt-1">100</span>
+                        </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue';
+
 import { dataFeedback } from '@/api/services/dashboard/dashboard.services';
-import { useToastAlert } from '@/composables/useToastAlert'
+import { useToastAlert } from '@/composables/useToastAlert';
+
+import  CircleProgress  from 'vue3-circle-progress';
+import "vue3-circle-progress/dist/circle-progress.css";
 
 const toast = useToastAlert();
 
@@ -166,16 +171,15 @@ const feelingsPostStay = ref([
     { name: 'VERYWRONG', percentage: '--' },
 ]);
 
+const average = ref(81); 
+
 onMounted(async () => {
     await handleDataFeedback();
-})
+});
 
 const handleDataFeedback = async () => {
-    /* const params = {
-        hotel: userStore.$getDataHotel(['id'])
-    } */
     const response = await dataFeedback();
-    if(response.ok){
+    if (response.ok) {
         const inStay = response.data.inStay;
         const postStay = response.data.postStay;
         
@@ -188,26 +192,30 @@ const handleDataFeedback = async () => {
             name: feeling.name,
             percentage: postStay[feeling.name] == 0 ? '--' : postStay[feeling.name],
         }));
-        console.log(feelingsPostStay.value)
     } else {
-        toast.errorToast(response.data.message, 'top-right')
+        toast.errorToast(response.data.message, 'top-right');
     }
-}
+};
 </script>
-<style scoped>
-    .rounded-bottom-border {
-        position: relative; 
-    }
 
-    .rounded-bottom-border::after {
-        content: ''; 
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 35px; 
-        height: 7px; 
-        background-color: #0B6357; 
-        border-radius: 10px 10px 0 0;
-    }
+<style scoped>
+.rounded-bottom-border {
+    position: relative; 
+}
+
+.rounded-bottom-border::after {
+    content: ''; 
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35px; 
+    height: 7px; 
+    background-color: #0B6357; 
+    border-radius: 10px 10px 0 0;
+}
+
+.transformCircle { 
+    transform: rotate(150deg);
+}
 </style>

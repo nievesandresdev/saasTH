@@ -66,7 +66,7 @@
         display: block;
     }
     .width-xs {
-        width: 215px;
+        width: 185px;
     }
     .width-s {
         width: 290px;
