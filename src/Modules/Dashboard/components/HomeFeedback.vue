@@ -101,19 +101,19 @@ const userStore = useUserStore();
 const toast = useToastAlert();
 
 const feelingsInStay = ref([
-    { name: 'VERYGOOD', percentage: 0 },
-    { name: 'GOOD', percentage: 0 },
-    { name: 'NORMAL', percentage: 0 },
-    { name: 'WRONG', percentage: 0 },
-    { name: 'VERYWRONG', percentage: 0 },
+    { name: 'VERYGOOD', percentage: '--' },
+    { name: 'GOOD', percentage: '--' },
+    { name: 'NORMAL', percentage: '--' },
+    { name: 'WRONG', percentage: '--' },
+    { name: 'VERYWRONG', percentage: '--' },
 ]);
 
 const feelingsPostStay = ref([
-    { name: 'VERYGOOD', percentage: 0 },
-    { name: 'GOOD', percentage: 0 },
-    { name: 'NORMAL', percentage: 0 },
-    { name: 'WRONG', percentage: 0 },
-    { name: 'VERYWRONG', percentage: 0 },
+    { name: 'VERYGOOD', percentage: '--' },
+    { name: 'GOOD', percentage: '--' },
+    { name: 'NORMAL', percentage: '--' },
+    { name: 'WRONG', percentage: '--' },
+    { name: 'VERYWRONG', percentage: '--' },
 ]);
 
 onMounted(async () => {
@@ -131,12 +131,12 @@ const handleDataFeedback = async () => {
         
         feelingsInStay.value = feelingsInStay.value.map(feeling => ({
             name: feeling.name,
-            percentage: inStay[feeling.name] || 0
+            percentage: inStay[feeling.name] == 0 ? '--' : inStay[feeling.name]
         }));
         
         feelingsPostStay.value = feelingsPostStay.value.map(feeling => ({
             name: feeling.name,
-            percentage: postStay[feeling.name] || 0
+            percentage: postStay[feeling.name] == 0 ? '--' : postStay[feeling.name]
         }));
     } else {
         toast.errorToast(response.data.message, 'top-right')
