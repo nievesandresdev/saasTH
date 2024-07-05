@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
                 sessionStorage.setItem('token', token.value);
                 sessionStorage.setItem('user', JSON.stringify(user.value));
                 sessionStorage.setItem('current_hotel', JSON.stringify(response.data.user.current_hotel));
-                sessionStorage.setItem('current_subdomain', response.data.user.current_subdomain_hotel);
+                sessionStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
                 this.$router.push('/dashboard');
             } else {
                 errorLogin.value = 'Credenciales incorrectas';
