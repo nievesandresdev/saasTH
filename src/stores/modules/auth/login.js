@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
                 sessionStorage.setItem('token', token.value);
                 sessionStorage.setItem('user', JSON.stringify(user.value));
                 sessionStorage.setItem('current_hotel', JSON.stringify(response.data.user.current_hotel));
-                sessionStorage.setItem('current_subdomain', response.data.user.current_subdmain_hotel);
+                sessionStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
                 this.$router.push('/dashboard');
             } else {
                 errorLogin.value = 'Credenciales incorrectas';
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         if (response.ok) {
             token.value = '';
-            //user.value = null;
+            user.value = null;
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
             sessionStorage.removeItem('current_hotel');
@@ -63,6 +63,8 @@ export const useAuthStore = defineStore('auth', () => {
         return `${user.value.name} ${user.value.lastname}`;
     });
 
+    
+
     return {
         user,
         token,
@@ -73,6 +75,6 @@ export const useAuthStore = defineStore('auth', () => {
         current_hotel,
         current_subdomain,
         $setUser,
-        fullName
+        fullName,
     };
 });

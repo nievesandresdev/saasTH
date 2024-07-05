@@ -3,6 +3,7 @@
         <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard</h1>
         <div class="border-b border-[#BFBFBF] mb-5"></div>
         <CustomerExperience />
+        <HomeFeedback />
     </div>
     
 </template>
@@ -11,6 +12,7 @@ import { onMounted } from 'vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useMockupStore } from '@/stores/modules/mockup'
 import CustomerExperience from './components/CustomerExperience.vue'
+import HomeFeedback from './components/HomeFeedback.vue'
 
 
 const mockupStore = useMockupStore();
