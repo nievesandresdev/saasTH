@@ -68,47 +68,47 @@
             </div>
             <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2 ">
                 <div class="p-4 mt-2">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" >
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Booking.svg" alt="">
+                            <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ bookingReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ bookingReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Google.svg" alt="">
+                            <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ googleReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ googleReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="">
+                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ tripadvisorReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ tripadvisorReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Expedia.svg" alt="">
+                            <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ expediaReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ expediaReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { dataFeedback } from '@/api/services/dashboard/dashboard.services';
+import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
 
 import  CircleProgress  from 'vue3-circle-progress';
@@ -171,10 +171,24 @@ const feelingsPostStay = ref([
     { name: 'VERYWRONG', percentage: '--' },
 ]);
 
-const average = ref(81); 
+const defaultReview = {
+    data_review: {
+        reviews_rating: '--',
+        reviews_count: '--',
+    }
+};
+
+const tripadvisorReview = ref({ ...defaultReview, ota: 'TRIPADVISOR' });
+const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
+const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
+const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
+
+const average = ref(0); 
 
 onMounted(async () => {
     await handleDataFeedback();
+    await handleDataOta();
+    //await handleOtaTest();
 });
 
 const handleDataFeedback = async () => {
@@ -196,6 +210,55 @@ const handleDataFeedback = async () => {
         toast.errorToast(response.data.message, 'top-right');
     }
 };
+
+/* function getCidFromUrl(url) {
+    const cidMatch = url.match(/[?&]cid=([^&]+)/);
+    return cidMatch ? cidMatch[1] : null;
+} */
+
+const handleDataOta = async () => {
+    const response = await dataReviewOTA();
+
+    
+
+    if (response.ok) {
+        let totalRating = 0;
+        let count = 0;
+        const reviews = response.data.summaryReviews || [];
+        reviews.forEach(review => {
+            switch (review.ota) {
+                case 'TRIPADVISOR':
+                    tripadvisorReview.value = review;
+                    break;
+                case 'EXPEDIA':
+                    expediaReview.value = review;
+                    break;
+                case 'BOOKING':
+                    bookingReview.value = review;
+                    break;
+                case 'GOOGLE':
+                    googleReview.value = review;
+                    break;
+                default:
+                    break;
+            }
+
+            if (review.data_review && review.data_review.reviews_rating !== '--') {
+                totalRating += parseFloat(review.data_review.reviews_rating);
+                count++;
+            }
+
+            average.value = count > 0 ? (totalRating / count) * 10 : 0;
+        });
+
+        
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
+        average.value = 0; // Ensure average is 0 if there was an error
+    }
+};
+
+
 </script>
 
 <style scoped>
