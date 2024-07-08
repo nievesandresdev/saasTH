@@ -2,10 +2,10 @@
   <transition name="modal-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-[600]"
+      class="fixed inset-0 flex items-center justify-center bg-[#00000088] z-[600]"
       @click.self="closeModal"
     >
-      <div :style="{ width: modalWidth }" class="bg-white rounded-lg shadow-xl mx-auto transform transition-all">
+      <div :style="{ width: modalWidth }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all">
         <div :class="paddingContent">
           <slot name="content"></slot>
         </div>
@@ -30,8 +30,8 @@ const props = defineProps({
     default: 'p-6'
   },
   footer: {
-    type: String,
-    default: null,
+    type: Boolean,
+    default: false,
   },
 });
 
