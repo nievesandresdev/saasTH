@@ -199,7 +199,11 @@ const handleDataFeedback = async () => {
 };
 
 const handleDataOta = async () => {
-    const response = await dataReviewOTA();
+    const params = {
+        googleMapCid : '12447947541478153122'
+    }
+    const response = await dataReviewOTA(params);
+   
     if (response.ok) {
        console.log(response)
     } else {
