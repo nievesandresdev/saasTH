@@ -183,7 +183,7 @@ const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
 const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
 const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
 
-const average = ref(81); 
+const average = ref(0); 
 
 onMounted(async () => {
     await handleDataFeedback();
