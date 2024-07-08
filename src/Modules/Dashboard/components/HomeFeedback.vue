@@ -73,9 +73,9 @@
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ bookingReview.dataReview.reviewsRating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ bookingReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ bookingReview.dataReview.reviewsCount }}</span>
+                            <span>{{ bookingReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -84,9 +84,9 @@
                             <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ googleReview.dataReview.reviewsRating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ googleReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ googleReview.dataReview.reviewsCount }}</span>
+                            <span>{{ googleReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -95,9 +95,9 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ tripadvisorReview.dataReview.reviewsRating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ tripadvisorReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ tripadvisorReview.dataReview.reviewsCount }}</span>
+                            <span>{{ tripadvisorReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -106,9 +106,9 @@
                             <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ expediaReview.dataReview.reviewsRating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ expediaReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ expediaReview.dataReview.reviewsCount }}</span>
+                            <span>{{ expediaReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { dataFeedback,dataReviewOTA,dataReviewOTATest } from '@/api/services/dashboard/dashboard.services';
+import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useAuthStore } from '@/stores/modules/auth/login'
 
@@ -182,7 +182,7 @@ const googleReview = ref(null);
 onMounted(async () => {
     await handleDataFeedback();
     await handleDataOta();
-    await handleOtaTest();
+    //await handleOtaTest();
 });
 
 const handleDataFeedback = async () => {
@@ -205,16 +205,16 @@ const handleDataFeedback = async () => {
     }
 };
 
-function getCidFromUrl(url) {
+/* function getCidFromUrl(url) {
     const cidMatch = url.match(/[?&]cid=([^&]+)/);
     return cidMatch ? cidMatch[1] : null;
-}
+} */
 
 const handleDataOta = async () => {
-    const params = {
+    /* const params = {
         googleMapCid: getCidFromUrl(authStore.current_hotel.url_google),
-    };
-    const response = await dataReviewOTA(params);
+    }; */
+    const response = await dataReviewOTA();
    
     if (response.ok) {
         const reviews = response.data.summaryReviews;
@@ -242,7 +242,7 @@ const handleDataOta = async () => {
 };
 
 const handleOtaTest = async() => {
-    const response = await dataReviewOTATest();
+    const response = await dataReviewOTA();
 
     console.log(response);
 }
