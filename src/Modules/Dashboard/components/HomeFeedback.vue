@@ -68,7 +68,7 @@
             </div>
             <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2 ">
                 <div class="p-4 mt-2">
-                    <div class="flex justify-between items-center" v-if="bookingReview">
+                    <div class="flex justify-between items-center" >
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
@@ -79,7 +79,7 @@
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3" v-if="googleReview">
+                    <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
@@ -90,7 +90,7 @@
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3" v-if="tripadvisorReview">
+                    <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
@@ -101,7 +101,7 @@
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3" v-if="expediaReview">
+                    <div class="flex justify-between items-center mt-3">
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
@@ -173,11 +173,19 @@ const feelingsPostStay = ref([
     { name: 'VERYWRONG', percentage: '--' },
 ]);
 
+const defaultReview = {
+    data_review: {
+        reviews_rating: '--',
+        reviews_count: '--',
+    }
+};
+
+const tripadvisorReview = ref({ ...defaultReview, ota: 'TRIPADVISOR' });
+const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
+const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
+const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
+
 const average = ref(81); 
-const tripadvisorReview = ref(null);
-const expediaReview = ref(null);
-const bookingReview = ref(null);
-const googleReview = ref(null);
 
 onMounted(async () => {
     await handleDataFeedback();
@@ -211,13 +219,10 @@ const handleDataFeedback = async () => {
 } */
 
 const handleDataOta = async () => {
-    /* const params = {
-        googleMapCid: getCidFromUrl(authStore.current_hotel.url_google),
-    }; */
     const response = await dataReviewOTA();
-   
+
     if (response.ok) {
-        const reviews = response.data.summaryReviews;
+        const reviews = response.data.summaryReviews || [];
         reviews.forEach(review => {
             switch (review.ota) {
                 case 'TRIPADVISOR':
@@ -241,11 +246,6 @@ const handleDataOta = async () => {
     }
 };
 
-const handleOtaTest = async() => {
-    const response = await dataReviewOTA();
-
-    console.log(response);
-}
 
 </script>
 
