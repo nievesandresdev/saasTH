@@ -114,7 +114,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
     'subdomainHotel': subdomain,
-    'x-key-api': X_KEY_API,
+    'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
   };
 
   if (!options.hasOwnProperty('headers')) options.headers = defaultHeaders
