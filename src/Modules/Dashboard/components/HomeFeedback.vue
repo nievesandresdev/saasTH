@@ -147,7 +147,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
+import { dataFeedback,dataReviewOTA,dataReviewOTATest } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useAuthStore } from '@/stores/modules/auth/login'
 
@@ -182,6 +182,7 @@ const googleReview = ref(null);
 onMounted(async () => {
     await handleDataFeedback();
     await handleDataOta();
+    await handleOtaTest();
 });
 
 const handleDataFeedback = async () => {
@@ -239,6 +240,12 @@ const handleDataOta = async () => {
         toast.errorToast(response.data.message, 'top-right');
     }
 };
+
+const handleOtaTest = async() => {
+    const response = await dataReviewOTATest();
+
+    console.log(response);
+}
 
 </script>
 
