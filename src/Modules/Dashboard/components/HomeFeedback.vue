@@ -149,13 +149,11 @@ import { onMounted, ref } from 'vue';
 
 import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
-import { useAuthStore } from '@/stores/modules/auth/login'
 
 import  CircleProgress  from 'vue3-circle-progress';
 import "vue3-circle-progress/dist/circle-progress.css";
 
 const toast = useToastAlert();
-const authStore = useAuthStore();
 
 const feelingsInStay = ref([
     { name: 'VERYGOOD', percentage: '--' },
@@ -221,7 +219,11 @@ const handleDataFeedback = async () => {
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
 
+    
+
     if (response.ok) {
+        let totalRating = 0;
+        let count = 0;
         const reviews = response.data.summaryReviews || [];
         reviews.forEach(review => {
             switch (review.ota) {
@@ -240,9 +242,19 @@ const handleDataOta = async () => {
                 default:
                     break;
             }
+
+            if (review.data_review && review.data_review.reviews_rating !== '--') {
+                totalRating += parseFloat(review.data_review.reviews_rating);
+                count++;
+            }
+
+            average.value = count > 0 ? (totalRating / count) * 10 : 0;
         });
+
+        
     } else {
         toast.errorToast(response.data.message, 'top-right');
+        average.value = 0; // Ensure average is 0 if there was an error
     }
 };
 
