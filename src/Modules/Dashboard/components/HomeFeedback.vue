@@ -68,47 +68,47 @@
             </div>
             <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2 ">
                 <div class="p-4 mt-2">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" v-if="bookingReview">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Booking.svg" alt="">
+                            <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ bookingReview.dataReview.reviewsRating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ bookingReview.dataReview.reviewsCount }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
+                    <div class="flex justify-between items-center mt-3" v-if="googleReview">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Google.svg" alt="">
+                            <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ googleReview.dataReview.reviewsRating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ googleReview.dataReview.reviewsCount }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
+                    <div class="flex justify-between items-center mt-3" v-if="tripadvisorReview">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="">
+                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ tripadvisorReview.dataReview.reviewsRating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ tripadvisorReview.dataReview.reviewsCount }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
+                    <div class="flex justify-between items-center mt-3" v-if="expediaReview">
                         <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Expedia.svg" alt="">
+                            <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">8.5/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{ expediaReview.dataReview.reviewsRating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>1930</span>
+                            <span>{{ expediaReview.dataReview.reviewsCount }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -149,11 +149,13 @@ import { onMounted, ref } from 'vue';
 
 import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
+import { useAuthStore } from '@/stores/modules/auth/login'
 
 import  CircleProgress  from 'vue3-circle-progress';
 import "vue3-circle-progress/dist/circle-progress.css";
 
 const toast = useToastAlert();
+const authStore = useAuthStore();
 
 const feelingsInStay = ref([
     { name: 'VERYGOOD', percentage: '--' },
@@ -172,6 +174,10 @@ const feelingsPostStay = ref([
 ]);
 
 const average = ref(81); 
+const tripadvisorReview = ref(null);
+const expediaReview = ref(null);
+const bookingReview = ref(null);
+const googleReview = ref(null);
 
 onMounted(async () => {
     await handleDataFeedback();
@@ -198,14 +204,37 @@ const handleDataFeedback = async () => {
     }
 };
 
+function getCidFromUrl(url) {
+    const cidMatch = url.match(/[?&]cid=([^&]+)/);
+    return cidMatch ? cidMatch[1] : null;
+}
+
 const handleDataOta = async () => {
     const params = {
-        googleMapCid : '12447947541478153122'
-    }
+        googleMapCid: getCidFromUrl(authStore.current_hotel.url_google),
+    };
     const response = await dataReviewOTA(params);
    
     if (response.ok) {
-       console.log(response)
+        const reviews = response.data.summaryReviews;
+        reviews.forEach(review => {
+            switch (review.ota) {
+                case 'TRIPADVISOR':
+                    tripadvisorReview.value = review;
+                    break;
+                case 'EXPEDIA':
+                    expediaReview.value = review;
+                    break;
+                case 'BOOKING':
+                    bookingReview.value = review;
+                    break;
+                case 'GOOGLE':
+                    googleReview.value = review;
+                    break;
+                default:
+                    break;
+            }
+        });
     } else {
         toast.errorToast(response.data.message, 'top-right');
     }
