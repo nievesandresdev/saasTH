@@ -147,7 +147,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { dataFeedback } from '@/api/services/dashboard/dashboard.services';
+import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
 
 import  CircleProgress  from 'vue3-circle-progress';
@@ -175,6 +175,7 @@ const average = ref(81);
 
 onMounted(async () => {
     await handleDataFeedback();
+    await handleDataOta();
 });
 
 const handleDataFeedback = async () => {
@@ -196,6 +197,16 @@ const handleDataFeedback = async () => {
         toast.errorToast(response.data.message, 'top-right');
     }
 };
+
+const handleDataOta = async () => {
+    const response = await dataReviewOTA();
+    if (response.ok) {
+       console.log(response)
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
+    }
+};
+
 </script>
 
 <style scoped>
