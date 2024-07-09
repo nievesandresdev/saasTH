@@ -2,29 +2,41 @@
     <div class="h-screen bg-[#FAFAFA]">
         <div class="pb-[104px]">
             <ListPageHeader />
-            <ListPageBannerShowToGuest />
+            <ListPageBannerShowToGuest v-if="!hotelData.show_facilities" />
             <div class="mt-[24px] px-[24px]">
                 <ListPageTabs class="mb-4"/>
                 <p v-if="!facilitiesEmpty" class="text-sm font-medium">{{ searchText }}</p>
                 <!-- <p class="text-sm font-medium">{{ visibleFacilities.length }} instalaciones visibles y {{ hiddenFacilities.length }} ocultas</p> -->
-                <ListPageListVisible v-if="filter !== 'hidden'" @update:reloadItems="loadFacilities()" />
+                <ListPageListVisible
+                    v-if="filter !== 'hidden'"
+                    @update:reloadItems="loadFacilities"
+                    @click:editFacility="editFacility"
+                />
                 <!-- <p class="text-sm font-medium my-6 text-center max-w-[720px] 3xl:max-w-[1218px]">{{ hiddenFacilities.length }} instalaciones ocultas</p> -->
                 <div v-if="hiddenFacilities.length && !filter" class="flex items-center mt-6 w-full">
                     <div class="border-b border-gray-300 flex-grow"></div>
                     <p class="text-sm font-medium mx-6">
                             {{ hiddenFacilities.length }}
-                            {{ hiddenFacilities.length > 1 ? 'instalaciones ocultas' : 'instalacion oculta' }}
+                            {{ hiddenFacilities.length > 1 ? 'instalaciones ocultas' : 'instalación oculta' }}
                     </p>
                     <div class="border-b border-gray-300 flex-grow"></div>
                 </div>
-                <ListPageListHidden v-if="filter !== 'visible'" @update:reloadItems="loadFacilities()" />
+                <ListPageListHidden
+                    v-if="filter !== 'visible'"
+                    @update:reloadItems="loadFacilities()"
+                />
             </div>
         </div>
+        <PanelEdit
+            ref="panelEditRef"
+            @load:resetPageData="resetPageData()"
+        />
     </div>
+    
 </template>
 
 <script setup>
-    import { ref, reactive, onMounted, provide, computed } from 'vue';
+    import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
     //COMPONENTS
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
     //
@@ -33,26 +45,48 @@
     import ListPageTabs from './ListPageTabs.vue';
     import ListPageListVisible from './ListPageListVisible.vue';
     import ListPageListHidden from './ListPageListHidden.vue';
+    import PanelEdit from './components/PanelEdit.vue';
+    import ModalDeleteFacility from './components/ModalDeleteFacility.vue';
 
     // STATE
     import { useFacilityStore } from '@/stores/modules/facility';
     const facilityStore = useFacilityStore();
     provide('facilityStore', facilityStore);
+    //
+    import { useHotelStore } from '@/stores/modules/hotel';
+    const hotelStore = useHotelStore();
+    provide('hotelStore', hotelStore);
+    import { useMockupStore } from '@/stores/modules/mockup';
+    const mockupStore = useMockupStore();
+    // COMPOSABLES
+    import { useToastAlert } from '@/composables/useToastAlert'
+    const toast = useToastAlert();
 
     // DATA
     const visibleFacilities = ref([]);
     const hiddenFacilities = ref([]);
-    const changePending = ref(false);
-    const modalAdd = ref(false);
+    const modalChangePendinginForm = ref(false);
+    const changePendingInForm = ref(false);
     const selectedCard = ref(null);
     const filter = ref(null);
+    const newItem = ref({});
+    const itemSelected = ref({});
+    const modelActive = ref(null);
+    const panelEditRef = ref(null);
+    const { hotelData } = hotelStore;
 
     // PROVIDE
+    provide('hotelData', hotelData);
     provide('filter', filter);
-    provide('changePending', changePending);
-    provide('modalAdd', modalAdd);
+    provide('modalChangePendinginForm', modalChangePendinginForm);
+    provide('changePendingInForm', changePendingInForm);
+    
     provide('selectedCard', selectedCard);
     provide('facilitiesEmpty', selectedCard);
+    //
+    provide('facilityStore', facilityStore);
+    provide('mockupStore', mockupStore);
+    provide('toast', toast);
 
     // ONMOUNTED
     onMounted(() => {
@@ -71,7 +105,7 @@
         let singleHidden = 'ocultas';
 
         visibleFacilities.value.length == 1 ? textVisibles = 'instalacion visible': '';
-        hiddenFacilities.value.length == 1 ? textHiddens = 'instalacion oculta': '';
+        hiddenFacilities.value.length == 1 ? textHiddens = 'instalación oculta': '';
         hiddenFacilities.value.length == 1 ? singleHidden = 'oculta': '';
 
         if(filter.value !== 'hidden'){
@@ -92,6 +126,7 @@
     // PROVIDE
     provide('visibleFacilities', visibleFacilities);
     provide('hiddenFacilities', hiddenFacilities);
+    provide('modelActive', modelActive);
 
     // FUNCTIONS
     async function loadFacilities () {
@@ -107,5 +142,30 @@
     function filterhiddenFacility (facility) {
         return facility.select === 0;
     }
+
+    function editFacility (payload) {
+        if (changePendingInForm.value) {
+            openModalChangeInForm();
+            return;
+        }
+        modelActive.value = payload.action;
+        nextTick(() => {
+            panelEditRef.value.editFacility(payload);
+        });
+        // console.log(panelEditRef.value, 'panelEditlRef');
+    }
+
+    function openModalChangeInForm () {
+        modalChangePendinginForm.value = true;
+        nextTick(() => {
+            modalChangePendinginForm.value = false;
+        });
+    }
+
+    function resetPageData () {
+        loadFacilities();
+        filter.value = null;
+    }
+
 
 </script>

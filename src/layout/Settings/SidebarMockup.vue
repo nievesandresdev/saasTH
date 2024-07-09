@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full">
+    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[100]">
         <div class="px-12">
             <h1 class="text-base font-semibold leading-[120%] text-center py-[22px]">
                 Visualiza tu webapp

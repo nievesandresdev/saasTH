@@ -4,20 +4,12 @@
             <label 
                 for="fileInput"
                 class="relative w-[224px] rounded-[6px] border hborder-black-100 cursor-pointer gallery-file flex justify-center items-center"
+                @click="addNewFacility"
             >   
                 <h5 class="text-base font-medium text-center flex flex-col items-center justify-center">
                     <div class="icon w-[240px] inline-block mb-2 " />
                     Crear instalación
                 </h5>
-                <input
-                    type="file"
-                    accept=".jpg, .jpeg, .png, .svg" 
-                    id="fileInput"
-                    multiple
-                    style="display: none;"
-                    @change="handleFiles"
-                    ref="fileInput"
-                />
             </label>
             <div
                 v-for="(item, index) in visibleFacilities"
@@ -32,6 +24,7 @@
                 :class="{'shadow-draginng border border-gray-300' : item.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
+                @click="editFacility(item)"
             >
                 <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
                     <span class="text-[10px] font-semibold">Visible</span>
@@ -64,15 +57,6 @@
                     <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
                 </button>
             </div>
-            <!-- <template
-                v-for="(item, index) in visibleFacilities"
-                :key="index"
-            >
-                <ListPageListVisibleItem
-                    :facility="item"
-                    :index="index"
-                />
-            </template> -->
         </div>
     </div>
 </template>
@@ -84,7 +68,7 @@ import { ref, reactive, onMounted, provide, computed, inject, nextTick } from 'v
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import ListPageListVisibleItem from "./ListPageListVisibleItem.vue";
 
-const emit = defineEmits(['update:reloadItems']);
+const emit = defineEmits(['update:reloadItems', 'click:editFacility']);
 
 // DATA
 const selectedCard = ref(null);
@@ -98,6 +82,8 @@ const draggableCard = ref(null);
 //INJECT
 const facilityStore = inject('facilityStore');
 const visibleFacilities = inject('visibleFacilities');
+const modalChangePendinginForm = inject('modalChangePendinginForm');
+const changePendingInForm = inject('changePendingInForm');
 
 // FUNCTIONS
 const setDragStart = (index) => {
@@ -122,6 +108,10 @@ const handlerDragOver = (event) => {
 };
 
 const handlerDrop = (index, facility) => {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
   const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
   if (draggedIndex !== index) {
     const droppedItem = visibleFacilities.value.splice(draggedIndex, 1)[0];
@@ -141,6 +131,11 @@ const handlerDragEnd = () => {
 ////
 
 async function updateVisible (facility) {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        facility.select = !facility.select;
+        return;
+    }
     const data = {visible: facility.select, facility_hoster_id: facility.id}
     const response = await facilityStore.$updateVisible(data)
     emit('update:reloadItems')
@@ -150,6 +145,24 @@ async function updateOrder () {
     const data = {order: idsFacities}
     const response = await facilityStore.$updateOrder(data)
     console.log(response, 'response')
+}
+
+function addNewFacility () {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+    emit('click:editFacility', { action: 'ADD', facility: null});
+}
+function editFacility (facility) {
+    emit('click:editFacility', { action: 'EDIT', facility});
+}
+
+function openModalChangeInForm () {
+    modalChangePendinginForm.value = true;
+    nextTick(() => {
+        modalChangePendinginForm.value = false;
+    });
 }
 
 </script>

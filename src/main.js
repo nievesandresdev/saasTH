@@ -8,10 +8,11 @@ import 'vue-toastification/dist/index.css';
 
 
 // estilos generales
-import './assets/css/main.css'
+import './assets/css/main.css';
+import './utils/registerBaseComponents.js';
 
-import { i18n } from './i18n'
-import { pinia } from './stores'
+import { i18n } from './i18n';
+import { pinia } from './stores';
 
 // helpers
 import { 

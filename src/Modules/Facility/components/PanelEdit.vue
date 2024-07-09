@@ -1,0 +1,406 @@
+<template>
+    <transition>
+        <div
+            v-if="modelActive"
+            class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
+            :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
+            
+            ref="refPanelEdit"
+        >
+            <div class="overflow-y-auto scrolling-sticky" style="height:100%">
+                <div class="px-6">
+                    <div class="flex justify-between py-[20px]">
+                        <h1 class="text-[22px] font-medium text-center">{{ modelActive === 'EDIT' ? 'Editar instalación' : 'Crea tu instalación'}}</h1>
+                        <button @click="closeModal">
+                            <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
+                        </button>
+                    </div>
+                </div>
+                <!-- tabs -->
+                <ul
+                    class="flex space-x-2 px-[24px]"
+                >
+                    <li
+                        v-for="(item ,index) in tabs"
+                        :key="index"
+                        class="cursor-pointer px-4 pt-4 rounded-t-[10px] flex flex-col"
+                        :class="tabSelected === index ? 'hbg-green-200' : ''"
+                        @click="changeTab(index)"
+                    >
+                         <span
+                            class="text-base font-semibold"
+                            :class="tabSelected === index ? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
+                        >
+                             {{ item }}
+                        </span>
+                        <span class="w-full h-[3px] rounded-full" :class="tabSelected === index ? 'hbg-green-800' : 'bg-white'" />
+                    </li>
+                </ul>   
+                <div class="px-6 mt-[31px]">
+                    <template v-if="tabSelected === INFORMATION">
+                        <PanelEditFormInformation />
+                    </template>
+                    <template v-else-if="tabSelected === SCHEDULE">
+                        <PanelEditFormSchedule />
+                    </template>
+                    <template v-else-if="tabSelected === GALLERY">
+                        <PanelEditFormPhotos />
+                    </template>
+                </div>    
+            </div>
+            <div class="py-4 px-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
+                <template v-if="modelActive === 'EDIT'">
+                    <button
+                        class="py-3"
+                        @click="changesform ? openModalCancel() : openModalDeleteFacility()"
+                    >
+                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
+                    </button>
+                    <button
+                        class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
+                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        @click="submitSave"
+                    >
+                        Guardar
+                    </button>
+                </template>
+                <template v-else>
+                    <button
+                        class="leading-[110%] underline text-sm font-medium"
+                        @click="prevTab"
+                    >
+                        {{ tabSelected === INFORMATION ? 'Cancelar' : 'Volver a atrás' }}
+                    </button>
+                    <button
+                        class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
+                        :diisabled="isLoadingForm"
+                        @click="nextTab"
+                    >
+                        {{ tabSelected === GALLERY ? 'Crear' : 'Siguiente' }}
+                        
+                    </button>
+                </template>
+            </div>
+            
+        </div>
+    </transition>
+    <BasePreviewImage 
+        :url-image="previewUrl"
+        :is-open="isPreviewOpen"
+        @click:close="closePreviewImage"
+    />
+    <ModalDeleteFacility
+        ref="modalDeleteFacilityRef"
+        @submit:delete="submitDeleteFacility()"
+    />
+    <ModalCancelChangeFacility
+        ref="modalCancelChangeFacilityRef"
+        @submit:saveChange="submitSave()"
+        @submit:closeModal="closeModal"
+    />
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changesform"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submitSave"
+        type="save_changes"
+        :force-open="modalChangePendinginForm"
+        @close="closeModal()"
+    />
+</template>
+
+
+<script setup>
+import { ref, reactive, onMounted, provide, computed, toRefs, inject } from 'vue';
+
+// COMPONENTS
+import BasePreviewImage from "@/components/BasePreviewImage.vue";
+import PanelEditFormInformation from './PanelEditFormInformation.vue';
+import PanelEditFormSchedule from './PanelEditFormSchedule.vue';
+import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
+import ModalDeleteFacility from './ModalDeleteFacility.vue';
+import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
+import ModalNoSave from '@/components/ModalNoSave.vue';
+
+
+import { useFormValidation } from '@/composables/useFormValidation'
+import * as rules from '@/utils/rules';
+
+const emit = defineEmits(['load:resetPageData']);
+
+// DATA STATIC
+const  INFORMATION = 'INFORMATION';
+const  SCHEDULE = 'SCHEDULE';
+const  GALLERY = 'GALLERY';
+const tabs = {
+    [INFORMATION]: 'Información',
+    [SCHEDULE]: 'Horarios',
+    [GALLERY]: 'Galería',
+}
+const schedulesDefault = [
+        {
+            name: 'Lunes',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Martes',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Miércoles',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Jueves',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Viernes',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Sábado',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+        {
+            name: 'Domingo',
+            active: false,
+            times: [
+                {start: '00:00', end: '23:59'},
+            ],
+        },
+];
+// DATA
+const tabSelected = ref(INFORMATION);
+
+const changePendingInForm = inject('changePendingInForm');
+const modalChangePendinginForm = inject('modalChangePendinginForm');
+const modelActive = inject('modelActive');
+const hotelStore = inject('hotelStore');
+const facilityStore = inject('facilityStore');
+const mockupStore = inject('mockupStore');
+const toast = inject('toast');
+const hotelData = inject('hotelData');
+
+const form = reactive({
+    id: null,
+    title: null,
+    description: null,
+    ad_tag: null,
+    schedules: [...schedulesDefault],
+    always_open: false,
+    images: [],
+});
+const itemSelected = reactive({
+    id: null,
+    title: null,
+    description: null,
+    ad_tag: null,
+    schedules: [...schedulesDefault],
+    always_open: false,
+    images: [],
+});
+const formDefault = reactive({
+    id: null,
+    title: null,
+    description: null,
+    ad_tag: null,
+    schedules: [...schedulesDefault],
+    always_open: false,
+    images: [],
+});
+const formRules = {
+    title: [value => value.trim() ? true : 'Introduce el nombre de tu instalación'],
+};
+
+const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
+
+const isLoadingForm = ref(false);
+const urlsimages = ref([]);
+const modalDeleteFacilityRef = ref(null);
+const modalCancelChangeFacilityRef = ref(null);
+
+const previewUrl = ref(null);
+const isPreviewOpen = ref(false);
+//
+provide('form', form);
+provide('itemSelected', itemSelected);
+provide('errors', errors);
+provide('urlsimages', urlsimages);
+provide('validateField', validateField);
+provide('previewUrl', previewUrl);
+provide('isPreviewOpen', isPreviewOpen);
+
+
+//
+// provide('schedulesDefault', {...schedulesDefault});
+
+// CHANGE
+const changesform = computed(() => {
+    let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
+        (normalize(form.description) !== normalize(itemSelected.description)) ||
+        (normalize(form.ad_tag) !== normalize(itemSelected.ad_tag)) ||
+        (Boolean(form.always_open) !== Boolean(itemSelected.value?.always_open)) ||
+        // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules));
+        (form.images.length !== itemSelected?.images.length)
+        form.images.find(item => item?.image);
+        changePendingInForm.value = valid;
+    return valid
+});
+function toRawObject(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+// FUNCTION
+function prevTab () {
+    if(tabSelected.value == GALLERY){
+        tabSelected.value = SCHEDULE;
+    }else if (tabSelected.value == SCHEDULE){
+        tabSelected.value = INFORMATION;
+    } else {
+        openModalCancel();
+    }
+}
+
+function nextTab () {
+    if(tabSelected.value === GALLERY){
+        submitSave();
+    } else if (tabSelected.value === INFORMATION){
+        tabSelected.value = SCHEDULE;
+    } else if (tabSelected.value === SCHEDULE){
+        tabSelected.value = GALLERY;
+    }
+}
+
+function changeTab (val) {
+    tabSelected.value = val
+}
+
+function editFacility ({action, facility}) {
+    urlsimages.value = [];
+    if (action === 'EDIT') {
+        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
+        if (!!schedules) {
+            schedules = JSON.parse(schedules);
+        } else {
+            schedules = [...schedulesDefault];
+        }
+
+        Object.assign(itemSelected, { id, title, description, schedule,  schedules: [...schedules], images: [...images], select, ad_tag, always_open });
+        Object.assign(form, { id, title, description, schedule, schedules: [...schedules], images: [...images], select, ad_tag, always_open });
+        images.forEach(img => {
+            urlsimages.value.push(img);
+        });
+    } else {
+        Object.assign(itemSelected, formDefault);
+        Object.assign(form, formDefault);
+    }
+
+}
+defineExpose({ editFacility });
+ 
+
+async function submitSave () {
+    let body = { ...form };
+    const response = await facilityStore.$storeOrUpdate(body);
+    console.log(response, 'response');
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+async function submitDeleteFacility () {
+    const response = await facilityStore.$delete(form.id);
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+function openModalCancel () {
+    modalCancelChangeFacilityRef.value.openModal();
+}
+const normalize = (value) => {
+    return value === "" || value === null || value === undefined ? null : value;
+}
+function resetCompoent () {
+    closeModal();
+    resetPageData();
+}
+function closeModal () {
+    modelActive.value = null;
+    tabSelected.value = INFORMATION;
+    resetData();
+}
+function resetData () {
+    Object.assign(form, formDefault);
+    Object.assign(itemSelected, formDefault);
+}
+function resetPageData () {
+    emit('load:resetPageData');
+}
+function openModalDeleteFacility () {
+    modalDeleteFacilityRef.value.openModal();
+}
+function closePreviewImage() {
+    isPreviewOpen.value = false;
+}
+</script>
+
+<style lang="scss">
+.v-enter-active,
+.v-leave-active {
+    transition: transform 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    transform: translateX(100%);
+}
+
+.scrolling-sticky {
+    &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    }
+    &::-webkit-scrollbar:vertical {
+        width:16px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #BFBFBF;
+        border-radius: 20px;
+        border: 4px solid #fff;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #fff;
+    }
+    &::-webkit-scrollbar:horizontal{
+        width:0;
+        height: 0;
+    }
+}  
+</style>

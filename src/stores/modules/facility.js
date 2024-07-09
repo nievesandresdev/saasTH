@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import * as facilitySevices from '@/api/services/facility.service'
+import * as facilityServices from '@/api/services/facility.service'
 
 
 export const useFacilityStore = defineStore('facility', () => {
@@ -24,31 +24,45 @@ export const useFacilityStore = defineStore('facility', () => {
     }
 
     async function $getAll () {
-        const response = await facilitySevices.getAllApi()
+        const response = await facilityServices.getAllApi()
         return response;
         if(response.ok) return response.data
         return []
     }
 
     async function $updateVisible (data) {
-        const response = await facilitySevices.updateVisibleApi(data)
+        const response = await facilityServices.updateVisibleApi(data)
         return response;
         if(response.ok) return response.data
         return []
     }
 
     async function $updateOrder (data) {
-        const response = await facilitySevices.updateOrderApi(data)
+        const response = await facilityServices.updateOrderApi(data)
         return response;
         if(response.ok) return response.data
         return []
     }
 
     async function $findById(id) {
-        const response = await facilitySevices.findByIdApi(id)
+        const response = await facilityServices.findByIdApi(id)
         return response;
         if(response.ok) return response.data
         return []
+    }
+
+    async function $storeOrUpdate(body) {
+        const response = await facilityServices.storeOrUpdateApi(body);
+        return response;
+        if(response.ok) return response.data;
+        return [];
+    }
+
+    async function $delete(id) {
+        const response = await facilityServices.deleteApi(id);
+        return response;
+        if(response.ok) return response.data;
+        return [];
     }
 
     //
@@ -58,6 +72,8 @@ export const useFacilityStore = defineStore('facility', () => {
         $findById,
         $updateVisible,
         $updateOrder,
+        $storeOrUpdate,
+        $delete,
     }
 
 })

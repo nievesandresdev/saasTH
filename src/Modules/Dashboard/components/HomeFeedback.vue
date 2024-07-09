@@ -1,22 +1,24 @@
 <template>
-    <div class="flex flex-col border border-[#BFBFBF] rounded-lg p-4 mt-7">
+    <div :class="subscribed ? 'flex flex-col border border-[#BFBFBF] rounded-lg p-4 mt-7' : 'flex flex-col border border-[#BFBFBF] rounded-lg p-4 mt-7'">
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="flex flex-col items-start">
-                <span class="text-[#0B6357] text-xs font-semibold mb-2">REPUTACIÓN ONLINE</span>
-                <div class="flex gap-4">
+                <span :class="subscribed ? 'text-[#0B6357] text-xs font-semibold mb-2' : 'text-xs font-semibold mb-2 text-normal-color'">
+                    {{ subscribed ? 'REPUTACIÓN ONLINE' : 'Contrata REPUTACIÓN ONLINE' }}
+                </span>
+                <div :class="subscribed ? '' : 'grayscale opacity-50'">
                     <span class="font-semibold text-sm flex gap-4">
                         Feedback de tus huéspedes
                     </span>
                 </div>
             </div>
-            <div class="flex items-end">
+            <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
                     <span class="font-semibold text-sm flex gap-4">
                         Reseñas por OTAs
                     </span>
                 </div>
             </div>
-            <div class="flex items-end">
+            <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
                     <span class="font-semibold text-sm flex gap-4">
                         Promedio de tu hotel
@@ -26,7 +28,7 @@
         </div>
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
-            <div class="row-span-2 flex gap-2 flex-col">
+            <div class="row-span-2 flex gap-2 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                     <div class="py-2 px-3 flex items-center">
                         <span class="text-xs font-semibold">STAY</span>
@@ -37,12 +39,10 @@
                             v-for="feeling in feelingsInStay" 
                             :key="feeling.name" 
                             class="w-full p-2 flex flex-col items-center"
-                            :class="{
-                                'rounded-bottom-border': feeling.percentage.isMax
-                            }"
+                            :class="subscribed && feeling.percentage.isMax ? 'rounded-bottom-border' : ''"
                         >
-                            <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{ feeling.percentage.percentage }}%</span>
+                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-8 h-8">
+                            <span class="text-sm font-medium">{{feeling.percentage.percentage ?? '--'  }}%</span>
                         </div>
                     </div>
                 </div>
@@ -56,26 +56,24 @@
                             v-for="feeling in feelingsPostStay" 
                             :key="feeling.name" 
                             class="w-full p-2 flex flex-col items-center"
-                            :class="{
-                                'rounded-bottom-border': feeling.percentage.isMax
-                            }"
+                            :class="subscribed && feeling.percentage.isMax ? 'rounded-bottom-border' : ''"
                         >
-                            <img :src="`/assets/icons/reviews/${feeling.name}.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{ feeling.percentage.percentage }}%</span>
+                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-8 h-8">
+                            <span class="text-sm font-medium">{{feeling.percentage.percentage ?? '--'  }}%</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2 ">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="p-4 mt-2">
-                    <div class="flex justify-between items-center" >
+                    <div class="flex justify-between items-center">
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ bookingReview.data_review.reviews_rating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{  bookingReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ bookingReview.data_review.reviews_count }}</span>
+                            <span>{{  bookingReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -84,9 +82,9 @@
                             <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ googleReview.data_review.reviews_rating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{  googleReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ googleReview.data_review.reviews_count }}</span>
+                            <span>{{  googleReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -95,9 +93,9 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ tripadvisorReview.data_review.reviews_rating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{  tripadvisorReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ tripadvisorReview.data_review.reviews_count }}</span>
+                            <span>{{  tripadvisorReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -106,34 +104,33 @@
                             <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{ expediaReview.data_review.reviews_rating }}/10</span>
+                        <span class="text-sm font-medium w-1/3 text-center">{{  expediaReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{ expediaReview.data_review.reviews_count }}</span>
+                            <span>{{  expediaReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">TheHoster REVIEW INDEX™</span>
                 </div>
                 <div class="p-4 flex gap-4 items-center">
                     <CircleProgress
                         :size="120"
-                        :percent="average"
+                        :percent="subscribed ? average : 0"
                         border-width="22"
-                        border-bg-width	="22"
+                        border-bg-width="22"
                         :linecap="'line'"
                         :fill-color="'#34A98F'"
                         :empty-color="'#ECF9F5'"
                         class="transformCircle"
                     />
-                        
                     <div class="flex flex-col gap-2 w-1/2">
                         <span class="text-sm">Promedio de todas las OTAs vinculadas a tu hotel</span>
                         <div class="flex items-center">
-                            <span class="text-2xl font-semibold">{{ average }}</span>
+                            <span class="text-2xl font-semibold">{{ subscribed && average != 0 ? average : '-.-' }}</span>
                             <span class="text-[23.642px] font-semibold">/</span>
                             <span class="text-base font-semibold flex mt-1">100</span>
                         </div>
@@ -147,13 +144,14 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { dataFeedback,dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
+import { dataFeedback, dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert';
-
-import  CircleProgress  from 'vue3-circle-progress';
+import { useUserStore } from '@/stores/modules/users/users'
+import CircleProgress from 'vue3-circle-progress';
 import "vue3-circle-progress/dist/circle-progress.css";
 
 const toast = useToastAlert();
+const user = useUserStore();
 
 const feelingsInStay = ref([
     { name: 'VERYGOOD', percentage: '--' },
@@ -173,8 +171,8 @@ const feelingsPostStay = ref([
 
 const defaultReview = {
     data_review: {
-        reviews_rating: '--',
-        reviews_count: '--',
+        reviews_rating: '-.-',
+        reviews_count: '-.-',
     }
 };
 
@@ -183,25 +181,41 @@ const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
 const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
 const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
 
-const average = ref(0); 
+const average = ref(0);
+const subscribed = ref(true); // Variable para determinar la suscripción
 
 onMounted(async () => {
-    await handleDataFeedback();
-    await handleDataOta();
-    //await handleOtaTest();
+    await handleSubscription();
+    if(subscribed.value) {
+        await handleDataFeedback();
+        await handleDataOta();
+    }
+    
+    
 });
+
+const handleSubscription = async() => {
+    const response = await user.$getSubscriptionStatus();
+    if (response.ok) {
+        //console.log(response.data.status);
+        subscribed.value = response.data.status.subscribed;
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
+    }
+    
+};
 
 const handleDataFeedback = async () => {
     const response = await dataFeedback();
     if (response.ok) {
         const inStay = response.data.inStay;
         const postStay = response.data.postStay;
-        
+
         feelingsInStay.value = feelingsInStay.value.map(feeling => ({
             name: feeling.name,
             percentage: inStay[feeling.name] == 0 ? '--' : inStay[feeling.name],
         }));
-        
+
         feelingsPostStay.value = feelingsPostStay.value.map(feeling => ({
             name: feeling.name,
             percentage: postStay[feeling.name] == 0 ? '--' : postStay[feeling.name],
@@ -211,15 +225,8 @@ const handleDataFeedback = async () => {
     }
 };
 
-/* function getCidFromUrl(url) {
-    const cidMatch = url.match(/[?&]cid=([^&]+)/);
-    return cidMatch ? cidMatch[1] : null;
-} */
-
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
-
-    
 
     if (response.ok) {
         let totalRating = 0;
@@ -250,35 +257,35 @@ const handleDataOta = async () => {
 
             average.value = count > 0 ? (totalRating / count) * 10 : 0;
         });
-
-        
     } else {
         toast.errorToast(response.data.message, 'top-right');
         average.value = 0; // Ensure average is 0 if there was an error
     }
 };
-
-
 </script>
 
 <style scoped>
+.text-normal-color {
+    color: #0B6357;
+}
+
 .rounded-bottom-border {
-    position: relative; 
+    position: relative;
 }
 
 .rounded-bottom-border::after {
-    content: ''; 
+    content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 35px; 
-    height: 7px; 
-    background-color: #0B6357; 
+    width: 35px;
+    height: 7px;
+    background-color: #0B6357;
     border-radius: 10px 10px 0 0;
 }
 
-.transformCircle { 
+.transformCircle {
     transform: rotate(150deg);
 }
 </style>

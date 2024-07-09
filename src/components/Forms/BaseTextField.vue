@@ -21,7 +21,7 @@
             >
             <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600 flex items-center">
-                    <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                    <img :class="{'invisible':!(errors?.[name] !== true &&  errors?.[name] !== undefined)}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                     {{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}
                 </p>
                 <!-- <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600">{{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}</p> -->
@@ -34,8 +34,6 @@
         </button>
         <img v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show" class="w-6 h-6 absolute right-3 top-3" :src="appendInnerIcon.icon" alt="append inner icon">
     </div>
-    <!-- <pre>{{ name }}</pre> -->
-    <!-- <pre>{{ errors?.[name] }}</pre> -->
 </template>
 
 <script setup>
