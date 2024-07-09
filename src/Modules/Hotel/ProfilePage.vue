@@ -130,9 +130,9 @@
                 </div>
                 <div class="space-y-2">
                     <ProfilePageSectionMap ref="profilePageSectionMap" />
-                    {{`log: ${form.metting_point_longitude}`}}
+                    <!-- {{`log: ${form.metting_point_longitude}`}}
                     {{`lat: ${form.metting_point_latitude}`}}
-                    {{`address: ${form.address}`}}
+                    {{`address: ${form.address}`}} -->
                 </div>
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">

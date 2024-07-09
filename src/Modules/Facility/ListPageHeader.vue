@@ -20,7 +20,11 @@
         <div class="flex items-center">
             <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
            
-                <BaseSwichInput v-model="formShowtoGuest.show" class="mr-4" />
+                <BaseSwichInput
+                    v-model="hotelData.show_facilities"
+                    class="mr-4"
+                    @change:value="updateVisivilityFacilities()"
+                />
             <BaseTooltipResponsive
                 size="l"
                 :top="50"
@@ -43,13 +47,31 @@
 </template>
 
 <script setup>
-    import { ref, reactive, onMounted, provide, computed } from 'vue';
+    import { ref, reactive, onMounted, provide, computed, inject } from 'vue';
     //COMPONENTS
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
     import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
+    // STORE
+    
+    //
+    const hotelStore = inject('hotelStore');
+    const mockupStore = inject('mockupStore');
+    const toast = inject('toast');
+    const hotelData = inject('hotelData');
+
     // DATA
-    const formShowtoGuest = reactive({
-        show: false,
-    })
+
+    async function updateVisivilityFacilities () {
+        const response = await hotelStore.$updateVisivilityFacilities();
+        // console.log(response, 'response');
+        const { ok, data } = response;
+        await hotelStore.reloadHotel();
+        if (ok) {
+            toast.warningToast('Cambios guardados con éxito','top-right');
+        } else {
+            toast.warningToast(data?.message,'top-right');
+        }
+        mockupStore.$reloadIframe();
+    }
 </script>

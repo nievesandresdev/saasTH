@@ -7,7 +7,7 @@
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       
       <div class="inline-block bg-white rounded-[10px] text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-[344px] p-4">  
-          <img class="h-6 w-6 cursor-pointer ml-auto" @click="closeModal" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
+          <img class="h-6 w-6 cursor-pointer ml-auto" @click="visitNow = false" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
 
           <div class="text-center">
             <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
@@ -58,7 +58,8 @@ const props = defineProps({
   text: String,
   title: String,
   textbtn: String,
-  type: String
+  type: String,
+  forceOpen: Boolean,
 });
 
 const emit = defineEmits(['saveChanges', 'close']);
@@ -68,11 +69,19 @@ const intendedRoute = ref(null);  // Almacena la ruta intentada
 
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
-  if (props.type === 'exit_save') {
-    visitNow.value = newVal;
-  } else {
-    visitNow.value = false;
+  if (!props.forceOpen) {
+    if (props.type === 'exit_save') {
+      visitNow.value = newVal;
+    } else {
+      visitNow.value = false;
+    }
   }
+});
+
+watch(() => props.forceOpen, (newVal, oldVal) => {
+    if (!oldVal && newVal) {
+      visitNow.value = true;
+    }
 });
 
 const router = useRouter();
@@ -94,6 +103,8 @@ function goLink() {
       router.push(intendedRoute.value).catch(err => {
           console.error('Routing error:', err);
       });
+  } else {
+    closeModal();
   }
 }
 

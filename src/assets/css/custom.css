@@ -148,3 +148,9 @@ button:focus {
   color:#333;
   white-space: nowrap; 
 }
+
+.position-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

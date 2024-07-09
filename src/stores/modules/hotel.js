@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import * as hotelService from '@/api/services/hotel.service'
 
@@ -8,12 +8,32 @@ import * as hotelService from '@/api/services/hotel.service'
 
 export const useHotelStore = defineStore('hotel', () => {
     
+    const hotelSession = computed(() => {
+        let hotel = sessionStorage.getItem('current_hotel') ?? null;
+        if (hotel) {
+            hotel = JSON.parse(hotel);
+            if (hotel?.images) {
+                delete hotel.images;
+            }
+            return hotel;
+        }
+        return;
+    })
+
     // STATE
-    const hotelData = ref(sessionStorage.getItem('current_hotel') ?? null);
-    const subdomain = ref(sessionStorage.getItem('current_subdomain') ?? null)
-    const URL_STORAGE = process.env.VUE_APP_STORAGE_URL
+    const hotelData = ref({...hotelSession.value});
+    const subdomain = ref(sessionStorage.getItem('current_subdomain') ?? null);
+    const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
+    
 
     // ACTIONS
+
+    function updateHoteInSession (hotel) {
+        if (hotel?.images) {
+            delete hotel.images;
+        }
+        sessionStorage.setItem('current_hotel', JSON.stringify(hotel));
+    }
 
     function formatImage (image) {
         let url = image?.url;
@@ -25,6 +45,12 @@ export const useHotelStore = defineStore('hotel', () => {
         return url;
     }
 
+    async function reloadHotel () {
+        let hotel = await $findByParams();
+        
+        updateHoteInSession(hotel);
+    }
+
     async function $findByParams () {
         let params = {
             subdomain: subdomain.value,
@@ -32,10 +58,11 @@ export const useHotelStore = defineStore('hotel', () => {
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
         const response = await hotelService.findByParamsApi(params)
         const { ok } = response
-
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
+    
 
     async function $findHotelFullByParams () {
         let params = {
@@ -58,6 +85,16 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
+    async function $updateVisivilityFacilities () {
+        // console.log('findByParamsApi',localStorage.getItem('subdomain'))
+        const response = await hotelService.updateVisivilityFacilitiesApi()
+        return response
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
     
 
 
@@ -67,8 +104,10 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData,
         subdomain,
         formatImage,
+        reloadHotel,
         $findByParams,
         $updateProfile,
+        $updateVisivilityFacilities,
     }
 
 })
