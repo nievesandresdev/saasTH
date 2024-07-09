@@ -18,7 +18,7 @@
         :class="{'hbg-green-600 shadow-lg': $route.name === 'DashboardIndex', 'hover-gray-100': $route.name !== 'DashboardIndex'}"
         to="/dashboard"
       >
-        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white': $route.name === 'DashboardIndex'}">
+        <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARDNEW.svg" :class="{'icon-white': $route.name === 'DashboardIndex'}">
         <div :class="widthMenu">
           <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white': $route.name === 'DashboardIndex'}">
             Dashboard
@@ -42,7 +42,7 @@
             class="rounded-[10px] flex items-center p-2"
             :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
           >
-            <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARD.svg" :class="{'icon-white': link.include.includes($route.name)}">
+            <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
             <div :class="widthMenu">
               <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white': link.include.includes($route.name)}">{{link.title}}</p>
             </div>
@@ -157,20 +157,20 @@ const menu_links = ref([
     title: 'Operación',
     group: [
       {
-        title: 'Estancias',
-        icon: '1.TH.DASHBOARD',
-        include: ['-'],
-        url: '/dashboard',
+        title: 'Estancias ',
+        icon: '1.TH.ESTANCIAS.MM',
+        include: ['StayHomePage'],
+        url: '/estancias',
       },
       {
         title: 'Reseñas',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
       },
       {
         title: 'Análisis',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
       },
@@ -181,36 +181,36 @@ const menu_links = ref([
     group: [
       {
         title: 'WebApp',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: [
           'ReviewRequestSettingsIndex',
           'SettingsPreStayPage',
-          'StayPage',
+          'SettingsStayPage',
           'SettingsPostStayPage',
         ],
         url: '/dashboard',
       },
       {
         title: 'Comunicaciones',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
       },
       {
         title: 'Plataformas externas',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
       },
       {
         title: 'Datos',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
       },
       {
         title: 'Equipo',
-        icon: '1.TH.DASHBOARD',
+        icon: '1.TH.DASHBOARDNEW',
         include: ['UserNotificationsSettings', 'UsersSettings'],
         url: '/usuarios/configuracion/usuarios',
       },

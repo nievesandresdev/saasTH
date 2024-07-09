@@ -3,7 +3,7 @@
         <h1 class="text-lg font-medium">Feedback en {{ status }} </h1>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
             <p class="text-sm font-semibold">Mostrar feedback al huésped</p>
-            <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0 mr-4">
+            <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0">
                 <input
                     :checked="defaultToggle"
                     type="checkbox"

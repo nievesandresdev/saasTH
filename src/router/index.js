@@ -8,6 +8,7 @@ import chatGroupRoutes from './chat/chatGroupRoutes'
 import userGroupRoutes from './user/userGroupRoutes'
 import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
 import queriesGroupRoutes from './queries/queriesGroupRoutes'
+import stayGroupRoutes from './stay/stayGroupRoutes'
 // Importaciones de stores
 
 // Utilidades generales y funciones
@@ -32,6 +33,7 @@ const routes = [
   ...userGroupRoutes,
   ...reviewsRequestsGroupRoutes,
   ...queriesGroupRoutes,
+  ...stayGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 

@@ -19,7 +19,8 @@ import {
   $getRoleName ,
   $isAssociate,
   $isAdmin,
-  $isOperator
+  $isOperator,
+  $nameLanguage
 } from '@/utils/helpers.js'
 
 const head = createHead()
@@ -48,6 +49,7 @@ function initializeApp() {
   app.config.globalProperties.$isAdmin = $isAdmin
   //$isOperator global
   app.config.globalProperties.$isOperator = $isOperator
+  app.config.globalProperties.$nameLanguage = $nameLanguage
 
   
   app.mount('#app')

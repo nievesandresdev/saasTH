@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser,getSubscriptionStatus } from '@/api/services/users/userSettings.service';
 import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -30,6 +30,19 @@ export const useUserStore = defineStore('user', () => {
       return selectedAttributes;
     });
   }
+
+  function $getDataHotel(attributes = []) {
+    if (attributes.length === 0) {
+        return user.value.current_hotel;
+    }
+
+    return attributes.reduce((result, attr) => {
+        if (user.value.current_hotel.hasOwnProperty(attr)) {
+            result[attr] = user.value.current_hotel[attr];
+        }
+        return result;
+    }, {});
+}
 
   /*
   *avatar ui
@@ -86,6 +99,14 @@ export const useUserStore = defineStore('user', () => {
     return response;
   }
 
+  /**
+   * get status subscription
+   */
+  async function $getSubscriptionStatus() {
+    const response = await getSubscriptionStatus();
+    return response;
+  }
+
 
   return {
     $getHotels,
@@ -95,6 +116,8 @@ export const useUserStore = defineStore('user', () => {
     $updateProfile,
     $userAvatar,
     $getUser,
-    $deleteUser
+    $deleteUser,
+    $getDataHotel,
+    $getSubscriptionStatus
   };
 });

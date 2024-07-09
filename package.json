@@ -13,6 +13,7 @@
     "axios": "^1.6.2",
     "core-js": "^3.8.3",
     "dotenv": "^16.3.1",
+    "luxon": "^3.4.4",
     "pinia": "^2.1.7",
     "postcss": "^8.4.32",
     "qrcode-vue3": "^1.6.8",
@@ -20,7 +21,8 @@
     "vue": "^3.2.13",
     "vue-i18n": "^9.8.0",
     "vue-router": "^4.2.5",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-circle-progress": "^1.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

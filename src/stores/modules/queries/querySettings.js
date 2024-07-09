@@ -5,7 +5,11 @@ import {
     getAllApi,
     updateNotificationsEmailApi,
     getPreStaySettingsApi,
-    updatePreStaySettingsApi
+    updatePreStaySettingsApi,
+    getStaySettingsApi,
+    updateStaySettingsApi,
+    getPostStaySettingsApi,
+    updatePostStaySettingsApi
 } from '@/api/services/queries/querySettings.services'
 
 export const useQuerySettingsStore = defineStore('querySettings', () => {
@@ -32,9 +36,41 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
     }
 
     async function $updatePreStaySettings (data) {
-        console.log('updatePreStaySettings',data)
         const response = await updatePreStaySettingsApi(data)
-        console.log('response',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getStaySettings () {
+
+        const response = await getStaySettingsApi()
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $updateStaySettings (data) {
+        const response = await updateStaySettingsApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getPostStaySettings () {
+
+        const response = await getPostStaySettingsApi()
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $updatePostStaySettings (data) {
+        const response = await updatePostStaySettingsApi(data)
         const { ok } = response   
         if(ok){
             return response.data
@@ -46,14 +82,22 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
         const { ok } = response;
         return ok;
     }
+
     
 
     //
     return {
         $getAll,
         $updateNotificationsEmail,
+        //
         $getPreStaySettings,
-        $updatePreStaySettings
+        $updatePreStaySettings,
+        //
+        $getStaySettings,
+        $updateStaySettings,
+        //
+        $getPostStaySettings,
+        $updatePostStaySettings
     }
 
 })

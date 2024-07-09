@@ -7,6 +7,9 @@ import { useAuthStore } from '@/stores/modules/auth/login'
 // const locale = localStorage.getItem('locale') || 'es'
 const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
 const URL_BASE_BACKEND_HELPER = process.env.VUE_APP_API_URL_BACKEND_HELPER
+const VUE_APP_API_URL_REVIEW = process.env.VUE_APP_API_URL_REVIEW
+
+const X_KEY_API_REVIEW = process.env.VUE_APP_X_KEY_REVIEW
 const X_KEY_API = process.env.VUE_APP_X_KEY_API
 
 function getPreloaderStore() {// función auxiliar que devuelve el store de preloader
@@ -81,14 +84,39 @@ let paramAxios = {
 } */
 
 export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
-  const api_url_backend = SLUG_API === 'API_GENERAL' ? URL_BASE_BACKEND_GENERAL : URL_BASE_BACKEND_HELPER;
+  // switch
+  const url_backend = () => {
+    switch (SLUG_API) {
+      case 'API_GENERAL':
+        return URL_BASE_BACKEND_GENERAL
+      case 'API_HELPER':
+        return URL_BASE_BACKEND_HELPER
+      case 'API_REVIEW':
+        return VUE_APP_API_URL_REVIEW
+      default:
+        return URL_BASE_BACKEND_GENERAL
+    }
+  }
+
+  const api_url_backend = url_backend()
   const subdomain = sessionStorage.getItem('current_subdomain') || null
+  if(SLUG_API === 'API_REVIEW') {
+  console.log('subdomainSCS',{
+    'URL_BASE_BACKEND_GENERAL' : URL_BASE_BACKEND_GENERAL,
+    'URL_BASE_BACKEND_HELPER' : URL_BASE_BACKEND_HELPER,
+    'VUE_APP_API_URL_REVIEW' : VUE_APP_API_URL_REVIEW,
+    'KEY_API_REVIEW' : X_KEY_API_REVIEW,
+    'X_KEY_API' : X_KEY_API,
+    'SLUG_API' : SLUG_API,
+    api_url_backend: api_url_backend,
+  })
+  }
   const defaultHeaders = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
     'subdomainHotel': subdomain,
-    'x-key-api': X_KEY_API,
+    'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
   };
 
   if (!options.hasOwnProperty('headers')) options.headers = defaultHeaders

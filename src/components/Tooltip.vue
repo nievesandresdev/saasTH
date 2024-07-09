@@ -12,7 +12,7 @@
 <script setup>
     import { ref } from 'vue'
     const { size, top, right, left, color, size_custom } = defineProps({
-        //S M L
+        //S M L XS
         size: {
             type: String,
             default: 's'
@@ -66,7 +66,7 @@
         display: block;
     }
     .width-xs {
-        width: 215px;
+        width: 185px;
     }
     .width-s {
         width: 290px;
