@@ -250,6 +250,7 @@ const closeDeleteUser = () => {
 
 onMounted(() => {
     handleGetUsers();
+    handleTestMail();
 });
 
 const data_filter = ref ({
@@ -276,6 +277,11 @@ const handleGetUsers = async () => {
   const response = await userStore.$getUsers(params);
   data.value = response.data.users;
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
+};
+
+const handleTestMail = async () => {
+    const response = await userStore.$testMail();
+    console.log('e,mailResponse',response);
 };
 
 /* const handleUpdateUsers = async () => {

@@ -18,3 +18,6 @@ export const updateProfile = (data) => apiHttp('POST', `${userPath}/update-profi
 export const deleteUser = (data) => apiHttp('POST', `${userPath}/delete`, data)
 export const getSubscriptionStatus = () => apiHttp('GET', `${userPath}/get-subscription-status`)
 
+//testMail
+export const testMail = () => apiHttp('GET', `${userPath}/testMail`)
+
