@@ -10,9 +10,9 @@ export const useStayStore = defineStore('stay', () => {
     // STATE
 
     // ACTIONS
-    async function $getAllByHotel () {
-
-        const response = await getAllByHotelApi()
+    async function $getAllByHotel (data) {
+        console.log('data',data)
+        const response = await getAllByHotelApi(data)
         console.log('getAllByHotel',response)
         const { ok } = response   
         if(ok){

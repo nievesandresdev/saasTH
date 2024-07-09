@@ -42,7 +42,7 @@
 
 import { computed } from 'vue'
 
-const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search']);
+const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search', 'input:typing']);
 
 const  props = defineProps({
     classContent: {
@@ -97,6 +97,7 @@ const searchbyenter = () => {
 const updateValue = (event) => {
   emit('update:modelValue', event.target.value);
   emit('blur:validate');
+  emit('input:typing', event.target.value);
 };
 
 const customInputClass = computed(() => {
