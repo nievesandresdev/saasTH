@@ -20,7 +20,8 @@ import {
   $isAssociate,
   $isAdmin,
   $isOperator,
-  $nameLanguage
+  $nameLanguage,
+  $translatePeriod
 } from '@/utils/helpers.js'
 
 const head = createHead()
@@ -50,6 +51,7 @@ function initializeApp() {
   //$isOperator global
   app.config.globalProperties.$isOperator = $isOperator
   app.config.globalProperties.$nameLanguage = $nameLanguage
+  app.config.globalProperties.$translatePeriod = $translatePeriod
 
   
   app.mount('#app')

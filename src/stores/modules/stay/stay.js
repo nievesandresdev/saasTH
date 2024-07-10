@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import {
     getAllByHotelApi,
+    statisticsByHotelApi,
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -11,18 +12,26 @@ export const useStayStore = defineStore('stay', () => {
 
     // ACTIONS
     async function $getAllByHotel (data) {
-        console.log('data',data)
         const response = await getAllByHotelApi(data)
-        console.log('getAllByHotel',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $statisticsByHotel () {
+        const response = await statisticsByHotelApi()
+        console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data
         }
     }
     
-
+    
     return {
-        $getAllByHotel
+        $getAllByHotel,
+        $statisticsByHotel
     }
 
 })

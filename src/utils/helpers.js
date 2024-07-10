@@ -51,10 +51,26 @@ const $nameLanguage = (lang) => {
   }
 }
 
+const $translatePeriod = (period) => {
+  switch (period) {
+    case 'pre-stay':
+      return 'pre-stay';
+    case 'in-stay':
+      return 'stay';
+    case 'post-stay':
+      return 'post-stay';
+    case 'invalid-stay':
+      return 'post-stay';
+    default:
+      return '';
+  }
+}
+
 export {
     $getRoleName,
     $isAssociate,
     $isAdmin,
     $isOperator,
-    $nameLanguage
+    $nameLanguage,
+    $translatePeriod
 };
