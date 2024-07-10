@@ -10,8 +10,9 @@ body{
 *> :not(i){
   font-family: 'Montserrat', sans-serif;
 }
-p,a{
+p,a,h1,h2,h3,h4,h5,h6,span,button{
     font-family: 'Montserrat', sans-serif !important;
+    color:#333;
 }
 
 /* Eliminar el anillo (outline) predeterminado en todos los elementos de entrada al enfocar */
