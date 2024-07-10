@@ -3,7 +3,7 @@
         <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
             <label 
                 for="fileInput"
-                class="relative w-[224px] rounded-[6px] border hborder-black-100 cursor-pointer gallery-file flex justify-center items-center"
+                class="relative w-[224px] rounded-[6px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card"
                 @click="addNewFacility"
             >   
                 <h5 class="text-base font-medium text-center flex flex-col items-center justify-center">
@@ -44,13 +44,14 @@
                         :src="facilityStore.formatImage(item.image)"
                     />
                 </div>
-                <div class="py-4 text-center bg-white">
-                    <h5 class="text-base htext-black-100 px-[20px]" v-html="item.title"></h5>
+                <div class="py-[19px] text-center bg-white px-[12px]">
+                    <h5 class="text-base htext-black-100" v-html="item.title"></h5>
                     <!-- {{`1: ${dragStartIndex}`}}
                     {{`2: ${draggedItem}`}} -->
                 </div>
                 <button
-                    class="buttom-drag p-1 shadow-md rounded-full hbg-white-500 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab"
+                    v-if="hoverItem == index"
+                    class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
                     :class="{'cursor-grabbing ': dragStartIndex == index}"
                     @mousedown="setDragStart(index)"
                 >

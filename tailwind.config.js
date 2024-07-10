@@ -42,6 +42,9 @@ module.exports = {
       // => @media (min-width: 1920px) { ... }
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('daisyui'),
+  ],
 }
 
