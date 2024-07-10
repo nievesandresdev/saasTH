@@ -5,4 +5,4 @@ import {
 } from '../../config/apiRoute'
 
 
-export const getAllByHotelApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getAllByHotel`, data)
+export const getAllByHotelApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/getAllByHotel`, data)

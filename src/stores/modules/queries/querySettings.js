@@ -77,8 +77,8 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
         }
     }
 
-    async function $updateNotificationsEmail() {
-        const response = await updateNotificationsEmailApi()
+    async function $updateNotificationsEmail(data) {
+        const response = await updateNotificationsEmailApi(data)
         const { ok } = response;
         return ok;
     }
