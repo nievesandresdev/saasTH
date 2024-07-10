@@ -19,7 +19,7 @@
                     class="w-[152.5px] h-[94px] relative mt-6 px-2"
                 >
                     <img
-                        :src="hotelStorage.formatImage(image)"
+                        :src="hotelStorage.formatImage({image})"
                         alt="photo preview"
                         loading="lazy"
                         class="w-full h-full rounded-[6px] object-cover"

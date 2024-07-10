@@ -37,6 +37,12 @@
     --alert-alert: #FFC506;
     --alert-info: #AAD1E6;
 }
+
+
+    .hbg-yellow-cta {
+        background-color: var(--h-yellow);
+    }
+
     /*
         ***
         green colors

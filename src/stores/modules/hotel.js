@@ -22,21 +22,31 @@ export const useHotelStore = defineStore('hotel', () => {
 
     // STATE
     const hotelData = ref({...hotelSession.value});
+    const hotelsAvailables = ref([]);
     const subdomain = ref(sessionStorage.getItem('current_subdomain') ?? null);
     const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
     
 
     // ACTIONS
 
+    async function loadHotelsAvailables () {
+        if (hotelsAvailables.value?.length <= 0) {
+            const response = await $getAll();
+            const { ok } = response;
+            hotelsAvailables.value = ok ? response.data : null;
+        }
+    }
+
     function updateHoteInSession (hotel) {
         if (hotel?.images) {
             delete hotel.images;
         }
         sessionStorage.setItem('current_hotel', JSON.stringify(hotel));
+        sessionStorage.setItem('current_subdomain', hotel.subdomain);
     }
 
-    function formatImage (image) {
-        let url = image?.url;
+    function formatImage ({image = null, url = null}) {
+        url = image?.url || url;
         if (!url) return;
         let type = url.includes('https://') ? 'CDN' : 'STORAGE';
         // console.log(process.env.VUE_APP_STORAGE_URL, 'process.env.VUE_APP_STORAGE_URL')
@@ -45,15 +55,32 @@ export const useHotelStore = defineStore('hotel', () => {
         return url;
     }
 
+    async function changeHotel (hotel) {
+        let params = {subdomain: hotel.subdomain}
+        console.log(params, 'changeHotel')
+        let hotelResponse = await $findByParams(params);
+        updateHoteInSession(hotelResponse);
+    }
+
     async function reloadHotel () {
         let hotel = await $findByParams();
         
         updateHoteInSession(hotel);
     }
 
-    async function $findByParams () {
-        let params = {
-            subdomain: subdomain.value,
+    async function $getAll () {
+        const response = await hotelService.getAllApi();
+        return response;
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+
+    async function $findByParams (params = null) {
+        if (!params) {
+            params = {
+                subdomain: subdomain.value,
+            }
         }
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
         const response = await hotelService.findByParamsApi(params)
@@ -61,8 +88,6 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
-
-    
 
     async function $findHotelFullByParams () {
         let params = {
@@ -102,11 +127,15 @@ export const useHotelStore = defineStore('hotel', () => {
     //
     return {
         hotelData,
+        hotelsAvailables,
         subdomain,
         formatImage,
         reloadHotel,
+        changeHotel,
+        loadHotelsAvailables,
         $findByParams,
         $updateProfile,
+        $getAll,
         $updateVisivilityFacilities,
     }
 

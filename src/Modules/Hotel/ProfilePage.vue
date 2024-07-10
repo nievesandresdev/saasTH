@@ -400,7 +400,7 @@
     onMounted(() => {
         loadHotel()
         loadMockup()
-        console.log(hotelData, 'hotelData')
+        // console.log(hotelData, 'hotelData')
     })
 
     // COMPUTED

@@ -1,15 +1,7 @@
 <template>
   <div class="group px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full">
     <!-- select hotel -->
-    <div class="flex flex-shrink-0 p-2 shadow-xl">
-      <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
-      <div 
-        :class="`flex items-center ${widthMenu} ${displayedMenu ? 'pl-4' : 'group-hover:pl-4'}`"
-      >
-        <p class="text-lg font-semibold ml-2 whitespace-nowrap text-left leading-[120%]">Nombre Hotel</p>
-        <img class="w-3 h-3 ml-auto" src="/assets/icons/1.TH.I.dropdown.svg" alt="">
-      </div>
-    </div>
+    <DropdownChangeHotel :width-menu="widthMenu"  :displayed-menu="displayedMenu" />
     
     <div class="overflow-y-auto bg-white no-scrollbar">
       <!-- links -->
@@ -130,16 +122,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, provide } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'
 import { useUserStore } from '@/stores/modules/users/users'
+import { useHotelStore } from '@/stores/modules/hotel'
 import ModalWindow from '@/components/ModalWindow.vue'
+import DropdownChangeHotel from './components/DropdownChangeHotel'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
+const hotelStore = useHotelStore()
+
+provide('hotelStore', hotelStore);
 
 const modalProfile = ref(false)
 
@@ -249,6 +246,10 @@ const widthMenu = computed(() => {
     withStyles = 'w-[188px]'
   }
   return withStyles
+})
+
+onMounted(() => {
+    hotelStore.loadHotelsAvailables();
 })
 
 const logout = async () => {
