@@ -28,8 +28,8 @@
                 <!-- current date -->
                 <div class="w-[87px]">
                     <h3 class="text-[20px] font-semibold leading-[90%] text-center">Hoy</h3>
-                    <h1 v-if="statistics.today" class="text-[64px] font-semibold leading-[90%] text-center mt-1"> {{ statistics.today }}</h1>
-                    <h4 v-if="statistics.month" class="text-base font-semibold leading-[90%] text-center mt-1">{{ statistics.month }}</h4>
+                    <h1 class="text-[64px] font-semibold leading-[90%] text-center mt-1"> {{ statistics.today ?? 0 }}</h1>
+                    <h4 class="text-base font-semibold leading-[90%] text-center mt-1">{{ statistics.month ?? 0 }}</h4>
                 </div>
                 <div class="border-r hborder-gray-400 mx-2 h-full 3xl:mx-10"></div>
                 <!-- counter checkin and checkout -->
