@@ -91,6 +91,7 @@
     // ONMOUNTED
     onMounted(() => {
         loadFacilities();
+        loadMockup();
     });
 
     // COMPUTED
@@ -129,6 +130,12 @@
     provide('modelActive', modelActive);
 
     // FUNCTIONS
+
+    function loadMockup () {
+        mockupStore.$setIframeUrl('/instalaciones');
+        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    }
+
     async function loadFacilities () {
         const response = await facilityStore.$getAll();
         const { ok, data } = response;

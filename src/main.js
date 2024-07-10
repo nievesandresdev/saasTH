@@ -5,6 +5,8 @@ import { createHead } from '@vueuse/head'
 import Toast from "vue-toastification";
 import 'vue-toastification/dist/index.css';
 
+import VueClickAway from "vue3-click-away";
+
 
 
 // estilos generales
@@ -40,7 +42,9 @@ function initializeApp() {
   app.use(i18n)
   app.use(router)
   app.use(head)
-
+  
+  app.use(VueClickAway)
+  
   //$getRoleName global
   app.config.globalProperties.$getRoleName = $getRoleName
   //$isAssociate global
