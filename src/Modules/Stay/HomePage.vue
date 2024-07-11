@@ -98,9 +98,7 @@
                 </div>
                 <!-- languages card -->
                 <div class="flex-grow flex-1">
-                    <h3 class="text-sm font-semibold leading-[120%]">
-                        Idiomas más utilizados por tus huéspedes
-                    </h3>
+                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados por tus huéspedes</h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
                         <div v-for="(lang,index) in ['es','en','fr']" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
                             <img v-if="statistics.percentageLangs && statistics.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
