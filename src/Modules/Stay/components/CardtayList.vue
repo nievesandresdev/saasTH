@@ -1,7 +1,7 @@
 <template>
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
-        :class="{'hbg-green-200':selected_stay == stay.id}"
+        :class="{'hbg-green-200':route.params.id == stay.id}"
         @click="goDetailStay(stay.id)"
     >
         <div class="flex items-center">
@@ -68,9 +68,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { DateTime } from 'luxon';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+
 
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps({
     stay: {
@@ -80,11 +82,7 @@ const props = defineProps({
     search: {
         type: String,
         default: null,
-    },
-    selected_stay: {
-        type: Number,
-        default: null,
-    },
+    }
 });
 
 watch(() => props.search, (newSearch, oldSearch) => {

@@ -6,6 +6,11 @@ import {
     statisticsByHotelApi,
     getdetailDataApi,
     updateDataApi,
+    getAllNotesByStayApi,
+    createOrupdateStayNoteApi,
+    deleteStayNoteApi,
+    createOrupdateGuestNoteApi,
+    deleteGuestNoteApi,
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -42,7 +47,50 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $updateData (data) {
         const response = await updateDataApi(data)
-        console.log('updateData',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getAllNotesByStay (stayId) {
+        const response = await getAllNotesByStayApi({stayId})
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $createOrupdateStayNote (data) {
+        const response = await createOrupdateStayNoteApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $deleteStayNote (data) {
+        const response = await deleteStayNoteApiApi(data)
+        console.log('deleteStayNote',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $createOrupdateGuestNote (data) {
+        console.log('data',data)
+        const response = await createOrupdateGuestNoteApi(data)
+        console.log('createOrupdateGuestNote',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $deleteGuestNote (data) {
+        const response = await deleteGuestNoteApi(data)
+        console.log('deleteGuestNote',response)
         const { ok } = response   
         if(ok){
             return response.data
@@ -50,11 +98,17 @@ export const useStayStore = defineStore('stay', () => {
     }
     
     
+    
     return {
         $getAllByHotel,
         $statisticsByHotel,
         $getdetailData,
-        $updateData
+        $updateData,
+        $getAllNotesByStay,
+        $createOrupdateStayNote,
+        $deleteStayNote,
+        $createOrupdateGuestNote,
+        $deleteGuestNote
     }
 
 })

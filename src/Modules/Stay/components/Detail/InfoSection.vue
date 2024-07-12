@@ -118,7 +118,6 @@ watch(() => data.value, async (newData) => {
     form.room = newData.room;
     form.middle_reservation = newData.middle_reservation;
     form.stayId = newData.id;
-    console.log('form',form)
 }, { immediate: true });              
 
 

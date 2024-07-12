@@ -1,7 +1,9 @@
 <template>
     <Head />
-    <div class="p-6">
-        <InfoSection v-if="data" :data="data" />
+    <div class="p-6" v-if="data">
+        <InfoSection/>
+        <GuestList/>
+        <NotesList/>
     </div>
 </template>
 
@@ -11,6 +13,8 @@ import { useRoute } from 'vue-router';
 //components
 import Head from './components/HeadDetail.vue'
 import InfoSection from './components/Detail/InfoSection.vue';
+import GuestList from './components/Detail/GuestList.vue';
+import NotesList from './components/Detail/NotesList.vue';
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
 
