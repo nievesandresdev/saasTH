@@ -250,7 +250,7 @@ const closeDeleteUser = () => {
 
 onMounted(() => {
     handleGetUsers();
-    /* handleTestMail(); */
+     handleTestMail(); 
 });
 
 const data_filter = ref ({
