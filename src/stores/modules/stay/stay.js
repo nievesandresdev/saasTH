@@ -4,6 +4,8 @@ import { ref } from 'vue'
 import {
     getAllByHotelApi,
     statisticsByHotelApi,
+    getdetailDataApi,
+    updateDataApi,
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -26,11 +28,33 @@ export const useStayStore = defineStore('stay', () => {
             return response.data
         }
     }
+
+    async function $getdetailData (stayId) {
+        let data = {
+            stayId
+        };
+        const response = await getdetailDataApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $updateData (data) {
+        const response = await updateDataApi(data)
+        console.log('updateData',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     
     return {
         $getAllByHotel,
-        $statisticsByHotel
+        $statisticsByHotel,
+        $getdetailData,
+        $updateData
     }
 
 })

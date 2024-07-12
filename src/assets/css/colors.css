@@ -187,7 +187,7 @@
         color: var(--h-black-200);
     }
     .hborder-black-100{
-        border: 1px solid var(--h-black-100);
+        border-color: var(--h-black-100);
     }
     .hbg-gray-400{
         background-color: var(--h-gray-400);

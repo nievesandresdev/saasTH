@@ -66,12 +66,19 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { DateTime } from 'luxon';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
     stay: {
         type: Object,
+        default: null,
+    },
+    search: {
+        type: String,
         default: null,
     },
     selected_stay: {
@@ -79,6 +86,12 @@ const props = defineProps({
         default: null,
     },
 });
+
+watch(() => props.search, (newSearch, oldSearch) => {
+    searchUpdate.value = newSearch;
+});
+
+const searchUpdate = ref(props.search);
 const guest1 = ref(props.stay.guests[0] ?? null);
 const guest2 = ref(props.stay.guests[1] ?? null);
 const translatePeriod = {
@@ -89,7 +102,12 @@ const translatePeriod = {
 };
 
 function goDetailStay(id) {
-    // Cambia a tu función de enrutamiento actual
+    console.log('searchUpdate.value',searchUpdate.value)
+    router.push({
+        name: 'StayDetailPage',
+        params: { id: id },
+        query: { search: searchUpdate.value }
+    });
 }
 
 // Función para formatear las fechas usando Luxon

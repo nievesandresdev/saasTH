@@ -118,7 +118,7 @@
 <script setup>
 import { onMounted, ref, provide } from 'vue'
 import Tooltip from '@/components/Tooltip.vue'
-import TooltipStayActive from './HomePage/components/TooltipStayActive.vue'
+import TooltipStayActive from './components/TooltipStayActive.vue'
 import InviteGuest from './components/InviteGuestModal.vue'
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
@@ -135,7 +135,7 @@ const openInviteGuest = ref(false);
 
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
-    console.log('statistics.value',statistics.value)
+    // console.log('statistics.value',statistics.value)
 })
 
 provide('openInviteGuest',openInviteGuest)

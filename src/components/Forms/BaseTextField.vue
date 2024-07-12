@@ -12,12 +12,13 @@
                 type="text"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-11 hinput hinput-green rounded-[6px]"
-                :class="customInputClass"
+                class="w-full hinput border hinput-green rounded-[6px]"
+                :class="`${height} ${customInputClass} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"
                 @keyup.enter="searchbyenter"
+                @blur="$emit('blur')"
             >
             <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600 flex items-center">
@@ -85,6 +86,10 @@ const  props = defineProps({
     errors: {
         type: Object,
         default: () => ({}),
+    },
+    height: {
+        type: String,
+        default: 'h-11',
     },
 });
 
