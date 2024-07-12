@@ -21,7 +21,6 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $statisticsByHotel () {
         const response = await statisticsByHotelApi()
-        console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data
