@@ -3,9 +3,13 @@
     <div
       :disabled="disabled"
       :id="`dropdown-input-${options[0].value}`"
-      class="text-start flex items-center bg-white w-full hinput hinput-green"
+      class="text-start flex items-center bg-white w-full hinput hinput-green border"
       :class="[
-        size ? style.content : ''
+        size ? style.content : '',
+        {
+            'hborder-gray-400': !modelValue,
+            'hborder-black-100': modelValue,
+          },
       ]"
       @click="toggleOptions"
     >
@@ -31,7 +35,7 @@
       </template>
     </div>
     <div
-      class="absolute z-10 bg-white"
+      class="absolute z-50 bg-white"
       :class="'dropdown-menu ' + extra_dropdown + ' ' + top_dropdown"
       :aria-labelledby="`dropdown-input-${options[0].value}`"
       v-if="showOptions"

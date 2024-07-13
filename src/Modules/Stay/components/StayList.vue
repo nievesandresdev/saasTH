@@ -75,8 +75,7 @@
             class="overflow-y-auto custom-scrollbar"
         >
             <template v-for="stay in list" :key="stay.id">
-                <!-- :selected_stay="selected_stay"  -->
-                <CardtayList :stay="stay"/>
+                <CardtayList :stay="stay" :search="search"/>
             </template>
 
             <div v-if="totalCounts == 0 && filtersActive && !search" class="mt-6 px-4">
