@@ -26,6 +26,7 @@
                     <img :class="{'invisible':!(errors?.[name] !== true &&  errors?.[name] !== undefined)}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                     {{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}
                 </p>
+                <!-- d/ -->
                 <!-- <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600">{{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}</p> -->
                 <p class="text-[10px] font-medim text-right mt-[4px] ">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
