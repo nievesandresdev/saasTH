@@ -3,8 +3,8 @@
     <!-- head -->
     <section>
         <div class="px-6">
-            <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo</h1>
-            <MenuSettings />
+            <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Notificaciones</h1>
+            <!-- <MenuSettings /> -->
         </div>
         <!-- info banner -->
         <div class="bg-[#D9E8F2] px-24 py-[14px]">

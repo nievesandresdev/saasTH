@@ -1,26 +1,25 @@
 <template>
-    <!-- <Dialog id="delete-note" :styleContent="{'max-width': '344px !important'}">
-        <template v-slot:header>
+    <Modal id="delete-note" :isVisible="openDeleteModal" width="344px" footer>
+        <template #content>
             <div class="relative">
                 <img 
-                    data-dismiss="modal" aria-label="Close" class="w-6 h-6 cursor-pointer ml-auto"
-                    src="/vendor_asset/img/partner/icons/close.svg"
+                    @click="closeModal"
+                    class="w-6 h-6 cursor-pointer ml-auto"
+                    src="/assets/icons/1.TH.CLOSE.svg"
                 >
                 <div>
                     <img
                         class="h-8 w-8 mx-auto"
-                        src="/vendor_asset/img/partner/icons/warning.svg" 
+                        src="/assets/icons/warning.svg" 
                     >
                 </div>
                 <h1 class="mt-4 text-[20px] font-semibold text-center">¿Eliminar nota?</h1> 
             </div>
-        </template>
-        <template v-slot:body>
             <p class="text-sm mt-2 text-center">Las notas se eliminan de forma permanente y no pueden ser recuperadas</p>
         </template>
-        <template v-slot:action>
-            <div class="mt-4 flex justify-between items-center">
-                <button class="text-sm font-medium underline" data-dismiss="modal" aria-label="Close">
+        <template #footer>
+            <div class="mt-4 flex justify-between items-center pb-4 px-4 htext-black-100">
+                <button class="text-sm font-medium underline" @click="closeModal">
                     Cancelar
                 </button>
                 <button 
@@ -31,35 +30,42 @@
                 </button>
             </div>
         </template>
-    </Dialog> -->
+    </Modal>
 </template>
 <script setup>
 import { inject, reactive } from 'vue'
-// import Dialog from '@/Components/Dialog.vue'
+import Modal from '@/components/ModalWindow.vue'
+//composable
+import { useToastAlert } from '@/composables/useToastAlert'
+//store
+import { useStayStore } from '@/stores/modules/stay/stay';
+
+const stayStore = useStayStore();
+const toast = useToastAlert();
+
+const emit = defineEmits(['reloadList'])
 
 const deleteNoteId = inject('deleteNoteId')
 const noteType = inject('noteType')
+const openDeleteModal = inject('openDeleteModal')
 
 const form = reactive({
     noteId: null
 });
 
-const deleteNote = () => {
-    $('#delete-note').modal('hide');
+const deleteNote = async () => {
+    openDeleteModal.value = false;
     form.noteId = deleteNoteId.value;
-    let route_delete = 'stay.notes.delete';
-    console.log('noteType',noteType)
     if(noteType.value == 'HU'){
-        route_delete = 'stay.guest.notes.delete';
+        await stayStore.$deleteGuestNote(form)
+    }else{
+        await stayStore.$deleteStayNote(form)
     }
-    form.delete(route(route_delete),{
-        preserveScroll: true,
-        onSuccess: () => {
-            form.noteId = null 
-            deleteNoteId.value = null
-            console.log('delte note')
-        },
-    });
-    // Inertia.delete(route('stay.notes.delete',deleteNoteId.value));
+    emit('reloadList');
+    toast.warningToast('Actualizado','top-right');
+}
+
+const closeModal = async () => {
+    openDeleteModal.value = false;
 }
 </script>

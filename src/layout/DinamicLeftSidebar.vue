@@ -1,25 +1,24 @@
 <template>
-    <component :is="dynamicComponent" />
+    <component :is="dynamicComponent" v-bind="props" />
 </template>
 
 <script setup>
 import { computed, defineProps } from 'vue';
 import SettingsMenu from '@/layout/Settings/SettingsMenu.vue';
-import StayList from '@/Modules/Stay/components/StayList.vue'
+import StayList from '@/Modules/Stay/components/StayList.vue';
+import Platform from '@/components/LeftMenu/Platform.vue';
 
 const props = defineProps({
-sidebarName: String
+    sidebarName: String
 });
 
-// mapeo de nombres de componentes a componentes
 const componentMap = {
-SettingsMenu,
-StayList
+    SettingsMenu,
+    StayList,
+    Platform
 };
 
-// computed property para determinar cuál componente renderizar
 const dynamicComponent = computed(() => {
-return componentMap[props.sidebarName] || null;
+    return componentMap[props.sidebarName] || null;
 });
 </script>
-  
