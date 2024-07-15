@@ -46,7 +46,10 @@
         <div :id="'note'+note.id+note.type" class="container-text-quill mt-4 hidden" v-html="note.content"></div>
         <div class="border-b border-gray-300 mt-4"></div>
     </div>
-    <NoteEditor type="edit"  v-if="noteId == note.id && noteType == note.type" :createAt="note.created_at"/>
+    <NoteEditor 
+        type="edit"  v-if="noteId == note.id && noteType == note.type" 
+        :createAt="note.created_at" @reloadList="reloadList"
+    />
 </template>
 <script setup>
 import { inject, computed, ref } from 'vue'
@@ -67,7 +70,7 @@ const { note } = defineProps({
 
 const openContent = ref(true);
 
-const emit = defineEmits(['confirmDelete'])
+const emit = defineEmits(['confirmDelete','reloadList'])
 const editNote = (noteID, noteTYPE, ContentTEXT) =>{
     noteText.value = ContentTEXT;
     noteType.value = noteTYPE;
@@ -77,6 +80,11 @@ const editNote = (noteID, noteTYPE, ContentTEXT) =>{
 const confirmDelete = (noteId, noteTYPE) =>{
     noteType.value = noteTYPE;
     emit('confirmDelete',noteId)
+}
+
+const reloadList = () =>{
+    console.log('dentro de card?')
+    emit('reloadList')
 }
 
 const acronymIcon = computed(()=>{

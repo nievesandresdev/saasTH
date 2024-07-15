@@ -70,8 +70,7 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $deleteStayNote (data) {
-        const response = await deleteStayNoteApiApi(data)
-        console.log('deleteStayNote',response)
+        const response = await deleteStayNoteApi(data)
         const { ok } = response   
         if(ok){
             return response.data
@@ -79,9 +78,7 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $createOrupdateGuestNote (data) {
-        console.log('data',data)
         const response = await createOrupdateGuestNoteApi(data)
-        console.log('createOrupdateGuestNote',response)
         const { ok } = response   
         if(ok){
             return response.data
@@ -90,7 +87,6 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $deleteGuestNote (data) {
         const response = await deleteGuestNoteApi(data)
-        console.log('deleteGuestNote',response)
         const { ok } = response   
         if(ok){
             return response.data
