@@ -5,13 +5,15 @@
 <script setup>
 import { computed, defineProps } from 'vue';
 import SidebarMockup from '@/layout/Settings/SidebarMockup.vue'
+import SideStayFeedback from './Guest/SideStayFeedback.vue'
 const props = defineProps({
     sidebarName: String
 });
 
 // mapeo de nombres de componentes a componentes
 const componentMap = {
-    SidebarMockup
+    SidebarMockup,
+    SideStayFeedback
 };
 
 // computed property para determinar cuál componente renderizar

@@ -4,10 +4,10 @@
         <span class="mt-4 block text-[10px] font-semibold leading-[120%] pl-2 htext-gray-500">
             {{data.guests.length}} {{ data.guests.length > 1 ? 'HUESPEDES' : 'HUESPED' }} 
         </span>
-        <button 
+        <router-link 
             class="p-2 block w-full rounded-[6px]" v-for="g in data.guests" :key="g.id"
             :class="{'hbg-green-200': guestId == g.id}"
-            @click="loadGuestSidebar(g.id)"
+            :to="{ name: 'StayDetailPage',params: { id: data.id }, query: { g: g.id }}"
         >
             <div class="flex items-center">
                 <img 
@@ -20,7 +20,7 @@
                     :src="`/assets/icons/flags/${g.lang_web}.svg`"
                 >
             </div>
-        </button>
+        </router-link>
     </div>
 </template>
 <script setup>
@@ -28,9 +28,4 @@ import { inject } from 'vue'
 
 const data = inject('data')
 const guestId = inject('guestId')
-
-function loadGuestSidebar(id) {
-    let ruta = 'hoster.stay.index';
-    // Inertia.get(route(ruta,{selected:selected_stay, showSidebar: true, guestId : id}),{preserveScroll: true});
-}
 </script>
