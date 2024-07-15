@@ -3,12 +3,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import authRoutes from './authRoutes'
 import dashboardRoutes from './dashboardRoutes'
 //grupos de rutas
-import hotelGroupRoutes from './hotel/hotelGroupRoutes'
 import chatGroupRoutes from './chat/chatGroupRoutes'
 import userGroupRoutes from './user/userGroupRoutes'
 import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
 import queriesGroupRoutes from './queries/queriesGroupRoutes'
 import stayGroupRoutes from './stay/stayGroupRoutes'
+// routes config webapp
+import hotelGroupRoutes from './hotel/hotelGroupRoutes'
+import placeGroupRoutes from './placeRoutes'
+
 // Importaciones de stores
 
 // Utilidades generales y funciones
@@ -28,12 +31,14 @@ const routes = [
   ...authRoutes,
   ...dashboardRoutes,
   //grupos de rutas por modulo
-  ...hotelGroupRoutes,
   ...chatGroupRoutes,
   ...userGroupRoutes,
   ...reviewsRequestsGroupRoutes,
   ...queriesGroupRoutes,
   ...stayGroupRoutes,
+  //
+  ...hotelGroupRoutes,
+  ...placeGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 

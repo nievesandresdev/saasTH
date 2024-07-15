@@ -21,7 +21,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
 
   function $reloadIframe() {
       const currentUrl = iframeUrlRef.value;
-      console.log('currentUrl',currentUrl)
+      // console.log('currentUrl',currentUrl)
       iframeUrlRef.value = '';
       setTimeout(() => {
           iframeUrlRef.value = currentUrl;

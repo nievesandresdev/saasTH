@@ -34,7 +34,7 @@
                     @enter:search="submitSearch"
                 ></BaseTextField>
                 <ul
-                    v-if="dropdownSearchOpen && !!search"
+                    v-if="dropdownSearchOpen"
                     class="w-[252px] absolute top-[44px] left-[16px] bg-white rounded-b-[5px] z-10"
                     style="box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);"
                 >
@@ -74,6 +74,7 @@
                     <h6 class="text-sm font-semibold htext-black-100">Cambiar de alojamiento</h6>
                 </div>
                 <ul
+                    v-if="!dropdownSearchOpen"
                     id="container-search-list"
                     class="h-[346px] overflow-y-auto"
                     :class="hotels.length <= 3 ? '' : 'h-[269px] overflow-auto'"
@@ -101,6 +102,9 @@
                         </div>
                     </li>
                 </ul>
+                <div v-else  class="h-[269px] w-full bg-white">
+
+                </div>
             </div>
             <div v-if="$isAdmin()" class="p-4 hborder-top-gray-400">
                 <button class="hbtn-tertiary text-sm htext-black-100 font-medium underline">¿Quieres añadir otro alojamiento?</button>
@@ -158,9 +162,9 @@ onMounted(() => {
 });
 
 watch(search, (newVal) => {
-    if (newVal) {
+    // if (newVal) {
         filterHolter();
-    }
+    // }
 });
 
 // FUNCTIONS
@@ -171,6 +175,10 @@ function submitSearch () {
 function filterHolter () {
     dropdownSearchOpen.value = true;
     const term = search.value.toLowerCase();
+    if (!term) {
+        hotelsFoundInSearch.value = []; 
+        return;   
+    }
     hotelsFoundInSearch.value = hotelStore.hotelsAvailables.filter(hotel =>
             hotel.name.toLowerCase().includes(term) ||
             hotel.type.toLowerCase().includes(term) ||

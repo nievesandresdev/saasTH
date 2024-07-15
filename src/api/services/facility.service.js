@@ -5,7 +5,7 @@ import {
 
 export const getAllApi = (params) => apiHttp('GET', `${facilityPath}/getAll`, params);
 export const findByIdApi = (id) => apiHttp('GET', `${facilityPath}/findById/${id}`);
-export const updateOrderApi = (data) => apiHttp('POST', `${facilityPath}/order`, data);
+export const updateOrderApi = (data, config = {}) => apiHttp('POST', `${facilityPath}/order`, data, config);
 export const updateVisibleApi = (data) => apiHttp('POST', `${facilityPath}/visible`, data);
 export const storeOrUpdateApi = (data) => apiHttp('POST', `${facilityPath}/storeOrUpdate`, data);
 export const deleteApi = (id) => apiHttp('DELETE', `${facilityPath}/${id}`);

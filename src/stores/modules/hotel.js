@@ -57,7 +57,6 @@ export const useHotelStore = defineStore('hotel', () => {
 
     async function changeHotel (hotel) {
         let params = {subdomain: hotel.subdomain}
-        console.log(params, 'changeHotel')
         let hotelResponse = await $findByParams(params);
         updateHoteInSession(hotelResponse);
     }
@@ -83,10 +82,10 @@ export const useHotelStore = defineStore('hotel', () => {
             }
         }
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
-        const response = await hotelService.findByParamsApi(params)
-        const { ok } = response
-        hotelData.value = ok ? response.data : null
-        return response.data
+        const response = await hotelService.findByParamsApi(params);
+        const { ok } = response;
+        hotelData.value = ok ? response.data : null;
+        return response.data;
     }
 
     async function $findHotelFullByParams () {
@@ -94,17 +93,17 @@ export const useHotelStore = defineStore('hotel', () => {
             subdomain: subdomain.value,
         }
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
-        const response = await hotelService.findByParamsApi(params)
-        const { ok } = response
+        const response = await hotelService.findByParamsApi(params);
+        const { ok } = response;
 
-        hotelData.value = ok ? response.data : null
-        return response.data
+        hotelData.value = ok ? response.data : null;
+        return response.data;
     }
 
     async function $updateProfile (data) {
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
-        const response = await hotelService.updateProfileApi(data)
-        return response
+        const response = await hotelService.updateProfileApi(data);
+        return response;
         const { ok } = response
 
         hotelData.value = ok ? response.data : null
@@ -113,8 +112,34 @@ export const useHotelStore = defineStore('hotel', () => {
 
     async function $updateVisivilityFacilities () {
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
-        const response = await hotelService.updateVisivilityFacilitiesApi()
-        return response
+        const response = await hotelService.updateVisivilityFacilitiesApi();
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+
+    async function $updateVisivilityPlaces () {
+        // console.log('findByParamsApi',localStorage.getItem('subdomain'))
+        const response = await hotelService.updateVisivilityPlacesApi();
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+    async function $updateVisivilityCategory (body) {
+        const response = await hotelService.updateVisivilityCategoryApi(body);
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+    async function $updateVisivilityTypePlace (body) {
+        const response = await hotelService.updateVisivilityTypePlaceApi(body);
+        return response;
         const { ok } = response
 
         hotelData.value = ok ? response.data : null
@@ -137,6 +162,9 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateProfile,
         $getAll,
         $updateVisivilityFacilities,
+        $updateVisivilityPlaces,
+        $updateVisivilityCategory,
+        $updateVisivilityTypePlace,
     }
 
 })

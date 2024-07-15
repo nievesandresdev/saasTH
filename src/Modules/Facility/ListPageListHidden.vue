@@ -68,11 +68,12 @@ const hiddenFacilities = inject('hiddenFacilities');
 
 async function updateVisible (facility) {
     const data = {visible: facility.select, facility_hoster_id: facility.id}
-    console.log(data, 'data')
+    // console.log(data, 'data')
     const response = await facilityStore.$updateVisible(data)
-    console.log(response, 'response')
+    // console.log(response, 'response')
     emit('update:reloadItems')
 }
+
 
 </script>
 

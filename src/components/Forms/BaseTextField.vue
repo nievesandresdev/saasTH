@@ -18,6 +18,7 @@
                 :minlength="min"
                 :maxlength="max"
                 @keyup.enter="searchbyenter"
+                @click="onClick()"
             >
             <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600 flex items-center">
@@ -40,7 +41,7 @@
 
 import { computed } from 'vue'
 
-const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search', 'input:typing']);
+const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search', 'input:typing', 'click']);
 
 const  props = defineProps({
     classContent: {
@@ -91,12 +92,16 @@ const  props = defineProps({
 const searchbyenter = () => {
     emit('enter:search');
 }
+const onClick = () => {
+    emit('click');
+}
 
 const updateValue = (event) => {
   emit('update:modelValue', event.target.value);
   emit('blur:validate');
   emit('input:typing', event.target.value);
 };
+
 
 const customInputClass = computed(() => {
     let c = props.classInput

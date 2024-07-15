@@ -153,6 +153,15 @@
 **********
 */
 
+.chip {
+    border-radius: 6px;
+}
+.chip--green {
+    color: var(--h-green-700);
+    border: 1px solid var(--h-green-700);
+    background-color: var(--h-green-200);
+}
+
 .chip-primary{
     background-color: var(--h-white-100);
     border: 1px solid var(--h-black-100);
