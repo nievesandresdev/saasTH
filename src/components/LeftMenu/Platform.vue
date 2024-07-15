@@ -23,8 +23,8 @@
                 </li>
                 <transition name="fade">
                     <ul v-if="showSubmenu || isActiveSubmenu('Equipo')" class="submenu mt-2">
-                        <router-link tag="li" to="/usuarios/configuracion/usuarios" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/usuarios/configuracion/usuarios' }">Empleados</router-link>
-                        <router-link tag="li" to="/usuarios/configuracion/notificaciones" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/usuarios/configuracion/notificaciones' }">Notificaciones</router-link>
+                        <router-link tag="li" to="/equipo/configuracion/usuarios" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Empleados</router-link>
+                        <router-link tag="li" to="/equipo/configuracion/notificaciones" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
                     </ul>
                 </transition>
             </ul>
@@ -58,7 +58,7 @@ const toggleSubmenu = (itemText) => {
 
 const isActiveSubmenu = (itemText) => {
     if (itemText === 'Equipo') {
-        return route.path.startsWith('/usuarios/configuracion/usuarios') || route.path.startsWith('/usuarios/configuracion/notificaciones');
+        return route.path.startsWith('/equipo/configuracion/usuarios') || route.path.startsWith('/equipo/configuracion/notificaciones');
     }
     return false;
 };

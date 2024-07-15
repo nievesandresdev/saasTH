@@ -197,7 +197,7 @@ const menu_links = ref([
         title: 'Plataformas',
         icon: '1.TH.DASHBOARDNEW',
         include: ['UserNotificationsSettings', 'UsersSettings'],
-        url: '/usuarios/configuracion/usuarios',
+        url: '/equipo/configuracion/usuarios',
       },
       /* {
         title: 'Plataformas externas',

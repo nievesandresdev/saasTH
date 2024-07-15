@@ -3,7 +3,7 @@ const AppLayout = () => import('@/layout/AppLayout');
 
 const userGroupRoutes = [
   {
-    path: '/usuarios',
+    path: '/equipo',
     component: AppLayout,
     meta: { 
         displayedMenu: false,
