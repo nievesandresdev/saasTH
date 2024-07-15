@@ -160,6 +160,7 @@
     }
 
     function editFacility (payload) {
+        console.log(changePendingInForm.value, 'changePendingInForm.value')
         if (changePendingInForm.value) {
             openModalChangeInForm();
             return;
@@ -184,6 +185,7 @@
     }
 
     function resetPageData () {
+        changePendingInForm.value = false;
         mockupStore.$reloadIframe();
         loadMockup();
         loadFacilities();

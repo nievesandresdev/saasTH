@@ -13,7 +13,8 @@ const dashboardRoutes = [
         name: 'Places',
         path: '',
         meta: { requiresAuth: true, sidebarRight: 'SidebarMockup' },
-        component: ListPage
+        component: ListPage,
+        props: (route) => ({ queryRouter: {...route.query} }),
       },
     ],
   },

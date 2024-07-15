@@ -33,6 +33,14 @@
                             class="w-[224px] h-[148px] rounded-t-[10px]"
                             :src="placeStore.formatImage(place.place_images?.[0])"
                         >
+                        <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
+                            <span class="text-[10px] font-semibold">Visible</span>
+                            <BaseSwichInput
+                                v-model="place.select"
+                                :id="`swich-visible-facility-${index}`"
+                                @change:value="updateVisible(place)"
+                            />
+                        </div>
                         <div
                             v-if="(hoverItem == index) && place.is_visible"
                             class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
@@ -69,7 +77,7 @@
                                 <p class="text-[10px] font-semibold htext-black-100">125 reviews</p>
                             </div>
                         </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2">{{ place.title }}</h6>
+                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
                         <div class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
                             <p class="text-[10px] font-semibold htext-black-100">{{ place.city }} {{ place?.is_visible }}</p>
@@ -126,6 +134,8 @@
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
+
+import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 const hotelStore = inject('hotelStore');
 const placeStore = inject('placeStore');
@@ -207,31 +217,35 @@ async function loadPlaces ({ showPageLoading, showLoadingMore }) {
     isloadingForm.value=false;
 }
 defineExpose({ loadPlaces });
+
+function updateVisible (place) {
+    
+}
  
   
 
 </script>
 
 <style lang="scss">
-    .divider{
-        // width:calc(100vw - 640px);
-    }
-    .shadow-card{
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
-    }
+.shadow-card{
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+}
 
-    .shadow-selected,
-    .shadow-card:hover{
-        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
-    }
+.shadow-selected,
+.shadow-card:hover{
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+}
 
 
-    .hidden-overlay{
-        background: rgba(0, 0, 0, 0.30)
-    }
-    .shadow-draginng {
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    }
+.hidden-overlay{
+    background: rgba(0, 0, 0, 0.30)
+}
+.shadow-draginng {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.hover-swich{
+    box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
+}
 
 
 

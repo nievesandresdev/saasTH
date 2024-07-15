@@ -81,7 +81,6 @@
                     </button>
                 </template>
             </div>
-            
         </div>
     </transition>
     <BasePreviewImage 
@@ -98,21 +97,24 @@
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
     />
-    <ModalNoSave
-        :id="'not-saved'"
-        :open="changesform"
-        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
-        textbtn="Guardar"
-        @saveChanges="submitSave"
-        type="save_changes"
-        :force-open="modalChangePendinginForm"
-        @close="closeModal()"
-    />
+    <template v-if="modelActive">
+        <ModalNoSave
+            :id="'not-saved'"
+            :open="changesform"
+            text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+            textbtn="Guardar"
+            @saveChanges="submitSave"
+            type="save_changes"
+            :force-open="modalChangePendinginForm"
+            @close="closeModal()"
+        />
+    </template>
 </template>
 
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, toRefs, inject } from 'vue';
+import lodash from 'lodash';
 
 // COMPONENTS
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
@@ -249,6 +251,7 @@ provide('urlsimages', urlsimages);
 provide('validateField', validateField);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
+provide('changePendingInForm', changePendingInForm);
 
 
 //
@@ -256,18 +259,43 @@ provide('isPreviewOpen', isPreviewOpen);
 
 // CHANGE
 const changesform = computed(() => {
+    let schedulesNew = form.schedules;
+    let schedulesOld = itemSelected?.schedules;
     let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.ad_tag) !== normalize(itemSelected.ad_tag)) ||
         (Boolean(form.always_open) !== Boolean(itemSelected.value?.always_open)) ||
-        // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules));
-        (form.images.length !== itemSelected?.images.length)
+        // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules)) ||
+        !lodash.isEqual(form.schedules, itemSelected?.schedules) ||
+        // !deepEqual(form.schedules, itemSelected?.schedules) ||
+        (form.images.length !== itemSelected?.images.length) ||
         form.images.find(item => item?.image);
         changePendingInForm.value = valid;
     return valid
 });
 function toRawObject(obj) {
   return JSON.parse(JSON.stringify(obj));
+}
+function deepEqual(obj1, obj2) {
+  if (obj1 === obj2) return true;
+
+  if (typeof obj1 !== 'object' || obj1 === null ||
+      typeof obj2 !== 'object' || obj2 === null) {
+    return false;
+  }
+
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (let key of keys1) {
+    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // FUNCTION
@@ -297,24 +325,32 @@ function changeTab (val) {
 
 function editFacility ({action, facility}) {
     urlsimages.value = [];
+    console.log(action, 'action')
     if (action === 'EDIT') {
         let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
+        let schedulesNew = [];
         if (!!schedules) {
-            let scheduleFormated = schedules = JSON.parse(schedules);
+            let scheduleFormated = JSON.parse(schedules);
             if (scheduleFormated?.length != 7) {
-                schedules = [...schedulesDefault];
+                schedulesNew = [...schedulesDefault];
+            } else {
+                schedulesNew = [...scheduleFormated];
             }
         } else {
-            schedules = [...schedulesDefault];
+            schedulesNew = [...schedulesDefault];
         }
-        Object.assign(itemSelected, { id, title, description, schedule,  schedules: [...schedules], images: [...images], select, ad_tag, always_open });
-        Object.assign(form, { id, title, description, schedule, schedules: [...schedules], images: [...images], select, ad_tag, always_open });
+        let itemSelectedSchedules = JSON.parse(JSON.stringify(schedulesNew));
+        let formSchedules = JSON.parse(JSON.stringify(schedulesNew));
+        let itemSelectedImages = JSON.parse(JSON.stringify(schedulesNew));
+        let formImages = JSON.parse(JSON.stringify(schedulesNew));
+        Object.assign(itemSelected, { id, title, description, schedule,  schedules: itemSelectedSchedules, images: itemSelectedImages, select, ad_tag, always_open });
+        Object.assign(form, { id, title, description, schedule, schedules: formSchedules, images: formImages, select, ad_tag, always_open });
         images.forEach(img => {
             urlsimages.value.push(img);
         });
     } else {
-        Object.assign(itemSelected, formDefault);
-        Object.assign(form, formDefault);
+        Object.assign(itemSelected, {...formDefault});
+        Object.assign(form, {...formDefault});
     }
 
 }
@@ -354,13 +390,14 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
+    changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
     resetData();
 }
 function resetData () {
-    Object.assign(form, formDefault);
-    Object.assign(itemSelected, formDefault);
+    Object.assign(form, {...formDefault});
+    Object.assign(itemSelected, {...formDefault});
 }
 function resetPageData () {
     emit('load:resetPageData');
