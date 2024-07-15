@@ -8,7 +8,7 @@ const userGroupRoutes = [
     meta: { 
         displayedMenu: false,
         sidebar: 'Platform',
-        sidebarWidth: '236px'
+        sidebarWidth: '266px'
     },
     children: [
       ...userSettingsRoutes,

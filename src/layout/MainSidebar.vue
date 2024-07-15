@@ -194,6 +194,12 @@ const menu_links = ref([
         url: '/dashboard',
       },
       {
+        title: 'Plataformas',
+        icon: '1.TH.DASHBOARDNEW',
+        include: ['UserNotificationsSettings', 'UsersSettings'],
+        url: '/usuarios/configuracion/usuarios',
+      },
+      /* {
         title: 'Plataformas externas',
         icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
@@ -210,7 +216,7 @@ const menu_links = ref([
         icon: '1.TH.DASHBOARDNEW',
         include: ['UserNotificationsSettings', 'UsersSettings'],
         url: '/usuarios/configuracion/usuarios',
-      },
+      }, */
     ],
   },
 ])

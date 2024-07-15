@@ -17,7 +17,6 @@ const userSettingsRoutes = [
         path: 'usuarios',
         component: UsersSettings
       },
-      //panel
       {
         name: 'UserPanel',
         path: 'panel',
