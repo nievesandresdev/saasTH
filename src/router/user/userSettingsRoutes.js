@@ -2,6 +2,7 @@
 const NotificationsSettings = () => import('@/Modules/User/Settings/NotificationsSettings');
 const UsersSettings = () => import('@/Modules/User/Settings/UsersSettings');
 const UserPanel = () => import('@/Modules/User/Settings/UserPanel');
+const ExternalPlatform = () => import('@/Modules/User/Settings/ExternalPlatforms');
 
 const userSettingsRoutes = [
   {
@@ -21,6 +22,11 @@ const userSettingsRoutes = [
         name: 'UserPanel',
         path: 'panel',
         component: UserPanel
+      },
+      {
+        name: 'ExternalPlatforms',
+        path: 'plataformas-externas',
+        component : ExternalPlatform
       }
     ],
   },

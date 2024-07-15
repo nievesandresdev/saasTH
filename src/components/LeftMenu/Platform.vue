@@ -6,12 +6,13 @@
 
         <nav class="px-4">
             <ul>
-                <li 
+                <router-link 
                     v-for="item in menuItems" 
                     :key="item.text" 
+                    :to="item?.url || '#'" 
                     class="menu-item relative rounded-lg flex flex-col" 
-                    @click="toggleSubmenu(item.text)"
-                    :class="{ 'active': isActiveSubmenu(item.text) }"
+                    @click.native="toggleSubmenu(item.text)"
+                    :class="{ 'active': isActive(item.url) }"
                 >
                     <div class="flex items-center justify-between w-full">
                         <div class="flex items-center">
@@ -20,11 +21,11 @@
                         </div>
                         <img v-if="item.text === 'Equipo'" src="/assets/icons/1.TH.I.dropdown.svg" :class="{'rotate-180': showSubmenu || isActiveSubmenu(item.text), 'transition-transform': true, 'duration-300': true}" class="w-4 h-4 ml-3" />
                     </div>
-                </li>
+                </router-link>
                 <transition name="fade">
                     <ul v-if="showSubmenu || isActiveSubmenu('Equipo')" class="submenu mt-2">
-                        <router-link tag="li" to="/equipo/configuracion/usuarios" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Empleados</router-link>
-                        <router-link tag="li" to="/equipo/configuracion/notificaciones" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
+                        <router-link to="/equipo/configuracion/usuarios" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Empleados</router-link>
+                        <router-link to="/equipo/configuracion/notificaciones" class="submenu-item py-2 pl-6" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
                     </ul>
                 </transition>
             </ul>
@@ -38,8 +39,8 @@ import { useRoute } from 'vue-router';
 
 const title = 'Plataforma';
 const menuItems = [
-    { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' },
-    { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg' },
+    { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' },
+    { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  },
     { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' }
 ];
 
@@ -54,6 +55,10 @@ const toggleSubmenu = (itemText) => {
             showSubmenu.value = !showSubmenu.value;
         }
     }
+};
+
+const isActive = (url) => {
+    return route.path === url;
 };
 
 const isActiveSubmenu = (itemText) => {
