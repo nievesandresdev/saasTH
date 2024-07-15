@@ -300,11 +300,13 @@ function editFacility ({action, facility}) {
     if (action === 'EDIT') {
         let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
         if (!!schedules) {
-            schedules = JSON.parse(schedules);
+            let scheduleFormated = schedules = JSON.parse(schedules);
+            if (scheduleFormated?.length != 7) {
+                schedules = [...schedulesDefault];
+            }
         } else {
             schedules = [...schedulesDefault];
         }
-
         Object.assign(itemSelected, { id, title, description, schedule,  schedules: [...schedules], images: [...images], select, ad_tag, always_open });
         Object.assign(form, { id, title, description, schedule, schedules: [...schedules], images: [...images], select, ad_tag, always_open });
         images.forEach(img => {
@@ -322,7 +324,7 @@ defineExpose({ editFacility });
 async function submitSave () {
     let body = { ...form };
     const response = await facilityStore.$storeOrUpdate(body);
-    console.log(response, 'response');
+    // console.log(response, 'response');
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');

@@ -24,6 +24,7 @@ export const useFacilityStore = defineStore('facility', () => {
     }
 
     async function $getAll () {
+        console.log('f');
         const response = await facilityServices.getAllApi()
         return response;
         if(response.ok) return response.data
@@ -38,9 +39,9 @@ export const useFacilityStore = defineStore('facility', () => {
     }
 
     async function $updateOrder (data) {
-        const response = await facilityServices.updateOrderApi(data)
+        const response = await facilityServices.updateOrderApi(data, {showPreloader: false});
         return response;
-        if(response.ok) return response.data
+        if(response.ok) return response.data;
         return []
     }
 

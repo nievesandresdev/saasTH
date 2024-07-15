@@ -90,10 +90,10 @@
                             {{ user.work_position }}
                         </td>
                         <td @click="showUser(user)" class="px-6 py-4">
-                            <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[12px] text-[#0B6357] bg-green-100 rounded-full">
+                            <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[10px] text-[#0B6357] bg-green-100 rounded-full">
                                 Activo
                             </span>
-                            <span v-else class="px-4 py-2 font-[600] text-[12px] text-[#C53030] bg-red-100 rounded-full">
+                            <span v-else class="px-4 py-4 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
                                 Inactivo
                             </span>
                         </td>

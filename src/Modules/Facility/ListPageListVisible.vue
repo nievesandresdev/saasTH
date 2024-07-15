@@ -43,6 +43,7 @@
                         class="w-full object-cover rounded-t-lg h-full"
                         :src="facilityStore.formatImage(item.image)"
                     />
+                    <div v-if="item.ad_tag" class="absolute bottom-[-12px] right-[8px] h-6 flex items-center text-enter z-10 hbg-yellow-cta p-2 rounded-full py-[4px] px-[8px] text-[10px] font-semibold">{{ item.ad_tag }}</div>
                 </div>
                 <div class="py-[19px] text-center bg-white px-[12px]">
                     <h5 class="text-base htext-black-100" v-html="item.title"></h5>
@@ -82,6 +83,7 @@ const draggableCard = ref(null);
 
 //INJECT
 const facilityStore = inject('facilityStore');
+const mockupStore = inject('mockupStore');
 const visibleFacilities = inject('visibleFacilities');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
 const changePendingInForm = inject('changePendingInForm');
@@ -117,7 +119,7 @@ const handlerDrop = (index, facility) => {
   if (draggedIndex !== index) {
     const droppedItem = visibleFacilities.value.splice(draggedIndex, 1)[0];
     visibleFacilities.value.splice(index, 0, droppedItem);
-    updateOrder()
+    updateOrder();
   }
   draggedItem.value = null;
   dragStartIndex.value = null;
@@ -142,10 +144,10 @@ async function updateVisible (facility) {
     emit('update:reloadItems')
 }
 async function updateOrder () {
-    const idsFacities = visibleFacilities.value.map(item => item.id)
-    const data = {order: idsFacities}
-    const response = await facilityStore.$updateOrder(data)
-    console.log(response, 'response')
+    const idsFacities = visibleFacilities.value.map(item => item.id);
+    const data = {order: idsFacities};
+    const response = await facilityStore.$updateOrder(data);
+    mockupStore.$reloadIframe();
 }
 
 function addNewFacility () {

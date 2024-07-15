@@ -7,9 +7,9 @@
         ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-4 mt-4">
-            <div class="flex-1 text-center">
-              <h1 class="font-[600] text-xl">Editar usuario</h1>
+          <div class="flex justify-between items-center px-6 py-5 mt-4">
+            <div class="flex-1 text-left">
+              <h1 class="font-[600] text-xl">Editar usuario {{ dataUser.role.name }}</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal">
@@ -18,21 +18,35 @@
             </div>
           </div>
   
-          <div class="p-6">
-            <hr class="mb-4">
-            <div class="flex items-center justify-between px-4 mb-5">
-              <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center">
-                <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
-                  {{ step.number }}
-                </div>
-                <div :class="['text-sm mt-2', currentStep >= step.number ? 'text-black' : 'text-gray-500']" class="font-semibold">
+          <div class="pb-6 pr-6 pl-6">
+              <div class="flex items-center w-full px-4">
+                <h3
+                  class="flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative"
+                  v-for="(step, index) in steps"
+                  :key="step.number"
+                  :class="{
+                    'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step': currentStep === step.number,
+                    'text-gray-300': currentStep !== step.number
+                  }"
+                  @click="currentStep = step.number"
+                >
                   {{ step.label }}
-                </div>
-                <!-- border -->
-                <div v-if="index !== steps.length - 1" :class="['absolute w-[170px] h-0 border top-5 left-3', currentStep >= (step.number + 1) ? 'border-[#34A98F]' : '']"></div>
-              </div>
+                </h3>
             </div>
-            <hr class="mb-5">
+
+
+
+            <!-- <div class="mb-5">
+                <h3
+                    class="inline-block mr-4 text-lg font-medium text-gray-300 cursor-pointer text-semibold "
+                    v-for="(step, index) in steps" :key="step.number"
+                    :class="{'category-select':currentStep === step.number}"
+                    @click="currentStep = step.number"
+                >
+                    {{step.label}}
+                </h3>
+            </div> -->
+            <hr class="mb-5 px-4">
             <div v-if="currentStep === 1">
               <div class="flex flex-col text-black">
                 <span class="text-sm font-medium">Elige tu tipo de usuario</span>
@@ -830,5 +844,28 @@ const clearForm = () => {
   .modal-fade-leave-from {
     opacity: 1;
   }
-  </style>
+
+  .rounded-bottom-border {
+    position: relative;
+  }
+
+.rounded-bottom-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 135px;
+  height: 3px;
+  background-color: #0B6357;
+  border-radius: 10px 10px 0 0;
+}
+
+.active-step { //ajustar al px-4 de tialwind
+  margin-left: -1rem; 
+  margin-right: -1rem; 
+  padding-left: 1rem; 
+  padding-right: 1rem; 
+}
+</style>
   
