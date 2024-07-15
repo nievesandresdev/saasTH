@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-    import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
+    import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
     //COMPONENTS
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
     //
@@ -129,11 +129,20 @@
     provide('hiddenFacilities', hiddenFacilities);
     provide('modelActive', modelActive);
 
+    watch(modelActive, (valNew, valOld) => {
+        if (!valNew && valOld) {
+            loadMockup();
+        }
+    });
+
     // FUNCTIONS
 
-    function loadMockup () {
-        mockupStore.$setIframeUrl('/instalaciones');
-        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    function loadMockup (path = '/') {
+        mockupStore.$setIframeUrl(`/instalaciones${path}`);
+        mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
+    }
+    function loadMockupEdit (facilityId) {
+        mockupStore.$setIframeUrl(`/instalaciones/${facilityId}`);
     }
 
     async function loadFacilities () {
@@ -157,6 +166,11 @@
         }
         modelActive.value = payload.action;
         nextTick(() => {
+            if (payload.action === 'EDIT') {
+                loadMockup(`/${payload.facility.id}`);
+            } else {
+                loadMockup('/fakedetail');
+            }
             panelEditRef.value.editFacility(payload);
         });
         // console.log(panelEditRef.value, 'panelEditlRef');
@@ -170,6 +184,8 @@
     }
 
     function resetPageData () {
+        mockupStore.$reloadIframe();
+        loadMockup();
         loadFacilities();
         filter.value = null;
     }

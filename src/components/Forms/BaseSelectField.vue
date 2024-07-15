@@ -112,7 +112,7 @@ export default {
     },
     icon_right: {
       type: String,
-      default: '/assets/icons/1.TH.I.DROPDOWN.svg',
+      default: '/assets/icons/1.TH.I.dropdown.svg',
     },
     icon_right_class: {
       type: String,

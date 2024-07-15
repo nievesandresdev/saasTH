@@ -210,19 +210,19 @@ import { useRoute, useRouter  } from 'vue-router';
               {
                   title: 'Alojamiento',
                   icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-                  expanded: false,
+                  expanded: ['Perfil','Facilities'].includes(route.name),
                   group: [
                       {
                           title: 'perfil',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-                          to: 'hoster.hotel.profile',
-                          selected: false
+                          to: 'Perfil',
+                          selectedArr: ['Perfil']
                       },
                       {
                           title: 'instalaciones',
                           icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-                          to: 'hoster.plataform.facility.show',
-                          selected: false
+                          to: 'Facilities',
+                          selectedArr: ['Facilities']
                       },
                   ],
               },

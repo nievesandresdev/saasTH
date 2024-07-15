@@ -64,7 +64,6 @@
 
     async function updateVisivilityFacilities () {
         const response = await hotelStore.$updateVisivilityFacilities();
-        // console.log(response, 'response');
         const { ok, data } = response;
         await hotelStore.reloadHotel();
         if (ok) {
