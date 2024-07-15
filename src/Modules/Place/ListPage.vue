@@ -38,10 +38,14 @@
 
     </div>
     <ModalFilter @reloadPlaces="reloadPlaces()" />
+    
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
+import { ref, reactive, onMounted, provide, computed, nextTick, toRefs } from 'vue';
+
+import { useRouter } from 'vue-router';
+const route = useRouter();
 
 import ListPageHeader from './ListPageHeader.vue';
 //
@@ -51,6 +55,15 @@ import ModalFilter from './components/ModalFilter';
 import ListPageTabs from './ListPageTabs';
 import ListPageList from './ListPageList';
 import ListPageFiltersSelected from './ListPageFiltersSelected';
+
+    // PROPS
+const props = defineProps({
+    queryRouter: {
+        type: Object,
+        default: () => ({})
+    }
+})
+const { queryRouter } = toRefs(props);
 
 // STATE
 //
@@ -80,7 +93,7 @@ const formFilter = reactive({
     city_longitude: null,
     one_place_id: null,
     featured: false,
-    visibility: false,
+    visibility: null,
     recommendated: false,
     search_terms: null,
     all_cities: false,
@@ -95,7 +108,7 @@ const formFilterDefault = reactive({
     city_longitude: null,
     one_place_id: null,
     featured: false,
-    visibility: false,
+    visibility: null,
     recommendated: false,
     search_terms: null,
     all_cities: false,
@@ -160,7 +173,7 @@ provide('toast', toast);
 onMounted(async () => {
     await loadTypePlaces();
     loadCategoriPlaces();
-    reloadPlaces();
+    loadPlaces();
 });
 
 // COMPUTED
@@ -191,11 +204,7 @@ function resetFormFilter () {
     Object.assign(formFilter.value, formFilterDefault.value);
 }
 function changeCategory(cat){
-    formFilter.visibility = null;
-    formFilter.recommendated = false;
-    formFilter.search_terms = null;
-    page.value = 1;
-    placesData.value = [];
+    resetDataPage();
     changeFieldValueInFormFilter('selected_subplace', cat.id);
 }
 function changeFieldValueInFormFilter(field,value) {
@@ -205,6 +214,7 @@ function changeFieldValueInFormFilter(field,value) {
 async function loadTypePlaces () {
     const response = await placeStore.$getTypePlaces();
     if (response.ok) {
+        
         typeplaces.value = response.data;
         // if (!formFilter.selected_place) {
             formFilter.selected_place = typeplaces.value?.[0].id;
@@ -214,6 +224,7 @@ async function loadTypePlaces () {
             formFilter.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
             formFilterDefault.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
         // }
+        loadQueryInFormFilter();
     }
 }
 async function loadDataUtil () {
@@ -234,15 +245,75 @@ async function loadCategoriPlaces () {
         categoriplaces.value = response.data;
     }
 }
+function resetDataPage () {
+    formFilter.points = [];
+    formFilter.one_place_id = null;
+    formFilter.featured = false;
+    formFilter.visibility = null;
+    formFilter.recommendated = false;
+    formFilter.search_terms = null;
+    formFilter.all_cities = false;
+    formFilter.distances = [];
+    page.value = 1;
+    placesData.value = [];
+    Object.assign(filtersSelected, {...filtersSelectedDefault});
+}
+function filterNonNullAndNonEmpty(obj) {
+    const filteredObject = {}
+    Object.keys(obj).forEach(key => {
 
+        if (obj[key] !== null && obj[key] !== '') {
+            if (Array.isArray(obj[key]) && obj[key].length > 0) {
+                filteredObject[key] = obj[key]
+            }
+            else if (!Array.isArray(obj[key])) {
+                filteredObject[key] = obj[key]
+            }
+        }
+    })
+    return filteredObject
+}
+function loadQueryInFormFilter () {
+    for (const [key, value] of Object.entries(queryRouter.value || {})) {
+        if (formFilter.hasOwnProperty(key)) {
+            formFilter[key] = validValueQuery(key, value);
+        }
+    }
+}
+function validValueQuery (field, value) {
+
+    if (['featured', 'recommendated', 'all_cities'].includes(field)) {
+        if (value === 'false') return false;
+        if (value === 'true') return true;
+    }
+
+    if (['selected_place', 'selected_subplace'].includes(field)) {
+        return Number(value);
+    }
+
+    return value;
+}
 async function reloadPlaces () {
     loadDataFormFilter();
-    // console.log(formFilter.value, 'filter');
     page.value = 1;
     isOpenModelFilter.value = false;
     placesData.value = [];
+    route.push({ name: 'Places', query: {...filterNonNullAndNonEmpty(formFilter)} });
     await Promise.all([loadDataUtil(), listPageListRef.value.loadPlaces(true)]);
-    loadDataUtil();
+}
+
+async function loadPlaces () {
+    loadDataFormFilter();
+    page.value = 1;
+    isOpenModelFilter.value = false;
+    placesData.value = [];
+    console.log(formFilter);
+    await Promise.all([loadDataUtil(), listPageListRef.value.loadPlaces(true)]);
+}
+
+function resetDataPlaceAndReloadPlaces () {
+    resetDataPage();
+    reloadPlaces();
 }
 
 function openModalFilter () {

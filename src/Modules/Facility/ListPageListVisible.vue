@@ -3,7 +3,7 @@
         <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
             <label 
                 for="fileInput"
-                class="relative w-[224px] rounded-[6px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card"
+                class="relative w-[224px] rounded-[6px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card h-[184px]"
                 @click="addNewFacility"
             >   
                 <h5 class="text-base font-medium text-center flex flex-col items-center justify-center">

@@ -1,7 +1,8 @@
 <template>
     <div class="px-6">
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo</h1>
-        <MenuSettings />
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Empleados</h1>
+        <hr class="bg-[#BFBFBF]">
+        <!-- <MenuSettings /> -->
         <div class="flex justify-between items-center mt-6">
             <div class="relative flex w-1/3" ref="ref_dropdown_container" :class="{'mb-4':data_filter.search_terms}">
                 <input

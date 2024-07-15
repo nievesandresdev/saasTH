@@ -66,7 +66,6 @@
                 </button>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -81,6 +80,7 @@ import Checkbox from "@/components/Forms/Checkbox.vue";
 
 // PROVIDE
 const form = inject('form');
+const itemSelected = inject('itemSelected');
 const time = ref(null);
 
 // WATCH
