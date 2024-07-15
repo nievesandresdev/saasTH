@@ -1,7 +1,7 @@
 <template>
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
-        :class="{'hbg-green-200':selected_stay == stay.id}"
+        :class="{'hbg-green-200':route.params.id == stay.id}"
         @click="goDetailStay(stay.id)"
     >
         <div class="flex items-center">
@@ -66,19 +66,30 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { DateTime } from 'luxon';
+import { useRouter, useRoute } from 'vue-router';
+
+
+const router = useRouter();
+const route = useRoute();
 
 const props = defineProps({
     stay: {
         type: Object,
         default: null,
     },
-    selected_stay: {
-        type: Number,
+    search: {
+        type: String,
         default: null,
-    },
+    }
 });
+
+watch(() => props.search, (newSearch, oldSearch) => {
+    searchUpdate.value = newSearch;
+});
+
+const searchUpdate = ref(props.search);
 const guest1 = ref(props.stay.guests[0] ?? null);
 const guest2 = ref(props.stay.guests[1] ?? null);
 const translatePeriod = {
@@ -89,7 +100,12 @@ const translatePeriod = {
 };
 
 function goDetailStay(id) {
-    // Cambia a tu función de enrutamiento actual
+    console.log('searchUpdate.value',searchUpdate.value)
+    router.push({
+        name: 'StayDetailPage',
+        params: { id: id },
+        query: { search: searchUpdate.value }
+    });
 }
 
 // Función para formatear las fechas usando Luxon

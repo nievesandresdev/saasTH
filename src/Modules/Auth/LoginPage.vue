@@ -172,6 +172,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import LoadingAuth from './Components/LoadingAuth.vue';
+import { useUserStore } from '@/stores/modules/users/users'
 import ModalWindow from '@/components/ModalWindow.vue'; 
 import { resetPassword } from '@/api/services/auth';
 import { useRoute, useRouter } from 'vue-router';
@@ -193,6 +194,8 @@ const showAlertModal = ref(false);
 const route = useRoute();
 const router = useRouter();
 
+const user = useUserStore();
+
 const forgot = ref({
   email: '',
   processing: false,
@@ -206,6 +209,29 @@ const forgot = ref({
 onMounted(() => {
   if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
+  }
+});
+
+onMounted(async() => {
+  // Capturar parámetros de la URL
+  const token = route.query.token;
+
+
+  if (token) {
+    // Almacenar en sessionStorage
+    sessionStorage.setItem('token', token);
+
+    const params = {
+      token: sessionStorage.setItem('token', token)
+    }
+    
+     await authStore.loginAdmin(params);
+
+    
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 1000);
+    //router.push('/dashboard');
   }
 });
 

@@ -62,7 +62,7 @@
                     <p class="text-sm leading-[150%]">
                         O puedes invitar a tus huéspedes desde el botón:
                     </p>
-                    <button class="hbtn-primary py-3 px-2 text-xs font-medium leading-[90%] ml-auto mt-auto">
+                    <button class="hbtn-primary py-3 px-2 text-xs font-medium leading-[90%] ml-auto mt-auto" @click="openInviteGuest = true">
                         Invitar huésped
                     </button>
                 </div>
@@ -75,13 +75,13 @@
                 <div class="flex-grow flex-1" v-for="(count, key, index) in statistics.countsByPeriod" :key="index">
                     <h3 class="text-sm font-semibold leading-[120%] flex items-center" v-if="key == 'pre-stay'">
                         Estancias activas en tu WebApp
-                        <TooltipStayActive />
+                        <TooltipStayActive type="title"/>
                     </h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px]">
                         <div class="py-2 px-4 rounded-t-[10px] bg-[#D9E8F2]" :class="stayColors[key]">
-                            <h3 class="text-xs font-semibold leading-[130%] flex items-center uppercase">
-                                {{ $translatePeriod(key) }}
-                                <TooltipStayActive />
+                            <h3 class="text-xs font-semibold leading-[130%] flex items-center">
+                                <span class="uppercase">{{ $translatePeriod(key) }}</span>
+                                <TooltipStayActive :type="key"/>
                             </h3>
                         </div>
                         <div class="p-4">
@@ -98,25 +98,28 @@
                 </div>
                 <!-- languages card -->
                 <div class="flex-grow flex-1">
-                    <h3 class="text-sm font-semibold leading-[120%]">
-                        Idiomas más utilizados por tus huéspedes
-                    </h3>
+                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados por tus huéspedes</h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
                         <div v-for="(lang,index) in ['es','en','fr']" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
-                            <img :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
-                            <span class="text-base font-semibold leading-[120%] mr-1">{{ statistics.percentageLangs ? statistics.percentageLangs[lang] : 0 }}% </span>
-                            <span class="text-sm font-medium"> {{ $nameLanguage(lang) }}</span>
+                            <img v-if="statistics.percentageLangs && statistics.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
+                            <img v-else src="/assets/icons/1.TH.SINIDIOMA.svg" class="w-6 h-6 mr-1">
+                            <span class="text-base font-semibold leading-[120%] mr-1">
+                                {{ statistics.percentageLangs && statistics.percentageLangs[lang] > 0 ? statistics.percentageLangs[lang] : '--' }}% 
+                            </span>
+                            <span class="text-sm font-medium"> {{ statistics.percentageLangs && statistics.percentageLangs[lang] ? $nameLanguage(lang) : '-'}}</span>
                         </div> 
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    <InviteGuest />
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import Tooltip from '@/components/Tooltip.vue'
-import TooltipStayActive from './HomePage/components/TooltipStayActive.vue'
+import TooltipStayActive from './components/TooltipStayActive.vue'
+import InviteGuest from './components/InviteGuestModal.vue'
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
 
@@ -128,9 +131,12 @@ const stayColors= {
 }
 
 const statistics = ref([]);
+const openInviteGuest = ref(false);
 
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
-    console.log('statistics.value',statistics.value)
+    // console.log('statistics.value',statistics.value)
 })
+
+provide('openInviteGuest',openInviteGuest)
 </script>

@@ -48,7 +48,7 @@ export const useUserStore = defineStore('user', () => {
   *avatar ui
   */
  function $userAvatar(){
-   return `https://ui-avatars.com/api/?name=${user.value.name}&color=fff&background=${user.value.color}`
+   return `https://ui-avatars.com/api/?name=${user?.value?.name}&color=fff&background=${user?.value?.color}`
  }
 
   /**
@@ -116,6 +116,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
 
+
   return {
     $getHotels,
     $storeUser,
@@ -127,6 +128,6 @@ export const useUserStore = defineStore('user', () => {
     $deleteUser,
     $getDataHotel,
     $getSubscriptionStatus,
-    $testMail
+    $testMail,
   };
 });

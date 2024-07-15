@@ -100,7 +100,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
 
   const api_url_backend = url_backend()
   const subdomain = sessionStorage.getItem('current_subdomain') || null
-  if(SLUG_API === 'API_REVIEW') {
+/*   if(SLUG_API === 'API_REVIEW') {
   console.log('subdomainSCS',{
     'URL_BASE_BACKEND_GENERAL' : URL_BASE_BACKEND_GENERAL,
     'URL_BASE_BACKEND_HELPER' : URL_BASE_BACKEND_HELPER,
@@ -110,7 +110,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'SLUG_API' : SLUG_API,
     api_url_backend: api_url_backend,
   })
-  }
+  } */
   const defaultHeaders = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',

@@ -1,6 +1,7 @@
 // stores/auth.js (o login.js)
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
+import { getUserData } from '@/api/services/users/userSettings.service';
 import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -32,6 +33,35 @@ export const useAuthStore = defineStore('auth', () => {
             } else {
                 errorLogin.value = 'Credenciales incorrectas';
             }
+
+        } catch (error) {
+            errorLogin.value = error.response?.data?.message || 'Ha ocurrido un error';
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    async function loginAdmin(token) {
+        loading.value = true;
+        errorLogin.value = null;
+
+        try {
+            
+            const response = await getUserData(token);
+
+                //token.value = response.token;
+                user.value = response.user;
+
+                //console('storeAjhsihj',user.value)
+                errorLogin.value = null;
+
+                // Set session token and user data
+                //sessionStorage.setItem('token', token.value);
+                sessionStorage.setItem('user', JSON.stringify(user.value));
+                sessionStorage.setItem('current_hotel', JSON.stringify(response.user.current_hotel));
+                sessionStorage.setItem('current_subdomain', response.user.current_hotel.subdomain);
+                this.$router.push('/dashboard');
+           
 
         } catch (error) {
             errorLogin.value = error.response?.data?.message || 'Ha ocurrido un error';
@@ -78,5 +108,6 @@ export const useAuthStore = defineStore('auth', () => {
         current_subdomain,
         $setUser,
         fullName,
+        loginAdmin
     };
 });

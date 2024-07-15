@@ -7,7 +7,15 @@
         ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-4 mt-4">
+          <div class="flex justify-between items-center px-6 py-4">
+            <div class="flex justify-end">
+              <button
+                @click="prevStep"
+                v-if="currentStep > 1"
+              >
+                <img src="/assets/icons/1.TH.BACK.svg" alt="icon_close" class="w-5 h-5">
+              </button>
+            </div>
             <div class="flex-1 text-center">
               <h1 class="font-[600] text-xl">Crear usuario</h1>
             </div>
@@ -19,7 +27,7 @@
           </div>
   
           <div class="p-6">
-            <hr class="mb-4">
+            <!-- <hr class="mb-4"> -->
             <div class="flex items-center justify-between px-4 mb-5">
               <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center">
                 <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
@@ -259,13 +267,13 @@
         </div>
   
         <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
-          <button
+         <!--  <button
             class="px-4 py-2.5 font-medium rounded w-full bg-hoster-gray text-black"
             @click="prevStep"
             v-if="currentStep > 1"
           >
             Anterior
-          </button>
+          </button> -->
           <button
             class="px-4 py-2.5 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"

@@ -23,7 +23,8 @@ import {
   $isAdmin,
   $isOperator,
   $nameLanguage,
-  $translatePeriod
+  $translatePeriod,
+  $formatTimestampDate
 } from '@/utils/helpers.js'
 
 const head = createHead()
@@ -56,6 +57,7 @@ function initializeApp() {
   app.config.globalProperties.$isOperator = $isOperator
   app.config.globalProperties.$nameLanguage = $nameLanguage
   app.config.globalProperties.$translatePeriod = $translatePeriod
+  app.config.globalProperties.$formatTimestampDate = $formatTimestampDate
 
   
   app.mount('#app')

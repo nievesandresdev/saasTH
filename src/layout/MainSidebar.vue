@@ -94,7 +94,7 @@
           </button>
         </div>
         <div class="text-center">
-          <img :src="`${userStore.$userAvatar()}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
+          <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2" width="80" height="80" />
           <h3 class="text-lg font-medium">{{ authStore.user.name }}</h3>
           <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
           <div class="mt-4 flex justify-between gap-4">

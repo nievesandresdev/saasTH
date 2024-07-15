@@ -1,4 +1,5 @@
 const HomePage = () => import('@/Modules/Stay/HomePage');
+const DetailPage = () => import('@/Modules/Stay/DetailPage');
 
 const stayGroupRoutes = [
   {
@@ -8,6 +9,12 @@ const stayGroupRoutes = [
         name: 'StayHomePage',
         path: '',
         component: HomePage
+      },
+      {
+        name: 'StayDetailPage',
+        path: ':id',
+        component: DetailPage,
+        props: (route) => ({ paramsRouter: {...route.params} })
       },
     ],
   },
