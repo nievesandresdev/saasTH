@@ -33,7 +33,7 @@
             <div class="relative flex-shrink-0 w-[40px] ml-2">
                 <div class="absolute flex top-[-20px]">
                     <IconHover 
-                        :src="`/assets/icons/${ openContent ? '1.TH.I.DROPDOWN' : '1.TH.I.DROPDOWN.OPEN'}.svg`"
+                        :src="`/assets/icons/${ openContent ? '1.TH.I.dropdown' : '1.TH.I.DROPDOWN.OPEN'}.svg`"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
                         :padding_container="'8px'"
