@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const title = 'Plataforma';
@@ -67,6 +67,12 @@ const isActiveSubmenu = (itemText) => {
     }
     return false;
 };
+
+watch(route, (newRoute, oldRoute) => {
+    if (!isActiveSubmenu('Equipo')) {
+        showSubmenu.value = false;
+    }
+});
 </script>
 
 <style scoped>
