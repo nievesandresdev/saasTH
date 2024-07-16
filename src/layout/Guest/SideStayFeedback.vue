@@ -85,7 +85,7 @@
                             </span>
                             <div class="w-10 absolute right-0 top-[-10px]">
                                 <IconHover
-                                    :src="`/assets/icons/${ openNotes ? '1.TH.I.dropdown' : '1.TH.I.DROPDOWN'}.svg`"
+                                    :src="`/assets/icons/${ openNotes ? '1.TH.I.DROPDOWN.OPEN' : '1.TH.I.dropdown'}.svg`"
                                     :height_icon="'24px'"
                                     :width_icon="'24px'"
                                     :padding_container="'8px'"
@@ -120,7 +120,7 @@
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router';
 import TimeLineQueries from '../Queries/TimeLineQueries.vue'
-import IconHover from '@/components/Buttons/iconHover.vue'
+import IconHover from '@/components/Buttons/IconHover.vue'
 //store
 import { useQueryStore } from '@/stores/modules/queries/query';
 

@@ -101,7 +101,7 @@ import { useStayStore } from '@/stores/modules/stay/stay';
 import CardtayList from './CardtayList.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
-import IconHover from '@/components/Buttons/iconHover.vue'
+import IconHover from '@/components/Buttons/IconHover.vue'
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 

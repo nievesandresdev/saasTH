@@ -54,7 +54,7 @@
 <script setup>
 import { inject, computed, ref } from 'vue'
 import NoteEditor from './NoteEditor.vue'
-import IconHover from '@/components/Buttons/iconHover.vue'
+import IconHover from '@/components/Buttons/IconHover.vue'
 
 const noteText = inject('noteText')
 const noteId = inject('noteId')

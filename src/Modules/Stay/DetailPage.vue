@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import { ref, watch, provide } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, watch, provide, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 //components
 import Head from './components/HeadDetail.vue'
 import InfoSection from './components/Detail/InfoSection.vue';
@@ -24,8 +24,34 @@ const route = useRoute();
 // Refs para reaccionar a los cambios en los parámetros o consultas
 const id = ref(route.params.id);
 const data = ref(null);
+const test = ref(false);
+provide('test',test)
 const searchQuery = ref(route.query.search);
 
+onBeforeRouteLeave((to, from, next) => {
+    updateDetailSession();
+    next();
+});
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload);
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+})
+
+// Handler for beforeunload event
+const handleBeforeUnload = async (event) => {
+    delete event['returnValue'];
+    await updateDetailSession();
+    window.close();
+}
+
+// Function to perform asynchronous operations
+const updateDetailSession = async () => {
+    await stayStore.$updateData({sessions:'ultima',stayId:id.value});
+}
 
 // Watchers para actualizaciones de URL
 watch(() => route.params.id, async (newId) => {
