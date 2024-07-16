@@ -11,6 +11,8 @@ import {
     deleteStayNoteApi,
     createOrupdateGuestNoteApi,
     deleteGuestNoteApi,
+    createSessionApi,
+    deleteSessionApi,
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -92,6 +94,26 @@ export const useStayStore = defineStore('stay', () => {
             return response.data
         }
     }
+
+    async function $createSession (stayId, field, userEmail, userName, userColor) {
+        let data = { stayId, field, userEmail, userName, userColor };
+        const response = await createSessionApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $deleteSession (stayId, field, userEmail) {
+        let data = { stayId, field, userEmail };
+        console.log('deleteSession',data)
+        const response = await deleteSessionApi(data)
+        console.log('deleteSessionApi',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     
     
@@ -100,11 +122,15 @@ export const useStayStore = defineStore('stay', () => {
         $statisticsByHotel,
         $getdetailData,
         $updateData,
+        //notes
         $getAllNotesByStay,
         $createOrupdateStayNote,
         $deleteStayNote,
         $createOrupdateGuestNote,
-        $deleteGuestNote
+        $deleteGuestNote,
+        //sessions
+        $createSession,
+        $deleteSession,
     }
 
 })

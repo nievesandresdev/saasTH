@@ -101,12 +101,11 @@ const closeEdit = () =>{
 }
 
 const validate = computed(()=>{
-    // console.log('validate form', titleFull.value)
+
     return titleFull.value;
 })
 
 const iconLeftDropdown = computed( () => {
-    // console.log('dataDetail.value',dataDetail.value)
     let value = dataDetail.value.optionsListNote.find(item => item.value == noteTo.value)  
     return value.img;
 })

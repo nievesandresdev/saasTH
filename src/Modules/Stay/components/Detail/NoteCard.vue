@@ -83,7 +83,6 @@ const confirmDelete = (noteId, noteTYPE) =>{
 }
 
 const reloadList = () =>{
-    console.log('dentro de card?')
     emit('reloadList')
 }
 
