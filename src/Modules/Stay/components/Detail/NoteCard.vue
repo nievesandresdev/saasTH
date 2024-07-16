@@ -12,7 +12,7 @@
             </p>
             <div class="relative flex-shrink-0 w-[80px] ml-auto">
                 <div class="absolute flex top-[-20px]">
-                    <IconHover 
+                    <HoveredIcon 
                         :src="'/assets/icons/1.TH.EDIT.OUTLINED.svg'"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
@@ -20,7 +20,7 @@
                         style="--background-color: #f3f3f3;"
                         @click="editNote(note.id, note.type, note.content)"
                     />
-                    <IconHover 
+                    <HoveredIcon 
                         :src="'/assets/icons/1.TH.DELETE.OUTLINE.svg'"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
@@ -32,7 +32,7 @@
             </div>
             <div class="relative flex-shrink-0 w-[40px] ml-2">
                 <div class="absolute flex top-[-20px]">
-                    <IconHover 
+                    <HoveredIcon 
                         :src="`/assets/icons/${ openContent ? '1.TH.I.dropdown' : '1.TH.I.DROPDOWN.OPEN'}.svg`"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
@@ -54,7 +54,7 @@
 <script setup>
 import { inject, computed, ref } from 'vue'
 import NoteEditor from './NoteEditor.vue'
-import IconHover from '@/components/Buttons/IconHover.vue'
+import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
 
 const noteText = inject('noteText')
 const noteId = inject('noteId')

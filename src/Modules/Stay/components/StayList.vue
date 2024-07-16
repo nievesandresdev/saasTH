@@ -32,7 +32,7 @@
                         v-if="filtersActive"
                         class="w-4 h-4 rounded-full hbg-green-600 absolute right-[-4px] top-[-4px] text-xs border border-white text-white text-center leading-[115%]"
                     >{{filtersActiveNumber}}</span>
-                    <IconHover 
+                    <HoveredIcon 
                         :src="`/assets/icons/${ filtersActive ? '1.TH.Filters.active' : '1.TH.Filters'}.svg`"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
@@ -101,7 +101,7 @@ import { useStayStore } from '@/stores/modules/stay/stay';
 import CardtayList from './CardtayList.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
-import IconHover from '@/components/Buttons/IconHover.vue'
+import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 
