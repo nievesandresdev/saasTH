@@ -185,7 +185,7 @@ const menu_links = ref([
           'SettingsStayPage',
           'SettingsPostStayPage',
         ],
-        url: '/dashboard',
+        url: '/feedback/webapp/pre-stay',
       },
       {
         title: 'Comunicaciones',

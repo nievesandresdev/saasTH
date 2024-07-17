@@ -259,9 +259,9 @@ import { useRoute, useRouter  } from 'vue-router';
               },
               {
                   title: 'Chat',
-                  to: 'hoster.chat.general',
+                  to: 'GeneralSettings',
                   icon: '/assets/icons/1.TH.CHAT.NEW.svg',
-                  include: '/chat'
+                
               },
           ],
       },
