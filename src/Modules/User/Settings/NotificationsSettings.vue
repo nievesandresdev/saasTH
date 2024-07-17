@@ -4,8 +4,10 @@
     <section>
         <div class="px-6">
             <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Notificaciones</h1>
+            
             <!-- <MenuSettings /> -->
         </div>
+        <hr class="bg-[#BFBFBF]">
         <!-- info banner -->
         <div class="bg-[#D9E8F2] px-24 py-[14px]">
             <p class="text-sm font-semibold leading-[150%]">Las notificaciones visuales dentro de la plataforma son esenciales para ayudar y guiar en la operativa diaria. Permanecerán siempre activas.</p>

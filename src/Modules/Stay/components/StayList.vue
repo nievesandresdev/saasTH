@@ -32,7 +32,7 @@
                         v-if="filtersActive"
                         class="w-4 h-4 rounded-full hbg-green-600 absolute right-[-4px] top-[-4px] text-xs border border-white text-white text-center leading-[115%]"
                     >{{filtersActiveNumber}}</span>
-                    <IconHover 
+                    <HoveredIcon 
                         :src="`/assets/icons/${ filtersActive ? '1.TH.Filters.active' : '1.TH.Filters'}.svg`"
                         :height_icon="'24px'"
                         :width_icon="'24px'"
@@ -97,15 +97,20 @@
 </template>
 <script setup>
 import { onMounted, ref, provide, computed } from 'vue'
-import { useStayStore } from '@/stores/modules/stay/stay';
 import CardtayList from './CardtayList.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
-import IconHover from '@/components/Buttons/iconHover.vue'
+import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
+
+import { useStayStore } from '@/stores/modules/stay/stay';
+import { useRouter, useRoute } from 'vue-router';
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 
 const toast = useToastAlert();
+const router = useRouter();
+const route = useRoute();
+
 
 const stayStore = useStayStore();
 const list = ref(null)
@@ -169,6 +174,12 @@ function cleanSearch(){
         search: search.value,
         periods: allFilters.value.periods,
         pendings:  allFilters.value.pendings
+    }
+    if(route.params.id){
+        router.push({
+            name: 'StayDetailPage',
+            params: { id: route.params.id }
+        });
     }
     loadData();
 }

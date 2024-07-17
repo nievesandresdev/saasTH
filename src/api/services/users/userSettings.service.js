@@ -19,6 +19,7 @@ export const updateUser = (data) => apiHttp('POST', `${userPath}/update`, data)
 export const updateProfile = (data) => apiHttp('POST', `${userPath}/update-profile`, data)
 export const deleteUser = (data) => apiHttp('POST', `${userPath}/delete`, data)
 export const getSubscriptionStatus = () => apiHttp('GET', `${userPath}/get-subscription-status`)
+export const dataOTAS = () => apiHttp('GET', `${userPath}/getDataOtas`)
 
 //testMail
 export const testMail = () => apiHttp('GET', `${userPath}/testMail`)

@@ -14,6 +14,7 @@ const stayGroupRoutes = [
         name: 'StayDetailPage',
         path: ':id',
         component: DetailPage,
+        meta: { sidebarRight: 'SideStayFeedback'},  
         props: (route) => ({ paramsRouter: {...route.params} })
       },
     ],

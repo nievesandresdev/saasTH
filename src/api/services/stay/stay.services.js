@@ -15,3 +15,6 @@ export const createOrupdateStayNoteApi = (data) => apiHttp('POST', `${stayPath}/
 export const deleteStayNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteStayNote`, data)
 export const createOrupdateGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createOrupdateGuestNote`, data)
 export const deleteGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteGuestNote`, data)
+//sessions
+export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data)
+export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })

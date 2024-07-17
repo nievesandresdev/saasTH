@@ -9,7 +9,7 @@
                         <p class="text-xs font-semibold text-white">Check-in</p>
                     </div>
                     <div class="p-4 flex items-center">
-                        <img class="w-8 h-8" src="/assets/icons/1.TH.SCHEDULE.svg" alt="">
+                        <img class="w-8 h-8" src="/assets/icons/1.TH.schedule.svg" alt="">
                         <div class="ml-1">
                             <h2 class="text-[22px] font-medium leading-[110%]">{{ data.formatCheckin.dayMonth }}</h2>
                             <span class="text-xs font-semibold leading-[110%] htext-gray-500">{{ data.formatCheckin.year }}</span>
@@ -33,7 +33,7 @@
                         <p class="text-xs font-semibold text-white">Check-out</p>
                     </div>
                     <div class="p-4 flex items-center border-l border-gray-300">
-                        <img class="w-8 h-8" src="/assets/icons/1.TH.SCHEDULE.svg" alt="">
+                        <img class="w-8 h-8" src="/assets/icons/1.TH.schedule.svg" alt="">
                         <div class="ml-1">
                             <h2 class="text-[22px] font-medium leading-[110%]">{{ data.formatCheckout.dayMonth }}</h2>
                             <span class="text-xs font-semibold leading-[110%] htext-gray-500">{{ data.formatCheckout.year }}</span>
@@ -100,7 +100,7 @@ const form = reactive({
 
 const update = async ()=>{
     await stayStore.$updateData(form);
-    toast.warningToast('Invitacion enviada.','top-right');
+    toast.warningToast('Actualizado.','top-right');
 }
 
 const iconLeftDropdown = computed( () => {

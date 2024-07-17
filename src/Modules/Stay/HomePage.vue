@@ -135,7 +135,6 @@ const openInviteGuest = ref(false);
 
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
-    // console.log('statistics.value',statistics.value)
 })
 
 provide('openInviteGuest',openInviteGuest)

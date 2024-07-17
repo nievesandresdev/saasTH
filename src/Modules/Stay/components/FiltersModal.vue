@@ -157,7 +157,6 @@ const changes = computed(() => {
 
 const toReset = computed(() => {
     let treset = !allChecked.value || dropdownFilter.value !== 'all';
-    console.log('treset',treset)
     return treset;
 });
 
