@@ -166,7 +166,7 @@ function buildErrorMessage (error) {
       } else if (error.response.status === 405 || error.response.status === 406) {
         errorResponse.message.text = i18n.global.t('messageRequest.apiError405_406')
       } else errorResponse.message.text = error.response.data.message.text
-    errorResponse.ok = error.response.data.ok
+    errorResponse.ok = error.response?.data?.ok
     // eslint-disable-next-line no-prototype-builtins
     if (error.response.data.hasOwnProperty('errors')) errorResponse.message.text = Object.values(error.response.data.errors)[0][0]
     // eslint-disable-next-line no-prototype-builtins

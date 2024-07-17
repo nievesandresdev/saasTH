@@ -1,5 +1,8 @@
 <template>
     <SuscriptionBanner v-if="showSuscriptionBanner" />
+    <!-- <div class="px-3.5 md:px-6 h-10 w-full hbg-green-600 flex justify-between items-center">
+d    dd
+    </div> -->
     <div 
         class="flex" id="main-container"
         :class="showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'"

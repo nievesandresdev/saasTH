@@ -20,7 +20,7 @@
             />
             <div v-if="errors?.[name] !== true || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
-                <p class="text-[10px] font-medim text-right mt-[4px] ">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
+                <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
         <!-- :class="prependInnerIcon ? 'pl-11' : ''" -->

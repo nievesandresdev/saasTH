@@ -12,7 +12,6 @@ export const useGuestStore = defineStore('guest', () => {
     // ACTIONS
     async function $inviteToHotel (data) {
         const response = await inviteToHotelApi(data)
-        console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data

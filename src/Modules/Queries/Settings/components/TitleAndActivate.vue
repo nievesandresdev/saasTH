@@ -60,6 +60,5 @@ const emit = defineEmits(['onchange'])
 
 function toggle(event){
     emit('onchange',event.target.checked)
-    console.log('toggle',event.target.checked)
 }
 </script>

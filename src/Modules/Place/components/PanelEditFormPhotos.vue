@@ -16,16 +16,16 @@
                     @mouseleave="hoverImg = null"
                 >
                     <div v-if="hoverImg === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0 rounded-xl">
-                        <div  class="absolute space-x-4 position-center">
-                            <button @click="openPreview(facilityStore.formatImage(image))">
-                                <img class="w-5 h-5" alt="icon_search"  src="/assets/icons/1.TH.SEARCH.WHITE.svg">
+                        <div  class="absolute space-x-4 position-center z-[100]">
+                            <button @click="openPreview(placeStore.formatImage(image))">
+                                <img class="w-5 h-5" alt="icon_search icon-white"  src="/assets/icons/1.TH.SEARCH.WHITE.svg">
                             </button>
                             <button @click="removeImage(index)" >
                                 <img class="w-5 h-5" alt="icon_delete" src="/assets/icons/delete.white.svg">
                             </button>
                         </div>
                     </div>
-                    <img class="w-full h-full rounded-xl object-cover " :src="facilityStore.formatImage(image)">
+                    <img class="w-full h-full rounded-xl object-cover " :src="placeStore.formatImage(image)">
                 </div>
         </div>
         <!-- <p v-if="form.images.length == 0" class="text-xs text-red-400 mt-2">Debes añadir al menos una imagen</p> -->
@@ -45,7 +45,7 @@ const form = inject('form');
 const urlsimages = inject('urlsimages');
 
 //
-const facilityStore = inject('facilityStore');
+const placeStore = inject('placeStore');
 const previewUrl = inject('previewUrl');
 const isPreviewOpen  = inject('isPreviewOpen');
 

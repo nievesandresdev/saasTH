@@ -24,9 +24,16 @@
                 </div>
                 <div
                     class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
+                    @dragover="handlerDragOver"
+                    @drop="handlerDrop(index, item)"
+                    :draggable="true"
+                    @dragstart="handlerDragStart(index, $event)"
+                    @dragend="handlerDragEnd"
+                    ref="draggableCard"
                     :class="{'shadow-draginng border border-gray-300' : place.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                     @mouseover="hoverItem = index"
                     @mouseleave="hoverItem = null"
+                    @click="editPlace(place)"
                 >
                     <div class="w-[224px] h-[148px] rounded-t-[10px] relative">
                         <img
@@ -36,7 +43,7 @@
                         <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
                             <span class="text-[10px] font-semibold">Visible</span>
                             <BaseSwichInput
-                                v-model="place.select"
+                                v-model="place.featured"
                                 :id="`swich-visible-facility-${index}`"
                                 @change:value="updateVisible(place)"
                             />
@@ -44,16 +51,17 @@
                         <div
                             v-if="(hoverItem == index) && place.is_visible"
                             class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
-                            :class="place.recommended ? 'hbg-green-600' : 'hbg-white-100'"
+                            :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
+                            @click="updateRecommendation(place)"
                         >
                             <img
                                 class=""
-                                :src="`/assets/icons/1.TH.REVIEW.${place.recommended ? 'WHITE' : 'OUTLINE'}.svg`"
+                                :src="`/assets/icons/1.TH.REVIEW.${place.featured ? 'WHITE' : 'OUTLINE'}.svg`"
                                 alt="1.TH.WHITE"
                             >
                             <span
                                 class="text-[10px] font-semibold"
-                                :class="place.recommended ? 'htext-white-100' : 'htext-black-100'"
+                                :class="place.featured ? 'htext-white-100' : 'htext-black-100'"
                             >
                                 Recomendar
                             </span>
@@ -80,15 +88,27 @@
                         <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
                         <div class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }} {{ place?.is_visible }}</p>
+                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }} {{ place.is_visible }}</p>
                         </div>
                         <div v-if="place.distance" class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.FOOTSTEP.svg" alt="1.TH.FOOTSTEP">
                             <p class="text-[10px] font-semibold htext-black-100">{{ `a ${place.distance}Km`}}</p>
                         </div>
+                        <button
+                            v-if="hoverItem == index"
+                            class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
+                            :class="{'cursor-grabbing ': dragStartIndex == index}"
+                            @mousedown="setDragStart(index)"
+                        >
+                            <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
+                        </button>
                     </div>
                 </div>
             </template>
+            <!-- <PanelEdit
+                ref="panelEditRef"
+                @load:resetPageData="resetPageData()"
+            /> -->
         </div>
     </template>
     <template v-else>
@@ -97,7 +117,6 @@
                 <img src="/assets/img/1.TH.NO.RECORDS.png" alt="1.TH.NO.RECORDS">
             </div>
             <div>
-                <p class="text-base htext-gray-500">No se han encontrado lugares.</p>
                 <p class="text-base htext-gray-500">No se han encontrado lugares.</p>
             </div>
         </div>
@@ -136,6 +155,9 @@
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
 
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import PanelEdit from "./components/PanelEdit.vue";
+
+const emits = defineEmits(['reloadPlaces', 'edit']);
 
 const hotelStore = inject('hotelStore');
 const placeStore = inject('placeStore');
@@ -148,11 +170,21 @@ const paginateData = inject('paginateData');
 const page = inject('page');
 const numberPlacesVisible = inject('numberPlacesVisible');
 const numberPlacesHidden = inject('numberPlacesHidden');
+const changePendingInForm = inject('changePendingInForm');
+const modalChangePendinginForm = inject('modalChangePendinginForm');
 
+const toast = inject('toast');
+const mockupStore = inject('mockupStore');
+
+// DATA
 const selectedCard = ref(null);
 const dragStartIndex = ref(null);
+const draggedItem = ref(null);
 const hoverItem = ref(null);
 const isloadingForm = ref(true);
+
+// REFS
+const draggableCard = ref(null);
 
 const textNumbersPlacesVisiblesAndHidden = computed(() => {
     let text = null;
@@ -182,6 +214,51 @@ const textNumbersPlacesVisiblesAndHidden = computed(() => {
 
 
 // FUNCTIONS
+
+const setDragStart = (index) => {
+  dragStartIndex.value = index;
+};
+
+const handlerDragStart = (index, event) => {
+  if (dragStartIndex.value !== index) {
+    event.preventDefault();
+    return;
+  }
+  draggedItem.value = index;
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', index);
+  nextTick(() => {
+      event.dataTransfer.setDragImage(draggableCard.value[index], 0, 0);
+  });
+};
+
+const handlerDragOver = (event) => {
+  event.preventDefault();
+};
+
+const handlerDrop = (index, facility) => {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+  const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
+  if (draggedIndex !== index) {
+    const droppedItem = placesData.value.splice(draggedIndex, 1)[0];
+    placesData.value.splice(index, 0, droppedItem);
+    updatePosition();
+  }
+  draggedItem.value = null;
+  dragStartIndex.value = null;
+};
+
+const handlerDragEnd = () => {
+  draggedItem.value = null;
+  dragStartIndex.value = null;
+
+};
+
+///
+
 function converStar(value){
     if(!value) return 0;
     return parseFloat(value.replace(",", "."));
@@ -218,10 +295,79 @@ async function loadPlaces ({ showPageLoading, showLoadingMore }) {
 }
 defineExpose({ loadPlaces });
 
-function updateVisible (place) {
-    
+async function updatePosition () {
+    const idsPlaces = placesData.value.filter(item => item.is_visible).map(item => item.toggle_place_id);
+    const data = {
+        position: idsPlaces,
+        selected_place: formFilter.selected_place,
+        selected_subplace: formFilter.selected_subplace,
+    };
+
+    const response = await placeStore.$updatePosition(data);
+    const { ok } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    mockupStore.$reloadIframe();
 }
- 
+
+async function updateVisible (place) {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        place.select = !facility.select;
+        return;
+    }
+    const data = {
+        visivility: !place.is_visible,
+        place_id: place.id,
+        selected_place: formFilter.selected_place,
+        selected_subplace: formFilter.selected_subplace,
+    }
+    // console.log(data, 'data');
+    const response = await placeStore.$updateVisibility(data);
+    const { ok } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    mockupStore.$reloadIframe();
+    emits('reloadPlaces');
+}
+
+async function updateRecommendation (place) {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        place.select = !facility.select;
+        return;
+    }
+    const data = {
+        recommedation: !place.featured,
+        place_id: place.id,
+    }
+    const response = await placeStore.$updateRecommendation(data);
+    const { ok } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    mockupStore.$reloadIframe();
+    emits('reloadPlaces');
+}
+
+function editPlace (place) {
+ emits('edit', { action: 'EDIT', place});
+} 
+
+function openModalChangeInForm () {
+    modalChangePendinginForm.value = true;
+    nextTick(() => {
+        modalChangePendinginForm.value = false;
+    });
+}
   
 
 </script>

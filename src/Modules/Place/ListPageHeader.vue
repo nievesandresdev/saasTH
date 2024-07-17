@@ -33,12 +33,12 @@
                 v-for="(category ,index) in categoriplaces"
                 :key="index"
                 class="cursor-pointer px-4 pt-4 rounded-t-[10px] flex flex-col"
-                :class="formFilter.selected_subplace === category.id ? 'hbg-green-200' : ''"
+                :class="formFilter.selected_subplace == category.id ? 'hbg-green-200' : ''"
                 @click="changeCategory(category)"
             >
                     <span
                     class="text-base font-semibold"
-                    :class="formFilter.selected_subplace === category.id ? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
+                    :class="formFilter.selected_subplace == category.id ? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
                 >
                         {{ $capitalizeFirstLetter(category.name) }}
                 </span>

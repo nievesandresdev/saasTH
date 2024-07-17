@@ -1,5 +1,5 @@
 <template>
-    <div class="h-[100%] bg-[#FAFAFA]">
+    <div class="h-[100%] bg-[#FAFAFA] relative">
         <div class="pb-[104px]">
             <ListPageHeader @changeCategory="changeCategory($event)" />
             <div
@@ -31,13 +31,21 @@
                     <ListPageTabs @reloadPlaces="reloadPlaces()" class="mt-6 px-6"/>
                 </div>
                 <div class="px-6 mt-4">
-                    <ListPageList ref="listPageListRef" class="px-6 mt-4" />
+                    <ListPageList 
+                        ref="listPageListRef"
+                        class="px-6 mt-4"
+                        @reloadPlaces="reloadPlaces()"
+                        @edit="edit"
+                    />
                 </div>
             </div>
         </div>
-
+        <ModalFilter @reloadPlaces="reloadPlaces()" />
+        <PanelEdit
+            ref="panelEditRef"
+            @load:resetPageData="reloadPlaces()"
+        />
     </div>
-    <ModalFilter @reloadPlaces="reloadPlaces()" />
     
 </template>
 
@@ -55,6 +63,7 @@ import ModalFilter from './components/ModalFilter';
 import ListPageTabs from './ListPageTabs';
 import ListPageList from './ListPageList';
 import ListPageFiltersSelected from './ListPageFiltersSelected';
+import PanelEdit from './components/PanelEdit';
 
     // PROPS
 const props = defineProps({
@@ -146,6 +155,13 @@ const listPageListRef = ref(null);
 const visibilityCategory = ref(false);
 const visibilityTypePlace = ref(false);
 const isOpenModelFilter = ref(false);
+const changePendingInForm = ref(false);
+const modalChangePendinginForm = ref(false);
+
+const modelActive = ref(null);
+const panelEditRef = ref(null);
+
+provide('modelActive', modelActive);
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -164,6 +180,8 @@ provide('numbersByFilters', numbersByFilters);
 provide('isOpenModelFilter', isOpenModelFilter);
 provide('filtersSelected', filtersSelected);
 provide('filtersSelectedDefault', filtersSelectedDefault);
+provide('changePendingInForm', changePendingInForm);
+provide('modalChangePendinginForm', modalChangePendinginForm);
 
 //
 provide('mockupStore', mockupStore);
@@ -307,7 +325,6 @@ async function loadPlaces () {
     page.value = 1;
     isOpenModelFilter.value = false;
     placesData.value = [];
-    console.log(formFilter);
     await Promise.all([loadDataUtil(), listPageListRef.value.loadPlaces(true)]);
 }
 
@@ -318,6 +335,29 @@ function resetDataPlaceAndReloadPlaces () {
 
 function openModalFilter () {
     isOpenModelFilter.value = true;
+}
+
+function openModalChangeInForm () {
+    modalChangePendinginForm.value = true;
+    nextTick(() => {
+        modalChangePendinginForm.value = false;
+    });
+}
+
+function edit (payload) {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+    modelActive.value = payload.action;
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            // loadMockup(`/${payload.facility.id}`);
+        } else {
+            // loadMockup('/fakedetail');
+        }
+        panelEditRef.value.edit(payload);
+    });
 }
 
 </script>

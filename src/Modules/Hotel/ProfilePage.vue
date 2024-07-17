@@ -72,10 +72,10 @@
                     <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
                     <BaseTextareaField
                         v-model="form.description"
-                        placeholder="Nombre..."
+                        placeholder="Descripción..."
                         class-content="flex-1"
                         class-input="text-sm h-[44px]"
-                        name="name"
+                        name="description"
                     />
                 </div>
             </section>
@@ -496,7 +496,6 @@
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
         const body = {...form}
-        console.log(body, 'body')
         const response  = await hotelStorage.$updateProfile(body);
         // console.log(response, 'response')
         const  {ok, data} = response ?? {}

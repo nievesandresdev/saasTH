@@ -66,6 +66,57 @@ export const usePlaceStore = defineStore('place', () => {
         return response.data
     }
 
+    async function $updateVisibility (params, config = {}) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...params
+        }
+        const response = await placeService.updateVisibilityApi(newParams, config);
+        return response;
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+
+    async function $updateRecommendation (params, config = {}) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...params
+        }
+        const response = await placeService.updateRecommendationApi(newParams, config);
+        return response;
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+    
+    async function $updatePosition (body) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newBody = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...body,
+        }
+        const response = await placeService.updatePositionApi(newBody, {showPreloader: false});
+        return response;
+        if(response.ok) return response.data;
+        return []
+    }
+
+    async function $update (body) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newBody = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...body,
+        }
+        // console.log(newBody);
+        const response = await placeService.updateApi(newBody, {showPreloader: true});
+        return response;
+        if(response.ok) return response.data;
+        return []
+    }
+
     //
     return {
         formatImage,
@@ -73,6 +124,10 @@ export const usePlaceStore = defineStore('place', () => {
         $getDataUtil,
         $getTypePlaces,
         $getCategoriesByType,
+        $updateVisibility,
+        $updateRecommendation,
+        $updatePosition,
+        $update,
     }
 
 })

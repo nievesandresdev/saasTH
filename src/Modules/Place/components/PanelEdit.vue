@@ -2,15 +2,14 @@
     <transition>
         <div
             v-if="modelActive"
-            class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
+            class="shadow-xl bg-white flex flex-col justify-between z-[100] w-[500px] fixed"
             :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
-            
             ref="refPanelEdit"
         >
-            <div class="overflow-y-auto scrolling-sticky" style="height:100%">
+            <div class="overflow-y-auto scrolling-sticky">
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
-                        <h1 class="text-[22px] font-medium text-center">{{ modelActive === 'EDIT' ? 'Editar instalación' : 'Crea tu instalación'}}</h1>
+                        <h1 class="text-[22px] font-medium text-center">Editar lugar</h1>
                         <button @click="closeModal">
                             <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
                         </button>
@@ -18,7 +17,7 @@
                 </div>
                 <!-- tabs -->
                 <ul
-                    class="flex space-x-2 px-[24px]"
+                    class="flex space-x-2 mx-[24px] border-b hborder-gray-400"
                 >
                     <li
                         v-for="(item ,index) in tabs"
@@ -36,25 +35,22 @@
                         <span class="w-full h-[3px] rounded-full" :class="tabSelected === index ? 'hbg-green-800' : 'bg-white'" />
                     </li>
                 </ul>   
-                <div class="px-6 mt-[31px]">
+                <div class="px-6 pt-[31px] pb-[35px] flex-1">
                     <template v-if="tabSelected === INFORMATION">
                         <PanelEditFormInformation />
-                    </template>
-                    <template v-else-if="tabSelected === SCHEDULE">
-                        <PanelEditFormSchedule />
                     </template>
                     <template v-else-if="tabSelected === GALLERY">
                         <PanelEditFormPhotos />
                     </template>
-                </div>    
+                </div>
             </div>
             <div class="py-4 px-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalCancel() : openModalDeleteFacility()"
+                        @click="changesform ? openModalCancel() : openModalDeletePlace()"
                     >
-                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
+                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar lugar' }}</span>
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
@@ -88,15 +84,15 @@
         :is-open="isPreviewOpen"
         @click:close="closePreviewImage"
     />
-    <ModalDeleteFacility
-        ref="modalDeleteFacilityRef"
-        @submit:delete="submitDeleteFacility()"
-    />
-    <ModalCancelChangeFacility
+    <ModalCancelChangePlace
         ref="modalCancelChangeFacilityRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
     />
+    <!-- <ModalDeleteFacility
+        ref="modalDeleteFacilityRef"
+        @submit:delete="submitDeleteFacility()"
+    /> -->
     <template v-if="modelActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -108,21 +104,20 @@
             :force-open="modalChangePendinginForm"
             @close="closeModal()"
         />
-    </template>
+    </template> -->
 </template>
 
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, toRefs, inject } from 'vue';
+import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick } from 'vue';
 import lodash from 'lodash';
 
 // COMPONENTS
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import PanelEditFormInformation from './PanelEditFormInformation.vue';
-import PanelEditFormSchedule from './PanelEditFormSchedule.vue';
 import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
-import ModalDeleteFacility from './ModalDeleteFacility.vue';
-import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
+import ModalCancelChangePlace from './ModalCancelChangePlace.vue';
+// import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 
 
@@ -133,64 +128,11 @@ const emit = defineEmits(['load:resetPageData']);
 
 // DATA STATIC
 const  INFORMATION = 'INFORMATION';
-const  SCHEDULE = 'SCHEDULE';
 const  GALLERY = 'GALLERY';
 const tabs = {
     [INFORMATION]: 'Información',
-    [SCHEDULE]: 'Horarios',
     [GALLERY]: 'Galería',
 }
-const schedulesDefault = [
-        {
-            name: 'Lunes',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Martes',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Miércoles',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Jueves',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Viernes',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Sábado',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-        {
-            name: 'Domingo',
-            active: false,
-            times: [
-                {start: '00:00', end: '23:59'},
-            ],
-        },
-];
 // DATA
 const tabSelected = ref(INFORMATION);
 
@@ -199,39 +141,49 @@ const modalChangePendinginForm = inject('modalChangePendinginForm');
 const modelActive = inject('modelActive');
 const hotelStore = inject('hotelStore');
 const facilityStore = inject('facilityStore');
+const placeStore = inject('placeStore');
 const mockupStore = inject('mockupStore');
 const toast = inject('toast');
 const hotelData = inject('hotelData');
 
 const form = reactive({
-    id: null,
+    place_id: null,
+    featured: false,
+    recommendation: null,
+    address: null,
     title: null,
     description: null,
-    ad_tag: null,
-    schedules: [...schedulesDefault],
-    always_open: false,
+    phone: null,
+    email: null,
+    url_web: null,
     images: [],
 });
 const itemSelected = reactive({
-    id: null,
+    place_id: null,
+    featured: false,
+    recommendation: null,
+    address: null,
     title: null,
     description: null,
-    ad_tag: null,
-    schedules: [...schedulesDefault],
-    always_open: false,
+    phone: null,
+    email: null,
+    url_web: null,
     images: [],
 });
 const formDefault = reactive({
-    id: null,
+    place_id: null,
+    featured: false,
+    recommendation: null,
+    address: null,
     title: null,
     description: null,
-    ad_tag: null,
-    schedules: [...schedulesDefault],
-    always_open: false,
+    phone: null,
+    email: null,
+    url_web: null,
     images: [],
 });
 const formRules = {
-    title: [value => value.trim() ? true : 'Introduce el nombre de tu instalación'],
+    // title: [value => value.trim() ? true : 'Introduce '],
 };
 
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
@@ -259,19 +211,17 @@ provide('changePendingInForm', changePendingInForm);
 
 // CHANGE
 const changesform = computed(() => {
-    let schedulesNew = form.schedules;
-    let schedulesOld = itemSelected?.schedules;
     let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
-        (normalize(form.ad_tag) !== normalize(itemSelected.ad_tag)) ||
-        (Boolean(form.always_open) !== Boolean(itemSelected.value?.always_open)) ||
-        // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules)) ||
-        !lodash.isEqual(form.schedules, itemSelected?.schedules) ||
-        // !deepEqual(form.schedules, itemSelected?.schedules) ||
-        (form.images.length !== itemSelected?.images.length) ||
-        form.images.find(item => item?.image);
+        (normalize(form.recommendation) !== normalize(itemSelected.recommendation)) ||
+        (normalize(form.address) !== normalize(itemSelected.address)) ||
+        (normalize(form.phone) !== normalize(itemSelected.phone)) ||
+        (normalize(form.email) !== normalize(itemSelected.email)) ||
+        (normalize(form.url_web) !== normalize(itemSelected.url_web)) ||
+        (Boolean(form.featured) !== Boolean(itemSelected?.featured)) ||
+        (form.images.length !== itemSelected?.images.length);
         changePendingInForm.value = valid;
-    return valid
+    return valid;
 });
 function toRawObject(obj) {
   return JSON.parse(JSON.stringify(obj));
@@ -323,44 +273,29 @@ function changeTab (val) {
     tabSelected.value = val
 }
 
-function editFacility ({action, facility}) {
+function edit ({action, place}) {
     urlsimages.value = [];
-    console.log(action, 'action')
     if (action === 'EDIT') {
-        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
-        let schedulesNew = [];
-        if (!!schedules) {
-            let scheduleFormated = JSON.parse(schedules);
-            if (scheduleFormated?.length != 7) {
-                schedulesNew = [...schedulesDefault];
-            } else {
-                schedulesNew = [...scheduleFormated];
-            }
-        } else {
-            schedulesNew = [...schedulesDefault];
-        }
-        let itemSelectedSchedules = JSON.parse(JSON.stringify(schedulesNew));
-        let formSchedules = JSON.parse(JSON.stringify(schedulesNew));
-        let itemSelectedImages = JSON.parse(JSON.stringify(schedulesNew));
-        let formImages = JSON.parse(JSON.stringify(schedulesNew));
-        Object.assign(itemSelected, { id, title, description, schedule,  schedules: itemSelectedSchedules, images: itemSelectedImages, select, ad_tag, always_open });
-        Object.assign(form, { id, title, description, schedule, schedules: formSchedules, images: formImages, select, ad_tag, always_open });
-        images.forEach(img => {
+        let { id, title, description, featured, place_images, address, metting_point_latitude, metting_point_longitude, recomendations, web_link, phone_wheretoeat, email_wheretoeat } = place;
+        let imagesForm = JSON.parse(JSON.stringify(place_images ?? []));
+        let  formObject = { place_id: id, title, description, featured, images: imagesForm, address, metting_point_latitude, metting_point_longitude, recommendation: recomendations?.message, url_web: web_link, phone: phone_wheretoeat, email: email_wheretoeat };
+        Object.assign(itemSelected, formObject);
+
+        let imagesItemSelected = JSON.parse(JSON.stringify(place_images ?? []));
+        let  itemSelectedObject = { place_id: id, title, description, featured, images: imagesItemSelected, address, metting_point_latitude, metting_point_longitude, recommendation: recomendations?.message, url_web: web_link, phone: phone_wheretoeat, email: email_wheretoeat };
+        Object.assign(form, itemSelectedObject);
+
+        imagesForm.forEach(img => {
             urlsimages.value.push(img);
         });
-    } else {
-        Object.assign(itemSelected, {...formDefault});
-        Object.assign(form, {...formDefault});
     }
-
 }
-defineExpose({ editFacility });
+defineExpose({ edit });
  
 
 async function submitSave () {
     let body = { ...form };
-    const response = await facilityStore.$storeOrUpdate(body);
-    // console.log(response, 'response');
+    const response = await placeStore.$update(body);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -390,6 +325,10 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
@@ -408,6 +347,19 @@ function openModalDeleteFacility () {
 function closePreviewImage() {
     isPreviewOpen.value = false;
 }
+
+function openModalDeletePlace () {
+
+}
+
+function openModalChangeInForm () {
+    modalChangePendinginForm.value = true;
+    nextTick(() => {
+        modalChangePendinginForm.value = false;
+    });
+}
+
+
 
 </script>
 

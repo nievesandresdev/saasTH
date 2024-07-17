@@ -160,7 +160,6 @@
     }
 
     function editFacility (payload) {
-        console.log(changePendingInForm.value, 'changePendingInForm.value')
         if (changePendingInForm.value) {
             openModalChangeInForm();
             return;
