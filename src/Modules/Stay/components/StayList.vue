@@ -1,5 +1,5 @@
 <template>
-    <aside class="w-full h-full flex flex-col bg-white">
+    <aside class="w-full h-full flex flex-col bg-white shadow-hoster">
         
         <button class="py-[23px] px-4 block">
             <h5 class="text-base font-semibold leading-[120%] text-left">Estancias</h5>
@@ -175,10 +175,10 @@ function cleanSearch(){
         periods: allFilters.value.periods,
         pendings:  allFilters.value.pendings
     }
-    if(route.params.id){
+    if(route.params.stayId){
         router.push({
             name: 'StayDetailPage',
-            params: { id: route.params.id }
+            params: { id: route.params.stayId }
         });
     }
     loadData();

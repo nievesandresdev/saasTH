@@ -12,34 +12,44 @@
         </div>
     </div>
     <div class="pt-4 sticky top-0 left-0 bg-white px-6 z-50">
-        <TabMenu :links="views"/>
+        <TabMenu :links="views ?? {}"/>
     </div>
 </template>
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, watch } from 'vue'
 import { useRoute } from 'vue-router';
-
-const route = useRoute();
-
-const session = inject('session');
-
 import TabMenu from '@/components/TabMenu.vue'
 
-const views = ref([
-    {
-        name: 'Información',
-        active : route.name == 'StayDetailPage',
-        viewName :'StayDetailPage'
-    },
-    {
-        name: 'Seguimiento',
-        active : route.name == '-',
-        viewName :'StayDetailPage'
-    },
-    {
-        name: 'Chat',
-        active : route.name == '-',
-        viewName :'StayDetailPage'
-    },
-])
+const route = useRoute();
+const data = inject('data')
+const session = inject('session');
+
+const stayId = ref(route.params.stayId);
+const views = ref([])
+
+watch(data, (newValue) => {
+    if (newValue && newValue.guests && newValue.guests.length > 0) {
+        const guestId = newValue.guests[0].id;
+        views.value = [
+            {
+                name: 'Información',
+                active: route.name == 'StayDetailPage',
+                viewName: 'StayDetailPage'
+            },
+            {
+                name: 'Seguimiento',
+                active: route.name == 'StayQueryDetail',
+                viewName: 'StayQueryDetail',
+                params: { stayId: stayId.value},
+                query: { g: guestId }
+            },
+            {
+                name: 'Chat',
+                active: route.name == 'StayChatPage',
+                viewName: 'StayChatPage'
+            },
+        ];
+    }
+}, { deep: true, immediate: true });
+
 </script>
