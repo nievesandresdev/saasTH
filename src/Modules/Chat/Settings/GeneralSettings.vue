@@ -111,13 +111,13 @@ onMounted(() => {
 
 const getSettingsData = async () => {
     const response = await getSettings()
-    form.languages = JSON.parse(JSON.stringify(response.data.languages))
-    response.data.languages.forEach(lang => {
+    form.languages = JSON.parse(JSON.stringify(response.data.settings.languages))
+    response.data.settings.languages.forEach(lang => {
         notSearchLang.value.push(lang.id)
     })
 
-    form.name = response.data.name
-    form.show_guest = response.data.show_guest == 1 ? true : false
+    form.name = response.data.settings.name
+    form.show_guest = response.data.settings.show_guest == 1 ? true : false
     initialForm.value = JSON.stringify(form) 
     mockupStore.$setIframeUrl('/mobile-chat/fake')
 }
