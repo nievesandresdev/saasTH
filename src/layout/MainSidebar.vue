@@ -184,8 +184,11 @@ const menu_links = ref([
           'SettingsPreStayPage',
           'SettingsStayPage',
           'SettingsPostStayPage',
+          'Places',
+          'Facilities',
+          'Perfil',
         ],
-        url: '/dashboard',
+        url: '/alojamiento/perfil',
       },
       {
         title: 'Comunicaciones',

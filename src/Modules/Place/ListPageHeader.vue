@@ -2,7 +2,7 @@
     <section class="sticky top-0 hbg-white-100 z-[100]">
         <div class="flex justify-between py-[20px] px-[24px]">
             <div class="space-x-2 flex">
-                <h1 class="font-medium text-[22px]">Destino - {{ categoryCurrent?.name_type_place }}</h1>
+                <h1 class="font-medium text-[22px]">Destino - {{ typePlaceCurrent?.name }}</h1>
                 <BaseTooltipResponsive
                     size="l"
                     :top="55"
@@ -20,6 +20,7 @@
             </div>
             <SwichShowTypePlace />
         </div>
+        
         <div
             v-if="!visibilityTypePlace"
             class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
@@ -70,6 +71,7 @@
     //
     const categoriplaces = inject('categoriplaces');
     const categoryCurrent = inject('categoryCurrent');
+    const typePlaceCurrent = inject('typePlaceCurrent');
     const visibilityTypePlace = inject('visibilityTypePlace');
 
     // DATA

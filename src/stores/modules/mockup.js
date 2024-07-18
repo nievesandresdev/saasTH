@@ -16,7 +16,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
       if(ENVIROMENT == 'test'){
         urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       }
-      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&mockup=true&${params}`
+      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
   }
 
