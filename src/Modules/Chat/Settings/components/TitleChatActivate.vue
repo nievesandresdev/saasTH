@@ -48,10 +48,6 @@ const props = defineProps({
         type:Boolean,
         default:false
     },
-    status:{
-        type:String,
-        default:'Pre-Stay'
-    },
 })
 const emit = defineEmits(['onchange'])
 

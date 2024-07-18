@@ -24,8 +24,8 @@ const views = ref([
     },
     {
         name: 'Respuestas automáticas',
-        active : route.name == 'SettingsPostStayPage',
-        viewName :'SettingsPostStayPage'
+        active : route.name == 'AutomaticResponses',
+        viewName :'AutomaticResponses'
     },
 ])
 </script>

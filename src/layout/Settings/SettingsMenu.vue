@@ -288,7 +288,7 @@ import { useRoute, useRouter  } from 'vue-router';
                   title: 'Chat',
                   to: 'GeneralSettings',
                   icon: '/assets/icons/1.TH.CHAT.NEW.svg',
-                  include: ['GeneralSettings','AvailabilitySettings']
+                  include: ['GeneralSettings','AvailabilitySettings','AutomaticResponses']
                 
               },
           ],

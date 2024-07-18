@@ -17,3 +17,5 @@ export const getSettings = () => apiHttp('GET', `${chatPath}/${hosterPath}/${cha
 export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/searchLang`, params,{ showPreloader: false })
 //storeGeneralSetting
 export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params)
+//updateAvailability
+export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params)

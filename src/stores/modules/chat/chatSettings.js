@@ -4,7 +4,8 @@ import { ref } from 'vue'
 import {
     getAllApi,
     updateNotificationsEmailApi,
-    getSettings
+    getSettings,
+    updateAvailability
 } from '@/api/services/chat/chatSettings.services'
 
 export const useChatSettingsStore = defineStore('chatSettings', () => {
@@ -31,7 +32,9 @@ export const useChatSettingsStore = defineStore('chatSettings', () => {
         return ok;
     }
 
-
+    /*
+    * Get all settings chat
+    */
     async function $getAllSettingsChat() {
         const response = await getSettings()
         const { ok } = response
@@ -40,12 +43,22 @@ export const useChatSettingsStore = defineStore('chatSettings', () => {
         }
     }
 
+    /**
+     * updateAvailability
+     */
+    async function $updateAvailability(params) {
+        const response = await updateAvailability(params)
+        const { ok } = response
+        return ok
+    }
+
 
     //
     return {
         $getAll,
         $updateNotificationsEmail,
-        $getAllSettingsChat
+        $getAllSettingsChat,
+        $updateAvailability
     }
 
 })
