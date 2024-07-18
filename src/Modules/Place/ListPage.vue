@@ -8,6 +8,8 @@
             >
                 La sección <span class="font-semibold">{{ categoryCurrent?.name }}</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
             </div>
+            <!-- {{ formFilter.selected_subplace }} -->
+            <!-- {{typePlaceCurrent}} -->
             <div>
                 <div class="pt-6">
                     <div class="flex justify-between items-center px-6">
@@ -50,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, nextTick, toRefs } from 'vue';
+import { ref, reactive, onMounted, provide, computed, nextTick, toRefs, watch } from 'vue';
 
 import { useRouter } from 'vue-router';
 const route = useRouter();
@@ -194,12 +196,23 @@ onMounted(async () => {
     loadPlaces();
 });
 
+watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
 // COMPUTED
 const categoryCurrent = computed(() => {
-    let cat = categoriplaces.value.find(category => formFilter.selected_subplace === category.id);
+    let cat = typePlaceCurrent.value?.categori_places.find(category => formFilter.selected_subplace === category.id);
+    return cat;
+});
+const typePlaceCurrent = computed(() => {
+    let cat = typeplaces.value.find(type => formFilter.selected_place === type.id);
     return cat;
 });
 provide('categoryCurrent', categoryCurrent);
+provide('typePlaceCurrent', typePlaceCurrent);
 
 const emptyFilters = computed(() => {
     return !filtersSelected.points?.length && !filtersSelected.distances?.length && !filtersSelected.all_cities;
@@ -234,15 +247,24 @@ async function loadTypePlaces () {
     if (response.ok) {
         
         typeplaces.value = response.data;
-        // if (!formFilter.selected_place) {
+        // console.log(typeplaces.value)
+        loadQueryInFormFilter();
+
+        if (!formFilter.selected_place) {
             formFilter.selected_place = typeplaces.value?.[0].id;
             formFilterDefault.selected_place = typeplaces.value?.[0].id;
-        // }
-        // if (!formFilter.selected_subplace) {
-            formFilter.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
-            formFilterDefault.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
-        // }
-        loadQueryInFormFilter();
+        }
+        if (!formFilter.selected_subplace) {
+            if (!formFilter.selected_place) {
+                formFilter.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
+                formFilterDefault.selected_subplace = typeplaces.value?.[0].categori_places?.[0].id;
+            } else {
+                formFilter.selected_subplace = typePlaceCurrent.value?.categori_places?.[0]?.id;
+                formFilterDefault.selected_subplace = typePlaceCurrent.value?.categori_places?.[0]?.id;
+
+            }
+        }
+
     }
 }
 async function loadDataUtil () {
@@ -258,7 +280,8 @@ async function loadDataUtil () {
 }
 
 async function loadCategoriPlaces () {
-    const response = await placeStore.$getCategoriesByType();
+    let params = {typeplace: formFilter?.selected_place};
+    const response = await placeStore.$getCategoriesByType(params);
     if (response.ok) {
         categoriplaces.value = response.data;
     }
@@ -312,11 +335,13 @@ function validValueQuery (field, value) {
     return value;
 }
 async function reloadPlaces () {
+    
     loadDataFormFilter();
     page.value = 1;
     isOpenModelFilter.value = false;
     placesData.value = [];
     route.push({ name: 'Places', query: {...filterNonNullAndNonEmpty(formFilter)} });
+    loadMockup();
     await Promise.all([loadDataUtil(), listPageListRef.value.loadPlaces(true)]);
 }
 
@@ -325,6 +350,7 @@ async function loadPlaces () {
     page.value = 1;
     isOpenModelFilter.value = false;
     placesData.value = [];
+    loadMockup();
     await Promise.all([loadDataUtil(), listPageListRef.value.loadPlaces(true)]);
 }
 
@@ -352,12 +378,24 @@ function edit (payload) {
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
-            // loadMockup(`/${payload.facility.id}`);
+            loadMockup(payload.place.id);
+            // loadMockup(payload.place.id);
         } else {
             // loadMockup('/fakedetail');
         }
         panelEditRef.value.edit(payload);
     });
+}
+
+function loadMockup (placeId = null) {
+    let query = null;
+    if (placeId) {
+        mockupStore.$setIframeUrl(`/places/${placeId}`);
+    } else {
+        query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}&city=${formFilter.current_city}&featured=${formFilter.featured}`;
+        mockupStore.$setIframeUrl(`/places`, query);
+    }
+    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
 }
 
 </script>

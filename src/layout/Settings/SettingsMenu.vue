@@ -3,6 +3,8 @@
         <div class="py-3">
             <p class="text-base font-semibold leading-[120%] py-[10.5px] px-4">WebApp</p>
         </div>
+        <!-- {{dataTypePlaces}}
+        {{ fullUrl }} -->
       <template
         v-for="(section, index_section) in menu_section"
         :key="index_section"
@@ -37,18 +39,37 @@
                     <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-gray-100"
-                      :class="page_url.includes(`typeplace=${data_type_places?.[index_sub_menu]?.id}`) || page_url == '/tablero-hoster/plataforma/guia-de-la-ciudad' && data_type_places?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                      :class="fullUrl.includes(`typeplace=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     >
-                    <!-- !load_page && -->
                       <div
-                        class="w-full h-full block pl-[44px] pr-[24px] py-[8px] cursor-pointer"
-                        @click="data_type_places?.[index_sub_menu]?.id ? goLinkWithRoute(route('hoster.plataform.cityguide', { typeplace: data_type_places?.[index_sub_menu]?.id })) : ''"
+                        class="w-full h-full block pl-[44px] pr-[24px] cursor-pointer"
+                        @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''"
                       >
-                        <div class="flex items-center">
+                        <!-- @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''" -->
+                        <!-- @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace(dataTypePlaces?.[index_sub_menu]?.id) : ''" -->
+                        <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
+                          <span v-if="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[24px] w-[3px]  rounded-full left-[-2.4px]"></span>
+                          <div class="py-[8px] ml-[20px]">
+                            <span class="text-sm normal-case">{{ sub_menu.title }}</span>
+                          </div>
+                        </div>
+                        <!-- <div class="flex items-center">
                           <img :src="sub_menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
                           <span class="text-sm normal-case">{{ sub_menu.title }} </span>
-                        </div>
+                        </div> -->
                       </div>
+                      <!-- <a
+                        href="javascript:void(0)"
+                        class="w-full h-full block pl-[36px] pr-[12px]"
+                        @click="!load_page && data_type_places?.[index_sub_menu]?.id ? goLinkWithRoute(route('hoster.plataform.cityguide', { typeplace: data_type_places?.[index_sub_menu]?.id })) : ''"
+                      >
+                        <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
+                          <span v-if="$page.url.includes(`typeplace=${data_type_places?.[index_sub_menu]?.id}`) || $page.url == '/tablero-hoster/plataforma/guia-de-la-ciudad' && data_type_places?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[24px] w-[3px]  rounded-full left-[-2.4px]"></span>
+                          <div class="py-[8px] ml-[20px]">
+                            <span class="text-sm normal-case">{{ $utils.capitalize(sub_menu.title) }}</span>
+                          </div>
+                        </div>
+                      </a> -->
                     </li>
                     <li
                       v-else
@@ -127,7 +148,7 @@
                               <li
                                 v-if="sub_menu.place"
                                 class=" w-full h-full hover-gray-100"
-                                :class="page_url.includes(`typeplace=${data_type_places?.[index_sub_menu]?.id}`) || page_url == '/tablero-hoster/plataforma/guia-de-la-ciudad' && data_type_places?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                                :class="fullUrl.includes(`typeplace=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                               >
                                 <a
                                   href="javascript:void(0)"
@@ -188,7 +209,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, computed } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
 // import DropdownHotel from '@/Pages/Associates/Layouts/DropdownHotel.vue';
 // import TooltipResponsive from '@/Components/TooltipResponsive.vue'
@@ -196,6 +217,9 @@ import { useRoute, useRouter  } from 'vue-router';
   const route = useRoute();
   const router = useRouter();
   const status_subscription = false
+
+  import { usePlaceStore } from '@/stores/modules/place';
+  const placeStore = usePlaceStore();
 //   const buttonRefs = ref([]);
 //   const applyHoverEffect = (index) => {
 //     buttonRefs.value[index].classList.add('hover-effect');
@@ -235,19 +259,22 @@ import { useRoute, useRouter  } from 'vue-router';
                       title: 'qué visitar',
                       icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
-                      include: '/guia-de-la-ciudad',
+                      include: '/places',
+                      selectedArr: ['Places']
                     },
                     {
                       title: 'dónde comer',
                       icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
-                      include: '/guia-de-la-ciudad',
+                      include: '/places',
+                      selectedArr: ['Places']
                     },
                     {
                       title: 'ocio',
                       icon: '/assets/icons/1.TH.DESTINO.svg',
                       place: true,
-                      include: '/guia-de-la-ciudad',
+                      include: '/places',
+                      selectedArr: ['Places']
                     },
                   ],
               },
@@ -345,7 +372,7 @@ import { useRoute, useRouter  } from 'vue-router';
 const page_url = 'x'
 //   const load_page = inject('load_page')
 
-  const data_type_places = reactive([
+  const dataTypePlaces = reactive([
     {
         id: 1,
         name: "Qué visitar",
@@ -364,7 +391,7 @@ const page_url = 'x'
         active: 1,
         show: 1,
     },
-  ])
+  ]);
 
   // ONMOUNTED
   onMounted(() => {
@@ -372,24 +399,27 @@ const page_url = 'x'
       focusMenu()
   })
 
+  // COMPUTED
+  const fullUrl = computed(() => {
+    let url = `${route.fullPath}`;
+    return url;
+  });
+
 
 
   // FUNCTIONS
 
-  function getTypePlaces(){
-    // axios({
-    //     url: route('hoster.gettypeplaces'),
-    //     method: 'GET',
-    // })
-    // .then((res) => {
-    //   let type_places = res.data
-    //   type_places.forEach(item => {
-    //     let type = data_type_places.find(t => t.name == item.name)
-    //     if (type) {
-    //       type.id = item.id
-    //     }
-    //   });
-    // })
+  async function getTypePlaces(){
+    const response = await placeStore.$getTypePlaces();
+    if (response.ok) {
+      let typePlaces = response.data;
+      typePlaces.forEach(item => {
+        let type = dataTypePlaces.find(t => t.name == item.name);
+        if (type) {
+          type.id = item.id;
+        }
+      });
+    }
   }
 
   function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
@@ -407,7 +437,7 @@ const page_url = 'x'
     menu_section.forEach((section, index_section) => {
       section.group.forEach((menu, index_menu) => {
         menu?.group?.forEach((sub_menu) => {
-          if (page_url.includes(sub_menu.include)) {
+          if (fullUrl.value?.includes(sub_menu.include)) {
             menu_section[index_section].group[index_menu].expanded = true
           }
         })
@@ -417,6 +447,13 @@ const page_url = 'x'
 
   function goLink(viewName) {
     router.push({ name: viewName});
+  }
+
+  function goLinkPlace(r) {
+    // console.log(router?.name, 'd');
+    router.replace(r);
+    const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`
+    window.location.assign(newUrl);
   }
 
   function goLinkWithRoute() {
