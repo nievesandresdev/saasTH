@@ -19,8 +19,8 @@ const views = ref([
     },
     {
         name: 'Disponibilidad',
-        active : route.name == 'SettingsStayPage',
-        viewName :'SettingsStayPage'
+        active : route.name == 'AvailabilitySettings',
+        viewName :'AvailabilitySettings'
     },
     {
         name: 'Respuestas automáticas',
