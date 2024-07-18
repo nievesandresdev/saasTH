@@ -88,6 +88,7 @@ import useClickOutside from '@/composables/useClickOutside';
 import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useMockupStore } from '@/stores/modules/mockup'
 import { useToastAlert } from '@/composables/useToastAlert'
+import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
 
 const form = reactive({
     name: '',
@@ -97,6 +98,7 @@ const form = reactive({
 })
 
 const mockupStore = useMockupStore()
+const chatSettingsStore = useChatSettingsStore()
 const toast = useToastAlert()
 
 const initialForm = ref(null) // Para mantener el estado inicial del formulario
@@ -110,16 +112,20 @@ onMounted(() => {
 })
 
 const getSettingsData = async () => {
-    const response = await getSettings()
-    form.languages = JSON.parse(JSON.stringify(response.data.settings.languages))
-    response.data.settings.languages.forEach(lang => {
+    const response = await chatSettingsStore.$getAllSettingsChat();
+
+    form.languages = JSON.parse(JSON.stringify(response.settings.languages))
+    response.settings.languages.forEach(lang => {
         notSearchLang.value.push(lang.id)
     })
 
-    form.name = response.data.settings.name
-    form.show_guest = response.data.settings.show_guest == 1 ? true : false
+    form.name = response.settings.name
+    form.show_guest = response.settings.show_guest == 1 ? true : false
     initialForm.value = JSON.stringify(form) 
     mockupStore.$setIframeUrl('/mobile-chat/fake')
+
+    
+
 }
 
 const search = ref('')
