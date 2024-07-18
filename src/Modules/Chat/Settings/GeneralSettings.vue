@@ -105,7 +105,8 @@ const notSearchLang = ref([])
 onMounted(() => {
     getSettingsData()
 
-    mockupStore.$setIframeUrl('/mobile-chat/fake')
+    
+    //mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 })
 
 const getSettingsData = async () => {
@@ -116,7 +117,9 @@ const getSettingsData = async () => {
     })
 
     form.name = response.data.name
-    initialForm.value = JSON.stringify(form) // Guardar estado inicial después de cargar los datos
+    form.show_guest = response.data.show_guest == 1 ? true : false
+    initialForm.value = JSON.stringify(form) 
+    mockupStore.$setIframeUrl('/mobile-chat/fake')
 }
 
 const search = ref('')
@@ -179,6 +182,8 @@ const submit = async () => {
     } else {
         toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
     }
+    getSettingsData()
+    mockupStore.$reloadIframe();
     // Lógica para enviar cambios
     initialForm.value = JSON.stringify(form) // Actualizar el estado inicial después de guardar
 }
@@ -196,6 +201,3 @@ const valid = computed(() => {
 watch(form, handleInputChange, { deep: true })
 </script>
 
-<style scoped>
-/* Las clases CSS personalizadas ya no son necesarias */
-</style>
