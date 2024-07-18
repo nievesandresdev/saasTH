@@ -15,3 +15,5 @@ export const updateNotificationsEmailApi = (data) => apiHttp('POST', `${chatPath
 export const getSettings = () => apiHttp('GET', `${chatPath}/${hosterPath}/${chatSettingsPath}/getSettings`, [])
 //searchLang
 export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/searchLang`, params)
+//storeGeneralSetting
+export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params)

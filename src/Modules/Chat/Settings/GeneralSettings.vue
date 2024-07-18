@@ -1,6 +1,9 @@
 <template>
     <section class="px-6">
-        <TitleChatActivate status="Post-Stay" />
+        <TitleChatActivate 
+            :defaultToggle="form.show_guest" 
+            @onchange="(value) => form.show_guest = value"
+        />
         <HeadChat />
         <SectionConfig>
             <template #title>
@@ -59,7 +62,7 @@
     <ChangesBar 
         :existingChanges="changes"
         :validChanges="changes && valid"
-        @cancel="cancelarCambios" 
+        @cancel="cancelChange" 
         @submit="submit"
     />
 
@@ -80,23 +83,29 @@ import HeadChat from './components/HeadChat.vue'
 import SectionConfig from './components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTextField from '@/components/Forms/BaseTextField'
-import { getSettings, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
+import { getSettings,storeGeneralSetting, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
 import useClickOutside from '@/composables/useClickOutside';
 import ModalNoSave from '@/components/ModalNoSave.vue'
+import { useMockupStore } from '@/stores/modules/mockup'
+import { useToastAlert } from '@/composables/useToastAlert'
 
 const form = reactive({
     name: '',
-    languages: [
-        { id: 1, name: 'Español', abbreviation: 'es' },
-        { id: 2, name: 'Inglés', abbreviation: 'en' }
-    ]
+    languages: [],
+    languages_id: [],
+    show_guest: null
 })
+
+const mockupStore = useMockupStore()
+const toast = useToastAlert()
 
 const initialForm = ref(null) // Para mantener el estado inicial del formulario
 const notSearchLang = ref([])
 
 onMounted(() => {
     getSettingsData()
+
+    mockupStore.$setIframeUrl('/mobile-chat/fake')
 })
 
 const getSettingsData = async () => {
@@ -151,14 +160,25 @@ const handleInputChange = () => {
     valid.value = form.name.trim() !== '' && form.languages.length > 0
 }
 
-const cancelarCambios = () => {
+const cancelChange = () => {
     const oldValues = JSON.parse(initialForm.value)
     form.name = oldValues.name
     form.languages = oldValues.languages
 }
 
 const submit = async () => {
-    console.log('Enviando cambios')
+    form.languages_id = []
+    form.languages.forEach(lang => {
+        form.languages_id.push(lang.id)
+    });
+
+    const response = await storeGeneralSetting(form)
+
+    if(response.ok){
+        toast.warningToast('Se han guardado los cambios','top-right')
+    } else {
+        toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
+    }
     // Lógica para enviar cambios
     initialForm.value = JSON.stringify(form) // Actualizar el estado inicial después de guardar
 }
