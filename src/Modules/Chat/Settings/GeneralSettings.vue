@@ -62,6 +62,15 @@
         @cancel="cancelarCambios" 
         @submit="submit"
     />
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
 </template>
 
 <script setup>
@@ -73,6 +82,7 @@ import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTextField from '@/components/Forms/BaseTextField'
 import { getSettings, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
 import useClickOutside from '@/composables/useClickOutside';
+import ModalNoSave from '@/components/ModalNoSave.vue'
 
 const form = reactive({
     name: '',
