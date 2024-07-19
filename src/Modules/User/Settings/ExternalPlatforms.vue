@@ -16,7 +16,12 @@
 
             <div class="font-montserrat">
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
-                    <span class="font-medium text-sm">Alojamiento 1</span>
+                    <div class="flex justify-end">
+                        <div class="flex cursor-pointer items-center">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
                     <div :class="['flex', hoverValidation.booking ? 'border-green-500' : 'border-gray-300']">
                         <span :class="['inline-flex items-center px-2 text-sm text-gray-900 border border-e-0 pr-6', hoverValidation.booking ? 'border-green-500' : 'border-gray-300', 'rounded-s-md']">
                             <img src="/assets/icons/otas/Booking.svg" class="w-8 h-8 mr-2" alt="Booking">
@@ -26,7 +31,12 @@
                     </div>
                 </div>
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
-                    <span class="font-medium text-sm">Alojamiento 1</span>
+                    <div class="flex justify-end">
+                        <div class="flex cursor-pointer items-center">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
                     <div :class="['flex', hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
                         <span :class="['inline-flex items-center px-2 text-sm text-gray-900 border border-e-0', hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300', 'rounded-s-md']">
                             <img src="/assets/icons/otas/Tripadvisor.svg" class="w-8 h-8 mr-2" alt="Tripadvisor">
@@ -36,7 +46,12 @@
                     </div>
                 </div>
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
-                    <span class="font-medium text-sm">Alojamiento 1</span>
+                    <div class="flex justify-end">
+                        <div class="flex cursor-pointer items-center">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
                     <div :class="['flex', hoverValidation.expedia ? 'border-green-500' : 'border-gray-300']">
                         <span :class="['inline-flex items-center px-2 text-sm text-gray-900 border border-e-0 pr-6', hoverValidation.expedia ? 'border-green-500' : 'border-gray-300', 'rounded-s-md']">
                             <img src="/assets/icons/otas/Expedia.svg" class="w-8 h-8 mr-2" alt="Expedia">
@@ -46,7 +61,12 @@
                     </div>
                 </div>
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
-                    <span class="font-medium text-sm">Alojamiento 1</span>
+                    <div class="flex justify-end">
+                        <div class="flex cursor-pointer items-center">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
                     <div :class="['flex', hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
                         <span :class="['inline-flex items-center px-2 text-sm text-gray-900 border border-e-0 pr-6', hoverValidation.google ? 'border-green-500' : 'border-gray-300', 'rounded-s-md']">
                             <img src="/assets/icons/otas/Google.svg" class="w-8 h-8 mr-2" alt="Google">
