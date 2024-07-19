@@ -19,3 +19,5 @@ export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}
 export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params)
 //updateAvailability
 export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params)
+//updateResponses
+export const updateResponses = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateResponses`, params)

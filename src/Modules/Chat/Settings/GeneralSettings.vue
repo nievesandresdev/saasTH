@@ -1,11 +1,14 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <section class="px-6 min-h-screen">
+        <div class="px-6">
             <TitleChatActivate 
                 :defaultToggle="form.show_guest" 
                 @onchange="(value) => form.show_guest = value"
             />
-            <HeadChat />
+        </div>
+        <AlertShowGuest :show_guest="form.show_guest"/>
+        <section class="px-6 min-h-screen">
+            <HeadChat/>
             <SectionConfig>
                 <template #title>
                     <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
@@ -85,12 +88,13 @@ import HeadChat from './components/HeadChat.vue'
 import SectionConfig from './components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTextField from '@/components/Forms/BaseTextField'
-import { getSettings,storeGeneralSetting, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
+import { storeGeneralSetting, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
 import useClickOutside from '@/composables/useClickOutside';
 import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useMockupStore } from '@/stores/modules/mockup'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
+import AlertShowGuest from './components/AlertShowGuest.vue'
 
 const form = reactive({
     name: '',
@@ -107,11 +111,11 @@ const initialForm = ref(null) // Para mantener el estado inicial del formulario
 const notSearchLang = ref([])
 
 onMounted(() => {
-    getSettingsData()
+    ata()
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 })
 
-const getSettingsData = async () => {
+const ata = async () => {
     const response = await chatSettingsStore.$getAllSettingsChat();
 
     form.languages = JSON.parse(JSON.stringify(response.settings.languages))
@@ -188,7 +192,7 @@ const submit = async () => {
     } else {
         toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
     }
-    getSettingsData()
+    //getSettingsData()
     mockupStore.$reloadIframe();
     // Lógica para enviar cambios
     initialForm.value = JSON.stringify(form) // Actualizar el estado inicial después de guardar

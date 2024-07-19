@@ -5,7 +5,8 @@ import {
     getAllApi,
     updateNotificationsEmailApi,
     getSettings,
-    updateAvailability
+    updateAvailability,
+    updateResponses
 } from '@/api/services/chat/chatSettings.services'
 
 export const useChatSettingsStore = defineStore('chatSettings', () => {
@@ -52,13 +53,24 @@ export const useChatSettingsStore = defineStore('chatSettings', () => {
         return ok
     }
 
+    /*
+    ** update responses automatic
+    */
+    async function $updateResponses(params) {
+        const response = await updateResponses(params)
+        const { ok } = response
+        return ok
+    }
+
+
 
     //
     return {
         $getAll,
         $updateNotificationsEmail,
         $getAllSettingsChat,
-        $updateAvailability
+        $updateAvailability,
+        $updateResponses
     }
 
 })
