@@ -143,7 +143,7 @@
                             <stop offset="100%" stop-color="#34A98F" stop-opacity="1" />
                         </linearGradient>
                     </defs>
-                    <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
+                    <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6" class="circle"></circle>
                 </svg>
                 <img class="spinner-icon  w-[40px] h-[40px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
             </div>
@@ -409,7 +409,7 @@ function openModalChangeInForm () {
     }
     }
 
-    circle {
+    .circle {
     stroke-dasharray: 125.6;
     stroke-dashoffset: 125.6;
     animation: dash 1.5s linear infinite;

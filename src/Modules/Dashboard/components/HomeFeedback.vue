@@ -119,7 +119,7 @@
                 <div class="p-4 flex gap-4 items-center">
                     <CircleProgress
                         :size="120"
-                        :percent="subscribed ? average : 0"
+                        :percent="subscribed ? average : 100"
                         border-width="22"
                         border-bg-width="22"
                         :linecap="'line'"
