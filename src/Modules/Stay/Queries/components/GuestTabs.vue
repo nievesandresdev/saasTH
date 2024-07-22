@@ -1,0 +1,47 @@
+<template>
+    <section>
+        <div class="flex" v-if="data">
+            <button
+                v-for="guest in data.guests"
+                class="text-base leading-[110%] font-medium pb-2 relative"
+                :key="guest.id"
+                :class="{
+                    'bg-white shadow-tab pt-4 pr-4  pl-4 rounded-t-[10px] text-[#0B6357] font-semibold': Number(currentGuestId) == guest.id,
+                    'text-gray-500 pt-4 pr-4 pl-4 hover:bg-[#ECF9F5] hover:rounded-t-lg': Number(currentGuestId) !== guest.id,
+                }"
+                @click="goGuest('stay.queries.guest', guest.id)"
+            >
+                <img
+                    v-if="guest.queryCount > 0"
+                    class="w-2.5 h-2.5 absolute top-3 right-2"
+                    src="/vendor_asset/img/hoster/icons/EllipseWarning.svg" alt=""
+                >
+                {{ guest.name }}
+            </button>
+        </div>
+    </section>
+</template>
+<script setup>
+import { onMounted, ref, inject } from 'vue'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const currentGuestId = route.query.g;
+const data = inject('data');
+const notyRef = ref([]);
+
+onMounted(()=>{
+    // console.log('props.notifyPeriod',props.notifyPeriod)
+})
+
+
+function goGuest(route_name, guestId){
+    // Inertia.visit(route(route_name,{selected:props.selected, guestId}))
+}
+</script>
+<style>
+.shadow-tab{
+    box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.15);
+}
+</style>
