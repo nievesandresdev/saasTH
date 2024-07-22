@@ -48,7 +48,7 @@ const $nameLanguage = (lang) => {
     case 'fr':
       return 'Francés';
     default:
-      return '--';
+      return '-';
   }
 }
 
