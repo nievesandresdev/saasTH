@@ -7,14 +7,14 @@
             :right="period === 'post-stay' ? 0 : null"
         >
             <template v-slot:button>
-                <img class="w-6 h-6" src="/vendor_asset/img/hoster/icons/1.TH.SCHEDULECIRCLE.svg" alt="">
+                <img class="w-6 h-6" src="/assets/icons/1.TH.SCHEDULECIRCLE.svg" alt="">
             </template>
             <template v-slot:content>
                 <p class="text-xs font-medium">Feedback {{translatePeriod}}</p>
                 <p class="text-xs mt-4">Envío programado:
                     <span class="font-medium">
-                        {{$moment(data.shippingTime).format('DD/MM/YY')}} -
-                        {{$moment(data.shippingTime).format('HH:mm')}}
+                        {{$formatTimestampDate(timeLineData[period].shippingTime,'dd/MM/yyyy')}} -
+                        {{$formatTimestampDate(timeLineData[period].shippingTime,'HH:mm')}}
                     </span>
                 </p>
             </template>
@@ -29,6 +29,5 @@ import Tooltip from '@/components/Tooltip.vue'
 const period = inject('period')
 const translatePeriod = inject('translatePeriod')
 const timeLineData = inject('timeLineData')
-const data = timeLineData[period]
 
 </script>

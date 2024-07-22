@@ -12,8 +12,8 @@
                 <p class="text-xs font-medium">Solicitud de reseña</p>
                 <p class="text-xs mt-4">Envío: 
                     <span class="font-medium">
-                    {{$moment(data.answeredTime).format('DD/MM/YY')}} - 
-                    {{$moment(data.answeredTime).format('HH:mm')}}
+                    {{$formatTimestampDate(data.answeredTime,'dd/MM/yyyy')}} -
+                    {{$formatTimestampDate(data.answeredTime,'HH:mm')}}
                     </span>
                 </p>
             </template>

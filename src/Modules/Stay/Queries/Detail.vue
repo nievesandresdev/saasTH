@@ -42,6 +42,10 @@ watch(() => data.value, async (newData) => {
     timeLineData.value = newData?.timeline;
 }, { immediate: true });  
 
+watch(() => route.query.g, async (newId) => {
+    data.value = await stayStore.$getDetailQueryByGuest(stayId.value,newId);
+}, { immediate: true });  
+
 provide('data',data)
 provide('timeLineData',timeLineData);
 provide('guestAccess',guestAccess)

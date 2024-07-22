@@ -7,15 +7,15 @@
             :right="period === 'post-stay' ? 0 : null"
         >
             <template v-slot:button>
-                <img v-if="period === 'pre-stay'" class="w-6 h-6" src="/vendor_asset/img/hoster/icons/1.TH.Waiting.svg" alt="">
-                <img v-else class="w-6 h-6" src="/vendor_asset/img/hoster/icons/1.TH.EmojisNOEmotion.svg" alt="">
+                <img v-if="period === 'pre-stay'" class="w-6 h-6" src="/assets/icons/1.TH.Waiting.svg" alt="">
+                <img v-else class="w-6 h-6" src="/assets/icons/1.TH.EmojisNOEmotion.svg" alt="">
             </template>
             <template v-slot:content>
                 <p class="text-xs font-medium">Feedback {{translatePeriod}}</p>
                 <p class="text-xs mt-4">Envío:
                     <span class="font-medium">
-                    {{$moment(data.shippingTime).format('DD/MM/YY')}} -
-                    {{$moment(data.shippingTime).format('HH:mm')}}
+                    {{$formatTimestampDate(timeLineData[period].shippingTime,'dd/MM/yyyy')}} -
+                    {{$formatTimestampDate(timeLineData[period].shippingTime,'HH:mm')}}
                     </span>
                 </p>
                 <p class="text-xs mt-2">Tu huésped <span class="font-medium">aún no ha proporcionado su feedback.</span></p>
@@ -31,6 +31,4 @@ import Tooltip from '@/components/Tooltip.vue'
 const period = inject('period')
 const timeLineData = inject('timeLineData')
 const translatePeriod = inject('translatePeriod')
-
-const data = timeLineData[period]
 </script>

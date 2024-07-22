@@ -13,8 +13,9 @@
                 <p class="text-xs font-medium">Feedback {{translatePeriod}}</p>
                 <p class="text-xs mt-4">Envío:
                     <span class="font-medium">
-                        {{$moment(data.shippingTime).format('DD/MM/YY')}} -
-                        {{$moment(data.shippingTime).format('HH:mm')}}
+                        
+                        {{$formatTimestampDate(timeLineData[period].shippingTime,'dd/MM/yyyy')}} -
+                        {{$formatTimestampDate(timeLineData[period].shippingTime,'HH:mm')}}
                     </span>
                 </p>
                 <p class="text-xs mt-2">Ha finalizado la fecha para proporcionar el feedback.</p>
@@ -30,6 +31,5 @@ import Tooltip from '@/components/Tooltip.vue'
 const period = inject('period')
 const timeLineData = inject('timeLineData')
 const translatePeriod = inject('translatePeriod')
-const data = timeLineData[period]
 
 </script>
