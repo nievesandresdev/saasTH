@@ -32,7 +32,6 @@ export const useQueryStore = defineStore('query', () => {
 
     async function $countPendingByHotel () {
         const response = await countPendingByHotelApi()
-        console.log('countPendingByHotelApi',response)
         const { ok } = response   
         if(ok){
             return response.data

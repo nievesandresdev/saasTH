@@ -45,8 +45,10 @@ watch(data, (newValue) => {
             },
             {
                 name: 'Chat',
-                active: route.name == 'StayChatPage',
-                viewName: 'StayChatPage'
+                active: route.name == 'StayChatRoom',
+                viewName: 'StayChatRoom',
+                params: { stayId: stayId.value},
+                query: { g: guestId }
             },
         ];
     }

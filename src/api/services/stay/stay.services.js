@@ -21,3 +21,5 @@ export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterP
 export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })
 //queries
 export const getDetailQueryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getDetailQueryByGuest`, data)
+//guest
+export const getGuestListWithNotiApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getGuestListWithNoti`, data)
