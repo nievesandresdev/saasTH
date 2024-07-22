@@ -3,7 +3,7 @@
         
         <!-- date info-->
         <div class="flex items-center mb-2">
-            <img class="w-4 h-4" :src="`/assets/icons/1.TH.SCHEDULE.svg`" alt="">
+            <img class="w-4 h-4" src="/assets/icons/1.TH.schedule.svg" alt="">
             <p class="text-xs font-normal ml-2">{{$formatTimestampDate(data.created_at,'dd/MM/yyyy')}} | {{ parseInt(daysDifference) }} {{ dayLabel }} {{ beforeOrAfter }} del {{ periodLabel }}</p>
         </div>
 

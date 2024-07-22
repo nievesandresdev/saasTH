@@ -96,13 +96,15 @@
     </aside>
 </template>
 <script setup>
-import { onMounted, ref, provide, computed } from 'vue'
+import { onMounted, ref, provide, computed, onUnmounted } from 'vue'
 import CardtayList from './CardtayList.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
 
+import { getPusherInstance } from '@/utils/pusherSingleton'
 import { useStayStore } from '@/stores/modules/stay/stay';
+import { useHotelStore } from '@/stores/modules/hotel'
 import { useRouter, useRoute } from 'vue-router';
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -111,8 +113,9 @@ const toast = useToastAlert();
 const router = useRouter();
 const route = useRoute();
 
-
+const hotelStore = useHotelStore()
 const stayStore = useStayStore();
+
 const list = ref(null)
 const data = ref(null)
 const search = ref(null)
@@ -126,10 +129,33 @@ const allFilters = ref({
     pendings:  'all'
 })
 const openFiltersModal = ref(false)
+//pusher
+const channelChat = ref(null);
+const channelStay = ref(null);
+const channelQuery = ref(null);
+const pusher = ref(null);
 
 onMounted( async() => {
     loadData();
+    connectPusher();
 })
+
+onUnmounted(() => {
+    if (channelChat.value) {
+        channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
+        pusher.value.unsubscribe(channelChat.value);
+    }
+
+    if (channelStay.value) {
+        channelStay.value.unbind('App\\Events\\CreateStayEvent');
+        pusher.value.unsubscribe(channelStay.value);
+    }
+    
+    if (channelQuery.value) {
+        channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
+        pusher.value.unsubscribe(channelQuery.value);
+    }
+});
 
 async function submit(data){
     openFiltersModal.value = false;
@@ -160,6 +186,33 @@ async function loadData(){
     totalCounts.value = data.value.total_counts;
     totalCounts.value = data.value.total_counts;
     pendingCount.value = data.value.pending_counts;
+}
+
+const connectPusher = () =>{
+    /*
+    //PUSHER
+    */
+    channelChat.value = 'private-noti-hotel.' + hotelStore.hotelData.id;
+    console.log('channelChat.value',channelChat.value)
+    // Pusher.logToConsole = true;
+    pusher.value = getPusherInstance();
+    channelChat.value = pusher.value.subscribe(channelChat.value);
+    channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
+        loadData();
+    });
+
+    channelStay.value = 'private-create-stay.' + hotelStore.hotelData.id;
+    channelStay.value = pusher.value.subscribe(channelStay.value);
+    channelStay.value.bind('App\\Events\\CreateStayEvent', (data) => {
+        loadData();
+    });
+
+    channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
+    channelQuery.value = pusher.value.subscribe(channelQuery.value);
+    channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
+        console.log('NotifySendQueryEvent staylist',data)
+        loadData();
+    });
 }
 
 function resetFilters(){

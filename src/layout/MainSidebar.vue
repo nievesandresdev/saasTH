@@ -31,9 +31,17 @@
           <router-link
             v-for="(link, indexLink) in section.group" :key="indexLink"
             :to="link.url"
-            class="rounded-[10px] flex items-center p-2"
+            class="rounded-[10px] flex items-center p-2 relative"
             :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
           >
+            <!-- notification icon -->
+            <img 
+              class="w-2.5 h-2.5 absolute top-1.5 left-5" 
+              src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
+              alt="notification icon"
+              v-if="link.title == 'Estancias' && countPendingQueries > 0"
+            >
+
             <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
             <div :class="widthMenu">
               <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white': link.include.includes($route.name)}">{{link.title}}</p>
@@ -122,11 +130,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, provide } from 'vue'
+import { ref, computed, onMounted, onUnmounted, provide } from 'vue'
+import { getPusherInstance, isChannelSubscribed, setChannelSubscribed } from '@/utils/pusherSingleton'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'
 import { useUserStore } from '@/stores/modules/users/users'
 import { useHotelStore } from '@/stores/modules/hotel'
+import { useQueryStore } from '@/stores/modules/queries/query'
 import ModalWindow from '@/components/ModalWindow.vue'
 import DropdownChangeHotel from './components/DropdownChangeHotel'
 
@@ -135,10 +145,45 @@ const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const hotelStore = useHotelStore()
+const queryStore = useQueryStore()
 
 provide('hotelStore', hotelStore);
 
 const modalProfile = ref(false)
+const countPendingQueries = ref(0)
+//pusher
+const pusher = ref(null)
+const channelQuery = ref(null)
+const channelStay = ref(null)
+
+const connectPusher = async () => {
+
+    pusher.value = getPusherInstance();
+    let channelNameQuery = 'notify-send-query.' + hotelStore.hotelData.id;
+    let channelNameStay = 'private-noti-hotel.' + hotelStore.hotelData.id;
+
+    channelQuery.value = pusher.value.subscribe(channelNameQuery);
+    channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
+        showNotification(data.title,data.text,data.urlQuery,10000);
+        countPendingQueries.value = await queryStore.$countPendingByHotel();
+        //loadExistsPending();
+    });
+    
+    channelStay.value = pusher.value.subscribe(channelNameStay);
+    channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
+        //notificacion del navegador cuando se recibe un mensaje
+        if(!Number(data.automatic) && data.guest){
+            let room_text =  'Estancia: nº habitación ';
+            data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
+            let link  = route('stay.hoster.chat',{selected:data.stay_id});
+            showNotification(room_text,data.text,link,10000);
+        }
+
+        // get_stay_data_pending();
+        // defineNotificationsCount();
+    });
+};
+
 
 function redirectToUserPanel() {
   router.push({ name: 'UserPanel' })
@@ -154,7 +199,7 @@ const menu_links = ref([
     title: 'Operación',
     group: [
       {
-        title: 'Estancias ',
+        title: 'Estancias',
         icon: '1.TH.ESTANCIAS.MM',
         include: ['StayHomePage'],
         url: '/estancias',
@@ -257,9 +302,49 @@ const widthMenu = computed(() => {
   return withStyles
 })
 
-onMounted(() => {
+const showNotification = (title,text,link,timeout) =>{
+    if (Notification.permission === 'granted') {
+        displayNotification(title,text,link,timeout);
+    } else if (Notification.permission !== 'denied') { // Si el permiso no ha sido denegado ni concedido ("default")
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                displayNotification(title,text,link,timeout);
+            }
+        });
+    }
+}
+
+const displayNotification = (title,text,link,timeout) => {
+    const notif = new Notification(title, {
+        body: text,
+        icon:'/assets/icons/1.TH.ChatBubblegreen.svg',
+        requireInteraction: true
+    });
+    notif.onclick = (event) => {
+        event.preventDefault();
+        // Inertia.visit(link)
+    };
+    setTimeout(() => {
+        notif.close();
+    }, timeout);
+}
+onMounted(async() => {
     hotelStore.loadHotelsAvailables();
+    countPendingQueries.value = await queryStore.$countPendingByHotel();
+    connectPusher();
 })
+
+onUnmounted(() => {
+    if (channelStay.value) {
+        channelStay.value.unbind('App\\Events\\NotifyStayHotelEvent');
+        pusher.value.unsubscribe(channelStay.value);
+    }
+
+    if (channelQuery.value) {
+        channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
+        pusher.value.unsubscribe(channelQuery.value);
+    }
+});
 
 const logout = async () => {
   await closeModalProfile()
