@@ -10,7 +10,7 @@
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Tooltip Text</p>
+                            <p class="text-sm font-normal">Aquí verás las estancias de aquellos huéspedes que hayan accedido a tu <strong>WebApp</strong> y cargado sus datos.</p>
                         </template>
                     </Tooltip>
                 </span>
@@ -20,15 +20,15 @@
         </div>
         <!-- contenido -->
         <div class="grid grid-cols-4 gap-4 mt-4">
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg  relative">
                 <div class="bg-[#D9E8F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">PRE-STAY</span>
-                    <Tooltip :top="25" :left="5" size="xs" :class="'z-[600]'">
+                    <Tooltip :top="25" :left="5" size="m" :class="'z-[800]'">
                         <template v-slot:button>
                             <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Tooltip Text</p>
+                            <p class="text-sm">Se consideran en <strong>PRE-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> y aún no hayan llegado a su fecha de <strong>Check-In</strong></p>
                         </template>
                     </Tooltip>
                 </div>
@@ -43,15 +43,17 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg ">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">STAY</span>
-                    <Tooltip :top="25" :left="5" size="xs" :class="'z-[600]'">
+                    <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
                         <template v-slot:button>
                             <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Tooltip Text</p>
+                            <p class="text-sm">
+                                Se consideran en <strong>STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> luego de su fecha de <strong>Check-in</strong> y antes de su <strong>Check-out</strong>
+                            </p>
                         </template>
                     </Tooltip>
                 </div>
@@ -66,15 +68,15 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
+            <div class="bg-white border border-[#BFBFBF] rounded-lg ">
                 <div class="bg-[#F2F2F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">POST-STAY</span>
-                    <Tooltip :top="25" :left="5" size="xs" :class="'z-[600]'">
+                    <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
                         <template v-slot:button>
                             <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Tooltip Text</p>
+                            <p class="text-sm">Se consideran en <strong>POST-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> luego de haber realizado su <strong>Check-out</strong></p>
                         </template>
                     </Tooltip>
                 </div>
