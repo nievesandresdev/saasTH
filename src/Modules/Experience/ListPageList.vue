@@ -396,7 +396,7 @@ function openModalChangeInForm () {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .shadow-card{
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }

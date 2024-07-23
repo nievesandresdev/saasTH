@@ -7,6 +7,7 @@ const ExternalPlatform = () => import('@/Modules/User/Settings/ExternalPlatforms
 const userSettingsRoutes = [
   {
     path: 'configuracion',
+    meta: { requiresAuth: true},
     children: [
       {
         name: 'UserNotificationsSettings',
@@ -18,11 +19,11 @@ const userSettingsRoutes = [
         path: 'usuarios',
         component: UsersSettings
       },
-      {
+      /* {
         name: 'UserPanel',
         path: 'panel',
         component: UserPanel
-      },
+      }, */
       {
         name: 'ExternalPlatforms',
         path: 'plataformas-externas',

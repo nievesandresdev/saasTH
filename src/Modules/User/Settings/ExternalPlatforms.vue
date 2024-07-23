@@ -21,7 +21,7 @@
                             <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6 mr-2" alt="Booking">
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal(form.booking)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('booking',form.booking)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
@@ -31,26 +31,7 @@
                     </div>
                     <div v-if="errors.booking" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
-                        <p>{{ errorMessage.booking }}</p>
-                    </div>
-                </div>
-                <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
-                    <div class="flex justify-between">
-                        <div class="flex">
-                            <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
-                            <span class="font-semibold text-sm">Tripadvisor</span>
-                        </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal(form.tripadvisor)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
-                        </div>
-                    </div>
-                    <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.tripadvisor" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')">
-                    </div>
-                    <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
-                        <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
-                        <p>{{ errorMessage.tripadvisor }}</p>
+                        <p class="text-red-500">{{ errorMessage.booking }}</p>
                     </div>
                 </div>
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
@@ -59,7 +40,7 @@
                             <img src="/assets/icons/otas/Expedia.svg" class="w-6 h-6 mr-2" alt="Expedia">
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal(form.expedia)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('expedia',form.expedia)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
@@ -69,9 +50,48 @@
                     </div>
                     <div v-if="errors.expedia" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
-                        <p>{{ errorMessage.expedia }}</p>
+                        <p class="text-red-500">{{ errorMessage.expedia }}</p>
                     </div>
                 </div>
+                <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
+                    <div class="flex justify-between">
+                        <div class="flex">
+                            <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
+                            <span class="font-semibold text-sm">Tripadvisor</span>
+                        </div>
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('tripadvisor',form.tripadvisor)">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
+                    <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
+                        <input type="text" v-model="form.tripadvisor" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')">
+                    </div>
+                    <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
+                        <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
+                        <p class="text-red-500">{{ errorMessage.tripadvisor }}</p>
+                    </div>
+                </div>
+                <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
+                    <div class="flex justify-between">
+                        <div class="flex">
+                            <img src="/assets/icons/otas/Google.svg" class="w-6 h-6 mr-2" alt="Google">
+                            <span class="font-semibold text-sm">Google</span>
+                        </div>
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('google',form.google)">
+                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
+                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        </div>
+                    </div>
+                    <div :class="['flex', errors.google ? 'border-red-500' : hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
+                        <input type="text" v-model="form.google" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')">
+                    </div>
+                    <div v-if="errors.google" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
+                        <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
+                        <p class="text-red-500">{{ errorMessage.google }}</p>
+                    </div>
+                </div>
+                
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
@@ -88,7 +108,7 @@
                                 </Tooltip>
                             </div>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal(form.airbnb)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('airbnb',form.airbnb)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
@@ -129,7 +149,7 @@
                 type="save_changes"
             />
             <ModalDeleteURL :open="openModalDeleteURL" @submit:delete="submitDelete" @close:modal="openDeleteModal" />
-            <ModalChangeURL :open="openModalchangeUrl" @submit:change="submit" @close:change="changeUrlModal" />
+            <ModalChangeURL :open="openModalchangeUrl" @submit:change="handleEmail" @close:change="changeUrlModal" />
         </div> 
         <ChangesBar 
             :existingChanges="changesComputed"
@@ -150,12 +170,16 @@ import ModalChangeURL from './components/ModalChangeURL.vue';
 import { useUserStore } from '@/stores/modules/users/users';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useRouter } from 'vue-router';
+import {
+    requestChangeUrlApi,
+} from '@/api/services/platforms/platformsServices'
 
 const userStore = useUserStore();
 const toast = useToastAlert();
 const router = useRouter();
 
 const dataMail = ref(null);
+const dataMailtype = ref(null);
 const openModalDeleteURL = ref(false);
 const openModalchangeUrl = ref(false);
 const indexToDelete = ref(null);
@@ -209,6 +233,10 @@ const getSettings = async () => {
                         form.expedia = ota.url;
                         hoverValidation.value.expedia = ota.url.length > 0;
                         break;
+                    case 'google':
+                        form.google = ota.url;
+                        hoverValidation.value.google = ota.url.length > 0;
+                        break;
                     case 'booking':
                         form.booking = ota.url;
                         hoverValidation.value.booking = ota.url.length > 0;
@@ -226,24 +254,43 @@ const getSettings = async () => {
 };
 
 const validateUrl = (url, type) => {
-    const patterns = {
-        booking: /\/hotel\/.*\.html$/,
-        tripadvisor: /\/Hotel_Review-.*\.html$/,
-        google: /\/maps\/place\//
-    };
+    const urlParts = new URL(url);
+    const hostname = urlParts.origin; 
+    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/
 
-    if (!url.endsWith('.com')) {
+    // Verifica que el dominio termine en .com
+    if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
-    if (type !== 'airbnb' && !patterns[type].test(url)) {
-        return 'El formato del enlace es incorrecto. Revisa el enlace introducido.';
+    
+    switch (type) {
+        case 'booking':
+            if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de Booking es incorrecto. Debe contener "/hotel/" y terminar en ".html".';
+            }
+            break;
+        case 'tripadvisor':
+            if (!pathname.startsWith('/Hotel_Review-') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de TripAdvisor es incorrecto. Debe empezar con "/Hotel_Review-" y terminar en ".html".';
+            }
+            break;
+        case 'google':
+            if (!pathname.startsWith('/maps/place/')) {
+                return 'El formato del enlace de Google es incorrecto. Debe empezar con "/maps/place/".';
+            }
+            break;
+        case 'airbnb':
+            console.log('Validating Airbnb:', url);
+            break;
     }
 
     return null;
 };
 
+
 const marcarCambio = (field) => {
+    console.log('marcarCambio:', field);
     changes.value += 1;
     const validationError = validateUrl(form[field], field);
     if (!validationError) {
@@ -258,7 +305,7 @@ const marcarCambio = (field) => {
 };
 
 const markAdditionalLinkChange = (index) => {
-    changes.value += 1;
+    changes.value += 1;  // Incrementa el contador de cambios cada vez que se verifica un enlace.
     const validationError = validateUrl(additionalLinks.value[index].url, 'airbnb');
     if (!validationError) {
         additionalLinks.value[index].hoverValidation = true;
@@ -270,6 +317,7 @@ const markAdditionalLinkChange = (index) => {
         additionalLinks.value[index].errorMessage = validationError;
     }
 };
+
 
 const addAnotherLink = () => {
     additionalLinks.value.push({ url: '', hoverValidation: false, errors: false, errorMessage: '', status: 1 });
@@ -291,8 +339,10 @@ const submitDelete = () => {
     changes.value += 1;
 };
 
-const changeUrlModal = (url) => {
+const changeUrlModal = (type,url) => {
     dataMail.value = url;
+    dataMailtype.value = type;
+
     openModalchangeUrl.value = !openModalchangeUrl.value;
 };
 
@@ -306,12 +356,38 @@ const cancelChange = () => {
     Object.keys(errors.value).forEach(key => errors.value[key] = false);
 };
 
+const handleEmail = async () => {
+    const payload = {
+        ...form,
+        airbnb: additionalLinks.value.filter(link => link.status !== 0)
+    };
+    console.log('hjandleEmail:', dataMail.value);
+
+    const params = {
+        type: dataMailtype.value,
+        url: dataMail.value,
+        init : initialForm.value,
+        end : JSON.stringify(payload)
+    }
+
+    const response = await requestChangeUrlApi(params);   
+    
+    if(response.ok){
+        toast.warningToast(response.data.message, 'top-right')
+        openModalchangeUrl.value = false;
+    }else{
+        toast.errorToast(response.data.message, 'top-right')
+    }
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
+};
+
 const submit = async () => {
     const payload = {
         ...form,
         airbnb: additionalLinks.value.filter(link => link.status !== 0)
     };
     console.log('Saving changes:', payload);
+
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
 };
 
