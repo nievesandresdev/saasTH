@@ -19,13 +19,13 @@ const views = ref([
     },
     {
         name: 'Disponibilidad',
-        active : route.name == 'SettingsStayPage',
-        viewName :'SettingsStayPage'
+        active : route.name == 'AvailabilitySettings',
+        viewName :'AvailabilitySettings'
     },
     {
         name: 'Respuestas automáticas',
-        active : route.name == 'SettingsPostStayPage',
-        viewName :'SettingsPostStayPage'
+        active : route.name == 'AutomaticResponses',
+        viewName :'AutomaticResponses'
     },
 ])
 </script>

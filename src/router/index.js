@@ -7,7 +7,7 @@ import chatGroupRoutes from './chat/chatGroupRoutes'
 import userGroupRoutes from './user/userGroupRoutes'
 import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes'
 import queriesGroupRoutes from './queries/queriesGroupRoutes'
-import stayGroupRoutes from './stay/stayGroupRoutes'
+import stayRoutes from './stayRoutes'
 // routes config webapp
 import hotelGroupRoutes from './hotel/hotelGroupRoutes'
 import placeGroupRoutes from './placeRoutes'
@@ -36,8 +36,8 @@ const routes = [
   ...userGroupRoutes,
   ...reviewsRequestsGroupRoutes,
   ...queriesGroupRoutes,
-  ...stayGroupRoutes,
   //
+  ...stayRoutes,
   ...hotelGroupRoutes,
   ...placeGroupRoutes,
   ...experienceGroupRoutes,

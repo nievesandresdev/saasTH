@@ -13,6 +13,8 @@ import {
     deleteGuestNoteApi,
     createSessionApi,
     deleteSessionApi,
+    getDetailQueryByGuestApi,
+    getGuestListWithNotiApi
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -106,16 +108,32 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $deleteSession (stayId, field, userEmail) {
         let data = { stayId, field, userEmail };
-        console.log('deleteSession',data)
         const response = await deleteSessionApi(data)
-        console.log('deleteSessionApi',response)
         const { ok } = response   
         if(ok){
             return response.data
         }
     }
-    
-    
+
+    async function $getDetailQueryByGuest (stayId, guestId) {
+        let data = { stayId, guestId };
+        const response = await getDetailQueryByGuestApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getGuestListWithNoti (stayId) {
+        let data = { stayId };
+        console.log('getGuestListWithNoti',data)
+        const response = await getGuestListWithNotiApi(data)
+        console.log('response',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     return {
         $getAllByHotel,
@@ -131,6 +149,10 @@ export const useStayStore = defineStore('stay', () => {
         //sessions
         $createSession,
         $deleteSession,
+        //query
+        $getDetailQueryByGuest,
+        //guests
+        $getGuestListWithNoti
     }
 
 })

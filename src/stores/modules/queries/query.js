@@ -3,6 +3,8 @@ import { ref } from 'vue'
 
 import {
     getFeedbackSummaryByGuestApi,
+    togglePendingStateApi,
+    countPendingByHotelApi,
 } from '@/api/services/queries/query.services'
 
 export const useQueryStore = defineStore('query', () => {
@@ -18,9 +20,28 @@ export const useQueryStore = defineStore('query', () => {
             return response.data
         }
     }
+
+    async function $togglePendingState (queryId, bool) {
+        let data = { queryId, bool };
+        const response = await togglePendingStateApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $countPendingByHotel () {
+        const response = await countPendingByHotelApi()
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     return {
         $getFeedbackSummaryByGuest,
+        $togglePendingState,
+        $countPendingByHotel
     }
 
 })

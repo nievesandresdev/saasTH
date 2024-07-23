@@ -8,7 +8,7 @@
                     'hbg-green-200 htext-green-800': link.active,
                     'opacity-50':link.disabled,
                 }"
-                @click="goLink(link.viewName)"
+                @click="goLink(link.viewName,link.params ?? {}, link.query ?? {})"
             >
                 {{ link.name }}
                 <img v-if="false" class="absolute top-4 right-[6px] w-2.5 h-2.5" src="/assets/icons/EllipseWarning.svg" alt="">
@@ -24,8 +24,10 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 
-const goLink = (viewName) =>{
-    router.push({ name: viewName});
+const goLink = (viewName, params, query) =>{
+    console.log('params',params)
+    console.log('query',query)
+    router.push({ name: viewName, params, query });
 }
 
 

@@ -1,7 +1,8 @@
 import { apiHttp } from '../../AxiosConfig'
 import {
     stayPath,
-    hosterPath
+    hosterPath,
+    queryPath
 } from '../../config/apiRoute'
 
 
@@ -18,3 +19,7 @@ export const deleteGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hoste
 //sessions
 export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data)
 export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })
+//queries
+export const getDetailQueryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getDetailQueryByGuest`, data)
+//guest
+export const getGuestListWithNotiApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getGuestListWithNoti`, data)

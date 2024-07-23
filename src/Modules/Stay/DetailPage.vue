@@ -27,7 +27,7 @@ const channel_chat = ref(null);
 const pusher = ref(null);   
 
 // Refs para reaccionar a los cambios en los parámetros o consultas
-const id = ref(route.params.id);
+const id = ref(route.params.stayId);
 const data = ref(null);
 const session = ref(null);
 
@@ -88,7 +88,7 @@ const updateDetailSession = async () => {
 }
 
 // Watchers para actualizaciones de URL
-watch(() => route.params.id, async (newId, oldId) => {
+watch(() => route.params.stayId, async (newId, oldId) => {
     
     let user = JSON.parse(sessionStorage.getItem('user'));
     if(oldId){

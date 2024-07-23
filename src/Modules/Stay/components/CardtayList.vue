@@ -1,7 +1,7 @@
 <template>
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
-        :class="{'hbg-green-200':route.params.id == stay.id}"
+        :class="{'hbg-green-200':route.params.stayId == stay.id}"
         @click="goDetailStay(stay.id)"
     >
         <div class="flex items-center">
@@ -103,7 +103,7 @@ function goDetailStay(id) {
     console.log('searchUpdate.value',searchUpdate.value)
     router.push({
         name: 'StayDetailPage',
-        params: { id: id },
+        params: { stayId: id },
         query: { search: searchUpdate.value }
     });
 }

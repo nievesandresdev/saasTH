@@ -1,53 +1,41 @@
 <template>
-    <section class="px-6">
-        <TitleChatActivate status="Post-Stay" />
-        <HeadChat />
-        <!-- <p class="text-sm mt-2">
-            El feedback en post-stay no puede desactivarse debido a que es crucial para conocer la experiencia de los huéspedes. Teniendo como objetivo la obtención de la reseña positiva o para la prevención de una posible valoración negativa.
-        </p> -->
-        <SectionConfig>
-            <template #title>
-                <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
-            </template>
-            <template #content>
-                <!-- <div class="bg-white shadow-md py-6 px-4 rounded-lg mt-6"> -->
-                    <!-- <h3 class="text-base font-medium">Ajustes del chat</h3> -->
+    <div class="flex flex-col min-h-screen">
+        <div class="px-6">
+            <TitleChatActivate 
+                :defaultToggle="form.show_guest" 
+                @onchange="(value) => form.show_guest = value"
+            />
+        </div>
+        <AlertShowGuest :show_guest="form.show_guest"/>
+        <section class="px-6 min-h-screen">
+            <HeadChat/>
+            <SectionConfig>
+                <template #title>
+                    <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
+                </template>
+                <template #content>
                     <div class="mt-6 w-full">
                         <label class="text-sm font-medium mb-2 block">Nombre en la ventana de conversación</label>
-                        <input
-                            type="text"
-                            id="headertext"
+                        <BaseTextField
                             v-model="form.name"
-                            :placeholder="errorsKey.includes('name') ? 'Debes añadir un texto' : 'Ej: “Hotel Posada del Sol”'"
-                            :class="{
-                                'border-gray-400 text-gray-500': !form.name,
-                                'border-black': form.name,
-                                'border-red-500': errorsKey.includes('name')
-                            }"
-                            class="border p-2 rounded w-full"
-                            style="font-size: 14px; font-weight: 500; color: #A0A0A0;"
-                        />
+                            placeholder="Ej: “Hotel Posada del Sol”"
+                            class-content="w-full"
+                            class-input="text-sm"
+                            @input="handleInputChange"
+                        ></BaseTextField>
                         <label class="text-sm font-medium mb-2 block mt-4">Idiomas disponibles para la atención a tus huéspedes</label>
                         <div class="relative" ref="dropdownRef">
-                            <input
-                                type="text"
-                                class="pl-10 text-sm border border-gray-400 h-11 rounded w-full"
-                                placeholder="Selecciona los idiomas con los que se comunicará tu personal"
+                            <BaseTextField
                                 v-model="search"
-                                :class="{'border-dark': search}"
+                                prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
+                                placeholder="Selecciona los idiomas con los que se comunicará tu personal"
+                                class-content="w-full"
+                                class-input="text-sm"
                                 @keyup.prevent="$searchLang"
-                                @keypress.enter="submit_filters"
-                                @input="updateSearchTerms"
-                                @focus="showResults = true"
-                                style="font-size: 14px; font-weight: 500; color: #A0A0A0;"
-                            />
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-                                </svg>
-                            </div>
+                                @enter:search="$searchLang"
+                            ></BaseTextField>
                             <ul
-                                v-if="result.length && showResults"
+                                v-if="result.length > 0 && showResults"
                                 class="absolute top-10 left-0 w-full z-50 bg-white overflow-hidden shadow-md rounded-lg"
                             >
                                 <li
@@ -72,56 +60,82 @@
                             <img @click="delete_lang(lang.id)" class="w-4 h-4 cursor-pointer" src="/assets/icons/1.TH.CLOSE.svg" alt="">
                         </div>
                     </div>
-                    
-                <!-- </div> -->
-            </template>
-        </SectionConfig>
-    </section>
-    <ChangesBar 
-        :existingChanges="changes > 0" 
-        :validChanges="valid"
-        @cancel="cancelarCambios" 
-        @submit="submit"
+                </template>
+            </SectionConfig>
+        </section>
+        <ChangesBar 
+            :existingChanges="changes"
+            :validChanges="changes && valid"
+            @cancel="cancelChange" 
+            @submit="submit"
+        />
+    </div>
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
     />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import TitleChatActivate from './components/TitleChatActivate.vue'
 import HeadChat from './components/HeadChat.vue'
 import SectionConfig from './components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
-import { getSettings, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
+import BaseTextField from '@/components/Forms/BaseTextField'
+import { storeGeneralSetting, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';
 import useClickOutside from '@/composables/useClickOutside';
+import ModalNoSave from '@/components/ModalNoSave.vue'
+import { useMockupStore } from '@/stores/modules/mockup'
+import { useToastAlert } from '@/composables/useToastAlert'
+import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
+import AlertShowGuest from './components/AlertShowGuest.vue'
 
-const form = ref({
+const form = reactive({
     name: '',
-    languages: [
-        { id: 1, name: 'Español', abbreviation: 'es' },
-        { id: 2, name: 'Inglés', abbreviation: 'en' }
-    ]
+    languages: [],
+    languages_id: [],
+    show_guest: null
 })
 
+const mockupStore = useMockupStore()
+const chatSettingsStore = useChatSettingsStore()
+const toast = useToastAlert()
+
+const initialForm = ref(null) // Para mantener el estado inicial del formulario
 const notSearchLang = ref([])
 
 onMounted(() => {
-    getSettingsData()
+    ata()
+    mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 })
 
-const getSettingsData = async () => {
-    const response = await getSettings()
-    form.value.languages = JSON.parse(JSON.stringify(response.data.languages))
-    response.data.languages.forEach(lang => {
+const ata = async () => {
+    const response = await chatSettingsStore.$getAllSettingsChat();
+
+    form.languages = JSON.parse(JSON.stringify(response.settings.languages))
+    response.settings.languages.forEach(lang => {
         notSearchLang.value.push(lang.id)
     })
+
+    form.name = response.settings.name
+    form.show_guest = response.settings.show_guest == 1 ? true : false
+    initialForm.value = JSON.stringify(form) 
+    mockupStore.$setIframeUrl('/mobile-chat/fake')
+
+    
+
 }
 
 const search = ref('')
-const errorsKey = ref([])
 const result = ref([])
 const showResults = ref(false)
-const changes = ref(0)
-const valid = ref(false)
+const anyEmpty = ref([])
 
 const { elementRef: dropdownRef } = useClickOutside(() => {
     showResults.value = false;
@@ -134,40 +148,66 @@ const $searchLang = async () => {
     }
     const response = await fetchLangs(params)
     result.value = response.data
+
+    if (search.value) {
+        showResults.value = true
+    } else {
+        showResults.value = false
+    }
 }
 
 const add_lang = (lang) => {
-    form.value.languages.push(lang)
+    form.languages.push(lang)
     notSearchLang.value.push(lang.id)
     search.value = ''
     showResults.value = false
-    changes.value++
-    valid.value = true // Actualiza esta lógica según las validaciones necesarias
 }
 
 const delete_lang = (langId) => {
-    form.value.languages = form.value.languages.filter(lang => lang.id !== langId)
+    form.languages = form.languages.filter(lang => lang.id !== langId)
     notSearchLang.value = notSearchLang.value.filter(id => id !== langId)
-    changes.value++
-    valid.value = true // Actualiza esta lógica según las validaciones necesarias
 }
 
-const updateSearchTerms = () => {}
-
-const submit_filters = () => {}
-
-// Funciones para manejar los eventos de ChangesBar
-const cancelarCambios = () => {
-    console.log('Cancelando cambios')
-    // Lógica para cancelar cambios
+const handleInputChange = () => {
+    // Actualizar la validez del formulario
+    valid.value = form.name.trim() !== '' && form.languages.length > 0
 }
 
-const submit = () => {
-    console.log('Enviando cambios')
+const cancelChange = () => {
+    const oldValues = JSON.parse(initialForm.value)
+    form.name = oldValues.name
+    form.languages = oldValues.languages
+}
+
+const submit = async () => {
+    form.languages_id = []
+    form.languages.forEach(lang => {
+        form.languages_id.push(lang.id)
+    });
+
+    const response = await storeGeneralSetting(form)
+
+    if(response.ok){
+        toast.warningToast('Se han guardado los cambios','top-right')
+    } else {
+        toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
+    }
+    //getSettingsData()
+    mockupStore.$reloadIframe();
     // Lógica para enviar cambios
+    initialForm.value = JSON.stringify(form) // Actualizar el estado inicial después de guardar
 }
+
+// Computed para los cambios
+const changes = computed(() => {
+    return JSON.stringify(form) !== initialForm.value
+})
+
+// Computed para la validez
+const valid = computed(() => {
+    return form.name.trim() !== '' && form.languages.length > 0
+})
+
+watch(form, handleInputChange, { deep: true })
 </script>
 
-<style scoped>
-/* Las clases CSS personalizadas ya no son necesarias */
-</style>

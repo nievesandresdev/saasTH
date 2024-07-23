@@ -86,7 +86,7 @@
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
                             <div v-if="sub_menu.selectedArr.includes(route.name)" class="w-[3px] h-6 bg-[#2A8973] absolute inset-0 mx-auto my-2 rounded-full"></div>
                           </div>
-                          <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }}</span>
+                          <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
                         </div>
                       </div>
                     </li>
@@ -105,7 +105,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span>
+                    <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span> <!--menu individual-->
                   </div>
                 </a>
               </li>
@@ -289,6 +289,7 @@ import { useRoute, useRouter  } from 'vue-router';
                   title: 'Chat',
                   to: 'GeneralSettings',
                   icon: '/assets/icons/1.TH.CHAT.NEW.svg',
+                  include: ['GeneralSettings','AvailabilitySettings','AutomaticResponses']
                 
               },
           ],
@@ -424,14 +425,23 @@ const page_url = 'x'
   }
 
   function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
+    console.log({
+      'partidea': 'toggleSubMenu',
+      'index_section_selected': index_section_selected,
+      'index_menu_selected': index_menu_selected,
+      'section_selected': section_selected,
+      'menu_selected': menu_selected
+    })
+    
     menu_selected.expanded = !menu_selected.expanded
-    menu_section.forEach((section, index_section) => {
+    
+    /* menu_section.forEach((section, index_section) => {
       section.group.forEach((menu, index_menu) => {
         if (menu?.title && (menu_selected.title != menu?.title)) {
           menu_section[index_section].group[index_menu].expanded = false
         }
       })
-    })
+    }) */
   }
 
   function focusMenu () {

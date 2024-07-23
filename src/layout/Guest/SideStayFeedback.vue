@@ -1,5 +1,5 @@
 <template>
-    <aside class="w-[354px] flex-shrink-0 flex flex-col h-full sticky top-0 left-0 z-40 hbg-gray-100">
+    <aside class="w-[354px] flex-shrink-0 flex flex-col h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
         <div :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
             <!-- guest data -->
             <div v-if="data?.guest" class="py-8 px-6 border-b-2 hborder-color-gray-400 header-shadow bg-white">
@@ -117,7 +117,7 @@
     </aside>
 </template>
 <script setup>
-import { watch, ref } from 'vue'
+import { watch, ref, provide } from 'vue'
 import { useRoute } from 'vue-router';
 import TimeLineQueries from '../Queries/TimeLineQueries.vue'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
@@ -137,17 +137,15 @@ watch(() => route.query.g, async (newId) => {
     if(newId){
         let params ={
             guestId: newId,
-            stayId: route.params.id,
+            stayId: route.params.stayId,
         }
         data.value = await queryStore.$getFeedbackSummaryByGuest(params);
-        console.log('data.value',data.value)
         if(!showSideBar.value){
             showSideBar.value = true;
         }
     }else{
         data.value = null;
     }
-    
 }, { immediate: true });  
 
 const translatePeriod = {

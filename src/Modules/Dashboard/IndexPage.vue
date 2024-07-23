@@ -1,6 +1,6 @@
 <template>
     <div class="px-6">
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard</h1>
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard {{ authStore.current_hotel?.name }}</h1>
         <div class="border-b border-[#BFBFBF] mb-5"></div>
         <CustomerExperience />
         <HomeFeedback />
@@ -11,11 +11,13 @@
 import { onMounted } from 'vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useMockupStore } from '@/stores/modules/mockup'
+import { useAuthStore } from '@/stores/modules/auth/login';
 import CustomerExperience from './components/CustomerExperience.vue'
 import HomeFeedback from './components/HomeFeedback.vue'
 
 
 const mockupStore = useMockupStore();
+const authStore = useAuthStore();
 
 const toast = useToastAlert();
 
