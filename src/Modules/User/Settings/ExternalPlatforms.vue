@@ -254,24 +254,43 @@ const getSettings = async () => {
 };
 
 const validateUrl = (url, type) => {
-    const patterns = {
-        booking: /\/hotel\/.*\.html$/,
-        tripadvisor: /\/Hotel_Review-.*\.html$/,
-        google: /\/maps\/place\//
-    };
+    const urlParts = new URL(url);
+    const hostname = urlParts.origin; // https://www.example.com
+    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/resource?query=string#hash
 
-    if (!url.endsWith('.com')) {
+    // Verifica que el dominio termine en .com
+    if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
-    if (type !== 'airbnb' && !patterns[type].test(url)) {
-        return 'El formato del enlace es incorrecto. Revisa el enlace introducido.';
+    // Verifica los segmentos específicos según el tipo
+    switch (type) {
+        case 'booking':
+            if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de Booking es incorrecto. Debe contener "/hotel/" y terminar en ".html".';
+            }
+            break;
+        case 'tripadvisor':
+            if (!pathname.startsWith('/Hotel_Review-') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de TripAdvisor es incorrecto. Debe empezar con "/Hotel_Review-" y terminar en ".html".';
+            }
+            break;
+        case 'google':
+            if (!pathname.startsWith('/maps/place/')) {
+                return 'El formato del enlace de Google es incorrecto. Debe empezar con "/maps/place/".';
+            }
+            break;
+        case 'airbnb':
+            // Solo se valida que termine en .com para Airbnb, ya que es la única validación necesaria por ahora.
+            break;
     }
 
     return null;
 };
 
+
 const marcarCambio = (field) => {
+    console.log('marcarCambio:', field);
     changes.value += 1;
     const validationError = validateUrl(form[field], field);
     if (!validationError) {
@@ -286,7 +305,7 @@ const marcarCambio = (field) => {
 };
 
 const markAdditionalLinkChange = (index) => {
-    changes.value += 1;
+    changes.value += 1;  // Incrementa el contador de cambios cada vez que se verifica un enlace.
     const validationError = validateUrl(additionalLinks.value[index].url, 'airbnb');
     if (!validationError) {
         additionalLinks.value[index].hoverValidation = true;
@@ -298,6 +317,7 @@ const markAdditionalLinkChange = (index) => {
         additionalLinks.value[index].errorMessage = validationError;
     }
 };
+
 
 const addAnotherLink = () => {
     additionalLinks.value.push({ url: '', hoverValidation: false, errors: false, errorMessage: '', status: 1 });
