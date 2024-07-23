@@ -1,35 +1,38 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser,getSubscriptionStatus,testMail,dataOTAS } from '@/api/services/users/userSettings.service';
-import { ref } from 'vue';
+import { ref,computed,watch } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const authStore = useAuthStore();
   const user = ref(authStore.user);
 
-  /**
-   * hoteles del usuario con atributos especificos 
-  **/
-  function $getHotels(attributes = []) {
-    if (!user.value || !user.value.hotels) {
-      return [];
-    }
+  // Watch for changes in authStore.user
+  watch(() => authStore.user, (newUser) => {
+    user.value = newUser;
+  });
 
-    // si no hay atributos trae todos
-    if (attributes.length === 0) {
-      return user.value.hotels;
-    }
+  const $getHotels = computed(() => {
+    return (attributes = []) => {
+      if (!user.value || !user.value.hotels) {
+        return [];
+      }
 
-    return user.value.hotels.map(hotel => {
-      let selectedAttributes = {};
-      attributes.forEach(attr => {
-        if (hotel.hasOwnProperty(attr)) {
-          selectedAttributes[attr] = hotel[attr];
-        }
+      if (attributes.length === 0) {
+        return user.value.hotels;
+      }
+
+      return user.value.hotels.map(hotel => {
+        let selectedAttributes = {};
+        attributes.forEach(attr => {
+          if (hotel.hasOwnProperty(attr)) {
+            selectedAttributes[attr] = hotel[attr];
+          }
+        });
+        return selectedAttributes;
       });
-      return selectedAttributes;
-    });
-  }
+    };
+  });
 
   function $getDataHotel(attributes = []) {
     if (attributes.length === 0) {
@@ -47,9 +50,9 @@ export const useUserStore = defineStore('user', () => {
   /*
   *avatar ui
   */
- function $userAvatar(){
-   return `https://ui-avatars.com/api/?name=${user?.value?.name}&color=fff&background=${user?.value?.color}`
- }
+  const $userAvatar = computed(() => {
+    return `https://ui-avatars.com/api/?name=${user?.value?.name}&color=fff&background=${user?.value?.color}`;
+  });
 
   /**
     * guardar usuario

@@ -221,6 +221,7 @@
                         <!-- <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne"> -->
                         <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/>
                     </div>
+                    <!-- <pre>{{ userStore.$getHotels(['id', 'name']) }}</pre> -->
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-[500]">{{ hotel.name }}</span>
@@ -298,6 +299,7 @@
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
+  import { useAuthStore } from '@/stores/modules/auth/login';
   import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
 
@@ -310,7 +312,10 @@
   });
 
   const userStore = useUserStore();
+  const authStore = useAuthStore();
   const toast = useToastAlert();
+
+  const getHotels = userStore.$getHotels;
 
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);

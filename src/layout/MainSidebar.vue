@@ -78,12 +78,12 @@
         <!-- User Name -->
         <button 
           @mousemove="handleMouseMove('User Profile')"
-          @click="handleMenuItemClick('User Profile')"
+          @click="modalProfile = true"
           class="rounded-[10px] flex items-center p-1 max-h-[40px]"
           :class="{'hbg-green-600 shadow-lg': route.name === 'UserPanel', 'hover-gray-100': route.name !== 'UserPanel'}"
         >
           <img 
-            class="w-8 h-8 rounded-full" :src="userStore.$userAvatar()"
+            class="w-8 h-8 rounded-full" :src="userAvatar"
             :class="{'icon-white': false, 'border border-white': route.name === 'UserPanel'}"
           >
           <div :class="widthMenu">
@@ -152,6 +152,8 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const hotelStore = useHotelStore()
 const queryStore = useQueryStore()
+
+const userAvatar = computed(() => userStore.$userAvatar);
 
 provide('hotelStore', hotelStore);
 
