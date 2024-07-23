@@ -255,15 +255,15 @@ const getSettings = async () => {
 
 const validateUrl = (url, type) => {
     const urlParts = new URL(url);
-    const hostname = urlParts.origin; // https://www.example.com
-    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/resource?query=string#hash
+    const hostname = urlParts.origin; 
+    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/
 
     // Verifica que el dominio termine en .com
     if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
-    // Verifica los segmentos específicos según el tipo
+    
     switch (type) {
         case 'booking':
             if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
@@ -281,7 +281,7 @@ const validateUrl = (url, type) => {
             }
             break;
         case 'airbnb':
-            // Solo se valida que termine en .com para Airbnb, ya que es la única validación necesaria por ahora.
+            console.log('Validating Airbnb:', url);
             break;
     }
 
