@@ -46,13 +46,14 @@
                                 v-model="experience.is_visible"
                                 :id="`swich-visible-facility-${index}`"
                                 @change:value="updateVisible(experience)"
+                                @click="handlerClickSwichVisibility"
                             />
                         </div>
                         <div
                             v-if="(hoverItem == index) && experience.is_visible"
                             class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
                             :class="experience.featured ? 'hbg-green-600' : 'hbg-white-100'"
-                            @click="updateRecommendation(experience)"
+                            @click="updateRecommendation($event, experience)"
                         >
                             <img
                                 class=""
@@ -108,7 +109,7 @@
                             </template>
                         </div>
                         <button
-                            v-if="hoverItem == index"
+                            v-if="hoverItem == index && experience.is_visible"
                             class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
                             :class="{'cursor-grabbing ': dragStartIndex == index}"
                             @mousedown="setDragStart(index)"
@@ -334,7 +335,9 @@ async function updatePosition () {
     }
     mockupStore.$reloadIframe();
 }
-
+function handlerClickSwichVisibility (event) {
+    event.stopPropagation();
+}
 async function updateVisible (experience) {
     if (changePendingInForm.value) {
         openModalChangeInForm();
@@ -357,7 +360,8 @@ async function updateVisible (experience) {
     emits('reloadExperiences');
 }
 
-async function updateRecommendation (experience) {
+async function updateRecommendation (event, experience) {
+    event.stopPropagation();
     if (changePendingInForm.value) {
         openModalChangeInForm();
         experience.featured = !experience.featured;
@@ -392,7 +396,7 @@ function openModalChangeInForm () {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .shadow-card{
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }

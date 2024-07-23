@@ -14,6 +14,7 @@
                         v-model="item.select"
                         :id="`swich-visible-facility-${index}`"
                         @change:value="updateVisible(item)"
+                        @click="handlerClickSwichVisibility"
                     />
                 </div>
                 <div
@@ -72,6 +73,11 @@ async function updateVisible (facility) {
     const response = await facilityStore.$updateVisible(data)
     // console.log(response, 'response')
     emit('update:reloadItems')
+}
+
+
+function handlerClickSwichVisibility (event) {
+    event.stopPropagation();
 }
 
 

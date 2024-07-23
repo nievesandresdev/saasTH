@@ -53,6 +53,8 @@ const currentLeftSidebar = computed(() => route.meta.sidebar);
 const currentRightSidebar = computed(() => route.meta.sidebarRight);
 const sidebarWidthz = computed(() => route.meta.sidebarWidth);
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
+
+console.log('route', route);
 </script>
 <style scoped>
 .h-without-banner{

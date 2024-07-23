@@ -238,7 +238,6 @@ async function submitDelete () {
         is_deleted: true,
     }
     const response = await experienceStore.$updateVisibility(params);
-    console.log(response, 'response');
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
