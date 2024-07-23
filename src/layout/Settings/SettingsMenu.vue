@@ -424,14 +424,23 @@ const page_url = 'x'
   }
 
   function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
+    console.log({
+      'partidea': 'toggleSubMenu',
+      'index_section_selected': index_section_selected,
+      'index_menu_selected': index_menu_selected,
+      'section_selected': section_selected,
+      'menu_selected': menu_selected
+    })
+    
     menu_selected.expanded = !menu_selected.expanded
-    menu_section.forEach((section, index_section) => {
+    
+    /* menu_section.forEach((section, index_section) => {
       section.group.forEach((menu, index_menu) => {
         if (menu?.title && (menu_selected.title != menu?.title)) {
           menu_section[index_section].group[index_menu].expanded = false
         }
       })
-    })
+    }) */
   }
 
   function focusMenu () {
