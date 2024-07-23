@@ -161,6 +161,9 @@
     border: 1px solid var(--h-green-700);
     background-color: var(--h-green-200);
 }
+.chip--green > span {
+    color: var(--h-green-700);
+}
 
 .chip-primary{
     background-color: var(--h-white-100);

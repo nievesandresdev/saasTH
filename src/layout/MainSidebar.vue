@@ -187,6 +187,7 @@ const menu_links = ref([
           'Places',
           'Facilities',
           'Perfil',
+          'Experiences',
         ],
         url: '/alojamiento/perfil',
       },

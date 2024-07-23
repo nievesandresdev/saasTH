@@ -1,5 +1,5 @@
 <template>
-    <div class="h-[100%] bg-[#FAFAFA] relative">
+    <div class="bg-[#FAFAFA] relative">
         <div class="pb-[104px]">
             <ListPageHeader @changeCategory="changeCategory($event)" />
             <div
@@ -317,16 +317,25 @@ function filterNonNullAndNonEmpty(obj) {
 function loadQueryInFormFilter () {
     for (const [key, value] of Object.entries(queryRouter.value || {})) {
         if (formFilter.hasOwnProperty(key)) {
-            formFilter[key] = validValueQuery(key, value);
+            if (['duration', 'score'].includes(key)) {
+                if (typeof value === 'string') {
+                    formFilter[key].push(value);
+                    filtersSelected[key].push(value);
+                } else {
+                    formFilter[key] = value;
+                    filtersSelected[key] = value;
+                }
+            }else {
+                formFilter[key] = validValueQuery(key, value);
+                filtersSelected[key] = validValueQuery(key, value);
+            }
         }
     }
 }
 function validValueQuery (field, value) {
 
-    if (['featured', 'recommendated', 'all_cities'].includes(field)) {
-        if (value === 'false') return false;
-        if (value === 'true') return true;
-    }
+    if (value === 'false') return false;
+    if (value === 'true') return true;
 
     if (['selected_place', 'selected_subplace'].includes(field)) {
         return Number(value);
@@ -335,7 +344,6 @@ function validValueQuery (field, value) {
     return value;
 }
 async function reloadPlaces () {
-    
     loadDataFormFilter();
     page.value = 1;
     isOpenModelFilter.value = false;

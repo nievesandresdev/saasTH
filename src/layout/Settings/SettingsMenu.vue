@@ -96,7 +96,7 @@
               <li
                 v-else
                 class="hover-gray-100"
-                :class="page_url.includes(menu.include) ? 'hbg-green-200' : ''"
+                :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
               >
                 <a
                   href="javascript:void(0)"
@@ -163,7 +163,7 @@
                               <li
                                 v-else
                                 class=" w-full h-full hover-gray-100"
-                                :class="page_url.includes(sub_menu.include) ? 'hbg-green-200' : ''"
+                                :class="fullUrl.includes(sub_menu.include) ? 'hbg-green-200' : ''"
                               >
                                 <a
                                   href="javascript:void(0)"
@@ -181,7 +181,7 @@
                         <li
                           v-else
                           class="hover-gray-100"
-                          :class="page_url.includes(menu.include) ? 'hbg-green-200' : ''"
+                          :class="fullUrl.includes(menu.include) ? 'hbg-green-700' : ''"
                         >
                           <a
                             href="javascript:void(0)"
@@ -280,9 +280,10 @@ import { useRoute, useRouter  } from 'vue-router';
               },
               {
                   title: 'Experiencias',
-                  to: 'hoster.plataform.experiences',
+                  to: 'Experiences',
                   icon: '/assets/icons/1.TH.CAMERA.svg',
-                  include: '/experiencias'
+                  include: '/experiencias',
+                  selectedArr: ['Experiences'],
               },
               {
                   title: 'Chat',
