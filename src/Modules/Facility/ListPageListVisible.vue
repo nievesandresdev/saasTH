@@ -32,6 +32,7 @@
                         v-model="item.select"
                         :id="`swich-visible-facility-${index}`"
                         @change:value="updateVisible(item)"
+                        @click="handlerClickSwichVisibility"
                     />
                 </div>
                 <div
@@ -132,6 +133,10 @@ const handlerDragEnd = () => {
 };
 
 ////
+
+function handlerClickSwichVisibility (event) {
+    event.stopPropagation();
+}
 
 async function updateVisible (facility) {
     if (changePendingInForm.value) {

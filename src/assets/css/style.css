@@ -66,9 +66,9 @@ textarea::-webkit-scrollbar{
     border-bottom-left-radius: 10px;
     margin-right: 4px;
   }
-  textarea:focus{
+  /* textarea:focus{
     border: 1px solid #A0A0A0;
-  }
+  } */
 
  /* h4 a:hover {
      color: #31516B;

@@ -1,12 +1,12 @@
 <template>
     <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms">
-        {{ textNumbersPlacesVisiblesAndHidden }}
+        {{ textNumbersExperiencesVisiblesAndHidden }}
     </p>
-    <template v-if="placesData.length > 0">
-        <div id="list-places" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
-            <template v-for="(place, index) in placesData">
+    <template v-if="experiencesData.length > 0">
+        <div id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
+            <template v-for="(experience, index) in experiencesData">
                 <div
-                    v-if="!formFilter.visibility && !place?.is_visible && placesData[index-1]?.is_visible"
+                    v-if="!formFilter.visibility && !experience?.is_visible && experiencesData[index-1]?.experience"
                     class="w-[789px] 3xl:w-[1216px] relative"
                 >
                     <div
@@ -15,8 +15,8 @@
                     >
                         <div class="flex-grow bg-gray-300 border-t"></div>
                         <p class="mx-6 w-[198px] text-center text-sm font-medium">
-                            {{numberPlacesHidden}}
-                            {{numberPlacesHidden > 1 ? 'lugares ocultos':'lugar oculto'}}
+                            {{numberExperiencesHidden}}
+                            {{numberExperiencesHidden > 1 ? 'experiencias ocultas':'experiencia oculta'}}
 
                         </p>
                         <div class="flex-grow bg-gray-300 border-t"></div>
@@ -30,73 +30,86 @@
                     @dragstart="handlerDragStart(index, $event)"
                     @dragend="handlerDragEnd"
                     ref="draggableCard"
-                    :class="{'shadow-draginng border border-gray-300' : place.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
+                    :class="{'shadow-draginng border border-gray-300' : experience.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                     @mouseover="hoverItem = index"
                     @mouseleave="hoverItem = null"
-                    @click="editPlace(place)"
+                    @click="editExperience(experience)"
                 >
-                    <div class="w-[224px] h-[148px] rounded-t-[10px] relative">
+                    <div class="w-[224px] rounded-t-[10px] relative">
                         <img
                             class="w-[224px] h-[148px] rounded-t-[10px]"
-                            :src="placeStore.formatImage(place.place_images?.[0])"
+                            :src="experienceStore.formatImage(experience?.image)"
                         >
                         <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
                             <span class="text-[10px] font-semibold">Visible</span>
                             <BaseSwichInput
-                                v-model="place.featured"
+                                v-model="experience.is_visible"
                                 :id="`swich-visible-facility-${index}`"
-                                @change:value="updateVisible(place)"
+                                @change:value="updateVisible(experience)"
                                 @click="handlerClickSwichVisibility"
                             />
                         </div>
                         <div
-                            v-if="(hoverItem == index) && place.is_visible"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-[100]"
-                            :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
-                            @click.prevent="updateRecommendation($event, place)"
+                            v-if="(hoverItem == index) && experience.is_visible"
+                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
+                            :class="experience.featured ? 'hbg-green-600' : 'hbg-white-100'"
+                            @click="updateRecommendation($event, experience)"
                         >
                             <img
                                 class=""
-                                :src="`/assets/icons/1.TH.REVIEW.${place.featured ? 'WHITE' : 'OUTLINE'}.svg`"
+                                :src="`/assets/icons/1.TH.REVIEW.${experience.featured ? 'WHITE' : 'OUTLINE'}.svg`"
                                 alt="1.TH.WHITE"
                             >
                             <span
                                 class="text-[10px] font-semibold"
-                                :class="place.featured ? 'htext-white-100' : 'htext-black-100'"
+                                :class="experience.featured ? 'htext-white-100' : 'htext-black-100'"
                             >
                                 Recomendar
                             </span>
                         </div>
                     </div>
                     <div
-                        v-if="place.is_visible == 0"
+                        v-if="experience.is_visible == 0"
                         class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10"
                     />
-                    <div class="pt-2 px-2 pb-4 truncate-2 space-y-[8px]">
-                        <div class="flex items-center space-x-[4px] pb-[7px]">
-                            <span class="text-[22px] font-medium htext-black-100">{{converStar(place.num_stars).toFixed(1)}}</span>
+                    <div class="p-2 truncate-2">
+                        <div class="flex items-center space-x-[4px] h-[33px]">
+                            <span class="text-[22px] font-medium htext-black-100">{{ experience.reviews?.combined_average_rating.toFixed(1) }}</span>
                             <div>
                                 <div class="flex flec-col">
                                     <img 
-                                        v-for="star in Math.round(converStar(place.num_stars))"
+                                        v-for="star in Math.ceil(experience?.reviews?.combined_average_rating)"
                                         :key="star"
                                         class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
                                     >
                                 </div>
-                                <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reviews</p>
+                                <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reviews</p>
                             </div>
                         </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
-                        <div class="flex space-x-1">
-                            <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }} {{ place.is_visible }}</p>
+                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px] mt-[8px]">{{ experience.title }}</h6>
+                        <span class="text-sm htext-black-100 font-semibold truncate-2 mt-[12px]">Desde {{ experience.from_price }}€</span>
+                        <div class="flex space-x-1 mt-[12px]">
+                            <img class="" src="/assets/icons/1.TH.CLOCK.svg" alt="1.TH.LOCATION">
+                            <p class="text-[10px] font-semibold htext-black-100">
+                                <template v-if="formatDuration(experience.duration)?.minutes <= 0">
+                                    {{ `${formatDuration(experience.duration)?.hours}H APROX` }}
+                                </template>
+                                <template v-else>
+                                    {{ `${formatDuration(experience.duration)?.hours}HS Y ${formatDuration(experience.duration)?.minutes}MIN APROX` }}
+                                </template>
+                            </p>
                         </div>
-                        <div v-if="place.distance" class="flex space-x-1">
-                            <img class="" src="/assets/icons/1.TH.FOOTSTEP.svg" alt="1.TH.FOOTSTEP">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ `a ${place.distance}Km`}}</p>
+                        <div class="flex space-x-1 mt-[8px]">
+                            <template v-if="experience.cancellation_policy == 'STANDARD'">
+                                <img class="" src="/assets/icons/1.TH.CHECK.OUTLINED.svg" alt="1.TH.CHECK.OUTLINED">
+                                <p class="text-[10px] font-semibold htext-black-100">CANCELACIÓN GRATUITA</p>
+                            </template>
+                            <template v-else>
+
+                            </template>
                         </div>
                         <button
-                            v-if="hoverItem == index && place.is_visible"
+                            v-if="hoverItem == index && experience.is_visible"
                             class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
                             :class="{'cursor-grabbing ': dragStartIndex == index}"
                             @mousedown="setDragStart(index)"
@@ -115,14 +128,14 @@
     <template v-else>
         <div class="flex flex-col justify-center items-center space-y-4 mt-[85px]">
             <div>
-                <img src="/assets/img/1.TH.NO.RECORDS.png" alt="1.TH.NO.RECORDS">
+                <img src="/assets/img/1.TH.NO.RECORDS.EXPERIENCES.png" alt="1.TH.NO.RECORDS">
             </div>
-            <div>
-                <p class="text-base htext-gray-500">No se han encontrado lugares.</p>
+            <div class="text-center">
+                <p class="text-base htext-gray-500">No se han encontrado experiencias.<br> Intenta con otra búsqueda o revisa los filtros.</p>
             </div>
         </div>
     </template>
-    <div v-if="(placesData.length > 0) && (placesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
+    <div v-if="(experiencesData.length > 0) && (experiencesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
         <button
             v-if="!isloadingForm"
             class="text-sm font-medium text-center rounded-lg py-[13px] px-[16px] border border-black htext-black-100"
@@ -144,7 +157,7 @@
                             <stop offset="100%" stop-color="#34A98F" stop-opacity="1" />
                         </linearGradient>
                     </defs>
-                    <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6" class="circle"></circle>
+                    <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
                 </svg>
                 <img class="spinner-icon  w-[40px] h-[40px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
             </div>
@@ -156,21 +169,19 @@
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
 
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
-import PanelEdit from "./components/PanelEdit.vue";
+// import PanelEdit from "./components/PanelEdit.vue";
 
-const emits = defineEmits(['reloadPlaces', 'edit']);
+const emits = defineEmits(['reloadExperiences', 'edit']);
 
 const hotelStore = inject('hotelStore');
-const placeStore = inject('placeStore');
+const experienceStore = inject('experienceStore');
 const hotelData = inject('hotelData');
-const categoriplaces = inject('categoriplaces');
-const typeplaces = inject('typeplaces');
-const placesData = inject('placesData');
+const experiencesData = inject('experiencesData');
 const formFilter = inject('formFilter');
 const paginateData = inject('paginateData');
 const page = inject('page');
-const numberPlacesVisible = inject('numberPlacesVisible');
-const numberPlacesHidden = inject('numberPlacesHidden');
+const numberExperiencesVisible = inject('numberExperiencesVisible');
+const numberExperiencesHidden = inject('numberExperiencesHidden');
 const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
 
@@ -187,25 +198,28 @@ const isloadingForm = ref(false);
 // REFS
 const draggableCard = ref(null);
 
-const textNumbersPlacesVisiblesAndHidden = computed(() => {
+const textNumbersExperiencesVisiblesAndHidden = computed(() => {
     let text = null;
     let visiblesText = 'lugares visibles';
     let hiddensText = 'lugares ocultos';
     let hidden = 'ocultos';
     //singular
-    numberPlacesVisible.value == 1 ? visiblesText = "lugar visible": '';
-    numberPlacesHidden.value == 1 ? hiddensText = "lugar oculto": '';
-    numberPlacesHidden.value == 1 ? hidden = "oculto": '';
+    numberExperiencesVisible.value == 1 ? visiblesText = "experiencia visible": '';
+    numberExperiencesHidden.value == 1 ? hiddensText = "experiencia oculto": '';
+    numberExperiencesHidden.value == 1 ? hidden = "oculto": '';
     //
     if(!formFilter.visibility){
-        text = ` ${numberPlacesVisible.value} ${visiblesText} y ${numberPlacesHidden.value} ${hidden}`
+        text = ` ${numberExperiencesVisible.value} ${visiblesText} y ${numberExperiencesHidden.value} ${hidden}`
     }
     if(formFilter.visibility){
         if(formFilter.visibility.includes('visible')){
-            text =` ${numberPlacesVisible.value} ${visiblesText}`
+            text =` ${numberExperiencesVisible.value} ${visiblesText}`
+        }
+        if(formFilter.visibility.includes('recommendated')){
+            text =` ${numberExperiencesVisible.value} ${visiblesText}`
         }
         if(formFilter.visibility.includes('hidden')){
-            text =` ${numberPlacesHidden.value} ${hiddensText}`
+            text =` ${numberExperiencesHidden.value} ${hiddensText}`
         }
 
     }
@@ -215,6 +229,17 @@ const textNumbersPlacesVisiblesAndHidden = computed(() => {
 
 
 // FUNCTIONS
+
+const formatDuration = (duration) => {
+    if (!duration) null
+    let hours = Math.floor(duration / 60);
+    let minutes = duration % 60;
+    let m = {
+        hours,
+        minutes,
+    }
+    return m;
+}
 
 const setDragStart = (index) => {
   dragStartIndex.value = index;
@@ -244,8 +269,8 @@ const handlerDrop = (index, facility) => {
     }
   const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
   if (draggedIndex !== index) {
-    const droppedItem = placesData.value.splice(draggedIndex, 1)[0];
-    placesData.value.splice(index, 0, droppedItem);
+    const droppedItem = experiencesData.value.splice(draggedIndex, 1)[0];
+    experiencesData.value.splice(index, 0, droppedItem);
     updatePosition();
   }
   draggedItem.value = null;
@@ -267,44 +292,41 @@ function converStar(value){
 
 function loadMore ({showLoadingMore}) {
     page.value += 1;
-    
-    loadPlaces({ showPageLoading: false, showLoadingMore  });
+    loadExperiences({ showPageLoading: false, showLoadingMore  });
 }
 
-async function loadPlaces ({ showPageLoading, showLoadingMore }) {
+async function loadExperiences ({ showPageLoading, showLoadingMore }) {
     if (showLoadingMore) {
         isloadingForm.value=true;
     }
-    // console.log(formFilter, 'form')
-    const response = await placeStore.$getAll({page: page.value,...formFilter}, { showPreloader: showPageLoading });
+    const response = await experienceStore.$getAll({page: page.value,...formFilter}, { showPreloader: showPageLoading });
     if (response.ok) {
         let paginate = {
-            total: response.data.places.meta.total,
-            current_page: response.data.places.meta.current_page,
-            per_page: response.data.places.meta.per_page,
-            last_page: response.data.places.meta.last_page,
-            from_page: response.data.places.meta.from,
-            to: response.data.places.meta.to,
+            total: response.data.experiences.paginate.total,
+            current_page: response.data.experiences.paginate.current_page,
+            per_page: response.data.experiences.paginate.per_page,
+            last_page: response.data.experiences.paginate.last_page,
+            from_page: response.data.experiences.paginate.from,
+            to: response.data.experiences.paginate.to,
         }
         Object.assign(paginateData, paginate);
         page.value = paginateData.current_page;
-        placesData.value = [...placesData.value, ...response.data.places.data];
-        numberPlacesVisible.value = response.data.countVisible;
-        numberPlacesHidden.value = paginate.total - numberPlacesVisible.value;
+        experiencesData.value = [...experiencesData.value, ...response.data.experiences.data];
+        numberExperiencesVisible.value = response.data.visibleNumbers;
+        numberExperiencesHidden.value = response.data.hiddenNumbers;
     }
     isloadingForm.value=false;
 }
-defineExpose({ loadPlaces });
+defineExpose({ loadExperiences });
 
 async function updatePosition () {
-    const idsPlaces = placesData.value.filter(item => item.is_visible).map(item => item.toggle_place_id);
+    const idsExperiences = experiencesData.value.filter(item => item.is_visible).map(item => item.toggle_product_id);
     const data = {
-        position: idsPlaces,
-        selected_place: formFilter.selected_place,
-        selected_subplace: formFilter.selected_subplace,
+        position: idsExperiences,
     };
 
-    const response = await placeStore.$updatePosition(data);
+    const response = await experienceStore.$updatePosition(data);
+    console.log(response, 'response');
     const { ok } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -316,20 +338,18 @@ async function updatePosition () {
 function handlerClickSwichVisibility (event) {
     event.stopPropagation();
 }
-async function updateVisible (place) {
+async function updateVisible (experience) {
     if (changePendingInForm.value) {
         openModalChangeInForm();
-        place.select = !facility.select;
+        experience.is_visible = !experience.is_visible;
         return;
     }
     const data = {
-        visivility: !place.is_visible,
-        place_id: place.id,
-        selected_place: formFilter.selected_place,
-        selected_subplace: formFilter.selected_subplace,
+        visivility: experience.is_visible,
+        product_id: experience.id,
     }
     // console.log(data, 'data');
-    const response = await placeStore.$updateVisibility(data);
+    const response = await experienceStore.$updateVisibility(data);
     const { ok } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -337,21 +357,21 @@ async function updateVisible (place) {
         toast.warningToast(data?.message,'top-right');
     }
     mockupStore.$reloadIframe();
-    emits('reloadPlaces');
+    emits('reloadExperiences');
 }
 
-async function updateRecommendation (event, place) {
+async function updateRecommendation (event, experience) {
     event.stopPropagation();
     if (changePendingInForm.value) {
         openModalChangeInForm();
-        place.select = !facility.select;
+        experience.featured = !experience.featured;
         return;
     }
     const data = {
-        recommedation: !place.featured,
-        place_id: place.id,
+        recommedation: !experience.featured,
+        product_id: experience.id,
     }
-    const response = await placeStore.$updateRecommendation(data);
+    const response = await experienceStore.$updateRecommendation(data);
     const { ok } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -359,11 +379,11 @@ async function updateRecommendation (event, place) {
         toast.warningToast(data?.message,'top-right');
     }
     mockupStore.$reloadIframe();
-    emits('reloadPlaces');
+    emits('reloadExperiences');
 }
 
-function editPlace (place) {
- emits('edit', { action: 'EDIT', place});
+function editExperience (experience) {
+ emits('edit', { action: 'EDIT', experience});
 } 
 
 function openModalChangeInForm () {
@@ -413,7 +433,7 @@ function openModalChangeInForm () {
     }
     }
 
-    .circle {
+    circle {
     stroke-dasharray: 125.6;
     stroke-dashoffset: 125.6;
     animation: dash 1.5s linear infinite;

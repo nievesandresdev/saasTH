@@ -1,4 +1,5 @@
 <template>
+<!-- <textarea class="" name="" id="" cols="30" rows="10"></textarea> -->
     <div class="relative" :class="classContent">
         <img
             v-if="prependInnerIcon"
@@ -11,23 +12,19 @@
                 rows="5"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-[108px] min-h-[114px] hinput hinput-green rounded-[6px]"
+                class="focus:border-[#333] focus:hover:border-[#34A98F] w-full h-[108px] min-h-[114px] hinput hinput-green rounded-[6px]"
                 :class="customInputClass"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
                 :maxlength="max"
                 @keyup.enter="searchbyenter"
             />
+            
             <div v-if="errors?.[name] !== true || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
                 <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
-        <!-- :class="prependInnerIcon ? 'pl-11' : ''" -->
-        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-3" @click="emit('click:append_inner')">
-            <img class="w-6 h-6" :src="appendInnerIcon.icon" alt="append inner icon">
-        </button>
-        <img v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show" class="w-6 h-6 absolute right-3 top-3" :src="appendInnerIcon.icon" alt="append inner icon">
     </div>
     <!-- <pre>{{ name }}</pre> -->
     <!-- <pre>{{ errors?.[name] }}</pre> -->
@@ -47,18 +44,6 @@ const  props = defineProps({
     classInput: {
         type: String,
         default: ''
-    },
-    prependInnerIcon: {
-        type: String,
-        default: '',
-    },
-    appendInnerIcon: {
-        type: Object,
-        default: {
-            icon: null,
-            type: null, // (BUTTON, ICON)
-            show: false, 
-        },
     },
     placeholder: {
         type: String,
@@ -95,14 +80,12 @@ const updateValue = (event) => {
 };
 
 const customInputClass = computed(() => {
-    let c = props.classInput
-    if (props.prependInnerIcon) {
-        c = `${c} pl-11`
-    }
+    let c = '';
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
         c = `${c} hinput-error`
     }
-    return c
+    c = props.modelValue ? `${c} hborder-black-100` : `${c} hborder-gray-400`;
+    return c;
 })
 
 </script>

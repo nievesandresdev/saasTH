@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="h-11 hinput hinput-green rounded-[6px] cursor-pointer relative flex"
+        class="h-11 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex"
         :class="{'hinput-error': isError}"
     >
         <div

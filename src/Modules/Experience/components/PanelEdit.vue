@@ -9,38 +9,16 @@
             <div class="overflow-y-auto scrolling-sticky">
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
-                        <h1 class="text-[22px] font-medium text-center">Editar lugar</h1>
+                        <h1 class="text-[22px] font-medium text-center">Sobre la experiencia</h1>
                         <button @click="closeModal">
                             <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
                         </button>
                     </div>
                 </div>
-                <!-- tabs -->
-                <ul
-                    class="flex space-x-2 mx-[24px] border-b hborder-gray-400"
-                >
-                    <li
-                        v-for="(item ,index) in tabs"
-                        :key="index"
-                        class="cursor-pointer px-4 pt-4 rounded-t-[10px] flex flex-col"
-                        :class="tabSelected === index ? 'hbg-green-200' : ''"
-                        @click="changeTab(index)"
-                    >
-                         <span
-                            class="text-base font-semibold"
-                            :class="tabSelected === index ? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
-                        >
-                             {{ item }}
-                        </span>
-                        <span class="w-full h-[3px] rounded-full" :class="tabSelected === index ? 'hbg-green-800' : 'bg-white'" />
-                    </li>
-                </ul>   
-                <div class="px-6 pt-[31px] pb-[35px] flex-1">
+
+                <div class="px-6 pt-[32px] pb-[35px] flex-1">
                     <template v-if="tabSelected === INFORMATION">
                         <PanelEditFormInformation />
-                    </template>
-                    <template v-else-if="tabSelected === GALLERY">
-                        <PanelEditFormPhotos />
                     </template>
                 </div>
             </div>
@@ -48,9 +26,9 @@
                 <template v-if="modelActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalCancelChange() : openModalDelete()"
+                        @click="changesform ? openModalCancel() : openModalDelete()"
                     >
-                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar lugar' }}</span>
+                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar experiencia' }}</span>
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
@@ -79,12 +57,7 @@
             </div>
         </div>
     </transition>
-    <BasePreviewImage 
-        :url-image="previewUrl"
-        :is-open="isPreviewOpen"
-        @click:close="closePreviewImage"
-    />
-    <ModalCancelChangePlace
+    <ModalCancelChange
         ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
@@ -104,7 +77,7 @@
             :force-open="modalChangePendinginForm"
             @close="closeModal()"
         />
-    </template> -->
+    </template>
 </template>
 
 
@@ -113,10 +86,8 @@ import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick }
 import lodash from 'lodash';
 
 // COMPONENTS
-import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import PanelEditFormInformation from './PanelEditFormInformation.vue';
-import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
-import ModalCancelChangePlace from './ModalCancelChangePlace.vue';
+import ModalCancelChange from './ModalCancelChange.vue';
 import ModalDelete from './ModalDelete.vue';
 // import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -141,48 +112,25 @@ const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
 const modelActive = inject('modelActive');
 const hotelStore = inject('hotelStore');
-const facilityStore = inject('facilityStore');
-const placeStore = inject('placeStore');
+const experienceStore = inject('experienceStore');
 const mockupStore = inject('mockupStore');
 const toast = inject('toast');
 const hotelData = inject('hotelData');
-const formFilter = inject('formFilter');
 
 const form = reactive({
-    place_id: null,
-    featured: false,
+    product_id: null,
+    featured: null,
     recommendation: null,
-    address: null,
-    title: null,
-    description: null,
-    phone: null,
-    email: null,
-    url_web: null,
-    images: [],
 });
 const itemSelected = reactive({
-    place_id: null,
-    featured: false,
+    product_id: null,
+    featured: null,
     recommendation: null,
-    address: null,
-    title: null,
-    description: null,
-    phone: null,
-    email: null,
-    url_web: null,
-    images: [],
 });
 const formDefault = reactive({
-    place_id: null,
-    featured: false,
+    product_id: null,
+    featured: null,
     recommendation: null,
-    address: null,
-    title: null,
-    description: null,
-    phone: null,
-    email: null,
-    url_web: null,
-    images: [],
 });
 const formRules = {
     // title: [value => value.trim() ? true : 'Introduce '],
@@ -191,20 +139,13 @@ const formRules = {
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
-const urlsimages = ref([]);
 const modalDeleteRef = ref(null);
 const modalCancelChangeRef = ref(null);
-
-const previewUrl = ref(null);
-const isPreviewOpen = ref(false);
 //
 provide('form', form);
 provide('itemSelected', itemSelected);
 provide('errors', errors);
-provide('urlsimages', urlsimages);
 provide('validateField', validateField);
-provide('previewUrl', previewUrl);
-provide('isPreviewOpen', isPreviewOpen);
 provide('changePendingInForm', changePendingInForm);
 
 
@@ -213,15 +154,8 @@ provide('changePendingInForm', changePendingInForm);
 
 // CHANGE
 const changesform = computed(() => {
-    let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
-        (normalize(form.description) !== normalize(itemSelected.description)) ||
-        (normalize(form.recommendation) !== normalize(itemSelected.recommendation)) ||
-        (normalize(form.address) !== normalize(itemSelected.address)) ||
-        (normalize(form.phone) !== normalize(itemSelected.phone)) ||
-        (normalize(form.email) !== normalize(itemSelected.email)) ||
-        (normalize(form.url_web) !== normalize(itemSelected.url_web)) ||
-        (Boolean(form.featured) !== Boolean(itemSelected?.featured)) ||
-        (form.images.length !== itemSelected?.images.length);
+    let valid = (normalize(form.recommendation) !== normalize(itemSelected.recommendation)) ||
+        (Boolean(form.featured) !== Boolean(itemSelected.featured));
         changePendingInForm.value = valid;
     return valid;
 });
@@ -257,7 +191,7 @@ function prevTab () {
     }else if (tabSelected.value == SCHEDULE){
         tabSelected.value = INFORMATION;
     } else {
-        modalCancelChangeRef();
+        openModalCancel();
     }
 }
 
@@ -275,21 +209,12 @@ function changeTab (val) {
     tabSelected.value = val
 }
 
-function edit ({action, place}) {
-    urlsimages.value = [];
+function edit ({action, experience}) {
     if (action === 'EDIT') {
-        let { id, title, description, featured, place_images, address, metting_point_latitude, metting_point_longitude, recomendations, web_link, phone_wheretoeat, email_wheretoeat } = place;
-        let imagesForm = JSON.parse(JSON.stringify(place_images ?? []));
-        let  formObject = { place_id: id, title, description, featured, images: imagesForm, address, metting_point_latitude, metting_point_longitude, recommendation: recomendations?.message, url_web: web_link, phone: phone_wheretoeat, email: email_wheretoeat };
+        let { id, featured, recomendations } = experience;
+        let  formObject = { product_id: id, featured, recommendation: recomendations?.message };
         Object.assign(itemSelected, formObject);
-
-        let imagesItemSelected = JSON.parse(JSON.stringify(place_images ?? []));
-        let  itemSelectedObject = { place_id: id, title, description, featured, images: imagesItemSelected, address, metting_point_latitude, metting_point_longitude, recommendation: recomendations?.message, url_web: web_link, phone: phone_wheretoeat, email: email_wheretoeat };
-        Object.assign(form, itemSelectedObject);
-
-        imagesForm.forEach(img => {
-            urlsimages.value.push(img);
-        });
+        Object.assign(form, formObject);
     }
 }
 defineExpose({ edit });
@@ -297,7 +222,7 @@ defineExpose({ edit });
 
 async function submitSave () {
     let body = { ...form };
-    const response = await placeStore.$update(body);
+    const response = await experienceStore.$update(body);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -307,14 +232,12 @@ async function submitSave () {
     }
 }
 async function submitDelete () {
-    const params = {
+    let params = {
+        product_id: itemSelected.product_id,
         visivility: false,
-        place_id: itemSelected.place_id,
-        selected_place: formFilter.selected_place,
-        selected_subplace: formFilter.selected_subplace,
         is_deleted: true,
     }
-    const response = await placeStore.$updateVisibility(params);
+    const response = await experienceStore.$updateVisibility(params);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -323,7 +246,7 @@ async function submitDelete () {
         toast.warningToast(data?.message,'top-right');
     }
 }
-function openModalCancelChange () {
+function openModalCancel () {
     modalCancelChangeRef.value.openModal();
 }
 const normalize = (value) => {
@@ -334,10 +257,10 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
-    if (changePendingInForm.value) {
-        openModalChangeInForm();
-        return;
-    }
+    // if (changePendingInForm.value) {
+    //     openModalChangeInForm();
+    //     return;
+    // }
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
@@ -353,13 +276,6 @@ function resetPageData () {
 function openModalDelete () {
     modalDeleteRef.value.openModal();
 }
-function closePreviewImage() {
-    isPreviewOpen.value = false;
-}
-
-function openModalDeletePlace () {
-
-}
 
 function openModalChangeInForm () {
     modalChangePendinginForm.value = true;
@@ -367,6 +283,7 @@ function openModalChangeInForm () {
         modalChangePendinginForm.value = false;
     });
 }
+
 
 
 </script>
