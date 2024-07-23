@@ -7,7 +7,7 @@ const dashboardRoutes = [
     path: '/experiencias',
     component: AppLayout,
     component: AppLayout,
-    meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
+    meta: { requiresAuth: true,sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
     children: [
       {
         name: 'Experiences',

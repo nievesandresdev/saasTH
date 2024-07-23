@@ -162,7 +162,7 @@ const userAvatar = computed(() => userStore.$userAvatar);
 
 provide('hotelStore', hotelStore);
 
-const modalProfile = ref(true)
+const modalProfile = ref(false)
 const countPendingQueries = ref(0)
 const isMouseMoving = ref(false)
 //pusher
