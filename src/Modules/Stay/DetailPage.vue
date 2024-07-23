@@ -31,8 +31,12 @@ const id = ref(route.params.stayId);
 const data = ref(null);
 const session = ref(null);
 
+
 onBeforeRouteLeave((to, from, next) => {
-    updateDetailSession();
+    if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
+        // Ejecutar `updateDetailSession` solo si la ruta de destino no está en el array allowedRoutes
+        updateDetailSession();
+    }
     next();
 });
 
@@ -57,7 +61,6 @@ const connect_pusher = () => {
             pusher.value = getPusherInstance();
             channel_chat.value = pusher.value.subscribe(channel_chat.value);
             channel_chat.value.bind('App\\Events\\SessionsStayEvent', async (data) => {
-                console.log('pusher en accion', data)
                 if(data.stayId == id.value){
                     session.value = data.session;
                 }

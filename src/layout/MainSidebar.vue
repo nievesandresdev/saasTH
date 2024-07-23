@@ -138,6 +138,8 @@
       </div>
     </template>
   </ModalWindow>
+
+  <ModalHelp ref="modalHelpRef"/>
 </template>
 
 <script setup>
@@ -150,6 +152,7 @@ import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query'
 import ModalWindow from '@/components/ModalWindow.vue'
 import DropdownChangeHotel from './components/DropdownChangeHotel'
+import ModalHelp from './components/ModalHelp'
 
 const route = useRoute()
 const router = useRouter()
@@ -165,6 +168,7 @@ provide('hotelStore', hotelStore);
 const modalProfile = ref(false)
 const countPendingQueries = ref(0)
 const isMouseMoving = ref(false)
+const modalHelpRef = ref(false)
 //pusher
 const pusher = ref(null)
 const channelQuery = ref(null)
@@ -211,8 +215,15 @@ const handleMouseMove = () => {
   isMouseMoving.value = true
 }
 
-const handleMenuItemClick = () => {
-  isMouseMoving.value = false
+const openModalHelp = () => {
+  modalHelpRef.value.open();
+}
+
+const handleMenuItemClick = (nameButtom) => {
+  isMouseMoving.value = false;
+  if (nameButtom === 'Ayuda') {
+    openModalHelp();
+  }
 }
 
 const menu_links = ref([

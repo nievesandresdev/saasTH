@@ -6,6 +6,7 @@ import {
     statisticsByHotelApi,
     getdetailDataApi,
     updateDataApi,
+    getSessionsApi,
     getAllNotesByStayApi,
     createOrupdateStayNoteApi,
     deleteStayNoteApi,
@@ -126,20 +127,30 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $getGuestListWithNoti (stayId) {
         let data = { stayId };
-        console.log('getGuestListWithNoti',data)
         const response = await getGuestListWithNotiApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getSessions (stayId) {
+        let data = { stayId };
+        console.log('getSessions',data)
+        const response = await getSessionsApi(data)
         console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data
         }
     }
-    
+
     return {
         $getAllByHotel,
         $statisticsByHotel,
         $getdetailData,
         $updateData,
+        $getSessions,
         //notes
         $getAllNotesByStay,
         $createOrupdateStayNote,
