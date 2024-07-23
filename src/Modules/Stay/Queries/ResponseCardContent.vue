@@ -83,7 +83,6 @@ onMounted(() => {
   let qualification = props.data?.qualification
   if (qualification) {
     let periodTranslate = queryQualificationText[props.period]
-    console.log('props.period',props.period)
     let qualificationTranslate = periodTranslate[qualification]
     translateQualification.value = qualificationTranslate
   }

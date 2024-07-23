@@ -100,7 +100,6 @@ const translatePeriod = {
 };
 
 function goDetailStay(id) {
-    console.log('searchUpdate.value',searchUpdate.value)
     router.push({
         name: 'StayDetailPage',
         params: { stayId: id },

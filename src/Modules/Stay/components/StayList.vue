@@ -193,7 +193,6 @@ const connectPusher = () =>{
     //PUSHER
     */
     channelChat.value = 'private-noti-hotel.' + hotelStore.hotelData.id;
-    console.log('channelChat.value',channelChat.value)
     // Pusher.logToConsole = true;
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
@@ -210,7 +209,6 @@ const connectPusher = () =>{
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
     channelQuery.value = pusher.value.subscribe(channelQuery.value);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
-        console.log('NotifySendQueryEvent staylist',data)
         loadData();
     });
 }
