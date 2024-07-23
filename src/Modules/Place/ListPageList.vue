@@ -46,13 +46,14 @@
                                 v-model="place.featured"
                                 :id="`swich-visible-facility-${index}`"
                                 @change:value="updateVisible(place)"
+                                @click="handlerClickSwichVisibility"
                             />
                         </div>
                         <div
                             v-if="(hoverItem == index) && place.is_visible"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
+                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-[100]"
                             :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
-                            @click="updateRecommendation(place)"
+                            @click.prevent="updateRecommendation($event, place)"
                         >
                             <img
                                 class=""
@@ -95,7 +96,7 @@
                             <p class="text-[10px] font-semibold htext-black-100">{{ `a ${place.distance}Km`}}</p>
                         </div>
                         <button
-                            v-if="hoverItem == index"
+                            v-if="hoverItem == index && place.is_visible"
                             class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
                             :class="{'cursor-grabbing ': dragStartIndex == index}"
                             @mousedown="setDragStart(index)"
@@ -312,7 +313,9 @@ async function updatePosition () {
     }
     mockupStore.$reloadIframe();
 }
-
+function handlerClickSwichVisibility (event) {
+    event.stopPropagation();
+}
 async function updateVisible (place) {
     if (changePendingInForm.value) {
         openModalChangeInForm();
@@ -337,7 +340,8 @@ async function updateVisible (place) {
     emits('reloadPlaces');
 }
 
-async function updateRecommendation (place) {
+async function updateRecommendation (event, place) {
+    event.stopPropagation();
     if (changePendingInForm.value) {
         openModalChangeInForm();
         place.select = !facility.select;

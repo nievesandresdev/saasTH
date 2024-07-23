@@ -48,7 +48,7 @@
                 <template v-if="modelActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalCancel() : openModalDeletePlace()"
+                        @click="changesform ? openModalCancelChange() : openModalDelete()"
                     >
                         <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar lugar' }}</span>
                     </button>
@@ -85,14 +85,14 @@
         @click:close="closePreviewImage"
     />
     <ModalCancelChangePlace
-        ref="modalCancelChangeFacilityRef"
+        ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
     />
-    <!-- <ModalDeleteFacility
-        ref="modalDeleteFacilityRef"
-        @submit:delete="submitDeleteFacility()"
-    /> -->
+    <ModalDelete
+        ref="modalDeleteRef"
+        @submit="submitDelete()"
+    />
     <template v-if="modelActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -117,6 +117,7 @@ import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import PanelEditFormInformation from './PanelEditFormInformation.vue';
 import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
 import ModalCancelChangePlace from './ModalCancelChangePlace.vue';
+import ModalDelete from './ModalDelete.vue';
 // import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 
@@ -145,6 +146,7 @@ const placeStore = inject('placeStore');
 const mockupStore = inject('mockupStore');
 const toast = inject('toast');
 const hotelData = inject('hotelData');
+const formFilter = inject('formFilter');
 
 const form = reactive({
     place_id: null,
@@ -190,8 +192,8 @@ const { errors, validateField, formInvalid } = useFormValidation(form, formRules
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
-const modalDeleteFacilityRef = ref(null);
-const modalCancelChangeFacilityRef = ref(null);
+const modalDeleteRef = ref(null);
+const modalCancelChangeRef = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
@@ -255,7 +257,7 @@ function prevTab () {
     }else if (tabSelected.value == SCHEDULE){
         tabSelected.value = INFORMATION;
     } else {
-        openModalCancel();
+        modalCancelChangeRef();
     }
 }
 
@@ -304,8 +306,15 @@ async function submitSave () {
         toast.warningToast(data?.message,'top-right');
     }
 }
-async function submitDeleteFacility () {
-    const response = await facilityStore.$delete(form.id);
+async function submitDelete () {
+    const params = {
+        visivility: false,
+        place_id: itemSelected.place_id,
+        selected_place: formFilter.selected_place,
+        selected_subplace: formFilter.selected_subplace,
+        is_deleted: true,
+    }
+    const response = await placeStore.$updateVisibility(params);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
@@ -314,8 +323,8 @@ async function submitDeleteFacility () {
         toast.warningToast(data?.message,'top-right');
     }
 }
-function openModalCancel () {
-    modalCancelChangeFacilityRef.value.openModal();
+function openModalCancelChange () {
+    modalCancelChangeRef.value.openModal();
 }
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
@@ -341,8 +350,8 @@ function resetData () {
 function resetPageData () {
     emit('load:resetPageData');
 }
-function openModalDeleteFacility () {
-    modalDeleteFacilityRef.value.openModal();
+function openModalDelete () {
+    modalDeleteRef.value.openModal();
 }
 function closePreviewImage() {
     isPreviewOpen.value = false;
@@ -358,7 +367,6 @@ function openModalChangeInForm () {
         modalChangePendinginForm.value = false;
     });
 }
-
 
 
 </script>

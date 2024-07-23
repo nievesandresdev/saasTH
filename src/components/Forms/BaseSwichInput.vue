@@ -7,6 +7,7 @@
             :id="id"
             @change="updateValue($event)"
             :disabled="disabled"
+            @click="handleCLick"
         />
         <div
         :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : 'bg-gray-400']"
@@ -40,6 +41,10 @@ const value = computed({
 function updateValue(val) {
   value.value = !value.value
   emit('change:value')
+}
+
+function handleCLick (event) {
+  event.stopPropagation();
 }
 
 </script>
