@@ -30,3 +30,6 @@ export const requestSettingsPath = 'request-settings'
 //hoster
 export const hosterPath = 'hoster'
 export const chatSettingsPath = 'settings'
+
+//platforms
+export const platformsPath = 'platforms'
