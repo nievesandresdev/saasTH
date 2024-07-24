@@ -3,7 +3,8 @@ import {
     platformsPath,
 } from '../../config/apiRoute'
 
-//requestChangeUrl
 export const requestChangeUrlApi = (data) => apiHttp('POST', `${platformsPath}/requestChangeUrl`, data, { showPreloader: false })
+export const dataOTAS = () => apiHttp('GET', `${platformsPath}/getDataOtas`)
+export const updateBulkOTASApi = (data) => apiHttp('POST', `${platformsPath}/updateBulkOTAS`, data)
 
 

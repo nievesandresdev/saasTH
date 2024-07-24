@@ -621,7 +621,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
     form.value.hotels.forEach(hotelId => {
         const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
         
-        console.log('indexXvX',jsonHotel.value)
+        //console.log('indexXvX',jsonHotel.value)
         if (index !== -1) { // Si existe el hotel
             if (!isSelected) {
                 // eliminar de jsonhotel

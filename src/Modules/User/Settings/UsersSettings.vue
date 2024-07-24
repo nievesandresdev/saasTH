@@ -61,8 +61,10 @@
                 Inactivos
             </ButtonFilter>
         </div>
-        <div class="relative mt-6">
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 shadow-md">
+        
+        <div class="relative mt-5">
+            <span class="mb-4 text-sm font-normal">[{{ totalUsers }}] usuarios encontrados</span>
+            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 shadow-md mt-4">
                 <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">Nombre</th>
@@ -98,7 +100,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 relative" >
-                            <svg @click="toggleDropdown(index,user)" class="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg @click="toggleDropdown(index,user)" v-show="!ownerAccount(user)" class="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="2" fill="currentColor"/>
                                 <circle cx="19" cy="12" r="2" fill="currentColor"/>
                                 <circle cx="5" cy="12" r="2" fill="currentColor"/>
@@ -359,9 +361,14 @@ const hoverTable = (index) => {
     }
 };
 
+const ownerAccount = (user) => { //funcion que ve que es el duse;o o primer usuario de una cuenta
+    return user.role.name == 'Associate' && ($isAdmin() || $isOperator())
+}
+
 const toggleDropdown = (index,user) => {
 
     if (user.role.name == 'Associate' && ($isAdmin() || $isOperator())) {
+        console.log('no se puede editar');
         visibleDropdown.value = null;
     }else{
         if (visibleDropdown.value === index || user.del == 1) {
