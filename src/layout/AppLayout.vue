@@ -25,7 +25,7 @@ d    dd
         </aside>
 
         <!-- central container -->
-        <div id="main-content" class="overflow-y-auto flex-grow h-full">
+        <div id="main-content" class="overflow-y-auto flex-grow h-full bg-[#FAFAFA]">
             <router-view></router-view>
         </div>
 
