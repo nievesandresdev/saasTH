@@ -1,5 +1,5 @@
 <template>
-    <div class="body-chat flex-grow p-6 bg-white border-b border-l border-r border-shadow-border overflow-y-auto scrolling-sticky scrolling-sticky-main mb-5 mr-5 ml-6">
+    <div class="body-chat flex-grow p-6 bg-white border-b border-l border-r border-shadow-border overflow-y-auto scrolling-sticky scrolling-sticky-main mx-6">
         <!-- card message -->
         <div class="flex flex-col justify-end">
             <div

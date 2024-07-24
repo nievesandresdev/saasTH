@@ -43,7 +43,7 @@
               class="w-2.5 h-2.5 absolute top-1.5 left-5" 
               src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
               alt="notification icon"
-              v-if="link.title == 'Estancias' && countPendingQueries > 0"
+              v-if="link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)"
             >
 
             <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
@@ -146,13 +146,16 @@
 import { ref, computed, onMounted, onUnmounted, provide } from 'vue'
 import { getPusherInstance, isChannelSubscribed, setChannelSubscribed } from '@/utils/pusherSingleton'
 import { useRoute, useRouter } from 'vue-router'
+//components
+import ModalWindow from '@/components/ModalWindow.vue'
+import DropdownChangeHotel from './components/DropdownChangeHotel'
+import ModalHelp from './components/ModalHelp'
+//stores
 import { useAuthStore } from '@/stores/modules/auth/login'
 import { useUserStore } from '@/stores/modules/users/users'
 import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query'
-import ModalWindow from '@/components/ModalWindow.vue'
-import DropdownChangeHotel from './components/DropdownChangeHotel'
-import ModalHelp from './components/ModalHelp'
+import { useChatStore } from '@/stores/modules/chat/chat'
 
 const route = useRoute()
 const router = useRouter()
@@ -160,6 +163,7 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const hotelStore = useHotelStore()
 const queryStore = useQueryStore()
+const chatStore = useChatStore()
 
 const userAvatar = computed(() => userStore.$userAvatar);
 
@@ -167,6 +171,7 @@ provide('hotelStore', hotelStore);
 
 const modalProfile = ref(false)
 const countPendingQueries = ref(0)
+const countPendingChats = ref(0)
 const isMouseMoving = ref(false)
 const modalHelpRef = ref(false)
 //pusher
@@ -188,15 +193,21 @@ const connectPusher = async () => {
     });
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
-    channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
+    channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+      // console.log('NotifyStayHotelEvent',data)
         //notificacion del navegador cuando se recibe un mensaje
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
             // let link  = route('stay.hoster.chat',{selected:data.stay_id});
-            showNotification(room_text,data.text,null,10000);
+            let routeData = {
+              name : 'StayChatRoom',
+              params : { stayId : data.stay_id },
+              query : { g : data.guest_id }
+            };
+            showNotification(room_text, data.text, routeData, 10000);
         }
-
+        countPendingChats.value = await chatStore.$pendingCountByHotel();
         // get_stay_data_pending();
         // defineNotificationsCount();
     });
@@ -311,19 +322,19 @@ const groupClass = computed(() => ({
   group: isMouseMoving.value
 }))
 
-const showNotification = (title,text,link,timeout) =>{
+const showNotification = (title, text, route, timeout) =>{
     if (Notification.permission === 'granted') {
-        displayNotification(title,text,link,timeout);
+        displayNotification(title, text, route, timeout);
     } else if (Notification.permission !== 'denied') { // Si el permiso no ha sido denegado ni concedido ("default")
         Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
-                displayNotification(title,text,link,timeout);
+                displayNotification(title, text, route, timeout);
             }
         });
     }
 }
 
-const displayNotification = (title,text,link,timeout) => {
+const displayNotification = (title, text, route, timeout) => {
     const notif = new Notification(title, {
         body: text,
         icon:'/assets/icons/1.TH.ChatBubblegreen.svg',
@@ -331,7 +342,13 @@ const displayNotification = (title,text,link,timeout) => {
     });
     notif.onclick = (event) => {
         event.preventDefault();
-        // Inertia.visit(link)
+        if(route.name){
+          router.push({
+              name: route.name,
+              params: route.params,
+              query: route.query,
+          }); 
+        } 
     };
     setTimeout(() => {
         notif.close();
@@ -340,6 +357,7 @@ const displayNotification = (title,text,link,timeout) => {
 onMounted(async() => {
     hotelStore.loadHotelsAvailables();
     countPendingQueries.value = await queryStore.$countPendingByHotel();
+    countPendingChats.value = await chatStore.$pendingCountByHotel();
     connectPusher();
 })
 

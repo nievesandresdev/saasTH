@@ -9,11 +9,12 @@
             :listGuests="listGuests"
             v-if="listGuests?.length"
             ref="HeadChatComponent"
+            @updateGuestMessagesCount="handleUpdateGuestMessagesCount"
         />
         <!-- body -->
         <BodyChat :messages="dataMessages" />
         <!-- foot -->
-        <div class="py-2 px-6 hbg-white-100 flex border-t sticky bottom-0">
+        <div class="py-2 mx-6 hbg-white-100 flex border-x sticky bottom-0">
             <textarea
                 ref="messageTextarea"
                 class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden"
@@ -94,16 +95,6 @@ const sendMsg = async (e) => {
         msg.value = null
         await chatStore.$sendMsg(route.query.g, route.params.stayId, text)
         await getDataChat(false);
-        // axios({
-        //     url: route('stay.chat.send.msg', {
-        //         stay_id: props.selected,
-        //         guest_id: props.currentGuestId,
-        //         text,
-        //     }),
-        //     method: 'POST',
-        // }).then((res) => {
-        //     get_messages()
-        // })
     }
 }
 
@@ -118,10 +109,12 @@ const suscribePusher = () => {
     channelChat.value = 'private-update-chat.' + route.params.stayId
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
-    channelChat.value.bind('App\\Events\\UpdateChatEvent', function (data) {
-        console.log('App\\Events\\UpdateChatEvent', data)
+    channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
+        if(data?.message?.messageable_id == route.query.g || data?.message?.automatic){
+            dataMessages.value = [...dataMessages.value, data.message]
+        }
+        listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);
         // callHeadChatComponent()
-        dataMessages.value = [...dataMessages.value, data.message]
         // if (data.message.by == 'Guest' && current_route == 'stay.hoster.chat') {
         //     mark_msgs_as_read(props.stay.id)
         // }
@@ -146,6 +139,13 @@ const getDataChat = async (showLoadPage = true) =>{
     let { chat, messages } = await chatStore.$getDataRoom(route.params.stayId, route.query.g, showLoadPage)
     dataChat.value = chat;
     dataMessages.value = messages;
+}
+
+const handleUpdateGuestMessagesCount = (guestId, newCount)  => {
+    const index = listGuests.value.findIndex(guest => guest.id === guestId);
+    if (index !== -1 && listGuests.value[index].chats && listGuests.value[index].chats[0]) {
+        listGuests.value[index].chats[0].messages_count = newCount;
+    }
 }
 
 const adjustTextareaHeight = () => {

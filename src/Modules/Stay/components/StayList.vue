@@ -197,7 +197,7 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
-        console.log('NotifyStayHotelEvent', data)
+        console.log('NotifyStayHotelEvent')
         let showLoadPage = data.showLoadPage ?? true;
         loadData(showLoadPage);
     });
