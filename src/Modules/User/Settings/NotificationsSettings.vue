@@ -25,7 +25,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -43,7 +43,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -61,7 +61,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -166,7 +166,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -184,7 +184,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -202,7 +202,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
                         <!-- checkbox's -->
-                        <div class="flex gap-6 mt-2">
+                        <div class="flex mt-2">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
