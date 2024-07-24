@@ -79,7 +79,7 @@ watch(() => props.chat, async (newChat) => {
     console.log('newChat',newChat)
     pending.value = newChat ? !newChat?.pending : false;
     console.log('pending.value',pending.value)
-}, { immediate: true });  
+}, { immediate: true, deep: true });  
 
 //function
 const togglePending =() =>{
@@ -97,14 +97,14 @@ function goGuest(guestId){
     });
 }
 
-function makePendingChat (){
-    pending.value = false;
-}
+// function makePendingChat (){
+//     pending.value = false;
+// }
 
-// Exponer el método para que pueda ser accesible desde el padre
-defineExpose({
-    makePendingChat
-});
+// // Exponer el método para que pueda ser accesible desde el padre
+// defineExpose({
+//     makePendingChat
+// });
 </script>
 <style scoped>
 .hbg-warning:hover{

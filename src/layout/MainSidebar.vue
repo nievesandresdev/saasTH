@@ -193,8 +193,8 @@ const connectPusher = async () => {
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-            let link  = route('stay.hoster.chat',{selected:data.stay_id});
-            showNotification(room_text,data.text,link,10000);
+            // let link  = route('stay.hoster.chat',{selected:data.stay_id});
+            showNotification(room_text,data.text,null,10000);
         }
 
         // get_stay_data_pending();

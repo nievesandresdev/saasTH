@@ -40,6 +40,7 @@
 <script setup>
 import { ref, onMounted, watch, provide } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
+import { getPusherInstance } from '@/utils/pusherSingleton'
 //
 import HeadSection from '../components/HeadDetail.vue'
 import BodyChat from './BodyChat'
@@ -66,19 +67,18 @@ const msg = ref(null)
 const messageTextarea = ref(null)
 const maxHeight = 125; // Altura máxima en píxeles
 
+//pusher
+const channelChat = ref(null)
+const pusher = ref(null)
+
 
 onMounted(async() => {
     data.value.guests = await chatStore.$getGuestListWNoti(route.params.stayId);
     listGuests.value = data.value.guests;
     session.value = await stayStore.$getSessions(route.params.stayId)
+    suscribePusher()
 })
 
-watch(() => route.query.g, async (newId) => {
-    let { chat, messages } = await chatStore.$getDataRoom(route.params.stayId, route.query.g)
-    // console.log('chat',chat)
-    dataChat.value = chat;
-    dataMessages.value = messages;
-}, { immediate: true });  
 
 onBeforeRouteLeave((to, from, next) => {
     if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
@@ -88,10 +88,12 @@ onBeforeRouteLeave((to, from, next) => {
     next();
 });
 
-const sendMsg = (e) => {
+const sendMsg = async (e) => {
     if (!e.shiftKey) {
         let text = msg.value
         msg.value = null
+        await chatStore.$sendMsg(route.query.g, route.params.stayId, text)
+        await getDataChat(false);
         // axios({
         //     url: route('stay.chat.send.msg', {
         //         stay_id: props.selected,
@@ -110,6 +112,40 @@ const handleEnter = (e) => {
     if (!e.shiftKey) {
         e.preventDefault()
     }
+}
+
+const suscribePusher = () => {
+    channelChat.value = 'private-update-chat.' + route.params.stayId
+    pusher.value = getPusherInstance()
+    channelChat.value = pusher.value.subscribe(channelChat.value)
+    channelChat.value.bind('App\\Events\\UpdateChatEvent', function (data) {
+        console.log('App\\Events\\UpdateChatEvent', data)
+        // callHeadChatComponent()
+        dataMessages.value = [...dataMessages.value, data.message]
+        // if (data.message.by == 'Guest' && current_route == 'stay.hoster.chat') {
+        //     mark_msgs_as_read(props.stay.id)
+        // }
+    })
+    channelChat.value.bind('App\\Events\\MsgReadChatEvent', function (data) {
+        dataChat.value = { ...dataChat.value, pending: true };
+        dataChat.value = dataChat.value;
+        const count_msgs = dataMessages.value.length
+        const arr = dataMessages.value
+        for (let i = count_msgs - 1; i >= 0; i--) {
+            if (arr[i].status == 'Entregado' && arr[i].by == 'Hoster') {
+                arr[i].status = 'Leído'
+            } else if (arr[i].status == 'Entregado') {
+                break
+            }
+        }
+        dataMessages.value = arr
+    })
+}
+
+const getDataChat = async (showLoadPage = true) =>{
+    let { chat, messages } = await chatStore.$getDataRoom(route.params.stayId, route.query.g, showLoadPage)
+    dataChat.value = chat;
+    dataMessages.value = messages;
 }
 
 const adjustTextareaHeight = () => {
@@ -131,13 +167,16 @@ const updateDetailSession = async () => {
     await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
 }
 
-// watch(() => route.query.g, async (newId) => {
-//     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,newId);
-// }, { immediate: true });  
+watch(() => route.query.g, async (newId) => {
+    await getDataChat();
+}, { immediate: true });  
 provide('data',data)
 provide('session',session)
 </script>
 <style scoped>
+textarea:focus{
+    border:none;
+}
 .chat-container {
     height: calc(100vh - 139px);
 }

@@ -10,9 +10,9 @@ import {
 
 export const useChatStore = defineStore('chat', () => {
     
-    async function $getDataRoom (stayId, guestId) {
+    async function $getDataRoom (stayId, guestId, showLoadPage = true) {
         let data = { stayId, guestId };
-        const response = await getDataRoomApi(data)
+        const response = await getDataRoomApi(data, showLoadPage)
         const { ok } = response   
         if(ok){
             return response.data
@@ -37,11 +37,22 @@ export const useChatStore = defineStore('chat', () => {
         }
     }
 
+    async function $sendMsg (guestId, stayId, text) {
+        let data = { guestId, stayId, text };
+        console.log('sendMsg',data)
+        const response = await sendMsgApi(data)
+        console.log('response',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     //
     return {
         $getDataRoom,
         $getGuestListWNoti,
-        $togglePending
+        $togglePending,
+        $sendMsg
     }
 
 })
