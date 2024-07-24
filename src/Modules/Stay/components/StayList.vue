@@ -169,7 +169,7 @@ async function submit(data){
 }
 
 async function searchInList(){
-    if(search.value.length >= 3){
+    if(search.value?.length >= 3){
         allFilters.value = {
             search: search.value,
             periods: allFilters.value.periods,
@@ -179,8 +179,8 @@ async function searchInList(){
     }
 }
 
-async function loadData(){
-    data.value = await stayStore.$getAllByHotel(allFilters.value);
+async function loadData(showLoadPage = true){
+    data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
     list.value = data.value.stays;
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_counts;
@@ -197,7 +197,9 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
-        loadData();
+        console.log('NotifyStayHotelEvent')
+        let showLoadPage = data.showLoadPage ?? true;
+        loadData(showLoadPage);
     });
 
     channelStay.value = 'private-create-stay.' + hotelStore.hotelData.id;

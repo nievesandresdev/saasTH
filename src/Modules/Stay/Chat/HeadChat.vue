@@ -2,23 +2,25 @@
     <div class="px-6 pt-6 bg-[#FAFAFA] w-full sticky top-11 left-0">
         <div class="flex justify-between items-start w-full">
             <div class="flex">
-                <button
+                <div
                 v-for="guest in listGuests"
-                class="text-base leading-[110%] font-medium pb-2 relative  "
+                class="text-base leading-[110%] font-medium pb-2 relative cursor-pointer"
                 :key="guest.id"
                 :class="{
-                    'bg-white border-t border-l border-r border-shadow-border pt-4 pr-4  pl-4 rounded-t-lg text-[#0B6357] font-semibold': Number(route.query.g) == guest.id,
+                    'bg-white border-t border-l border-r border-shadow-border pt-4 pr-4  pl-4 rounded-t-lg': Number(route.query.g) == guest.id,
                     'text-gray-500 pt-4 pr-4 pl-4 hover:bg-[#ECF9F5] hover:rounded-t-lg': Number(route.query.g) !== guest.id,
                 }"
                 @click="goGuest(guest.id)"
             >
-                <img
-                    v-if="guest.chats[0]?.messages_count"
-                    class="w-2.5 h-2.5 absolute top-0 right-[-10px]"
-                    src="/assets/icons/EllipseWarning.svg" alt=""
-                >
-                {{ guest.name }}
-            </button>
+                <div class="text-[#0B6357] font-semibold relative">
+                    <img
+                        v-if="guest.chats[0]?.messages_count"
+                        class="w-2.5 h-2.5 absolute top-[-4px] right-[-8px]"
+                        src="/assets/icons/EllipseWarning.svg" alt=""
+                    >
+                    {{ guest.name ?? 'Sin nombre'}}
+                </div>
+            </div>
         </div>
 
 
@@ -71,15 +73,14 @@ const props = defineProps({
 const pending = ref(props.chat ? !props.chat?.pending : false)
 const sendingChange = ref(false)
 
+const emit = defineEmits(['updateGuestMessagesCount']);
 const toast = useToastAlert();
 const route = useRoute()
 const router = useRouter()
 
 watch(() => props.chat, async (newChat) => {
-    console.log('newChat',newChat)
     pending.value = newChat ? !newChat?.pending : false;
-    console.log('pending.value',pending.value)
-}, { immediate: true });  
+}, { immediate: true, deep: true });  
 
 //function
 const togglePending =() =>{
@@ -90,6 +91,7 @@ const togglePending =() =>{
 }
 
 function goGuest(guestId){
+    emit('updateGuestMessagesCount', guestId, 0);
     router.push({
         name: 'StayChatRoom',
         params: { stayId: route.params.stayId },
@@ -97,14 +99,14 @@ function goGuest(guestId){
     });
 }
 
-function makePendingChat (){
-    pending.value = false;
-}
+// function makePendingChat (){
+//     pending.value = false;
+// }
 
-// Exponer el método para que pueda ser accesible desde el padre
-defineExpose({
-    makePendingChat
-});
+// // Exponer el método para que pueda ser accesible desde el padre
+// defineExpose({
+//     makePendingChat
+// });
 </script>
 <style scoped>
 .hbg-warning:hover{
