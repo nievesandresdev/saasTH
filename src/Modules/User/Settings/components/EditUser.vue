@@ -9,7 +9,7 @@
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-5 mt-4">
             <div class="flex-1 text-left">
-              <h1 class="font-[600] text-xl">Editar usuario {{ dataUser.role.name }}</h1>
+              <h1 class="font-medium text-[22px]">Editar usuario {{ $getRoleName(dataUser.role.name) }}</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal">
@@ -19,7 +19,7 @@
           </div>
   
           <div class="pb-6 pr-6 pl-6">
-              <div class="flex items-center w-full px-4">
+              <div class="flex items-center w-full">
                 <h3
                   class="flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative"
                   v-for="(step, index) in steps"
@@ -32,7 +32,7 @@
                 >
                   {{ step.label }}
                 </h3>
-            </div>
+              </div>
 
 
 
@@ -59,7 +59,7 @@
                     @click="toggleModalSelect"
                     :value="selectedRoleName"
                     readonly
-                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                    class="bg-white w-full rounded-md border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
                     placeholder="Selecciona el tipo de usuario deseado..."
                   />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -99,7 +99,7 @@
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                      class="bg-white w-full rounded-md border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
                       placeholder="Selecciona el tipo de usuario deseado..."
                     />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -124,7 +124,7 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Nombre del usuario"
                         />
                     </div>
@@ -135,7 +135,7 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Apellido del usuario"
                         />
                     </div>
@@ -167,7 +167,7 @@
                         <input
                             v-model="form.email"
                             type="email"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Correo con el que iniciara sesión"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
@@ -203,8 +203,8 @@
             </div>
 
             <div v-if="currentStep === 3">
-                <div class="flex flex-col mb-8 text-left">
-                    <strong class="mb-5 text-xl">Accesos</strong>
+                <div class="flex flex-col mb-5 text-left">
+                   <!--  <strong class="mb-5 text-xl">Accesos</strong> -->
                     <span class="font-normal">
                         Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
                     </span>
@@ -214,7 +214,7 @@
                     <div>
                         <span class="block mb-2 font-semibold text-lg">Operación</span>
                         <div class="space-y-2">
-                            <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
+                            <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between  rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
                                 <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
                                 <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
@@ -225,7 +225,7 @@
                     <div>
                         <span class="block mb-2 font-semibold text-lg">Administración</span>
                         <div class="space-y-2">
-                            <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between mb-4 rounded-lg">
+                            <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
                                 <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
                                 <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
@@ -246,7 +246,7 @@
             Anterior
           </button>
           <button
-            class="px-4 py-2.5 font-medium rounded w-full text-black"
+            class="px-4 py-2 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
@@ -855,17 +855,18 @@ const clearForm = () => {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 135px;
+  width: 105px;
   height: 3px;
   background-color: #0B6357;
   border-radius: 10px 10px 0 0;
 }
 
-.active-step { //ajustar al px-4 de tialwind
-  margin-left: -1rem; 
-  margin-right: -1rem; 
-  padding-left: 1rem; 
-  padding-right: 1rem; 
+.active-step {
+  margin-left: -0.5rem; /* Ajusta según sea necesario */
+  /* margin-right: -0.5rem; 
+  padding-left: 0.5rem;  */
+  padding-right: 0.5rem; /* Ajusta según sea necesario */
 }
+
 </style>
   

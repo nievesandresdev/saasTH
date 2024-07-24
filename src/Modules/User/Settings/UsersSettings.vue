@@ -1,5 +1,6 @@
 <template>
-    <div class="px-6">
+    <div class="px-6 bg-[#FAFAFA]
+    ">
         <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Empleados</h1>
         <hr class="bg-[#BFBFBF]">
         <!-- <MenuSettings /> -->
@@ -16,13 +17,11 @@
                     @input="updateSearchTerms"
                 >
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg class="w-6 h-6 text-[#333333] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-                    </svg>
+                    <img src="/assets/icons/1.TH.SEARCH.svg" class="w-6 h-6" alt="search icon">
                 </div>
             </div>
             <button class="flex items-center px-4 py-2 text-black border border-[#333333] rounded hover:bg-gray-100" @click="createUser">
-                <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4 mr-2" alt="plus icon">
+                <img src="/assets/icons/1.TH.PLUS.svg" class="w-6 h-6 mr-2" alt="plus icon">
                 Crear usuario
             </button>
         </div>
@@ -63,7 +62,7 @@
             </ButtonFilter>
         </div>
         <div class="relative mt-6">
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 shadow-md">
                 <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">Nombre</th>
@@ -94,7 +93,7 @@
                             <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[10px] text-[#0B6357] bg-green-100 rounded-full">
                                 Activo
                             </span>
-                            <span v-else class="px-4 py-4 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                            <span v-else class="px-4 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
                                 Inactivo
                             </span>
                         </td>
@@ -127,7 +126,7 @@
         <Pagination
             :current-page="currentPage"
             :total-pages="totalPages"
-            :per-page="15"
+            :per-page="totalUsers"
             @update:page="handlePageChange"
         />
     </div>
@@ -251,7 +250,7 @@ const closeDeleteUser = () => {
 
 onMounted(() => {
     handleGetUsers();
-     handleTestMail(); 
+     //handleTestMail(); 
 });
 
 const data_filter = ref ({
@@ -267,23 +266,24 @@ const data = ref([]);
 const dataEdit = ref(null);
 const currentPage = ref(1);
 const totalPages = ref(1);
+const totalUsers = ref(1);
 
 const handleGetUsers = async () => {
   let params = {
     search_terms: data_filter.value.search_terms,
     type: data_filter.value.type,
     page: currentPage.value,
-    per_page: 15,
+    per_page: 20,
   };
   const response = await userStore.$getUsers(params);
   data.value = response.data.users;
+  totalUsers.value = response.data.total;
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
 };
 
-const handleTestMail = async () => {
+/* const handleTestMail = async () => {
     const response = await userStore.$testMail();
-    console.log('e,mailResponse',response);
-};
+}; */
 
 /* const handleUpdateUsers = async () => {
   console.log('handleUpdateUsers');
@@ -327,7 +327,6 @@ const editUser = (data) => {
 }
 
 const showUser = (data) => {
-    console.log('showUserConsole',data);
     selectedUser.value = data
     modalShow.value = true
     visibleDropdown.value = null
