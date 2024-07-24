@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.booking ? 'border-red-500' : hoverValidation.booking ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')">
+                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')" :disabled="disabledInput.booking">
                     </div>
                     <div v-if="errors.booking" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.expedia ? 'border-red-500' : hoverValidation.expedia ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')">
+                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')" :disabled="disabledInput.expedia">
                     </div>
                     <div v-if="errors.expedia" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')">
+                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')" :disabled="disabledInput.tripadvisor">
                     </div>
                     <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -91,8 +91,9 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.google ? 'border-red-500' : hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')">
+                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')" :disabled="disabledInput.google">
                     </div>
+                    
                     <div v-if="errors.google" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.google }}</p>
@@ -176,13 +177,16 @@ import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalDeleteURL from './components/ModalDeleteURL.vue';
 import ModalChangeURL from './components/ModalChangeURL.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
+import { useAuthStore } from '@/stores/modules/auth/login';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useRouter } from 'vue-router';
+import { $getPropertyInUrl } from '@/utils/helpers';
 import {
     requestChangeUrlApi,
 } from '@/api/services/platforms/platformsServices'
 
 const platformsStore = platformsExternalStore();
+const authStore = useAuthStore();
 const toast = useToastAlert();
 const router = useRouter();
 
@@ -223,6 +227,14 @@ const form = reactive({
     airbnb: { url: '', _id: null }
 });
 
+const disabledInput = ref({
+    booking: false,
+    tripadvisor: false,
+    expedia: false,
+    google: false,
+    airbnb: false
+});
+
 const additionalLinks = ref([]);
 const initialForm = ref(null);
 
@@ -232,27 +244,36 @@ onMounted(async () => {
 });
 
 const getSettings = async () => {
+
+    const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+    }
+    
     try {
-        const response = await platformsStore.$getDataOTAS();
-        if (response && response.data && response.data.otas.otas) {
-            response.data.otas.otas.forEach(ota => {
+        const response = await platformsStore.$getDataOTAS(params);
+        if (response && response.data && response.data.otas) {
+            response.data.otas.forEach(ota => {
                 switch(ota.ota.toLowerCase()) {
                     case 'tripadvisor':
+                        disabledInput.value.tripadvisor = ota.attemptsToUpdate >= 3;
                         form.tripadvisor.url = ota.url;
                         form.tripadvisor._id = ota._id;
                         hoverValidation.value.tripadvisor = ota.url.length > 0;
                         break;
                     case 'expedia':
+                        disabledInput.value.expedia = ota.attemptsToUpdate >= 3;
                         form.expedia.url = ota.url;
                         form.expedia._id = ota._id;
                         hoverValidation.value.expedia = ota.url.length > 0;
                         break;
                     case 'google':
+                        disabledInput.value.google = ota.attemptsToUpdate >= 3;
                         form.google.url = ota.url;
                         form.google._id = ota._id;
                         hoverValidation.value.google = ota.url.length > 0;
                         break;
                     case 'booking':
+                        disabledInput.value.booking = ota.attemptsToUpdate >= 3;
                         form.booking.url = ota.url;
                         form.booking._id = ota._id;
                         hoverValidation.value.booking = ota.url.length > 0;
@@ -442,9 +463,18 @@ const submit = async () => {
 
     console.log('Saving changes:', payload);
 
-    const response = await platformsStore.$bulkUpdateOTAS(payload);
+    const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        urls: payload
+    }
 
-    console.log('ResponseOTIS:', response, payload);
+    const response = await platformsStore.$bulkUpdateOTAS(params);
+
+    if(response.ok){
+        toast.warningToast('Cambios aplicados con éxito', 'top-right')
+    }else{
+        toast.errorToast(response.data.message, 'top-right')
+    }
 
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
 };

@@ -85,6 +85,7 @@ let paramAxios = {
 
 export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
   // switch
+  //console.log('SLUG_API', SLUG_API)
   const url_backend = () => {
     switch (SLUG_API) {
       case 'API_GENERAL':
@@ -99,8 +100,9 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
   }
 
   const api_url_backend = url_backend()
+  //console.log('api_url_backend', `${api_url_backend}/${endpoint}`,data)
   const subdomain = sessionStorage.getItem('current_subdomain') || null
-/*   if(SLUG_API === 'API_REVIEW') {
+ /*  if(SLUG_API === 'API_REVIEW') {
   console.log('subdomainSCS',{
     'URL_BASE_BACKEND_GENERAL' : URL_BASE_BACKEND_GENERAL,
     'URL_BASE_BACKEND_HELPER' : URL_BASE_BACKEND_HELPER,
@@ -116,7 +118,8 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
     'subdomainHotel': subdomain,
-    'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
+    //'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
+    'x-key-api':  X_KEY_API,
   };
 
   if (!options.hasOwnProperty('headers')) options.headers = defaultHeaders

@@ -24,6 +24,13 @@ const $getRoleName = (roleName) => {
       : 'Operador';
 };
 
+const $getPropertyInUrl = (url, property) => {
+  if (!url) return;
+  const urlObj = new URL(url);
+  const queryParams = new URLSearchParams(urlObj.search);
+  return queryParams.get(property);
+}
+
 const $isAssociate = () => {
     const authStore = useAuthStore();
     return authStore.user.role === 'Associate';
@@ -87,5 +94,6 @@ export {
     $isOperator,
     $nameLanguage,
     $translatePeriod,
-    $formatTimestampDate
+    $formatTimestampDate,
+    $getPropertyInUrl
 };

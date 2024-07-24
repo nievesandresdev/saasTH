@@ -8,8 +8,8 @@ export const platformsExternalStore = defineStore('platformsExternal', () => {
    * 
    * dataOTAS
    */
-  async function $getDataOTAS(){
-    const response = await dataOTAS();
+  async function $getDataOTAS(params){
+    const response = await dataOTAS(params);
     return response;
   }
   
