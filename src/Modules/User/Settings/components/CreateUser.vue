@@ -4,7 +4,7 @@
         v-if="modalAdd"
         class="absolute bg-white shadow-xl add flex-column"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
-        ref="ref_section_add"
+         ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-4">
@@ -295,7 +295,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits,computed,watch } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits,computed,watch,onBeforeUnmount } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
@@ -401,9 +401,7 @@ const adminAccess = ref([
 
   };
   
-  function closeModal() {
-    emits('close');
-  }
+
   
   const isFormIncomplete = computed(() => {
       //email
@@ -715,8 +713,46 @@ const clearForm = () => {
       access.selected = false;
     });
 };
+const ref_section_add = ref(null);  // Declarar la referencia
+
+// Método para cerrar el modal si se hace clic fuera de él
+const handleClickOutside = (event) => {
+  const addSection = ref_section_add.value;
+  if (addSection && !addSection.contains(event.target)) {
+    closeModal();
+  }
+};
+watch(() => props.modalAdd, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      registerClickOutside();
+    });
+  } else {
+    unregisterClickOutside();
+  }
+});
+
+
+function closeModal() {
+      emits('close');
+    //emits('close');
+  }
+
+// Registrar el evento de clic en el documento con retraso
+const registerClickOutside = () => {
+  setTimeout(() => {
+    document.addEventListener('click', handleClickOutside);
+  }, 2000); // 100ms de retraso
+};
+
+// Remover el evento de clic en el documento
+const unregisterClickOutside = () => {
+  document.removeEventListener('click', handleClickOutside);
+};
   
   const containerTop = ref(0);
+
+  
   
   onMounted(async () => {
     await nextTick();
@@ -725,9 +761,17 @@ const clearForm = () => {
       containerTop.value = sectionExpElement.offsetTop;
     }
 
+    console.log('modalAddesd',props.modalAdd)
+
+    registerClickOutside();  // Registrar el listener de clic fuera
+
     errorPassword.value = false;
     errorPasswordMatch.value = false;
     errorEmail.value = false;
+  });
+
+  onBeforeUnmount(() => {
+    unregisterClickOutside();  // Remover el listener de clic fuera
   });
   </script>
   
