@@ -1,12 +1,22 @@
 <template>
     <!-- head info -->
     <section class="px-6">
-        <div class="py-5 border-b hborder-gray-400">
-            <h1 class="text-[22px] font-medium leading-[140%]">Solicitudes</h1>
-        </div>
-        <div class="mt-6">
-            <h2 class="text-lg font-medium leading-[110%]">Solicitudes de reseña</h2>
-            <p  class="text-sm leading-[150%] mt-2">Concluida la estancia y tras analizar los distintos feedbacks recibidos del huésped, se determinará qué huéspedes han tenido una experiencia satisfactoria en el hotel. Una vez segmentados, se les enviará la solicitud de reseña a aquellos que puedan derivar en una reseña positiva.</p>
+        <div class="py-5 border-b hborder-gray-400 flex items-center gap-2">
+            <h1 class="text-[22px] font-medium leading-[110%]">Seguimiento - Solicitudes</h1>
+            <Tooltip
+                size="l"
+                :top="25"
+                :left="0"
+            >
+                <template v-slot:button>
+                    <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                </template>
+                <template v-slot:content>
+                    <p class="text-sm leading-[150%]">
+                        Determinaremos qué huéspedes han tenido una experiencia satisfactoria, concluida la estancia y tras analizar los feedbacks recibidos. Una vez segmentados, se les enviará la solicitud de reseña a aquellos que puedan derivar en una reseña positiva.
+                    </p>
+                </template>
+            </Tooltip>
         </div>
     </section>
 
@@ -102,6 +112,7 @@ import RadioButton from '@/components/Forms/RadioButton.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue'
 import Editor from '@/components/Forms/Editor.vue'
 import Checkbox from '@/components/Forms/Checkbox.vue'
+import Tooltip from '@/components/Tooltip.vue'
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 //STORES
