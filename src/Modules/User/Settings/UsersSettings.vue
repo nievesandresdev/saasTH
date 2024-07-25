@@ -247,6 +247,7 @@ const handleCloseModal = () => {
 const closeModalSaveCreate = () => {
     showModalNoSave.value = false;
     modalAdd.value = false;
+    location.reload();
 };
 const modalEdit = ref(false);
 const modalShow = ref(false);
