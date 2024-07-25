@@ -6,7 +6,7 @@ const dashboardRoutes = [
   {
     path: '/dashboard',
     component: AppLayout,
-    meta: { requiresAuth: true, sidebarRight: 'SidebarMockup' },
+    meta: { requiresAuth: true, sidebarRight: 'SidebarMockup', displayedMenu: true },
     children: [
       {
         name: 'DashboardIndex',
