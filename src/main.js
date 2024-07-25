@@ -24,6 +24,7 @@ import {
   $isOperator,
   $nameLanguage,
   $translatePeriod,
+  $getPropertyInUrl,
   $formatTimestampDate
 } from '@/utils/helpers.js'
 
@@ -57,6 +58,7 @@ function initializeApp() {
   app.config.globalProperties.$isOperator = $isOperator
   app.config.globalProperties.$nameLanguage = $nameLanguage
   app.config.globalProperties.$translatePeriod = $translatePeriod
+  app.config.globalProperties.$getPropertyInUrl = $getPropertyInUrl
   app.config.globalProperties.$formatTimestampDate = $formatTimestampDate
 
   

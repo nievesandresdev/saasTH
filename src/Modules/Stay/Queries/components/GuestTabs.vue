@@ -31,9 +31,9 @@ const router = useRouter();
 const data = inject('data');
 const notyRef = ref([]);
 
-onMounted(()=>{
-    // console.log('props.notifyPeriod',props.notifyPeriod)
-})
+// onMounted(()=>{
+
+// })
 
 
 function goGuest(guestId){

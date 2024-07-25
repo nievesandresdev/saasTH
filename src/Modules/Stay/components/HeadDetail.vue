@@ -16,9 +16,15 @@
     </div>
 </template>
 <script setup>
-import { ref, inject, watch } from 'vue'
+import { ref, inject, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router';
 import TabMenu from '@/components/TabMenu.vue'
+import { useChatStore } from '@/stores/modules/chat/chat'
+import { useHotelStore } from '@/stores/modules/hotel'
+import { getPusherInstance } from '@/utils/pusherSingleton'
+
+const chatStore = useChatStore();
+const hotelStore = useHotelStore()
 
 const route = useRoute();
 const data = inject('data')
@@ -26,32 +32,71 @@ const session = inject('session');
 
 const stayId = ref(route.params.stayId);
 const views = ref([])
+const countPendingChats = ref([])
+const channelChat = ref(null);
+const pusher = ref(null);
 
-watch(data, (newValue) => {
-    if (newValue && newValue.guests && newValue.guests.length > 0) {
-        const guestId = newValue.guests[0].id;
+watch(data, async (newValue) => {
+    countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
+
+    updateViews();
+}, { deep: true, immediate: true });
+
+
+
+
+const updateViews = () => {
+    if (data.value && data.value.guests && data.value.guests.length > 0) {
+        const guestId = data.value.guests[0].id;
         views.value = [
             {
                 name: 'Información',
-                active: route.name == 'StayDetailPage',
+                active: route.name === 'StayDetailPage',
                 viewName: 'StayDetailPage'
             },
             {
                 name: 'Seguimiento',
-                active: route.name == 'StayQueryDetail',
+                active: route.name === 'StayQueryDetail',
                 viewName: 'StayQueryDetail',
-                params: { stayId: stayId.value},
+                params: { stayId: stayId.value },
                 query: { g: guestId }
             },
             {
                 name: 'Chat',
-                active: route.name == 'StayChatRoom',
+                active: route.name === 'StayChatRoom',
                 viewName: 'StayChatRoom',
-                params: { stayId: stayId.value},
-                query: { g: guestId }
+                params: { stayId: stayId.value },
+                query: { g: guestId },
+                notify : countPendingChats.value > 0
             },
         ];
     }
-}, { deep: true, immediate: true });
+};
 
+
+const connectPusher = () =>{
+    /*
+    //PUSHER
+    */
+    channelChat.value = 'private-noti-hotel.' + hotelStore.hotelData.id;
+    // Pusher.logToConsole = true;
+    pusher.value = getPusherInstance();
+    channelChat.value = pusher.value.subscribe(channelChat.value);
+    channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+        countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
+        updateViews();
+        console.log('countPendingChats.value', countPendingChats.value);
+    });
+}
+
+onMounted( async() => {
+    connectPusher();
+})
+
+onUnmounted(() => {
+    if (channelChat.value) {
+        channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
+        pusher.value.unsubscribe(channelChat.value);
+    }
+});
 </script>

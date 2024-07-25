@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-left flex-col items-left mt-4">
+    <div class="flex justify-left flex-col items-left mt-6" v-show="perPage >= 20">
       <span class="font-normal text-sm mb-2">
         {{ perPage }} usuarios por página
       </span>

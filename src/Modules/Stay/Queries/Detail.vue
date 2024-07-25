@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { ref, onMounted, watch, provide } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import Head from '../components/HeadDetail.vue'
 import TimeLineCard from './TimeLineCard.vue'
 import GuestTabs from './components/GuestTabs.vue'
@@ -37,6 +37,14 @@ onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
 })
 
+onBeforeRouteLeave((to, from, next) => {
+    if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
+        // Ejecutar `updateDetailSession` solo si la ruta de destino no está en el array allowedRoutes
+        updateDetailSession();
+    }
+    next();
+});
+
 watch(() => data.value, async (newData) => {
     guestAccess.value = newData?.timeline?.guestAccess;
     timeLineData.value = newData?.timeline;
@@ -45,6 +53,12 @@ watch(() => data.value, async (newData) => {
 watch(() => route.query.g, async (newId) => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,newId);
 }, { immediate: true });  
+
+
+const updateDetailSession = async () => {
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    await stayStore.$deleteSession(stayId.value ,'sessions', user.email);
+}
 
 provide('data',data)
 provide('timeLineData',timeLineData);

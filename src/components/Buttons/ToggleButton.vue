@@ -6,6 +6,7 @@
         :id="id"
         v-model="internalValue"
         :disabled="disabled"
+        @change="toggle"
       />
       <label :for="id">
         <!-- :class="`bg-[${internalValue ? enableColor : disabledColor}]`" -->
@@ -47,8 +48,12 @@
   const emit = defineEmits(['update:modelValue', 'change'])
   const internalValue = ref(props.modelValue)
   
-  watch(() => internalValue.value, (newVal) => {
-    toggle();
+  // watch(() => internalValue.value, (newVal) => {
+  //   toggle();
+  // })
+
+  watch(() => props.modelValue, (newVal) => {
+    internalValue.value = newVal;
   })
 
   const toggle = () => {

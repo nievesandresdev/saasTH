@@ -53,7 +53,7 @@
                     @click="toggleModalSelect"
                     :value="selectedRoleName"
                     readonly
-                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500  font-medium text-sm px-4 py-2.5 cursor-pointer text-black"
                     placeholder="Selecciona el tipo de usuario deseado..."
                   />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -93,7 +93,7 @@
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-400 font-medium text-sm px-4 py-2.5 cursor-pointer"
+                      class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
                       placeholder="Selecciona el tipo de usuario deseado..."
                     />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -118,7 +118,7 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Nombre del usuario"
                         />
                     </div>
@@ -129,7 +129,7 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Apellido del usuario"
                         />
                     </div>
@@ -161,7 +161,7 @@
                         <input
                             v-model="form.email"
                             type="email"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Correo con el que iniciara sesión"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
@@ -178,7 +178,7 @@
                         <input
                             v-model="form.password"
                             type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Contraseña de acceso"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorPassword">
@@ -195,7 +195,7 @@
                         <input
                             v-model="form.password_confirmation"
                             type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm"
+                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Repite la contraseña"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorPasswordMatch">
@@ -276,7 +276,7 @@
             Anterior
           </button> -->
           <button
-            class="px-4 py-2.5 font-medium rounded w-full text-black"
+            class="px-4 py-2 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"

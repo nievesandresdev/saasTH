@@ -15,76 +15,83 @@
             <hr class="mb-5">
 
             <div class="font-montserrat">
+                <!-- Booking -->
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
                             <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6 mr-2" alt="Booking">
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('booking',form.booking)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('booking', form.booking.url)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div :class="['flex', errors.booking ? 'border-red-500' : hoverValidation.booking ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.booking" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')">
+                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking && !disabledInput.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.booking ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')" :disabled="disabledInput.booking">
                     </div>
                     <div v-if="errors.booking" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.booking }}</p>
                     </div>
                 </div>
+                
+                <!-- Expedia -->
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
                             <img src="/assets/icons/otas/Expedia.svg" class="w-6 h-6 mr-2" alt="Expedia">
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('expedia',form.expedia)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('expedia', form.expedia.url)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div :class="['flex', errors.expedia ? 'border-red-500' : hoverValidation.expedia ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.expedia" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')">
+                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia && !disabledInput.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.expedia ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')" :disabled="disabledInput.expedia">
                     </div>
                     <div v-if="errors.expedia" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.expedia }}</p>
                     </div>
                 </div>
+
+                <!-- Tripadvisor -->
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
                             <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
                             <span class="font-semibold text-sm">Tripadvisor</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('tripadvisor',form.tripadvisor)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.tripadvisor" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')">
+                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor && !disabledInput.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.tripadvisor ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')" :disabled="disabledInput.tripadvisor">
                     </div>
                     <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.tripadvisor }}</p>
                     </div>
                 </div>
+
+                <!-- Google -->
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
                             <img src="/assets/icons/otas/Google.svg" class="w-6 h-6 mr-2" alt="Google">
                             <span class="font-semibold text-sm">Google</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('google',form.google)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('google', form.google.url)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div :class="['flex', errors.google ? 'border-red-500' : hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.google" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')">
+                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google && !disabledInput.google ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.google ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')" :disabled="disabledInput.google">
                     </div>
                     <div v-if="errors.google" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -92,6 +99,7 @@
                     </div>
                 </div>
                 
+                <!-- Airbnb -->
                 <div class="w-full h-min mb-4 px-4 py-6 bg-white shadow-md rounded-lg flex flex-col gap-2">
                     <div class="flex justify-between">
                         <div class="flex">
@@ -108,17 +116,17 @@
                                 </Tooltip>
                             </div>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('airbnb',form.airbnb)">
+                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('airbnb', form.airbnb.url)">
                             <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
                             <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div :class="['flex', errors.airbnb ? 'border-red-500' : hoverValidation.airbnb ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.airbnb" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.airbnb ? 'border-red-500 text-red-500' : hoverValidation.airbnb ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('airbnb')">
+                        <input type="text" v-model="form.airbnb.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.airbnb ? 'border-red-500 text-red-500' : hoverValidation.airbnb && !disabledInput.airbnb ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.airbnb ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('airbnb')">
                     </div>
                     <div v-if="errors.airbnb" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
-                        <p>{{ errorMessage.airbnb }}</p>
+                        <p class="text-red-500">{{ errorMessage.airbnb }}</p>
                     </div>
                     <div class="flex items-center mt-3 cursor-pointer" @click="addAnotherLink">
                         <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4 mr-2" alt="Add Another Link">
@@ -134,7 +142,7 @@
                         </div>
                         <div v-if="link.errors" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                             <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
-                            <p>{{ link.errorMessage }}</p>
+                            <p class="text-red-500">{{ link.errorMessage }}</p>
                         </div>
                     </div>
                 </div>
@@ -167,14 +175,17 @@ import ChangesBar from '@/components/Forms/ChangesBar.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalDeleteURL from './components/ModalDeleteURL.vue';
 import ModalChangeURL from './components/ModalChangeURL.vue';
-import { useUserStore } from '@/stores/modules/users/users';
+import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
+import { useAuthStore } from '@/stores/modules/auth/login';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useRouter } from 'vue-router';
+import { $getPropertyInUrl } from '@/utils/helpers';
 import {
     requestChangeUrlApi,
 } from '@/api/services/platforms/platformsServices'
 
-const userStore = useUserStore();
+const platformsStore = platformsExternalStore();
+const authStore = useAuthStore();
 const toast = useToastAlert();
 const router = useRouter();
 
@@ -188,27 +199,39 @@ const hoverValidation = ref({
     booking: false,
     tripadvisor: false,
     expedia: false,
+    google: false,
     airbnb: false
 });
 const errors = ref({
     booking: false,
     tripadvisor: false,
     expedia: false,
+    google: false,
     airbnb: false
 });
 const errorMessage = ref({
     booking: '',
     tripadvisor: '',
     expedia: '',
+    google: '',
     airbnb: ''
 });
 const changes = ref(0);
 
 const form = reactive({
-    booking: '',
-    tripadvisor: '',
-    expedia: '',
-    airbnb: ''
+    booking: { url: '', _id: null },
+    tripadvisor: { url: '', _id: null },
+    google: { url: '', _id: null },
+    expedia: { url: '', _id: null },
+    airbnb: { url: '', _id: null }
+});
+
+const disabledInput = ref({
+    booking: false,
+    tripadvisor: false,
+    expedia: false,
+    google: false,
+    airbnb: false
 });
 
 const additionalLinks = ref([]);
@@ -220,29 +243,43 @@ onMounted(async () => {
 });
 
 const getSettings = async () => {
+
+    const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+    }
+    
     try {
-        const response = await userStore.$getDataOTAS();
-        if (response && response.data && response.data.otas.otas) {
-            response.data.otas.otas.forEach(ota => {
+        const response = await platformsStore.$getDataOTAS(params);
+        if (response && response.data && response.data.otas) {
+            response.data.otas.forEach(ota => {
                 switch(ota.ota.toLowerCase()) {
                     case 'tripadvisor':
-                        form.tripadvisor = ota.url;
+                        disabledInput.value.tripadvisor = ota.attemptsToUpdate >= 3;
+                        form.tripadvisor.url = ota.url;
+                        form.tripadvisor._id = ota._id;
                         hoverValidation.value.tripadvisor = ota.url.length > 0;
                         break;
                     case 'expedia':
-                        form.expedia = ota.url;
+                        disabledInput.value.expedia = ota.attemptsToUpdate >= 3;
+                        form.expedia.url = ota.url;
+                        form.expedia._id = ota._id;
                         hoverValidation.value.expedia = ota.url.length > 0;
                         break;
                     case 'google':
-                        form.google = ota.url;
+                        disabledInput.value.google = ota.attemptsToUpdate >= 3;
+                        form.google.url = ota.url;
+                        form.google._id = ota._id;
                         hoverValidation.value.google = ota.url.length > 0;
                         break;
                     case 'booking':
-                        form.booking = ota.url;
+                        disabledInput.value.booking = ota.attemptsToUpdate >= 3;
+                        form.booking.url = ota.url;
+                        form.booking._id = ota._id;
                         hoverValidation.value.booking = ota.url.length > 0;
                         break;
                     case 'airbnb':
-                        form.airbnb = ota.url;
+                        form.airbnb.url = ota.url;
+                        form.airbnb._id = ota._id;
                         hoverValidation.value.airbnb = ota.url.length > 0;
                         break;
                 }
@@ -254,7 +291,20 @@ const getSettings = async () => {
 };
 
 const validateUrl = (url, type) => {
-    const urlParts = new URL(url);
+    console.log('Validating:', url, type);
+
+    // Si el campo está vacío, no hay errores
+    if (!url) {
+        return null;
+    }
+    
+    let urlParts;
+    try {
+        urlParts = new URL(url);
+    } catch (error) {
+        return 'URL no válida';
+    }
+
     const hostname = urlParts.origin; 
     const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/
 
@@ -263,7 +313,6 @@ const validateUrl = (url, type) => {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
-    
     switch (type) {
         case 'booking':
             if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
@@ -283,16 +332,18 @@ const validateUrl = (url, type) => {
         case 'airbnb':
             console.log('Validating Airbnb:', url);
             break;
+        case 'expedia' :
+            break;
+        default:
+            return 'Tipo de enlace no soportado';
     }
 
     return null;
 };
 
-
 const marcarCambio = (field) => {
-    console.log('marcarCambio:', field);
     changes.value += 1;
-    const validationError = validateUrl(form[field], field);
+    const validationError = validateUrl(form[field].url, field);
     if (!validationError) {
         hoverValidation.value[field] = true;
         errors.value[field] = false;
@@ -318,9 +369,8 @@ const markAdditionalLinkChange = (index) => {
     }
 };
 
-
 const addAnotherLink = () => {
-    additionalLinks.value.push({ url: '', hoverValidation: false, errors: false, errorMessage: '', status: 1 });
+    additionalLinks.value.push({ url: '', _id: null, hoverValidation: false, errors: false, errorMessage: '', status: 1 });
 };
 
 const openDeleteModal = (index) => {
@@ -339,7 +389,7 @@ const submitDelete = () => {
     changes.value += 1;
 };
 
-const changeUrlModal = (type,url) => {
+const changeUrlModal = (type, url) => {
     dataMail.value = url;
     dataMailtype.value = type;
 
@@ -351,6 +401,7 @@ const cancelChange = () => {
     form.booking = oldValues.booking;
     form.tripadvisor = oldValues.tripadvisor;
     form.expedia = oldValues.expedia;
+    form.google = oldValues.google;
     form.airbnb = oldValues.airbnb;
     additionalLinks.value = oldValues.additionalLinks || [];
     Object.keys(errors.value).forEach(key => errors.value[key] = false);
@@ -358,10 +409,13 @@ const cancelChange = () => {
 
 const handleEmail = async () => {
     const payload = {
-        ...form,
+        booking: form.booking,
+        tripadvisor: form.tripadvisor,
+        expedia: form.expedia,
+        google: form.google,
         airbnb: additionalLinks.value.filter(link => link.status !== 0)
     };
-    console.log('hjandleEmail:', dataMail.value);
+    console.log('handleEmail:', dataMail.value);
 
     const params = {
         type: dataMailtype.value,
@@ -382,11 +436,61 @@ const handleEmail = async () => {
 };
 
 const submit = async () => {
-    const payload = {
-        ...form,
-        airbnb: additionalLinks.value.filter(link => link.status !== 0)
+    /* const payload = [];
+
+    const buildPayloadEntry = (otaName, data) => {
+        if (data.url) {
+            payload.push({
+                ota: otaName.toUpperCase(),
+                url: data.url,
+                _id: data._id || null
+            });
+        }
+    }; */
+
+    const payload = [];
+
+    const buildPayloadEntry = (otaName, data) => { //para que envie nada mas las url que se editaron
+        const initialData = JSON.parse(initialForm.value)[otaName];
+        if (data.url && data.url !== initialData.url) {
+            payload.push({
+                ota: otaName.toUpperCase(),
+                url: data.url,
+                _id: data._id || null
+            });
+        }
     };
+
+    buildPayloadEntry('booking', form.booking);
+    buildPayloadEntry('tripadvisor', form.tripadvisor);
+    buildPayloadEntry('expedia', form.expedia);
+    buildPayloadEntry('google', form.google);
+    buildPayloadEntry('airbnb', form.airbnb);
+
+    additionalLinks.value.filter(link => link.status !== 0).forEach(link => {
+        payload.push({
+            ota: 'AIRBNB',
+            url: link.url,
+            _id: link._id || null
+        });
+    });
+
     console.log('Saving changes:', payload);
+
+    const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        urls: payload
+    }
+
+    const response = await platformsStore.$bulkUpdateOTAS(params);
+
+    if(response.ok){
+        
+        toast.warningToast('Cambios aplicados con éxito', 'top-right')
+        await getSettings();
+    }else{
+        toast.errorToast(response.data.message, 'top-right')
+    }
 
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
 };

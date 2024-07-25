@@ -11,7 +11,7 @@
                 @click="goLink(link.viewName,link.params ?? {}, link.query ?? {})"
             >
                 {{ link.name }}
-                <img v-if="false" class="absolute top-4 right-[6px] w-2.5 h-2.5" src="/assets/icons/EllipseWarning.svg" alt="">
+                <img v-if="link.notify" class="absolute top-4 right-[6px] w-2.5 h-2.5" src="/assets/icons/EllipseWarning.svg" alt="">
                 <div v-if="link.active" class="hbg-green-800 w-full h-1 rounded-full bottom-[-10px] relative left-0"></div>
             </div>
         </template>
@@ -25,8 +25,6 @@ const router = useRouter();
 
 
 const goLink = (viewName, params, query) =>{
-    console.log('params',params)
-    console.log('query',query)
     router.push({ name: viewName, params, query });
 }
 
