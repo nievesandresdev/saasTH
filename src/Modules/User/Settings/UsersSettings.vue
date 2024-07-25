@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 bg-[#FAFAFA]
     ">
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Empleados</h1>
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Usuarios</h1>
         <hr class="bg-[#BFBFBF]">
         <!-- <MenuSettings /> -->
         <div class="flex justify-between items-center mt-6">
