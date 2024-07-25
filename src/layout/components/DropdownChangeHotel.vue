@@ -3,7 +3,8 @@
         <div
             class="flex flex-shrink-0 p-2 shadow-xl  hover:bg-[#FAFAFA] rounded-[10px] cursor-pointer"
             :class="{'bg-[#FAFAFA]': dropdownOpenn}"
-            @click="dropdownOpenn = true"
+            @click="dropdownOpenn = !dropdownOpenn"
+            
         >
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
             <div 
@@ -15,13 +16,14 @@
         </div>
         <div v-if="dropdownOpenn"
             class=" w-[284px] pt-4 hbg-white-100 absolute top-[64px] left-[12px] z-[100] shadow-dorpdown bg-white rounded-[6px]"
+            @mouseleave="dropdownOpenn = false"
         >
             <div class="flex flex-col items-center" :class="{'mb-4': hotelStore.hotelsAvailables?.length  <= 1}">
                 <div class="w-[64px] h-[64px] rounded-[3px]">
                     <img v-if="hotelData?.image" class="rounded-[3px] overflow-hidden w-[64px] h-[64px] object-cover" :src="hotelStore.formatImage({url: hotelData?.image})" alt="photo perfil">
                     <img v-else class="rounded-[3px] w-[64px] h-[64px] object-cover" src="/assets/icons/1.TH.IMAGES.svg" alt="image empty">
                 </div>
-                <h5 class="text-base htext-black-100 font-semibold mt-[12px]">{{ hotelData.name }}</h5>
+                <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4">{{ hotelData.name }}</h5>
                 <p class="text-xs font-semibold htext-gray-500 mt-[4px]">{{ hotelData.type }} - {{ hotelData.zone }}</p>
             </div>
             <div v-if="hotelStore.hotelsAvailables?.length  > 1" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
@@ -116,7 +118,7 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, watch, inject } from 'vue';
 
-import { $isAssociate } from '@/utils/helpers';
+import { $isAssociate, $isAdmin } from '@/utils/helpers';
 
 import { useRouter } from 'vue-router';
 

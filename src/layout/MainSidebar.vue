@@ -1,7 +1,7 @@
 <template>
   <div :class="groupClass" class="px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full">
     <!-- select hotel -->
-    <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu" />
+    <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu"/>
 
     <div class="overflow-y-auto bg-white no-scrollbar">
       <!-- links -->

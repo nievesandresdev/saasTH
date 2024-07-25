@@ -57,7 +57,7 @@ export const useHotelStore = defineStore('hotel', () => {
 
     async function changeHotel (hotel) {
         let params = {subdomain: hotel.subdomain}
-        let hotelResponse = await $findByParams(params);
+        let hotelResponse = await $findByParams(params, { showPreloader: false });
         updateHoteInSession(hotelResponse);
     }
 

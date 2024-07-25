@@ -4,7 +4,7 @@ import {
 } from '../config/apiRoute'
 
 export const getAllApi = () => apiHttp('GET', `${hotelPath}/getAll`);
-export const findByParamsApi = (params) => apiHttp('GET', `${hotelPath}/findByParams`, params);
+export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: false });
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data);
 export const updateVisivilityFacilitiesApi = () => apiHttp('POST', `${hotelPath}/facilityVisivility`);
 export const updateVisivilityExperiencesApi = () => apiHttp('POST', `${hotelPath}/experienceVisivility`);
