@@ -16,12 +16,22 @@
         </div>
         <div v-if="dropdownOpenn"
             class=" w-[284px] pt-4 hbg-white-100 absolute top-[64px] left-[12px] z-[100] shadow-dorpdown bg-white rounded-[6px]"
-            @mouseleave="dropdownOpenn = false"
         >
+        <!-- @mouseleave="dropdownOpenn = false" -->
             <div class="flex flex-col items-center" :class="{'mb-4': hotelStore.hotelsAvailables?.length  <= 1}">
                 <div class="w-[64px] h-[64px] rounded-[3px]">
-                    <img v-if="hotelData?.image" class="rounded-[3px] overflow-hidden w-[64px] h-[64px] object-cover" :src="hotelStore.formatImage({url: hotelData?.image})" alt="photo perfil">
-                    <img v-else class="rounded-[3px] w-[64px] h-[64px] object-cover" src="/assets/icons/1.TH.IMAGES.svg" alt="image empty">
+                    <img
+                        v-if="hotelData?.image"
+                        :src="hotelStore.formatImage({url: hotelData?.image})"
+                        class="rounded-[3px] overflow-hidden w-[64px] h-[64px] object-cover"
+                        alt="photo perfil"
+                    >
+                    <img
+                        v-else
+                        :src="hotelStore.formatImage({url: '/storage/gallery/general-1.jpg'})"
+                        class="rounded-[3px] overflow-hidden w-[64px] h-[64px] object-cover"
+                        alt="photo default "
+                    >
                 </div>
                 <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4">{{ hotelData.name }}</h5>
                 <p class="text-xs font-semibold htext-gray-500 mt-[4px]">{{ hotelData.type }} - {{ hotelData.zone }}</p>
@@ -32,8 +42,7 @@
                     prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                     placeholder="Buscar alojamiento"
                     class-content="w-full"
-                    class-input="text-sm"
-                    @enter:search="submitSearch"
+                    @enter:search="submitSearch" 
                 ></BaseTextField>
                 <ul
                     v-if="dropdownSearchOpen"
@@ -48,8 +57,13 @@
                             @click="changeHotel(hotel)"
                         >
                             <div class="w-[34px] h-[34px] rounded-[3px]">
-                                <img v-if="hotel?.image" class="rounded-[3px] w-[34px] h-[34px] object-cover" :src="hotelStore.formatImage({url: hotelData?.image})" alt="photo perfil ">
-                                <img v-else class="rounded-[3px] w-full h-full object-cover" src="/assets/icons/1.TH.IMAGES.svg" alt="image empty">
+                                <img v-if="hotel?.image" class="rounded-[3px] w-[34px] h-[34px] object-cover" :src="hotelStore.formatImage({url: hotel?.image})" alt="photo perfil ">
+                                <img
+                                    v-else
+                                    :src="hotelStore.formatImage({url: '/storage/gallery/general-1.jpg'})"
+                                    class="rounded-[3px] w-[34px] h-[34px] object-cover"
+                                    alt="photo default "
+                                >
                             </div>
                             <div class="truncate-1 flex-1">
                                 <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
@@ -88,8 +102,18 @@
                         @click="changeHotel(hotel)"
                     >
                         <div class="w-[34px] h-[34px] rounded-[3px]">
-                            <img v-if="hotel?.image" class="rounded-[3px] w-[34px] h-[34px] object-cover" :src="hotelStore.formatImage({url: hotel?.image})" alt="photo perfil ">
-                            <img v-else class="rounded-[3px] w-full h-full object-cover" src="/assets/icons/1.TH.IMAGES.svg" alt="image empty">
+                            <img
+                                v-if="hotel?.image"
+                                class="rounded-[3px] w-[34px] h-[34px] object-cover"
+                                :src="hotelStore.formatImage({url: hotel?.image})"
+                                alt="photo perfil"
+                            >
+                            <img
+                                v-else
+                                :src="hotelStore.formatImage({url: '/storage/gallery/general-1.jpg'})"
+                                class="rounded-[3px] w-[34px] h-[34px] object-cover"
+                                alt="photo default"
+                            >
                         </div>
                         <div class="truncate-1 flex-1">
                             <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
@@ -108,11 +132,18 @@
 
                 </div>
             </div>
-            <div v-if="$isAssociate()" class="p-4 hborder-top-gray-400">
-                <button class="hbtn-tertiary text-sm htext-black-100 font-medium underline">¿Quieres añadir otro alojamiento?</button>
+            <!-- <div v-if="$isAssociate()" class="p-4 hborder-top-gray-400"> -->
+            <div class="p-4 hborder-top-gray-400">
+                <button
+                    class="hbtn-tertiary text-sm htext-black-100 font-medium underline"
+                    @click="openModalInfoNewHotel"
+                >
+                    ¿Quieres añadir otro alojamiento?
+                </button>
             </div>
         </div>
     </div>
+    <ModalInfoNewHotel ref="modalInfoNewHotelRef" />
 </template>
 
 <script setup>
@@ -125,6 +156,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 import BaseTextField from '@/components/Forms/BaseTextField';
+import ModalInfoNewHotel from './ModalInfoNewHotel';
 
 const props = defineProps({
     widthMenu: String,
@@ -132,9 +164,11 @@ const props = defineProps({
 });
 
 const hotelStore = inject('hotelStore');
+const onHoverMainMenu = inject('onHoverMainMenu');
 
 const { hotelData, hotelsAvailables } = hotelStore;
 
+const modalInfoNewHotelRef = ref(null);
 const dropdownOpenn = ref(false);
 const dropdownSearchOpen = ref(false);
 const hotelsFoundInSearch = ref([]);
@@ -167,6 +201,13 @@ watch(search, (newVal) => {
     // if (newVal) {
         filterHolter();
     // }
+});
+
+
+watch(onHoverMainMenu, (newValue, oldValue)=>{
+    if (!newValue) {
+        dropdownOpenn.value = false;
+    }
 });
 
 // FUNCTIONS
@@ -204,6 +245,9 @@ async function changeHotel (hotel) {
     router.go();
 }
 
+function openModalInfoNewHotel () {
+    modalInfoNewHotelRef.value.open();
+}
 
 
 </script>

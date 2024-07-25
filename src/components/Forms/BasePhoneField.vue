@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="h-10 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex overflow-hidden"
+        class="h-10 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex"
         :class="{'hinput-error': isError}"
     >
         <div
@@ -15,12 +15,12 @@
                 type="text" 
                 class="hinput-green w-full p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none"
                 v-model="code"
-                @keyup="search_codes"
+                @keyup="searchCodes"
                 :placeholder="'+ Código país'"
             >
-            <div v-if="code" class="dropdown-code absolute left-0 z-50 w-full top-10 hbg-white-100 overflow-hidden">
+            <div v-if="code" class="dropdown-code absolute left-0 z-[50] w-full top-[40px] hbg-white-100 overflow-hidden">
                 <p 
-                    v-for="cde in search_list" :key="cde" 
+                    v-for="cde in searchList" :key="cde" 
                     class="cursor-pointer relative p-3 text-sm htext-black-100 hover-gray-100"
                     @click="selectOption(cde.value)"
                 >
@@ -80,8 +80,8 @@ const hoverOption = ref(false);
 const selected = ref(false);
 const phone = ref('');
 const code = ref('');
-const code_list = ref([]);
-const search_list = ref([]);
+const codeList = ref([]);
+const searchList = ref([]);
 const error_phone = ref(false);
 const initialLoad = ref(false);
 
@@ -95,30 +95,29 @@ const isError = computed(() => {
 })
 
 // fucntions
-const search_codes = () => {
-  search_list.value = [];
-  for (let ph of code_list.value) {
-    if (search_list.value.length >= 5) break;
+const searchCodes = () => {
+  searchList.value = [];
+  for (let ph of codeList.value) {
+    if (searchList.value.length >= 5) break;
     if (
       ph.label.toLowerCase().includes(code.value.toLowerCase()) ||
       ph.country.es.toLowerCase().includes(code.value.toLowerCase()) ||
       ph.country.en.toLowerCase().includes(code.value.toLowerCase()) ||
       ph.country.fr.toLowerCase().includes(code.value.toLowerCase())
     ) {
-      search_list.value.push(ph);
+      searchList.value.push(ph);
     }
   }
 };
 
-const get_code_list = () => {
+const getCodeList = () => {
   axios({
     url: 'https://dashboard.thehoster.io/api/phone-codes',
     method: 'GET',
   })
     .then(res => {
-      code_list.value = res.data;
-
-      code_list.value
+      codeList.value = res.data;
+      codeList.value
         .map(item => item.value)
         .forEach(item => {
           let phoneString = props.modelValue;
@@ -138,7 +137,7 @@ const get_code_list = () => {
 };
 
 const selectOption = (value) => {
-  search_list.value = [];
+  searchList.value = [];
   code.value = value;
 };
 
@@ -175,7 +174,7 @@ watch(code, (newVal, oldVal) => {
 });
 
 onMounted(() => {
-  get_code_list()
+  getCodeList()
 });
 
 

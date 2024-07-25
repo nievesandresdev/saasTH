@@ -1,8 +1,13 @@
 <template>
-  <div :class="groupClass" class="px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full">
+  <div
+    id="main-menu"
+    :class="groupClass"
+    class="px-3 py-2 flex flex-col relative z-[600] shadow-lg bg-white h-full"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
     <!-- select hotel -->
-    <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu"/>
-
+    <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu" />
     <div class="overflow-y-auto bg-white no-scrollbar">
       <!-- links -->
       <router-link
@@ -178,6 +183,9 @@ const modalHelpRef = ref(false)
 const pusher = ref(null)
 const channelQuery = ref(null)
 const channelStay = ref(null)
+const onHoverMainMenu = ref(false)
+
+provide('onHoverMainMenu', onHoverMainMenu)
 
 const connectPusher = async () => {
 
@@ -372,6 +380,14 @@ onUnmounted(() => {
         pusher.value.unsubscribe(channelQuery.value);
     }
 });
+
+function handleMouseEnter () {
+  onHoverMainMenu.value = true;
+}
+
+function handleMouseLeave () {
+  onHoverMainMenu.value = false;
+}
 
 const logout = async () => {
   await closeModalProfile()
