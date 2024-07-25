@@ -12,7 +12,7 @@
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
                 class="w-full hinput border hinput-green rounded-[6px]"
-                :class="`${height} ${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"
@@ -49,7 +49,7 @@ const props = defineProps({
     },
     classInput: {
         type: String,
-        default: ''
+        default: 'p-3 h-10 text-sm'
     },
     prependInnerIcon: {
         type: String,
@@ -86,10 +86,6 @@ const props = defineProps({
     errors: {
         type: Object,
         default: () => ({}),
-    },
-    height: {
-        type: String,
-        default: 'h-11',
     },
 });
 
@@ -144,13 +140,13 @@ const customInputClass = computed(() => {
 .hinput-error {
     border-color: #DC2626;
 }
-.hinput-green {
-    border-color: #10B981;
-}
-.hborder-black-100 {
-    border-color: #1F2937;
-}
-.hborder-gray-400 {
-    border-color: #D1D5DB;
-}
+// .hinput-green {
+//     border-color: #10B981;
+// }
+// .hborder-black-100 {
+//     border-color: #1F2937;
+// }
+// .hborder-gray-400 {
+//     border-color: #D1D5DB;
+// }
 </style>

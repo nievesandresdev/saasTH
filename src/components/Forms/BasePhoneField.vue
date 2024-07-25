@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="h-11 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex"
+        class="h-10 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex overflow-hidden"
         :class="{'hinput-error': isError}"
     >
         <div
@@ -13,8 +13,7 @@
         >
             <input
                 type="text" 
-                class="hinput-green w-full p-0 text-sm font-medium pl-3 rounded-[6px]"
-                style="border:none; !important;" 
+                class="hinput-green w-full p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none"
                 v-model="code"
                 @keyup="search_codes"
                 :placeholder="'+ Código país'"
@@ -32,9 +31,8 @@
     
         <input 
             type="number" 
-            class="hinput-green flex-grow p-0 text-sm font-medium pl-3 rounded-[6px]"
+            class="hinput-green flex-grow p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none"
             :class="{'htext-alert-negative': isError}"
-            style="border:none; !important;"
             :placeholder="'Teléfono de contacto'"
             v-model="phone"
         >

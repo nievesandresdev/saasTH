@@ -20,7 +20,6 @@
                             v-model="form.name"
                             placeholder="Ej: “Hotel Posada del Sol”"
                             class-content="w-full"
-                            class-input="text-sm"
                             @input="handleInputChange"
                         ></BaseTextField>
                         <label class="text-sm font-medium mb-2 block mt-4">Idiomas disponibles para la atención a tus huéspedes</label>
@@ -30,7 +29,6 @@
                                 prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                                 placeholder="Selecciona los idiomas con los que se comunicará tu personal"
                                 class-content="w-full"
-                                class-input="text-sm"
                                 @keyup.prevent="$searchLang"
                                 @enter:search="$searchLang"
                             ></BaseTextField>

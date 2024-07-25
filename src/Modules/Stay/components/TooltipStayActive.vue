@@ -9,7 +9,7 @@
             <img class="w-4 h-4 ml-2" src="/assets/icons/info.blue.svg">
         </template>
         <template v-slot:content>
-            <p class="text-base leading-[150%] font-normal">
+            <p class="text-sm leading-[150%] font-normal">
                 Se consideran en
                     <span class="font-semibold">POST-STAY</span> todas las estancias de huéspedes que utilicen tu 
                     <span class="font-semibold">WebApp</span> luego de haber realizado su  
@@ -27,7 +27,7 @@
             <img class="w-4 h-4 ml-2" src="/assets/icons/info.blue.svg">
         </template>
         <template v-slot:content>
-            <p class="text-base leading-[150%] font-normal">
+            <p class="text-sm leading-[150%] font-normal">
                 <template v-if="type == 'title'">
                     Aquí verás las estancias de aquellos huéspedes que hayan accedido a tu <span class="font-semibold">WebApp</span> y cargado sus datos.
                 </template>

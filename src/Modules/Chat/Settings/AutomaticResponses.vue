@@ -46,7 +46,7 @@
               v-model="form.first_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px]"
+              class-input="text-sm h-[50px] min-h-[64px] p-3"
               name="description"
           />
           <div class="flex justify-between items-center">
@@ -65,7 +65,7 @@
               v-model="form.second_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px]"
+              class-input="text-sm h-[50px] min-h-[64px] p-3"
               id="description"
           />
           <div class="flex justify-between items-center">
@@ -84,7 +84,7 @@
               v-model="form.three_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[70px] min-h-[84px]"
+              class-input="text-sm h-[70px] min-h-[84px] p-3"
               id="description"
           />
           <div class="flex flex-col w-full">
@@ -119,7 +119,7 @@
               v-model="form.not_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px]"
+              class-input="text-sm h-[50px] min-h-[64px] p-3"
               name="description"
           />
           <div class="flex flex-col w-full">

@@ -59,7 +59,6 @@
                         v-model="form.name"
                         placeholder="Nombre de alojamiento"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         name="name"
                         :errors="errors"
                         @blur:validate="validate('name')"
@@ -74,7 +73,7 @@
                         v-model="form.description"
                         placeholder="Descripción..."
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
+                        class-input="text-sm h-[44px] p-3"
                         name="description"
                     />
                 </div>
@@ -122,7 +121,6 @@
                         v-model="form.email"
                         placeholder="Introduce email contacto del alojamiento"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         name="email"
                         :errors="errors"
                         @blur:validate="validate('email')"
@@ -219,7 +217,6 @@
                         v-model="form.urlInstagram"
                         placeholder="Instagram URL"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.INSTAGRAM.COLOR.svg"
                         name="urlInstagram"
                     />
@@ -227,7 +224,6 @@
                         v-model="form.urlFacebook"
                         placeholder="Facebook URL"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.FACEBOOK.COLOR.svg"
                         name="urlFacebook"
                     />
@@ -235,7 +231,6 @@
                         v-model="form.urlPinterest"
                         placeholder="Pinterest URL"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.PINTEREST.COLOR.svg"
                         name="urlPinterest"
                     />
@@ -243,7 +238,6 @@
                         v-model="form.urlX"
                         placeholder="X URL"
                         class-content="flex-1"
-                        class-input="text-sm h-[44px]"
                         prepend-inner-icon="/assets/icons/1.TH.X.svg"
                         name="urlX"
                     />

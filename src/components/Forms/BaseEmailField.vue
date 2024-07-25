@@ -1,14 +1,14 @@
 <template>
     <div class="relative">
         <label v-if="textLabel" class="text-sm font-medium mb-2 block leading-4">{{ textLabel }}</label>
-        <p v-if="textDescription" class="mb-2 text-sm text-gray-500">{{ textDescription }}</p>
+        <p v-if="textDescription" class="mb-2 text-sm htext-gray-500">{{ textDescription }}</p>
 
         <img v-if="iconLeft" class="w-6 h-6 absolute left-3 top-2" :src="iconLeft">
         <input
             ref="emailInput"
             :id="id"
             type="email"
-            :class="computeClasses"
+            :class="`${computeClasses} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
             :placeholder="placeholderText"
             :value="modelValue"
             @input="validateEmail"
@@ -39,7 +39,7 @@ export default {
         modelValue: String,
         customClasses: {
             type: String,
-            default: 'h-11 text-base font-medium w-full px-3 py-2 block'
+            default: 'h-10 text-sm w-full p-3 '
         },
         showTextError: {
             type: Boolean,
@@ -61,11 +61,11 @@ export default {
             return this.placeholder || 'Introduce un email';
         },
         computeClasses() {
-            let classes = 'hinput-green rounded-[6px] ' + this.customClasses;
+            let classes = 'hinput-green rounded-[6px] border ' + this.customClasses;
             if (this.hasError) {
                 classes += 'hborder-alert-negative htext-alert-negative placeholder-negative';
             } else {
-                classes += ' hover:bg-gray-100';
+                classes += '';
             }
             if(this.iconLeft){
                 classes += ' pl-[44px]';
@@ -94,11 +94,6 @@ export default {
 </script>
 
 <style scoped>
-input::placeholder {
-    font-size: 16px;
-    color: var(--h-gray-500);
-    font-weight: 500;
-}
 input::focus {
     outline:none !important;
 }

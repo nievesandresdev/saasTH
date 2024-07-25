@@ -12,7 +12,7 @@
                     <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
                 </template>
                 <template v-slot:content>
-                    <p class="text-base leading-[150%]">
+                    <p class="text-sm leading-[150%]">
                         Selecciona una <span class="font-semibold">Estancia</span> del menu lateral para operar en ella. Podrás consultar 
                         las fechas de <span class="font-semibold">Check-in</span> y <span class="font-semibold">Check-out</span>, la información y el <span class="font-semibold">feedback</span> de tus 
                         huéspedes y <span class="font-semibold">chatear</span> con ellos.

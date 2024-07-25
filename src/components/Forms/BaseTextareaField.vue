@@ -12,8 +12,8 @@
                 rows="5"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="focus:border-[#333] focus:hover:border-[#34A98F] w-full h-[108px] min-h-[114px] hinput hinput-green rounded-[6px]"
-                :class="customInputClass"
+                class="w-full h-[108px] min-h-[114px] hinput hinput-green rounded-[6px] border"
+                :class="`${customInputClass} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
                 :maxlength="max"
@@ -43,7 +43,7 @@ const  props = defineProps({
     },
     classInput: {
         type: String,
-        default: ''
+        default: 'p-3 text-sm'
     },
     placeholder: {
         type: String,
@@ -80,11 +80,10 @@ const updateValue = (event) => {
 };
 
 const customInputClass = computed(() => {
-    let c = '';
+    let c = props.classInput;
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
-        c = `${c} hinput-error`
+        c += `${c} hinput-error`
     }
-    c = props.modelValue ? `${c} hborder-black-100` : `${c} hborder-gray-400`;
     return c;
 })
 

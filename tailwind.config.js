@@ -41,9 +41,23 @@ module.exports = {
       '3xl': '1920px',
       // => @media (min-width: 1920px) { ... }
     },
+    // Opcional: Define el estilo de foco para ser específicamente nada en todo
+    outline: {
+      none: ['2px solid transparent', '2px'],
+    },
+    ringWidth: {
+      default: '0px',  // Establece el ancho del anillo de foco a 0 por defecto
+    },
+  },
+  variants: {
+    extend: {
+      borderColor: ['focus-visible'], // Sólo aplica cambios de color en focus-visible
+      ringWidth: ['focus-visible'], // Controla la visibilidad del anillo solo con focus-visible
+      outline: ['focus-visible'],
+    },
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    // require('@tailwindcss/forms'),
     // require('daisyui'),
   ],
 }
