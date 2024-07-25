@@ -2,7 +2,7 @@
     <transition>
       <div
         v-if="modalAdd"
-        class="absolute bg-white shadow-xl add flex-column"
+        class="absolute bg-white shadow-xl add flex-column add"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
          ref="ref_section_add"
       >
@@ -53,9 +53,17 @@
                     @click="toggleModalSelect"
                     :value="selectedRoleName"
                     readonly
-                    class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500  font-medium text-sm px-4 py-2.5 cursor-pointer text-black"
+                    class="bg-white w-full rounded-md border-solid border border-gray-300 font-medium text-sm px-4 py-2.5 cursor-pointer text-black"
                     placeholder="Selecciona el tipo de usuario deseado..."
                   />
+                  <!-- <BaseSelectField
+                        :id="'type_lodging'"
+                        :textLabel="'Selecciona el tipo de usuario deseado..'"
+                        v-model="form.role"
+                        :options="typeLodging"
+                        mandatory
+                        :error="false"
+                    /> -->
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                     <img src="/assets/icons/1.TH.I.dropdownBig.svg">
                   </div>
@@ -93,7 +101,7 @@
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
+                      class="bg-white w-full rounded-md border-solid border border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
                       placeholder="Selecciona el tipo de usuario deseado..."
                     />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -118,9 +126,14 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Nombre del usuario"
                         />
+                        <!-- <BaseTextField
+                              v-model="form.name"
+                              placeholder="Nombre del usuario"
+                              class-content="w-full"
+                          ></BaseTextField> -->
                     </div>
                 </div>
                 <div class="mt-4">
@@ -129,7 +142,7 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Apellido del usuario"
                         />
                     </div>
@@ -137,19 +150,20 @@
                 <div class="mt-4">
                   <label class="text-sm font-medium">Teléfono móvil</label>
                     <div class="flex rounded">
-                        <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border-r-[1px] border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-700  font-medium text-sm px-4 py-2.5">
+                        <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, '': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px] border-solid  border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
                             <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                         </select>
-                            <input type="text"
-                                placeholder="Número de teléfono"
-                                class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
-                                :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
-                                v-model="form.phone"
-                                @input="validatePhone"
-                            >
+                        
+                        <input type="text"
+                            placeholder="Número de teléfono"
+                            class="p-2.5 block border border-solid border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg"
+                            :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
+                            v-model="form.phone"
+                            @input="validatePhone"
+                        >
                     </div>
-                    <div class="flex justify-end mt-1 text-red-600" v-if="errorPhone">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <div class="flex justify-end w-full mt-1 mr-2 text-red-600" v-if="errorPhone">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="mr-1 w-6 h-6 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                         </svg>
                         <small> Introduce solo números en el campo de teléfono</small>
@@ -161,7 +175,7 @@
                         <input
                             v-model="form.email"
                             type="email"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Correo con el que iniciara sesión"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
@@ -178,7 +192,7 @@
                         <input
                             v-model="form.password"
                             type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Contraseña de acceso"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorPassword">
@@ -195,7 +209,7 @@
                         <input
                             v-model="form.password_confirmation"
                             type="password"
-                            class="w-full h-10 p-3 text-sm font-medium border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
                             placeholder="Repite la contraseña"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorPasswordMatch">
@@ -302,9 +316,11 @@
   import { useAuthStore } from '@/stores/modules/auth/login';
   import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
+  import BaseTextField from '@/components/Forms/BaseTextField'
+  import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
 
   
-  const emits = defineEmits(['close','store','alert']);
+  const emits = defineEmits(['close','store','alert','showModalNoSave']);
   
   const props = defineProps({
     modalAdd: Boolean,
@@ -316,6 +332,36 @@
   const toast = useToastAlert();
 
   const getHotels = userStore.$getHotels;
+
+  const typeLodging = [
+        { value: "Hotel", label: "Hotel", disabled: false },
+        { value: "Hostal", label: "Hostal", disabled: false },
+        { value: "Pensión", label: "Pensión", disabled: false },
+        {
+            value: "Complejo de apartamentos",
+            label: "Complejo de apartamentos",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+        {
+            value: "Apartamento turístico",
+            label: "Apartamento turístico",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+        {
+            value: "Vivienda con fines turísticos",
+            label: "Vivienda con fines turísticos",
+            disabled: true,
+            tag: { text: "Próximamente", class: "success-tag" }
+        },
+    ]
+
+  const seletedRoleUser = ref([
+    { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
+    { id: 2, name: 'Usuario Administrador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
+    { id: 3, name: 'Usuario Operador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' }
+  ]);
 
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);
@@ -335,12 +381,7 @@
     hotels: [],
     access: []
   });
-  
-  const seletedRoleUser = ref([
-    { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
-    { id: 2, name: 'Usuario Administrador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
-    { id: 3, name: 'Usuario Operador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' }
-  ]);
+
   const prefixes = ref([null,'+1', '+34', '+91'])
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
@@ -678,7 +719,7 @@ if (form.value.role === 1) {
 };
 
 const clearForm = () => {
-  closeModal();
+  //closeModal();
     currentStep.value = 1;
     errorEmailText.value = '';
     errorPassword.value = false;
@@ -725,24 +766,61 @@ const handleClickOutside = (event) => {
 watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
-      registerClickOutside();
+      console.log('modalAddInit',props.modalAdd)
+      setTimeout(() => {
+        registerClickOutside();
+      }, 800); // 100ms de retraso
     });
   } else {
+    console.log('modalAddClose',props.modalAdd)
     unregisterClickOutside();
   }
 });
 
 
-function closeModal() {
-      emits('close');
-    //emits('close');
+ watch(() => props.modalAdd, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      if(newVal) {
+        errorEmail.value = false;
+        errorPassword.value = false;
+        errorPasswordMatch.value = false;
+        errorPhone.value = false;
+        rolAlert.value = 0;
+        
+      }
+    });
   }
+});
+ const initialForm = ref(null);
+const showModalNoSave = ref(false);
+
+const changes = computed(() => {
+  return JSON.stringify(form) !== initialForm.value;
+});
+
+onMounted(async () => {
+  await nextTick();
+  initialForm.value = JSON.stringify(form);
+});
+
+ /* watch(form, (newVal) => {
+  showModalNoSave.value = changes.value;
+  emits('showModalNoSave', showModalNoSave.value);
+}, { deep: true }); */
+
+function closeModal() {
+  if (changes.value) {
+    showModalNoSave.value = true;
+    emits('showModalNoSave', true);
+  } else {
+    emits('close');
+  }
+}
 
 // Registrar el evento de clic en el documento con retraso
 const registerClickOutside = () => {
-  setTimeout(() => {
-    document.addEventListener('click', handleClickOutside);
-  }, 2000); // 100ms de retraso
+  document.addEventListener('click', handleClickOutside);
 };
 
 // Remover el evento de clic en el documento
@@ -760,6 +838,7 @@ const unregisterClickOutside = () => {
     if (sectionExpElement) {
       containerTop.value = sectionExpElement.offsetTop;
     }
+
 
     console.log('modalAddesd',props.modalAdd)
 
