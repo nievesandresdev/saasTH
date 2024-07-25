@@ -1,6 +1,5 @@
 <template>
-    <div class="px-6 bg-[#FAFAFA]
-    ">
+    <div class="px-6 bg-[#FAFAFA]" >
         <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Usuarios</h1>
         <hr class="bg-[#BFBFBF]">
         <!-- <MenuSettings /> -->
@@ -25,7 +24,7 @@
                 Crear usuario
             </button>
         </div>
-        <div class="flex gap-4 mb-4">
+        <div class="flex gap-4 mb-4" >
             <ButtonFilter
                 @click="change_type(0)"
                 :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 0,'border border-black': data_filter.type != 0 }"
@@ -136,9 +135,20 @@
     <CreateUser 
         :modal-add="modalAdd" 
         @close="closeModal" 
-        @store="handleGetUsers"
+        @store="handleConfirmCreateUser"
         @alert="confirmCreateUser" 
         :work-positions="workPositionsData" 
+        @showModalNoSave="showModalNoSave = $event"
+    />
+
+    <ModalNoSave
+      :id="'not-saved'"
+      :open="showModalNoSave"
+      text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+      textbtn="Guardar"
+      @close="closeModalSaveCreate"
+      @saveChanges="handleStoreUser"
+      :type="'exit_save'"
     />
 
     <EditUser 
@@ -209,7 +219,7 @@
 
 <script setup>
 import { ref,onMounted } from 'vue';
-import MenuSettings from './components/MenuSettings.vue';
+//import MenuSettings from './components/MenuSettings.vue';
 import CreateUser from './components/CreateUser.vue';
 import EditUser from './components/EditUser.vue';
 import ShowUser from './components/ShowUser.vue';
@@ -220,13 +230,29 @@ import { useUserStore } from '@/stores/modules/users/users'
 import ModalWindow from '@/components/ModalWindow.vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { $isAdmin, $isOperator } from '@/utils/helpers';
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 const modalAdd = ref(false);
+const showModalNoSave = ref(false);
+const workPositionsData = ref([]); // Suponiendo que tienes esto definido
+
+const handleCloseModal = () => {
+  if (showModalNoSave.value) {
+    showModalNoSave.value = true;
+  } else {
+    modalAdd.value = false;
+  }
+};
+
+const closeModalSaveCreate = () => {
+    showModalNoSave.value = false;
+    modalAdd.value = false;
+    location.reload();
+};
 const modalEdit = ref(false);
 const modalShow = ref(false);
 const deleteUser = ref(false);
 const visibleDropdown = ref(null);
-const workPositionsData = ref([]);
 
 const selectedUser = ref(null);
 const userData = ref({})
@@ -242,18 +268,37 @@ const confirmCreateUser = () => {
 
 const closeConfirmCreateUser = () => {
     openConfirmCreateUser.value = false
+    location.reload();
 }
 
 const closeDeleteUser = () => {
     deleteUser.value = false
 }
 
+const handleClickOutside = (event) => {
+  // Verifica si el clic ocurrió fuera del modal
+  const modalElement = document.querySelector('.add');
+  console.log('modalElement',showModalNoSave.value);
+  //if (modalElement && !modalElement.contains(event.target)) {
+    if (showModalNoSave.value) {
+      showModalNoSave.value = true;
+    } else {
+      modalAdd.value = false;
+    }
+  //}
+};
 
 
 onMounted(() => {
     handleGetUsers();
      //handleTestMail(); 
 });
+
+const handleConfirmCreateUser = () => {
+
+    handleGetUsers();
+    closeModal();
+}
 
 const data_filter = ref ({
     search_terms: '',
@@ -281,6 +326,9 @@ const handleGetUsers = async () => {
   data.value = response.data.users;
   totalUsers.value = response.data.total;
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
+
+  
+  //showModalNoSave.value = false;
 };
 
 /* const handleTestMail = async () => {
@@ -316,8 +364,7 @@ const submit_filters = () => {
 }
 
 const createUser = () => {
-    modalAdd.value = true
-    visibleDropdown.value = null
+    
     workPositions();
 }
 
@@ -339,10 +386,14 @@ const showUser = (data) => {
 const workPositions = async () => {
     const response = await getWorkPosition();
     workPositionsData.value = response.data.work_positions;
+
+    modalAdd.value = true
+    visibleDropdown.value = null
 }
 
 const closeModal = () => {
     modalAdd.value = false
+    showModalNoSave.value = true
 }
 
 const closeModalEdit = () => {
