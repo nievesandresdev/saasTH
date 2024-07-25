@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.booking ? 'border-red-500' : hoverValidation.booking ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')" :disabled="disabledInput.booking">
+                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking && !disabledInput.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.booking ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')" :disabled="disabledInput.booking">
                     </div>
                     <div v-if="errors.booking" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.expedia ? 'border-red-500' : hoverValidation.expedia ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')" :disabled="disabledInput.expedia">
+                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia && !disabledInput.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.expedia ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')" :disabled="disabledInput.expedia">
                     </div>
                     <div v-if="errors.expedia" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')" :disabled="disabledInput.tripadvisor">
+                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor && !disabledInput.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.tripadvisor ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')" :disabled="disabledInput.tripadvisor">
                     </div>
                     <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -91,9 +91,8 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.google ? 'border-red-500' : hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')" :disabled="disabledInput.google">
+                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google && !disabledInput.google ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.google ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')" :disabled="disabledInput.google">
                     </div>
-                    
                     <div v-if="errors.google" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.google }}</p>
@@ -123,7 +122,7 @@
                         </div>
                     </div>
                     <div :class="['flex', errors.airbnb ? 'border-red-500' : hoverValidation.airbnb ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.airbnb.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.airbnb ? 'border-red-500 text-red-500' : hoverValidation.airbnb ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('airbnb')">
+                        <input type="text" v-model="form.airbnb.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.airbnb ? 'border-red-500 text-red-500' : hoverValidation.airbnb && !disabledInput.airbnb ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.airbnb ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('airbnb')">
                     </div>
                     <div v-if="errors.airbnb" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -333,6 +332,8 @@ const validateUrl = (url, type) => {
         case 'airbnb':
             console.log('Validating Airbnb:', url);
             break;
+        case 'expedia' :
+            break;
         default:
             return 'Tipo de enlace no soportado';
     }
@@ -435,10 +436,23 @@ const handleEmail = async () => {
 };
 
 const submit = async () => {
-    const payload = [];
+    /* const payload = [];
 
     const buildPayloadEntry = (otaName, data) => {
         if (data.url) {
+            payload.push({
+                ota: otaName.toUpperCase(),
+                url: data.url,
+                _id: data._id || null
+            });
+        }
+    }; */
+
+    const payload = [];
+
+    const buildPayloadEntry = (otaName, data) => { //para que envie nada mas las url que se editaron
+        const initialData = JSON.parse(initialForm.value)[otaName];
+        if (data.url && data.url !== initialData.url) {
             payload.push({
                 ota: otaName.toUpperCase(),
                 url: data.url,
@@ -471,7 +485,9 @@ const submit = async () => {
     const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if(response.ok){
+        
         toast.warningToast('Cambios aplicados con éxito', 'top-right')
+        await getSettings();
     }else{
         toast.errorToast(response.data.message, 'top-right')
     }

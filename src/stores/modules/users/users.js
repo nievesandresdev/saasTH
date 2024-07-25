@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/modules/auth/login';
-import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser,getSubscriptionStatus,testMail,dataOTAS } from '@/api/services/users/userSettings.service';
+import { createUser,getUsers,updateUser,updateProfile,getUser,deleteUser,getSubscriptionStatus,testMail } from '@/api/services/users/userSettings.service';
 import { ref,computed,watch } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
@@ -114,10 +114,10 @@ export const useUserStore = defineStore('user', () => {
    * 
    * dataOTAS
    */
-  async function $getDataOTAS(){
+ /*  async function $getDataOTAS(){
     const response = await dataOTAS();
     return response;
-  }
+  } */
 
   /*
   * test mail
@@ -140,7 +140,7 @@ export const useUserStore = defineStore('user', () => {
     $deleteUser,
     $getDataHotel,
     $getSubscriptionStatus,
-    $getDataOTAS,
+    //$getDataOTAS,
     $testMail,
   };
 });
