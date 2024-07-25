@@ -108,7 +108,7 @@
 
                 </div>
             </div>
-            <div v-if="$isAdmin()" class="p-4 hborder-top-gray-400">
+            <div v-if="$isAssociate()" class="p-4 hborder-top-gray-400">
                 <button class="hbtn-tertiary text-sm htext-black-100 font-medium underline">¿Quieres añadir otro alojamiento?</button>
             </div>
         </div>
