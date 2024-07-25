@@ -38,6 +38,7 @@
                     <div class="w-[224px] rounded-t-[10px] relative">
                         <img
                             class="w-[224px] h-[148px] rounded-t-[10px]"
+                            loading="lazy"
                             :src="experienceStore.formatImage(experience?.image)"
                         >
                         <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
