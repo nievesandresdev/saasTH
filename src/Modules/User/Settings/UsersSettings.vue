@@ -360,14 +360,14 @@ const submit_filters = () => {
 
 const createUser = () => {
     
-    workPositions();
+    workPositions('create');
 }
 
 const editUser = (data) => {
     dataEdit.value = data;
     modalEdit.value = true
     visibleDropdown.value = null
-    workPositions();
+    workPositions('edit');
 }
 
 const showUser = (data) => {
@@ -378,11 +378,15 @@ const showUser = (data) => {
 }
 
 //const getWorkposition async
-const workPositions = async () => {
+const workPositions = async (module) => {
     const response = await getWorkPosition();
     workPositionsData.value = response.data.work_positions;
 
-    modalAdd.value = true
+    if(module == 'create'){
+        modalAdd.value = true
+    }else{
+        modalEdit.value = true
+    }
     visibleDropdown.value = null
 }
 

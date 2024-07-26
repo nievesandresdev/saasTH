@@ -708,7 +708,7 @@ if (form.value.role === 1) {
     handleUpdateAllPermissions(true);
 }
   
-  const currentStep = ref(2);
+  const currentStep = ref(1);
   const steps = [
     { number: 1, label: 'Usuario' },
     { number: 2, label: 'Hoteles' },
