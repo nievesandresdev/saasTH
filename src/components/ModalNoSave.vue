@@ -14,7 +14,7 @@
             <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
             <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
           </div>
-          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save'">
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit'">
               <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
@@ -43,6 +43,14 @@
                   Salir
               </button>
           </div>
+          <div class="mt-4 flex justify-between" v-if="type == 'alone_exit'">
+              <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir
+              </button>
+              <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border border-green-400 text-green-600">
+                  Seguir
+              </button>
+          </div>
       </div>
     </div>
   </transition>
@@ -62,7 +70,7 @@ const props = defineProps({
   forceOpen: Boolean,
 });
 
-const emit = defineEmits(['saveChanges', 'close']);
+const emit = defineEmits(['saveChanges', 'close','hidden']);
 const showModal = ref(false);
 const visitNow = ref(false);
 const intendedRoute = ref(null);  // Almacena la ruta intentada
@@ -70,7 +78,7 @@ const intendedRoute = ref(null);  // Almacena la ruta intentada
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
   if (!props.forceOpen) {
-    if (props.type === 'exit_save') {
+    if (props.type === 'exit_save' || props.type === 'alone_exit') {
       visitNow.value = newVal;
     } else {
       visitNow.value = false;
@@ -89,6 +97,11 @@ const router = useRouter();
 function closeModal() {
   visitNow.value = false;
   emit('close');
+}
+
+function hiddenModal() {
+  visitNow.value = false;
+  emit('hidden');
 }
 
 function saveChanges() {

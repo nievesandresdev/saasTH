@@ -141,15 +141,7 @@
         @showModalNoSave="showModalNoSave = $event"
     />
 
-    <ModalNoSave
-      :id="'not-saved'"
-      :open="showModalNoSave"
-      text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
-      textbtn="Guardar"
-      @close="closeModalSaveCreate"
-      @saveChanges="handleStoreUser"
-      :type="'exit_save'"
-    />
+    
 
     <EditUser 
         :modal-edit="modalEdit"
@@ -230,18 +222,21 @@ import { useUserStore } from '@/stores/modules/users/users'
 import ModalWindow from '@/components/ModalWindow.vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { $isAdmin, $isOperator } from '@/utils/helpers';
-import ModalNoSave from '@/components/ModalNoSave.vue';
+
 
 const modalAdd = ref(false);
 const showModalNoSave = ref(false);
 const workPositionsData = ref([]); // Suponiendo que tienes esto definido
 
 const handleCloseModal = () => {
-  if (showModalNoSave.value) {
+  /* if (showModalNoSave.value) {
     showModalNoSave.value = true;
   } else {
     modalAdd.value = false;
-  }
+  } */
+ showModalNoSave.value = !showModalNoSave.value;
+
+  console.log('handleCloseModaTTTTl',showModalNoSave.value);
 };
 
 const closeModalSaveCreate = () => {
@@ -393,7 +388,7 @@ const workPositions = async () => {
 
 const closeModal = () => {
     modalAdd.value = false
-    showModalNoSave.value = true
+    //showModalNoSave.value = true
 }
 
 const closeModalEdit = () => {

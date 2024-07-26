@@ -2,8 +2,8 @@
     <transition>
       <div
         v-if="modalAdd"
-        class="absolute bg-white shadow-xl add flex-column add"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
+        class="absolute bg-white shadow-xl add flex-column add "
+        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
          ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
@@ -232,8 +232,8 @@
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
-                        <!-- <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne"> -->
-                        <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/>
+                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
+                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                     <!-- <pre>{{ userStore.$getHotels(['id', 'name']) }}</pre> -->
                     <!-- Checkboxes para los hoteles individuales -->
@@ -304,8 +304,20 @@
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button> -->
         </div>
+      <ModalNoSave
+        :id="'not-saved'"
+        :open="showModalNoSave"
+        text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+        textbtn="Guardar"
+        @close="closeModalSaveCreate"
+        @saveChanges="handleStoreUser"
+        :type="'alone_exit'"
+        @hidden="handleCloseModal"
+      />
       </div>
     </transition>
+
+    
   </template>
   
   <script setup>
@@ -313,11 +325,12 @@
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
-  import { useAuthStore } from '@/stores/modules/auth/login';
+  //import { useAuthStore } from '@/stores/modules/auth/login';
   import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
-  import BaseTextField from '@/components/Forms/BaseTextField'
-  import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
+  //import BaseTextField from '@/components/Forms/BaseTextField'
+  //import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
+  import ModalNoSave from '@/components/ModalNoSave.vue';
 
   
   const emits = defineEmits(['close','store','alert','showModalNoSave']);
@@ -328,10 +341,19 @@
   });
 
   const userStore = useUserStore();
-  const authStore = useAuthStore();
+  //const authStore = useAuthStore();
   const toast = useToastAlert();
 
-  const getHotels = userStore.$getHotels;
+  const handleCloseModal = () => {
+    showModalNoSave.value = false;
+  }
+
+  const closeModalSaveCreate = () => {
+    showModalNoSave.value = false;
+    window.location.reload();
+  }
+
+/*   const getHotels = userStore.$getHotels;
 
   const typeLodging = [
         { value: "Hotel", label: "Hotel", disabled: false },
@@ -355,7 +377,7 @@
             disabled: true,
             tag: { text: "Próximamente", class: "success-tag" }
         },
-    ]
+    ] */
 
   const seletedRoleUser = ref([
     { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
@@ -686,7 +708,7 @@ if (form.value.role === 1) {
     handleUpdateAllPermissions(true);
 }
   
-  const currentStep = ref(1);
+  const currentStep = ref(2);
   const steps = [
     { number: 1, label: 'Usuario' },
     { number: 2, label: 'Hoteles' },
@@ -760,6 +782,7 @@ const ref_section_add = ref(null);  // Declarar la referencia
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
   if (addSection && !addSection.contains(event.target)) {
+    //console.log('handleClickOutside',event.target)
     closeModal();
   }
 };
@@ -767,9 +790,9 @@ watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
       console.log('modalAddInit',props.modalAdd)
-      setTimeout(() => {
+      //setTimeout(() => {
         registerClickOutside();
-      }, 800); // 100ms de retraso
+      //}, 800); // 100ms de retraso
     });
   } else {
     console.log('modalAddClose',props.modalAdd)
@@ -810,6 +833,7 @@ onMounted(async () => {
 }, { deep: true }); */
 
 function closeModal() {
+  //console.log('closeModal',changes.value,form.value,initialForm.value)
   if (changes.value) {
     showModalNoSave.value = true;
     emits('showModalNoSave', true);
