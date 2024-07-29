@@ -29,7 +29,7 @@
             <div class="mt-2" v-if="form.in_stay_thanks_good">
                 <AutoTextArea 
                     :key="forceUpdate"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
+                    @empty="event => handleEmpty(event,'thanksGOOD')"
                     :id="'AutoTextArea1'"
                     v-model="form.in_stay_thanks_good.es" 
                     :wordLimit="150"
@@ -40,7 +40,7 @@
             <div class="mt-2" v-if="form.in_stay_thanks_normal">
                 <AutoTextArea 
                     :key="forceUpdate"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
+                    @empty="event => handleEmpty(event,'thanksWRONG')"
                     :id="'AutoTextArea3'"
                     v-model="form.in_stay_thanks_normal.es" 
                     :wordLimit="150"
@@ -59,7 +59,7 @@
                 <AutoTextArea 
                     :key="forceUpdate"
                     v-if="form.in_stay_comment"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
+                    @empty="event => handleEmpty(event,'thanksComment')"
                     :id="'AutoTextArea2'"
                     v-model="form.in_stay_comment.es" 
                     :wordLimit="300"

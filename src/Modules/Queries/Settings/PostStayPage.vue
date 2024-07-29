@@ -27,7 +27,7 @@
             <div class="mt-2">
                 <p class="mt-2 text-sm">
                     Configura el mensaje de agradecimiento que aparecerá cuando el huésped proporcione un feedback positivo desde 
-                    <u class="font-medium cursor-pointer">Configuración > Seguimiento > Solicitudes.</u>
+                    <router-link :to="{ name : 'ReviewRequestSettingsIndex'}" class="font-medium underline hover:underline">Administración > Seguimiento > Solicitudes.</router-link>
                 </p>
             </div>
             <p class="text-sm font-medium leading-[110%] mt-4">Cuando el huésped responda normal, mala o muy mala</p>
@@ -53,7 +53,7 @@
                 <AutoTextArea 
                     :key="forceUpdate"
                     v-if="form.post_stay_comment"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
+                    @empty="event => handleEmpty(event,'thanksComment')"
                     :id="'AutoTextArea2'"
                     v-model="form.post_stay_comment.es" 
                     :wordLimit="300"
