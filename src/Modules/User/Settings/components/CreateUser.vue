@@ -4,7 +4,7 @@
         v-if="modalAdd"
         class="absolute bg-white shadow-xl add flex-column add "
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
-         ref="ref_section_add"
+        ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-4">
@@ -304,16 +304,16 @@
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button> -->
         </div>
-      <ModalNoSave
-        :id="'not-saved'"
-        :open="showModalNoSave"
-        text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
-        textbtn="Guardar"
-        @close="closeModalSaveCreate"
-        @saveChanges="handleStoreUser"
-        :type="'alone_exit'"
-        @hidden="handleCloseModal"
-      />
+        <ModalNoSave
+          :id="'not-saved'"
+          :open="showModalNoSave"
+          text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+          textbtn="Guardar"
+          @close="closeModalSaveCreate"
+          @saveChanges="handleStoreUser"
+          :type="'alone_exit'"
+          @hidden="handleCloseModal"
+        />
       </div>
     </transition>
 
@@ -333,7 +333,8 @@
   import ModalNoSave from '@/components/ModalNoSave.vue';
 
   
-  const emits = defineEmits(['close','store','alert','showModalNoSave']);
+  //const emits = defineEmits(['close','store','alert','showModalNoSave']);
+  const emits = defineEmits(['close','store','alert']);
   
   const props = defineProps({
     modalAdd: Boolean,
