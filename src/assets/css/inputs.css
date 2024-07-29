@@ -44,3 +44,45 @@ input[type=radio]:hover {
 .hinput-green:hover::placeholder {
     color: #34A98F;
 }
+
+
+/* ========================= */
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 2px solid #333;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    background-color: #fff;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: #34A98F;
+    border-color: #34A98F;
+  }
+
+  input[type="checkbox"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 11px;
+    width: 2px;
+    height: 12px;
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    transform: rotate(45deg);
+  }
+  input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 9.5px;
+    left: 5px;
+    width: 2px;
+    height: 6px;
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    transform: rotate(-45deg);
+  }

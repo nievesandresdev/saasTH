@@ -4,7 +4,7 @@
             v-if="prependInnerIcon"
             :src="prependInnerIcon"
             alt="prepend inner icon"
-            class="absolute left-3 top-2.5 w-6 h-6 z-10"
+            class="absolute left-3 top-[7.5px] w-6 h-6 z-10"
         >
         <div class="relative">
             <input
