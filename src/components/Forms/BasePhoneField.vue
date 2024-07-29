@@ -1,14 +1,14 @@
 <template>
     <div 
-        class="h-10 hinput hinput-green border hborder-black-100 rounded-[6px] cursor-pointer relative flex"
-        :class="{'hinput-error': isError}"
+        class="h-10 hinput hinput-green border rounded-[6px] cursor-pointer relative flex overflow-hidden"
+        :class="{'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone}"
     >
         <div
             class="flex h-full items-center w131 relative"
             :class="{
-                'br-gray': !isError && !modelValue,
+                'br-gray': !code || !phone,
                 'br-negative': isError,
-                'br-black': modelValue,
+                'br-black': code && phone,
             }"
         >
             <input

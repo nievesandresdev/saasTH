@@ -1,6 +1,6 @@
 <template>
     <div class="px-6">
-        <h1 class="py-5 text-[22px] font-medium leading-[110%]">Feedback</h1>
+        <h1 class="py-5 text-[22px] font-medium leading-[110%]">Seguimiento - Feedback</h1>
         <TabMenu :links="views"/>
     </div>
 </template>

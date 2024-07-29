@@ -30,7 +30,7 @@
                 <label class="font-medium text-lg mb-1">Correo electrónico</label>
                 <input 
                   type="email"
-                  class="w-100 rounded h-11 lg:h-14 py-1 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                  class="w-100 rounded h-11 lg:h-14 p-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                   :placeholder="placeholderEmail" 
                   autocomplete="on" 
                   v-model="form.email" 

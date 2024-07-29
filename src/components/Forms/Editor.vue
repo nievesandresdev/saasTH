@@ -17,6 +17,7 @@
             contentType="html"
             :placeholder="placeholder"
             :toolbar="toolbarOptions"
+            ref="quillRef"
         />
       </div>
       <div
@@ -54,7 +55,9 @@
     const isValid = ref(true);
     const characterCount = ref(0);
   
-  const content = ref(props.modelValue)
+    const content = ref(props.modelValue)
+    const quillRef = ref(null);
+
   
   onMounted(() => {
     // console.log('mounted editor',props.modelValue)
@@ -71,12 +74,21 @@
   ];
   
   const onTextChange = () => {
-    characterCount.value = content.value.length;
-    isValid.value = (content.value !== '' || content.value !== '<p><br></p>');
-    emptyEditor()
-    emit('update:modelValue', content.value)
-    emit('validation', isValid.value);
+    const editor = quillRef.value.getQuill();
+    const plainText = quillRef.value.getText().trim(); // Obtiene el texto plano del editor
+    characterCount.value = plainText.length;
+    // console.log('editor',editor.history)
+    if (characterCount.value > props.maxLength) {
+      editor.history.undo(); // Deshace la última operación
+      characterCount.value = props.maxLength;
+    } else {
+      isValid.value = (plainText !== '');
+      emptyEditor();
+      emit('update:modelValue', editor.root.innerHTML); // Actualiza el valor del modelo con el HTML
+      emit('validation', isValid.value);
+    }
   };
+
   
   const emptyEditor = () => {
     if (content.value === "<p><br></p>") {
