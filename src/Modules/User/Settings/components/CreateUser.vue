@@ -260,8 +260,9 @@
                         <div class="space-y-2">
                             <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
-                                <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
+                                <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
+
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -271,8 +272,8 @@
                         <div class="space-y-2">
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
-                                <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
+                                <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -791,9 +792,7 @@ watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
       console.log('modalAddInit',props.modalAdd)
-      //setTimeout(() => {
         registerClickOutside();
-      //}, 800); // 100ms de retraso
     });
   } else {
     console.log('modalAddClose',props.modalAdd)
@@ -816,7 +815,8 @@ watch(() => props.modalAdd, (newVal) => {
     });
   }
 });
- const initialForm = ref(null);
+
+const initialForm = ref(null);
 const showModalNoSave = ref(false);
 
 const changes = computed(() => {
@@ -834,7 +834,6 @@ onMounted(async () => {
 }, { deep: true }); */
 
 function closeModal() {
-  //console.log('closeModal',changes.value,form.value,initialForm.value)
   if (changes.value) {
     showModalNoSave.value = true;
     emits('showModalNoSave', true);
@@ -855,8 +854,6 @@ const unregisterClickOutside = () => {
   
   const containerTop = ref(0);
 
-  
-  
   onMounted(async () => {
     await nextTick();
     const sectionExpElement = document.getElementById('layout-hoster');
@@ -877,6 +874,7 @@ const unregisterClickOutside = () => {
   onBeforeUnmount(() => {
     unregisterClickOutside();  // Remover el listener de clic fuera
   });
+
   </script>
   
   <style lang="scss">

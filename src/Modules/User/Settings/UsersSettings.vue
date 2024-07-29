@@ -425,7 +425,6 @@ const toggleDropdown = (index,user) => {
 };
 
 const closeToggleDropdown = () => {
-    console.log('closeToggleDropdown')
     visibleDropdown.value = null;
 };
 
