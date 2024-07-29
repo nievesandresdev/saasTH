@@ -155,3 +155,15 @@ button:focus {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* [type='checkbox']:checked {
+  background-color: #34a98f !important;
+}
+[type='checkbox']:focus {
+outline: 2px solid transparent;
+--tw-ring-color: #ffffff00;
+}
+
+[type='checkbox']:focus, [type='checkbox']:hover {
+background-color: #EBF9F0;
+} */

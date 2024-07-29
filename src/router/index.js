@@ -12,6 +12,7 @@ import stayRoutes from './stayRoutes'
 import hotelGroupRoutes from './hotel/hotelGroupRoutes'
 import placeGroupRoutes from './placeRoutes'
 import experienceGroupRoutes from './experienceRoutes'
+import galleryGroupRoutes from './galleryRoutes'
 
 // Importaciones de stores
 
@@ -41,6 +42,7 @@ const routes = [
   ...hotelGroupRoutes,
   ...placeGroupRoutes,
   ...experienceGroupRoutes,
+  ...galleryGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 

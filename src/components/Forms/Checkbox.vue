@@ -17,7 +17,7 @@
         
         <div
             v-else
-            class="border rounded w-full h-full hborder-black-100 hover-green-200"
+            class="border rounded w-full h-full hborder-black-100 hover-green-200 bg-white"
             :class="{'opacity-50': isDisabled}"
             @click="toggleCheck"
         ></div>

@@ -190,14 +190,14 @@
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
-                        <!-- <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne"> -->
+                        <!-- <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne"> -->
                         <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/>
                     </div>
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox disabled:opacity-50 h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
-                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
+                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class=" disabled:opacity-50 h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
+                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                         <div class="space-y-2">
                             <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between  rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
+                                <!-- <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
                                 <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
                             </div>
                         </div>
@@ -227,7 +227,7 @@
                         <div class="space-y-2">
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
+                                <!-- <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
                                 <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
                             </div>
                         </div>
@@ -453,8 +453,16 @@ const form = ref({
   };
   
   function closeModal() {
-    emits('close');
-    currentStep.value = 1;
+   /*  emits('close');
+    currentStep.value = 1; */
+
+    if (changes.value) {
+      showModalNoSave.value = true;
+      emits('showModalNoSave', true);
+    } else {
+      emits('close');
+      currentStep.value = 1;
+    }
 
   }
   
@@ -768,6 +776,28 @@ const clearForm = () => {
 };
   
   const containerTop = ref(0);
+
+  const initialForm = ref(null);
+const showModalNoSave = ref(false);
+
+const changes = computed(() => {
+  return JSON.stringify(form) !== initialForm.value;
+});
+
+onMounted(async () => {
+  await nextTick();
+  initialForm.value = JSON.stringify(form);
+});
+
+
+/* const closeModal = () => {
+  if (changes.value) {
+    showModalNoSave.value = true;
+    emits('showModalNoSave', true);
+  } else {
+    emits('close');
+  }
+} */
   
   onMounted(async () => {
     await nextTick();
