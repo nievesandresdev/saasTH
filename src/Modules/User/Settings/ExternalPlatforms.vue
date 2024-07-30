@@ -370,7 +370,7 @@ const markAdditionalLinkChange = (index) => {
 };
 
 const addAnotherLink = () => {
-    additionalLinks.value.push({ url: '', _id: null, hoverValidation: false, errors: false, errorMessage: '', status: 1 });
+    additionalLinks.value.push({ url: '', _id: "", hoverValidation: false, errors: false, errorMessage: '', status: 1 });
 };
 
 const openDeleteModal = (index) => {
@@ -456,7 +456,7 @@ const submit = async () => {
             payload.push({
                 ota: otaName.toUpperCase(),
                 url: data.url,
-                _id: data._id || null
+                _id: data._id || ""
             });
         }
     };
@@ -471,7 +471,7 @@ const submit = async () => {
         payload.push({
             ota: 'AIRBNB',
             url: link.url,
-            _id: link._id || null
+            _id: link._id || ""
         });
     });
 
