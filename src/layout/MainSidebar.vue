@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, provide } from 'vue'
+import { ref, computed, onMounted, onUnmounted, provide, inject } from 'vue'
 import { getPusherInstance, isChannelSubscribed, setChannelSubscribed } from '@/utils/pusherSingleton'
 import { useRoute, useRouter } from 'vue-router'
 //components
@@ -173,6 +173,7 @@ const chatStore = useChatStore()
 const userAvatar = computed(() => userStore.$userAvatar);
 
 provide('hotelStore', hotelStore);
+const isNotifyPanelVisible = inject('isNotifyPanelVisible');
 
 const modalProfile = ref(false)
 const countPendingQueries = ref(0)
@@ -242,6 +243,9 @@ const handleMenuItemClick = (nameButtom) => {
   isMouseMoving.value = false;
   if (nameButtom === 'Ayuda') {
     openModalHelp();
+  }
+  if (nameButtom === 'Novedades') {
+    isNotifyPanelVisible.value = true;   
   }
 }
 
