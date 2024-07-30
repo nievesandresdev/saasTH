@@ -285,7 +285,7 @@ const menu_links = ref([
           'Perfil',
           'Experiences',
         ],
-        url: '/alojamiento/perfil',
+        url: '/webapp',
       },
       {
         title: 'Comunicaciones',
