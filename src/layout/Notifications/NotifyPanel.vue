@@ -1,12 +1,28 @@
 <template>
     <transition name="slide" @after-leave="$emit('close')">
         <aside v-if="isVisible" class="w-[400px] bg-white fixed top-0 right-0 h-screen overflow-y-auto z-[2100]">
-            <div class="py-5 flex items-center justify-between px-6 border-b border-gray-400">
-                <h2 class="text-[22px] font-medium leading-[110%]">Novedades</h2>
-                <button @click="isVisible = false">Cerrar</button>
-            </div>
-            <div class="px-6">
-                <!-- Cuerpo del panel -->
+            <div class="flex h-full flex-col">
+                <!-- header -->
+                <div class="py-5 flex items-center justify-between px-6 border-b border-gray-400 shadow-hoster">
+                    <h2 class="text-[22px] font-medium leading-[110%]">Novedades</h2>
+                    <div class="mt-[-8px] mb-[-14px]">
+                        <HoveredIcon
+                            :src="`/assets/icons/1.TH.CLOSE.svg`"
+                            :height_icon="'24px'"
+                            :width_icon="'24px'"
+                            :padding_container="'6px'"
+                            style="--background-color: #f3f3f3;"
+                            @click="isVisible = false"
+                        />
+                    </div>
+                </div>
+                <!-- body -->
+                <div class="px-6 flex-grow overflow-y-auto bg-white">
+                    <template v-for="novelty in  data" :key="novelty.id">
+                        <NoveltyCard v-if="novelty.type == 'news'" :data="novelty"/>
+                        <NotificationCard v-else :data="novelty"/>
+                    </template>
+                </div>
             </div>
         </aside>
     </transition>
@@ -16,9 +32,21 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue';
+import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
+import NotificationCard from './NotificationCard.vue'
+import NoveltyCard from './NoveltyCard.vue'
 
+import { useNotifyUserStore } from '@/stores/modules/users/notifiyUser';
+
+const notifyUserStore = useNotifyUserStore();
 const isVisible = inject('isNotifyPanelVisible');
+const data = ref([]);
+watch(() => isVisible.value, async (newVal) => {
+    if(newVal){
+        data.value = await notifyUserStore.$getNotificationsByUser();
+    }
+});  
 </script>
 
 <style scoped>

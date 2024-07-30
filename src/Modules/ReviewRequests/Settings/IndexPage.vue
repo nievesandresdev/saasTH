@@ -169,7 +169,6 @@ function cancelChanges(){
 }
 
 function assignValuesToForm(data){
-    console.log('settings.value',data)
     if (data) {
         form.msg_title = data.msg_title;
         form.msg_text = data.msg_text;
