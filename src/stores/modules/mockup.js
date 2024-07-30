@@ -9,14 +9,14 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoText1Ref = ref(null);
   const infoTextIcon1Ref = ref(null);
 
-  function $setIframeUrl(uri, params = 'test=null') {
+  function $setIframeUrl(uri, params = 'test=x') {
       let subdomain = sessionStorage.getItem('current_subdomain');
       let urlBase = GUEST_URL;
       // console.log(subdomain)
       if(ENVIROMENT == 'test'){
         urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       }
-      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&mockup=true&${params}`;
+      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&lang=es&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
   }
 

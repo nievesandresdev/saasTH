@@ -129,7 +129,8 @@ onMounted(async ()=>{
     mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
-    assignValuesToForm();
+    const data = JSON.parse(JSON.stringify(settings.value));
+    assignValuesToForm(data);
 })
 
 
@@ -163,16 +164,18 @@ const submit = async () =>{
 }
 
 function cancelChanges(){
-    assignValuesToForm();
+    const data = JSON.parse(JSON.stringify(settingsRef.value));
+    assignValuesToForm(data);
 }
 
-function assignValuesToForm(){
-    if (settings.value) {
-        form.msg_title = settings.value.msg_title;
-        form.msg_text = settings.value.msg_text;
-        form.otas_enabled_google = settings.value.otas_enabled?.google;
-        form.otas_enabled_tripadvisor = settings.value.otas_enabled?.tripadvisor;
-        form.request_to = settings.value.request_to;
+function assignValuesToForm(data){
+    console.log('settings.value',data)
+    if (data) {
+        form.msg_title = data.msg_title;
+        form.msg_text = data.msg_text;
+        form.otas_enabled_google = data.otas_enabled?.google;
+        form.otas_enabled_tripadvisor = data.otas_enabled?.tripadvisor;
+        form.request_to = data.request_to;
         // Asegúrate de manejar la estructura de otas_enabled si es necesaria
         form.otas_enabled = {
             google: form.otas_enabled_google,

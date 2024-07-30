@@ -37,7 +37,7 @@
                 <AutoTextArea 
                     :key="forceUpdate"
                     v-if="form.pre_stay_comment"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
+                    @empty="event => handleEmpty(event,'commentEmpty')"
                     :id="'AutoTextArea2'"
                     v-model="form.pre_stay_comment.es" 
                     :wordLimit="300"
