@@ -325,7 +325,6 @@ function changeTab (val) {
 
 function editFacility ({action, facility}) {
     urlsimages.value = [];
-    console.log(action, 'action')
     if (action === 'EDIT') {
         let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
         let schedulesNew = [];

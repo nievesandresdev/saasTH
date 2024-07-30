@@ -28,7 +28,14 @@ export const useGalleryStore = defineStore('gallery', () => {
     }
 
     async function $getAll (params, config) {
-        const response = await galleryServices.getAllApi(params, config)
+        const response = await galleryServices.getAllApi(params, config);
+        return response;
+        if(response.ok) return response.data
+        return []
+    }
+
+    async function $deleteBulk (data, config) {
+        const response = await galleryServices.deleteBulkApi(data, config);
         return response;
         if(response.ok) return response.data
         return []
@@ -38,6 +45,7 @@ export const useGalleryStore = defineStore('gallery', () => {
     return {
         formatImage,
         $getAll,
+        $deleteBulk,
     }
 
 })

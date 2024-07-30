@@ -55,7 +55,7 @@
                                 :src="galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default })"
                             >
                             <div
-                                v-if="indexImageHover === index"
+                                v-if="indexImageHover === index || imageSelected.includes(img.id)"
                                 class="h-full w-full absolute z-[50] rounded-[6px] top-0 left-0 p-2 flex justify-between items-start"
                                 style="background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%);"
                             >
@@ -73,9 +73,9 @@
                                 <input
                                     type="checkbox"
                                     v-model="imageSelected"
-                                    :value="index"
+                                    :value="img.id"
                                     :id="index"
-                                    class="w-[24px] h-[24px]"
+                                    class="hcheckbox w-[24px] h-[24px]"
                                 >
                             </div>
                         </div>
@@ -91,15 +91,16 @@
         <button
             class="py-3"
             :class="{'opacity-25':!imageSelected?.length }"
+            @click="resetSelected"
         >
             <span class="underline font-medium">Cancelar</span>
         </button>
         <button
             class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-             :disabled="!imageSelected?.length"
-            @click="submitDelete"
+            :disabled="!imageSelected?.length"
+            @click="openModalDelete"
         >
-            Eliminat
+            Eliminar
         </button>
     </div>
 </div>
@@ -109,7 +110,10 @@
     :is-open="isPreviewOpen"
     @click:close="closePreviewImage"
 />
-
+<ModalDelete
+    ref="modalDeleteRef"
+    @submit="submitDelete()"
+/>
 </template>
 
 <script setup>
@@ -136,6 +140,7 @@ import BaseTab from '@/components/BaseTab';
 import BasePreviewImage from '@/components/BasePreviewImage';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import Checkbox from '@/components/Forms/Checkbox';
+import ModalDelete from './components/ModalDelete';
 
 const PLACE = 'PLACE';
 const HOTEL = 'HOTEL';
@@ -154,6 +159,8 @@ const indexImageHover = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
+
+const modalDeleteRef = ref(null);
 
 const imagesContainer = computed(()=> {
     // console.log('images_container computed')
@@ -225,14 +232,39 @@ function selectImageMultiple(img, index){
     // }
 }
 
-function submitDelete () {
+function resetCompoent () {
+    loadGallery();
+    resetSelected();
+}
 
+async function submitDelete () {
+        let bodyRequest = {
+            ids_delete: [...imageSelected.value]
+        }
+        const response = await galleryStore.$deleteBulk(bodyRequest);
+        const { ok, data } = response;
+        if (ok) {
+            toast.warningToast('Cambios guardados con éxito','top-right');
+            resetCompoent();
+        } else {
+            toast.warningToast(data?.message,'top-right');
+        }
+}
+function openModalDelete () {
+    modalDeleteRef.value.openModal();
 }
 
 function openPreview(url) {
     // console.log(url,'url');
     previewUrl.value = url;
     isPreviewOpen.value = true;
+}
+function closePreviewImage () {
+    previewUrl.value = null;
+    isPreviewOpen.value = false;
+}
+function resetSelected () {
+    imageSelected.value = [];
 }
 
 </script>
