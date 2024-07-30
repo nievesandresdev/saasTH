@@ -862,8 +862,6 @@ const unregisterClickOutside = () => {
     }
 
 
-    console.log('modalAddesd',props.modalAdd)
-
     registerClickOutside();  // Registrar el listener de clic fuera
 
     errorPassword.value = false;

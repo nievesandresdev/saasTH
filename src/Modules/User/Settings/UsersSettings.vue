@@ -138,8 +138,6 @@
         :work-positions="workPositionsData" 
     />
 
-    
-
     <EditUser 
         :modal-edit="modalEdit"
         @close="closeModalEdit" 

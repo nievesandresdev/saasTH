@@ -4,7 +4,7 @@
         v-if="modalEdit"
         class="absolute bg-white shadow-xl add flex-column"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
-        ref="ref_section_add"
+        ref="ref_section_edit"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-5 mt-4">
@@ -190,8 +190,8 @@
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
-                        <!-- <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne"> -->
-                        <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/>
+                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne">
+                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
@@ -200,6 +200,7 @@
                         <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
+                <!-- <pre>{{ jsonHotel }}</pre> -->
             </div>
 
             <div v-if="currentStep === 3">
@@ -209,6 +210,7 @@
                         Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
                     </span>
                 </div>
+                <!-- <pre>{{ jsonHotel }}</pre> -->
                 <div class="space-y-6">
                     <!-- Sección de Operación -->
                     <div>
@@ -216,8 +218,8 @@
                         <div class="space-y-2">
                             <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between  rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
-                                <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
+                                <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -227,8 +229,8 @@
                         <div class="space-y-2">
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <!-- <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)"> -->
-                                <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/>
+                                <input type="checkbox" v-model="item.selected" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -260,17 +262,28 @@
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button> -->
         </div>
+        <ModalNoSave
+          :id="'not-saved'"
+          :open="showModalNoSave"
+          text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+          textbtn="Guardar"
+          @close="closeModalSaveCreate"
+          @saveChanges="handleStoreUser"
+          :type="'alone_exit'"
+          @hidden="handleCloseModal"
+        />
       </div>
     </transition>
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits,computed,watch,defineProps } from 'vue';
+  import { ref, onMounted, nextTick, defineEmits,computed,watch,defineProps, onBeforeUnmount } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
   import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
+  import ModalNoSave from '@/components/ModalNoSave.vue';
 
   
   const emits = defineEmits(['close','update']);
@@ -285,8 +298,46 @@
   watch(() => props.modalEdit, (newVal) => {
   if (newVal) {
     initializeForm();
+    initialForm.value = JSON.stringify(form);
+
   }
 });
+
+const ref_section_edit = ref(null);  // Declarar la referencia
+
+// Método para cerrar el modal si se hace clic fuera de él
+const handleClickOutside = (event) => {
+  const addSection = ref_section_edit.value;
+  if (addSection && !addSection.contains(event.target)) {
+    //console.log('handleClickOutside',event.target)
+    closeModal();
+  }
+};
+
+watch(() => props.modalEdit, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      console.log('modalEditInit',props.modalEdit)
+        registerClickOutside();
+    });
+  } else {
+    console.log('modalEditClose',props.modalEdit)
+    unregisterClickOutside();
+  }
+});
+
+const registerClickOutside = () => {
+  document.addEventListener('click', handleClickOutside);
+};
+
+// Remover el evento de clic en el documento
+const unregisterClickOutside = () => {
+  document.removeEventListener('click', handleClickOutside);
+};
+
+const handleCloseModal = () => {
+    showModalNoSave.value = false;
+  }
 
 
 const form = ref({
@@ -452,19 +503,7 @@ const form = ref({
 
   };
   
-  function closeModal() {
-   /*  emits('close');
-    currentStep.value = 1; */
 
-    if (changes.value) {
-      showModalNoSave.value = true;
-      emits('showModalNoSave', true);
-    } else {
-      emits('close');
-      currentStep.value = 1;
-    }
-
-  }
   
   const isFormIncomplete = computed(() => {
       //email
@@ -581,6 +620,7 @@ const handleSelectAll = (initial = false) => {
             access.selected = false;
         });
     }
+
 };
 
 const handleSelection = (hotelId, add = null) => {
@@ -775,19 +815,38 @@ const clearForm = () => {
     });
 };
   
-  const containerTop = ref(0);
+const containerTop = ref(0);
 
-  const initialForm = ref(null);
+const initialForm = ref(null);
 const showModalNoSave = ref(false);
 
 const changes = computed(() => {
   return JSON.stringify(form) !== initialForm.value;
 });
 
-onMounted(async () => {
-  await nextTick();
-  initialForm.value = JSON.stringify(form);
-});
+
+/* onMounted(async() => {
+    initializeForm();
+    await nextTick();
+    initialForm.value = JSON.stringify(form);
+
+    console.log('dataUser',form.value)
+  }); */
+
+function closeModal() {
+   /*  emits('close');
+    currentStep.value = 1; */
+    console.log('closeModalChangesEdit',changes.value)
+
+    if (changes.value == true) {
+      showModalNoSave.value = true;
+      emits('showModalNoSave', true);
+    } else {
+      emits('close');
+      currentStep.value = 1;
+    }
+
+  }
 
 
 /* const closeModal = () => {
@@ -805,16 +864,17 @@ onMounted(async () => {
     if (sectionExpElement) {
       containerTop.value = sectionExpElement.offsetTop;
     }
-
+    registerClickOutside();
     errorPassword.value = false;
     errorPasswordMatch.value = false;
     errorEmail.value = false;
     
   });
 
-  onMounted(() => {
-    initializeForm();
+  onBeforeUnmount(() => {
+    unregisterClickOutside();  // Remover el listener de clic fuera
   });
+
 
   </script>
   
