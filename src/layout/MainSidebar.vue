@@ -115,18 +115,18 @@
             <div class="flex-none w-14"></div>
             <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2 mt-5" width="80" height="80" />
             <button @click="closeModalProfile" class="mr-4 mt-[-50px]">
-              <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-8 w-8" />
+              <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
             </button>
           </div>
           <div class="text-center">
             <h3 class="text-lg font-medium">{{ authStore.fullName }}</h3>
-            <p class="text-sm text-gray-500">{{ $getRoleName(authStore.user.role) }}</p>
-            <div class="mt-4 flex justify-center gap-4">
-              <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+            <p class="text-sm text-gray-500 font-semibold">{{ $getRoleName(authStore.user.role) }}</p>
+            <div class="mt-4 flex justify-center gap-3">
+              <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
                 Ver Suscripción
               </button>
-              <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-bold text-xs hover:text-[#34A98F]">
+              <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
                 Ajustes de cuenta
               </button>
