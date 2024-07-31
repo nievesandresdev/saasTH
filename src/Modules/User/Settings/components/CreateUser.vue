@@ -782,11 +782,14 @@ const clearForm = () => {
 const ref_section_add = ref(null);  // Declarar la referencia
 const ref_modal_crud = ref(null);
 
+// Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
-  const modalCrudEl = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
+  const modalCrud = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
 
-  if (addSection && !addSection.contains(event.target) && (!modalCrudEl || !modalCrudEl.contains(event.target))) {
+  console.log('modalisCrud',modalCrud,event.target)
+  
+  if (addSection && !addSection.contains(event.target) && modalCrud && !modalCrud.contains(event.target)) {
     closeModal();
   }
 };
@@ -839,7 +842,7 @@ function closeModal() {
   if (changes.value) {
     showModalNoSave.value = true;
     console.log('showModalNoSaveSS',showModalNoSave.value)
-    //emits('showModalNoSave', true);
+    emits('showModalNoSave', true);
   } else {
     emits('close');
   }
