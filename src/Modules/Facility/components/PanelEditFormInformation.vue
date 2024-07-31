@@ -6,7 +6,6 @@
                 v-model="form.title"
                 placeholder="Nueva instalación"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="title"
                 :max="'50'"
                 :errors="errors"
@@ -19,7 +18,6 @@
                 v-model="form.description"
                 placeholder="Describe la nueva instalación"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="description"
                 :max="'500'"
             />
@@ -49,7 +47,6 @@
                 v-model="form.ad_tag"
                 placeholder="Ingresa tu texto"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="ad_tag"
                 :max="'20'"
             />

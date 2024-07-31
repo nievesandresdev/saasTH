@@ -83,7 +83,7 @@ let paramAxios = {
   return serviceResponse
 } */
 
-export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL') => {
+export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL', IS_FORM_DATA = false) => {
   // switch
   //console.log('SLUG_API', SLUG_API)
   const url_backend = () => {
@@ -113,7 +113,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     api_url_backend: api_url_backend,
   })
   } */
-  const defaultHeaders = {
+  let formatHeader = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
@@ -122,9 +122,20 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'x-key-api':  X_KEY_API,
   };
 
-  if (!options.hasOwnProperty('headers')) options.headers = defaultHeaders
+  if (IS_FORM_DATA) {
+    formatHeader['Content-Type'] = 'multipart/form-data';
+  }
+  
+  const defaultHeaders = {...formatHeader};
+
+  if (!options.hasOwnProperty('headers')) {
+    options.headers = defaultHeaders;
+  } else {
+    Object.assign(options.headers, defaultHeaders);
+  }
   let serviceResponse = {}
   method = method.toLowerCase()
+
  let paramAxios = {
    method,
    url: `${api_url_backend}/${endpoint}`,

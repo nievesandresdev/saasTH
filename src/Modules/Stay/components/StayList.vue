@@ -133,6 +133,7 @@ const openFiltersModal = ref(false)
 const channelChat = ref(null);
 const channelStay = ref(null);
 const channelQuery = ref(null);
+const channelUpdate = ref(null);
 const pusher = ref(null);
 
 onMounted( async() => {
@@ -154,6 +155,11 @@ onUnmounted(() => {
     if (channelQuery.value) {
         channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
         pusher.value.unsubscribe(channelQuery.value);
+    }
+
+    if (channelUpdate.value) {
+        channelUpdate.value.unbind('App\\Events\\UpdateStayListEvent');
+        pusher.value.unsubscribe(channelUpdate.value);
     }
 });
 
@@ -206,6 +212,13 @@ const connectPusher = () =>{
     channelStay.value = pusher.value.subscribe(channelStay.value);
     channelStay.value.bind('App\\Events\\CreateStayEvent', (data) => {
         loadData();
+    });
+
+    channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
+    channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
+    channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
+        let showLoadPage = data.showLoadPage ?? true;
+        loadData(showLoadPage);
     });
 
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;

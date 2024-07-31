@@ -14,12 +14,17 @@
             prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
             placeholder="Buscar imagen..."
             class-content="w-[345px]"
+            :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: form.search?.length > 0 }"
+            @enter:search="loadGallery"
+            @click:append_inner="resetFilter (tabCurrent)"
         />
-        <p v-if="imageSelected?.length == 0" class="text-sm font-medium htext-gray-500 mt-6">{{ textNumbersImagesFound }}</p>
-        <div v-else class="flex space-x-[4px] mt-6 items-center">
+        <p v-if="imagesContainer?.length <= 0" class="text-sm font-medium htext-gray-500 mt-6">No cuentas con imágenes. Busca imágenes en tu ordenador y añadelas</p>
+        <p v-else-if="imagesContainer?.length > 0 && imageSelected?.length == 0" class="text-sm font-medium htext-gray-500 mt-6">{{ textNumbersImagesFound }}</p>
+        <div v-else-if="imagesContainer?.length > 0 && imageSelected?.length > 0" class="flex space-x-[4px] mt-6 items-center">
             <img src="/assets/icons/1.TH.Checkbox.svg" class="w-[16px] h-[16px]">
             <span class="text-sm font-medium"> {{ textNumbersImagesSelected }} </span>
         </div>
+        
         <div class="mt-4">
             <div class="w-[968px] 3xl:w-[1464px] grid grid-cols-4 3xl:grid-cols-6 gap-4">
                 <label 
@@ -119,6 +124,7 @@
 <script setup>
 
 import { ref, provide, reactive, onMounted, computed } from 'vue';
+import axios from 'axios';
 
 
 // STATE
@@ -142,19 +148,17 @@ import BaseTextField from '@/components/Forms/BaseTextField';
 import Checkbox from '@/components/Forms/Checkbox';
 import ModalDelete from './components/ModalDelete';
 
-const PLACE = 'PLACE';
-const HOTEL = 'HOTEL';
+const PLACE = 'image-place';
+const HOTEL = 'image-hotel';
 const ITEMS_TABS = [{name: 'Mi alojamiento', value: HOTEL}, {name: 'Destino', value: PLACE}];
 
 // DATA
 const tabCurrent = ref(HOTEL);
-const search = ref(null);
 const form = reactive({
     search: '',
 });
 const images = ref([]);
 const imageSelected = ref([]);
-const multiple = ref(false);
 const indexImageHover = ref(null);
 
 const previewUrl = ref(null);
@@ -162,12 +166,12 @@ const isPreviewOpen = ref(false);
 
 const modalDeleteRef = ref(null);
 
+// COMPUTED
 const imagesContainer = computed(()=> {
     // console.log('images_container computed')
     const imagesCurrent = tabCurrent.value === HOTEL ? images.value.images_gallery_hotel : images.value.images_gallery_places;
     return imagesCurrent;
-})
-
+});
 
 const textNumbersImagesFound = computed(() => {
     let numbers = imagesContainer.value?.length;
@@ -182,19 +186,57 @@ const textNumbersImagesSelected = computed(() => {
 });
 
 // FUNCTION
-function openGallery () {
-
-}
 
 onMounted(() => {
     loadGallery();  
 });
 
-function handleFiles () {
+function handleFiles(e) {
+    const files = Array.from(e.target.files);
+    const maxSize = 5 * 1024 * 1024;
 
+    files.forEach((file) => {
+        if (!(file instanceof File)) return;
+        if (file.size > maxSize) {
+            toast.error("Archivo mayor a 5mb", { position: "top-right", });
+            return;
+        }
+        
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            if(file.type == "image/svg+xml" || file.type == "image/jpeg" || file.type == "image/png" || file.type == "image/jpg"){
+                    uploadFile(e.target.result,file);
+            }else{
+                toast.error("Tipo de archivo no permitido", { position: "top-right", });
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+async function uploadFile (url,file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type',  tabCurrent.value);
+    formData.append('name_image', formateNameImage(hotelStore.hotelData.name));
+    const response = await galleryStore.$upload(formData);
+    const { ok, data} = response;
+    if (ok) {
+        toast.warningToast('Imagen guardada','top-right');
+        resetCompoent();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+
+function formateNameImage (nameImageOld) {
+    let nameImageNew = nameImageOld?.replace(/<\/?[^>]+(>|$)/g, "")?.trim()  ?? null;
+    return nameImageNew;
 }
 
 async function loadGallery() {
+    imageSelected.value = [];
     let config = { showPreloader: false  }
     const response = await galleryStore.$getAll(form, config);
     const { ok, data} = response;
@@ -206,30 +248,6 @@ async function loadGallery() {
 function checkSelectedImage (url) {
     let exit = imageSelected.value?.some(item => item?.url == url)
     return exit
-}
-
-function selectImage (img, index) {
-    // if (image_selected.value.length > 0) {
-    //     image_selected.value = []
-    // }
-    // if(img?.file){
-    //     image_selected.value.push({ id: null, name:img?.name ??img?.file?.name, url: img.url, exists: false, index, type: img.type, url_origin: img.url_origin })
-    // }else{
-    //     image_selected.value.push({ id: img.id, name:img?.name ??img?.file?.name, url: img.url, exists: true, index, type: img.type, url_origin: img.url_origin })
-    // }
-}
-
-function selectImageMultiple(img, index){
-    // if (check_selected_image(img.url)) {
-    //     let index_image_selected = image_selected.value.findIndex(item => item.url === img.url)
-    //     image_selected.value?.splice(index_image_selected, 1)     
-    // } else {
-    //     if(img?.file){
-    //         image_selected.value.push({id: null, name:img?.name ??img?.file?.name, url:img.url,exists:false,index, type: img.type, url_origin: img.url_origin })
-    //     }else{
-    //         image_selected.value.push({id: img.id, name:img?.name ??img?.file?.name, url:img.url,exists:true,index, type: img.type, url_origin: img.url_origin })
-    //     }
-    // }
 }
 
 function resetCompoent () {
@@ -250,6 +268,7 @@ async function submitDelete () {
             toast.warningToast(data?.message,'top-right');
         }
 }
+
 function openModalDelete () {
     modalDeleteRef.value.openModal();
 }
@@ -259,12 +278,21 @@ function openPreview(url) {
     previewUrl.value = url;
     isPreviewOpen.value = true;
 }
+
 function closePreviewImage () {
     previewUrl.value = null;
     isPreviewOpen.value = false;
 }
+
 function resetSelected () {
     imageSelected.value = [];
+}
+
+function resetFilter  (TYPE) {
+    tabCurrent.value = TYPE
+    search.value = ''
+    form.search = ''
+    loadGallery();
 }
 
 </script>

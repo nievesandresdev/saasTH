@@ -80,7 +80,7 @@
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <div class="flex space-x-4">
-                    <div class="space-y-2">
+                    <div class="space-y-2 w-[384px]">
                         <div class="flex justify-between">
                             <label class="text-sm font-medium inline-block">Teléfono principal</label>
                             <BaseTooltipResponsive
@@ -105,7 +105,7 @@
                             @blur:validate="validate('phone')"
                         />
                     </div>
-                    <div class="space-y-2">
+                    <div class="space-y-2 w-[384px]">
                         <label class="text-sm font-medium inline-block">Teléfono principal</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
@@ -115,7 +115,7 @@
                         />
                     </div>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-2 w-[706px]">
                     <label class="text-sm font-medium inline-block">Email</label>
                     <BaseTextField
                         v-model="form.email"
@@ -208,7 +208,7 @@
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <h2 class="font-medium text-lg">Fotos</h2>
-                <profilePageSectionPhotos />
+                <profilePageSectionPhotos @openModelGallery="openModelGallery()" />
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
                 <h2 class="font-medium text-lg">Redes sociales</h2>
@@ -269,6 +269,13 @@
         @saveChanges="submit"
         type="save_changes"
     />
+    <ModalGallery
+        ref="modalGaleryRef"
+        :id="'modal-gallery'"
+        :name-image-new="hotelData.name"
+        multiple
+        @update:img="addNewsImages($event)"
+    />
 </template>
 
 <script setup>
@@ -283,6 +290,7 @@
     import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
     import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
     //
+    import ModalGallery from '@/components/ModalGallery.vue';
     import ModalNoSave from '@/components/ModalNoSave.vue'
     import ProfilePageSectionMap from "./ProfilePageSectionMap.vue";
     import ProfilePageSectionPhotos from "./ProfilePageSectionPhotos.vue";
@@ -300,7 +308,7 @@
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
-
+    
     //DATA
     const form = reactive({
         hotel_id: null,
@@ -329,6 +337,7 @@
         show_profile: false,
         with_wifi: false,
     });
+    const modalGaleryRef = ref(null);
     const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const formRules = {
@@ -399,8 +408,6 @@
 
     // COMPUTED
     const isChanged = computed(()=>{
-        let imagesSaved = JSON.stringify(hotelData.images);
-        let imagesForm = JSON.stringify(form.images_hotel);
         let c =
             form.name !== hotelData.name || form.type !== hotelData.type ||
             Number(form.category) !== Number(hotelData.category) ||
@@ -418,7 +425,7 @@
             normalize(form.urlPinterest) !== hotelData.pinterest_url ||
             normalize(form.urlFacebook) !== hotelData.facebook_url ||
             normalize(form.urlX) !== hotelData.x_url ||
-            // imagesForm !== imagesForm ||
+            form.images_hotel?.length !== hotelData.images?.length ||
             Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
         return c;
     });
@@ -463,7 +470,7 @@
         form.urlFacebook = hotel.facebook_url || null;
         form.urlX = hotel.x_url || null;
         form.city = hotel.city || null;
-        form.images_hotel = hotel.images || [];
+        form.images_hotel = [...hotel.images];
         form.show_profile = hotel.show_profile || false;
         form.with_wifi = hotel.with_wifi || false;
     }
@@ -503,6 +510,16 @@
         mockupStore.$reloadIframe()
     }
 
+    function openModelGallery () {
+        modalGaleryRef.value.openModal();
+    }
+
+    function addNewsImages (images) {
+        images.forEach(item => {
+            let { url, name, type } = item;
+            form.images_hotel.unshift({ id: null, url, name, type });
+        });
+    }
 
 </script>
 

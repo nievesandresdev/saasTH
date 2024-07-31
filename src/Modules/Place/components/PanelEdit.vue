@@ -40,10 +40,11 @@
                         <PanelEditFormInformation />
                     </template>
                     <template v-else-if="tabSelected === GALLERY">
-                        <PanelEditFormPhotos />
+                        <PanelEditFormPhotos  @open:gallery="openGallery" />
                     </template>
                 </div>
             </div>
+             {{ form.place_id}}
             <div class="py-4 px-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
@@ -79,6 +80,13 @@
             </div>
         </div>
     </transition>
+    <ModalGallery
+        ref="modalGaleryRef"
+        :id="'modal-gallery-id'"
+        :name-image-new="'place'"
+        multiple
+        @update:img="addNewsImages($event)"
+    />
     <BasePreviewImage 
         :url-image="previewUrl"
         :is-open="isPreviewOpen"
@@ -102,9 +110,9 @@
             @saveChanges="submitSave"
             type="save_changes"
             :force-open="modalChangePendinginForm"
-            @close="closeModal()"
+            @close="closeModalForce()"
         />
-    </template> -->
+    </template>
 </template>
 
 
@@ -120,6 +128,7 @@ import ModalCancelChangePlace from './ModalCancelChangePlace.vue';
 import ModalDelete from './ModalDelete.vue';
 // import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import ModalGallery from '@/components/ModalGallery.vue';
 
 
 import { useFormValidation } from '@/composables/useFormValidation'
@@ -159,6 +168,9 @@ const form = reactive({
     email: null,
     url_web: null,
     images: [],
+    delete_place_images: [],
+    delete_hotel_images: [],
+    new_images: [],
 });
 const itemSelected = reactive({
     place_id: null,
@@ -171,6 +183,9 @@ const itemSelected = reactive({
     email: null,
     url_web: null,
     images: [],
+    delete_place_images: [],
+    delete_hotel_images: [],
+    new_images: [],
 });
 const formDefault = reactive({
     place_id: null,
@@ -183,10 +198,14 @@ const formDefault = reactive({
     email: null,
     url_web: null,
     images: [],
+    delete_place_images: [],
+    delete_hotel_images: [],
+    new_images: [],
 });
 const formRules = {
     // title: [value => value.trim() ? true : 'Introduce '],
 };
+const modalGaleryRef = ref(null);
 
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
@@ -297,10 +316,15 @@ defineExpose({ edit });
 
 async function submitSave () {
     let body = { ...form };
+    // console.log(body, 'body');
     const response = await placeStore.$update(body);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
+            changePendingInForm.value = false;
+            modelActive.value = null;
+            tabSelected.value = INFORMATION;
+            resetData();
         resetCompoent();
     } else {
         toast.warningToast(data?.message,'top-right');
@@ -330,14 +354,20 @@ const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
 function resetCompoent () {
-    closeModal();
     resetPageData();
+    closeModal();
 }
 function closeModal () {
     if (changePendingInForm.value) {
         openModalChangeInForm();
         return;
     }
+    changePendingInForm.value = false;
+    modelActive.value = null;
+    tabSelected.value = INFORMATION;
+    resetData();
+}
+function closeModalForce () {
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
@@ -365,6 +395,20 @@ function openModalChangeInForm () {
     modalChangePendinginForm.value = true;
     nextTick(() => {
         modalChangePendinginForm.value = false;
+    });
+}
+
+function openGallery () {
+    modalGaleryRef.value.openModal();
+}
+
+function addNewsImages (images) {
+    images.forEach(item => {
+        let { url, name } = item;
+        let type = "GALLERY";
+        urlsimages.value.push({ url, name, type });
+        form.images.push({ id:null, url, name, type, origin: 'HOSTER' });
+        form.new_images.push({ id:null, url, name, type, origin: 'HOSTER' });
     });
 }
 

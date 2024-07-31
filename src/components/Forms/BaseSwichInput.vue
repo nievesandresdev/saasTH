@@ -12,9 +12,10 @@
         <div
         :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : 'bg-gray-400']"
         ></div>
-        <div
-        :class="['dot absolute left-[0.125rem] top-[0.125rem] w-3.5 h-3.5 rounded-full transition', modelValue ? 'transform translate-x-full bg-white' : 'bg-white']"
+        <div  
+          :class="['dot absolute left-[0.125rem] top-[0.125rem] w-3.5 h-3.5 rounded-full transition ', modelValue ? 'translate-x-[0.75rem] bg-white' : 'bg-white']"
         ></div>
+        <!-- :class="['dot absolute top-[0.125rem] w-[1rem] h-[1rem] rounded-full transition transform', modelValue ? 'translate-x-[0.75rem] bg-white' : 'bg-white left-[0.125rem]']" -->
     </label>
 </template>
 <script setup>

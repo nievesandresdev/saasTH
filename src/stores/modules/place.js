@@ -16,12 +16,14 @@ export const usePlaceStore = defineStore('place', () => {
 
     function formatImage (item) {
         let { image: path, type, url } = item ?? {};
-        
-        let model = 'places';
-        if(type == "gallery" || url?.includes('storage')) model = 'gallery'; 
+        // let model = 'places';
+        // if(type == "gallery" || url?.includes('storage')) model = 'gallery';
 
-        let urlFull = `${URL_STORAGE}/storage/${model}/${path}`
-        return urlFull
+        // let urlFull = `${URL_STORAGE}/storage/${model}/${path}`
+        // return urlFull
+
+        if (type == 'gallery' || url?.includes('storage')) return `${URL_STORAGE}${url}`;
+        return `${URL_STORAGE}/storage/places/${item?.image}`;
 
     }
     
