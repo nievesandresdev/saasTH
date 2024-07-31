@@ -25,7 +25,7 @@
                     <span class="text-sm font-semibold">PRE-STAY</span>
                     <Tooltip :top="25" :left="5" size="m" :class="'z-[800]'">
                         <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                            <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">Se consideran en <strong>PRE-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> y aún no hayan llegado a su fecha de <strong>Check-In</strong></p>
@@ -48,7 +48,7 @@
                     <span class="text-sm font-semibold">STAY</span>
                     <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
                         <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                            <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">
@@ -73,7 +73,7 @@
                     <span class="text-sm font-semibold">POST-STAY</span>
                     <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
                         <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                            <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">Se consideran en <strong>POST-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> luego de haber realizado su <strong>Check-out</strong></p>
@@ -94,7 +94,7 @@
             <div class="flex flex-col h-full">
                 <!-- <span class="font-semibold text-sm text-left block mb-2">Idiomas más utilizados por tus huéspedes</span> -->
                 <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden flex-1">
-                    <div class="p-4 h-full">
+                    <div class="p-4 h-full flex flex-col items-start justify-center">
                         <div v-for="lang in processedLanguages" :key="lang.name" class="flex items-center gap-2">
                             <img :src="lang.icon" class="w-6 h-6">
                             <span class="text-base font-semibold">{{ lang.percentaje }}%</span>
