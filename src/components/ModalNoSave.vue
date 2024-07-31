@@ -47,8 +47,8 @@
               <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir
               </button>
-              <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border border-green-400 text-green-600">
-                  Seguir
+              <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
+                {{ textbtn ?? 'Seguir' }}
               </button>
           </div>
       </div>

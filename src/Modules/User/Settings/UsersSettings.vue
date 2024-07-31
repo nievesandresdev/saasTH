@@ -1,6 +1,6 @@
 <template>
     <div class="px-6 bg-[#FAFAFA]" >
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Usuarios</h1>
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Empleados</h1>
         <hr class="bg-[#BFBFBF]">
         <!-- <MenuSettings /> -->
         <div class="flex justify-between items-center mt-6">
@@ -63,8 +63,8 @@
         
         <div class="relative mt-5">
             <span class="mb-4 text-sm font-normal">[{{ totalUsers }}] usuarios encontrados</span>
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 shadow-md mt-4">
-                <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+            <table class="w-full text-sm text-left text-gray-500 rtl:text-right shadow-md mt-4">
+                <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3">Nombre</th>
                         <th scope="col" class="px-6 py-3">Tipo</th>
@@ -78,23 +78,27 @@
                         @mouseover="hoverTable(index)"
                         @mouseleave="hoverTable(index)"
                         :key="user.id"
-                        class=" border-b dark:bg-gray-800 dark:border-gray-700 bg-white hover:bg-[#F9FFFD]"
-                        :class="{'bg-[#ECF9F5]': selectedShow == user.id, 'shadow-sm': hoverSelected == index}"
+                        class=" border-b dark:bg-gray-800 dark:border-gray-700 bg-white "
+                        :class="{
+                            'bg-[#F9FFFD]': selectedShow == user.id,
+                            'hover:bg-[#F9FFFD]' : selectedUser?.id != user.id,
+                            'shadow-sm': hoverSelected == index
+                         }"
                     >
-                        <th @click="showUser(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th @click="showUser(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ user.name }}
                         </th>
-                        <td @click="showUser(user)" class="px-6 py-4">
+                        <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
                             {{ $getRoleName(user.role.name) }}
                         </td>
-                        <td @click="showUser(user)" class="px-6 py-4">
+                        <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
                             {{ user.work_position }}
                         </td>
                         <td @click="showUser(user)" class="px-6 py-4">
-                            <span v-if="user.del == 0" class="px-4 py-2 font-[600] text-[10px] text-[#0B6357] bg-green-100 rounded-full">
+                            <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-green-100 rounded-full">
                                 Activo
                             </span>
-                            <span v-else class="px-4 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                            <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
                                 Inactivo
                             </span>
                         </td>
@@ -148,7 +152,7 @@
 
     <ShowUser 
         :modal-show="modalShow" 
-        @close="modalShow = false" 
+        @close="modalShowClose" 
         :data-user="selectedUser" 
         @update="editUser"
         @delete="openModalDelete"
@@ -362,11 +366,12 @@ const editUser = (data) => {
     visibleDropdown.value = null
     workPositions('edit');
 }
-
+let selectedShow = ref(null);
 const showUser = (data) => {
     selectedUser.value = data
     modalShow.value = true
     visibleDropdown.value = null
+    selectedShow = data.id
 
 }
 
@@ -388,11 +393,16 @@ const closeModal = () => {
     //showModalNoSave.value = true
 }
 
+const modalShowClose = () => {
+    modalShow.value = false
+    selectedShow = null
+}
+
 const closeModalEdit = () => {
     modalEdit.value = false
 }
 
-let selectedShow = ref(null);
+
 const hoverSelected = ref(null);
 
 const hoverTable = (index) => {

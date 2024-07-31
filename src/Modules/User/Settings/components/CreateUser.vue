@@ -309,7 +309,7 @@
           :id="'not-saved'"
           :open="showModalNoSave"
           text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
-          textbtn="Guardar"
+          textbtn="Seguir"
           @close="closeModalSaveCreate"
           @saveChanges="handleStoreUser"
           :type="'alone_exit'"

@@ -240,20 +240,16 @@
         </div>
   
         <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
-          <button
-            class="px-4 py-2.5 font-medium rounded w-full bg-hoster-gray text-black"
-            @click="prevStep"
-            v-if="currentStep > 1"
-          >
-            Anterior
+          <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              Salir
           </button>
           <button
-            class="px-4 py-2 font-medium rounded w-full text-black"
+            class="px-4 py-2 font-medium rounded text-black"
             @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
-            {{ currentStep === 3 ? 'Guardar Cambios' : 'Siguiente' }}
+            {{ currentStep === 3 ? 'Guardar Cambios' : 'Guardar Cambios' }}
           </button>
           <!-- <button
             class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
@@ -261,19 +257,22 @@
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button> -->
+          
         </div>
-        <ModalNoSave
+        
+      </div>
+      
+    </transition>
+    <ModalNoSave
           :id="'not-saved'"
           :open="showModalNoSave"
           text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
-          textbtn="Guardar"
-          @close="closeModalSaveCreate"
+          textbtn="Seguir"
+          @close="closeModalEditUser"
           @saveChanges="handleStoreUser"
           :type="'alone_exit'"
           @hidden="handleCloseModal"
         />
-      </div>
-    </transition>
   </template>
   
   <script setup>
@@ -293,6 +292,11 @@
     workPositions: Array,
     dataUser : Object
   });
+
+  const closeModalEditUser = () => {
+    showModalNoSave.value = false;
+    window.location.reload();
+  }
 
 
   watch(() => props.modalEdit, (newVal) => {
@@ -317,7 +321,7 @@ const handleClickOutside = (event) => {
 watch(() => props.modalEdit, (newVal) => {
   if (newVal) {
     nextTick(() => {
-      console.log('modalEditInit',props.modalEdit)
+      /* console.log('modalEditInit',props.modalEdit) */
         registerClickOutside();
     });
   } else {
