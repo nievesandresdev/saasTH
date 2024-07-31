@@ -32,6 +32,7 @@ export const requestSettingsPath = 'request-settings'
 //hoster
 export const hosterPath = 'hoster'
 export const chatSettingsPath = 'settings'
+export const notificationsPath = 'notifications'
 
 //platforms
 export const platformsPath = 'platforms'

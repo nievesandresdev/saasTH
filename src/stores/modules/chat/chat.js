@@ -66,10 +66,7 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     async function $markGuesMsgstAsRead (stayId, guestId) {
-        console.log('stayId',stayId)
-        console.log('guestId',guestId)
         const response = await markGuesMsgstAsReadApi(stayId, guestId)
-        console.log('markGuesMsgstAsRead',response)
         const { ok } = response   
         if(ok){
             return response.data

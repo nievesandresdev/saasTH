@@ -34,27 +34,30 @@ d    dd
             <DinamicRightSidebar :sidebarName="currentRightSidebar"/>
         </aside>
     </div>
+    <NotifyPanel />
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, provide } from 'vue';
 import { useRoute } from 'vue-router';
 
 import DinamicLeftSidebar from './DinamicLeftSidebar.vue';
 import DinamicRightSidebar from './DinamicRightSidebar.vue';
 import MainSidebar from './MainSidebar.vue';
 import SuscriptionBanner from './SuscriptionBanner.vue';
+import NotifyPanel from './Notifications/NotifyPanel.vue'
 
 
 const route = useRoute();
 
 const showSuscriptionBanner = false;
+const isNotifyPanelVisible = ref(false)
 
 const currentLeftSidebar = computed(() => route.meta.sidebar);
 const currentRightSidebar = computed(() => route.meta.sidebarRight);
 const sidebarWidthz = computed(() => route.meta.sidebarWidth);
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
 
-console.log('route', route);
+provide('isNotifyPanelVisible',isNotifyPanelVisible)
 </script>
 <style scoped>
 .h-without-banner{
