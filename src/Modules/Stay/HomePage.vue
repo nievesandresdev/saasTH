@@ -24,7 +24,7 @@
         <!-- stays info -->
         <section class="mt-6 flex gap-6">
             <!-- today info-->
-            <div class="border hborder-gray-400 rounded-[10px] py-6 pl-4 pr-4 3xl:pl-[37px] 3xl:pr-[91px] flex items-center flex-shrink-0">
+            <div class="border hborder-gray-400 rounded-[10px] py-6 pl-4 pr-4 3xl:pl-[37px] 3xl:pr-[91px] flex items-center flex-shrink-0 bg-white">
                 <!-- current date -->
                 <div class="w-[87px]">
                     <h3 class="text-[20px] font-semibold leading-[90%] text-center">Hoy</h3>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <!-- create and guest info -->
-            <div class="py-6 px-4 flex shadow-hoster rounded-[10px]"> 
+            <div class="py-6 px-4 flex shadow-hoster rounded-[10px] bg-white"> 
                 <!-- create info -->
                 <div class="w-[306px] 3xl:w-[465px] flex-shrink-0">
                     <p class="text-sm font-semibold leading-[120%]">¿Cómo se crean las estancias?</p>
@@ -69,7 +69,7 @@
             </div>
         </section>
 
-        <section class="mt-6 rounded-[10px] border hborder-gray-400 py-6 px-4">
+        <section class="mt-6 rounded-[10px] border hborder-gray-400 py-6 px-4 bg-white">
             <div class="flex gap-4 items-end">
                 <!-- stay periods card -->
                 <div class="flex-grow flex-1" v-for="(count, key, index) in statistics.countsByPeriod" :key="index">
