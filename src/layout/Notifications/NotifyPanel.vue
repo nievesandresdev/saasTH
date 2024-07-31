@@ -22,6 +22,10 @@
                         <NoveltyCard v-if="novelty.type == 'news'" :data="novelty"/>
                         <NotificationCard v-else :data="novelty"/>
                     </template>
+                    <div class="py-6" v-if="!data.length">
+                        <h2 class="text-base font-semibold leading-[120%] htext-gray-500">Sin novedades</h2>
+                        <h2 class="text-sm leading-[140%] mt-2 htext-gray-500">Muy pronto te las comunicaremos por aquí </h2>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -43,6 +47,7 @@ const notifyUserStore = useNotifyUserStore();
 const isVisible = inject('isNotifyPanelVisible');
 const data = ref([]);
 watch(() => isVisible.value, async (newVal) => {
+    data.value = [];
     if(newVal){
         data.value = await notifyUserStore.$getNotificationsByUser();
     }

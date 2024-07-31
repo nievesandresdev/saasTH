@@ -43,7 +43,7 @@
   import { reactive, inject, ref, watch } from "vue";
   
   const windowWidth = ref(window.innerWidth);
-
+  const emit = defineEmits(['updateFeedback'])
   
   
   // DATA STATIC
@@ -76,7 +76,7 @@
   const form = inject('form')
   
   //FUNCTION
-  function selectEmoji(face) {
+  function selectEmoji(face, noAutomatic = true) {
     if(!face) return;
     const EMOJIS = Object.keys(state_emojis);
     state_emojis[face].mode = "ACTIVE";
@@ -86,11 +86,13 @@
         state_emojis[item].mode = "INACTIVE";
       }
     });
-    
+    if(noAutomatic){
+      emit('updateFeedback')
+    }
   }
   
   watch(form, (newType) => {
     // console.log('newType',newType.type)      
-    selectEmoji(newType.type)
+    selectEmoji(newType.type, false)
   }, { deep: true, immediate: true });
   </script>
