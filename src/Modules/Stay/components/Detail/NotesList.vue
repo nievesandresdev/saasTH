@@ -47,6 +47,6 @@ watch(() => dataDetail.value, async (newData) => {
 }, { immediate: true });        
 
 async function reloadList(){
-    notes.value = await stayStore.$getAllNotesByStay(dataDetail.value.id)
+    notes.value = await stayStore.$getAllNotesByStay(dataDetail.value.id, false)
 }
 </script>
