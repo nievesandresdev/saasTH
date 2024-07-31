@@ -11,17 +11,32 @@ export const useNotifyUserStore = defineStore('notifyUser', () => {
 
     // ACTIONS
     async function $getNotificationsByUser () {
-      let user = JSON.parse(sessionStorage.getItem('user'));
+        let user = JSON.parse(sessionStorage.getItem('user'));
         const response = await notifyUserServices.getNotificationsByUserApi(user.id)
-        console.log('response',response)
         const { ok } = response   
+        console.log('response',response)
         if(ok){
             return response.data
         }
     }
+
+    async function $vote (noticationId, face) {
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        let data = {
+            userId:user.id,
+            noticationId,
+            face
+        };
+        const response = await notifyUserServices.voteApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+      }
     //
     return {
-        $getNotificationsByUser
+        $getNotificationsByUser,
+        $vote
     }
 
 })
