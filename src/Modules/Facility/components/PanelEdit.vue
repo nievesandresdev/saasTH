@@ -44,7 +44,7 @@
                         <PanelEditFormSchedule />
                     </template>
                     <template v-else-if="tabSelected === GALLERY">
-                        <PanelEditFormPhotos />
+                        <PanelEditFormPhotos @open:gallery="openGallery" />
                     </template>
                 </div>    
             </div>
@@ -83,6 +83,13 @@
             </div>
         </div>
     </transition>
+    <ModalGallery
+        ref="modalGaleryRef"
+        :id="'modal-gallery'"
+        :name-image-new="hotelStore.hotelData.name"
+        multiple
+        @update:img="addNewsImages($event)"
+    />
     <BasePreviewImage 
         :url-image="previewUrl"
         :is-open="isPreviewOpen"
@@ -124,6 +131,7 @@ import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
 import ModalDeleteFacility from './ModalDeleteFacility.vue';
 import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import ModalGallery from "@/components/ModalGallery.vue";
 
 
 import { useFormValidation } from '@/composables/useFormValidation'
@@ -193,6 +201,7 @@ const schedulesDefault = [
 ];
 // DATA
 const tabSelected = ref(INFORMATION);
+const modalGaleryRef = ref(null);
 
 const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
@@ -202,6 +211,7 @@ const facilityStore = inject('facilityStore');
 const mockupStore = inject('mockupStore');
 const toast = inject('toast');
 const hotelData = inject('hotelData');
+
 
 const form = reactive({
     id: null,
@@ -340,8 +350,8 @@ function editFacility ({action, facility}) {
         }
         let itemSelectedSchedules = JSON.parse(JSON.stringify(schedulesNew));
         let formSchedules = JSON.parse(JSON.stringify(schedulesNew));
-        let itemSelectedImages = JSON.parse(JSON.stringify(schedulesNew));
-        let formImages = JSON.parse(JSON.stringify(schedulesNew));
+        let itemSelectedImages = JSON.parse(JSON.stringify(images));
+        let formImages = JSON.parse(JSON.stringify(images));
         Object.assign(itemSelected, { id, title, description, schedule,  schedules: itemSelectedSchedules, images: itemSelectedImages, select, ad_tag, always_open });
         Object.assign(form, { id, title, description, schedule, schedules: formSchedules, images: formImages, select, ad_tag, always_open });
         images.forEach(img => {
@@ -407,7 +417,17 @@ function openModalDeleteFacility () {
 function closePreviewImage() {
     isPreviewOpen.value = false;
 }
+function openGallery () {
+    modalGaleryRef.value.openModal();
+}
 
+function addNewsImages (images) {
+    images.forEach(item => {
+        let { url, name, type } = item
+        // urls_image.value.push({ url, name, type })
+        form.images.push({ id:null, url, name, type })
+    });
+}
 </script>
 
 <style lang="scss">

@@ -12,7 +12,8 @@
             type="text"
             id="metting_point"
             ref="metting_point"
-            class="h-10 rounded-[6px] text-sm font-medium w-full pl-11 hinput hinput-green"
+            class="h-10 rounded-[6px] text-sm font-medium w-full pl-11 hinput border hinput-green"
+            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'}`"
             :placeholder="'Introduce la ubicación hotel'"
         />
         <p v-if="!form.address" class="mt-2 text-xs htext-alert-negative flex items-center">

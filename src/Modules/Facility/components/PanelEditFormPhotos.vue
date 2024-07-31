@@ -15,22 +15,33 @@
                     @mouseenter="hoverImg = index"
                     @mouseleave="hoverImg = null"
                 >
-                    <div v-if="hoverImg === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0 rounded-xl">
-                        <div  class="absolute space-x-4 position-center">
+                    <div v-if="hoverImg === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0 rounded-xl p-2 flex justify-between">
+                        <!-- <div  class="absolute space-x-4 position-center">
                             <button @click="openPreview(facilityStore.formatImage(image))">
                                 <img class="w-5 h-5" alt="icon_search"  src="/assets/icons/1.TH.SEARCH.WHITE.svg">
                             </button>
                             <button @click="removeImage(index)" >
                                 <img class="w-5 h-5" alt="icon_delete" src="/assets/icons/delete.white.svg">
                             </button>
-                        </div>
+                        </div> -->
+                        <button
+                            class="bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                            @click="openPreview(facilityStore.formatImage(image))"
+                        >
+                            <img src="/assets/icons/1.TH.SEARCH.svg" class=" w-[20px] h-[20px]">
+                        </button>
+                        <button
+                            class="bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                            @click="removeImage(index)" 
+                        >
+                            <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
+                        </button>
                     </div>
                     <img class="w-full h-full rounded-xl object-cover " :src="facilityStore.formatImage(image)">
                 </div>
         </div>
         <!-- <p v-if="form.images.length == 0" class="text-xs text-red-400 mt-2">Debes añadir al menos una imagen</p> -->
     </div>
-
 </template>
 
 <script setup>
@@ -38,6 +49,9 @@ import { ref, reactive, onMounted, provide, computed, inject, watch } from 'vue'
 
 // COMPONENTS
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
+
+const emits = defineEmits(['open:gallery']);
+
 
 const hoverImg = ref(null);
 
@@ -51,7 +65,7 @@ const isPreviewOpen  = inject('isPreviewOpen');
 
 // FUNCTIONS
 function openGallery (){
-
+    emits('open:gallery');
 }
 
 function removeImage (index){

@@ -11,13 +11,13 @@ export const useFacilityStore = defineStore('facility', () => {
     // ACTIONS
     function formatImage (img) {
         if (!img) return '';
-        let { type, url } = img
-        // console.log(img, 'img')
+        let { type, url } = img;
+
         // console.log(`'type: '${type}, 'url: '${url}`)
-        if (type === 'CDN') return url
-        if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`
+        if (type === 'CDN') return url;
+        if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
         if (!type) return URL_STORAGE+'/storage/facility'+url;
-        return `${URL_STORAGE}${url}`
+        return `${URL_STORAGE}${url}`;
 
         // url = type != 'CDN' ? `${URL_STORAGE}${url}` : url
         // return url

@@ -1,13 +1,12 @@
 <template>
-  <div ref="modalContainerRef" :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open">
+  <div ref="modalContainerRef" :class="`absolute left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open" @click.stop>
     <div v-if="!isEditing">
       <div
         v-for="option in props.data"
         :key="option.id"
         class="flex justify-between items-center px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
-        @click="selectOption(option)"
       >
-        <span class="m-2" >{{ option.name }}</span>
+        <span class="m-2" @click="selectOption(option)">{{ option.name }}</span>
         <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-5 w-5 cursor-pointer" @click="editWorkPosition(option)" />
       </div>
       <div @click="workPositionMModalCreate" class="text-center px-4 py-2 mt-2 text-sm text-black border border-black m-3 rounded-md cursor-pointer hover:bg-gray-50">
@@ -43,18 +42,19 @@
           {{ editingWorkPosition.id ? 'Guardar' : 'Crear' }}
         </button>
       </div>
-    </div>
-  </div>
-  
-  <ModalNoSave 
+      <ModalNoSave 
     :open="showAlertModal" 
-    text="Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar?" 
+    text="Tienes cambios sin guardar en PUESTO DE TRABAJO. ¿Estás seguro de que quieres cerrar?" 
     title="Cambios sin guardar" 
     textbtn="Guardar" 
     type="exit_save"
     @saveChanges="saveWorkPosition"
     @close="confirmCloseModal"
   />
+    </div>
+  </div>
+
+  
 </template>
 
 <script setup>

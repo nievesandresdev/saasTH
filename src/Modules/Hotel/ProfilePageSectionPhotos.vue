@@ -4,8 +4,12 @@
             <div class="w-[152.5px] h-[94px] mt-6 px-2">
                 <label
                     class="w-full h-full flex items-center justify-center cursor-pointer rounded-[6px] text-sm font-medium border hborder-black-100 gallery-file"
+                    @click="openModalImage"
                 >
-                    <h5 class="text-sm font-medium text-center flex flex-column items-center justify-center">
+                    <h5
+                        class="text-sm font-medium text-center flex flex-column items-center justify-center"
+                        
+                    >
                         <div class="icon w-[20px] h-[20px] inline-block" />
                         Añadir imagen
                     </h5>
@@ -15,7 +19,7 @@
             <template v-for="(image, index) in collapsedImages" :key="index">
                 <div
                     
-                    :class="{'opacity-50': index > imagesOpacityFromIndex && isCollapsed}"
+                    :class="{'opacity-50': (index > imagesOpacityFromIndex) && isCollapsed && (images.length > maxImagesCollapsed)}"
                     class="w-[152.5px] h-[94px] relative mt-6 px-2"
                 >
                     <img
@@ -37,7 +41,7 @@
                 </div>
             </template>
         </div>
-        <div class="w-full mt-[20px] flex justify-center  max-w-[611px] 3xl:max-w-[1081px]">
+        <div v-if="images.length > maxImagesCollapsed" class="w-full mt-[20px] flex justify-center  max-w-[611px] 3xl:max-w-[1081px]">
             <button class="hbtn-tertiary underline text-sm font-medium" @click="isCollapsed = !isCollapsed">
                 {{ isCollapsed ? 'Ver más' : 'Ver menos' }}
             </button>
@@ -51,6 +55,8 @@
     import { useHotelStore } from '@/stores/modules/hotel';
     const hotelStorage = useHotelStore();
 
+    const emits = defineEmits(['openModelGallery']);
+
     // DATA
     const form = inject('form');
     const windowWidth = window.innerWidth;
@@ -58,15 +64,31 @@
     const imagesOpacityFromIndex = ref(windowWidth < 1920 ? 2 : 5)
     const maxImagesCollapsed = ref(windowWidth < 1920 ? 7 : 13)
 
+    // const isOpacity = (index) => {
+    //     if (form.images_hotel?.length > ) {
+    //         let o = (index > imagesOpacityFromIndex.value) && isCollapsed.value;
+    //         return o;
+    //     } else {
+
+    //     }
+    // };
+
+    const images = computed(() => {
+        return [...form.images_hotel];
+    });
+
     const collapsedImages = computed(() => {
-        const images = [...form.images_hotel];
         if (isCollapsed.value) {
-            const i = images.slice(0, maxImagesCollapsed.value);
+            const i = images.value.slice(0, maxImagesCollapsed.value);
             return i;
         } else {
-            return images;
+            return images.value;
         }
     });
+
+    function openModalImage () {
+        emits('openModelGallery');
+    }
 
 </script>
 

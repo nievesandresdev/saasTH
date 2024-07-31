@@ -40,12 +40,19 @@ export const useGalleryStore = defineStore('gallery', () => {
         if(response.ok) return response.data
         return []
     }
+    async function $upload (data, config) {
+        const response = await galleryServices.uploadApi(data, config);
+        return response;
+        if(response.ok) return response.data
+        return []
+    }
 
     //
     return {
         formatImage,
         $getAll,
         $deleteBulk,
+        $upload,
     }
 
 })
