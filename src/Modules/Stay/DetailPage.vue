@@ -1,8 +1,10 @@
 <template>
     <Head />
     <div class="p-6" v-if="data">
-        <InfoSection/>
-        <GuestList/>
+        <div class="3xl:flex 3xl:items-start 3xl:gap-6">
+            <InfoSection/>
+            <GuestList/>
+        </div>
         <NotesList/>
     </div>
 </template>

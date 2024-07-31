@@ -62,7 +62,7 @@ const deleteNote = async () => {
         await stayStore.$deleteStayNote(form)
     }
     emit('reloadList');
-    toast.warningToast('Actualizado','top-right');
+    toast.warningToast('Nota eliminada','top-right');
 }
 
 const closeModal = async () => {

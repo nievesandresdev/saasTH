@@ -79,7 +79,6 @@ const submit = async () =>{
         stayId: dataDetail.value.id,
         guestId: noteTo.value,
     }
-    text.value = "<p><br></p>";
     let response = 'Actualizado';
     if(props.type == 'create' && noteTo.value == 'STAY' || props.type == 'edit' && noteType.value == 'ES'){
         response = await stayStore.$createOrupdateStayNote(data);
@@ -89,7 +88,8 @@ const submit = async () =>{
     emit('reloadList');
     noteId.value = null;
     titleFull.value = false;
-    toast.warningToast('Actualizado','top-right');
+    text.value = "<p><br></p>";
+    toast.warningToast(response,'top-right');
     
    
 }

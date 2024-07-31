@@ -58,8 +58,8 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
-    async function $getAllNotesByStay (stayId) {
-        const response = await getAllNotesByStayApi({stayId})
+    async function $getAllNotesByStay (stayId, showPreloader = true) {
+        const response = await getAllNotesByStayApi({stayId}, showPreloader)
         const { ok } = response   
         if(ok){
             return response.data

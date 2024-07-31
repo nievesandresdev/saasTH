@@ -62,15 +62,13 @@
                 <div class="mt-4">
                     <BaseTextField
                         prependInnerIcon="/assets/icons/1.TH.ROOM.svg"
-                        classInput="text-sm"
-                        height="h-10"
                         textLabel="Número de habitación"
                         placeholder="Añade el nº de habitación"
                         :customClasses="{
                             'hborder-gray-400':!form.room,
                         }"
                         v-model="form.room"
-                        @blur="update"
+                        @blur:validate="update"
                     />
                 </div>
             </div>
