@@ -111,6 +111,7 @@
                 <transition name="modal-fade">
                   <div id="modalWorkPosition">
                     <ModalCrud
+                     ref="ref_modal_crud"
                       :data="workPositions"
                       :open="isModalCrudOpen"
                       @close="closeModalWorkPosition"
@@ -779,12 +780,13 @@ const clearForm = () => {
     });
 };
 const ref_section_add = ref(null);  // Declarar la referencia
+const ref_modal_crud = ref(null);
 
-// Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
-  if (addSection && !addSection.contains(event.target)) {
-    //console.log('handleClickOutside',event.target)
+  const modalCrudEl = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
+
+  if (addSection && !addSection.contains(event.target) && (!modalCrudEl || !modalCrudEl.contains(event.target))) {
     closeModal();
   }
 };
@@ -836,7 +838,8 @@ onMounted(async () => {
 function closeModal() {
   if (changes.value) {
     showModalNoSave.value = true;
-    emits('showModalNoSave', true);
+    console.log('showModalNoSaveSS',showModalNoSave.value)
+    //emits('showModalNoSave', true);
   } else {
     emits('close');
   }
