@@ -1,5 +1,4 @@
 import { ref, computed } from 'vue';
-
 export function useFormValidation(form, rules) {
   const errors = ref({});
 

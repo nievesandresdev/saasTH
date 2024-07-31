@@ -30,7 +30,6 @@
                 v-model="form.recommendation"
                 placeholder="Cuéntales a tus huéspedes por qué este lugar es especial"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="recommendation"
                 :max="'300'"
             />
@@ -41,7 +40,6 @@
                 v-model="form.title"
                 placeholder="Nombre del lugar"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="title"
                 :max="'50'"
             />
@@ -60,7 +58,6 @@
                 v-model="form.description"
                 placeholder="Descripción del lugar"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="description"
                 :max="'300'"
             />
@@ -90,7 +87,6 @@
                 v-model="form.address"
                 placeholder="Introduce la ubicación"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 :max="'50'"
             />
         </div>
@@ -100,7 +96,6 @@
                 v-model="form.phone"
                 placeholder="Introduce el teléfono"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 :max="'50'"
             />
         </div>
@@ -110,7 +105,6 @@
                 v-model="form.email"
                 placeholder="Introduce el correo electrónico"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 :max="'50'"
             />
         </div>
@@ -120,7 +114,6 @@
                 v-model="form.url_web"
                 placeholder="Introduce el sitio web del lugar"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 :max="'50'"
             />
         </div>
@@ -194,7 +187,7 @@ const initAutocomplete = () => {
         const place = autocomplete.value.getPlace();
 
         if (!place.geometry) {
-            console.log("No details available for input: '" + place.name + "'");
+            // console.log("No details available for input: '" + place.name + "'");
             return;
         }
 
