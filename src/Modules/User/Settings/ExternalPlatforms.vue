@@ -22,7 +22,7 @@
                             <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6 mr-2" alt="Booking">
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
-                        <div :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('booking', form.booking.url)">
+                        <div v-show="disabledInput.booking" :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('booking', form.booking.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
@@ -54,7 +54,7 @@
                             <img src="/assets/icons/otas/Expedia.svg" class="w-6 h-6 mr-2" alt="Expedia">
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
-                        <div :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('expedia', form.expedia.url)">
+                        <div v-show="disabledInput.expedia" :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('expedia', form.expedia.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
@@ -86,7 +86,7 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
                             <span class="font-semibold text-sm">Tripadvisor</span>
                         </div>
-                        <div :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
+                        <div v-show="disabledInput.tripadvisor" :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
@@ -118,7 +118,7 @@
                             <img src="/assets/icons/otas/Google.svg" class="w-6 h-6 mr-2" alt="Google">
                             <span class="font-semibold text-sm">Google</span>
                         </div>
-                        <div :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('google', form.google.url)">
+                        <div v-show="disabledInput.google" :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('google', form.google.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
@@ -160,7 +160,7 @@
                                 </Tooltip>
                             </div>
                         </div>
-                        <div :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
+                        <div v-show="disabledInput.airbnb" :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
@@ -183,10 +183,7 @@
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.airbnb }}</p>
                     </div>
-                    <div class="flex items-center mt-3 cursor-pointer" @click="addAnotherLink">
-                        <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4 mr-2" alt="Add Another Link">
-                        <span class="text-sm font-medium">Añadir otro enlace</span>
-                    </div>
+                    
                     <div v-for="(link, index) in additionalLinks" :key="index" class="mt-3" v-if="link?.status !== 0">
                         <div :class="['flex', link.errors ? 'border-red-500' : 'border-gray-300']">
                             <BaseTextField
@@ -197,14 +194,18 @@
                                 :error="link.errors"
                             />
                         </div>
-                        <div :class="['flex items-center mt-3 cursor-pointer justify-end group', link.errors ? 'text-red-500' : 'hover:text-green-500']" @click="openDeleteModal(index)">
-                            <img :class="['w-4 h-4 mr-2', link.errors ? 'text-red-500' : 'group-hover:text-green-500']" src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="Delete Link">
-                            <span class="text-sm font-medium" :class="link.errors ? 'text-red-500' : 'group-hover:text-green-500'">Eliminar</span>
+                        <div :class="['flex items-center mt-3 cursor-pointer justify-end group', link.errors ? 'text-red-500' : 'hover:text-green-500']" >
+                            <img @click="openDeleteModal(index)" :class="['w-4 h-4 mr-2', link.errors ? 'text-red-500' : 'group-hover:text-green-500']" src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="Delete Link">
+                            <span @click="openDeleteModal(index)" class="text-sm font-medium" :class="link.errors ? 'text-red-500' : 'group-hover:text-green-500'">Eliminar</span>
                         </div>
                         <div v-if="link.errors" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                             <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                             <p class="text-red-500">{{ link.errorMessage }}</p>
                         </div>
+                    </div>
+                    <div class="flex items-center mt-3 cursor-pointer" @click="addAnotherLink">
+                        <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4 mr-2" alt="Add Another Link">
+                        <span class="text-sm font-medium">Añadir otro enlace</span>
                     </div>
                 </div>
             </div>
