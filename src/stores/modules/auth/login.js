@@ -96,7 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     const $currentHotelName = computed(() => {
-        return user?.value?.name;
+        return current_hotel?.value?.name;
     })
 
     
