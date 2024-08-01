@@ -2,7 +2,7 @@
     <div class="flex flex-col border border-[#BFBFBF] rounded-lg p-4">
         <div class="flex flex-col">
             <span class="text-[#0B6357] text-xs font-semibold mb-2">CUSTOMER EXPERIENCE</span>
-            <div class="grid grid-cols-4 gap-4 items-center">
+            <div class="flex gap-4 items-center">
                 <span class="font-semibold text-sm flex gap-2 items-center col-span-1">
                     Estancias activas en tu WebApp
                     <Tooltip size="l" :top="25" :left="5">
@@ -14,7 +14,7 @@
                         </template>
                     </Tooltip>
                 </span>
-                <div class="col-span-2"></div> <!-- Espacio en blanco para alineación -->
+                <div class="flex-1"></div> <!-- Espacio en blanco para alineación -->
                 <span class="font-semibold text-sm text-left col-span-1">Idiomas más utilizados por tus huéspedes</span>
             </div>
         </div>
