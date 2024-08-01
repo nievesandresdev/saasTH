@@ -95,6 +95,10 @@ export const useAuthStore = defineStore('auth', () => {
         return `${user?.value?.name} ${user?.value?.lastname}`;
     });
 
+    const $currentHotelName = computed(() => {
+        return user?.value?.current_hotel?.name;
+    })
+
     
 
     return {
@@ -108,6 +112,7 @@ export const useAuthStore = defineStore('auth', () => {
         current_subdomain,
         $setUser,
         fullName,
+        $currentHotelName,
         loginAdmin
     };
 });
