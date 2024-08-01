@@ -28,7 +28,7 @@
         </div>
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
-            <div class="row-span-2 flex gap-2 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
+            <div class="row-span-2 flex gap-6 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
                     <div class="py-2 px-3 flex items-center">
                         <span class="text-xs font-semibold">STAY</span>
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="p-4 mt-2">
+                <div class="pt-4 px-3 gap-3">
                     <div class="flex justify-between items-center">
                         <div class="flex gap-1 items-center w-1/3">
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
@@ -107,6 +107,17 @@
                         <span class="text-sm font-medium w-1/3 text-center">{{  expediaReview.data_review.reviews_rating }}/10</span>
                         <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
                             <span>{{  expediaReview.data_review.reviews_count }}</span>
+                            <span>Reseñas</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-3">
+                        <div class="flex gap-1 items-center w-1/3">
+                            <img src="/assets/icons/otas/Airbnb.svg" alt="Airbnb">
+                            <span class="text-sm font-medium">Airbnb</span>
+                        </div>
+                        <span class="text-sm font-medium w-1/3 text-center">{{  airbnbReview.data_review.reviews_rating }}/10</span>
+                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
+                            <span>{{  airbnbReview.data_review.reviews_count }}</span>
                             <span>Reseñas</span>
                         </div>
                     </div>
@@ -180,6 +191,7 @@ const tripadvisorReview = ref({ ...defaultReview, ota: 'TRIPADVISOR' });
 const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
 const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
 const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
+const airbnbReview = ref({ ...defaultReview, ota: 'AIRBNB' });
 
 const average = ref(0);
 const subscribed = ref(true); // Variable para determinar la suscripción

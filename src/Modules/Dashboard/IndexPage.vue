@@ -1,6 +1,6 @@
 <template>
     <div class="px-6">
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard {{ authStore.current_hotel?.name }}</h1>
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard {{ authStore.$currentHotelName }}</h1>
         <div class="border-b border-[#BFBFBF] mb-5"></div>
         <CustomerExperience />
         <HomeFeedback />
@@ -8,7 +8,7 @@
     
 </template>
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted,computed } from 'vue'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useMockupStore } from '@/stores/modules/mockup'
 import { useAuthStore } from '@/stores/modules/auth/login';
@@ -21,15 +21,18 @@ const authStore = useAuthStore();
 
 const toast = useToastAlert();
 
+//computed current_hotel
+const current_hotel = computed(() => authStore.current_hotel?.name)
+
 onMounted(()=>{
     mockupStore.$setIframeUrl('')
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 })
 
-function defineMockupData() {
+/* function defineMockupData() {
     mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
     mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     toast.warningToast('texto','top-right')
-}
+} */
 
 </script>
