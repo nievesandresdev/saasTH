@@ -11,8 +11,8 @@
                 type="text"
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
-                class="w-full hinput border hinput-green rounded-[6px]"
-                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                class="w-full hinput border  rounded-[6px]"
+                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : 'hinput-green'}`"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"
@@ -82,6 +82,10 @@ const props = defineProps({
     name: {
         type: String,
         default: '',
+    },
+    error: { // one error
+        type: Boolean,
+        default: false,
     },
     errors: {
         type: Object,
