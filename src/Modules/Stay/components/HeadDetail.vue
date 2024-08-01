@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="pt-4 sticky top-0 left-0 bg-white px-6 z-50">
+    <div class="pt-4 sticky top-0 left-0 bg-[#fafafa] px-6 z-50">
         <TabMenu :links="views ?? {}"/>
     </div>
 </template>
@@ -38,7 +38,7 @@ const pusher = ref(null);
 
 watch(data, async (newValue) => {
     countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
-
+    stayId.value = route.params.stayId;
     updateViews();
 }, { deep: true, immediate: true });
 

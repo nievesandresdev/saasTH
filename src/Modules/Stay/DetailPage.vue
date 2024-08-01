@@ -33,7 +33,6 @@ const id = ref(route.params.stayId);
 const data = ref(null);
 const session = ref(null);
 
-
 onBeforeRouteLeave((to, from, next) => {
     if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
         // Ejecutar `updateDetailSession` solo si la ruta de destino no está en el array allowedRoutes
@@ -80,11 +79,12 @@ const connect_pusher = () => {
 };
 
 
-const handleBeforeUnload = async (event) => {
-    delete event['returnValue'];
-    await updateDetailSession();
-    window.close();
+const handleBeforeUnload = (event) => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    delete event['returnValue']; // Evitar la alerta del navegador
 }
+
 
 // Function to perform asynchronous operations
 const updateDetailSession = async () => {
