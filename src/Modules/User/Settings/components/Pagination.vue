@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-left flex-col items-left mt-6" v-show="totalData > 20">
+  <div class="flex justify-left flex-col items-left mt-3 mb-[48px]" v-show="totalData > 20">
     <span class="font-normal text-sm mb-2">
       {{ perPage }} usuarios por página
     </span>
@@ -51,13 +51,14 @@ if (page >= 1 && page <= props.totalPages) {
 
 <style scoped>
 button {
-padding: 8px 16px;
-border: 1px solid #ddd;
-margin: 0 2px;
-cursor: pointer;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  margin: 0 2px;
+  cursor: pointer;
 }
+
 button.bg-green-700 {
-background-color: #34A98F;
-color: white;
+  background-color: #34A98F;
+  color: white;
 }
 </style>
