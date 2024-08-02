@@ -1,6 +1,6 @@
 <template>
-    <div v-show="feedback" class="px-4 pb-4">
-      <div class="mb-2 flex items-center text-gray-600">
+    <div v-show="feedback" class="">
+      <div class="mb-4 flex items-center text-gray-600">
         <span class="text-sm font-semibold">Feedback del huésped</span>
         <Tooltip
             size="s"
@@ -18,9 +18,9 @@
             </template>
         </Tooltip>
       </div>
-      <div class="grid grid-cols-3 gap-3">
+      <div class="flex gap-4">
         <div
-            class="px-2 py-4 rounded-lg text-center border-[1px]"
+            class="px-2 py-4 rounded-lg text-center border-[1px] w-[91px] h-[93px]"
             v-for="(feed,index) in feedback " :key="feed.icon"
             :class="{
                 'border-black shadow-md hover:bg-[#FAFAFA]': feed.answeredTime,
@@ -66,7 +66,6 @@
           <div class="text-[10px] font-semibold text-[#A0A0A0]">{{ period[index] }} </div>
         </div>
       </div>
-      <div class="pb-6 border-b hborder-color-gray-400"></div>
     </div>
   </template>
   
