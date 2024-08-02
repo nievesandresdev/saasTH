@@ -30,7 +30,7 @@
                 <div class="fixed-size-container">
                     <img class="fixed-size-image left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
                 </div>
-                <img class="w-full left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
+                <img class=" left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
             </div>
             <!-- section -->
             <div class="w-full p-2 ml-4 flex-1 fixed-size-content">
@@ -44,7 +44,7 @@
                 <div class="mb-4 grid-container">
                     <div class="grid fixed-grid w-3/5">
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
-                            <a :href="route('hoster.hotel.profile')" class="block p-3">
+                            <router-link :to="{ path: '/alojamiento/perfil' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.icon.instalaciones.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
@@ -54,11 +54,11 @@
                                 <div class="flex items-center mt-2 group-hover:text-red-200">
                                     <p class="text-sm">Presenta a tus huéspedes tu alojamiento y sus instalaciones</p>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <a :href="route('hoster.plataform.cityguide')" class="block p-3">
+                            <router-link :to="{ path: '/places',query: {selected_place: 5} }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.GUÍA CIUDAD.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
@@ -68,10 +68,10 @@
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
                                     <p class="text-sm">Ofrece a tus huéspedes una selección de sitios turísticos, gastronómicos y de ocio</p>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
-                            <a :href="route('hoster.plataform.experiences')" class="block p-3">
+                            <router-link :to="{ path: '/experiencias' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.CAMERA.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
@@ -81,11 +81,11 @@
                                 <div class="flex items-center mt-2">
                                     <p class="text-sm">Recomienda las mejores experiencias para un viaje inolvidable</p>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
-                            <a :href="route('hoster.chat.general')" class="block p-3  ">
+                            <router-link :to="{ path: '/chat/webapp/general' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Chat.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
@@ -95,10 +95,10 @@
                                 <div class="flex items-center group mt-2">
                                     <p class="text-sm">Tus huéspedes podrán comunicarse directamente con el staff de tu hotel</p>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md group hover:border-[#34A98F] transition duration-200 hover:bg-white">
-                            <a :href="route('hoster.queries.setting-prestay')" class="block p-3 ">
+                            <router-link :to="{ path: '/feedback/webapp/pre-stay' }" class="block p-3 ">
                                 <div class="flex items-center group">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Seguimiento.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
@@ -108,7 +108,7 @@
                                 <div class="flex items-center group mt-2 group">
                                     <p class="text-sm">Conoce cómo se sienten tus huéspedes en las diferentes etapas de su estancia</p>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -120,18 +120,48 @@
                             <div class="h-1 z-10" style="width: 150%; margin-left: -50%; background: linear-gradient(to right, white 18%, rgb(52, 169, 143));"></div>
                         </span>
                     </div>
-                    <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md group hover:border-[#34A98F] transition duration-200 hover:bg-white p-4">
-                        <a :href="route('hoster.customatization.index')" class="block ">
-                            <div class="flex items-center group">
-                                <img src="/assets/icons/webapp/1.TH.Icon.Header.Personalización.png" alt="icon" class="w-8 h-8">
-                                <div class="ml-4">
-                                    <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Personalización</h3>
+                    
+                    <div class="grid fixed-grid w-1/2">
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
+                            <router-link :to="{ path: '/personalizacion' }" class="block p-3">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Personalización.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Personalización</h3>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex items-center group mt-2">
-                                <p class="text-sm">Elige el estilo visual que mejor aplique a la identidad de marca de tu alojamiento</p>
-                            </div>
-                        </a>
+                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
+                                    <p class="text-sm">Elige el estilo visual que mejor aplique a la identidad de marca de tu alojamiento.</p>
+                                </div>
+                            </router-link>
+                        </div>
+
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
+                            <router-link :to="{ path: '/textos-legales' }" class="block p-3">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Textos legales.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Textos legales</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
+                                    <p class="text-sm">Consulta y configura los textos necesarios para cubrir los aspectos legales.</p>
+                                </div>
+                            </router-link>
+                        </div>
+                        <div class="fixed-card-gallery hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/galeria-imagenes' }" class="block p-3">
+                                <div class="flex items-center">
+                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Galeria de imagenes.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Galería de imágenes</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <p class="text-sm">Gestiona la colección de imágenes que utilizarás en tu WebApp.</p>
+                                </div>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,10 +177,6 @@ import ToggleShowProfile from '@/Modules/Hotel/Components/ToggleShowProfile.vue'
 import { useMockupStore } from '@/stores/modules/mockup';
 
 const mockup = useMockupStore();
-
-const route = (name) => {
-    return name;
-}
 
 onMounted(()=>{
     mockup.$setIframeUrl('')
@@ -207,6 +233,11 @@ onMounted(()=>{
 
 .fixed-card {
     width: 230px;
+    height: 136px;
+}
+
+.fixed-card-gallery {
+    width: 260px;
     height: 136px;
 }
 </style>
