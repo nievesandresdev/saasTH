@@ -4,16 +4,16 @@
         v-if="modalShow"
         class="absolute bg-white shadow-xl add flex-column"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
-        ref="ref_section_add"
+        ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-4 mt-3">
-            <div class="flex-1 text-center">
-              <h1 class="font-[600] text-md">Perfil del usuario</h1>
+          <div class="flex justify-between items-center px-6 py-5 mt-2">
+            <div class=" text-center">
+              <h1 class="font-[500] text-[22px]">Perfil del usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal">
-                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-6 h-6">
               </button>
             </div>
           </div>
@@ -87,7 +87,7 @@
   </template>
   
   <script setup>
-    import { ref, onMounted, nextTick, defineEmits,defineProps } from 'vue';
+    import { ref, onMounted, nextTick, defineEmits,defineProps,watch } from 'vue';
     import Tooltip from '@/components/Tooltip.vue'
     
     const emits = defineEmits(['close','update','delete']);
@@ -122,6 +122,36 @@
         }
         
     });
+
+    const ref_section_show = ref(null);  // Declarar la referencia
+
+    // Método para cerrar el modal si se hace clic fuera de él
+    const handleClickOutside = (event) => {
+      const addSection = ref_section_show.value;
+      if (addSection && !addSection.contains(event.target)) {
+        console.log('handleClickOutside',event.target)
+        closeModal();
+      }
+    };
+
+    watch(() => props.modalShow, (newVal) => {
+      if (newVal) {
+        nextTick(() => {
+            registerClickOutside();
+        });
+      } else {
+          unregisterClickOutside();
+      }
+    });
+
+    const registerClickOutside = () => {
+      document.addEventListener('click', handleClickOutside);
+    };
+
+    // Remover el evento de clic en el documento
+    const unregisterClickOutside = () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
 
 
 

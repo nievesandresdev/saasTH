@@ -1,6 +1,6 @@
 <template>
     <div class="px-6 bg-[#FAFAFA]" >
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Empleados</h1>
+        <h1 class="text-[22px] font-medium leading-[110%] py-5">Equipo - Usuarios</h1>
         <hr class="bg-[#BFBFBF]">
         <!-- <MenuSettings /> -->
         <div class="flex justify-between items-center mt-6">
@@ -62,7 +62,7 @@
         </div>
         
         <div class="relative mt-5">
-            <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
+            <span class="mb-4 text-sm font-normal">{{ data.length }} usuarios encontrados</span>
             <table class="w-full text-sm text-left text-gray-500 rtl:text-right shadow-md mt-4">
                 <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700">
                     <tr>
@@ -121,7 +121,8 @@
         <Pagination
             :current-page="currentPage"
             :total-pages="totalPages"
-            :per-page="totalUsers"
+            :per-page="data.length"
+            :total-data="totalUsers"
             @update:page="handlePageChange"
         />
     </div>
@@ -305,6 +306,7 @@ const dataEdit = ref(null);
 const currentPage = ref(1);
 const totalPages = ref(1);
 const totalUsers = ref(1);
+const perPage = ref(20);
 
 const handleGetUsers = async () => {
   let params = {
@@ -316,6 +318,7 @@ const handleGetUsers = async () => {
   const response = await userStore.$getUsers(params);
   data.value = response.data.users;
   totalUsers.value = response.data.total;
+  perPage.value = response.data.per_page;
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
 
   
@@ -355,12 +358,10 @@ const submit_filters = () => {
 }
 
 const createUser = () => {
-    
     workPositions('create');
 }
 
 const editUser = (data) => {
-    console.log('editUser',data);
     dataEdit.value = data;
     modalEdit.value = true
     visibleDropdown.value = null
@@ -368,10 +369,12 @@ const editUser = (data) => {
 }
 let selectedShow = ref(null);
 const showUser = (data) => {
-    selectedUser.value = data
-    modalShow.value = true
-    visibleDropdown.value = null
-    selectedShow = data.id
+    setTimeout(() => {
+        selectedUser.value = data
+        modalShow.value = true
+        visibleDropdown.value = null
+        selectedShow = data.id
+    }, 200);
 
 }
 
