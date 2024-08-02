@@ -35,8 +35,6 @@
                 </h3>
               </div>
 
-
-
             <!-- <div class="mb-5">
                 <h3
                     class="inline-block mr-4 text-lg font-medium text-gray-300 cursor-pointer text-semibold "
@@ -969,13 +967,11 @@ if(!complete){
   background-color: #0B6357;
   border-radius: 10px 10px 0 0;
 }
-
+/* 
 .active-step {
-  margin-left: -0.5rem; /* Ajusta según sea necesario */
-  /* margin-right: -0.5rem; 
-  padding-left: 0.5rem;  */
-  padding-right: 0.5rem; /* Ajusta según sea necesario */
-}
+  margin-left: -0.5rem; 
+  padding-right: 0.5rem; 
+} */
 
 </style>
   
