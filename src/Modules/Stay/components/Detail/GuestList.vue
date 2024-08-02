@@ -6,7 +6,7 @@
         </span>
         <router-link 
             class="p-2 block w-full rounded-[6px]" v-for="g in data.guests" :key="g.id"
-            :class="{'hbg-green-200': guestId == g.id}"
+            :class="{'hbg-green-200': route.query.g == g.id}"
             :to="{ name: 'StayDetailPage',params: { id: data.id }, query: { g: g.id }}"
         >
             <div class="flex items-center">
@@ -29,7 +29,6 @@ import { ref, inject, watch } from 'vue'
 import { useRoute } from 'vue-router';
 
 const data = inject('data')
-const guestId = inject('guestId')
 
 const route = useRoute();
 const searchQuery = ref(route.query.search || '');

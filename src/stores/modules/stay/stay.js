@@ -21,6 +21,7 @@ import {
 export const useStayStore = defineStore('stay', () => {
     
     // STATE
+    const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
 
     // ACTIONS
     async function $getAllByHotel (data, showLoadPage = true) {
@@ -116,6 +117,20 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
+    async function $deleteSessionWithApiKey (stayId, userEmail) {
+        console.log('deleteSessionWithApiKey')
+        // Crea una URL con parámetros de consulta
+        let endpoint = `${URL_BASE_BACKEND_GENERAL}/stay/hoster/deleteSessionWithApiKey?`;
+        endpoint += `stayId=${encodeURIComponent(stayId)}`;
+        endpoint += `&userEmail=${encodeURIComponent(userEmail)}`;
+        endpoint += `&field=sessions`;
+        endpoint += `&xKeyApi=${encodeURIComponent(process.env.VUE_APP_X_KEY_API)}`;
+        console.log('endpoint',endpoint)
+        // Llama a navigator.sendBeacon con la URL
+        navigator.sendBeacon(endpoint);
+    }
+    
+
     async function $getDetailQueryByGuest (stayId, guestId) {
         let data = { stayId, guestId };
         const response = await getDetailQueryByGuestApi(data)
@@ -136,9 +151,7 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $getSessions (stayId) {
         let data = { stayId };
-        console.log('getSessions',data)
         const response = await getSessionsApi(data)
-        console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data
@@ -160,6 +173,7 @@ export const useStayStore = defineStore('stay', () => {
         //sessions
         $createSession,
         $deleteSession,
+        $deleteSessionWithApiKey,
         //query
         $getDetailQueryByGuest,
         //guests

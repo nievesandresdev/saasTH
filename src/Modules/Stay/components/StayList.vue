@@ -131,7 +131,6 @@ const allFilters = ref({
 const openFiltersModal = ref(false)
 //pusher
 const channelChat = ref(null);
-const channelStay = ref(null);
 const channelQuery = ref(null);
 const channelUpdate = ref(null);
 const pusher = ref(null);
@@ -145,11 +144,6 @@ onUnmounted(() => {
     if (channelChat.value) {
         channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
         pusher.value.unsubscribe(channelChat.value);
-    }
-
-    if (channelStay.value) {
-        channelStay.value.unbind('App\\Events\\CreateStayEvent');
-        pusher.value.unsubscribe(channelStay.value);
     }
     
     if (channelQuery.value) {
@@ -203,15 +197,8 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
-        console.log('NotifyStayHotelEvent')
         let showLoadPage = data.showLoadPage ?? true;
         loadData(showLoadPage);
-    });
-
-    channelStay.value = 'private-create-stay.' + hotelStore.hotelData.id;
-    channelStay.value = pusher.value.subscribe(channelStay.value);
-    channelStay.value.bind('App\\Events\\CreateStayEvent', (data) => {
-        loadData();
     });
 
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;

@@ -28,19 +28,19 @@
                 <!-- current date -->
                 <div class="w-[87px]">
                     <h3 class="text-[20px] font-semibold leading-[90%] text-center">Hoy</h3>
-                    <h1 class="text-[64px] font-semibold leading-[90%] text-center mt-1"> {{ statistics.today ?? 0 }}</h1>
-                    <h4 class="text-base font-semibold leading-[90%] text-center mt-1">{{ statistics.month ?? 0 }}</h4>
+                    <h1 class="text-[64px] font-semibold leading-[90%] text-center mt-1"> {{ statistics?.today ?? 0 }}</h1>
+                    <h4 class="text-base font-semibold leading-[90%] text-center mt-1">{{ statistics?.month ?? 0 }}</h4>
                 </div>
                 <div class="border-r hborder-gray-400 mx-2 h-full 3xl:mx-10"></div>
                 <!-- counter checkin and checkout -->
                 <div >
                     <div class="flex gap-1 items-center">
                         <img class="w-5 h-5" src="/assets/icons/1.TH.ESTANCIAS.MM.svg" >
-                        <h5 class="text-sm font-medium leading-[90%]">{{statistics.checkinToday ?? 0}} Estancias ingresan</h5>
+                        <h5 class="text-sm font-medium leading-[90%]">{{statistics?.checkinToday ?? 0}} Estancias ingresan</h5>
                     </div>
                     <div class="flex gap-1 items-center mt-4">
                         <img class="w-5 h-5" src="/assets/icons/1.TH.ESTANCIAS.MM.svg" >
-                        <h5 class="text-sm font-medium leading-[90%]">{{statistics.checkoutToday ?? 0}} Estancias se van</h5>
+                        <h5 class="text-sm font-medium leading-[90%]">{{statistics?.checkoutToday ?? 0}} Estancias se van</h5>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
         <section class="mt-6 rounded-[10px] border hborder-gray-400 py-6 px-4 bg-white">
             <div class="flex gap-4 items-end">
                 <!-- stay periods card -->
-                <div class="flex-grow flex-1" v-for="(count, key, index) in statistics.countsByPeriod" :key="index">
+                <div class="flex-grow flex-1" v-for="(count, key, index) in statistics?.countsByPeriod" :key="index">
                     <h3 class="text-sm font-semibold leading-[120%] flex items-center" v-if="key == 'pre-stay'">
                         Estancias activas en tu WebApp
                         <TooltipStayActive type="title"/>
@@ -101,12 +101,12 @@
                     <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados por tus huéspedes</h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
                         <div v-for="(lang,index) in ['es','en','fr']" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
-                            <img v-if="statistics.percentageLangs && statistics.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
+                            <img v-if="statistics?.percentageLangs && statistics?.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
                             <img v-else src="/assets/icons/1.TH.SINIDIOMA.svg" class="w-6 h-6 mr-1">
                             <span class="text-base font-semibold leading-[120%] mr-1">
-                                {{ statistics.percentageLangs && statistics.percentageLangs[lang] > 0 ? statistics.percentageLangs[lang] : '--' }}% 
+                                {{ statistics?.percentageLangs && statistics?.percentageLangs[lang] > 0 ? statistics?.percentageLangs[lang] : '--' }}% 
                             </span>
-                            <span class="text-sm font-medium"> {{ statistics.percentageLangs && statistics.percentageLangs[lang] ? $nameLanguage(lang) : '-'}}</span>
+                            <span class="text-sm font-medium"> {{ statistics?.percentageLangs && statistics?.percentageLangs[lang] ? $nameLanguage(lang) : '-'}}</span>
                         </div> 
                     </div>
                 </div>
@@ -135,6 +135,7 @@ const openInviteGuest = ref(false);
 
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
+    // console.log('statistics.value',statistics.value)
 })
 
 provide('openInviteGuest',openInviteGuest)

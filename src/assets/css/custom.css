@@ -167,3 +167,24 @@ outline: 2px solid transparent;
 [type='checkbox']:focus, [type='checkbox']:hover {
 background-color: #EBF9F0;
 } */
+
+/*clase para vue-quill editor */
+.container-text-quill {
+  list-style-type: disc;
+}
+
+.container-text-quill ul,
+.container-text-quill ol {
+  list-style: initial; /* Asegura que los estilos de lista iniciales se mantengan */
+  padding-left:  32px; /* Añade espacio a la izquierda para una mejor visualización */
+}
+
+.container-text-quill ul {
+  list-style-type: disc; /* Para listas no ordenadas, utiliza bullets */
+}
+
+.container-text-quill ol {
+  list-style-type: decimal; /* Para listas ordenadas, utiliza números */
+}
+
+/*FIN clase para vue-quill editor */

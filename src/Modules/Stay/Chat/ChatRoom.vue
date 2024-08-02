@@ -17,7 +17,7 @@
         <div class="py-2 mx-6 hbg-white-100 flex border-x sticky bottom-0">
             <textarea
                 ref="messageTextarea"
-                class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden"
+                class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden px-4 py-3"
                 placeholder="Escribe un mensaje..."
                 v-model="msg"
                 rows="1"
