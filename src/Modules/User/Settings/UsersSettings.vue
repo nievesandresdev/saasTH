@@ -19,50 +19,50 @@
                     <img src="/assets/icons/1.TH.SEARCH.svg" class="w-6 h-6" alt="search icon">
                 </div>
             </div>
-            <button class="flex items-center px-4 py-2 text-black border border-[#333333] rounded hover:bg-gray-100" @click="createUser">
+            <div class="flex items-center px-4 py-2 text-black border border-[#333333] rounded hover:bg-gray-100 cursor-pointer" @click="createUser">
                 <img src="/assets/icons/1.TH.PLUS.svg" class="w-6 h-6 mr-2" alt="plus icon">
                 Crear usuario
-            </button>
+            </div>
         </div>
         <div class="flex gap-4 mb-4" >
             <ButtonFilter
                 @click="change_type(0)"
-                :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 0,'border border-black': data_filter.type != 0 }"
+                :active="data_filter.type == 0"
             >
                 Todos
             </ButtonFilter>
 
             <ButtonFilter
                 @click="change_type(1)"
-                :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 1,'border border-black': data_filter.type != 1 }"
+                :active="data_filter.type == 1"
             >
                 Propietarios
             </ButtonFilter>
 
             <ButtonFilter
                 @click="change_type(2)"
-                :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 2,'border border-black': data_filter.type != 2 }"
+                :active="data_filter.type == 2"
             >
                 Administradores
             </ButtonFilter>
 
             <ButtonFilter
                 @click="change_type(3)"
-                :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 3,'border border-black': data_filter.type != 3 }"
+                :active="data_filter.type == 3"
                 >
                 Operadores
             </ButtonFilter>
 
             <ButtonFilter
                 @click="change_type(4)"
-                :class="{ 'border-green-700 hbg-green-200 htext-green-600': data_filter.type == 4,'border border-black': data_filter.type != 4 }"
+                :active="data_filter.type == 4"
             >
                 Inactivos
             </ButtonFilter>
         </div>
         
         <div class="relative mt-5">
-            <span class="mb-4 text-sm font-normal">[{{ totalUsers }}] usuarios encontrados</span>
+            <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
             <table class="w-full text-sm text-left text-gray-500 rtl:text-right shadow-md mt-4">
                 <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700">
                     <tr>

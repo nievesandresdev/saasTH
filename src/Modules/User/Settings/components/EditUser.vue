@@ -242,7 +242,7 @@
   
         <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
           <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
-              Salir
+              Cancelar
           </button>
           <button
             class="px-4 py-2 font-medium rounded text-black"
@@ -250,7 +250,7 @@
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
-            {{ currentStep === 3 ? 'Guardar Cambios' : 'Guardar Cambios' }}
+            {{ currentStep === 3 ? 'Guardar cambios' : 'Guardar cambios' }}
           </button>
         </div>
         <ModalNoSave

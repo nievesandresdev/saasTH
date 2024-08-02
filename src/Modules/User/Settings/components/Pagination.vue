@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-left flex-col items-left mt-6" v-show="perPage >= 20">
+  <div class="flex justify-left flex-col items-left mt-6" v-show="perPage > 20">
     <span class="font-normal text-sm mb-2">
       {{ perPage }} usuarios por página
     </span>
@@ -34,9 +34,9 @@
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-currentPage: Number,
-totalPages: Number,
-perPage: Number
+  currentPage: Number,
+  totalPages: Number,
+  perPage: Number
 });
 
 const emits = defineEmits(['update:page']);
