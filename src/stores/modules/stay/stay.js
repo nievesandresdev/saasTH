@@ -99,7 +99,11 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
-    async function $createSession (stayId, field, userEmail, userName, userColor) {
+    async function $createSession (stayId, field) {
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        let userEmail = user.email;
+        let userName = user.name;
+        let userColor = user.color;
         let data = { stayId, field, userEmail, userName, userColor };
         const response = await createSessionApi(data)
         const { ok } = response   
@@ -118,14 +122,12 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $deleteSessionWithApiKey (stayId, userEmail) {
-        console.log('deleteSessionWithApiKey')
         // Crea una URL con parámetros de consulta
         let endpoint = `${URL_BASE_BACKEND_GENERAL}/stay/hoster/deleteSessionWithApiKey?`;
         endpoint += `stayId=${encodeURIComponent(stayId)}`;
         endpoint += `&userEmail=${encodeURIComponent(userEmail)}`;
         endpoint += `&field=sessions`;
         endpoint += `&xKeyApi=${encodeURIComponent(process.env.VUE_APP_X_KEY_API)}`;
-        console.log('endpoint',endpoint)
         // Llama a navigator.sendBeacon con la URL
         navigator.sendBeacon(endpoint);
     }

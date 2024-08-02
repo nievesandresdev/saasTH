@@ -31,7 +31,7 @@
                             class="p-2 h-6 rounded-full text-[10px] font-semibold leading-[100%] uppercase"
                             :class="bgPeriod[period]"
                         >
-                            {{ period }}
+                            {{ $translatePeriod(period) }}
                         </span>
                         <Checkbox v-model="filters[period]"/>
                     </div>
@@ -71,8 +71,8 @@ const emit = defineEmits(['submit']);
 
 const openFiltersModal = inject('openFiltersModal');
 const bgPeriod = inject('bgPeriod');
-const totalCounts = inject('totalCounts');
-const pendingCount = inject('pendingCount');
+const countsGeneralByPeriod = inject('countsGeneralByPeriod');
+const pendingCountsByPeriod = inject('pendingCountsByPeriod');
 const activeFilters = ref([])
 const dropdownFilter = ref('all')
 const dropdownFilterApplied = ref('all')
@@ -137,13 +137,30 @@ function resetFilters() {
     handleAllChecked();
     submit();
 }
+// Opciones de dropdown
 const allFilterOptions = computed(() => {
+    // Calculamos el total dinámico basado en los filtros activos
+    const dynamicTotal = Object.keys(filters.value).reduce((acc, key) => {
+        if (filters.value[key] && countsGeneralByPeriod.value[key]) {
+            acc += countsGeneralByPeriod.value[key];
+        }
+        return acc;
+    }, 0);
+
+    const dynamicPendingTotal = Object.keys(filters.value).reduce((acc, key) => {
+        if (filters.value[key] && pendingCountsByPeriod.value[key]) {
+            acc += pendingCountsByPeriod.value[key];
+        }
+        return acc;
+    }, 0);
+    
     let options = [
-        { value: 'all', label: `Todas (${totalCounts.value})` },
-        { value: 'pending', label: `Pendientes (${pendingCount.value})` }
+        { value: 'all', label: `Todas (${dynamicTotal})` },
+        { value: 'pending', label: `Pendientes (${dynamicPendingTotal})` }
     ];
     return options;
 });
+
 
 const allFiltersDeselected = computed(() => {
     // Comprueba si todos los valores de los filtros son falsos
