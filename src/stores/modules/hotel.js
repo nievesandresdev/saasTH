@@ -65,6 +65,7 @@ export const useHotelStore = defineStore('hotel', () => {
         let hotel = await $findByParams();
         
         updateHoteInSession(hotel);
+        return hotel;
     }
 
     async function $getAll () {
@@ -154,6 +155,22 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+    async function $verifySubdomainExistPerHotel (params) {
+        const response = await hotelService.verifySubdomainExistPerHotel(params, {showPreloader: false});
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+    async function $updateCustomization (data) {
+        const response = await hotelService.updateCustomization(data);
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
     
 
 
@@ -175,6 +192,8 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateVisivilityPlaces,
         $updateVisivilityCategory,
         $updateVisivilityTypePlace,
+        $verifySubdomainExistPerHotel,
+        $updateCustomization,
     }
 
 })

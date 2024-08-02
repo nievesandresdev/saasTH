@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
+
+import { $urlBaseWebapp } from '@/utils/helpers';
 
 export const useMockupStore = defineStore('mockupStore', () => {
 
@@ -11,11 +13,11 @@ export const useMockupStore = defineStore('mockupStore', () => {
 
   function $setIframeUrl(uri, params = 'test=x') {
       let subdomain = sessionStorage.getItem('current_subdomain');
-      let urlBase = GUEST_URL;
+      let urlBase = $urlBaseWebapp();
       // console.log(subdomain)
-      if(ENVIROMENT == 'test'){
-        urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
-      }
+      // if(ENVIROMENT == 'test'){
+      //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
+      // }
       let completeURL =urlBase+`${uri}?subdomain=${subdomain}&lang=es&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
   }
