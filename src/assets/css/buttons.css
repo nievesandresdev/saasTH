@@ -132,19 +132,30 @@
 *****  PLAIN
 **********
 */
+
 .hbtn-tertiary{
     color: var(--h-black-100);
     align-items: center;
 }
-.hbtn-tertiary:disabled, .hbtn-tertiary:disabled:hover{
-    color: var(--h-gray-300);
-}
 .hbtn-tertiary:hover{
     color: var(--h-black-200);
 }
+.hbtn-tertiary:disabled {
+    opacity: 0.5;
+}
 
-.plain, .plain:hover, .plain:disabled, .plain:focus {
-    border: none !important;
+.hbtn-tertiary-green-hover:hover {
+    color: var(--h-green-600);
+}
+.hbtn-tertiary-green-hover:hover > .tertiary-green-icon{
+    filter: invert(41%) sepia(70%) saturate(352%) hue-rotate(116deg) brightness(94%) contrast(96%);
+}
+.hbtn-tertiary-green-hover:disabled:hover {
+    color: var(--h-black-100);
+}
+
+.plain, .plain:hover, .plain:disabled {
+    border: none;
 }
 
 /*

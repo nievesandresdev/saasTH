@@ -1,6 +1,6 @@
 <template>
-    <aside class="w-[354px] flex-shrink-0 flex flex-col h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
-        <div :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
+    <aside class="w-[354px] flex-shrink-0 h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
+        <div class="flex flex-col h-full" :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
             <!-- guest data -->
             <div v-if="data?.guest" class="py-8 px-6 border-b-2 hborder-color-gray-400 header-shadow bg-white">
                 <div class="flex items-center">
@@ -9,7 +9,7 @@
                         :src="`https://ui-avatars.com/api/?name=${data.guest?.acronym}&color=fff&background=${data.guest.color}`"
                     >
                     <div class="ml-4">
-                        <h1 class="text-lg font-medium leading-[120%]">{{data.guest?.name}}</h1>
+                        <h1 class="text-lg font-semibold leading-[120%]">{{data.guest?.name}}</h1>
                         <div class="flex items-center">
                             <h2 class="text-sm font-medium leading-[140%]">Idioma - {{ $nameLanguage(data.guest?.lang_web) }}</h2>
                             <img
@@ -21,8 +21,11 @@
                 </div>
             </div>
             <div v-if="data?.guest" class="overflow-y-auto flex-grow custom-scrollbar bg-white">
-                <div class="pt-4"></div>
-                <TimeLineQueries :feedback="data.queries" />
+                <div class="pt-8"></div>
+                <div class="px-6">
+                    <TimeLineQueries :feedback="data.queries" />
+                    <div class="mt-6 border-b hborder-color-gray-400"></div>
+                </div>
 
                 <!-- stay data -->
                 <div v-if="data?.stay" class="mt-6 px-6">

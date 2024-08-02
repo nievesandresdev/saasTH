@@ -124,8 +124,6 @@
 <script setup>
 
 import { ref, provide, reactive, onMounted, computed } from 'vue';
-import axios from 'axios';
-
 
 // STATE
 //
