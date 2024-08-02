@@ -25,7 +25,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 pr-3">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -90,7 +90,7 @@
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Nuevo chat</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo chat.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px]">
+                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
                             <!-- owner -->
                             <div class="flex justify-between flex-grow">
                                 <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
@@ -114,7 +114,7 @@
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Chat pendiente</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un chat pendiente.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px]">
+                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
                             <!-- owner -->
                             <div class="flex justify-between flex-grow">
                                 <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
@@ -138,7 +138,7 @@
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%] mr-2">Chat inactivo</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2 mr-2">Notificar cuando haya personal disponible en el chat y hayan transcurrido 30 minutos sin responder ningún chat.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] flex-shrink-0">
+                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3 flex-shrink-0">
                             <!-- owner -->
                             <div class="flex justify-between flex-grow">
                                 <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
@@ -166,7 +166,7 @@
                     <div>
                         <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 pr-3">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
@@ -230,7 +230,7 @@
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Nuevo feedback</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo feedback.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px]">
+                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
                             <!-- owner -->
                             <div class="flex justify-between flex-grow">
                                 <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
@@ -254,7 +254,7 @@
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Feedback pendiente</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un feedback pendiente.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] flex-shrink-0">
+                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3 flex-shrink-0">
                             <!-- owner -->
                             <div class="flex justify-between flex-grow">
                                 <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
