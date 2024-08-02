@@ -174,7 +174,7 @@ const isChanged = computed(() => {
 
 // FUNCTIONS
 function loadMockup () {
-    mockupStore.$setIframeUrl('/sobre-nosotros')
+    mockupStore.$setIframeUrl('/')
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
 }
 async function reloadHotel () {
@@ -209,7 +209,6 @@ function reloadDataComponent () {
     Object.assign(imgSelectedLogo.value, imgSelectedLogoDefault.value);
     Object.assign(imgSelectedFav.value, imgSelectedFavDefault.value);
     Object.assign(imgSelectedBg.value, imgSelectedBgDefault.value);
-    mockupStore.$reloadIframe();
 }
 function cancelChanges () {
     reloadDataComponent();
@@ -228,7 +227,8 @@ async function submit () {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-     isloadingForm.value = false
+    mockupStore.$reloadIframe();
+    isloadingForm.value = false;
 }
 
 </script>
