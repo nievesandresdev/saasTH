@@ -87,6 +87,25 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
   }
 };
 
+const $urlBaseWebapp = () => {
+  const GUEST_URL = process.env.VUE_APP_GUEST_URL;
+  let subdomain = sessionStorage.getItem('current_subdomain');
+  let urlBase = GUEST_URL.replace('subdomain', subdomain);
+  return urlBase;
+}
+
+const $formatImage = (payload) => {
+  const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
+  let { url, type, urlDefault } = payload
+  if (!url || !URL_STORAGE) return;
+  if (urlDefault) return url;
+  let type_d = url.includes('https://') ? 'CDN' : 'STORAGE'
+  type = type ?? type_d
+  if (type == 'CDN' || type == 'image-hotel-scraper') return url
+  let path = URL_STORAGE+url
+  return path
+}
+
 export {
     $getRoleName,
     $isAssociate,
@@ -95,5 +114,7 @@ export {
     $nameLanguage,
     $translatePeriod,
     $formatTimestampDate,
-    $getPropertyInUrl
+    $getPropertyInUrl,
+    $urlBaseWebapp,
+    $formatImage,
 };

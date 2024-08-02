@@ -14,6 +14,7 @@ import placeGroupRoutes from './placeRoutes'
 import experienceGroupRoutes from './experienceRoutes'
 import galleryGroupRoutes from './galleryRoutes'
 import webAppRoutes from './webAppRoutes'
+import customizationRoutes from './customizationRoutes'
 
 // Importaciones de stores
 
@@ -45,6 +46,7 @@ const routes = [
   ...experienceGroupRoutes,
   ...galleryGroupRoutes,
   ...webAppRoutes,
+  ...customizationRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ]
 
