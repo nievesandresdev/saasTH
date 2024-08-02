@@ -56,7 +56,7 @@
               </div>
               <div class="flex justify-between">
                 <div class="form-remember col-10 col-lg-4 text-left">
-                  <input type="checkbox" v-model="form.remember" class="border mr-1 h-6 w-5 rounded">
+                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-1 h-6 w-5 rounded">
                   <p class="inline text-sm">Recuérdame</p>
                 </div>
                 <div class="forgot-password text-left text-lg-right col-10 col-lg-6 pt-1">

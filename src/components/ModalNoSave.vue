@@ -1,8 +1,8 @@
 <template>
   <transition name="fade">
-    <div v-if="visitNow" class="fixed inset-0 z-[2000] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <div v-if="visitNow" class="fixed inset-0 z-[9999] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-        <div class="absolute inset-0 bg-[#00000080]"></div>
+        <div class="absolute w-full inset-0 bg-[#00000080]"></div>
       </div>
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       
@@ -73,7 +73,7 @@ const props = defineProps({
 const emit = defineEmits(['saveChanges', 'close','hidden']);
 const showModal = ref(false);
 const visitNow = ref(false);
-const intendedRoute = ref(null);  // Almacena la ruta intentada
+const intendedRoute = ref(null);
 
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
@@ -100,7 +100,7 @@ function closeModal() {
 }
 
 function hiddenModal() {
-  visitNow.value = false;
+  showModal.value = false;
   emit('hidden');
 }
 
@@ -112,7 +112,7 @@ function saveChanges() {
 function goLink() {
   if (intendedRoute.value) {
       showModal.value = false;
-      closeModal()
+      closeModal();
       router.push(intendedRoute.value).catch(err => {
           console.error('Routing error:', err);
       });
@@ -123,9 +123,9 @@ function goLink() {
 
 router.beforeEach((to, from, next) => {
   if (showModal.value && !visitNow.value) {
-    intendedRoute.value = to.fullPath; // Guarda la ruta completa a la que se intentaba acceder
+    intendedRoute.value = to.fullPath;
     visitNow.value = true;
-    next(false); // Detiene la navegación actual
+    next(false);
   } else {
     next();
   }

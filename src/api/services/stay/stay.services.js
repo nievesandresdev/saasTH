@@ -18,7 +18,7 @@ export const deleteStayNoteApi = (data) => apiHttp('POST', `${stayPath}/${hoster
 export const createOrupdateGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createOrupdateGuestNote`, data, { showPreloader: false })
 export const deleteGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteGuestNote`, data, { showPreloader: false })
 //sessions
-export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data)
+export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data, { showPreloader: false })
 export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })
 //queries
 export const getDetailQueryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getDetailQueryByGuest`, data)

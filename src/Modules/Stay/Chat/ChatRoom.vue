@@ -17,7 +17,7 @@
         <div class="py-2 mx-6 hbg-white-100 flex border-x sticky bottom-0">
             <textarea
                 ref="messageTextarea"
-                class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden"
+                class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden px-4 py-3"
                 placeholder="Escribe un mensaje..."
                 v-model="msg"
                 rows="1"
@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, provide } from 'vue';
+import { ref, onMounted, watch, provide, onBeforeUnmount } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 //
@@ -76,18 +76,34 @@ const pusher = ref(null)
 onMounted(async() => {
     data.value.guests = await chatStore.$getGuestListWNoti(route.params.stayId);
     listGuests.value = data.value.guests;
-    session.value = await stayStore.$getSessions(route.params.stayId)
+    session.value = await stayStore.$createSession(route.params.stayId ,'sessions')
+    //  stayStore.$getSessions(route.params.stayId)
     suscribePusher()
+    window.addEventListener('beforeunload', handleBeforeUnload);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
 })
 
 
 onBeforeRouteLeave((to, from, next) => {
-    if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
-        // Ejecutar `updateDetailSession` solo si la ruta de destino no está en el array allowedRoutes
-        updateDetailSession();
+    if (
+        !['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name) || 
+        to.params.stayId !== from.params.stayId && to.name == 'StayDetailPage' 
+    ) {
+        // Ejecutar `deleteSession`  si la ruta de destino no está en el array allowedRoutes
+        // o ejecutar deleteSession si esta ingresando a otra estancia
+        deleteSession();
     }
     next();
 });
+
+const handleBeforeUnload = (event) => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    delete event['returnValue']; // Evitar la alerta del navegador
+}
 
 const sendMsg = async (e) => {
     if (!e.shiftKey) {
@@ -162,7 +178,7 @@ const adjustTextareaHeight = () => {
     }
 };
 
-const updateDetailSession = async () => {
+const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
     await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
 }

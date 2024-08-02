@@ -2,10 +2,11 @@
     <transition>
       <div
         v-if="modalEdit"
-        class="absolute bg-white shadow-xl add flex-column"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
+        class="absolute bg-white shadow-xl flex-column add"
+        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
         ref="ref_section_edit"
       >
+     
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-5 mt-4">
             <div class="flex-1 text-left">
@@ -241,7 +242,7 @@
   
         <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
           <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
-              Salir
+              Cancelar
           </button>
           <button
             class="px-4 py-2 font-medium rounded text-black"
@@ -249,21 +250,10 @@
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
-            {{ currentStep === 3 ? 'Guardar Cambios' : 'Guardar Cambios' }}
+            {{ currentStep === 3 ? 'Guardar cambios' : 'Guardar cambios' }}
           </button>
-          <!-- <button
-            class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
-            @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
-          >
-            {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
-          </button> -->
-          
         </div>
-        
-      </div>
-      
-    </transition>
-    <ModalNoSave
+        <ModalNoSave
           :id="'not-saved'"
           :open="showModalNoSave"
           text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
@@ -273,6 +263,11 @@
           :type="'alone_exit'"
           @hidden="handleCloseModal"
         />
+        
+      </div>
+      
+    </transition>
+    
   </template>
   
   <script setup>
@@ -340,8 +335,10 @@ const unregisterClickOutside = () => {
 };
 
 const handleCloseModal = () => {
+  //alert('handleCloseModal')
     showModalNoSave.value = false;
-  }
+    //emit('showModalNoSave', false);
+}
 
 
 const form = ref({
@@ -353,8 +350,8 @@ const form = ref({
   prefix: null,
   phone: '',
   email: '',
-  password: '',
-  password_confirmation: '',
+ /*  password: '',
+  password_confirmation: '', */
   hotels: [],
   access: []
 });
@@ -783,7 +780,7 @@ if (form.value.role === 1) {
 };
 
 const clearForm = () => {
-  closeModal();
+    closeModal(true);
     currentStep.value = 1;
     errorEmailText.value = '';
     errorPassword.value = false;
@@ -836,12 +833,13 @@ const changes = computed(() => {
 
     console.log('dataUser',form.value)
   }); */
+  
 
-function closeModal() {
+function closeModal(complete = false) {
    /*  emits('close');
     currentStep.value = 1; */
-    console.log('closeModalChangesEdit',changes.value)
-
+    console.log('changesSS',changes.value,showModalNoSave.value)
+if(!complete){
     if (changes.value == true) {
       showModalNoSave.value = true;
       emits('showModalNoSave', true);
@@ -849,8 +847,25 @@ function closeModal() {
       emits('close');
       currentStep.value = 1;
     }
+}else{
+    emits('close');
+    currentStep.value = 1;
+}
 
+
+    /* emits('close');
+    currentStep.value = 1; */
+
+}
+
+/* watch(() => showModalNoSave.value, (newVal) => {
+  if (!newVal) {
+    emits('close');
+    currentStep.value = 1;
   }
+}); */
+
+  
 
 
 /* const closeModal = () => {

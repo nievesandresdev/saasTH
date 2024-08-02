@@ -22,13 +22,24 @@
                             <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6 mr-2" alt="Booking">
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('booking', form.booking.url)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        <div v-show="disabledInput.booking" :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('booking', form.booking.url)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                                <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                                <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                            </svg>
+                            <span class="text-sm font-medium" :class="errors.booking ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
-                    <div :class="['flex', errors.booking ? 'border-red-500' : hoverValidation.booking ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.booking.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.booking ? 'border-red-500 text-red-500' : hoverValidation.booking && !disabledInput.booking ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.booking ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('booking')" :disabled="disabledInput.booking">
+                    <div>
+                        <BaseTextField
+                            v-model="form.booking.url"
+                            placeholder="Introduce el enlace"
+                            class-content="w-full"
+                            @input="marcarCambio('booking')"
+                            :disabled="disabledInput.booking"
+                            :error="errors.booking"
+                        />
                     </div>
                     <div v-if="errors.booking" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -43,13 +54,24 @@
                             <img src="/assets/icons/otas/Expedia.svg" class="w-6 h-6 mr-2" alt="Expedia">
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('expedia', form.expedia.url)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        <div v-show="disabledInput.expedia" :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('expedia', form.expedia.url)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                                <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                                <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                            </svg>
+                            <span class="text-sm font-medium" :class="errors.expedia ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
-                    <div :class="['flex', errors.expedia ? 'border-red-500' : hoverValidation.expedia ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.expedia.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.expedia ? 'border-red-500 text-red-500' : hoverValidation.expedia && !disabledInput.expedia ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.expedia ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('expedia')" :disabled="disabledInput.expedia">
+                    <div>
+                        <BaseTextField
+                            v-model="form.expedia.url"
+                            placeholder="Introduce el enlace"
+                            class-content="w-full border-red-500"
+                            @input="marcarCambio('expedia')"
+                            :disabled="disabledInput.expedia"
+                            :error="errors.expedia"
+                        />
                     </div>
                     <div v-if="errors.expedia" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -64,13 +86,24 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
                             <span class="font-semibold text-sm">Tripadvisor</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        <div v-show="disabledInput.tripadvisor" :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                                <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                                <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                            </svg>
+                            <span class="text-sm font-medium" :class="errors.tripadvisor ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
-                    <div :class="['flex', errors.tripadvisor ? 'border-red-500' : hoverValidation.tripadvisor ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.tripadvisor.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.tripadvisor ? 'border-red-500 text-red-500' : hoverValidation.tripadvisor && !disabledInput.tripadvisor ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.tripadvisor ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('tripadvisor')" :disabled="disabledInput.tripadvisor">
+                    <div>
+                        <BaseTextField
+                            v-model="form.tripadvisor.url"
+                            placeholder="Introduce el enlace"
+                            class-content="w-full"
+                            @input="marcarCambio('tripadvisor')"
+                            :disabled="disabledInput.tripadvisor"
+                            :error="errors.tripadvisor"
+                        />
                     </div>
                     <div v-if="errors.tripadvisor" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -85,13 +118,24 @@
                             <img src="/assets/icons/otas/Google.svg" class="w-6 h-6 mr-2" alt="Google">
                             <span class="font-semibold text-sm">Google</span>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('google', form.google.url)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        <div v-show="disabledInput.google" :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('google', form.google.url)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                                <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                                <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                            </svg>
+                            <span class="text-sm font-medium" :class="errors.google ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
-                    <div :class="['flex', errors.google ? 'border-red-500' : hoverValidation.google ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.google.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.google ? 'border-red-500 text-red-500' : hoverValidation.google && !disabledInput.google ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.google ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('google')" :disabled="disabledInput.google">
+                    <div>
+                        <BaseTextField
+                            v-model="form.google.url"
+                            placeholder="Introduce el enlace"
+                            class-content="w-full"
+                            @input="marcarCambio('google')"
+                            :disabled="disabledInput.google"
+                            :error="errors.google"
+                        />
                     </div>
                     <div v-if="errors.google" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -116,35 +160,70 @@
                                 </Tooltip>
                             </div>
                         </div>
-                        <div class="flex cursor-pointer items-center" @click="changeUrlModal('airbnb', form.airbnb.url)">
-                            <img src="/assets/icons/Group3421.svg" class="w-4 h-4 mr-2" alt="Group 3421">
-                            <span class="text-sm font-medium">¿Necesitas cambiar el enlace?</span>
+                        <div v-show="disabledInput.airbnb" :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                                <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                                <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                            </svg>
+                            <span class="text-sm font-medium" :class="errors.airbnb ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
-                    <div :class="['flex', errors.airbnb ? 'border-red-500' : hoverValidation.airbnb ? 'border-green-500' : 'border-gray-300']">
-                        <input type="text" v-model="form.airbnb.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', errors.airbnb ? 'border-red-500 text-red-500' : hoverValidation.airbnb && !disabledInput.airbnb ? 'border-green-500 focus:ring-green-500 text-green-500' : disabledInput.airbnb ? 'bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="marcarCambio('airbnb')">
+                    <div>
+                        <BaseTextField
+                            v-model="form.airbnb.url"
+                            placeholder="Introduce el enlace"
+                            class-content="w-full"
+                            @input="marcarCambio('airbnb')"
+                            :disabled="disabledInput.airbnb"
+                            :error="errors.airbnb"
+                        />
                     </div>
                     <div v-if="errors.airbnb" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                         <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                         <p class="text-red-500">{{ errorMessage.airbnb }}</p>
                     </div>
-                    <div class="flex items-center mt-3 cursor-pointer" @click="addAnotherLink">
-                        <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4 mr-2" alt="Add Another Link">
-                        <span class="text-sm font-medium">Añadir otro enlace</span>
-                    </div>
+                    
                     <div v-for="(link, index) in additionalLinks" :key="index" class="mt-3" v-if="link?.status !== 0">
-                        <div :class="['flex', link.errors ? 'border-red-500' : link.hoverValidation ? 'border-green-500' : 'border-gray-300']">
-                            <input type="text" v-model="link.url" :class="['rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5', link.errors ? 'border-red-500 text-red-500' : link.hoverValidation ? 'border-green-500 focus:ring-green-500 text-green-500' : 'border-gray-300 focus:ring-green-500 placeholder:text-[#A0A0A0] placeholder:font-medium placeholder:text-[14px]']" placeholder="Escribe URL" @input="markAdditionalLinkChange(index)">
+                        <div :class="['flex', link.errors ? 'border-red-500' : 'border-gray-300']">
+                            <BaseTextField
+                                v-model="link.url"
+                                placeholder="Introduce el enlace"
+                                class-content="w-full"
+                                @input="markAdditionalLinkChange(index)"
+                                :error="link.errors"
+                            />
                         </div>
-                        <div class="flex items-center mt-3 cursor-pointer justify-end" @click="openDeleteModal(index)">
-                            <img :class="['w-4 h-4 mr-2', {'text-green-500': link.url.length}]" src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="Delete Link">
-                            <span :class="['text-sm font-medium', {'text-green-500': link.url.length}]">Eliminar</span>
+                        <div class="flex items-center mt-3 justify-end" @click="openDeleteModal(index)">
+                            <div class="flex cursor-pointer group hover:text-green-500">
+                                <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3 h-[15px] w-[15px]" viewBox="0 0 16 16">
+                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                </svg>
+                                <span class="text-sm font-medium group-hover:text-green-500 ml-1">Eliminar</span>
+                            </div>
                         </div>
                         <div v-if="link.errors" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                             <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
                             <p class="text-red-500">{{ link.errorMessage }}</p>
                         </div>
                     </div>
+                    <div class="flex items-center mt-3" @click="addAnotherLink">
+                        <div class=" flex cursor-pointer group hover:text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-plus h-6 w-6" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                            <span class="text-sm font-medium group-hover:text-green-500 mt-[4px]">Añadir otro enlace</span>
+                        </div>
+                    </div>
+                    <!-- <div  :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
+                            <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+                            <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
+                        </svg>
+                        
+                        <span class="text-sm font-medium" :class="errors.airbnb ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                    </div> -->
                 </div>
             </div>
             
@@ -180,6 +259,7 @@ import { useAuthStore } from '@/stores/modules/auth/login';
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useRouter } from 'vue-router';
 import { $getPropertyInUrl } from '@/utils/helpers';
+import BaseTextField from '@/components/Forms/BaseTextField';
 import {
     requestChangeUrlApi,
 } from '@/api/services/platforms/platformsServices'
@@ -257,30 +337,25 @@ const getSettings = async () => {
                         disabledInput.value.tripadvisor = ota.attemptsToUpdate >= 3;
                         form.tripadvisor.url = ota.url;
                         form.tripadvisor._id = ota._id;
-                        hoverValidation.value.tripadvisor = ota.url.length > 0;
                         break;
                     case 'expedia':
                         disabledInput.value.expedia = ota.attemptsToUpdate >= 3;
                         form.expedia.url = ota.url;
                         form.expedia._id = ota._id;
-                        hoverValidation.value.expedia = ota.url.length > 0;
                         break;
                     case 'google':
                         disabledInput.value.google = ota.attemptsToUpdate >= 3;
                         form.google.url = ota.url;
                         form.google._id = ota._id;
-                        hoverValidation.value.google = ota.url.length > 0;
                         break;
                     case 'booking':
                         disabledInput.value.booking = ota.attemptsToUpdate >= 3;
                         form.booking.url = ota.url;
                         form.booking._id = ota._id;
-                        hoverValidation.value.booking = ota.url.length > 0;
                         break;
                     case 'airbnb':
                         form.airbnb.url = ota.url;
                         form.airbnb._id = ota._id;
-                        hoverValidation.value.airbnb = ota.url.length > 0;
                         break;
                 }
             });
@@ -345,11 +420,9 @@ const marcarCambio = (field) => {
     changes.value += 1;
     const validationError = validateUrl(form[field].url, field);
     if (!validationError) {
-        hoverValidation.value[field] = true;
         errors.value[field] = false;
         errorMessage.value[field] = '';
     } else {
-        hoverValidation.value[field] = false;
         errors.value[field] = true;
         errorMessage.value[field] = validationError;
     }
@@ -359,18 +432,16 @@ const markAdditionalLinkChange = (index) => {
     changes.value += 1;  // Incrementa el contador de cambios cada vez que se verifica un enlace.
     const validationError = validateUrl(additionalLinks.value[index].url, 'airbnb');
     if (!validationError) {
-        additionalLinks.value[index].hoverValidation = true;
         additionalLinks.value[index].errors = false;
         additionalLinks.value[index].errorMessage = '';
     } else {
-        additionalLinks.value[index].hoverValidation = false;
         additionalLinks.value[index].errors = true;
         additionalLinks.value[index].errorMessage = validationError;
     }
 };
 
 const addAnotherLink = () => {
-    additionalLinks.value.push({ url: '', _id: "", hoverValidation: false, errors: false, errorMessage: '', status: 1 });
+    additionalLinks.value.push({ url: '', _id: "", errors: false, errorMessage: '', status: 1 });
 };
 
 const openDeleteModal = (index) => {
@@ -436,21 +507,9 @@ const handleEmail = async () => {
 };
 
 const submit = async () => {
-    /* const payload = [];
-
-    const buildPayloadEntry = (otaName, data) => {
-        if (data.url) {
-            payload.push({
-                ota: otaName.toUpperCase(),
-                url: data.url,
-                _id: data._id || null
-            });
-        }
-    }; */
-
     const payload = [];
 
-    const buildPayloadEntry = (otaName, data) => { //para que envie nada mas las url que se editaron
+    const buildPayloadEntry = (otaName, data) => {
         const initialData = JSON.parse(initialForm.value)[otaName];
         if (data.url && data.url !== initialData.url) {
             payload.push({
@@ -485,7 +544,6 @@ const submit = async () => {
     const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if(response.ok){
-        
         toast.warningToast('Cambios aplicados con éxito', 'top-right')
         await getSettings();
     }else{
@@ -507,3 +565,33 @@ watch(form, () => {}, { deep: true });
 watch(additionalLinks, () => {}, { deep: true });
 
 </script>
+
+<style scoped>
+.group-hover\:text-green-500:hover {
+  color: #22C55E;
+}
+
+.group-hover\:stroke-green-500:hover path {
+  stroke: #22C55E;
+}
+
+.group-hover\:fill-green-500:hover path {
+  fill: #22C55E;
+}
+
+.group-hover\:text-red-500:hover {
+  color: #EF4444;
+}
+
+.group-hover\:stroke-red-500:hover path {
+  stroke: #EF4444;
+}
+
+.group-hover\:fill-red-500:hover path {
+  fill: #EF4444;
+}
+
+.icon text-red-500 {
+  fill: #EF4444;
+}
+</style>

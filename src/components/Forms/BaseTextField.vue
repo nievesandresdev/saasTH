@@ -11,8 +11,8 @@
                 type="text"
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
-                class="w-full hinput border hinput-green rounded-[6px]"
-                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                class="w-full hinput border  rounded-[6px]"
+                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? '' : 'hinput-green'}`"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"
@@ -21,6 +21,7 @@
                 @keyup.prevent="handleKeyup"
                 @click="onClick"
                 @blur="handleBlur"
+                :disabled="disabled"
             >
             <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px] text-red-600 flex items-center">
@@ -83,9 +84,17 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    error: {
+        type: Boolean,
+        default: false,
+    },
     errors: {
         type: Object,
         default: () => ({}),
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -132,8 +141,16 @@ const customInputClass = computed(() => {
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
         c = `${c} hinput-error`;
     }
+
+    if(props.disabled) {
+        c = `${c} bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]`;
+    }
     return c;
 });
+
+
+
+
 </script>
 
 <style lang="scss" scoped>

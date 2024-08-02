@@ -45,7 +45,7 @@
           >
             <!-- notification icon -->
             <img 
-              class="w-2.5 h-2.5 absolute top-1.5 left-5" 
+              class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
               src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
               alt="notification icon"
               v-if="link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)"

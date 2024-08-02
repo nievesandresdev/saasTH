@@ -21,6 +21,7 @@ import {
 export const useStayStore = defineStore('stay', () => {
     
     // STATE
+    const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
 
     // ACTIONS
     async function $getAllByHotel (data, showLoadPage = true) {
@@ -98,7 +99,11 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
-    async function $createSession (stayId, field, userEmail, userName, userColor) {
+    async function $createSession (stayId, field) {
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        let userEmail = user.email;
+        let userName = user.name;
+        let userColor = user.color;
         let data = { stayId, field, userEmail, userName, userColor };
         const response = await createSessionApi(data)
         const { ok } = response   
@@ -115,6 +120,18 @@ export const useStayStore = defineStore('stay', () => {
             return response.data
         }
     }
+
+    async function $deleteSessionWithApiKey (stayId, userEmail) {
+        // Crea una URL con parámetros de consulta
+        let endpoint = `${URL_BASE_BACKEND_GENERAL}/stay/hoster/deleteSessionWithApiKey?`;
+        endpoint += `stayId=${encodeURIComponent(stayId)}`;
+        endpoint += `&userEmail=${encodeURIComponent(userEmail)}`;
+        endpoint += `&field=sessions`;
+        endpoint += `&xKeyApi=${encodeURIComponent(process.env.VUE_APP_X_KEY_API)}`;
+        // Llama a navigator.sendBeacon con la URL
+        navigator.sendBeacon(endpoint);
+    }
+    
 
     async function $getDetailQueryByGuest (stayId, guestId) {
         let data = { stayId, guestId };
@@ -136,9 +153,7 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $getSessions (stayId) {
         let data = { stayId };
-        console.log('getSessions',data)
         const response = await getSessionsApi(data)
-        console.log('response',response)
         const { ok } = response   
         if(ok){
             return response.data
@@ -160,6 +175,7 @@ export const useStayStore = defineStore('stay', () => {
         //sessions
         $createSession,
         $deleteSession,
+        $deleteSessionWithApiKey,
         //query
         $getDetailQueryByGuest,
         //guests

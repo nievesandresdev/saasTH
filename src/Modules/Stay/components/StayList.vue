@@ -11,10 +11,10 @@
             <!-- input y button -->
             <div class="flex items-center gap-1">
                 <div class="relative">
+                    <!-- :classInput="`py-2 px-3 h-10 text-sm ${ !search ? 'border-search-stay' : ''}`"  -->
                     <BaseTextField 
                         v-model="search" 
                         searchInList
-                        :classInput="`py-2 px-3 h-10 ${ !search ? 'border-search-stay' : ''}`" 
                         prependInnerIcon="/assets/icons/1.TH.SEARCH.svg"
                         placeholder="Nombre del huésped"
                         @input:typing="searchInList"
@@ -46,7 +46,7 @@
             <!-- counters -->
             <div class="mt-4 pb-2">
                 <div class="flex items-center">
-                    <h2 class="text-xs font-semibold leading-[130%]">{{totalCounts}} estancia{{ totalCounts==1 ?'':'s' }}</h2>
+                    <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalCounts==1 ?'':'s' }}</h2>
                     <button 
                         v-if="filtersActive" 
                         class="text-xs font-semibold leading-130% underline ml-auto"
@@ -56,17 +56,20 @@
                     </button>
                 </div>
                 <div class="mt-2 flex items-center gap-1">
-                    <div 
-                        class="flex items-center gap-1" v-for="period  in allFilters.periods"
-                    >
-                        <h2 v-if="countsByPeriod" class="text-xs font-semibold leading-[130%]">{{ countsByPeriod[period] ?? 0 }}</h2>
-                        <span
-                            class="px-3 py-1 rounded-full text-[10px] font-semibold leading-[130%] uppercase"
-                            :class="bgPeriod[period]"
+                    <template v-for="period  in allFilters.periods">
+                        <div 
+                            class="flex items-center gap-1" 
+                            v-if="period !== 'post-stay'"
                         >
-                            {{translatePeriod[period]}}
-                        </span>
-                    </div>
+                            <h2 v-if="countsByPeriod" class="text-xs font-semibold leading-[130%]">{{ countsByPeriod[period] ?? 0 }}</h2>
+                            <span
+                                class="px-3 py-1 rounded-full text-[10px] font-semibold leading-[130%] uppercase"
+                                :class="bgPeriod[period]"
+                            >
+                                {{translatePeriod[period]}}
+                            </span>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -121,7 +124,9 @@ const data = ref(null)
 const search = ref(null)
 const countsByPeriod = ref(null)
 const totalCounts = ref(0)
-const pendingCount = ref(0)
+const totalValidCount = ref(0)
+const countsGeneralByPeriod = ref(0)
+const pendingCountsByPeriod = ref(0)
 const filtersModal = ref(null);
 const allFilters = ref({
     search: null,
@@ -131,7 +136,6 @@ const allFilters = ref({
 const openFiltersModal = ref(false)
 //pusher
 const channelChat = ref(null);
-const channelStay = ref(null);
 const channelQuery = ref(null);
 const channelUpdate = ref(null);
 const pusher = ref(null);
@@ -145,11 +149,6 @@ onUnmounted(() => {
     if (channelChat.value) {
         channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
         pusher.value.unsubscribe(channelChat.value);
-    }
-
-    if (channelStay.value) {
-        channelStay.value.unbind('App\\Events\\CreateStayEvent');
-        pusher.value.unsubscribe(channelStay.value);
     }
     
     if (channelQuery.value) {
@@ -175,23 +174,31 @@ async function submit(data){
 }
 
 async function searchInList(){
-    if(search.value?.length >= 3){
-        allFilters.value = {
-            search: search.value,
-            periods: allFilters.value.periods,
-            pendings:  allFilters.value.pendings
-        }
-        loadData();
+    if(search.value?.length == 0){
+        loadSearch(null);
     }
+    if(search.value?.length >= 3){
+        loadSearch(search.value);
+    }
+}
+
+async function loadSearch(search){
+    allFilters.value = {
+        search,
+        periods: allFilters.value.periods,
+        pendings:  allFilters.value.pendings
+    }
+    loadData(false);
 }
 
 async function loadData(showLoadPage = true){
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
     list.value = data.value.stays;
     countsByPeriod.value = data.value.counts_by_period;
-    totalCounts.value = data.value.total_counts;
-    totalCounts.value = data.value.total_counts;
-    pendingCount.value = data.value.pending_counts;
+    totalCounts.value = data.value.total_count;
+    totalValidCount.value = data.value.total_valid_count;
+    countsGeneralByPeriod.value = data.value.counts_general_by_period;
+    pendingCountsByPeriod.value = data.value.pending_counts_by_period;
 }
 
 const connectPusher = () =>{
@@ -203,15 +210,8 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', (data) => {
-        console.log('NotifyStayHotelEvent')
         let showLoadPage = data.showLoadPage ?? true;
         loadData(showLoadPage);
-    });
-
-    channelStay.value = 'private-create-stay.' + hotelStore.hotelData.id;
-    channelStay.value = pusher.value.subscribe(channelStay.value);
-    channelStay.value.bind('App\\Events\\CreateStayEvent', (data) => {
-        loadData();
     });
 
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
@@ -241,13 +241,13 @@ function cleanSearch(){
         periods: allFilters.value.periods,
         pendings:  allFilters.value.pendings
     }
-    if(route.params.stayId){
-        router.push({
-            name: 'StayDetailPage',
-            params: { id: route.params.stayId }
-        });
-    }
-    loadData();
+    // if(route.params.stayId){
+    //     router.push({
+    //         name: 'StayDetailPage',
+    //         params: { id: route.params.stayId }
+    //     });
+    // }
+    loadData(false);
 }
 
 
@@ -279,8 +279,8 @@ const bgPeriod = {
 
 provide('openFiltersModal',openFiltersModal)
 provide('bgPeriod',bgPeriod)
-provide('totalCounts',totalCounts)
-provide('pendingCount',pendingCount)
+provide('countsGeneralByPeriod',countsGeneralByPeriod)
+provide('pendingCountsByPeriod',pendingCountsByPeriod)
 
 </script>
 <style>

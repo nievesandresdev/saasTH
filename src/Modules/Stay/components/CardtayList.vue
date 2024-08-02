@@ -62,7 +62,7 @@
                 >
             </div>
         </div>
-        <div v-if="stay.chat?.pending || stay.pending_queries_count" class="absolute h-full right-0.5 top-0 w-1 hbg-warning z-10"></div>
+        <div v-if="stay.has_pending_chats || stay.pending_queries_count" class="absolute h-full right-0.5 top-0 w-1 hbg-warning z-10"></div>
     </div>
 </template>
 <script setup>

@@ -284,13 +284,6 @@
         </div>
   
         <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
-         <!--  <button
-            class="px-4 py-2.5 font-medium rounded w-full bg-hoster-gray text-black"
-            @click="prevStep"
-            v-if="currentStep > 1"
-          >
-            Anterior
-          </button> -->
           <button
             class="px-4 py-2 font-medium rounded w-full text-black"
             @click="currentStep === 3 ? handleStoreUser() : nextStep()"
@@ -299,12 +292,6 @@
           >
             {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
           </button>
-          <!-- <button
-            class="px-4 py-2.5 font-medium rounded w-full text-black hbtn-cta"
-            @click="currentStep === 3 ? handleStoreUser() : nextStep()"
-          >
-            {{ currentStep === 3 ? 'Crear Usuario' : 'Siguiente' }}
-          </button> -->
         </div>
         <ModalNoSave
           :id="'not-saved'"
@@ -782,22 +769,26 @@ const clearForm = () => {
 const ref_section_add = ref(null);  // Declarar la referencia
 const ref_modal_crud = ref(null);
 
+// Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
-  const modalCrudEl = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
+  const modalCrud = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
 
-  if (addSection && !addSection.contains(event.target) && (!modalCrudEl || !modalCrudEl.contains(event.target))) {
+  //console.log('modalisCrud',modalCrud,event.target)
+  
+  if (addSection && !addSection.contains(event.target) && modalCrud && !modalCrud.contains(event.target)) {
+    //console.log('handleClickOutsideCreate',event.target)
     closeModal();
   }
 };
 watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
-      console.log('modalAddInit',props.modalAdd)
+      //console.log('modalAddInit',props.modalAdd)
         registerClickOutside();
     });
   } else {
-    console.log('modalAddClose',props.modalAdd)
+    //console.log('modalAddClose',props.modalAdd)
     unregisterClickOutside();
   }
 });
@@ -838,8 +829,8 @@ onMounted(async () => {
 function closeModal() {
   if (changes.value) {
     showModalNoSave.value = true;
-    console.log('showModalNoSaveSS',showModalNoSave.value)
-    //emits('showModalNoSave', true);
+    //console.log('showModalNoSaveSS',showModalNoSave.value)
+    emits('showModalNoSave', true);
   } else {
     emits('close');
   }

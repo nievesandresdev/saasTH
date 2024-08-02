@@ -15,7 +15,7 @@
     </section>
 </template>
 <script setup>
-import { ref, onMounted, watch, provide } from 'vue';
+import { ref, onMounted, watch, provide, onBeforeUnmount } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import Head from '../components/HeadDetail.vue'
 import TimeLineCard from './TimeLineCard.vue'
@@ -35,12 +35,22 @@ const timeLineData = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
+    stayStore.$createSession(stayId.value ,'sessions')
+    window.addEventListener('beforeunload', handleBeforeUnload);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
 })
 
 onBeforeRouteLeave((to, from, next) => {
-    if (!['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name)) {
-        // Ejecutar `updateDetailSession` solo si la ruta de destino no está en el array allowedRoutes
-        updateDetailSession();
+    if (
+        !['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name) || 
+        to.params.stayId !== from.params.stayId && to.name == 'StayDetailPage' 
+    ) {
+        // Ejecutar `deleteSession`  si la ruta de destino no está en el array allowedRoutes
+        // o ejecutar deleteSession si esta ingresando a otra estancia
+        deleteSession();
     }
     next();
 });
@@ -54,10 +64,15 @@ watch(() => route.query.g, async (newId) => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,newId);
 }, { immediate: true });  
 
+const handleBeforeUnload = (event) => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    delete event['returnValue']; // Evitar la alerta del navegador
+}
 
-const updateDetailSession = async () => {
+const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
-    await stayStore.$deleteSession(stayId.value ,'sessions', user.email);
+    await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
 }
 
 provide('data',data)

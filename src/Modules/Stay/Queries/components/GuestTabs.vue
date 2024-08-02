@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="flex" v-if="data">
-            <button
+            <div
                 v-for="guest in data.guests"
                 class="text-base leading-[110%] font-medium pb-2 relative"
                 :key="guest.id"
@@ -17,7 +17,7 @@
                     src="/assets/icons/EllipseWarning.svg" alt=""
                 >
                 {{ guest.name ?? 'Sin nombre'}}
-            </button>
+            </div>
         </div>
     </section>
 </template>
@@ -44,7 +44,7 @@ function goGuest(guestId){
     });
 }
 </script>
-<style>
+<style scoped>
 .shadow-tab{
     box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.15);
 }
