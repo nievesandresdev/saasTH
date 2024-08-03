@@ -1,9 +1,9 @@
 <template>
     <div class="h-screen px-[24px] bg-[#FAFAFA]">
         <div class="pb-5">
-            <section class="flex justify-between py-[20px] border-b border-[#BFBFBF]">
+            <section class="flex justify-between items-center py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
-                    <h1 class="font-medium text-[22px]">Perfil del WebApp</h1>
+                    <h1 class="font-medium text-[22px]">WebApp</h1>
                     <BaseTooltipResponsive
                         size="l"
                         :top="55"
@@ -19,9 +19,21 @@
                         </template>
                     </BaseTooltipResponsive>
                 </div>
+                <div class="space-x-2 flex">
+                    <h1 class="font-semibold text-[14px]">Idiomas</h1>
+                    <TooltipLanguages
+                        size="l"
+                        :top="55"
+                        :right="0"
+                    >
+                        <template #button>
+                            <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                        </template>
+                    </TooltipLanguages>
+                </div>
             </section>
         </div>
-        <div class="h-screen pt-10 flex flex-col md:flex-row">
+        <div class="h-screen pt-5 flex flex-col md:flex-row">
             <!-- mockup -->
             <div id="mockup" class="relative h-[520px] w-[258px]">
                 <div id="content-mockup" class="bg-gray-100 absolute z-[100] top-11 left-5 overflow-hidden">
@@ -173,7 +185,7 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 // COMPONENTS
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
-import ToggleShowProfile from '@/Modules/Hotel/Components/ToggleShowProfile.vue';
+import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import { useMockupStore } from '@/stores/modules/mockup';
 
 const mockup = useMockupStore();
@@ -182,6 +194,9 @@ onMounted(()=>{
     mockup.$setIframeUrl('')
     //mockup.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 })
+
+
+
 </script>
 
 <style scoped>

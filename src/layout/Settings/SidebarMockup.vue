@@ -15,6 +15,18 @@
 
             <!-- container info text's -->
             <div class="mt-4">
+                <div class="flex items-center gap-2 mb-4" v-if="store.setLanguage">
+                    <TooltipLanguages
+                        size="l"
+                        :top="20"
+                        :right="0"
+                    >
+                        <template #button>
+                            <img class="w-[16px] h-[16px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                        </template>
+                    </TooltipLanguages>
+                    <span class="font-semibold text-[12px]"> Idiomas</span>
+                </div>
                 <!-- infoText1 -->
                 <div 
                     class="flex gap-2 items-center"
@@ -32,6 +44,7 @@
 
 <script setup>
 import { useMockupStore } from '@/stores/modules/mockup';
+import TooltipLanguages from "@/components/TooltipLanguages.vue";
 
 const store = useMockupStore();
 </script>
