@@ -9,7 +9,7 @@
                     <div class="form-card bg-white shadow-md rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
                         <form @submit.prevent="handleUpdateProfile">
                             <h1 class="text-lg font-semibold text-center flex mb-6">Información de perfil</h1>
-                            <div class="hmb-4 mb-6 flex flex-col">
+                            <div class="mb-2 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Nombre</label>
                                 <input 
                                     type="text"
@@ -25,7 +25,7 @@
                                 />
                                  -->
                             </div>
-                            <div class="hmb-4 mb-6 flex flex-col">
+                            <div class="mb-2 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Apellidos</label>
                                 <input 
                                     type="text"
@@ -40,7 +40,7 @@
                                     required
                                 /> -->
                             </div>
-                            <div class="hmb-4 mb-6 flex flex-col">
+                            <div class="mb-2 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Correo electrónico</label>
                                 <input 
                                     type="email"
@@ -64,7 +64,7 @@
                                     <small v-text="errorEmailText"></small>
                                 </div>
                             </div>
-                            <div class="mb-6">
+                            <div class="mb-2">
                                 <label class="text-sm font-medium">Teléfono móvil</label>
                                 <div class="flex rounded relative">
                                     <div class="relative w-2/5">
@@ -99,8 +99,8 @@
                                     <span v-show="changePassword" @click="showChangePass()" class="text-sm font-medium ml-auto cursor-pointer">Cancelar</span>
                                 </div>
                                 <div class="relative w-100 collaborator-box">
-                                    <img v-if="changePassword && form.current_password !== '' && visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('current_password')">
-                                    <img v-if="changePassword && form.current_password !== '' && !visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('current_password')">
+                                    <img v-if="changePassword && form.current_password !== '' && visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('current_password')">
+                                    <img v-if="changePassword && form.current_password !== '' && !visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('current_password')">
                                     <input 
                                         :type="visible_pass.current_password ? 'text' : 'password'"
                                         class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
@@ -118,9 +118,9 @@
                                         <span class="font-medium text-sm">Nueva contraseña</span>
                                     </div>
                                     <div class="relative w-100 collaborator-box">
-                                        <img v-if="form.new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
-                                        <img v-if="form.new_password !== '' && visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('new_password')">
-                                        <img v-if="form.new_password !== '' && !visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('new_password')">
+                                        <img v-if="form.new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                                        <img v-if="form.new_password !== '' && visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('new_password')">
+                                        <img v-if="form.new_password !== '' && !visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('new_password')">
                                         <input 
                                             :type="visible_pass.new_password ? 'text' : 'password'"
                                             class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
@@ -135,9 +135,9 @@
                                         <span class="font-medium text-sm">Confirmar nueva contraseña</span>
                                     </div>
                                     <div class="relative w-100 collaborator-box">
-                                        <img v-if="form.confirm_new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
-                                        <img v-if="form.confirm_new_password !== '' && visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('confirm_new_password')">
-                                        <img v-if="form.confirm_new_password !== '' && !visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('confirm_new_password')">
+                                        <img v-if="form.confirm_new_password === ''" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                                        <img v-if="form.confirm_new_password !== '' && visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="toggleVisibility('confirm_new_password')">
+                                        <img v-if="form.confirm_new_password !== '' && !visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('confirm_new_password')">
                                         <input 
                                             :type="visible_pass.confirm_new_password ? 'text' : 'password'"
                                             class="w-full rounded h-11 py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 

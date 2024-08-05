@@ -118,14 +118,18 @@
               <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
             </button>
           </div>
-          <div class="text-center">
+          <div class="text-center px-8">
             <h3 class="text-lg font-medium">{{ authStore.fullName }}</h3>
             <p class="text-sm text-gray-500 font-semibold">{{ $getRoleName(authStore.user.role) }}</p>
-            <div class="mt-4 flex justify-center gap-3">
+            <div class="mt-3 mb-6 flex justify-center gap-4">
               <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
                 Ver Suscripción
               </button>
+              <!-- <button class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
+                <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
+                Ver Suscripción
+              </button> -->
               <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
                 Ajustes de cuenta
