@@ -307,6 +307,7 @@
   
   let selectedShow = ref(null);
   const showUser = (data) => {
+    if(modalAdd.value || modalEdit.value) return;
     setTimeout(() => {
       selectedUser.value = data;
       modalShow.value = true;
