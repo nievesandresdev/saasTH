@@ -88,7 +88,7 @@
                     <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
                       {{ user.work_position }}
                     </td>
-                    <td @click="showUser(user)" class="px-6 py-4 ">
+                    <td @click="showUser(user)" class="py-4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
                       <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
                         Activo
                       </span>
@@ -96,7 +96,7 @@
                         Inactivo
                       </span>
                     </td>
-                    <td class="px-6 py-4 relative">
+                    <td class="pl-10 py-4 ">
                       <Toggle
                         :user="user"
                         :index="index"

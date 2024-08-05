@@ -123,7 +123,7 @@
   };
 
   const dropdownPosition = computed(() => {
-    return window.innerWidth <= 1440 ? 'right-0' : 'left-0';
+    return window.innerWidth <= 1440 ? 'right-2' : 'left-1';
   });
   </script>
   
