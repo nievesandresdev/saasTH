@@ -552,7 +552,7 @@ const submit = async () => {
         });
     });
 
-    console.log('Saving changes:', payload);
+    //console.log('Saving changes:', payload);
 
     const params = {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
