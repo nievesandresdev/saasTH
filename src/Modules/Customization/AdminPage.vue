@@ -1,9 +1,9 @@
 <template>
-<div class="h-screen bg-[#FAFAFA] flex flex-col">
+<div class="h-screen bg-[#FAFAFA] flex flex-col ">
     <div class="flex-1 px-[24px]">
         <div class="py-[20px]">
             <h1 class="text-[22px] font-medium">
-                Perzonalización
+                Personalización
             </h1>
         </div>
         <BaseTab v-model="tabCurrent" :items="ITEMS_TABS" />

@@ -119,11 +119,21 @@
     ref="modalDeleteRef"
     @submit="submitDelete()"
 />
+<ModalNoSave
+    :id="'not-saved'"
+    :open="imageSelected.length"
+    text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+    textbtn="Guardar"
+    @saveChanges="submitDelete"
+    type="save_changes"
+/>
 </template>
 
 <script setup>
 
 import { ref, provide, reactive, onMounted, computed } from 'vue';
+
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 // STATE
 //

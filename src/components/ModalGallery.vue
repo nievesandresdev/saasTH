@@ -1,112 +1,112 @@
 <template>
 <ModalWindow v-if="open" :isVisible="open"  :width="'768px'" padding-content="p-0" footer="true">
     <template #content>
-        <div class="px-6 py-4 flex items-center justify-between">
-            <h2 class="text-[18px] font-medium">Galería de imágenes</h2>
-            <button @click="closeModal">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <BaseTab v-model="tabCurrent" class="px-[24px] mt-[24px]" :items="ITEMS_TABS" />
-        <div class="h-[538px] overflow-auto">
-            <div class="px-6 space-y-6">
-                <p class="text-[16px] font-medium mt-6">Elige las imágenes que deseas añadir</p>
-                <BaseTextField
-                    v-model="form.search"
-                    prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
-                    placeholder="Buscar imagen..."
-                    class-content="w-[345px]"
-                    :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: form.search?.length > 0 }"
-                    @enter:search="loadGallery"
-                    @click:append_inner="resetFilter(tabCurrent)"
-                />
-                <p v-if="!imagesContainer?.length" class="text-sm font-medium htext-gray-500 ">No cuentas con imágenes. Busca imágenes en tu ordenador y añadelas</p>
-                <p v-else-if="imagesContainer?.length > 0 && imageSelected?.length == 0" class="text-sm font-medium htext-gray-500">{{ textNumbersImagesFound }}</p>
-                <div v-else-if="imagesContainer?.length > 0 && imageSelected?.length > 0" class="flex space-x-[4px] items-center">
-                    <img src="/assets/icons/1.TH.Checkbox.svg" class="w-[16px] h-[16px]">
-                    <span class="text-sm font-medium"> {{ textNumbersImagesSelected }} </span>
-                </div>
+        <div class="h-[637px]">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <h2 class="text-[18px] font-medium">Galería de imágenes</h2>
+                <button @click="closeModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-            <div class="mt-[16px] px-[24px] overlay-auto">
-                <div class="grid grid-cols-3 gap-4">
-                    <label 
-                        for="fileInput"
-                        class="relative w-[224px] h-[149px] py-[12px] rounded-[6px] border hborder-black-100 cursor-pointer button-add flex flex-col justify-center items-center"
-                    >   
-                        <img src="/assets/icons/1.TH.PLUS.svg" class=" w-[16px] h-[16px]" >
-                        <span class="font-medium text-base">Añadir imagen</span>
-                        <input
-                            type="file"
-                            accept=".jpg, .jpeg, .png, .svg" 
-                            id="fileInput"
-                            multiple
-                            style="display: none;"
-                            @change="handleFiles"
-                            ref="fileInput"
-                        />
-                    </label>
-                    
-                    <div v-for="(img, index) in imagesContainer" :key="index">
-                        <div 
-                            class="gallery-card truncate relative rounded-[6px]"
-                        >
+            <BaseTab v-model="tabCurrent" class="px-[24px] mt-[24px]" :items="ITEMS_TABS" />
+            <div class="h-[412px] overflow-auto">
+                <div class="px-6 space-y-6">
+                    <p class="text-[16px] font-medium mt-6">Elige las imágenes que deseas añadir</p>
+                    <BaseTextField
+                        v-model="form.search"
+                        prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
+                        placeholder="Buscar imagen..."
+                        class-content="w-[345px]"
+                        :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: form.search?.length > 0 }"
+                        @enter:search="loadGallery"
+                        @click:append_inner="resetFilter(tabCurrent)"
+                    />
+                    <p v-if="!imagesContainer?.length" class="text-sm font-medium htext-gray-500 ">No cuentas con imágenes. Busca imágenes en tu ordenador y añadelas</p>
+                    <p v-else-if="imagesContainer?.length > 0 && imageSelected?.length == 0" class="text-sm font-medium htext-gray-500">{{ textNumbersImagesFound }}</p>
+                    <div v-else-if="imagesContainer?.length > 0 && imageSelected?.length > 0" class="flex space-x-[4px] items-center">
+                        <img src="/assets/icons/1.TH.Checkbox.svg" class="w-[16px] h-[16px]">
+                        <span class="text-sm font-medium"> {{ textNumbersImagesSelected }} </span>
+                    </div>
+                </div>
+                <div class="mt-[16px] px-[24px] overlay-auto">
+                    <div class="grid grid-cols-3 gap-4">
+                        <label 
+                            for="fileInput"
+                            class="relative w-[224px] h-[149px] py-[12px] rounded-[6px] border hborder-black-100 cursor-pointer button-add flex flex-col justify-center items-center"
+                        >   
+                            <img src="/assets/icons/1.TH.PLUS.svg" class=" w-[16px] h-[16px]" >
+                            <span class="font-medium text-base">Añadir imagen</span>
+                            <input
+                                type="file"
+                                accept=".jpg, .jpeg, .png, .svg" 
+                                id="fileInput"
+                                multiple
+                                style="display: none;"
+                                @change="handleFiles"
+                                ref="fileInput"
+                            />
+                        </label>
+                        
+                        <div v-for="(img, index) in imagesContainer" :key="index">
                             <div 
-                                class="relative h-full"
-                                @mouseover="indexImageHover = index"
-                                @mouseleave="indexImageHover = null"
+                                class="gallery-card truncate relative rounded-[6px]"
                             >
+                                <div 
+                                    class="relative h-full"
+                                    @mouseover="indexImageHover = index"
+                                    @mouseleave="indexImageHover = null"
+                                >
 
-                                <img 
-                                    class="w-[239px] h-[160px] rounded-6 object-cover"
-                                    loading="lazy"
-                                    :src="galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default })"
-                                >
-                                <div
-                                    v-if="indexImageHover === index || checkSelectedImage(img.url)"
-                                    class="h-full w-full absolute z-[50] rounded-[6px] top-0 left-0 p-2 flex justify-between items-start"
-                                    style="background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%);"
-                                >
-                                    <button
-                                        class="bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
-                                        @click="openPreview(galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default }))"
+                                    <img 
+                                        class="w-[224px] h-[149px] rounded-[6px] object-cover"
+                                        loading="lazy"
+                                        :src="galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default })"
                                     >
-                                        <img src="/assets/icons/1.TH.SEARCH.svg" class=" w-[20px] h-[20px]">
-                                    </button>
-                                    <!-- <Checkbox
-                                        v-model="imageSelected"
-                                        class="w-[24px] h-[24px]"
-                                    /> -->
-                                    <input
-                                        type="checkbox"
-                                        :checked="checkSelectedImage(img.url)"
-                                        :value="img.id"
-                                        :id="index"
-                                        class="hcheckbox w-[24px] h-[24px]"
-                                        @click="multiple ? selectImageMultiple(img, index) : selectImage(img, index)"
+                                    <div
+                                        v-if="indexImageHover === index || checkSelectedImage(img.url)"
+                                        class="h-full w-full absolute z-[50] rounded-[6px] top-0 left-0 p-2 flex justify-between items-start"
+                                        style="background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%);"
                                     >
+                                        <button
+                                            class="bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                                            @click="openPreview(galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default }))"
+                                        >
+                                            <img src="/assets/icons/1.TH.SEARCH.svg" class=" w-[20px] h-[20px]">
+                                        </button>
+                                        <!-- <Checkbox
+                                            v-model="imageSelected"
+                                            class="w-[24px] h-[24px]"
+                                        /> -->
+                                        <input
+                                            type="checkbox"
+                                            :checked="checkSelectedImage(img.url)"
+                                            :value="img.id"
+                                            :id="index"
+                                            class="hcheckbox w-[24px] h-[24px]"
+                                            @click="multiple ? selectImageMultiple(img, index) : selectImage(img, index)"
+                                        >
+                                    </div>
                                 </div>
                             </div>
+                            <p class="text-xs font-medium mt-2 truncate pl-3 w-[12.438rem]">
+                                {{ img?.name ?? img?.file?.name }}
+                            </p>
                         </div>
-                        <p class="text-xs font-medium mt-2 truncate pl-3 w-[12.438rem]">
-                            {{ img?.name ?? img?.file?.name }}
-                        </p>
                     </div>
                 </div>
             </div>
+            <div class="p-6 w-full flex justify-end  hborder-top-gray-400 z-[1000] hbg-white-100 w-full">
+                <button
+                    class="hbtn-cta px-4 py-3 font-medium rounded-[6px] text-sm"
+                    :disabled="!imageSelected?.length"
+                    @click="addImages"
+                >
+                    Añadir
+                </button>
+            </div>
         </div>
-        <div class="p-6 w-full flex justify-end  hborder-top-gray-400 z-[1000] hbg-white-100 w-full">
-            <button
-                class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                :disabled="!imageSelected?.length"
-                @click="addImages"
-            >
-                Añadir
-            </button>
-        </div>
-
-
     </template>
 </ModalWindow>
 <BasePreviewImage 

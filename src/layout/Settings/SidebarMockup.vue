@@ -1,7 +1,7 @@
 <template>
-    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[100]">
-        <div class="px-12">
-            <h1 class="text-base font-semibold leading-[120%] text-center py-[22px]">
+    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[100]  h-screen overflow-y-auto">
+        <div class="px-12 py-[22px]">
+            <h1 class="text-base font-semibold leading-[120%] text-center mb-[22px]">
                 Visualiza tu webapp
             </h1>
             
@@ -39,7 +39,7 @@
                 </div>
                 <template v-if="$route.name === 'Customization'">
                     <div 
-                        class="flex gap-2 items-center"
+                        class="flex gap-2 items-center mt-4"
                     >
                         <img class="w-4 h-4" src="/assets/icons/1.TH.QuestionBubble.svg">
                         <p class="text-xs font-semibold leading-[130%]">
@@ -47,11 +47,11 @@
                         </p>
                     </div>
                     <div 
-                        class="flex gap-2 items-center"
+                        class="flex gap-2 items-center mt-4"
                     >
                         <img class="w-4 h-4" src="/assets/icons/1.TH.COMPUTER.svg">
                         <p class="text-xs font-semibold leading-[130%]">
-                            Abre tu webapp para visualizar el favicon
+                            Abre tu webapp para visualizar el favicond
                         </p>
                     </div>
                 </template>
