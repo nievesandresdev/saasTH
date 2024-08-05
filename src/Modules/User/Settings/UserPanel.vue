@@ -13,32 +13,50 @@
                                 <label class="font-medium text-sm mb-1">Nombre</label>
                                 <input 
                                     type="text"
-                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                    class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md" 
                                     autocomplete="on" 
                                     v-model="form.name" 
                                     required
                                 >
+                                <!-- <BaseTextField
+                                    v-model="form.name"
+                                    autocomplete="on"
+                                    required
+                                />
+                                 -->
                             </div>
                             <div class="hmb-4 mb-6 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Apellidos</label>
                                 <input 
                                     type="text"
-                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                    class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md" 
                                     autocomplete="on" 
                                     v-model="form.lastname" 
                                     required
                                 >
+                                <!-- <BaseTextField
+                                    v-model="form.lastname"
+                                    autocomplete="on"
+                                    required
+                                /> -->
                             </div>
                             <div class="hmb-4 mb-6 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Correo electrónico</label>
                                 <input 
                                     type="email"
-                                    class="w-100 rounded h-11 py-1 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                                    class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md" 
                                     :placeholder="placeholderEmail" 
                                     autocomplete="on" 
                                     v-model="form.email" 
                                     required
                                 >
+                                <!-- <BaseEmailField
+                                    v-model="form.email"
+                                    required
+                                    :placeholder="placeholderEmail"
+                                    :showTextError="errorEmail"
+                                    :textError="errorEmailText"
+                                /> -->
                                 <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -49,12 +67,12 @@
                             <div class="mb-6">
                                 <label class="text-sm font-medium">Teléfono móvil</label>
                                 <div class="flex rounded">
-                                    <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border-r-[1px] border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-gray-700 font-medium text-sm px-4 py-2.5">
+                                    <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, '': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px] border-solid  border-gray-300 text-gray-700 font-medium text-sm px-4 py-2.5">
                                         <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                                     </select>
                                     <input type="text"
                                         placeholder="Número de teléfono"
-                                        class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
+                                        class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg "
                                         :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
                                         v-model="form.phone"
                                         @input="validatePhone"
@@ -145,6 +163,8 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import { useUserStore } from '@/stores/modules/users/users';
 import { useToastAlert } from '@/composables/useToastAlert';
+import BaseTextField from '@/components/Forms/BaseTextField';
+import BaseEmailField from '@/components/Forms/BaseEmailField';
 import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
