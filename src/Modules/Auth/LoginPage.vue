@@ -198,7 +198,7 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(true);
+const showModal = ref(false);
 
 const showAlertModal = ref(false);
 const route = useRoute();
