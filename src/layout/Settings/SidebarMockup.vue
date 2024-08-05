@@ -14,7 +14,7 @@
             </div>
 
             <!-- container info text's -->
-            <div class="mt-4">
+            <div class="mt-4 space-y-4">
                 <!-- infoText1 -->
                 <div 
                     class="flex gap-2 items-center"
@@ -25,6 +25,24 @@
                         {{ store.infoText1 }}
                     </p>
                 </div>
+                <template v-if="$route.name === 'Customization'">
+                    <div 
+                        class="flex gap-2 items-center"
+                    >
+                        <img class="w-4 h-4" src="/assets/icons/1.TH.QuestionBubble.svg">
+                        <p class="text-xs font-semibold leading-[130%]">
+                            Si no te gusta el resultado ponte en contacto con nosotros
+                        </p>
+                    </div>
+                    <div 
+                        class="flex gap-2 items-center"
+                    >
+                        <img class="w-4 h-4" src="/assets/icons/1.TH.COMPUTER.svg">
+                        <p class="text-xs font-semibold leading-[130%]">
+                            Abre tu webapp para visualizar el favicon
+                        </p>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

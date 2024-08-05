@@ -352,9 +352,10 @@ import { useRoute, useRouter  } from 'vue-router';
           group: [
               {
                   title: 'Personalización',
-                  to: 'hoster.customatization.index',
                   icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
-                  include: '/personalizacion'
+                  to: 'Customization',
+                  include: '/personalizacion',
+                  selectedArr: ['Customization'],
               },
               {
                   title: 'Textos legales',
@@ -364,9 +365,10 @@ import { useRoute, useRouter  } from 'vue-router';
               },
               {
                   title: 'Galería de imágenes',
-                  to: '',
                   icon: '/assets/icons/1.TH.IMAGES.svg',
-                  include: '/huespedes'
+                  to: 'Gallery',
+                  include: '/galeria',
+                  selectedArr: ['Gallery'],
               },
           ],
       },
