@@ -368,13 +368,13 @@ const getSettings = async () => {
 };
 
 const validateUrl = (url, type) => {
-    console.log('Validating:', url, type);
+    //console.log('Validating:', url, type);
 
     // Si el campo está vacío, no hay errores
     if (!url) {
         return null;
     }
-    
+
     let urlParts;
     try {
         urlParts = new URL(url);
@@ -383,15 +383,25 @@ const validateUrl = (url, type) => {
     }
 
     const hostname = urlParts.origin; 
-    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/
+    let pathname = urlParts.pathname; // /path/to/
 
     // Verifica que el dominio termine en .com
     if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
+    // Elimina cualquier query string o fragmento en la URL
+    pathname = pathname.split('?')[0].split('#')[0];
+
     switch (type) {
         case 'booking':
+            // Elimina cualquier cosa después de ".html" en la URL
+            if (pathname.includes('.html')) {
+                
+                pathname = pathname.substring(0, pathname.indexOf('.html') + 5);
+                form.booking.url = hostname + pathname;
+
+            }
             if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
                 return 'El formato del enlace de Booking es incorrecto. Debe contener "/hotel/" y terminar en ".html".';
             }
@@ -409,7 +419,8 @@ const validateUrl = (url, type) => {
         case 'airbnb':
             console.log('Validating Airbnb:', url);
             break;
-        case 'expedia' :
+        case 'expedia':
+            // Añadir validación específica para Expedia si es necesario
             break;
         default:
             return 'Tipo de enlace no soportado';
@@ -441,6 +452,8 @@ const markAdditionalLinkChange = (index) => {
         additionalLinks.value[index].errorMessage = validationError;
     }
 };
+
+
 
 const addAnotherLink = () => {
     additionalLinks.value.push({ url: '', _id: "", errors: false, errorMessage: '', status: 1 });
