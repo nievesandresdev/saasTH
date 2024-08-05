@@ -24,8 +24,8 @@
                 </router-link>
                 <transition name="fade">
                     <ul v-if="showSubmenu || isActiveSubmenu('Equipo')" class="submenu mt-2">
-                        <router-link to="/equipo/configuracion/usuarios" class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Usuarios</router-link>
-                        <router-link to="/equipo/configuracion/notificaciones" class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
+                        <router-link to="/equipo/configuracion/usuarios" v-show="!$isOperator()" class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Usuarios</router-link>
+                        <router-link to="/equipo/configuracion/notificaciones"  class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
                     </ul>
                 </transition>
             </ul>

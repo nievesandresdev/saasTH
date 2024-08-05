@@ -298,10 +298,10 @@ const menu_links = ref([
         url: '/dashboard',
       },
       {
-        title: 'Plataformas',
+        title: 'Plataforma',
         icon: '1.TH.DASHBOARDNEW',
         include: ['UserNotificationsSettings', 'UsersSettings'],
-        url: '/equipo/configuracion/usuarios',
+        url: '/equipo/configuracion/notificaciones',
       },
     ],
   },
