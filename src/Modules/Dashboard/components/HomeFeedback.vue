@@ -197,7 +197,7 @@ const average = ref(0);
 const subscribed = ref(true); // Variable para determinar la suscripción
 
 onMounted(async () => {
-    await handleSubscription();
+    //await handleSubscription();
     if(subscribed.value) {
         await handleDataFeedback();
         await handleDataOta();
