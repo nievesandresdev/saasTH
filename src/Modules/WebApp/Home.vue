@@ -6,7 +6,7 @@
                     <h1 class="font-medium text-[22px]">WebApp</h1>
                     <BaseTooltipResponsive
                         size="l"
-                        :top="55"
+                        :top="30"
                         :left="0"
                     >
                         <template #button>
@@ -23,7 +23,7 @@
                     <h1 class="font-semibold text-[14px]">Idiomas</h1>
                     <TooltipLanguages
                         size="l"
-                        :top="55"
+                        :top="30"
                         :right="0"
                     >
                         <template #button>
@@ -33,7 +33,7 @@
                 </div>
             </section>
         </div>
-        <div class="h-screen pt-5 flex flex-col md:flex-row">
+        <div class="h-screen mt-[32px] flex flex-col md:flex-row">
             <!-- mockup -->
             <div id="mockup" class="relative h-[520px] w-[258px]">
                 <div id="content-mockup" class="bg-gray-100 absolute z-[100] top-11 left-5 overflow-hidden">
