@@ -13,7 +13,7 @@
               <h1 class="font-medium text-[22px]">Editar usuario {{ $getRoleName(dataUser.role.name) }}</h1>
             </div>
             <div class="flex justify-end">
-              <button class="" @click="closeModal">
+              <button class="" @click="closeModal(true)">
                 <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
               </button>
             </div>
@@ -34,8 +34,6 @@
                   {{ step.label }}
                 </h3>
               </div>
-
-
 
             <!-- <div class="mb-5">
                 <h3
@@ -838,19 +836,19 @@ const changes = computed(() => {
 function closeModal(complete = false) {
    /*  emits('close');
     currentStep.value = 1; */
-    console.log('changesSS',changes.value,showModalNoSave.value)
-if(!complete){
-    if (changes.value == true) {
-      showModalNoSave.value = true;
-      emits('showModalNoSave', true);
-    } else {
-      emits('close');
-      currentStep.value = 1;
-    }
-}else{
-    emits('close');
-    currentStep.value = 1;
-}
+    //console.log('changesSS',changes.value,showModalNoSave.value)
+    //if(!complete){
+        if (changes.value == true) {
+          showModalNoSave.value = true;
+          emits('showModalNoSave', true);
+        } else {
+          emits('close');
+          currentStep.value = 1;
+        }
+    /* }else{
+        emits('close');
+        currentStep.value = 1;
+    } */
 
 
     /* emits('close');
@@ -969,13 +967,11 @@ if(!complete){
   background-color: #0B6357;
   border-radius: 10px 10px 0 0;
 }
-
+/* 
 .active-step {
-  margin-left: -0.5rem; /* Ajusta según sea necesario */
-  /* margin-right: -0.5rem; 
-  padding-left: 0.5rem;  */
-  padding-right: 0.5rem; /* Ajusta según sea necesario */
-}
+  margin-left: -0.5rem; 
+  padding-right: 0.5rem; 
+} */
 
 </style>
   

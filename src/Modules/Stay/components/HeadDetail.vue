@@ -84,7 +84,7 @@ const connectPusher = () =>{
     //PUSHER
     */
     channelChat.value = 'private-noti-hotel.' + hotelStore.hotelData.id;
-    channelSession.value = 'private-stay-sessions.' + route.params.stayId;
+    channelSession.value = 'private-stay-sessions-hotel.' + hotelStore.hotelData.id;
     
     // Pusher.logToConsole = true;
     pusher.value = getPusherInstance();
@@ -95,8 +95,8 @@ const connectPusher = () =>{
     });
     channelSession.value = pusher.value.subscribe(channelSession.value);
     channelSession.value.bind('App\\Events\\SessionsStayEvent', async (data) => {
-        // console.log('SessionsStayEvent',data)
-        // console.log('SessionsStayEvent stayId',route.params.stayId)
+        console.log('SessionsStayEvent',data)
+        console.log('SessionsStayEvent stayId',route.params.stayId)
         if(Number(data.stayId) == Number(route.params.stayId)){
             console.log('SessionsStayEvent entro')
             session.value = data.session;

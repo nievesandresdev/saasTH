@@ -9,6 +9,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const ENVIROMENT = process.env.VUE_APP_ENVIROMENT
   const iframeUrlRef = ref(null);
   const infoText1Ref = ref(null);
+  const languageRef = ref(null);
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x') {
@@ -36,9 +37,14 @@ export const useMockupStore = defineStore('mockupStore', () => {
       infoTextIcon1Ref.value = iconUrl;
   }
 
+  function $setLanguageTooltip(show = false){
+    languageRef.value = show;
+  }
+
   const iframeUrl = computed(() => iframeUrlRef.value);
   const infoText1 = computed(() => infoText1Ref.value);
   const infoTextIcon1 = computed(() => infoTextIcon1Ref.value);
+  const setLanguage = computed(() => languageRef.value);
 
 
   return {
@@ -47,6 +53,8 @@ export const useMockupStore = defineStore('mockupStore', () => {
     infoText1,
     infoTextIcon1,
     $setInfo1,
-    $reloadIframe
+    $reloadIframe,
+    $setLanguageTooltip,
+    setLanguage
   };
 });

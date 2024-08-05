@@ -8,7 +8,8 @@ const hotelGroupRoutes = [
   {
     path: '/alojamiento',
     component: AppLayout,
-    meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
+    //meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px',showPreloaderPage: false },  
+    meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px'},  
     children: [
       ...hotelProfileRoutes,
       ...hotelFacilityRoutes,

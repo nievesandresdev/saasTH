@@ -56,61 +56,61 @@
       </div>
       <div class="flex-1 flex flex-col justify-between">
         <div>
-          <span class="mb-4 text-sm font-normal">{{ data.length }} usuarios encontrados</span>
-          <table class="w-full text-sm text-left text-gray-500 rtl:text-right shadow-md mt-4">
-            <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700">
-              <tr>
-                <th scope="col" class="px-6 py-3">Nombre</th>
-                <th scope="col" class="px-6 py-3">Tipo</th>
-                <th scope="col" class="px-6 py-3">Puesto</th>
-                <th scope="col" class="px-6 py-3">Estado</th>
-                <th scope="col" class="px-6 py-3">Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(user, index) in data"
-                @mouseover="hoverTable(index)"
-                @mouseleave="hoverTable(index)"
-                :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
-                :class="{
-                  'bg-[#D9F2E9]': selectedShow == user.id,
-                  'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
-                  'shadow-sm': hoverSelected == index
-                }"
-              >
-                <th @click="showUser(user)" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                  {{ user.name }}
-                </th>
-                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
-                  {{ $getRoleName(user.role.name) }}
-                </td>
-                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
-                  {{ user.work_position }}
-                </td>
-                <td @click="showUser(user)" class="px-6 py-4">
-                  <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-green-100 rounded-full">
-                    Activo
-                  </span>
-                  <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
-                    Inactivo
-                  </span>
-                </td>
-                <td class="px-6 py-4 relative">
-                  <Toggle
-                    :user="user"
-                    :index="index"
-                    :visibleDropdown="visibleDropdown"
-                    :isAdmin="$isAdmin"
-                    :isOperator="$isOperator"
-                    @close="closeToggleDropdown"
-                    @editUser="editUser"
-                    @openModalDelete="openModalDelete"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
+            <table class="w-full text-sm  text-gray-500 rtl:text-right shadow-md mt-4 overflow-hidden rounded-lg">
+                <thead class="text-xs text-gray-700 uppercase text-left dark:bg-gray-700">
+                  <tr>
+                    <th scope="col" class="px-5 py-3">Nombre</th>
+                    <th scope="col" class="px-5 py-3">Tipos</th>
+                    <th scope="col" class="px-5 py-3">Puesto</th>
+                    <th scope="col" class="px-5 py-3">Estado</th>
+                    <th scope="col" class="px-5 py-3">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(user, index) in data"
+                    @mouseover="hoverTable(index)"
+                    @mouseleave="hoverTable(index)"
+                    :key="user.id"
+                    class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
+                    :class="{
+                      'bg-[#ECF9F5]': selectedShow == user.id,
+                      'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
+                      'shadow-sm': hoverSelected == index
+                    }"
+                  >
+                    <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      {{ user.name }}
+                    </th>
+                    <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
+                      {{ $getRoleName(user.role.name) }}
+                    </td>
+                    <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
+                      {{ user.work_position }}
+                    </td>
+                    <td @click="showUser(user)" class="px-6 py-4 ">
+                      <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                        Activo
+                      </span>
+                      <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                        Inactivo
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 relative">
+                      <Toggle
+                        :user="user"
+                        :index="index"
+                        :visibleDropdown="visibleDropdown"
+                        :isAdmin="$isAdmin"
+                        :isOperator="$isOperator"
+                        @close="closeToggleDropdown"
+                        @editUser="editUser"
+                        @openModalDelete="openModalDelete"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
         </div>
         <div class="mt-4">
           <Pagination
@@ -146,49 +146,48 @@
       @update="editUser"
       @delete="openModalDelete"
     />
-    <ModalWindow v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()">
+    <ModalWindow width="344px" v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()" paddingBottom="8" paddingTop="4" paddingRight="4" paddingLeft="4">
       <template #content>
         <div class="flex justify-end w-full">
-          <button @click="closeConfirmCreateUser">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div @click="closeConfirmCreateUser">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-          </button>
+          </div>
         </div>
-        <div class="flex flex-col items-center p-4">
-          <img src="/assets/icons/TH.CHECK.svg" alt="Check Icon" class="mb-4 w-8 h-8" />
+        <div class="flex flex-col items-center">
+          <img src="/assets/icons/TH.CHECK.svg" alt="Check Icon" class="mb-4 w-[40px] h-[40px]" />
           <h2 class="text-xl font-semibold mb-2 text-center">¡Felicidades! Usuario creado correctamente</h2>
-          <p class="text-center text-gray-600">
+          <p class="text-center text-gray-600 text-sm font-normal">
             Se enviará un email de bienvenida con las credenciales a la dirección de correo designada.
           </p>
         </div>
       </template>
     </ModalWindow>
-    <ModalWindow v-if="deleteUser" :isVisible="deleteUser" @close="closeDeleteUser">
+    <ModalWindow  :isVisible="deleteUser" @close="closeDeleteUser">
       <template #content>
-        <div class="flex justify-start">
-          <button @click="closeDeleteUser">
+        <div class="flex justify-end">
             <img
               src="/assets/icons/1.TH.CLOSE.svg"
-              class="w-6 h-6"
+              class="w-6 h-6 cursor-pointer"
+              @click="closeDeleteUser"
             >
-          </button>
         </div>
-        <div class="flex justify-center">
+        <div class="flex justify-center mb-4">
           <img
             src="/assets/icons/warning.svg"
             class="w-8 h-8"
           >
         </div>
-        <p class="text-lg font-bold mt-4 text-center mb-2">¿Desea eliminar al usuario<br> {{userData.name }} {{ userData.profile?.lastname }}?</p>
-        <p class="text-sm text-center">Estás a punto de eliminar un usuario. Este proceso es irreversible y eliminará todos los datos asociados con el usuario. Si solo necesitas bloquear su acceso a un hotel, considera desvincularlo del mismo desde el menú editar usuario.</p>
+        <p class="text-xl font-semibold mt-4 text-center mb-2">¿Desea eliminar al usuario<br> {{userData.name }} {{ userData.profile?.lastname }}?</p>
+        <p class="text-sm font-normal text-left">Estás a punto de eliminar un usuario. Este proceso es irreversible y eliminará todos los datos asociados con el usuario. Si solo necesitas bloquear su acceso a un hotel, considera desvincularlo del mismo desde el menú editar usuario.</p>
         <div class="flex justify-between mt-4">
-          <button @click="closeDeleteUser" class="hbtn-tertiary text-sm font-medium underline my-auto">
+          <div @click="closeDeleteUser" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
             Cancelar
-          </button>
-          <button @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4">
+          </div>
+          <div @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer">
             Eliminar usuario
-          </button>
+          </div>
         </div>
       </template>
     </ModalWindow>

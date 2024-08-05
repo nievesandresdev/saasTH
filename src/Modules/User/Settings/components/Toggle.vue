@@ -16,7 +16,8 @@
       </svg>
       <div
         v-if="visible"
-        class="absolute left-0 w-48 bg-white rounded-md shadow-md py-1 z-50"
+        class="absolute w-48 bg-white rounded-md shadow-md py-1 z-50"
+        :class="dropdownPosition"
       >
         <a
           href="#"
@@ -120,5 +121,9 @@
       emits('close');
     }
   };
+
+  const dropdownPosition = computed(() => {
+    return window.innerWidth <= 1440 ? 'right-0' : 'left-0';
+  });
   </script>
   

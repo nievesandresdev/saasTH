@@ -6,7 +6,7 @@ const dashboardRoutes = [
   {
     path: '/places',
     component: AppLayout,
-    component: AppLayout,
+    //component: AppLayout,
     meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px' },  
     children: [
       {

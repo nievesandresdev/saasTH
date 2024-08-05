@@ -2,7 +2,7 @@ import axios from 'axios'
 import { i18n } from '@/i18n'
 import { usePreloaderStore } from '@/stores/modules/preloader';
 import { useAuthStore } from '@/stores/modules/auth/login'
-
+import router from '@/router'; 
 
 // const locale = localStorage.getItem('locale') || 'es'
 const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
@@ -17,10 +17,23 @@ function getPreloaderStore() {// función auxiliar que devuelve el store de prel
 }
 
 axios.interceptors.request.use(config => {
-  if (config.showPreloader !== false) {
+   // Obtén la ruta actual
+   const currentRoute = router.currentRoute.value;
+
+   // Establece showPreloaderPage como true por defecto si no está definido
+   const routeShowPreloader = currentRoute.meta.showPreloaderPage !== undefined ? currentRoute.meta.showPreloaderPage : true;
+ 
+   // Manejo del preloader basado en la meta y la configuración
+   if (config.showPreloader !== false && routeShowPreloader) {
+     const preloader = getPreloaderStore();
+     preloader.requestStarted();
+   }
+  
+  // Manejo del preloader basado en la meta
+  /* if (currentRoute.meta.showPreloader !== false) {
     const preloader = getPreloaderStore();
     preloader.requestStarted();
-  }
+  } */
   const token = sessionStorage.getItem('token')
 
   if (token) {

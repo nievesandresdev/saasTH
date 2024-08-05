@@ -43,7 +43,7 @@ const $isAdmin = () => {
 
 const $isOperator = () => {
     const authStore = useAuthStore();
-    return authStore.user.role === 'Operator';
+    return authStore.user?.role === 'Operator';
 };
 
 const $nameLanguage = (lang) => {
