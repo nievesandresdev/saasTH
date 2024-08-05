@@ -94,7 +94,7 @@
             </p>
             <div class="flex flex-col">
               <label for="correo" class="font-medium text-sm">Correo electrónico</label>
-              <input
+              <!-- <input
                 v-model="forgot.email"
                 type="email"
                 class="rounded border-1 w-100 py-2 text-sm"
@@ -103,7 +103,16 @@
                 required
                 autofocus
                 autocomplete="username"
-              >                
+              >     -->
+              <BaseTextField
+                v-model="forgot.email"
+                type="email"
+                :error="forgot.errors?.email"
+                placeholder="Correo Electrónico"
+                required
+                autofocus
+                autocomplete="username"
+              />            
             </div>
             <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
           </div>
@@ -175,6 +184,7 @@ import LoadingAuth from './Components/LoadingAuth.vue';
 import { useUserStore } from '@/stores/modules/users/users'
 import ModalWindow from '@/components/ModalWindow.vue'; 
 import { resetPassword } from '@/api/services/auth';
+import BaseTextField from '@/components/Forms/BaseTextField';
 import { useRoute, useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
@@ -188,7 +198,7 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(false);
+const showModal = ref(true);
 
 const showAlertModal = ref(false);
 const route = useRoute();

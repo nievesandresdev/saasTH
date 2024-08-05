@@ -146,19 +146,19 @@
       @update="editUser"
       @delete="openModalDelete"
     />
-    <ModalWindow v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()">
+    <ModalWindow width="344px" v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()" paddingBottom="8" paddingTop="4" paddingRight="4" paddingLeft="4">
       <template #content>
         <div class="flex justify-end w-full">
-          <button @click="closeConfirmCreateUser">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div @click="closeConfirmCreateUser">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-          </button>
+          </div>
         </div>
-        <div class="flex flex-col items-center p-4">
-          <img src="/assets/icons/TH.CHECK.svg" alt="Check Icon" class="mb-4 w-8 h-8" />
+        <div class="flex flex-col items-center">
+          <img src="/assets/icons/TH.CHECK.svg" alt="Check Icon" class="mb-4 w-[40px] h-[40px]" />
           <h2 class="text-xl font-semibold mb-2 text-center">¡Felicidades! Usuario creado correctamente</h2>
-          <p class="text-center text-gray-600">
+          <p class="text-center text-gray-600 text-sm font-normal">
             Se enviará un email de bienvenida con las credenciales a la dirección de correo designada.
           </p>
         </div>

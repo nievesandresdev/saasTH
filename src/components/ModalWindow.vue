@@ -6,7 +6,7 @@
       @click.self="closeModal"
     >
       <div :style="{ width: modalWidth }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all">
-        <div :class="paddingContent">
+        <div :class="computedPaddingContent">
           <slot name="content"></slot>
         </div>
         <slot v-if="footer" name="footer"></slot>
@@ -23,11 +23,27 @@ const props = defineProps({
   isVisible: Boolean,
   width: {
     type: String,
-    default: '400px', // Default width in pixels
+    default: '400px',
   },
   paddingContent: {
     type: String,
     default: 'p-6'
+  },
+  paddingTop: {
+    type: String,
+    default: ''
+  },
+  paddingBottom: {
+    type: String,
+    default: ''
+  },
+  paddingLeft: {
+    type: String,
+    default: ''
+  },
+  paddingRight: {
+    type: String,
+    default: ''
   },
   footer: {
     type: Boolean,
@@ -41,6 +57,19 @@ const closeModal = () => {
 
 const modalWidth = computed(() => {
   return props.width;
+});
+
+const computedPaddingContent = computed(() => {
+  const { paddingTop, paddingBottom, paddingLeft, paddingRight, paddingContent } = props;
+  if (paddingTop || paddingBottom || paddingLeft || paddingRight) {
+    return [
+      paddingTop ? `pt-${paddingTop}` : '',
+      paddingBottom ? `pb-${paddingBottom}` : '',
+      paddingLeft ? `pl-${paddingLeft}` : '',
+      paddingRight ? `pr-${paddingRight}` : ''
+    ].join(' ').trim();
+  }
+  return paddingContent;
 });
 </script>
 
