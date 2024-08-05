@@ -325,24 +325,26 @@ const menu_section = reactive([
   {
       title: 'General',
       group: [
-          {
-              title: 'Personalización',
-              to: 'hoster.customatization.index',
-              icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
-              include: '/personalizacion'
-          },
-          {
-              title: 'Textos legales',
-              to: '',
-              icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
-              include: '/estancias'
-          },
-          {
-              title: 'Galería de imágenes',
-              to: '',
-              icon: '/assets/icons/1.TH.IMAGES.svg',
-              include: '/huespedes'
-          },
+        {
+            title: 'Personalización',
+            icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
+            to: 'Customization',
+            include: '/personalizacion',
+            selectedArr: ['Customization'],
+        },
+        {
+            title: 'Textos legales',
+            to: '',
+            icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
+            include: '/estancias'
+        },
+        {
+            title: 'Galería de imágenes',
+            icon: '/assets/icons/1.TH.IMAGES.svg',
+            to: 'Gallery',
+            include: '/galeria',
+            selectedArr: ['Gallery'],
+        },
       ],
   },
 ])
