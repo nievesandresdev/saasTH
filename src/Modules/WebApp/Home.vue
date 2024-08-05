@@ -1,6 +1,6 @@
 <template>
     <div class="h-screen px-[24px] bg-[#FAFAFA]">
-        <div class="pb-5">
+        <div class="pb-1">
             <section class="flex justify-between items-center py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
                     <h1 class="font-medium text-[22px]">WebApp</h1>
