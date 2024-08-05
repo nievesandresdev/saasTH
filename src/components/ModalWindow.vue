@@ -5,8 +5,8 @@
       class="fixed inset-0 flex items-center justify-center bg-[#00000088] z-[10000]"
       @click.self="closeModal"
     >
-      <div :style="{ width: modalWidth }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all">
-        <div :class="computedPaddingContent">
+      <div :style="{ width: modalWidth }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all overflow-hidden">
+        <div :class="computedPaddingContent" class="">
           <slot name="content"></slot>
         </div>
         <slot v-if="footer" name="footer"></slot>
