@@ -4,13 +4,18 @@
         <!-- date info-->
         <div class="flex items-center mb-2">
             <img class="w-4 h-4" src="/assets/icons/1.TH.schedule.svg" alt="">
-            <p class="text-xs font-normal ml-2">{{$formatTimestampDate(data.created_at,'dd/MM/yyyy')}} | {{ parseInt(daysDifference) }} {{ dayLabel }} {{ beforeOrAfter }} del {{ periodLabel }}</p>
+            <p class="text-xs font-normal ml-2">
+              {{$formatTimestampDate(data.responded_at,'dd/MM/yyyy')}} 
+              <template v-if="parseInt(daysDifference) > 0">
+                | {{ parseInt(daysDifference) }} {{ dayLabel }} {{ beforeOrAfter }} del {{ periodLabel }}
+              </template>
+            </p>
         </div>
 
         <!-- time -->
         <div class="flex items-center">
             <img class="w-4 h-4" :src="`/assets/icons/1.TH.CLOCK.svg`" alt="">
-            <p class="text-xs font-normal ml-2"> {{ $formatTimestampDate(data.created_at,'HH:mm') }} </p>
+            <p class="text-xs font-normal ml-2"> {{ $formatTimestampDate(data.responded_at,'HH:mm') }} </p>
                             
         </div>
 
@@ -100,13 +105,22 @@ const referenceDate = computed(() => {
   return DateTime.fromISO(props.stay.check_in)
 })
 
+
 const daysDifference = computed(() => {
-  const createdAt = DateTime.fromISO(props.data.created_at)
-  return Math.abs(referenceDate.value.diff(createdAt, 'days').days)
-})
+  // Convertir la cadena de fecha usando el formato correcto
+  const respondedAt = DateTime.fromFormat(props.data.responded_at, 'yyyy-MM-dd HH:mm:ss', { zone: 'Europe/Madrid' });
+  // Comprobar si respondedAt es válido
+  if (!respondedAt.isValid) {
+    return 0;
+  }
+
+  // Calcular la diferencia en días y asegurar que es un valor absoluto
+  return Math.abs(referenceDate.value.diff(respondedAt, 'days').days);
+});
+
 
 const dayLabel = computed(() => {
-  return daysDifference.value === 1 ? 'día' : 'días'
+  return parseInt(daysDifference.value) == 1 ? 'día' : 'días'
 })
 
 const periodLabel = computed(() => {
@@ -117,8 +131,10 @@ const periodLabel = computed(() => {
 })
 
 const beforeOrAfter = computed(() => {
-  const createdAt = DateTime.fromISO(props.data.created_at)
-  return createdAt < referenceDate.value ? 'antes' : 'después'
+  const respondedAt = DateTime.fromFormat(props.data.responded_at, 'yyyy-MM-dd HH:mm:ss', { zone: 'Europe/Madrid' });
+  console.log('responded_at',respondedAt)
+  console.log('referenceDate.value',referenceDate.value)
+  return respondedAt < referenceDate.value ? 'antes' : 'después'
 })
 
 const questions = {
