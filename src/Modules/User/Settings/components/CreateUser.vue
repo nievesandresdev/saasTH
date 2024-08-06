@@ -233,15 +233,15 @@
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
-                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded" :disabled="isRoleOne">
-                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
+                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
+                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleAdmin"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                     <!-- <pre>{{ userStore.$getHotels(['id', 'name']) }}</pre> -->
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox disabled:opacity-50 h-5 w-5 rounded" :disabled="isRoleOne">
-                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
+                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox disabled:opacity-50 h-5 w-5 rounded" :disabled="isRoleAdmin">
+                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
                 <!-- <pre>{{ jsonHotel }}</pre> -->
@@ -261,9 +261,9 @@
                         <div class="space-y-2">
                             <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
+                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
 
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -273,8 +273,8 @@
                         <div class="space-y-2">
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
+                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -378,7 +378,7 @@
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);
   const errorEmail = ref(false);
-  const isRoleOne = ref(false);
+  const isRoleAdmin = ref(false);
 
   const form = ref({
     work_position_id: null,
@@ -432,13 +432,13 @@ const adminAccess = ref([
     selectedRoleName.value = rol.name;
     form.value.role = rol.id;
     rolAlert.value = rol.id;
-    if (rol.id === 1) {
-        isRoleOne.value = true;
+    if (rol.id === 1 || rol.id === 2) {
+        isRoleAdmin.value = true;
         
         //handleChecked.value = true;
     } else {
       //console.log('rol',rol.id);
-        isRoleOne.value = false;
+        isRoleAdmin.value = false;
         handleChecked.value = false;
         selectAllHotels.value = false;
         //handleSelectAll(true)
@@ -526,7 +526,7 @@ const adminAccess = ref([
 
   const selectAllHotels = ref(false);
   
-  watch(() => form.value.role, (newRole) => { //fran check
+  watch(() => form.value.role, (newRole) => { 
     if (newRole === 1 || newRole === 2) {
         selectAllHotels.value = true;
         handleSelectAll(true);
@@ -753,7 +753,7 @@ const clearForm = () => {
     };
     selectedRoleName.value = 'Selecciona el tipo de usuario deseado';
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
-    isRoleOne.value = false;
+    isRoleAdmin.value = false;
     errorPhone.value = false;
     errorPrefix.value = false;
     errorEmail.value = false;
