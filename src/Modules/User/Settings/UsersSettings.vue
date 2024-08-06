@@ -57,60 +57,60 @@
       <div class="flex-1 flex flex-col justify-between">
         <div>
           <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
-            <table class="w-full text-sm  text-gray-500 rtl:text-right shadow-md mt-4 overflow-hidden rounded-lg">
-                <thead class="text-xs text-gray-700 uppercase text-left dark:bg-gray-700">
-                  <tr>
-                    <th scope="col" class="px-5 py-3">Nombre</th>
-                    <th scope="col" class="px-5 py-3">Tipos</th>
-                    <th scope="col" class="px-5 py-3">Puesto</th>
-                    <th scope="col" class="px-5 py-3">Estado</th>
-                    <th scope="col" class="px-5 py-3">Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(user, index) in data"
-                    @mouseover="hoverTable(index)"
-                    @mouseleave="hoverTable(index)"
-                    :key="user.id"
-                    class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
-                    :class="{
-                      'bg-[#ECF9F5]': selectedShow == user.id,
-                      'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
-                      'shadow-sm': hoverSelected == index
-                    }"
-                  >
-                    <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                      {{ user.name }}
-                    </th>
-                    <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
-                      {{ $getRoleName(user.role.name) }}
-                    </td>
-                    <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900">
-                      {{ user.work_position }}
-                    </td>
-                    <td @click="showUser(user)" class="py-4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
-                      <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
-                        Activo
-                      </span>
-                      <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
-                        Inactivo
-                      </span>
-                    </td>
-                    <td class="pl-10 py-4 ">
-                      <Toggle
-                        :user="user"
-                        :index="index"
-                        :visibleDropdown="visibleDropdown"
-                        :isAdmin="$isAdmin"
-                        :isOperator="$isOperator"
-                        @close="closeToggleDropdown"
-                        @editUser="editUser"
-                        @openModalDelete="openModalDelete"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-            </table>
+          <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 overflow-hidden rounded-lg">
+            <thead class="text-xs text-gray-700 uppercase text-left dark:bg-gray-700">
+              <tr>
+                <th scope="col" class="px-5 py-3 w-1/4">Nombre</th>
+                <th scope="col" class="px-5 py-3 w-1/4">Tipos</th>
+                <th scope="col" class="px-5 py-3 w-1/4">Puesto</th>
+                <th scope="col" class="px-5 py-3 w-1/4">Estado</th>
+                <th scope="col" class="px-5 py-3 w-1/4">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(user, index) in data"
+                @mouseover="hoverTable(index)"
+                @mouseleave="hoverTable(index)"
+                :key="user.id"
+                class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
+                :class="{
+                  'bg-[#ECF9F5]': selectedShow == user.id,
+                  'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
+                  'shadow-sm': hoverSelected == index
+                }"
+              >
+                <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                  {{ user.name }}
+                </th>
+                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words">
+                  {{ $getRoleName(user.role.name) }}
+                </td>
+                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words">
+                  {{ user.work_position }}
+                </td>
+                <td @click="showUser(user)" class="py-4 whitespace-normal break-words" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
+                  <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                    Activo
+                  </span>
+                  <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                    Inactivo
+                  </span>
+                </td>
+                <td class="pl-10 py-4 whitespace-normal break-words">
+                  <Toggle
+                    :user="user"
+                    :index="index"
+                    :visibleDropdown="visibleDropdown"
+                    :isAdmin="$isAdmin"
+                    :isOperator="$isOperator"
+                    @close="closeToggleDropdown"
+                    @editUser="editUser"
+                    @openModalDelete="openModalDelete"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="mt-4">
           <Pagination
