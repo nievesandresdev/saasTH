@@ -33,16 +33,16 @@
                 </div>
             </section>
         </div>
-        <div class="h-screen mt-[32px] flex flex-col md:flex-row">
+        <div class="h-screen mt-[31px] flex flex-col md:flex-row">
             <!-- mockup -->
-            <div id="mockup" class="relative h-[520px] w-[258px]">
+            <div id="mockup" class="relative h-[520px] w-[265px]">
                 <div id="content-mockup" class="bg-gray-100 absolute z-[100] top-11 left-5 overflow-hidden">
                     <iframe class="w-full h-full" :src="mockup.iframeUrl"></iframe>
                 </div>
                 <div class="fixed-size-container">
-                    <img class="fixed-size-image left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
+                    <img class="fixed-size-image left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt="">
                 </div>
-                <img class=" left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
+                <!-- <img class=" left-0 top-0 h-full z-50 w-[520px] fixed-size" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt=""> -->
             </div>
             <!-- section -->
             <div class="w-full p-2 ml-4 flex-1 fixed-size-content">
@@ -205,8 +205,8 @@ onMounted(()=>{
 }
 #content-mockup{
     border-radius: 0 0 8px 8px;
-    height: 451px;
-    width: 221px;
+    height: 460px;
+    width: 224px;
 }
 
 /* Custom Styles */
@@ -231,7 +231,7 @@ onMounted(()=>{
 
 .fixed-size-image {
     width: 100%;
-    height: 100%;
+    height: 540px;
     object-fit: contain; /* Ajusta la imagen dentro del contenedor sin deformarla */
 }
 
