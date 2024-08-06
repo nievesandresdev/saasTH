@@ -441,7 +441,7 @@ const adminAccess = ref([
         isRoleOne.value = false;
         handleChecked.value = false;
         selectAllHotels.value = false;
-        handleSelectAll()
+        //handleSelectAll(true)
     }
     isModalOpen.value = false;
 
@@ -526,8 +526,8 @@ const adminAccess = ref([
 
   const selectAllHotels = ref(false);
   
-  watch(() => form.value.role, (newRole) => {
-    if (newRole === 1) {
+  watch(() => form.value.role, (newRole) => { //fran check
+    if (newRole === 1 || newRole === 2) {
         selectAllHotels.value = true;
         handleSelectAll(true);
 
@@ -543,12 +543,13 @@ const adminAccess = ref([
             handleCheckPermission(access.value, true);
         });
         
-    }else{
+    }else if(newRole === 3){
         selectAllHotels.value = false;
-        //handleSelectAll(true);
         jsonHotel.value = [];
         handleChecked.value = false;
+        handleSelectAll();
     }
+      
 }, { immediate: true });
 
 const handleSelectAll = (initial = false) => {
