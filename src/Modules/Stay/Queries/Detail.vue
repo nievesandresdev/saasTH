@@ -31,7 +31,8 @@ const stayId = ref(route.params.stayId);
 const guestId = ref(route.query.g);
 const data = ref(null);
 const guestAccess = ref(null);
-const timeLineData = ref(null);
+const timeLineData = ref(null)
+const session = ref(null);;
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
@@ -79,4 +80,5 @@ provide('data',data)
 provide('timeLineData',timeLineData);
 provide('guestAccess',guestAccess)
 provide('currentPeriod',timeLineData.value?.currentPeriod)
+provide('session',session) // se define para porder ser usada en la cabecera
 </script>

@@ -132,8 +132,8 @@ const periodLabel = computed(() => {
 
 const beforeOrAfter = computed(() => {
   const respondedAt = DateTime.fromFormat(props.data.responded_at, 'yyyy-MM-dd HH:mm:ss', { zone: 'Europe/Madrid' });
-  console.log('responded_at',respondedAt)
-  console.log('referenceDate.value',referenceDate.value)
+  // console.log('responded_at',respondedAt)
+  // console.log('referenceDate.value',referenceDate.value)
   return respondedAt < referenceDate.value ? 'antes' : 'después'
 })
 
