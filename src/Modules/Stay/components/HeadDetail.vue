@@ -2,7 +2,7 @@
     <div class="px-6">
         <div class="flex items-center mt-10">
             <h1 class="text-[22px] font-medium">Estancia{{ route.params.stayId }}</h1>
-            <div class="flex items-center ml-auto" v-if="session && session[0]">
+            <div class="flex items-center ml-auto" v-if="session && session[0] && user.name !== session[0].userName">
                 <img 
                     class="rounded-full w-8 h-8 mr-2" 
                     :src="`https://ui-avatars.com/api/?name=${session[0].userName}&color=fff&background=${session[0].userColor}`"
@@ -29,6 +29,7 @@ const hotelStore = useHotelStore()
 const route = useRoute();
 const data = inject('data')
 const session = inject('session');
+const user = JSON.parse(sessionStorage.getItem('user'));
 
 const stayId = ref(route.params.stayId);
 const views = ref([])
