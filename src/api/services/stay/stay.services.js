@@ -20,6 +20,7 @@ export const deleteGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hoste
 //sessions
 export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data, { showPreloader: false })
 export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })
+export const deleteSessionByHotelAndEmailApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSessionByHotelAndEmail`, data)
 //queries
 export const getDetailQueryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getDetailQueryByGuest`, data)
 //guest

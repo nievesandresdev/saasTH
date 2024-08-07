@@ -180,7 +180,9 @@ const adjustTextareaHeight = () => {
 
 const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
-    await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    if(user){
+        await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    }
 }
 
 watch(() => route.query.g, async (newId) => {
