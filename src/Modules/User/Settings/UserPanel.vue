@@ -6,10 +6,10 @@
         <div class="flex items-center font-montserrat">
             <div class="hidden lg:flex w-full h-min">
                 <div class="w-1/2">
-                    <div class="form-card bg-white shadow-md rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
+                    <div class="form-card bg-white shadow-md rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto mb-12">
                         <form @submit.prevent="handleUpdateProfile">
                             <h1 class="text-lg font-semibold text-center flex mb-6">Información de perfil</h1>
-                            <div class="mb-2 flex flex-col">
+                            <div class="mb-4 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Nombre</label>
                                 <input 
                                     type="text"
@@ -18,14 +18,9 @@
                                     v-model="form.name" 
                                     required
                                 >
-                                <!-- <BaseTextField
-                                    v-model="form.name"
-                                    autocomplete="on"
-                                    required
-                                />
-                                 -->
+                                
                             </div>
-                            <div class="mb-2 flex flex-col">
+                            <div class="mb-4 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Apellidos</label>
                                 <input 
                                     type="text"
@@ -34,13 +29,9 @@
                                     v-model="form.lastname" 
                                     required
                                 >
-                                <!-- <BaseTextField
-                                    v-model="form.lastname"
-                                    autocomplete="on"
-                                    required
-                                /> -->
+                                
                             </div>
-                            <div class="mb-2 flex flex-col">
+                            <div class="mb-4 flex flex-col">
                                 <label class="font-medium text-sm mb-1">Correo electrónico</label>
                                 <input 
                                     type="email"
@@ -50,13 +41,7 @@
                                     v-model="form.email" 
                                     required
                                 >
-                                <!-- <BaseEmailField
-                                    v-model="form.email"
-                                    required
-                                    :placeholder="placeholderEmail"
-                                    :showTextError="errorEmail"
-                                    :textError="errorEmailText"
-                                /> -->
+                                
                                 <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -64,7 +49,7 @@
                                     <small v-text="errorEmailText"></small>
                                 </div>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <label class="text-sm font-medium">Teléfono móvil</label>
                                 <div class="flex rounded relative">
                                     <div class="relative w-2/5">
@@ -92,7 +77,7 @@
                                     <small> Introduce solo números en el campo de teléfono</small>
                                 </div>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <div class="flex mb-1">
                                     <span class="font-medium text-sm">Contraseña Actual</span>
                                     <span v-show="!changePassword" @click="showChangePass()" class="text-sm font-medium ml-auto cursor-pointer">Cambiar contraseña</span>
@@ -113,7 +98,7 @@
                                 </div>
                             </div>
                             <section v-if="changePassword">
-                                <div class="mb-2">
+                                <div class="mb-4">
                                     <div class="flex mb-1">
                                         <span class="font-medium text-sm">Nueva contraseña</span>
                                     </div>
@@ -130,7 +115,7 @@
                                         >
                                     </div>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-4">
                                     <div class="flex mb-1">
                                         <span class="font-medium text-sm">Confirmar nueva contraseña</span>
                                     </div>
