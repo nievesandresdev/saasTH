@@ -27,7 +27,7 @@
                 'border-[#BFBFBF]': !feed.answeredTime,
                 'cursor-pointer': feed.icon === 'Respondido'
             }"
-            @click="goFeedback()"
+            @click="goFeedback(feed.icon === 'Respondido')"
         >
           <div class="flex justify-center mb-2" v-if="!feed.feeling">
             <!-- si es prestay y no respondieron -->
@@ -71,9 +71,10 @@
   
   <script setup>
     import Tooltip from '@/components/Tooltip.vue'
-    import { useRouter } from 'vue-router';
+    import { useRouter, useRoute } from 'vue-router';
 
     const router = useRouter();
+    const route = useRoute();
 
     const props = defineProps({
       feedback: {
@@ -121,8 +122,10 @@
         return queryQualificationText[index][feed.feeling]
     }
   
-    const goFeedback = () =>{
-        router.push({ name: 'ReviewRequestSettingsIndex'});
+    const goFeedback = (bool) =>{
+      if(bool){
+        router.push({ name: 'StayQueryDetail', params: { stayId : route.params.stayId }, query: { g: route.query.g }});
+      }
     }
   </script>
   
