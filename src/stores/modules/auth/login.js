@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
 import { getUserData } from '@/api/services/users/userSettings.service';
+import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/stay.services'
 import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -76,6 +77,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function logout() {
+        let userEmail = user.value.email;
+        console.log('logout',userEmail)
+        await deleteSessionByHotelAndEmailApi({ userEmail });
         const response = await LogoutService();
 
         if (response.ok) {

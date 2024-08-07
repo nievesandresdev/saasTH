@@ -67,7 +67,9 @@ watch(() => route.query.g, async (newId) => {
 
 const handleBeforeUnload = (event) => {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    if(user){
+        stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    }
     delete event['returnValue']; // Evitar la alerta del navegador
 }
 

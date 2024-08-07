@@ -55,7 +55,9 @@ const handleBeforeUnload = (event) => {
 // Function to perform asynchronous operations
 const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
-    await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    if(user){
+        await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    }
 }
 
 // Watchers para actualizaciones de URL
