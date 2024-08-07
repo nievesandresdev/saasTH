@@ -238,6 +238,7 @@
   
   onMounted(() => {
     handleGetUsers();
+    handleTestMail();
   });
   
   const handleConfirmCreateUser = () => {
@@ -273,6 +274,11 @@
     totalUsers.value = response.data.total;
     perPage.value = response.data.per_page;
     totalPages.value = Math.ceil(response.data.total / response.data.per_page);
+  };
+
+  const handleTestMail = async () => {
+    const response = await userStore.$testMail();
+    console.log('mailTesting',response);
   };
   
   const handlePageChange = (page) => {

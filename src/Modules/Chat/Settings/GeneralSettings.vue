@@ -14,21 +14,38 @@
                     <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
                 </template>
                 <template #content>
-                    <div class="mt-6 w-full">
+                    <div class="w-full">
                         <label class="text-sm font-medium mb-2 block">Nombre en la ventana de conversación</label>
                         <BaseTextField
                             v-model="form.name"
                             placeholder="Ej: “Hotel Posada del Sol”"
-                            class-content="w-full"
+                            :class-content="'3xl:w-1/2 1xl:w-full'"
                             @input="handleInputChange"
                         ></BaseTextField>
-                        <label class="text-sm font-medium mb-2 block mt-4">Idiomas disponibles para la atención a tus huéspedes</label>
+                        <div class="flex justify-between 3xl:w-1/2 1xl:w-full">
+                            <label class="text-sm font-medium mb-2 block mt-4">Idiomas disponibles para la atención a tus huéspedes</label>
+                            <Tooltip
+                                size="l"
+                                :top="45"
+                                :right="0"
+                            >
+                                <template v-slot:button>
+                                    <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                                </template>
+                                <template v-slot:content>
+                                    <p class="text-sm">
+                                        Estos son los idiomas que ofrecerá tu personal para comunicarse con tus huéspedes. Ten en cuenta que no todos estos idiomas serán utilizados en las traducciones automáticas.
+                                    </p>
+                                </template>
+                            </Tooltip>
+                        </div>
+                        
                         <div class="relative" ref="dropdownRef">
                             <BaseTextField
                                 v-model="search"
                                 prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                                 placeholder="Selecciona los idiomas con los que se comunicará tu personal"
-                                class-content="w-full"
+                                :class-content="'3xl:w-1/2 1xl:w-full'"
                                 @keyup.prevent="$searchLang"
                                 @enter:search="$searchLang"
                             ></BaseTextField>
@@ -93,6 +110,7 @@ import { useMockupStore } from '@/stores/modules/mockup'
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
 import AlertShowGuest from './components/AlertShowGuest.vue'
+import Tooltip from '@/components/Tooltip.vue'
 
 const form = reactive({
     name: '',
@@ -209,4 +227,5 @@ const valid = computed(() => {
 
 watch(form, handleInputChange, { deep: true })
 </script>
+
 

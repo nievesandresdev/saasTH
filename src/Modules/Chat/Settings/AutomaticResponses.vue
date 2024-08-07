@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen">
+  <div class="flex flex-col min-h-screen mb-8">
     <div class="px-6">
       <TitleChatActivate 
           :defaultToggle="form.show_guest" 
@@ -10,10 +10,10 @@
     <section class="px-6 min-h-screen">
       <HeadChat/>
       <div class="flex justify-start mt-5 gap-2">
-          <span class="text-sm font-semibold">Respuestas automáticas en el chat</span>
+          <span class="text-[18px] font-semibold">Respuestas automáticas en el chat</span>
           <Tooltip size="m" :top="25" :left="5">
             <template v-slot:button>
-                <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                <img class="w-[20px] h-[20px]" src="/assets/icons/info.blue.svg">
             </template>
             <template v-slot:content>
                 <p class="text-sm">Aquí podrás configurar las respuestas automáticas que recibirán tus huéspedes cuando los operadores no estén disponibles para atender el Chat.
@@ -46,7 +46,7 @@
               v-model="form.first_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px] p-3"
+              class-input="text-sm h-[66px] min-h-[64px] p-3"
               name="description"
           />
           <div class="flex justify-between items-center">
@@ -65,7 +65,7 @@
               v-model="form.second_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px] p-3"
+              class-input="text-sm h-[66px] min-h-[64px] p-3"
               id="description"
           />
           <div class="flex justify-between items-center">
@@ -84,7 +84,7 @@
               v-model="form.three_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[70px] min-h-[84px] p-3"
+              class-input="text-sm h-[66px] p-3"
               id="description"
           />
           <div class="flex flex-col w-full">
@@ -119,7 +119,7 @@
               v-model="form.not_available_msg['es']"
               placeholder="Descripción..."
               class-content="flex-1"
-              class-input="text-sm h-[50px] min-h-[64px] p-3"
+              class-input="text-sm h-[66px] min-h-[64px] p-3"
               name="description"
           />
           <div class="flex flex-col w-full">

@@ -12,7 +12,7 @@
                 rows="5"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-[108px] min-h-[114px] hinput hinput-green rounded-[6px] border"
+                class="w-full h-[108px]  hinput hinput-green rounded-[6px] border"
                 :class="`${customInputClass} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
@@ -43,7 +43,7 @@ const  props = defineProps({
     },
     classInput: {
         type: String,
-        default: 'p-3 text-sm'
+        default: 'p-3 text-sm min-h-[114px]'
     },
     placeholder: {
         type: String,
