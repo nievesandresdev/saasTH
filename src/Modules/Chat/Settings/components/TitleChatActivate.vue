@@ -1,6 +1,22 @@
 <template>
     <div class="mt-6 flex justify-between items-center">
-        <h1 class="text-lg font-medium">Configuración de chat</h1>
+        <div class="flex justify-start items-center gap-2">
+            <h1 class="text-[22px] font-medium">Configuración de chat</h1>
+            <Tooltip
+                size="l"
+                :top="25"
+                :left="0"
+            >
+                <template v-slot:button>
+                    <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                </template>
+                <template v-slot:content>
+                    <p class="text-sm">
+                        Aquí podrás configurar los aspectos, funcionamientos y disponibilidad horaria del chat, mediante el cual te comunicarás con tus huéspedes.
+                    </p>
+                </template>
+            </Tooltip>
+        </div>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
             <p class="text-sm font-semibold">Mostrar al huésped</p>
             <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0">
