@@ -30,64 +30,71 @@
           </template>
           <template #content>
           <!-- contenido-->
-          <div class="flex justify-between items-center">
-            <label class="text-sm font-medium mb-2 block">Después de 1 minuto sin recibir una respuesta</label>
-            <div class="flex">
-              <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
-              <BaseSwichInput
-                v-model="form.first_available_show"
-                class-content="w-full"
-                class-input="text-sm"
-                id="first_available_show"
+          <section class="mb-4">
+            <div class="flex justify-between items-center">
+              <label class="text-sm font-medium mb-2 block">Después de 1 minuto sin recibir una respuesta</label>
+              <div class="flex">
+                <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
+                <BaseSwichInput
+                  v-model="form.first_available_show"
+                  class-content="w-full"
+                  class-input="text-sm"
+                  id="first_available_show"
+                />
+              </div>
+            </div>
+          
+            <BaseTextareaField
+                v-model="form.first_available_msg['es']"
+                placeholder="Descripción..."
+                class-content="flex-1"
+                class-input="text-sm h-[66px] min-h-[64px] p-3"
+                name="description"
+            />
+          </section>
+          <section class="mb-4">
+            <div class="flex justify-between items-center">
+              <label class="text-sm font-medium mb-2 block">Después de 5 minutos sin recibir una respuesta</label>
+              <div class="flex">
+                <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
+                <BaseSwichInput
+                  v-model="form.second_available_show"
+                  class-content="w-full"
+                  class-input="text-sm"
+                  id="second_available_show"
               />
+              </div>
             </div>
-          </div>
-          <BaseTextareaField
-              v-model="form.first_available_msg['es']"
-              placeholder="Descripción..."
-              class-content="flex-1"
-              class-input="text-sm h-[66px] min-h-[64px] p-3"
-              name="description"
-          />
-          <div class="flex justify-between items-center">
-            <label class="text-sm font-medium mb-2 block">Después de 5 minutos sin recibir una respuesta</label>
-            <div class="flex">
-              <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
-              <BaseSwichInput
-                v-model="form.second_available_show"
-                class-content="w-full"
-                class-input="text-sm"
-                id="second_available_show"
+            <BaseTextareaField
+                v-model="form.second_available_msg['es']"
+                placeholder="Descripción..."
+                class-content="flex-1"
+                class-input="text-sm h-[66px] min-h-[64px] p-3"
+                id="description"
             />
-            </div>
-          </div>
-          <BaseTextareaField
-              v-model="form.second_available_msg['es']"
-              placeholder="Descripción..."
-              class-content="flex-1"
-              class-input="text-sm h-[66px] min-h-[64px] p-3"
-              id="description"
-          />
-          <div class="flex justify-between items-center">
-            <label class="text-sm font-medium mb-2 block">Después de 10 minutos sin recibir una respuesta</label>
-            <div class="flex">
-              <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
-              <BaseSwichInput
-                v-model="form.three_available_show"
-                class-content="w-full"
-                class-input="text-sm"
-                id="three_available_show"
-            />
-            </div>
-          </div>
-          <BaseTextareaField
-              v-model="form.three_available_msg['es']"
-              placeholder="Descripción..."
-              class-content="flex-1"
-              class-input="text-sm h-[66px] p-3"
-              id="description"
-          />
-          <div class="flex flex-col w-full">
+          </section>
+          <section class="mb-4">
+              <div class="flex justify-between items-center">
+                <label class="text-sm font-medium mb-2 block">Después de 10 minutos sin recibir una respuesta</label>
+                <div class="flex">
+                  <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
+                  <BaseSwichInput
+                    v-model="form.three_available_show"
+                    class-content="w-full"
+                    class-input="text-sm"
+                    id="three_available_show"
+                />
+                </div>
+              </div>
+              <BaseTextareaField
+                  v-model="form.three_available_msg['es']"
+                  placeholder="Descripción..."
+                  class-content="flex-1"
+                  class-input="text-sm h-[66px] p-3"
+                  id="description"
+              />
+          </section>
+          <div class="flex flex-col w-full mt-6">
             <span class="font-semibold text-base mb-2">Comportamiento automático</span>
             <span class="font-semibold text-sm">Si transcurren 30 minutos sin que un operador atienda un chat no leído:</span>
             <span class="font-normal text-sm">El chat se mostrará a los huéspedes como ‘No disponible’. Volverá a mostrarse como ‘Disponible’ en el instante en que se atienda o responda un mensaje.</span>
@@ -122,7 +129,7 @@
               class-input="text-sm h-[66px] min-h-[64px] p-3"
               name="description"
           />
-          <div class="flex flex-col w-full">
+          <div class="flex flex-col w-full mt-6">
             <span class="font-semibold text-base mb-2">Comportamiento automático</span>
             <span class="font-semibold text-sm">Cuando los huéspedes envíen un mensaje al chat fuera del horario de disponibilidad:</span>
             <span class="font-normal text-sm">Se indicará a los huéspedes que el chat está ‘No disponible’ y recibirán la respuesta automática correspondiente.</span>
