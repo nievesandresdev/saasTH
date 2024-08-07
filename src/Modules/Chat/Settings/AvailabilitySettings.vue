@@ -19,7 +19,7 @@
                   <div class="flex 1xl:w-[42.5rem] 3xl:w-full">
                       <!-- day -->
                       <div class="w-[6.25rem] mr-4 flex-shrink-0 pt-[25px]">
-                          <input type="checkbox" class="rounded hcheckbox w-[16px] h-[16px]" v-model="schedule.active">
+                          <input type="checkbox" class="rounded hcheckbox w-[20px] h-[20px]" v-model="schedule.active">
                           <p 
                           class="inline ml-2 text-sm font-medium"
                           :class="{'opacity-75': !schedule.active}"

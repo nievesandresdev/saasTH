@@ -49,7 +49,7 @@ export default {
     computed: {
         computeClasses() {
             return {
-                'h-10 rounded-[6px] text-sm font-medium px-1 border': true,
+                'h-10 rounded-[6px] text-sm font-medium px-1 border hinput-green': true,
                 'hborder-black-100': this.modelValue && this.modelValue !== '' && !this.isError && !this.error,
                 'hborder-gray-400 htext-gray-400': (!this.modelValue || this.modelValue == '') && !this.isError && !this.error,
                 'w-24 text-center': !this.customClasses,
