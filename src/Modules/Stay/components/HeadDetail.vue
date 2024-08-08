@@ -35,7 +35,6 @@ const data = inject('data')
 const session = inject('session');
 const user = JSON.parse(sessionStorage.getItem('user'));
 
-const stayId = ref(route.params.stayId);
 const views = ref([])
 const countPendingChats = ref(0)
 const countPendingQueries = ref(0)
@@ -62,7 +61,7 @@ const updateViews = () => {
                 name: 'Seguimiento',
                 active: route.name === 'StayQueryDetail',
                 viewName: 'StayQueryDetail',
-                params: { stayId: stayId.value },
+                params: { stayId: route.params.stayId },
                 query: { g: guestId },
                 notify : countPendingQueries.value > 0
             },
@@ -70,7 +69,7 @@ const updateViews = () => {
                 name: 'Chat',
                 active: route.name === 'StayChatRoom',
                 viewName: 'StayChatRoom',
-                params: { stayId: stayId.value },
+                params: { stayId: route.params.stayId },
                 query: { g: guestId },
                 notify : countPendingChats.value > 0
             },
