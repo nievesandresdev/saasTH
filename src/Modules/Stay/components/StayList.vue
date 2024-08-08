@@ -148,7 +148,8 @@ const allFilters = ref({
     search: null,
     periods: ['pre-stay','in-stay','post-stay'],
     pendings:  'all',
-    offset : 0
+    offset : 0,
+    limit: 6,
 })
 const openFiltersModal = ref(false)
 //pusher
@@ -168,7 +169,7 @@ onMounted(async () => {
         observer.value = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 if(totalCounts.value > 0 && list.value.length < totalCounts.value && !loading.value){
-                    loadData(false);
+                    loadData(false, false);
                 }
             }
         }, {
@@ -224,16 +225,19 @@ async function searchInList(){
 }
 
 async function loadSearch(search){
-    allFilters.value = {
-        search,
-        periods: allFilters.value.periods,
-        pendings:  allFilters.value.pendings
-    }
-    loadData(false);
+    allFilters.value.search = search;
+    loadData(true, false);
 }
 
-async function loadData(showLoadPage = true){
-    allFilters.value.offset = list.value.length;
+async function loadData(resetList = false, showLoadPage = true){
+    if(resetList){
+        allFilters.value.offset = 0;
+        allFilters.value.limit = list.value.length;
+    }else{
+        allFilters.value.limit = 6;
+        allFilters.value.offset = list.value.length;    
+    }
+    
     loading.value = true;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
     countsByPeriod.value = data.value.counts_by_period;
@@ -241,7 +245,12 @@ async function loadData(showLoadPage = true){
     totalValidCount.value = data.value.total_valid_count;
     countsGeneralByPeriod.value = data.value.counts_general_by_period;
     pendingCountsByPeriod.value = data.value.pending_counts_by_period;
-    list.value = [...list.value, ...data.value.stays];
+    if(resetList){
+        list.value = data.value.stays;
+    }else{
+        list.value = [...list.value, ...data.value.stays];
+    }
+    
     loading.value = false;
 }
 
@@ -259,16 +268,19 @@ const connectPusher = () =>{
     // });
 
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
+    console.log('channelUpdate.value',channelUpdate.value)
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
+        console.log('UpdateStayListEvent staylist',data)
         let showLoadPage = data.showLoadPage ?? true;
-        loadData(showLoadPage);
+        loadData(true, showLoadPage);
     });
 
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
     channelQuery.value = pusher.value.subscribe(channelQuery.value);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
-        loadData();
+        let showLoadPage = data.showLoadPage ?? true;
+        loadData(true, showLoadPage);
     });
 }
 
@@ -291,6 +303,7 @@ function cleanSearch(){
     //         params: { id: route.params.stayId }
     //     });
     // }
+    list.value = [];
     loadData(false);
 }
 
