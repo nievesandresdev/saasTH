@@ -152,7 +152,6 @@ const submit = async () =>{
     verifyName();
     if(valid_form.value){
         openInviteGuest.value = false;
-        alert(String(valid_form.value));
         await guestStore.$inviteToHotel(form);
         cleanForm();
         toast.warningToast('Invitacion enviada.','top-right');
