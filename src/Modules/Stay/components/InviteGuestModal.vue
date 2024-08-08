@@ -1,27 +1,26 @@
 <template>
-    <Modal :isVisible="openInviteGuest" width="362px" footer paddingContent="p-4">
+    <Modal :isVisible="openInviteGuest" width="377px" footer paddingContent="pt-4 px-4 pb-6">
         <template #content>
-            <div class="relative">
-                <button class="absolute left-0 top-0" @click="closeModal">
+            <div class="flex items-center justify-between">
+                <h1 class="text-lg font-medium leading-[120%]">
+                    Invitar huésped
+                </h1>
+                <button class="" @click="closeModal">
                     <img
                         class="w-6 h-6"
                         src="/assets/icons/1.TH.CLOSE.svg"
                     >
                 </button>
-                <h1 class="text-lg font-medium text-center leading-6">
-                    Invitar huésped
-                </h1>
             </div>
             <div class="mt-6">
                 <p class="text-sm font-medium mb-2 leading-[110%]">Nombre del huésped</p>
                 <div>
                     <BaseTextField
+                        classInput="h-[36px] text-sm px-3 py-2"
                         :placeholder="'Introduce el nombre del huésped'"
                         v-model="form.name"
-                        :customClasses="{
-                            'hborder-gray-400':!form.name,
-                            'hborder-alert-negative':errorsKey.includes('name'),
-                        }"
+                        :error="alertNameNull"
+                        @input:typing="verifyName"
                     />
                 </div>
             </div>
@@ -43,9 +42,11 @@
                     </Tooltip>
                 </div>
                 <BaseEmailField
+                    customClasses="h-[36px] text-sm px-3 py-2"
                     :placeholder="'Introduce el correo del huésped'"
                     v-model="form.email"
                     @handleError="EmailFieldError = $event"    
+                    @input:typing="verifyName"
                 />
             </div>
             <div class="mt-4 relative">
@@ -65,6 +66,7 @@
                     </Tooltip>
                 </div>
                 <BasePhoneField
+                    heigthClass="h-[36px]"
                     :textLabel="'+ Código país'"
                     :options="[
                         {value:'+34',label:'+34'},
@@ -72,30 +74,30 @@
                         {value:'+1',label:'+1'},
                     ]"
                     v-model="form.phone"
-                    :error="errorsKey.includes('email-phone')"
                     @handlePhoneError="PhoneFieldError = $event"
+                    placeholderPhone="Teléfono del huésped"
+                    @keyupInput="verifyName"
                 />
             </div>
         </template>
         <template #footer>
-            <div class="mt-4 flex items-center justify-between px-4 pb-4">
-                <button 
-                    class="px-4 py-3 text-sm font-medium leading-[110%] hbtn-primary"
-                    :class="{'primary-disabled':!valid_form}"
+            <div class="flex items-center justify-between p-4 border-t hborder-gray-400">
+                <div 
+                    class="text-sm font-medium underline hover-htext-black-200 cursor-pointer"
+                    :class="{'htext-gray-500 hover-htext-gray-500':!valid_form}"
                     @click="closeModal"
                     :disabled="!valid_form"
                 >
                 Cancelar
-                </button>
+                </div>
 
-                <button 
-                    class="px-4 py-3 text-sm font-medium leading-[110%] hbtn-primary"
+                <div 
+                    class="px-4 py-3 text-sm font-medium leading-[110%] hbtn-primary cursor-pointer"
                     :class="{'primary-disabled':!valid_form}"
                     @click="submit"
-                    :disabled="!valid_form"
                 >
                     Enviar
-                </button>
+                </div>
             </div>
         </template>
     </Modal>
@@ -118,7 +120,7 @@ const openInviteGuest = inject('openInviteGuest');
 
 const EmailFieldError = ref(false);
 const PhoneFieldError = ref(false);
-const errorsKey = ref([]);
+const alertNameNull = ref(false);
 
 const form = reactive({
     name:null,
@@ -135,13 +137,26 @@ const cleanForm = () =>{
     form.name =  null
     form.phone = ''
     form.email = null
+    alertNameNull.value = false;
+}
+
+const verifyName = () =>{
+    if(!form.name){
+        alertNameNull.value = true;
+    }else{
+        alertNameNull.value = false;
+    }
 }
 
 const submit = async () =>{
-    openInviteGuest.value = false;
-    await guestStore.$inviteToHotel(form);
-    cleanForm();
-    toast.warningToast('Invitacion enviada.','top-right');
+    verifyName();
+    if(valid_form.value){
+        openInviteGuest.value = false;
+        alert(String(valid_form.value));
+        await guestStore.$inviteToHotel(form);
+        cleanForm();
+        toast.warningToast('Invitacion enviada.','top-right');
+    }
 }
 
 const valid_form = computed(()=>{

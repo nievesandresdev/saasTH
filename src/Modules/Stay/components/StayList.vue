@@ -1,9 +1,14 @@
 <template>
     <aside class="w-full h-full flex flex-col bg-white shadow-hoster">
         
-        <button class="py-[23px] px-4 block">
-            <h5 class="text-base font-semibold leading-[120%] text-left">Estancias</h5>
-        </button>
+        <router-link 
+            class="py-[23px] px-4 block group"
+            :to="{ name : 'StayHomePage'}"
+        >
+            <h5 
+                class="text-base font-semibold leading-[120%] text-left group-hover:text-[#000]"
+            >Estancias</h5>
+        </router-link>
 
         <!-- filters -->
         <div class="px-4  border-b hborder-gray-400">
@@ -75,7 +80,8 @@
         </div>
 
         <div
-            class="overflow-y-auto custom-scrollbar"
+            id="container-list"
+            class="overflow-y-auto custom-scrollbar pb-4"
         >
             <template v-for="stay in list" :key="stay.id">
                 <CardtayList :stay="stay" :search="search"/>
@@ -93,17 +99,27 @@
             <div v-if="totalCounts == 0 && search" class="mt-6 px-4">
                 <p class="text-center text-sm font-medium leading-[140%]">No se han encontrado estancias que coincidan con tus criterios de búsqueda. Prueba a modificar la búsqueda.</p>
             </div>
+
+            <!-- load icon -->
+            <div class="mt-4" v-if="totalCounts > 0 && list.length < totalCounts">  
+                <MiniSpinner />
+            </div>
+            <div class="pt-4 pb-2" v-if="totalCounts > 0 && totalCounts == list.length && list.length > 6">
+                <p class="text-xs font-semibold leading-[150%] htext-gray-500 text-center">No hay más estancias</p>
+            </div>
+            <div ref="loaderRef" class="loader-element"></div>
         </div>
 
         <FiltersModal ref="filtersModal" @submit="submit" />
     </aside>
 </template>
 <script setup>
-import { onMounted, ref, provide, computed, onUnmounted } from 'vue'
+import { onMounted, ref, provide, computed, onUnmounted, nextTick } from 'vue'
 import CardtayList from './CardtayList.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
+import MiniSpinner from './MiniSpinner.vue'
 
 import { getPusherInstance } from '@/utils/pusherSingleton'
 import { useStayStore } from '@/stores/modules/stay/stay';
@@ -119,7 +135,7 @@ const route = useRoute();
 const hotelStore = useHotelStore()
 const stayStore = useStayStore();
 
-const list = ref(null)
+const list = ref([])
 const data = ref(null)
 const search = ref(null)
 const countsByPeriod = ref(null)
@@ -131,7 +147,8 @@ const filtersModal = ref(null);
 const allFilters = ref({
     search: null,
     periods: ['pre-stay','in-stay','post-stay'],
-    pendings:  'all'
+    pendings:  'all',
+    offset : 0
 })
 const openFiltersModal = ref(false)
 //pusher
@@ -139,17 +156,41 @@ const openFiltersModal = ref(false)
 const channelQuery = ref(null);
 const channelUpdate = ref(null);
 const pusher = ref(null);
+const observer = ref(null);
+const loaderRef = ref(null);
+const loading = ref(false);
 
-onMounted( async() => {
-    loadData();
+onMounted(async () => {
+    await loadData();
     connectPusher();
-})
+
+    nextTick(() => {
+        observer.value = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                if(totalCounts.value > 0 && list.value.length < totalCounts.value && !loading.value){
+                    loadData(false);
+                }
+            }
+        }, {
+            root: document.querySelector('#container-list'),
+            rootMargin: '0px',
+            threshold: 1.0  // Ajusta según la sensibilidad deseada
+        });
+
+        if (loaderRef.value) {
+            observer.value.observe(loaderRef.value);
+        }
+    });
+});
 
 onUnmounted(() => {
     // if (channelChat.value) {
     //     channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
     //     pusher.value.unsubscribe(channelChat.value);
     // }
+    if (observer.value) {
+        observer.value.disconnect();
+    }
     
     if (channelQuery.value) {
         channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
@@ -192,13 +233,16 @@ async function loadSearch(search){
 }
 
 async function loadData(showLoadPage = true){
+    allFilters.value.offset = list.value.length;
+    loading.value = true;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    list.value = data.value.stays;
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     totalValidCount.value = data.value.total_valid_count;
     countsGeneralByPeriod.value = data.value.counts_general_by_period;
     pendingCountsByPeriod.value = data.value.pending_counts_by_period;
+    list.value = [...list.value, ...data.value.stays];
+    loading.value = false;
 }
 
 const connectPusher = () =>{

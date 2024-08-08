@@ -157,6 +157,10 @@ const customInputClass = computed(() => {
 .hinput-error {
     border-color: #DC2626;
 }
+input::placeholder{
+    font-weight: 500;
+    color: var(--h-gray-500);
+}
 // .hinput-green {
 //     border-color: #10B981;
 // }

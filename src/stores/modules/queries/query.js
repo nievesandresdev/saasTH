@@ -40,9 +40,7 @@ export const useQueryStore = defineStore('query', () => {
     }
 
     async function $pendingCountByStay (stayId) {
-        console.log('$pendingCountByStay',stayId)
         const response = await pendingCountByStayApi(stayId)
-        console.log('$pendingCountByStay',response)
         const { ok } = response   
         if(ok){
             return response.data

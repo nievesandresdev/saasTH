@@ -131,7 +131,7 @@ const stayColors= {
 }
 
 const statistics = ref([]);
-const openInviteGuest = ref(false);
+const openInviteGuest = ref(true);
 
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
