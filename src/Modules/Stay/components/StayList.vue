@@ -149,7 +149,7 @@ const allFilters = ref({
     periods: ['pre-stay','in-stay','post-stay'],
     pendings:  'all',
     offset : 0,
-    limit: 6,
+    limit: 10,
 })
 const openFiltersModal = ref(false)
 //pusher
@@ -234,7 +234,7 @@ async function loadData(resetList = false, showLoadPage = true){
         allFilters.value.offset = 0;
         allFilters.value.limit = list.value.length;
     }else{
-        allFilters.value.limit = 6;
+        allFilters.value.limit = 10;
         allFilters.value.offset = list.value.length;    
     }
     
