@@ -14,7 +14,7 @@
             <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
             <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
           </div>
-          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit'">
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit' && type !== 'alone_exit_save' ">
               <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
@@ -44,10 +44,18 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type == 'alone_exit'">
-              <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button  @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir
               </button>
               <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
+                {{ textbtn ?? 'Seguir' }}
+              </button>
+          </div>
+          <div class="mt-4 flex justify-between" v-if="type == 'alone_exit_save'">
+              <button  @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir sin guardar
+              </button>
+              <button @click="onlySaveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
                 {{ textbtn ?? 'Seguir' }}
               </button>
           </div>
@@ -78,8 +86,9 @@ const intendedRoute = ref(null);
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
   if (!props.forceOpen) {
-    if (props.type === 'exit_save' || props.type === 'alone_exit') {
+    if (props.type === 'exit_save' || props.type === 'alone_exit' || props.type === 'alone_exit_save') {
       visitNow.value = newVal;
+      showModal.value = true;
     } else {
       visitNow.value = false;
     }
@@ -99,6 +108,16 @@ function closeModal() {
   emit('close');
 }
 
+function onlySaveChanges() {
+  emit('saveChanges');
+  onlyCloseModal();
+}
+
+function onlyCloseModal() {
+  visitNow.value = false;
+  //emit('close');
+}
+
 function hiddenModal() {
   showModal.value = false;
   emit('hidden');
@@ -110,6 +129,7 @@ function saveChanges() {
 }
 
 function goLink() {
+  console.log(intendedRoute.value);
   if (intendedRoute.value) {
       showModal.value = false;
       closeModal();
@@ -122,6 +142,8 @@ function goLink() {
 }
 
 router.beforeEach((to, from, next) => {
+    //intendedRoute.value = to.fullPath
+    
   if (showModal.value && !visitNow.value) {
     intendedRoute.value = to.fullPath;
     visitNow.value = true;
@@ -129,6 +151,8 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+
+  console.log(showModal.value, visitNow.value);
 });
 </script>
 

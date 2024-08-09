@@ -13,7 +13,7 @@
               <h1 class="font-medium text-[22px]">Editar usuario {{ $getRoleName(dataUser.role.name) }}</h1>
             </div>
             <div class="flex justify-end">
-              <button class="" @click="closeModal(true)">
+              <button class="" @click="closeModal()">
                 <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
               </button>
             </div>
@@ -189,14 +189,14 @@
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
-                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded" :disabled="isRoleOne">
-                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleOne"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
+                        <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50" :disabled="isRoleAdmin">
+                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleAdmin"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox disabled:opacity-50 h-5 w-5 rounded" :disabled="isRoleOne">
-                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" :sizeClasses="`h-5 w-5`"/> -->
+                        <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox disabled:opacity-50 h-5 w-5 rounded" :disabled="isRoleAdmin">
+                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class=" h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
                 <!-- <pre>{{ jsonHotel }}</pre> -->
@@ -217,8 +217,8 @@
                         <div class="space-y-2">
                             <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between  rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
+                                <input type="checkbox" v-model="item.selected" class="hcheckbox disabled:opacity-50 w-[20px] h-[20px] text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -228,8 +228,8 @@
                         <div class="space-y-2">
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleOne" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleOne" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
+                                <input type="checkbox" v-model="item.selected" class="hcheckbox w-[20px] h-[20px] text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
+                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -257,11 +257,10 @@
           text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
           textbtn="Guardar"
           @close="closeModalEditUser"
-          @saveChanges="handleStoreUser"
-          :type="'alone_exit'"
+          @saveChanges="handleUpdateUser"
+          type="alone_exit_save"
           @hidden="handleCloseModal"
         />
-        
       </div>
       
     </transition>
@@ -279,6 +278,8 @@
 
   
   const emits = defineEmits(['close','update']);
+
+  const initPermissions = ref([])
   
   const props = defineProps({
     modalEdit: Boolean,
@@ -296,6 +297,7 @@
   if (newVal) {
     initializeForm();
     initialForm.value = JSON.stringify(form);
+    initPermissions.value = JSON.stringify(jsonHotel.value);
 
   }
 });
@@ -361,12 +363,14 @@ const form = ref({
   const errorPasswordMatch = ref(false);
   const errorPassword = ref(false);
   const errorEmail = ref(false);
-  const isRoleOne = ref(false);
+  const isRoleAdmin = ref(false);
 
 
   
   const handleChecked = ref(false)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
+
+
 
   
 
@@ -382,6 +386,7 @@ const form = ref({
         form.value.email = props.dataUser.email || '';
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
+       
 
         /* const firstHotel = computed(() => {
             if (props.dataUser?.hotels && props.dataUser.hotels.length > 0) {
@@ -476,20 +481,39 @@ const form = ref({
     isModalCrudOpen.value = false;
   }
 
-  const selectRole = (rol) => {
+  /* const selectRole = (rol) => {
     selectedRoleName.value = rol.name;
     form.value.role = rol.id;
     rolAlert.value = rol.id;
     if (rol.id === 1) {
-        isRoleOne.value = true;
+        isRoleAdmin.value = true;
         
         //handleChecked.value = true;
     } else {
       //console.log('rol',rol.id);
-        isRoleOne.value = false;
+        isRoleAdmin.value = false;
         handleChecked.value = false;
         selectAllHotels.value = false;
         handleSelectAll()
+    }
+    isModalOpen.value = false;
+
+  }; */
+
+  const selectRole = (rol) => {
+    selectedRoleName.value = rol.name;
+    form.value.role = rol.id;
+    rolAlert.value = rol.id;
+    if (rol.id === 1 || rol.id === 2) {
+        isRoleAdmin.value = true;
+        
+        //handleChecked.value = true;
+    } else {
+      //console.log('rol',rol.id);
+        isRoleAdmin.value = false;
+        handleChecked.value = false;
+        selectAllHotels.value = false;
+        //handleSelectAll(true)
     }
     isModalOpen.value = false;
 
@@ -571,7 +595,7 @@ const form = ref({
   const selectAllHotels = ref(false);
   
   watch(() => form.value.role, (newRole) => {
-    if (newRole === 1) {
+    if (newRole === 1 || newRole === 2) {
         selectAllHotels.value = true;
         handleSelectAll(true);
 
@@ -587,13 +611,35 @@ const form = ref({
             handleCheckPermission(access.value, true);
         });
         
-    }else{
+    }else{ // eso es si quita el rol de admin devuelve al estado original con initPermissions
         selectAllHotels.value = false;
-        //handleSelectAll(true);
-        //jsonHotel.value = [];
+        
+        jsonHotel.value = JSON.parse(initPermissions.value);
         handleChecked.value = false;
+
+        //jsonhotel values each selected acces
+        jsonHotel.value.forEach(hotel => {
+            const hotelId = Object.keys(hotel)[0];
+            const permissions = hotel[hotelId];
+            
+            operationAccess.value.forEach(access => {
+                if (permissions[access.value] && permissions[access.value].status) {
+                    access.selected = true;
+                }else{
+                    access.selected = false;
+                }
+            });
+            adminAccess.value.forEach(access => {
+                if (permissions[access.value] && permissions[access.value].status) {
+                    access.selected = true;
+                }else{
+                    access.selected = false;
+                }
+            });
+        });
+        
     }
-}, { immediate: true });
+});
 
 const handleSelectAll = (initial = false) => {
     //const allSelected = selectAllHotels.value;
@@ -732,7 +778,7 @@ const handleUpdateAllPermissions = (add) => {
     form.value.access = jsonHotel.value;
 };
 
-if (form.value.role === 1) {
+if (form.value.role === 1 || form.value.role === 2) {
     // Seleccionar todos los hoteles y permisos inicialmente
     handleSelectAll(true);
     operationAccess.value.forEach(access => {
@@ -799,7 +845,7 @@ const clearForm = () => {
     };
     selectedRoleName.value = 'Selecciona el tipo de usuario deseado';
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
-    isRoleOne.value = false;
+    isRoleAdmin.value = false;
     errorPhone.value = false;
     errorPrefix.value = false;
     errorEmail.value = false;
@@ -837,7 +883,8 @@ function closeModal(complete = false) {
    /*  emits('close');
     currentStep.value = 1; */
     //console.log('changesSS',changes.value,showModalNoSave.value)
-    //if(!complete){
+    if(!complete){
+      //alert('complete')
         if (changes.value == true) {
           showModalNoSave.value = true;
           emits('showModalNoSave', true);
@@ -845,10 +892,10 @@ function closeModal(complete = false) {
           emits('close');
           currentStep.value = 1;
         }
-    /* }else{
+    }else{
         emits('close');
         currentStep.value = 1;
-    } */
+    }
 
 
     /* emits('close');

@@ -16,8 +16,7 @@
       </svg>
       <div
         v-if="visible"
-        class="absolute w-48 bg-white rounded-md shadow-md py-1 z-50"
-        :class="dropdownPosition"
+        class="absolute w-48 bg-white rounded-md shadow-md py-1 z-50 right-3"
       >
         <a
           href="#"
