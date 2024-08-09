@@ -188,6 +188,7 @@ const modalHelpRef = ref(false)
 const pusher = ref(null)
 const channelQuery = ref(null)
 const channelStay = ref(null)
+const channelChat = ref(null)
 const onHoverMainMenu = ref(false)
 
 provide('onHoverMainMenu', onHoverMainMenu)
@@ -197,6 +198,7 @@ const connectPusher = async () => {
     pusher.value = getPusherInstance();
     let channelNameQuery = 'notify-send-query.' + hotelStore.hotelData.id;
     let channelNameStay = 'private-noti-hotel.' + hotelStore.hotelData.id;
+    let channelNameChat = 'private-notify-unread-msg-hotel.' + hotelStore.hotelData.id;
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
@@ -204,21 +206,25 @@ const connectPusher = async () => {
         countPendingQueries.value = await queryStore.$countPendingByHotel();
         //loadExistsPending();
     });
+
+    channelChat.value = pusher.value.subscribe(channelNameChat);
+    channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
+        console.log('NotifyUnreadMsg',data)
+        if(!Number(data.automatic) && data.guest){
+            let room_text =  'Estancia: nº habitación ';
+            data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
+            let routeData = {
+              name : 'StayChatRoom',
+              params : { stayId : data.stay_id },
+              query : { g : data.guest_id }
+            };
+            showNotification(room_text, data.text, routeData, 10000);
+        }
+    });
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-        // if(!Number(data.automatic) && data.guest){
-        //     let room_text =  'Estancia: nº habitación ';
-        //     data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-        //     // let link  = route('stay.hoster.chat',{selected:data.stay_id});
-        //     let routeData = {
-        //       name : 'StayChatRoom',
-        //       params : { stayId : data.stay_id },
-        //       query : { g : data.guest_id }
-        //     };
-        //     showNotification(room_text, data.text, routeData, 10000);
-        // }
-        console.log('NotifyStayHotelEvent main',data)
+        console.log('NotifyStayHotelEvent',data)
         if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
@@ -383,6 +389,11 @@ onUnmounted(() => {
     if (channelQuery.value) {
         channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
         pusher.value.unsubscribe(channelQuery.value);
+    }
+
+    if (channelChat.value) {
+        channelChat.value.unbind('App\\Events\\NotifyUnreadMsg');
+        pusher.value.unsubscribe(channelChat.value);
     }
 });
 
