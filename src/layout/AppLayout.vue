@@ -27,6 +27,7 @@ d    dd
         <!-- central container -->
         <div id="main-content" class="overflow-y-auto flex-grow h-full bg-[#FAFAFA]">
             <router-view></router-view>
+            <!-- <LoadPage v-if="activeRequests > 0" /> -->
         </div>
 
         <!-- side right -->
@@ -45,8 +46,11 @@ import DinamicRightSidebar from './DinamicRightSidebar.vue';
 import MainSidebar from './MainSidebar.vue';
 import SuscriptionBanner from './SuscriptionBanner.vue';
 import NotifyPanel from './Notifications/NotifyPanel.vue'
+import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
+import { usePreloaderStore } from '@/stores/modules/preloader';
 
-
+const preloaderStore = usePreloaderStore();
+const activeRequests = computed(() => preloaderStore.activeRequests);
 const route = useRoute();
 
 const showSuscriptionBanner = false;

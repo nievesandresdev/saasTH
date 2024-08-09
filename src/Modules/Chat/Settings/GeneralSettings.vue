@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col min-h-screen">
+        <LoadPage v-if="activeRequests > 0" />
         <div class="px-6">
             <TitleChatActivate 
                 :defaultToggle="form.show_guest" 
@@ -111,13 +112,18 @@ import { useToastAlert } from '@/composables/useToastAlert'
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
 import AlertShowGuest from './components/AlertShowGuest.vue'
 import Tooltip from '@/components/Tooltip.vue'
+import { usePreloaderStore } from '@/stores/modules/preloader';
+import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
 
 const form = reactive({
     name: '',
     languages: [],
     languages_id: [],
-    show_guest: null
+    show_guest: false
 })
+
+const preloaderStore = usePreloaderStore();
+const activeRequests = computed(() => preloaderStore.activeRequests);
 
 const mockupStore = useMockupStore()
 const chatSettingsStore = useChatSettingsStore()
@@ -133,6 +139,7 @@ onMounted(() => {
 })
 
 const ata = async () => {
+    console.log('ata')
     const response = await chatSettingsStore.$getAllSettingsChat();
 
     form.languages = JSON.parse(JSON.stringify(response.settings.languages))
