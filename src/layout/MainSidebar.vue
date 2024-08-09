@@ -207,22 +207,19 @@ const connectPusher = async () => {
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-      // console.log('NotifyStayHotelEvent',data)
-        //notificacion del navegador cuando se recibe un mensaje
-        if(!Number(data.automatic) && data.guest){
-            let room_text =  'Estancia: nº habitación ';
-            data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-            // let link  = route('stay.hoster.chat',{selected:data.stay_id});
-            let routeData = {
-              name : 'StayChatRoom',
-              params : { stayId : data.stay_id },
-              query : { g : data.guest_id }
-            };
-            showNotification(room_text, data.text, routeData, 10000);
-        }
-        countPendingChats.value = await chatStore.$pendingCountByHotel();
-        // get_stay_data_pending();
-        // defineNotificationsCount();
+        // if(!Number(data.automatic) && data.guest){
+        //     let room_text =  'Estancia: nº habitación ';
+        //     data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
+        //     // let link  = route('stay.hoster.chat',{selected:data.stay_id});
+        //     let routeData = {
+        //       name : 'StayChatRoom',
+        //       params : { stayId : data.stay_id },
+        //       query : { g : data.guest_id }
+        //     };
+        //     showNotification(room_text, data.text, routeData, 10000);
+        // }
+        console.log('NotifyStayHotelEvent main',data)
+        if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
 
