@@ -76,6 +76,7 @@ const props = defineProps({
   textbtn: String,
   type: String,
   forceOpen: Boolean,
+  redirect : String
 });
 
 const emit = defineEmits(['saveChanges', 'close','hidden']);
@@ -129,7 +130,6 @@ function saveChanges() {
 }
 
 function goLink() {
-  console.log(intendedRoute.value);
   if (intendedRoute.value) {
       showModal.value = false;
       closeModal();
@@ -152,7 +152,6 @@ router.beforeEach((to, from, next) => {
     next();
   }
 
-  console.log(showModal.value, visitNow.value);
 });
 </script>
 

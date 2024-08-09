@@ -256,6 +256,7 @@
           :open="showModalNoSave"
           text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
           textbtn="Guardar"
+          :redirect="intendedRoute"
           @close="closeModalEditUser"
           @saveChanges="handleUpdateUser"
           type="alone_exit_save"
@@ -274,10 +275,20 @@
   import { useUserStore } from '@/stores/modules/users/users'
   import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
+  import { useRoute, useRouter } from 'vue-router';
   import ModalNoSave from '@/components/ModalNoSave.vue';
 
   
   const emits = defineEmits(['close','update']);
+
+  const router = useRouter();
+  const route = useRoute();
+
+
+
+
+
+
 
   const initPermissions = ref([])
   
@@ -287,10 +298,6 @@
     dataUser : Object
   });
 
-  const closeModalEditUser = () => {
-    showModalNoSave.value = false;
-    window.location.reload();
-  }
 
 
   watch(() => props.modalEdit, (newVal) => {
@@ -864,10 +871,39 @@ const containerTop = ref(0);
 
 const initialForm = ref(null);
 const showModalNoSave = ref(false);
+const intendedRoute = ref(null);
 
 const changes = computed(() => {
   return JSON.stringify(form) !== initialForm.value;
 });
+
+/* router.beforeEach((to, from, next) => {
+  //console.log('beforeEachsx',changes.value,intendedRoute.value)
+    if (intendedRoute.value === null && changes.value) {
+      showModalNoSave.value = true;
+      intendedRoute.value = to.fullPath; // Guardamos la ruta a la que se quiere ir
+      next(false); // Prevenimos la navegación temporalmente
+    } 
+}); */
+
+const closeModalEditUser = () => {
+    showModalNoSave.value = false;
+    window.location.reload();
+    //redirect
+
+    /* if (intendedRoute.value && intendedRoute.value !== route.fullPath) {
+      console.log('Intended Route:', intendedRoute.value);  // Para depuración
+      router.push({name: 'UserNotificationsSettings', params: { }})
+        .then(() => {
+          console.log('Redirigido con éxito a:', intendedRoute.value);
+        })
+        .catch(err => {
+          console.error('Error al redireccionar:', err);
+        });
+    } else {
+      window.location.reload();
+    } */
+  };
 
 
 /* onMounted(async() => {
@@ -877,6 +913,10 @@ const changes = computed(() => {
 
     console.log('dataUser',form.value)
   }); */
+
+  onMounted(() => {
+    initialForm.value = JSON.stringify(form);
+  });
   
 
 function closeModal(complete = false) {
