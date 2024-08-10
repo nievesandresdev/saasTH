@@ -32,7 +32,7 @@ const guestId = ref(route.query.g);
 const data = ref(null);
 const guestAccess = ref(null);
 const timeLineData = ref(null)
-const session = ref(null);;
+const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);

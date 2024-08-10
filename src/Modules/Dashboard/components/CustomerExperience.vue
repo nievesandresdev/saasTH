@@ -46,7 +46,7 @@
             <div class="bg-white border border-[#BFBFBF] rounded-lg ">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">STAY</span>
-                    <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
+                    <Tooltip :top="25" :left="5" size="m">
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
@@ -71,7 +71,7 @@
             <div class="bg-white border border-[#BFBFBF] rounded-lg ">
                 <div class="bg-[#F2F2F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">POST-STAY</span>
-                    <Tooltip :top="25" :left="5" size="m" :class="'z-[600]'">
+                    <Tooltip :top="25" :left="5" size="m">
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>

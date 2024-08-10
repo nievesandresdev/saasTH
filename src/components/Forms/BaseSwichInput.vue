@@ -27,7 +27,7 @@ const emit = defineEmits(['update:modelValue', 'change:value'])
 //DATA PROPS
 const props = defineProps({
   disabled: Boolean,
-  modelValue: Boolean,
+  modelValue: null,
   id: {
       type: String,
       default: 'toggle',

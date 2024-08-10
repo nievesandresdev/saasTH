@@ -16,8 +16,8 @@
     /*
         gray
     */
-    --h-gray-100: #FAFAFA;
-    --h-gray-200: #F2F2F2;
+    --h-gray-100: #F1F1F1;  /* antes FAFAFA */
+    --h-gray-200: #F1F1F1;
     --h-gray-300 : #DADADA;
     --h-gray-400 : #BFBFBF;
     --h-gray-500 : #A0A0A0;

@@ -60,12 +60,12 @@
       </template>
 
       <!-- help, user and news -->
-      <div class="mt-auto mb-4 pt-4">
+      <div class="mt-auto pt-4 absolute inset-x-0 bottom-0 mb-6 px-3">
         <button 
           v-for="(button, indexButton) in user_buttons" :key="indexButton"
           @mousemove="handleMouseMove(button.title)"
           @click="handleMenuItemClick(button.title)"
-          class="rounded-[10px] flex items-center p-1 max-h-[40px]"
+          class="rounded-[10px] flex items-center p-1 h-[44px]"
           :class="{'hbg-green-600 shadow-lg': button.active, 'hover-gray-100': !button.active}"
         >
           <img 

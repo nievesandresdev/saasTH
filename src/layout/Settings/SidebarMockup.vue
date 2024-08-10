@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[100]  overflow-y-auto"> version anterior, quite el overflow-y-auto por que chocaba con el tooltip de idiomas del mockup -->
-    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[100]">
+    <div class="w-[354px] flex-shrink-0 bg-white shadow-hoster sticky top-0 right-0 h-full z-[700]">
         <div class="px-12 py-[22px]">
             <h1 class="text-base font-semibold leading-[120%] text-center mb-[22px]">
                 Visualiza tu webapp

@@ -1,11 +1,9 @@
 <template>
   <div class="flex flex-col min-h-screen mb-8">
-    <div class="px-6">
-      <TitleChatActivate 
-          :defaultToggle="form.show_guest" 
-          @onchange="(value) => form.show_guest = value"
-      />
-    </div>
+    <TitleChatActivate 
+        :defaultToggle="form.show_guest" 
+        @onchange="(value) => form.show_guest = value"
+    />
     <AlertShowGuest :show_guest="form.show_guest"/>
     <section class="px-6 min-h-screen">
       <HeadChat/>

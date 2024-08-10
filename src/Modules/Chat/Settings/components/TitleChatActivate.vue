@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-6 flex justify-between items-center">
+    <div class="mt-6 flex justify-between items-center z-[700] px-6">
         <div class="flex justify-start items-center gap-2">
             <h1 class="text-[22px] font-medium">Configuración de chat</h1>
             <Tooltip
@@ -58,11 +58,11 @@ import Tooltip from '@/components/Tooltip.vue'
 const props = defineProps({
     defaultToggle:{
         type:Boolean,
-        default:false
+        default:null
     },
     hideToggleButton:{
         type:Boolean,
-        default:false
+        default:null
     },
 })
 const emit = defineEmits(['onchange'])

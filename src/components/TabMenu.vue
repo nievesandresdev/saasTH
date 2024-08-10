@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-2 border-b hborder-gray-400 pb-[2px] relative">
+    <div class="flex gap-2 border-b hborder-gray-400 pb-[2px] relative z-[601]">
         
         <template v-for="link in links" :key="link">
             <div

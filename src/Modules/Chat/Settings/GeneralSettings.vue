@@ -1,12 +1,9 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <LoadPage v-if="activeRequests > 0" />
-        <div class="px-6">
-            <TitleChatActivate 
-                :defaultToggle="form.show_guest" 
-                @onchange="(value) => form.show_guest = value"
-            />
-        </div>
+        <TitleChatActivate 
+            :defaultToggle="form.show_guest" 
+            @onchange="(value) => form.show_guest = value"
+        />
         <AlertShowGuest :show_guest="form.show_guest"/>
         <section class="px-6 min-h-screen">
             <HeadChat/>
@@ -113,17 +110,17 @@ import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
 import AlertShowGuest from './components/AlertShowGuest.vue'
 import Tooltip from '@/components/Tooltip.vue'
 import { usePreloaderStore } from '@/stores/modules/preloader';
-import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
+/* import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta */
 
 const form = reactive({
     name: '',
     languages: [],
     languages_id: [],
-    show_guest: false
+    show_guest: null
 })
 
-const preloaderStore = usePreloaderStore();
-const activeRequests = computed(() => preloaderStore.activeRequests);
+/* const preloaderStore = usePreloaderStore();
+const activeRequests = computed(() => preloaderStore.activeRequests); */
 
 const mockupStore = useMockupStore()
 const chatSettingsStore = useChatSettingsStore()
