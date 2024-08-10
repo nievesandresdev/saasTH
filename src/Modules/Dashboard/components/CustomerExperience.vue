@@ -23,7 +23,7 @@
             <div class="bg-white border border-[#BFBFBF] rounded-lg  relative">
                 <div class="bg-[#D9E8F2] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">PRE-STAY</span>
-                    <Tooltip :top="25" :left="5" size="m" :class="'z-[800]'">
+                    <Tooltip :top="25" :left="5" size="m" >
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>

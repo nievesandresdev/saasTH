@@ -47,7 +47,7 @@
         position: absolute;
         border: none;
         background-color: #fff;
-        z-index:90000;
+        z-index:500;
         color: #000;
         padding: 16px;
         text-align: left;
