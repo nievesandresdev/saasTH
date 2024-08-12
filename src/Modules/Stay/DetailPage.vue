@@ -1,6 +1,6 @@
 <template>
     <Head />
-    <div class="p-6 z-[600]" v-if="data">
+    <div class="p-6" v-if="data">
         <div class="3xl:flex 3xl:items-start 3xl:gap-6">
             <InfoSection/>
             <GuestList/>

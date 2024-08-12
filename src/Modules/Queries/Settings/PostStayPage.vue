@@ -2,8 +2,8 @@
     <Head />
     <section class="px-6">
         <TitleAndActivate 
-        status="Post-Stay"
-        hideToggleButton
+            status="Post-Stay"
+            hideToggleButton
         />
         <p class="text-sm mt-2">
             El feedback en post-stay no puede desactivarse debido a que es crucial para conocer la experiencia de los huéspedes. Teniendo como objetivo la obtención de la reseña positiva o para la prevención de una posible valoración negativa.

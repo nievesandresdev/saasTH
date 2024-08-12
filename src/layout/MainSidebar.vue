@@ -35,10 +35,17 @@
         <div 
           class="rounded-[10px] hbg-green-200"
         >
-          <router-link
+          <!-- <router-link
             v-for="(link, indexLink) in section.group" :key="indexLink"
             :to="link.url"
             @mousemove="handleMouseMove(link.title)"
+            @click="handleMenuItemClick(link.title)"
+            class="rounded-[10px] flex items-center p-2 relative"
+            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
+          > -->
+          <router-link
+            v-for="(link, indexLink) in section.group" :key="indexLink"
+            :to="link.url"
             @click="handleMenuItemClick(link.title)"
             class="rounded-[10px] flex items-center p-2 relative"
             :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
@@ -408,10 +415,12 @@ onUnmounted(() => {
 
 function handleMouseEnter () {
   onHoverMainMenu.value = true;
+  isMouseMoving.value = true;
 }
 
 function handleMouseLeave () {
   onHoverMainMenu.value = false;
+  isMouseMoving.value = false;
 }
 
 const logout = async () => {
