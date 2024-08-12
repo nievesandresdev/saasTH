@@ -209,14 +209,23 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-        showNotification(data.title,data.text,data.urlQuery,10000);
-        countPendingQueries.value = await queryStore.$countPendingByHotel();
+       console.log('NotifySendQueryEvent',data)
+       let routeData = {
+            name : 'StayQueryDetail',
+            params : { stayId : data.stayId },
+            query : { g : data.guestId }
+          };
+        showNotification(data.title,data.text,routeData,10000);
+        if(data.countPendingQueries){
+          countPendingQueries.value = data.countPendingQueries;
+        }
+        // countPendingQueries.value = await queryStore.$countPendingByHotel();
         //loadExistsPending();
     });
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
-        console.log('NotifyUnreadMsg',data)
+        // console.log('NotifyUnreadMsg',data)
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
