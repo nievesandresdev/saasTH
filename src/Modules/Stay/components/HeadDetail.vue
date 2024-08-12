@@ -1,7 +1,7 @@
 <template>
-    <div class="px-6 relative z-[301]">
+    <div class="px-6 relative z-[201]">
         <div class="flex items-center mt-10">
-            <h1 class="text-[22px] font-medium">Estanciass</h1>
+            <h1 class="text-[22px] font-medium">Estancia</h1>
             <div class="flex items-center ml-auto" v-if="session && session[0] && user.name !== session[0].userName">
                 <img 
                     class="rounded-full w-8 h-8 mr-2" 
@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="pt-4 relative top-0 left-0 bg-[#fafafa] px-6 z-[700]">
+    <div class="pt-4 sticky top-0 left-0 bg-[#fafafa] px-6 z-50">
         <TabMenu :links="views ?? {}"/>
     </div>
 </template>
