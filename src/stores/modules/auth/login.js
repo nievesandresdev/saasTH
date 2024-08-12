@@ -77,23 +77,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function logout() {
-        let userEmail = user.value.email;
-        console.log('logout',userEmail)
-        await deleteSessionByHotelAndEmailApi({ userEmail });
-        const response = await LogoutService();
-
-        if (response.ok) {
+        try {
+            const userEmail = user.value.email;
+            await deleteSessionByHotelAndEmailApi({ userEmail });
+            await LogoutService();
+        } catch (error) {
+            console.error('Error during logout:', error);
+        } finally {
             token.value = '';
             user.value = null;
-            
-            this.$router.push('/login');
-
+    
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
             sessionStorage.removeItem('current_hotel');
             sessionStorage.removeItem('current_subdomain');
+            sessionStorage.removeItem('redirectTo');
+    
+            // No redirigimos aquí, el middleware se encargará de ello
         }
     }
+    
 
     const fullName = computed(() => {
         return `${user?.value?.name} ${user?.value?.lastname}`;
