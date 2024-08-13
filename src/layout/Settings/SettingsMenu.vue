@@ -334,9 +334,9 @@ const menu_section = reactive([
         },
         {
             title: 'Textos legales',
-            to: '',
+            to: 'GeneralLegal',
             icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
-            include: '/estancias'
+            include: '/legal'
         },
         {
             title: 'Galería de imágenes',

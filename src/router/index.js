@@ -15,6 +15,7 @@ import experienceGroupRoutes from './experienceRoutes';
 import galleryGroupRoutes from './galleryRoutes';
 import webAppRoutes from './webAppRoutes';
 import customizationRoutes from './customizationRoutes';
+import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
@@ -46,6 +47,7 @@ const routes = [
   ...galleryGroupRoutes,
   ...webAppRoutes,
   ...customizationRoutes,
+  ...legalTextGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ];
 
