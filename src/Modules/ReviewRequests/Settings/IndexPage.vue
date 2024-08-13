@@ -1,109 +1,116 @@
 <template>
-    <!-- head info -->
-    <section class="px-6">
-        <div class="py-5 border-b hborder-gray-400 flex items-center gap-2">
-            <h1 class="text-[22px] font-medium leading-[110%]">Seguimiento - Solicitudes</h1>
-            <Tooltip
-                size="l"
-                :top="25"
-                :left="0"
-            >
-                <template v-slot:button>
-                    <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
-                </template>
-                <template v-slot:content>
-                    <p class="text-sm leading-[150%]">
-                        Determinaremos qué huéspedes han tenido una experiencia satisfactoria, concluida la estancia y tras analizar los feedbacks recibidos. Una vez segmentados, se les enviará la solicitud de reseña a aquellos que puedan derivar en una reseña positiva.
-                    </p>
-                </template>
-            </Tooltip>
-        </div>
-    </section>
+    <div class="flex flex-col h-full">
+        <div class="flex-grow overflow-y-auto">
+            <!-- head info -->
+            <section class="px-6">
+                <div class="py-5 border-b hborder-gray-400 flex items-center gap-2">
+                    <h1 class="text-[22px] font-medium leading-[110%]">Seguimiento - Solicitudes</h1>
+                    <Tooltip
+                        size="l"
+                        :top="25"
+                        :left="0"
+                    >
+                        <template v-slot:button>
+                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                        </template>
+                        <template v-slot:content>
+                            <p class="text-sm leading-[150%]">
+                                Determinaremos qué huéspedes han tenido una experiencia satisfactoria, concluida la estancia y tras analizar los feedbacks recibidos. Una vez segmentados, se les enviará la solicitud de reseña a aquellos que puedan derivar en una reseña positiva.
+                            </p>
+                        </template>
+                    </Tooltip>
+                </div>
+            </section>
 
-    <!-- body section -->
-    <section class="px-6 mt-6 mb-10">
+            <!-- body section -->
+            <section class="px-6 mt-6 mb-10">
 
-        <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
-            <h2 class="text-base font-medium leading-[110%]">Configuración del mensaje en la WebApp</h2>
-            <p class="text-sm leading-[150%] mt-2">Configura cómo será el mensaje que se mostrará a tu huésped tras proporcionar un feedback positivo en Post-Stay.</p>
+                <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
+                    <h2 class="text-base font-medium leading-[110%]">Configuración del mensaje en la WebApp</h2>
+                    <p class="text-sm leading-[150%] mt-2">Configura cómo será el mensaje que se mostrará a tu huésped tras proporcionar un feedback positivo en Post-Stay.</p>
 
-            <div class="mt-4">
-                <p class="text-sm font-medium leading-[110%] mb-2">Título del mensaje</p>
-                <Editor 
-                    v-if="form.msg_title"
-                    v-model="form.msg_title['es']"
-                    placeholder="Debes introducir un texto"
-                    showCounter
-                    mandatory
-                    :maxLength="300"
-                    @validation="textFull = $event"
-                    countType="static"
-                />
-            </div>
-
-            <div class="mt-4 relative">
-                <p class="text-sm font-medium leading-[110%] mb-2">Texto del mensaje</p>
-                <Editor 
-                    v-if="form.msg_text"
-                    v-model="form.msg_text['es']"
-                    placeholder="Debes introducir un texto"
-                    showCounter
-                    mandatory
-                    :maxLength="300"
-                    @validation="textFull = $event"
-                    countType="static"
-                />
-            </div>
-
-            <div class="mt-4">
-                <p class="text-sm font-medium leading-[110%]">OTAs habilitadas para la solicitud de reseña</p>
-                <div class="mt-4">
-                    <div class="flex items-center gap-2">
-                        <Checkbox  v-model="form.otas_enabled_google"/>
-                        <p class="text-xs leading-[150%]">Google</p>
+                    <div class="mt-4">
+                        <p class="text-sm font-medium leading-[110%] mb-2">Título del mensaje</p>
+                        <Editor 
+                            v-if="form.msg_title"
+                            v-model="form.msg_title['es']"
+                            placeholder="Debes introducir un texto"
+                            showCounter
+                            mandatory
+                            :maxLength="300"
+                            @validation="textTitleFull = $event"
+                            countType="static"
+                        />
                     </div>
-                    <div class="flex items-center gap-2 mt-2">
-                        <Checkbox  v-model="form.otas_enabled_tripadvisor"/>
-                        <p class="text-xs leading-[150%]">TripAdvisor</p>
+
+                    <div class="mt-4 relative">
+                        <p class="text-sm font-medium leading-[110%] mb-2">Texto del mensaje</p>
+                        <Editor 
+                            v-if="form.msg_text"
+                            v-model="form.msg_text['es']"
+                            placeholder="Debes introducir un texto"
+                            showCounter
+                            mandatory
+                            :maxLength="300"
+                            @validation="textBodyFull = $event"
+                            countType="static"
+                        />
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="text-sm font-medium leading-[110%]">OTAs habilitadas para la solicitud de reseña</p>
+                        <div class="mt-4">
+                            <div class="flex items-center gap-2">
+                                <Checkbox  v-model="form.otas_enabled_google"/>
+                                <p class="text-xs leading-[150%]">Google</p>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2">
+                                <Checkbox  v-model="form.otas_enabled_tripadvisor"/>
+                                <p class="text-xs leading-[150%]">TripAdvisor</p>
+                            </div>
+                        </div>
+                        <p 
+                            class="text-xs font-medium htext-alert-negative mt-2 leading-[90%]"
+                            v-if="!form.otas_enabled_google && !form.otas_enabled_tripadvisor"
+                        >Debes seleccionar al menos una OTA para solicitar la reseña</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="text-sm font-medium leading-[110%]">La solicitud de reseña se mostrará a los huéspedes</p>
+                        <div class="mt-4">
+                            <div class="flex items-center gap-2">
+                                <RadioButton :value="DEFAULT_GOOD_STRING" v-model="form.request_to"/>
+                                <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno</p>
+                                <span class="text-[10px] leading-[110%] ml-1 htext-green-600">Recomendado</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2">
+                                <RadioButton :value="DEFAULT_DEFAULT_STRING" v-model="form.request_to"/>
+                                <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno, neutral y no respondido</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p 
-                    class="text-xs font-medium htext-alert-negative mt-2 leading-[90%]"
-                    v-if="!form.otas_enabled_google && !form.otas_enabled_tripadvisor"
-                >Debes seleccionar al menos una OTA para solicitar la reseña</p>
-            </div>
+            </section>
 
-            <div class="mt-4">
-                <p class="text-sm font-medium leading-[110%]">La solicitud de reseña se mostrará a los huéspedes</p>
-                <div class="mt-4">
-                    <div class="flex items-center gap-2">
-                        <RadioButton :value="DEFAULT_GOOD_STRING" v-model="form.request_to"/>
-                        <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno</p>
-                        <span class="text-[10px] leading-[110%] ml-1 htext-green-600">Recomendado</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-2">
-                        <RadioButton :value="DEFAULT_DEFAULT_STRING" v-model="form.request_to"/>
-                        <p class="text-xs leading-[150%]">Con feedback muy bueno o bueno, neutral y no respondido</p>
-                    </div>
-                </div>
-            </div>
+            
         </div>
-    </section>
-
-    <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes && valid"
-        @cancel="cancelChanges" 
-        @submit="submit"
-    />
-    <ModalNoSave
-        :id="'not-saved'"
-        :open="changes &&  valid"
-        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
-        textbtn="Guardar"
-        @saveChanges="submit"
-        type="save_changes"
-    />
+        <div>
+            <ChangesBar 
+                :existingChanges="changes"
+                :validChanges="changes && valid"
+                @cancel="cancelChanges" 
+                @submit="submit"
+            />
+        </div>
+            <ModalNoSave
+                :id="'not-saved'"
+                :open="changes &&  valid"
+                text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+                textbtn="Guardar"
+                @saveChanges="submit"
+                type="save_changes"
+            />
+    </div>
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
@@ -139,7 +146,8 @@ const anyEmpty = ref([]);
 const anyOverLimit = ref([]);
 const beforeUrl = ref({link: null,force: false})
 const settingsRef = ref(null);
-const textFull = ref(true);
+const textTitleFull = ref(true);
+const textBodyFull = ref(true);
 const DEFAULT_GOOD_STRING = JSON.stringify(['GOOD','VERYGOOD'])
 const DEFAULT_DEFAULT_STRING = JSON.stringify(['GOOD','VERYGOOD','NORMAL','NOTANSWERED'])
 // const urlMockup = ref(`${urlBase}/consultas/fakeLinkOtas?mockup=true&subdomain=${hotelSubdomain}`);
@@ -200,7 +208,7 @@ const changes = computed(()=>{
 
 const valid = computed(()=>{
     if(!settingsRef.value) return
-    let valid = !!form.msg_title?.es && textFull.value && (form.otas_enabled_google || form.otas_enabled_tripadvisor);
+    let valid = !!form.msg_title?.es && textTitleFull.value && textBodyFull.value && (form.otas_enabled_google || form.otas_enabled_tripadvisor);
     return valid;
 });
 </script>
