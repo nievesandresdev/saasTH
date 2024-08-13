@@ -98,7 +98,7 @@
 import { ref, reactive, onMounted, computed, watch } from 'vue'
 import TitleChatActivate from './components/TitleChatActivate.vue'
 import HeadChat from './components/HeadChat.vue'
-import SectionConfig from './components/SectionConfig.vue'
+import SectionConfig from '@/components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTextField from '@/components/Forms/BaseTextField'
 import { storeGeneralSetting, searchLang as fetchLangs } from '@/api/services/chat/chatSettings.services';

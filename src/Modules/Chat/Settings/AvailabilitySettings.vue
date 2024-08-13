@@ -91,7 +91,7 @@
   import { ref, reactive, onMounted, computed, watch } from 'vue'
   import TitleChatActivate from './components/TitleChatActivate.vue'
   import HeadChat from './components/HeadChat.vue'
-  import SectionConfig from './components/SectionConfig.vue'
+  import SectionConfig from '@/components/SectionConfig.vue'
   import BaseTimeField from '@/components/Forms/BaseTimeField.vue'
   import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
   import ModalNoSave from '@/components/ModalNoSave.vue'
