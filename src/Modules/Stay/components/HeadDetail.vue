@@ -11,8 +11,8 @@
             </div>
         </div>
     </div>
-    <div class="pt-4 sticky top-0 left-0 bg-[#fafafa] px-6 z-50">
-        <TabMenu :links="views ?? {}"/>
+    <div class="pt-4 top-0 left-0 bg-[#fafafa] px-6 z-50 " :class="{'sticky':!loading}">
+        <TabMenu :links="views"/>
     </div>
 </template>
 <script setup>
@@ -35,47 +35,64 @@ const data = inject('data')
 const session = inject('session');
 const user = JSON.parse(sessionStorage.getItem('user'));
 
-const views = ref([])
+const views = ref([
+    {
+        name: 'Información',
+        active: route.name == 'StayDetailPage',
+        viewName: 'StayDetailPage'
+    },
+    {
+        name: 'Seguimiento',
+        active: route.name == 'StayQueryDetail',
+        viewName: 'StayQueryDetail',
+        params: { stayId: route.params.stayId },
+        query: { g: null },
+        notify : 0
+    },
+    {
+        name: 'Chat',
+        active: route.name == 'StayChatRoom',
+        viewName: 'StayChatRoom',
+        params: { stayId: route.params.stayId },
+        query: { g: null },
+        notify : 0
+    },
+])
 const countPendingChats = ref(0)
 const countPendingQueries = ref(0)
+const loading = ref(true)
 const channelChat = ref(null);
 const channelSession = ref(null);
 const pusher = ref(null);
 
 watch(() => route.params.stayId, async (newId, oldId) => {
+    loading.value = true;
     countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
     updateViews();
 }, { immediate: true });      
 
 const updateViews = () => {
+    loading.value = true;
     if (data.value && data.value.guests && data.value.guests.length > 0) {
         const guestId = data.value.guests[0].id;
-        views.value = [
-            {
-                name: 'Información',
-                active: route.name === 'StayDetailPage',
-                viewName: 'StayDetailPage'
-            },
-            {
-                name: 'Seguimiento',
-                active: route.name === 'StayQueryDetail',
-                viewName: 'StayQueryDetail',
-                params: { stayId: route.params.stayId },
-                query: { g: guestId },
-                notify : countPendingQueries.value > 0
-            },
-            {
-                name: 'Chat',
-                active: route.name === 'StayChatRoom',
-                viewName: 'StayChatRoom',
-                params: { stayId: route.params.stayId },
-                query: { g: guestId },
-                notify : countPendingChats.value > 0
-            },
-        ];
+        // Actualizar solo las propiedades necesarias
+        views.value.forEach(view => {
+            if (view.viewName === 'StayQueryDetail' || view.viewName === 'StayChatRoom') {
+                // Actualizar el parámetro 'g' y 'notify' específicamente
+                view.query.g = guestId;
+                if (view.viewName === 'StayQueryDetail') {
+                    view.notify = countPendingQueries.value > 0;
+                }
+                if (view.viewName === 'StayChatRoom') {
+                    view.notify = countPendingChats.value > 0;
+                }
+            }
+        });
     }
+    loading.value = false;
 };
+
 
 
 const connectPusher = () =>{
