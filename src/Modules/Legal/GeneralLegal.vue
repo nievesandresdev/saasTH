@@ -57,9 +57,8 @@
     />
 </template>
 
-
 <script setup>
-import { ref, reactive, onMounted, nextTick } from 'vue';
+import { ref, reactive, onMounted, computed, nextTick } from 'vue';
 import HeadLegal from './components/HeadLegal.vue';
 import TabLegal from './components/TabLegal.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
@@ -76,9 +75,40 @@ const form = reactive({
     email_protection: ''
 });
 
+const initialForm = ref(null);
+
 onMounted(() => {
     loadGoogleMapsScript();
+    initialForm.value = JSON.stringify(form);
 });
+
+const changes = computed(() => {
+    return JSON.stringify(form) !== initialForm.value;
+});
+
+const valid = computed(() => {
+    return form.name.trim() !== '' && 
+           form.address.trim() !== '' && 
+           form.nif.trim() !== '' && 
+           form.email.trim() !== '' && 
+           (!form.protection || form.email_protection.trim() !== '');
+});
+
+const cancelChange = () => {
+    const oldValues = JSON.parse(initialForm.value);
+    form.name = oldValues.name;
+    form.address = oldValues.address;
+    form.nif = oldValues.nif;
+    form.email = oldValues.email;
+    form.protection = oldValues.protection;
+    form.email_protection = oldValues.email_protection;
+};
+
+const submit = async () => {
+    // Aquí puedes implementar la lógica para guardar los cambios
+    initialForm.value = JSON.stringify(form);
+    // Implementar la lógica de guardado
+};
 
 function loadGoogleMapsScript() {
     const script = document.createElement('script');
@@ -106,4 +136,3 @@ function initAutocomplete() {
     });
 }
 </script>
-
