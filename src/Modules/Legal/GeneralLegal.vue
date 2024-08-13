@@ -14,32 +14,26 @@
                 <div class="w-full">
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">Razón social</label>
-                        <BaseTextField
-                            v-model="form.name"
-                            placeholder="Ejemplo: Tecnologías Innovadoras S.A."
-                        ></BaseTextField>
+                        <BaseTextField v-model="form.name" placeholder="Ejemplo: Tecnologías Innovadoras S.A." />
                     </section>
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal</label>
-                        <BaseTextField
+                        <input
                             v-model="form.address"
-                            placeholder="Ejemplo: Plaza Trinidad 15, 5C - Sevilla"
                             id="fiscal_address"
-                        ></BaseTextField>
+                            type="text"
+                            placeholder="Ejemplo: Plaza Trinidad 15, 5C - Sevilla"
+                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border hinput-green"
+                            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                        >
                     </section>
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">NIF</label>
-                        <BaseTextField
-                            v-model="form.nif"
-                            placeholder="Ejemplo: A87654321"
-                        ></BaseTextField>
+                        <BaseTextField v-model="form.nif" placeholder="Ejemplo: A87654321" />
                     </section>
                     <section class="mb-6">
                         <label class="text-sm font-medium mb-[6px] block">Email de contacto</label>
-                        <BaseTextField
-                            v-model="form.email"
-                            placeholder="Ejemplo: direccion@dominio.com"
-                        ></BaseTextField>
+                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" />
                     </section>
                     <section class="flex justify-between items-center mb-4">
                         <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
@@ -48,10 +42,7 @@
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
                             <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField
-                                v-model="form.email_protection"
-                                placeholder="Ejemplo: direccion2@dominio.com"
-                            ></BaseTextField>
+                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" />
                         </section>
                     </transition>
                 </div>
@@ -67,11 +58,8 @@
 </template>
 
 
-
-
-
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, nextTick } from 'vue';
 import HeadLegal from './components/HeadLegal.vue';
 import TabLegal from './components/TabLegal.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
@@ -98,8 +86,10 @@ function loadGoogleMapsScript() {
     script.async = true;
     document.head.appendChild(script);
     script.onload = () => {
-        initAutocomplete(); // Inicializar el autocompletado después de que el script se haya cargado
-    }
+        nextTick(() => {
+            initAutocomplete();
+        });
+    };
 }
 
 function initAutocomplete() {
@@ -111,23 +101,9 @@ function initAutocomplete() {
     autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         if (place.geometry) {
-            form.address = place.formatted_address; // Asegúrate de que esto esté enlazado correctamente en el formulario
+            form.address = place.formatted_address;
         }
     });
 }
 </script>
-
-
-
-
-
-
-<style scoped>
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity 0.5s;
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
-</style>
 
