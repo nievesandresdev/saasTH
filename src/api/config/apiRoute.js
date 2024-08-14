@@ -36,3 +36,6 @@ export const notificationsPath = 'notifications'
 
 //platforms
 export const platformsPath = 'platforms'
+
+//legal
+export const legalPath = 'legal'

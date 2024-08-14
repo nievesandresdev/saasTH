@@ -5,7 +5,7 @@ const AppLayout = () => import('@/layout/AppLayout');
 
 const settingsGroupRoutes = [
   {
-    path: '/legal',
+    path: '/webapp',
     component: AppLayout,
     meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px', requiresAuth: true },  
     children: [

@@ -42,7 +42,13 @@
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
                             <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" />
+                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="!isEmailProtectionValid"/>
+                            <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                </svg>
+                                <small>Es necesario poner un correo electrónico válido</small>
+                            </div>
                         </section>
                     </transition>
                 </div>
@@ -58,13 +64,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, nextTick } from 'vue';
+import { ref, reactive, onMounted, computed, nextTick, watch } from 'vue';
 import HeadLegal from './components/HeadLegal.vue';
 import TabLegal from './components/TabLegal.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
 import BaseSwitchInput from "@/components/Forms/BaseSwichInput.vue";
+import { storeGeneralLegal, getGeneralLegal } from '@/api/services/legal/generalLegal.services';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue';
+import { useToastAlert } from '@/composables/useToastAlert'
+
+const toast = useToastAlert();
 
 const form = reactive({
     name: '',
@@ -76,11 +86,45 @@ const form = reactive({
 });
 
 const initialForm = ref(null);
+const isEmailProtectionValid = ref(false);
 
 onMounted(() => {
     loadGoogleMapsScript();
     initialForm.value = JSON.stringify(form);
+
+    getData();
+    isEmailProtectionValid.value = false; // Inicializar el error como true
 });
+
+const getData = async() => {
+    const response = await getGeneralLegal();
+    
+    form.name = response.data.legal?.name || '';
+    form.address = response.data.legal?.address || '';
+    form.nif = response.data.legal?.nif || '';
+    form.email = response.data.legal?.email || '';
+    form.protection = response.data.legal?.protection || false;
+    form.email_protection = response.data.legal?.email_protection || '';
+
+    isEmailProtectionValid.value = validateEmail(form.email_protection);
+};
+
+watch(() => form.email_protection, (newValue) => {
+    isEmailProtectionValid.value = validateEmail(newValue);
+});
+
+watch(() => form.protection, (newValue) => {
+    if(!newValue){
+        form.email_protection = '';
+        isEmailProtectionValid.value = true;
+    }
+});
+
+
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+};
 
 const changes = computed(() => {
     return JSON.stringify(form) !== initialForm.value;
@@ -91,7 +135,7 @@ const valid = computed(() => {
            form.address.trim() !== '' && 
            form.nif.trim() !== '' && 
            form.email.trim() !== '' && 
-           (!form.protection || form.email_protection.trim() !== '');
+           (!form.protection || (form.email_protection.trim() !== '' && isEmailProtectionValid.value));
 });
 
 const cancelChange = () => {
@@ -105,9 +149,17 @@ const cancelChange = () => {
 };
 
 const submit = async () => {
-    // Aquí puedes implementar la lógica para guardar los cambios
     initialForm.value = JSON.stringify(form);
-    // Implementar la lógica de guardado
+
+    const response = await storeGeneralLegal(form);
+
+    if(response.ok){
+        toast.warningToast('Se han guardado los cambios','top-right')
+    } else {
+        toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
+    }
+
+    console.log('Formulario guardado', form, response);
 };
 
 function loadGoogleMapsScript() {
@@ -135,4 +187,5 @@ function initAutocomplete() {
         }
     });
 }
+
 </script>
