@@ -44,7 +44,7 @@
 
 <style>
     .tooltipp{
-        position: absolute;
+        position: fixed;
         border: none;
         background-color: #fff;
         z-index:90000;
@@ -54,6 +54,7 @@
         min-height: 30px;
         border-radius: 10px;
         box-shadow: 0px 3.27806px 6.55612px rgba(0, 0, 0, 0.15);
+        z-index: 100000;
         /* right: -15px;
         top: 25px; */
         display: none;

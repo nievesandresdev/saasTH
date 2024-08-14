@@ -195,8 +195,13 @@ function buildErrorMessage (error) {
       } else errorResponse.message.text = error.response.data.message.text
     errorResponse.ok = error.response?.data?.ok
     // eslint-disable-next-line no-prototype-builtins
-    if (error.response.data.hasOwnProperty('errors')) errorResponse.message.text = Object.values(error.response.data.errors)[0][0]
-    // eslint-disable-next-line no-prototype-builtins
+    if (!error.response?.data) {
+      errorResponse.message.text = 'Error de conexión';
+      return errorResponse
+    }
+    if (error.response.data.hasOwnProperty('errors'))
+      errorResponse.message.text = error?.response?.data?.errors ? Object.values(error?.response?.data?.errors)?.[0]?.[0] : 'Error de conexión';
+
     else if (error.response.data.hasOwnProperty('motives')) errorResponse.message.text = error.response.data.motives.message
     else errorResponse.message.text = error.response.data.message
     errorResponse.data = error.response.data

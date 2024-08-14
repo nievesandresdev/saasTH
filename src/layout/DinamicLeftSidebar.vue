@@ -7,6 +7,7 @@ import { computed, defineProps } from 'vue';
 import SettingsMenu from '@/layout/Settings/SettingsMenu.vue';
 import StayList from '@/Modules/Stay/components/StayList.vue';
 import Platform from '@/components/LeftMenu/Platform.vue';
+import ReviewSiderbar from '@/layout/components/ReviewSiderbar.vue';
 
 const props = defineProps({
     sidebarName: String
@@ -15,7 +16,8 @@ const props = defineProps({
 const componentMap = {
     SettingsMenu,
     StayList,
-    Platform
+    Platform,
+    ReviewSiderbar,
 };
 
 const dynamicComponent = computed(() => {

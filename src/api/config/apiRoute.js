@@ -29,6 +29,10 @@ export const querySettingsPath = 'query-settings'
 export const stayAccessPath = 'stayAccess'
 export const requestSettingsPath = 'request-settings'
 
+// SERVICES API REVIEW
+export const reviewPath = 'reviews'
+export const translateAndResponsePath = 'translateAndResponse'
+
 //hoster
 export const hosterPath = 'hoster'
 export const chatSettingsPath = 'settings'

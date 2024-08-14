@@ -31,7 +31,7 @@
                 <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
-        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-3" @click="$emit('click:append_inner')">
+        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-3" @click="$emit('click:appendInner')">
             <img class="w-6 h-6" :src="appendInnerIcon.icon" alt="append inner icon">
         </button>
         <img v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show" class="w-6 h-6 absolute right-3 top-3" :src="appendInnerIcon.icon" alt="append inner icon">
@@ -41,7 +41,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 
-const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search', 'enter:key', 'input:typing', 'click', 'keyup:prevent']);
+const emit = defineEmits(['click:appendInner', 'update:modelValue', 'blur:validate', 'enter:search', 'enter:key', 'input:typing', 'click', 'keyup:prevent', 'input:search']);
 
 const props = defineProps({
     classContent: {
@@ -127,6 +127,7 @@ const handleBlur = () => {
 
 const updateValue = (value) => {
     inputValue.value = value;
+    emit('input:search', event);
 };
 
 const handleKeyup = (event) => {

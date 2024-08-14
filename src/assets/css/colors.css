@@ -240,3 +240,8 @@
 .black-link:hover{
     color: var(--h-black-200);
 }
+
+
+.bg-overlay{
+    background-color: rgba(0, 0, 0, 0.50);
+  }

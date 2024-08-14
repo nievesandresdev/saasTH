@@ -5,7 +5,6 @@
             prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
             placeholder="Buscar lugar..."
             class-content="w-[345px]"
-            class-input="text-sm"
             @click="onClick"
         ></BaseTextField>
         <div v-if="dropdownSearch" class="absolute left-0 py-6 bg-white top-11 rounded-[10px] z-50 " style="width: 519px;box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);">

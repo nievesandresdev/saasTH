@@ -41,21 +41,6 @@
     // animateSpinner();
   });
 
-
-  // let offst = 0;  // Inicializa en 0
-  // function animateSpinner() {
-  //   offst += 5;  // Incrementa en lugar de decrementar
-  //   const maxOffset = 125.6;  // Longitud de la circunferencia
-  //   if (offst >= maxOffset) {
-  //     offst = offset % maxOffset;
-  //   }
-  //   if (circle.value) {  // Verificar si circle.value es null
-  //     const actualOffset = maxOffset - offst;  // Invertir dirección
-  //     circle.value.setAttribute('stroke-dashoffset', actualOffset);
-  //   }
-  //   requestAnimationFrame(animateSpinner);
-  // }
-
 </script>
 
 <style scoped>
