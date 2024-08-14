@@ -19,8 +19,8 @@ const views = ref([
     },
     {
         name: 'Políticas',
-        active : route.name == 'AvailabilitySettings',
-        viewName :'AvailabilitySettings'
+        active : route.name == 'PoliciesLegal',
+        viewName :'PoliciesLegal'
     },
     {
         name: 'Política de privacidad',

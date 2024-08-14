@@ -1,17 +1,22 @@
 // legalTextSettingsRoute.js
 const GeneralLegal = () => import('@/Modules/Legal/GeneralLegal');
-const AvailabilitySettings = () => import('@/Modules/Chat/Settings/AvailabilitySettings');
+const PoliciesLegal = () => import('@/Modules/Legal/PoliciesLegal');
 const AutomaticResponses = () => import('@/Modules/Chat/Settings/AutomaticResponses');
 
 const legalTextSettingsRoute = [
   {
-    path: 'legal',
+    path: '',
     meta: {requiresAuth: true},  
     children: [
       {
         name: 'GeneralLegal',
         path: 'general',
         component: GeneralLegal
+      },
+      {
+        name: 'PoliciesLegal',
+        path: 'politicas',
+        component: PoliciesLegal
       },
      /*  {
         name: 'AvailabilitySettings',
