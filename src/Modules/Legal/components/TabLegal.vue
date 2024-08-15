@@ -24,8 +24,8 @@ const views = ref([
     },
     {
         name: 'Política de privacidad',
-        active : route.name == 'AutomaticResponses',
-        viewName :'AutomaticResponses'
+        active : route.name == 'PolicyPrivacyLegal',
+        viewName :'PolicyPrivacyLegal'
     },
     {
         name: 'Política de cookies',

@@ -1,7 +1,7 @@
 // legalTextSettingsRoute.js
 const GeneralLegal = () => import('@/Modules/Legal/GeneralLegal');
 const PoliciesLegal = () => import('@/Modules/Legal/PoliciesLegal');
-const AutomaticResponses = () => import('@/Modules/Chat/Settings/AutomaticResponses');
+const PolicyPrivacyLegal = () => import('@/Modules/Legal/PolicyPrivacyLegal.vue');
 
 const legalTextSettingsRoute = [
   {
@@ -17,6 +17,11 @@ const legalTextSettingsRoute = [
         name: 'PoliciesLegal',
         path: 'politicas',
         component: PoliciesLegal
+      },
+      {
+        name: 'PolicyPrivacyLegal',
+        path: 'privacidad',
+        component: PolicyPrivacyLegal
       },
      /*  {
         name: 'AvailabilitySettings',
