@@ -69,7 +69,7 @@ import HeadLegal from './components/HeadLegal.vue';
 import TabLegal from './components/TabLegal.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
 import BaseSwitchInput from "@/components/Forms/BaseSwichInput.vue";
-import { storeGeneralLegal, getGeneralLegal } from '@/api/services/legal/generalLegal.services';
+import { storeGeneralLegal, getGeneralLegal } from '@/api/services/legal/legal.services';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue';
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -93,7 +93,7 @@ onMounted(() => {
     initialForm.value = JSON.stringify(form);
 
     getData();
-    isEmailProtectionValid.value = false; // Inicializar el error como true
+    isEmailProtectionValid.value = false; 
 });
 
 const getData = async() => {

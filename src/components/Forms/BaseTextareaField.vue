@@ -1,5 +1,4 @@
 <template>
-<!-- <textarea class="" name="" id="" cols="30" rows="10"></textarea> -->
     <div class="relative" :class="classContent">
         <img
             v-if="prependInnerIcon"
@@ -12,31 +11,30 @@
                 rows="5"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-[108px]  hinput hinput-green rounded-[6px] border"
-                :class="`${customInputClass} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                class="w-full h-[108px] rounded-[6px] border"
+                :class="`${customInputClass} ${modelValue ? 'hborder-black-100 hinput-green' : disabled ? 'hborder-gray-300' : 'hborder-gray-400 hinput-green'} ${error ? 'hinput-error' : ''}`"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
                 :maxlength="max"
                 @keyup.enter="searchbyenter"
+                :disabled="disabled"
+                :style="{ backgroundColor: disabled ? 'white' : '', color: disabled ? '#A0A0A0' : '' }"
             />
             
             <div v-if="errors?.[name] !== true || max" class="flex justify-between">
-                <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
-                <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
+                <p class="text-[10px] font-medim text-left mt-[4px] text-red-600">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
+                <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
     </div>
-    <!-- <pre>{{ name }}</pre> -->
-    <!-- <pre>{{ errors?.[name] }}</pre> -->
 </template>
 
 <script setup>
-
 import { computed } from 'vue'
 
 const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search']);
 
-const  props = defineProps({
+const props = defineProps({
     classContent: {
         type: String,
         default: ''
@@ -64,9 +62,17 @@ const  props = defineProps({
         type: String,
         default: '',
     },
+    error: {
+        type: Boolean,
+        default: false,
+    },
     errors: {
         type: Object,
         default: () => ({}),
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -82,13 +88,11 @@ const updateValue = (event) => {
 const customInputClass = computed(() => {
     let c = props.classInput;
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
-        c += `${c} hinput-error`
+        c += ' hinput-error';
     }
     return c;
 })
-
 </script>
 
 <style lang="scss" scoped>
-
 </style>

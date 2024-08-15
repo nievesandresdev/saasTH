@@ -14,12 +14,12 @@
         <circle cx="5" cy="12" r="2" fill="currentColor" />
       </svg>
       <div v-if="visible" class="absolute w-40 bg-white rounded-md shadow-md z-50 right-0">
-        <a class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#F1F1F1] cursor-pointer">
+        <a class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#F1F1F1] cursor-pointer" @click="emitEdit">
           <img src="/assets/icons/1.TH.EDIT.OUTLINED.svg" alt="Edit" class="h-6 w-6 mr-2">
           Editar
         </a>
         <hr class="border-t mx-4" style="border-color: #BFBFBF;"> <!-- Línea separadora ajustada -->
-        <a class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#F1F1F1] cursor-pointer">
+        <a class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#F1F1F1] cursor-pointer" @click="emitDelete">
           <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="Delete" class="h-6 w-6 mr-2">
           Eliminar
         </a>
@@ -29,6 +29,19 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { defineEmits } from 'vue';
+
+const emits = defineEmits(['edit','delete']);
+
+const emitEdit = () => {
+  toggleDropdown();
+  emits('edit');
+};
+
+const emitDelete = () => {
+  toggleDropdown();
+  emits('delete');
+};
 
 const dropdownRef = ref(null);
 const visible = ref(false);

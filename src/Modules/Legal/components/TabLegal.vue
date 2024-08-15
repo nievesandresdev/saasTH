@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="mb-6">
         <TabMenu :links="views"/>
     </div>
 </template>
