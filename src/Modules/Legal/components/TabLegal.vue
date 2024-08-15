@@ -29,8 +29,8 @@ const views = ref([
     },
     {
         name: 'Política de cookies',
-        active : route.name == 'AutomaticResponses',
-        viewName :'AutomaticResponses'
+        active : route.name == 'PolicyCookiesLegal',
+        viewName :'PolicyCookiesLegal'
     }
    
 ])
