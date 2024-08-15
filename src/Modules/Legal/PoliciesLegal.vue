@@ -6,14 +6,14 @@
       <!-- <div class="grid grid-cols-5 gap-4 mt-4"> -->
         <div class="grid grid-cols-4 1xl:grid-cols-2 1xl:w-2/3 3xl:grid-cols-5 3xl:w-full 3xl:gap-4 1xl:gap-4 ">
             <!-- Botón para añadir política -->
-            <div class="bg-white border rounded-lg shadow-md flex items-center justify-center p-4 h-[175px] w-[344px] cursor-pointer" @click="openModalCreatePolicies">
+            <div class="bg-white border rounded-lg shadow-hoster flex items-center justify-center p-4 h-[175px] w-[344px] cursor-pointer" @click="openModalCreatePolicies">
                 <div class="flex flex-col items-center space-x-2">
                     <img src="/assets/icons/1.TH.PLUS.svg" alt="Add" class="h-5 w-5">
                     <h3 class="text-base font-medium">Añadir política</h3>
                 </div>
             </div>
             <!-- Divs de políticas existentes -->
-            <div v-for="policy in policies" :key="policy.id" class="bg-white border rounded-lg shadow-md flex flex-col justify-between p-4 h-[175px] w-[344px] cursor-pointer" >
+            <div v-for="policy in policies" :key="policy.id" class="bg-white border rounded-lg shadow-hoster flex flex-col justify-between p-4 h-[175px] w-[344px] cursor-pointer" >
                 <div @click="showPolicy(policy)">
                     <h3 class="text-base font-medium mb-4">{{ truncateText(policy.title, 45) }}</h3>
                     <div class="flex justify-start gap-4">
