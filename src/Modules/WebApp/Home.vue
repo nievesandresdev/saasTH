@@ -149,7 +149,7 @@
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/webapp/legal/general' }" class="block p-3">
+                            <router-link :to="{ path: '/legal/general' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Textos legales.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
