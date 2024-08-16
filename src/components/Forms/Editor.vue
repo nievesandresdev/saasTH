@@ -70,6 +70,7 @@
     ['bold', 'italic', 'underline', 'strike'],
     ['link'],
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'color': [] }, { 'background': [] }], 
     [{ 'align': [] }]
   ];
   
