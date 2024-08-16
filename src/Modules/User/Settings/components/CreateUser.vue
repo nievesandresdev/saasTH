@@ -234,14 +234,11 @@
                     <div class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-bold">Todos los hoteles</span>
                         <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleAdmin"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
-                    <!-- <pre>{{ userStore.$getHotels(['id', 'name']) }}</pre> -->
                     <!-- Checkboxes para los hoteles individuales -->
                     <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
                         <span class="text-sm font-[500]">{{ hotel.name }}</span>
                         <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        <!-- <Checkbox :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="form-checkbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
                 </div>
                 <!-- <pre>{{ jsonHotel }}</pre> -->
@@ -263,7 +260,6 @@
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
                                 <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
 
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -274,7 +270,6 @@
                             <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
                                 <span class="text-sm font-[500]">{{ item.name }}</span>
                                 <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
                             </div>
                         </div>
                     </div>
@@ -314,15 +309,11 @@
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
-  //import { useAuthStore } from '@/stores/modules/auth/login';
-  import Checkbox from '@/components/Forms/Checkbox.vue';
   import { useToastAlert } from '@/composables/useToastAlert'
-  //import BaseTextField from '@/components/Forms/BaseTextField'
-  //import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
+
   import ModalNoSave from '@/components/ModalNoSave.vue';
 
   
-  //const emits = defineEmits(['close','store','alert','showModalNoSave']);
   const emits = defineEmits(['close','store','alert']);
   
   const props = defineProps({
@@ -343,31 +334,14 @@
     window.location.reload();
   }
 
-/*   const getHotels = userStore.$getHotels;
-
-  const typeLodging = [
-        { value: "Hotel", label: "Hotel", disabled: false },
-        { value: "Hostal", label: "Hostal", disabled: false },
-        { value: "Pensión", label: "Pensión", disabled: false },
-        {
-            value: "Complejo de apartamentos",
-            label: "Complejo de apartamentos",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
-        {
-            value: "Apartamento turístico",
-            label: "Apartamento turístico",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
-        {
-            value: "Vivienda con fines turísticos",
-            label: "Vivienda con fines turísticos",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
-    ] */
+  const selectedText = ref(''); // variable que guardara texto seleccionado
+  window.addEventListener('mouseup', () => { // evento que se dispara al soltar el click
+      if (window.getSelection().toString().length > 0) { // si hay texto seleccionado
+        selectedText.value = window.getSelection().toString(); // guardamos el texto seleccionado
+      } else {
+        selectedText.value = ''; // si no hay texto seleccionado limpiamos la variable
+      }
+  });
 
   const seletedRoleUser = ref([
     { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
@@ -829,9 +803,11 @@ onMounted(async () => {
 
 function closeModal() {
   if (changes.value) {
-    showModalNoSave.value = true;
-    //console.log('showModalNoSaveSS',showModalNoSave.value)
-    emits('showModalNoSave', true);
+    if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
+      showModalNoSave.value = true;
+    } else { //si hay texto seleccionado, se cierra el modal sin alerta
+      showModalNoSave.value = false;
+    }
   } else {
     emits('close');
   }

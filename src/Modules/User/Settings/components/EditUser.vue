@@ -342,10 +342,17 @@ const unregisterClickOutside = () => {
 };
 
 const handleCloseModal = () => {
-  //alert('handleCloseModal')
     showModalNoSave.value = false;
-    //emit('showModalNoSave', false);
 }
+
+const selectedText = ref(''); // variable que guardara texto seleccionado
+window.addEventListener('mouseup', () => { // evento que se dispara al soltar el click
+    if (window.getSelection().toString().length > 0) { // si hay texto seleccionado
+      selectedText.value = window.getSelection().toString(); // guardamos el texto seleccionado
+    } else {
+      selectedText.value = ''; // si no hay texto seleccionado limpiamos la variable
+    }
+});
 
 
 const form = ref({
@@ -920,14 +927,14 @@ const closeModalEditUser = () => {
   
 
 function closeModal(complete = false) {
-   /*  emits('close');
-    currentStep.value = 1; */
-    //console.log('changesSS',changes.value,showModalNoSave.value)
     if(!complete){
       //alert('complete')
         if (changes.value == true) {
-          showModalNoSave.value = true;
-          emits('showModalNoSave', true);
+            if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
+              showModalNoSave.value = true;
+            }else{
+              showModalNoSave.value = false;
+            }
         } else {
           emits('close');
           currentStep.value = 1;
@@ -943,24 +950,6 @@ function closeModal(complete = false) {
 
 }
 
-/* watch(() => showModalNoSave.value, (newVal) => {
-  if (!newVal) {
-    emits('close');
-    currentStep.value = 1;
-  }
-}); */
-
-  
-
-
-/* const closeModal = () => {
-  if (changes.value) {
-    showModalNoSave.value = true;
-    emits('showModalNoSave', true);
-  } else {
-    emits('close');
-  }
-} */
   
   onMounted(async () => {
     await nextTick();
