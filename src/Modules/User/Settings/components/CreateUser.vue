@@ -296,6 +296,7 @@
           @close="closeModalSaveCreate"
           @saveChanges="handleStoreUser"
           :type="'alone_exit'"
+          :url="intendedRoute"
           @hidden="handleCloseModal"
         />
       </div>
@@ -312,6 +313,18 @@
   import { useToastAlert } from '@/composables/useToastAlert'
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
+  import { useRoute, useRouter } from 'vue-router';
+
+  const router = useRouter();
+
+router.beforeEach((to, from, next) => {
+
+  if(to.fullPath !== from.fullPath){
+    showModalNoSave.value = false
+    intendedRoute.value = to.fullPath;
+  }
+
+});
 
   
   const emits = defineEmits(['close','store','alert']);
@@ -333,6 +346,8 @@
     showModalNoSave.value = false;
     window.location.reload();
   }
+
+  const intendedRoute = ref(null);
 
   const selectedText = ref(''); // variable que guardara texto seleccionado
   window.addEventListener('mouseup', () => { // evento que se dispara al soltar el click

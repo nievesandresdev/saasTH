@@ -260,6 +260,7 @@
           @close="closeModalEditUser"
           @saveChanges="handleUpdateUser"
           type="alone_exit_save"
+          :url="intendedRoute"
           @hidden="handleCloseModal"
         />
       </div>
@@ -327,7 +328,7 @@ watch(() => props.modalEdit, (newVal) => {
         registerClickOutside();
     });
   } else {
-    console.log('modalEditClose',props.modalEdit)
+    //console.log('modalEditClose',props.modalEdit)
     unregisterClickOutside();
   }
 });
@@ -884,14 +885,27 @@ const changes = computed(() => {
   return JSON.stringify(form) !== initialForm.value;
 });
 
-/* router.beforeEach((to, from, next) => {
-  //console.log('beforeEachsx',changes.value,intendedRoute.value)
-    if (intendedRoute.value === null && changes.value) {
+router.beforeEach((to, from, next) => {
+  /* console.log({
+    to: to.fullPath,
+    from: from.fullPath,
+    intendedRoute: intendedRoute.value,
+    changes: changes.value	,
+    if : intendedRoute.value === null && changes.value,
+    testing : 'slkslkslñ'
+  }) */
+
+  if(to.fullPath !== from.fullPath){
+    showModalNoSave.value = false
+    intendedRoute.value = to.fullPath;
+  }
+
+    /* if (intendedRoute.value === null && changes.value) {
       showModalNoSave.value = true;
       intendedRoute.value = to.fullPath; // Guardamos la ruta a la que se quiere ir
       next(false); // Prevenimos la navegación temporalmente
-    } 
-}); */
+    }  */
+});
 
 const closeModalEditUser = () => {
     showModalNoSave.value = false;

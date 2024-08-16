@@ -44,7 +44,7 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type == 'alone_exit'">
-              <button  @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button  @click.prevent="goLinkUrl" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir
               </button>
               <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
@@ -52,7 +52,7 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type == 'alone_exit_save'">
-              <button  @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button  @click.prevent="goLinkUrl" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
               <button @click="onlySaveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
@@ -76,7 +76,8 @@ const props = defineProps({
   textbtn: String,
   type: String,
   forceOpen: Boolean,
-  redirect : String
+  redirect : String,
+  url: String
 });
 
 const emit = defineEmits(['saveChanges', 'close','hidden']);
@@ -127,6 +128,22 @@ function hiddenModal() {
 function saveChanges() {
   emit('saveChanges');
   closeModal();
+}
+
+const goLinkUrl = () => {
+  if(props.url){
+    console.log('props.url', props.url);
+    /* router.push(props.url).catch(err => {
+      console.error('Routing error:', err);
+    }); */
+
+    window.location.href = props.url;
+    onlyCloseModal();
+  }else{
+    closeModal();
+  }
+
+ 
 }
 
 function goLink() {
