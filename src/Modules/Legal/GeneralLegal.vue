@@ -3,7 +3,7 @@
         <HeadLegal />
         <TabLegal />
 
-        <SectionConfig :width="'w-2/3'">
+        <SectionConfig :widht="'67%'">
             <template #title>
                 <div class="flex flex-col mb-6 gap-2">
                     <span class="font-semibold text-base">General</span>
@@ -37,7 +37,11 @@
                     </section>
                     <section class="flex justify-between items-center mb-4">
                         <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
-                        <BaseSwitchInput v-model="form.protection" />
+                        <div class="flex">
+                            <span class="text-sm font-semibold mr-1">{{ form.protection ? 'Si' : 'No' }}</span>
+                            <BaseSwitchInput v-model="form.protection" />
+                        </div>
+                        
                     </section>
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">

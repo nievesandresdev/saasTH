@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-left flex-col items-left mt-3 mb-[48px]" v-show="totalData > 2">
+  <div v-show="totalData >= perPage" class="flex justify-left flex-col items-left mt-3 mb-[48px]">
     <span class="font-normal text-sm mb-2">
       {{ perPage }} por página
     </span>

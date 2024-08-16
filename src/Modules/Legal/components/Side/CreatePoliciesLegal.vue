@@ -7,7 +7,7 @@
         ref="ref_section_add"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5 mt-2">
+          <div class="flex justify-between items-center px-6 py-5">
             <div class="text-center">
               <h1 class="font-[500] text-[22px]">Crear política</h1>
             </div>
@@ -51,7 +51,7 @@
             <section class="flex justify-between items-center mb-2">
               <label class="text-sm font-medium">Penalización</label>
               <div class="flex items-center gap-1">
-                <span class="font-medium text-[10px]">No</span>
+                <span class="font-medium text-[10px]">{{ form.penalization ? 'Si' : 'No' }}</span>
                 <BaseSwitchInput v-model="form.penalization" />
               </div>
             </section>

@@ -3,7 +3,7 @@
       <HeadLegal />
       <TabLegal />
 
-      <SectionConfig>
+      <SectionConfig :widht="'67%'">
         <template v-slot:title>
             <div class="flex flex-col gap-2">
                 <span class="text-[16px] font-semibold text-gray-800">Política de privacidad</span>

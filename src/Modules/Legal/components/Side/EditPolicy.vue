@@ -7,7 +7,7 @@
         ref="ref_section_edit"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5 mt-2">
+          <div class="flex justify-between items-center px-6 py-5">
             <div class="text-center">
               <h1 class="font-[500] text-[22px]">Editar política</h1>
             </div>
