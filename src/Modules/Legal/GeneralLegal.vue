@@ -33,7 +33,13 @@
                     </section>
                     <section class="mb-6">
                         <label class="text-sm font-medium mb-[6px] block">Email de contacto</label>
-                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" />
+                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" :error="!isEmailValid"/>
+                        <div v-if="!isEmailValid" class="flex mt-1 text-[#FF6666] justify-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <small>Es necesario poner un correo electrónico válido</small>
+                        </div>
                     </section>
                     <section class="flex justify-between items-center mb-4">
                         <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
@@ -41,7 +47,6 @@
                             <span class="text-sm font-semibold mr-1">{{ form.protection ? 'Si' : 'No' }}</span>
                             <BaseSwitchInput v-model="form.protection" />
                         </div>
-                        
                     </section>
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
@@ -91,6 +96,7 @@ const form = reactive({
 
 const initialForm = ref(null);
 const isEmailProtectionValid = ref(false);
+const isEmailValid = ref(false);
 
 onMounted(() => {
     loadGoogleMapsScript();
@@ -98,6 +104,7 @@ onMounted(() => {
 
     getData();
     isEmailProtectionValid.value = false; 
+    isEmailValid.value = false; 
 });
 
 const getData = async() => {
@@ -110,8 +117,13 @@ const getData = async() => {
     form.protection = response.data.legal?.protection || false;
     form.email_protection = response.data.legal?.email_protection || '';
 
+    isEmailValid.value = validateEmail(form.email);
     isEmailProtectionValid.value = validateEmail(form.email_protection);
 };
+
+watch(() => form.email, (newValue) => {
+    isEmailValid.value = validateEmail(newValue);
+});
 
 watch(() => form.email_protection, (newValue) => {
     isEmailProtectionValid.value = validateEmail(newValue);
@@ -123,7 +135,6 @@ watch(() => form.protection, (newValue) => {
         isEmailProtectionValid.value = true;
     }
 });
-
 
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -138,7 +149,7 @@ const valid = computed(() => {
     return form.name.trim() !== '' && 
            form.address.trim() !== '' && 
            form.nif.trim() !== '' && 
-           form.email.trim() !== '' && 
+           form.email.trim() !== '' && isEmailValid.value &&
            (!form.protection || (form.email_protection.trim() !== '' && isEmailProtectionValid.value));
 });
 
@@ -153,6 +164,11 @@ const cancelChange = () => {
 };
 
 const submit = async () => {
+    if (!valid.value) {
+        toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right');
+        return;
+    }
+
     initialForm.value = JSON.stringify(form);
 
     const response = await storeGeneralLegal(form);
