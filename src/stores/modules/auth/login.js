@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
 import { getUserData } from '@/api/services/users/userSettings.service';
+import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/stay.services'
 import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -76,20 +77,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function logout() {
-        const response = await LogoutService();
-
-        if (response.ok) {
+        try {
+            const userEmail = user.value.email;
+            await deleteSessionByHotelAndEmailApi({ userEmail });
+            await LogoutService();
+        } catch (error) {
+            console.error('Error during logout:', error);
+        } finally {
             token.value = '';
             user.value = null;
-            
-            this.$router.push('/login');
-
+    
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
             sessionStorage.removeItem('current_hotel');
             sessionStorage.removeItem('current_subdomain');
+            sessionStorage.removeItem('redirectTo');
+    
+            // No redirigimos aquí, el middleware se encargará de ello
         }
     }
+    
 
     const fullName = computed(() => {
         return `${user?.value?.name} ${user?.value?.lastname}`;

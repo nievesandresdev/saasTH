@@ -3,7 +3,7 @@
         <div class="flex" v-if="data">
             <div
                 v-for="guest in data.guests"
-                class="text-base leading-[110%] font-medium pb-2 relative"
+                class="text-base leading-[110%] font-medium pb-2 relative cursor-pointer"
                 :key="guest.id"
                 :class="{
                     'bg-white shadow-tab pt-4 pr-4  pl-4 rounded-t-[10px] text-[#0B6357] font-semibold': Number(route.query.g) == guest.id,

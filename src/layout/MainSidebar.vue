@@ -35,10 +35,17 @@
         <div 
           class="rounded-[10px] hbg-green-200"
         >
-          <router-link
+          <!-- <router-link
             v-for="(link, indexLink) in section.group" :key="indexLink"
             :to="link.url"
             @mousemove="handleMouseMove(link.title)"
+            @click="handleMenuItemClick(link.title)"
+            class="rounded-[10px] flex items-center p-2 relative"
+            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
+          > -->
+          <router-link
+            v-for="(link, indexLink) in section.group" :key="indexLink"
+            :to="link.url"
             @click="handleMenuItemClick(link.title)"
             class="rounded-[10px] flex items-center p-2 relative"
             :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
@@ -60,12 +67,12 @@
       </template>
 
       <!-- help, user and news -->
-      <div class="mt-auto mb-4 pt-4">
+      <div class="mt-auto pt-4 absolute inset-x-0 bottom-0 mb-6 px-3">
         <button 
           v-for="(button, indexButton) in user_buttons" :key="indexButton"
           @mousemove="handleMouseMove(button.title)"
           @click="handleMenuItemClick(button.title)"
-          class="rounded-[10px] flex items-center p-1 max-h-[40px]"
+          class="rounded-[10px] flex items-center p-1 h-[44px]"
           :class="{'hbg-green-600 shadow-lg': button.active, 'hover-gray-100': !button.active}"
         >
           <img 
@@ -118,14 +125,18 @@
               <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
             </button>
           </div>
-          <div class="text-center">
+          <div class="text-center px-8">
             <h3 class="text-lg font-medium">{{ authStore.fullName }}</h3>
             <p class="text-sm text-gray-500 font-semibold">{{ $getRoleName(authStore.user.role) }}</p>
-            <div class="mt-4 flex justify-center gap-3">
+            <div class="mt-3 mb-6 flex justify-center gap-4">
               <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
                 Ver Suscripción
               </button>
+              <!-- <button class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
+                <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
+                Ver Suscripción
+              </button> -->
               <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
                 Ajustes de cuenta
@@ -187,6 +198,7 @@ const modalHelpRef = ref(false)
 const pusher = ref(null)
 const channelQuery = ref(null)
 const channelStay = ref(null)
+const channelChat = ref(null)
 const onHoverMainMenu = ref(false)
 
 provide('onHoverMainMenu', onHoverMainMenu)
@@ -196,22 +208,30 @@ const connectPusher = async () => {
     pusher.value = getPusherInstance();
     let channelNameQuery = 'notify-send-query.' + hotelStore.hotelData.id;
     let channelNameStay = 'private-noti-hotel.' + hotelStore.hotelData.id;
+    let channelNameChat = 'private-notify-unread-msg-hotel.' + hotelStore.hotelData.id;
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-        showNotification(data.title,data.text,data.urlQuery,10000);
-        countPendingQueries.value = await queryStore.$countPendingByHotel();
+       console.log('NotifySendQueryEvent',data)
+       let routeData = {
+            name : 'StayQueryDetail',
+            params : { stayId : data.stayId },
+            query : { g : data.guestId }
+          };
+        showNotification(data.title,data.text,routeData,10000);
+        if(data.countPendingQueries){
+          countPendingQueries.value = data.countPendingQueries;
+        }
+        // countPendingQueries.value = await queryStore.$countPendingByHotel();
         //loadExistsPending();
     });
-    
-    channelStay.value = pusher.value.subscribe(channelNameStay);
-    channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-      // console.log('NotifyStayHotelEvent',data)
-        //notificacion del navegador cuando se recibe un mensaje
+
+    channelChat.value = pusher.value.subscribe(channelNameChat);
+    channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
+        // console.log('NotifyUnreadMsg',data)
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-            // let link  = route('stay.hoster.chat',{selected:data.stay_id});
             let routeData = {
               name : 'StayChatRoom',
               params : { stayId : data.stay_id },
@@ -219,9 +239,12 @@ const connectPusher = async () => {
             };
             showNotification(room_text, data.text, routeData, 10000);
         }
-        countPendingChats.value = await chatStore.$pendingCountByHotel();
-        // get_stay_data_pending();
-        // defineNotificationsCount();
+    });
+    
+    channelStay.value = pusher.value.subscribe(channelNameStay);
+    channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+        console.log('NotifyStayHotelEvent',data)
+        if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
 
@@ -387,14 +410,21 @@ onUnmounted(() => {
         channelQuery.value.unbind('App\\Events\\NotifySendQueryEvent');
         pusher.value.unsubscribe(channelQuery.value);
     }
+
+    if (channelChat.value) {
+        channelChat.value.unbind('App\\Events\\NotifyUnreadMsg');
+        pusher.value.unsubscribe(channelChat.value);
+    }
 });
 
 function handleMouseEnter () {
   onHoverMainMenu.value = true;
+  isMouseMoving.value = true;
 }
 
 function handleMouseLeave () {
   onHoverMainMenu.value = false;
+  isMouseMoving.value = false;
 }
 
 const logout = async () => {

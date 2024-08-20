@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    emits: ['update:modelValue', 'handleError'],
+    emits: ['update:modelValue', 'handleError','input:typing'],
     props: {
         id: String,
         disabled: Boolean,
@@ -39,7 +39,7 @@ export default {
         modelValue: String,
         customClasses: {
             type: String,
-            default: 'h-10 text-sm w-full p-3 '
+            default: 'h-10 text-sm p-3 '
         },
         showTextError: {
             type: Boolean,
@@ -61,9 +61,9 @@ export default {
             return this.placeholder || 'Introduce un email';
         },
         computeClasses() {
-            let classes = 'hinput-green rounded-[6px] border ' + this.customClasses;
+            let classes = 'hinput-green rounded-[6px] border w-full ' + this.customClasses;
             if (this.hasError) {
-                classes += 'hborder-alert-negative htext-alert-negative placeholder-negative';
+                classes += ' hborder-alert-negative htext-alert-negative placeholder-negative';
             } else {
                 classes += '';
             }
@@ -87,6 +87,7 @@ export default {
             }else{
                 this.hasError = false;  
             }
+            this.$emit('input:typing');
             this.$emit('update:modelValue', email);
         }
     }
@@ -99,5 +100,9 @@ input::focus {
 }
 input{
     color:#333;
+}
+input::placeholder{
+    font-weight: 500;
+    color: var(--h-gray-500);
 }
 </style>

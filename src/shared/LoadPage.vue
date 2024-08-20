@@ -1,6 +1,6 @@
 <template>
     <!-- load page -->
-    <div class="hbg-white-100 flex flex-col fixed h-screen w-screen left-0 top-0 z-[600000]">
+    <div class="hbg-white-100 flex flex-col fixed h-screen w-screen left-0 top-0 z-[200]">
         <div class="spinner-container mx-auto mt-32 mb-auto">
             <svg class="spinner" viewBox="0 0 50 50">
                 <defs>

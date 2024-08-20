@@ -141,7 +141,7 @@
                     <div class="flex flex-col gap-2 w-1/2">
                         <span class="text-sm">Promedio de todas las OTAs vinculadas a tu hotel</span>
                         <div class="flex items-center">
-                            <span class="text-2xl font-semibold">{{ subscribed && average != 0 ? average : '-.-' }}</span>
+                            <span class="text-2xl font-semibold">{{ subscribed && average != 0 ? average.toFixed(1) : '-.-' }}</span>
                             <span class="text-[23.642px] font-semibold">/</span>
                             <span class="text-base font-semibold flex mt-1">100</span>
                         </div>
@@ -197,7 +197,7 @@ const average = ref(0);
 const subscribed = ref(true); // Variable para determinar la suscripción
 
 onMounted(async () => {
-    await handleSubscription();
+    //await handleSubscription();
     if(subscribed.value) {
         await handleDataFeedback();
         await handleDataOta();
@@ -269,6 +269,7 @@ const handleDataOta = async () => {
 
             average.value = count > 0 ? (totalRating / count) * 10 : 0;
         });
+        
     } else {
         toast.errorToast(response.data.message, 'top-right');
         average.value = 0; // Ensure average is 0 if there was an error

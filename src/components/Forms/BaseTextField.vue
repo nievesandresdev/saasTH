@@ -8,6 +8,8 @@
         >
         <div class="relative">
             <input
+                ref="inputElement"
+                :id="inputId" 
                 type="text"
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
@@ -39,9 +41,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch,onMounted } from 'vue';
 
 const emit = defineEmits(['click:appendInner', 'update:modelValue', 'blur:validate', 'enter:search', 'enter:key', 'input:typing', 'click', 'keyup:prevent', 'input:search']);
+
+const inputElement = ref(null);
 
 const props = defineProps({
     classContent: {
@@ -149,6 +153,10 @@ const customInputClass = computed(() => {
     return c;
 });
 
+onMounted(() => {
+    emit('input-ref', inputElement);
+});
+
 
 
 
@@ -157,6 +165,10 @@ const customInputClass = computed(() => {
 <style lang="scss" scoped>
 .hinput-error {
     border-color: #DC2626;
+}
+input::placeholder{
+    font-weight: 500;
+    color: var(--h-gray-500);
 }
 // .hinput-green {
 //     border-color: #10B981;

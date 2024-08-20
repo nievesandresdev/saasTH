@@ -31,7 +31,8 @@ const stayId = ref(route.params.stayId);
 const guestId = ref(route.query.g);
 const data = ref(null);
 const guestAccess = ref(null);
-const timeLineData = ref(null);
+const timeLineData = ref(null)
+const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
@@ -66,7 +67,9 @@ watch(() => route.query.g, async (newId) => {
 
 const handleBeforeUnload = (event) => {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    if(user){
+        stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    }
     delete event['returnValue']; // Evitar la alerta del navegador
 }
 
@@ -79,4 +82,5 @@ provide('data',data)
 provide('timeLineData',timeLineData);
 provide('guestAccess',guestAccess)
 provide('currentPeriod',timeLineData.value?.currentPeriod)
+provide('session',session) // se define para porder ser usada en la cabecera
 </script>

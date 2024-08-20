@@ -3,7 +3,7 @@
         class="icon relative flex items-center leading-3"
     >
         <slot name="button"></slot>
-        <div class="tooltipp " :class="sizeCustom ? `w-[${sizeCustom}px]` : `width-${size}`" :style="styles">
+        <div class="tooltipp" :class="sizeCustom ? `w-[${sizeCustom}px]` : `width-${size}`" :style="styles">
             <p class="text-sm leading-[150%] font-normal">
                 Nuestra IA, Hosty, traducirá todo el contenido de la WebApp del español al idioma preferido por tu huésped.
             </p>
@@ -71,7 +71,7 @@
         position: absolute;
         border: none;
         background-color: #fff;
-        z-index:90000;
+        z-index: 900000;
         color: #000;
         padding: 16px;
         text-align: left;

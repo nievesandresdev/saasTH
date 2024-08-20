@@ -16,8 +16,8 @@ export const getSettings = () => apiHttp('GET', `${chatPath}/${hosterPath}/${cha
 //searchLang
 export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/searchLang`, params,{ showPreloader: false })
 //storeGeneralSetting
-export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params)
+export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params,{ showPreloader: true })
 //updateAvailability
-export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params)
+export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params,{ showPreloader: true })
 //updateResponses
-export const updateResponses = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateResponses`, params)
+export const updateResponses = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateResponses`, params,{ showPreloader: true })

@@ -189,9 +189,9 @@ import { useRoute, useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
 const form = ref({
-  email: sessionStorage.getItem("user_email_form") ? sessionStorage.getItem("user_email_form") : '',
-  password: sessionStorage.getItem("pass_email_form") ? sessionStorage.getItem("pass_email_form") : '',
-  remember: sessionStorage.getItem("remember_form") ? (sessionStorage.getItem("remember_form") === 'true') : false
+  email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
+  password: localStorage.getItem("pass_email_form") ? localStorage.getItem("pass_email_form") : '',
+  remember: localStorage.getItem("remember_form") ? (localStorage.getItem("remember_form") === 'true') : false
 });
 
 const placeholderEmail = ref('Introduce tu email');

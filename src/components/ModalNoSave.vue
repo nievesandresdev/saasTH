@@ -7,14 +7,14 @@
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       
       <div class="inline-block bg-white rounded-[10px] text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-[344px] p-4">  
-          <img class="h-6 w-6 cursor-pointer ml-auto" @click="visitNow = false" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
+          <img class="h-6 w-6 cursor-pointer ml-auto" @click="type == 'alone_exit' ? hiddenModal() : visitNow = false" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
 
           <div class="text-center">
             <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
             <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
             <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
           </div>
-          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit'">
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit' && type !== 'alone_exit_save' ">
               <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
@@ -44,10 +44,18 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type == 'alone_exit'">
-              <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button  @click.prevent="goLinkUrl" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir
               </button>
               <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
+                {{ textbtn ?? 'Seguir' }}
+              </button>
+          </div>
+          <div class="mt-4 flex justify-between" v-if="type == 'alone_exit_save'">
+              <button  @click.prevent="goLinkUrl" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir sin guardar
+              </button>
+              <button @click="onlySaveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
                 {{ textbtn ?? 'Seguir' }}
               </button>
           </div>
@@ -68,6 +76,8 @@ const props = defineProps({
   textbtn: String,
   type: String,
   forceOpen: Boolean,
+  redirect : String,
+  url: String
 });
 
 const emit = defineEmits(['saveChanges', 'close','hidden']);
@@ -78,8 +88,9 @@ const intendedRoute = ref(null);
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
   if (!props.forceOpen) {
-    if (props.type === 'exit_save' || props.type === 'alone_exit') {
+    if (props.type === 'exit_save' || props.type === 'alone_exit' || props.type === 'alone_exit_save') {
       visitNow.value = newVal;
+      showModal.value = true;
     } else {
       visitNow.value = false;
     }
@@ -99,6 +110,16 @@ function closeModal() {
   emit('close');
 }
 
+function onlySaveChanges() {
+  emit('saveChanges');
+  onlyCloseModal();
+}
+
+function onlyCloseModal() {
+  visitNow.value = false;
+  //emit('close');
+}
+
 function hiddenModal() {
   showModal.value = false;
   emit('hidden');
@@ -107,6 +128,22 @@ function hiddenModal() {
 function saveChanges() {
   emit('saveChanges');
   closeModal();
+}
+
+const goLinkUrl = () => {
+  if(props.url){
+    console.log('props.url', props.url);
+    /* router.push(props.url).catch(err => {
+      console.error('Routing error:', err);
+    }); */
+
+    window.location.href = props.url;
+    onlyCloseModal();
+  }else{
+    closeModal();
+  }
+
+ 
 }
 
 function goLink() {
@@ -122,6 +159,8 @@ function goLink() {
 }
 
 router.beforeEach((to, from, next) => {
+    //intendedRoute.value = to.fullPath
+    
   if (showModal.value && !visitNow.value) {
     intendedRoute.value = to.fullPath;
     visitNow.value = true;
@@ -129,6 +168,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+
 });
 </script>
 

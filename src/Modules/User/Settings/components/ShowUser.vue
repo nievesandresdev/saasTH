@@ -64,10 +64,15 @@
             </div>
           </div>
         </div>
-        <div 
+        <!-- <div 
             class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
             style="height: 72px;" 
             v-if="dataUser.role.name != 'Associate' && ($isAdmin() || $isOperator())"
+        > -->
+        <div 
+            class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
+            style="height: 72px;" 
+            v-if="!$isOperator()"
         >
             <button
                 class="underline font-medium"

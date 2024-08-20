@@ -27,17 +27,17 @@
                   class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-gray-100"
                 >
                   <div class="flex items-center">
-                    <img :src="menu.icon" class="inline-block w-6 h-6 mr-2">
-                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
+                    <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 
+                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span> <!-- items con icono -->
                   </div>
-                  <img :src="menu.expanded ? '/assets/icons/1.TH.I.dropdown.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
+                  <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
                 <ul v-if="menu.expanded">
                   <template v-for="(sub_menu, index_sub_menu) in menu.group" :key="index_sub_menu">
                     <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-gray-100"
-                      :class="fullUrl.includes(`typeplace=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                      :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     >
                       <div
                         class="w-full h-full block pl-[44px] pr-[24px] cursor-pointer"
@@ -127,7 +127,7 @@
                               <li
                                 v-if="sub_menu.place"
                                 class=" w-full h-full hover-gray-100"
-                                :class="fullUrl.includes(`typeplace=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                                :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                               >
                                 <a
                                   href="javascript:void(0)"
@@ -208,13 +208,13 @@ const menu_section = reactive([
               expanded: ['Perfil','Facilities'].includes(route.name),
               group: [
                   {
-                      title: 'perfil',
+                      title: 'Perfil',
                       icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                       to: 'Perfil',
                       selectedArr: ['Perfil']
                   },
                   {
-                      title: 'instalaciones',
+                      title: 'Instalaciones',
                       icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                       to: 'Facilities',
                       selectedArr: ['Facilities']
@@ -228,21 +228,21 @@ const menu_section = reactive([
               expanded: false,
               group: [
                 {
-                  title: 'qué visitar',
+                  title: 'Qué visitar',
                   icon: '/assets/icons/1.TH.DESTINO.svg',
                   place: true,
                   include: '/places',
                   selectedArr: ['Places']
                 },
                 {
-                  title: 'dónde comer',
+                  title: 'Dónde comer',
                   icon: '/assets/icons/1.TH.DESTINO.svg',
                   place: true,
                   include: '/places',
                   selectedArr: ['Places']
                 },
                 {
-                  title: 'ocio',
+                  title: 'Ocio',
                   icon: '/assets/icons/1.TH.DESTINO.svg',
                   place: true,
                   include: '/places',
@@ -334,9 +334,9 @@ const menu_section = reactive([
         },
         {
             title: 'Textos legales',
-            to: '',
+            to: 'GeneralLegal',
             icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
-            include: '/estancias'
+            include: '/legal'
         },
         {
             title: 'Galería de imágenes',

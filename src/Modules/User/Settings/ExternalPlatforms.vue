@@ -184,7 +184,8 @@
                         <p class="text-red-500">{{ errorMessage.airbnb }}</p>
                     </div>
                     
-                    <div v-for="(link, index) in additionalLinks" :key="index" class="mt-3" v-if="link?.status !== 0">
+                    <div v-for="(link, index) in additionalLinks" class="mt-2" :key="index" v-if="link?.status !== 0">
+                        <hr class="mb-4 w-full">
                         <div :class="['flex', link.errors ? 'border-red-500' : 'border-gray-300']">
                             <BaseTextField
                                 v-model="link.url"
@@ -194,7 +195,7 @@
                                 :error="link.errors"
                             />
                         </div>
-                        <div class="flex items-center mt-3 justify-end" @click="openDeleteModal(index)">
+                        <div class="flex items-center mt-3 justify-end" @click="openDeleteModal(index,'Airbnb')">
                             <div class="flex cursor-pointer group hover:text-green-500">
                                 <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3 h-[15px] w-[15px]" viewBox="0 0 16 16">
                                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
@@ -235,7 +236,7 @@
                 @saveChanges="submit"
                 type="save_changes"
             />
-            <ModalDeleteURL :open="openModalDeleteURL" @submit:delete="submitDelete" @close:modal="openDeleteModal" />
+            <ModalDeleteURL :open="openModalDeleteURL" :nameOTA="nameOtaDelete" @submit:delete="submitDelete" @close:modal="openDeleteModal" />
             <ModalChangeURL :open="openModalchangeUrl" @submit:change="handleEmail" @close:change="changeUrlModal" />
         </div> 
         <ChangesBar 
@@ -274,6 +275,7 @@ const dataMailtype = ref(null);
 const openModalDeleteURL = ref(false);
 const openModalchangeUrl = ref(false);
 const indexToDelete = ref(null);
+const nameOtaDelete = ref(null);
 
 const hoverValidation = ref({
     booking: false,
@@ -366,13 +368,13 @@ const getSettings = async () => {
 };
 
 const validateUrl = (url, type) => {
-    console.log('Validating:', url, type);
+    //console.log('Validating:', url, type);
 
     // Si el campo está vacío, no hay errores
     if (!url) {
         return null;
     }
-    
+
     let urlParts;
     try {
         urlParts = new URL(url);
@@ -381,15 +383,25 @@ const validateUrl = (url, type) => {
     }
 
     const hostname = urlParts.origin; 
-    const pathname = urlParts.pathname + urlParts.search + urlParts.hash; // /path/to/
+    let pathname = urlParts.pathname; // /path/to/
 
     // Verifica que el dominio termine en .com
     if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
 
+    // Elimina cualquier query string o fragmento en la URL
+    pathname = pathname.split('?')[0].split('#')[0];
+
     switch (type) {
         case 'booking':
+            // Elimina cualquier cosa después de ".html" en la URL
+            if (pathname.includes('.html')) {
+                
+                pathname = pathname.substring(0, pathname.indexOf('.html') + 5);
+                form.booking.url = hostname + pathname;
+
+            }
             if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
                 return 'El formato del enlace de Booking es incorrecto. Debe contener "/hotel/" y terminar en ".html".';
             }
@@ -407,7 +419,8 @@ const validateUrl = (url, type) => {
         case 'airbnb':
             console.log('Validating Airbnb:', url);
             break;
-        case 'expedia' :
+        case 'expedia':
+            // Añadir validación específica para Expedia si es necesario
             break;
         default:
             return 'Tipo de enlace no soportado';
@@ -440,11 +453,16 @@ const markAdditionalLinkChange = (index) => {
     }
 };
 
+
+
 const addAnotherLink = () => {
     additionalLinks.value.push({ url: '', _id: "", errors: false, errorMessage: '', status: 1 });
 };
 
-const openDeleteModal = (index) => {
+const openDeleteModal = (index,name = false) => {
+    if(name){
+        nameOtaDelete.value = name;
+    }
     indexToDelete.value = index;
     openModalDeleteURL.value = !openModalDeleteURL.value;
 };
@@ -534,7 +552,7 @@ const submit = async () => {
         });
     });
 
-    console.log('Saving changes:', payload);
+    //console.log('Saving changes:', payload);
 
     const params = {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),

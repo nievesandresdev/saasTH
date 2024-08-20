@@ -19,59 +19,59 @@
         <!-- <section class="p-6 mb-6 overflow-y-auto h-[62vh]"> -->
 
             <!-- customer experience -->
-            <div class="flex justify-between items-center pb-4 border-b hborder-gray-400">
-                <p class="text-lg font-semibold leading-[110%]" :class="loadData ? loadClasses : ''">Customer Experience</p>
+            <div class="flex justify-between items-center pb-4 pr-6 border-b hborder-gray-400">
+                <p class="text-lg font-semibold leading-[110%]">Customer Experience</p>
                 <div class="grid gap-10 grid-cols-3 w-[452px]">
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2 pr-3">
+                        <div class="flex mt-2 gap-6">
                             <div>
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.chat.Associate" @change="maskAllEmailsForRole('chat','Associate')"/>
+                                    <Checkbox v-model="allChecked.chat.Associate" @change="maskAllEmailsForRole('chat','Associate')"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 gap-6">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.chat.Administrator" @change="maskAllEmailsForRole('chat','Administrator')"/>
+                                    <Checkbox v-model="allChecked.chat.Administrator" @change="maskAllEmailsForRole('chat','Administrator')"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 gap-6">
                             <div>
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
                                 <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.chat.Operator" @change="maskAllEmailsForRole('chat','Operator')"/>
+                                    <Checkbox v-model="allChecked.chat.Operator" @change="maskAllEmailsForRole('chat','Operator')"/>
 
                                 </div>
                             </div>
@@ -82,77 +82,77 @@
 
             <!-- chat -->
             <div class="mt-6">
-                <h2 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[120%]">Chat</h2>
+                <h2 class="text-base font-medium leading-[120%]">Chat</h2>
                 <div class="shadow-hoster rounded-[10px] bg-white py-6 mt-4">
                     <!-- new chat -->
-                    <div class="border-b hborder-gray-400 pb-4 px-4 flex items-center">
+                    <div class="border-b hborder-gray-400 pb-4 pl-4 pr-[28px] flex items-center">
                         <div>
-                            <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Nuevo chat</h3>
-                            <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo chat.</p>
+                            <h3 class="text-base font-medium leading-[140%]">Nuevo chat</h3>
+                            <p class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo chat.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
+                        <div class="ml-auto flex gap-[74px] pr-2.5">
                             <!-- owner -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysChat.email_notify_new_message_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysChat.email_notify_new_message_to.Associate" @change="reviewAllCheckup('chat','Associate')"/></div>
                             </div>
                             <!-- administrator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData"  v-model="boolBoxToKeysChat.email_notify_new_message_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox  v-model="boolBoxToKeysChat.email_notify_new_message_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/></div>
                             </div>
                             <!-- operator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData"  v-model="boolBoxToKeysChat.email_notify_new_message_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox  v-model="boolBoxToKeysChat.email_notify_new_message_to.Operator" @change="reviewAllCheckup('chat','Operator')"/></div>
                             </div>
                         </div>
                     </div>
                     <!-- pending chat -->
-                    <div class="border-b hborder-gray-400 py-4 px-4 flex items-center">
+                    <div class="border-b hborder-gray-400 py-4 pl-4 pr-[28px] flex items-center">
                         <div>
-                            <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Chat pendiente</h3>
-                            <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un chat pendiente.</p>
+                            <h3 class="text-base font-medium leading-[140%]">Chat pendiente</h3>
+                            <p class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un chat pendiente.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
+                        <div class="ml-auto flex gap-[74px] pr-2.5">
                             <!-- owner -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData"  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
                             </div>
                             <!-- administrator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData"  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
                             </div>
                             <!-- operator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData"  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox  v-model="boolBoxToKeysChat.email_notify_pending_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
                             </div>
                         </div>
                     </div>
                     <!-- inactive chat -->
-                    <div class="pt-4 px-4 flex items-center">
+                    <div class="pt-4 pl-4 pr-[28px] flex items-center">
                         <div>
                             <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%] mr-2">Chat inactivo</h3>
                             <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2 mr-2">Notificar cuando haya personal disponible en el chat y hayan transcurrido 30 minutos sin responder ningún chat.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3 flex-shrink-0">
+                        <div class="ml-auto flex gap-[74px] pr-2.5">
                             <!-- owner -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Associate" @change="reviewAllCheckup('chat','Associate')"/>
                             </div>
                             <!-- administrator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Administrator" @change="reviewAllCheckup('chat','Administrator')"/>
                             </div>
                             <!-- operator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
+                            <div class="flex gap-[58px]">
+                                <Checkbox v-model="plataformDefault" isDisabled/>
+                                <Checkbox v-model="boolBoxToKeysChat.email_notify_not_answered_chat_to.Operator" @change="reviewAllCheckup('chat','Operator')"/>
                             </div>
                         </div>
                     </div>
@@ -160,59 +160,59 @@
             </div>
 
             <!-- reputation online -->
-            <div class="flex justify-between items-center pb-4 border-b hborder-gray-400 mt-8">
-                <p :class="loadData ? loadClasses : ''" class="text-lg font-semibold leading-[110%]">Reputación online</p>
+            <div class="flex justify-between items-center pb-4 pr-6 border-b hborder-gray-400 mt-8">
+                <p class="text-lg font-semibold leading-[110%]">Reputación online</p>
                 <div class="grid gap-10 grid-cols-3 w-[452px]">
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Propietario</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2 pr-3">
+                        <div class="flex mt-2 gap-6">
                             <div>
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.queries.Associate" @change="maskAllEmailsForRole('queries','Associate')"/>
+                                    <Checkbox v-model="allChecked.queries.Associate" @change="maskAllEmailsForRole('queries','Associate')"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Administrador</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 gap-6">
                             <div>
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.queries.Administrator" @change="maskAllEmailsForRole('queries','Administrator')"/>
+                                    <Checkbox v-model="allChecked.queries.Administrator" @change="maskAllEmailsForRole('queries','Administrator')"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
+                        <p class="text-[10px] font-semibold leading-[130%] text-center">Operador</p>
                         <!-- checkbox's -->
-                        <div class="flex mt-2">
+                        <div class="flex mt-2 gap-6">
                             <div>
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Plataforma</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
+                                    <Checkbox v-model="plataformDefault" isDisabled/>
                                 </div>
                             </div>
                             <div class="flex-grow">
-                                <p :class="loadData ? loadClasses : ''" class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
+                                <p class="text-[10px] font-semibold leading-[130%] text-center">Email</p>
                                 <div class="mt-1 text-center">
-                                    <Checkbox :loading="loadData" v-model="allChecked.queries.Operator" @change="maskAllEmailsForRole('queries','Operator')"/>
+                                    <Checkbox v-model="allChecked.queries.Operator" @change="maskAllEmailsForRole('queries','Operator')"/>
                                 </div>
                             </div>
                         </div>
@@ -222,53 +222,53 @@
 
             <!-- feedback -->
             <div class="mt-6">
-                <h2 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[120%]">Seguimiento</h2>
+                <h2 class="text-base font-medium leading-[120%]">Seguimiento</h2>
                 <div class="shadow-hoster rounded-[10px] bg-white py-6 mt-4">
                     <!-- new feedback -->
-                    <div class="border-b hborder-gray-400 pb-4 px-4 flex items-center">
+                    <div class="border-b hborder-gray-400 pb-4 pl-4 pr-[28px] flex items-center">
                         <div>
-                            <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Nuevo feedback</h3>
-                            <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo feedback.</p>
+                            <h3 class="text-base font-medium leading-[140%]">Nuevo feedback</h3>
+                            <p class="text-sm leading-[150%] mt-2">Notificar cuando se reciba un nuevo feedback.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3">
+                        <div class="ml-auto flex gap-[74px] pr-2.5">
                             <!-- owner -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/></div>
                             </div>
                             <!-- administrator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/></div>
                             </div>
                             <!-- operator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_new_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/></div>
                             </div>
                         </div>
                     </div>
                     <!-- inactive feedback -->
-                    <div class="pt-4 px-4 flex items-center">
+                    <div class="pt-4 pl-4 pr-[28px] flex items-center">
                         <div>
-                            <h3 :class="loadData ? loadClasses : ''" class="text-base font-medium leading-[140%]">Feedback pendiente</h3>
-                            <p :class="loadData ? loadClasses : ''" class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un feedback pendiente.</p>
+                            <h3 class="text-base font-medium leading-[140%]">Feedback pendiente</h3>
+                            <p class="text-sm leading-[150%] mt-2">Notificar cuando hayan transcurrido 10 minutos con un feedback pendiente.</p>
                         </div>
-                        <div class="w-[418px] ml-auto flex gap-[74px] pr-3 flex-shrink-0">
+                        <div class="ml-auto flex gap-[74px] pr-2.5">
                             <!-- owner -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Associate"  @change="reviewAllCheckup('queries','Associate')"/></div>
                             </div>
                             <!-- administrator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Administrator"  @change="reviewAllCheckup('queries','Administrator')"/></div>
                             </div>
                             <!-- operator -->
-                            <div class="flex justify-between flex-grow">
-                                <Checkbox :loading="loadData" v-model="plataformDefault" isDisabled/>
-                                <Checkbox :loading="loadData" v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/>
+                            <div class="flex gap-[58px]">
+                                <div class="text-center"><Checkbox v-model="plataformDefault" isDisabled/></div>
+                                <div class="text-center"><Checkbox v-model="boolBoxToKeysQueries.email_notify_pending_feedback_to.Operator"  @change="reviewAllCheckup('queries','Operator')"/></div>
                             </div>
                         </div>
                     </div>

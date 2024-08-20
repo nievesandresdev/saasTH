@@ -1,7 +1,7 @@
 <template>
     <div class="" v-click-away="handleClickOutsideDropDown">
         <div
-            class="flex flex-shrink-0 p-2 shadow-xl  hover:bg-[#FAFAFA] rounded-[10px] cursor-pointer"
+            class="flex flex-shrink-0 p-2  hover:bg-[#FAFAFA] rounded-[10px] cursor-pointer"
             :class="{'bg-[#FAFAFA]': dropdownOpenn}"
             @click="dropdownOpenn = !dropdownOpenn"
             

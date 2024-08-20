@@ -7,3 +7,4 @@ import {
 export const getFeedbackSummaryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getFeedbackSummaryByGuest`, data, { showPreloader: false })
 export const togglePendingStateApi = (data) => apiHttp('POST', `${queryPath}/${hosterPath}/togglePendingState`, data, { showPreloader: false })
 export const countPendingByHotelApi = () => apiHttp('GET', `${queryPath}/${hosterPath}/countPendingByHotel`, null, { showPreloader: false })
+export const pendingCountByStayApi = (stayId) => apiHttp('GET', `${queryPath}/${hosterPath}/pendingCountByStay/${stayId}`, null, { showPreloader: false })

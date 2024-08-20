@@ -1,10 +1,13 @@
 <template>
     <div 
-        class="h-10 hinput hinput-green border rounded-[6px] cursor-pointer relative flex overflow-hidden"
-        :class="{'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone}"
+        class="hinput hinput-green border rounded-[6px] cursor-pointer relative flex"
+        :class="[
+          {'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone},
+          heigthClass
+        ]"
     >
         <div
-            class="flex h-full items-center w131 relative"
+            class="flex h-full items-center w-[151px] relative"
             :class="{
                 'br-gray': !code || !phone,
                 'br-negative': isError,
@@ -27,13 +30,16 @@
                     {{cde.label}}
                 </p>
             </div>
+            <div class="bg-white w-6 h-6 mx-2 flex-shrink-0 cursor-default">
+              <img class="w-full h-full" src="/assets/icons/1.TH.I.dropdownBig.svg" alt="">
+            </div>
         </div>
     
         <input 
             type="number" 
-            class="hinput-green flex-grow p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none"
+            class="hinput-green flex-grow p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none rounded-[6px]"
             :class="{'htext-alert-negative': isError}"
-            :placeholder="'Teléfono de contacto'"
+            :placeholder="placeholderPhone"
             v-model="phone"
         >
     </div>
@@ -70,6 +76,14 @@ const props = defineProps({
   errors: {
       type: Object,
       default: () => ({}),
+  },
+  heigthClass: {
+      type: String,
+      default: 'h-10',
+  },
+  placeholderPhone: {
+      type: String,
+      default: 'Teléfono de contacto',
   },
 })
 
@@ -182,14 +196,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.w131{
-    width: 131px;
-}
-@media(max-width:340px){
-    .w131{
-        width: 90px;
-    }
-}
 .box-input-field:hover{
     border-color:var(--h-green-600) !important;
     color:var(--h-green-600) !important;
@@ -206,7 +212,6 @@ onMounted(() => {
     border-radius: 0px 0px 10px 10px;
 }
 input::placeholder{
-    font-size: 14px;
     color: var(--h-gray-500);
     font-weight: 500;
 }

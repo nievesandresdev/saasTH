@@ -64,7 +64,7 @@ const computedPaddingContent = computed(() => {
   if (paddingTop || paddingBottom || paddingLeft || paddingRight) {
     return [
       paddingTop ? `pt-${paddingTop}` : '',
-      paddingBottom ? `pb-${paddingBottom}` : '',
+      paddingBottom ? `mb-${paddingBottom}` : '',
       paddingLeft ? `pl-${paddingLeft}` : '',
       paddingRight ? `pr-${paddingRight}` : ''
     ].join(' ').trim();

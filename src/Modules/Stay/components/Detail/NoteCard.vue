@@ -5,7 +5,14 @@
                 class="w-10 h-8 rounded-[6px] object-cover" 
                 :src="acronymIcon"
             >
-            <p class="text-base ml-2 w-[248px] 3xl:w-[448px]">{{ note.guest_name ? note.guest_name : 'Estancia' }}</p>
+            <p class="text-base ml-2 w-[248px] 3xl:w-[448px]" v-if="!note.guest_name">Estancia</p>
+            <p 
+                v-else  
+                class="text-base ml-2 w-[248px] 3xl:w-[448px]" 
+                v-html="highlightSearch(note.guest_name, route.query.search)"
+            ></p>
+            
+            
             <p class="text-xs font-semibold text-center ml-9">
                 {{$formatTimestampDate(note.created_at,'dd/MM')}} - 
                 {{$formatTimestampDate(note.created_at,'HH:mm')}}hs
@@ -55,6 +62,9 @@
 import { inject, computed, ref } from 'vue'
 import NoteEditor from './NoteEditor.vue'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const noteText = inject('noteText')
 const noteId = inject('noteId')
@@ -99,5 +109,11 @@ const toggleNote = (id) =>{
     openContent.value = !openContent.value;
     var el = document.getElementById(id);
     el.classList.toggle("hidden");
+}
+
+function highlightSearch(name, query) {
+    if (!query) return name;
+    const re = new RegExp(query, 'gi');
+    return name.replace(re, match => `<span style="background-color:#fff1be;">${match}</span>`);
 }
 </script>

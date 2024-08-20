@@ -1,6 +1,6 @@
 <template>
     <Head />
-    <div class="p-6" v-if="data">
+    <div class="p-6 z-[300]" v-if="data">
         <div class="3xl:flex 3xl:items-start 3xl:gap-6">
             <InfoSection/>
             <GuestList/>
@@ -55,7 +55,9 @@ const handleBeforeUnload = (event) => {
 // Function to perform asynchronous operations
 const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
-    await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    if(user){
+        await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    }
 }
 
 // Watchers para actualizaciones de URL
