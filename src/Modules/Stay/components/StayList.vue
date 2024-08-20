@@ -86,11 +86,11 @@
             <template v-for="stay in list" :key="stay.id">
                 <CardtayList :stay="stay" :search="search"/>
             </template>
+            <div ref="loaderRef" class="loader-element"></div>
             <!-- loading skeleton -->
             <template v-if="!firstLoad || totalCounts > 0 && list.length < totalCounts">
                 <CardSkeleton v-for="card in 5" />
             </template>
-
             <div v-if="totalCounts == 0 && filtersActive && !search" class="mt-6 px-4">
                 <p class="text-center text-sm font-medium leading-[140%]">No se han encontrado estancias que coincidan con tus criterios de búsqueda. Prueba a modificar los filtros.</p>
                 <div class="mt-6 text-center">
@@ -111,7 +111,6 @@
             <div class="pt-4 pb-2" v-if="totalCounts > 0 && totalCounts == list.length && list.length > 6">
                 <p class="text-xs font-semibold leading-[150%] htext-gray-500 text-center">No hay más estancias</p>
             </div>
-            <div ref="loaderRef" class="loader-element"></div>
         </div>
 
         <FiltersModal ref="filtersModal" @submit="submit" />
@@ -189,6 +188,7 @@ onMounted(async () => {
             observer.value.observe(loaderRef.value);
         }
     });
+    loadData(false, false);
 });
 
 onUnmounted(() => {
@@ -241,12 +241,13 @@ async function loadData(resetList = false, showLoadPage = true){
         allFilters.value.offset = 0;
         allFilters.value.limit = list.value.length;
     }else{
-        allFilters.value.limit = list.value.length >= 5 ? 10 : 5;
+        allFilters.value.limit = list.value.length >= 10 ? 10 : 5;
         allFilters.value.offset = list.value.length;    
     }
     
     loading.value = true;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
+    console.log('loadData',data.value)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     totalValidCount.value = data.value.total_valid_count;
