@@ -86,6 +86,10 @@
             <template v-for="stay in list" :key="stay.id">
                 <CardtayList :stay="stay" :search="search"/>
             </template>
+            <!-- loading skeleton -->
+            <template v-if="!firstLoad || totalCounts > 0 && list.length < totalCounts">
+                <CardSkeleton v-for="card in 5" />
+            </template>
 
             <div v-if="totalCounts == 0 && filtersActive && !search" class="mt-6 px-4">
                 <p class="text-center text-sm font-medium leading-[140%]">No se han encontrado estancias que coincidan con tus criterios de búsqueda. Prueba a modificar los filtros.</p>
@@ -101,9 +105,9 @@
             </div>
 
             <!-- load icon -->
-            <div class="mt-4" v-if="totalCounts > 0 && list.length < totalCounts">  
+            <!-- <div class="mt-4" v-if="totalCounts > 0 && list.length < totalCounts">  
                 <MiniSpinner />
-            </div>
+            </div> -->
             <div class="pt-4 pb-2" v-if="totalCounts > 0 && totalCounts == list.length && list.length > 6">
                 <p class="text-xs font-semibold leading-[150%] htext-gray-500 text-center">No hay más estancias</p>
             </div>
@@ -116,6 +120,7 @@
 <script setup>
 import { onMounted, ref, provide, computed, onUnmounted, nextTick } from 'vue'
 import CardtayList from './CardtayList.vue'
+import CardSkeleton from './CardStayListSkeleton.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
@@ -144,6 +149,7 @@ const totalValidCount = ref(0)
 const countsGeneralByPeriod = ref(0)
 const pendingCountsByPeriod = ref(0)
 const filtersModal = ref(null);
+const firstLoad = ref(false);
 const allFilters = ref({
     search: null,
     periods: ['pre-stay','in-stay','post-stay'],
@@ -163,6 +169,7 @@ const loading = ref(false);
 
 onMounted(async () => {
     await loadData();
+    firstLoad.value = true;
     connectPusher();
 
     nextTick(() => {
@@ -234,7 +241,7 @@ async function loadData(resetList = false, showLoadPage = true){
         allFilters.value.offset = 0;
         allFilters.value.limit = list.value.length;
     }else{
-        allFilters.value.limit = list.value.length >= 10 ? 10 : 5;
+        allFilters.value.limit = list.value.length >= 5 ? 10 : 5;
         allFilters.value.offset = list.value.length;    
     }
     
