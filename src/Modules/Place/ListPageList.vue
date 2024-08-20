@@ -42,7 +42,7 @@
                             :src="placeStore.formatImage(place.place_images?.[0])"
                         >
                         <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
-                            <span class="text-[10px] font-semibold">Visible</span>
+                            <span class="text-[10px] font-semibold">{{place.is_visible ? 'Visible' : 'Oculto'}}</span>
                             <BaseSwichInput
                                 v-model="place.is_visible"
                                 :id="`swich-visible-facility-${index}`"
@@ -51,7 +51,7 @@
                             />
                         </div>
                         <div
-                            v-if="(hoverItem == index) && place.is_visible"
+                            v-if="place.featured || ((hoverItem == index) && place.is_visible)"
                             class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-[100]"
                             :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
                             @click.prevent="updateRecommendation($event, place)"

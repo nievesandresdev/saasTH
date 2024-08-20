@@ -55,7 +55,7 @@
               class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
               src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
               alt="notification icon"
-              v-if="link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)"
+              v-if="(link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)) || (link.title == 'Reseñas' && conuntReviewsPending > 0)"
             >
 
             <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
@@ -172,6 +172,7 @@ import { useUserStore } from '@/stores/modules/users/users'
 import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query'
 import { useChatStore } from '@/stores/modules/chat/chat'
+import { useReviewStore } from '@/stores/modules/review'
 
 const route = useRoute()
 const router = useRouter()
@@ -180,6 +181,7 @@ const userStore = useUserStore()
 const hotelStore = useHotelStore()
 const queryStore = useQueryStore()
 const chatStore = useChatStore()
+const reviewStore = useReviewStore()
 
 const userAvatar = computed(() => userStore.$userAvatar);
 
@@ -189,6 +191,7 @@ const isNotifyPanelVisible = inject('isNotifyPanelVisible');
 const modalProfile = ref(false)
 const countPendingQueries = ref(0)
 const countPendingChats = ref(0)
+const conuntReviewsPending = ref(0)
 const isMouseMoving = ref(false)
 const modalHelpRef = ref(false)
 //pusher
@@ -284,9 +287,9 @@ const menu_links = ref([
       },
       {
         title: 'Reseñas',
-        icon: '1.TH.DASHBOARDNEW',
-        include: ['-'],
-        url: '/dashboard',
+        icon: '1.TH.REVIEW.MM',
+        include: ['Reviews'],
+        url: '/resenas',
       },
       {
         title: 'Análisis',
@@ -393,6 +396,7 @@ onMounted(async() => {
     hotelStore.loadHotelsAvailables();
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
+    conuntReviewsPending.value = await reviewStore.$countReviewsPending();
     connectPusher();
 })
 

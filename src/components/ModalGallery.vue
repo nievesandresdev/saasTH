@@ -21,7 +21,7 @@
                         class-content="w-[345px]"
                         :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: form.search?.length > 0 }"
                         @enter:search="loadGallery"
-                        @click:append_inner="resetFilter(tabCurrent)"
+                        @click:appendInner="resetFilter(tabCurrent)"
                     />
                     <p v-if="!imagesContainer?.length" class="text-sm font-medium htext-gray-500 ">No cuentas con imágenes. Busca imágenes en tu ordenador y añadelas</p>
                     <p v-else-if="imagesContainer?.length > 0 && imageSelected?.length == 0" class="text-sm font-medium htext-gray-500">{{ textNumbersImagesFound }}</p>
