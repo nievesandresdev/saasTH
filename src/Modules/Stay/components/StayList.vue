@@ -234,7 +234,7 @@ async function loadData(resetList = false, showLoadPage = true){
         allFilters.value.offset = 0;
         allFilters.value.limit = list.value.length;
     }else{
-        allFilters.value.limit = 10;
+        allFilters.value.limit = list.value.length >= 10 ? 10 : 5;
         allFilters.value.offset = list.value.length;    
     }
     
