@@ -38,62 +38,33 @@
 import { computed, inject, ref } from 'vue';
 
 //INJECT
+const fullDataTranslateReviews = inject('fullDataTranslateReviews');
 const reviewData = inject('reviewData');
 const translateReviewData = inject('translateReviewData');
 const cribadoTranslateReview = inject('cribadoTranslateReview');
 const languageActiveTranslate = inject('languageActiveTranslate');
 
 // COMPUTED
-const fullDataTranslateReviews = computed (() => {
-    const full = !!reviewData.value?.travelerTitle ||
-        !!reviewData.value?.travelerText ||
-        !!reviewData.value?.travelerRextNegative ||
-        !!reviewData.value?.travelerTextPositive
-    return full;
+
+const languagesTranslationEnable = computed(() => {
+    if (!!cribadoTranslateReview.value.languageOrigin && !fullDataTranslateReviews.value || !translateReviewData.value) return [];
+    const { es, en } = translateReviewData.value;
+    const KEYS_DISABLED = ['_id'];
+    const lgs = Object.keys(translateReviewData.value)
+        .filter(key => ( !!translateReviewData.value?.[key] && !KEYS_DISABLED.includes(key) ))
+    return lgs;
 });
+
 const enableTabsTranslate = computed (() => {
     if (!translateReviewData.value) return false;
-    let enable;
-    let existsBool = (!!cribadoTranslateReview.value.originaLanguage && fullDataTranslateReviews.value);
-    if(cribadoTranslateReview.value?.languageOrigin == 'es'){
-        enable = !!translateReviewData.value?.reviewTranslations?.englishtranslation && existsBool;
-    }else if(cribadoTranslateReview.value?.languageOrigin == 'en'){
-        enable = !!translateReviewData.value?.reviewTranslations?.spanishTranslation && existsBool;
-    }else{
-        enable = !!translateReviewData.value?.reviewTranslations?.spanishTranslation || 
-                !!translateReviewData.value?.reviewTranslations?.englishtranslation || 
-                existsBool;
-    }
-                
-    return enable
+    let existsBool = (!!cribadoTranslateReview.value.languageOrigin && !!fullDataTranslateReviews.value);
+
+    return existsBool && languagesTranslationEnable.value?.length > 0;
 });
 
 const tabsLanguagesTranslate = computed (() => {
-    let tabs = [];
-    let data = translateReviewData.value?.reviewTranslations;
-    if (
-        ( data?.spanishtranslation?.travelerTitle ||
-        data?.spanishTranslation?.travelerText ||
-        data?.spanishTranslation?.travelerTextPositive ||
-        data?.spanishTranslation?.travelerTextNegative) &&
-        cribadoTranslateReview.value?.languageOrigin !== 'es'
-    ) {
-        tabs.push('es')
-    }
-    if (
-        (data?.englishTranslation?.travelerTitle ||
-        data?.englishTranslation?.travelerText ||
-        data?.englishTranslation?.travelerTextPositive ||
-        data?.englishTranslation?.travelerTextNegative) &&
-        cribadoTranslateReview.value?.languageOrigin !== 'en'
-    ) {
-        tabs.push('en')
-    }
-    
-    tabs = [...new Set(tabs)];
-    tabs = tabs.filter(item => !!item);
+    let tabs = [...languagesTranslationEnable.value];
     return tabs;
-
 });
 
 // FUNCTIONS

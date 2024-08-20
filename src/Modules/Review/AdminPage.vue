@@ -19,7 +19,7 @@ import { onMounted, provide, ref, inject } from 'vue';
 
 import AdminPageHeader from './AdminPageHeader';
 import AdminPageSectionSummaryReviews from './AdminPageSectionSummaryReviews';
-import AdminPageSectionResponseHost from './AdminPageSectionResponseHosty';
+import AdminPageSectionResponseHosty from './AdminPageSectionResponseHosty';
 import AdminPageSectionExternalPlataform from './AdminPageSectionExternalPlataform';
 import AdminPageSectionTimeResponse from './AdminPageSectionTimeResponse';
 

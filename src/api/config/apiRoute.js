@@ -32,6 +32,7 @@ export const requestSettingsPath = 'request-settings'
 // SERVICES API REVIEW
 export const reviewPath = 'reviews'
 export const translateAndResponsePath = 'translateAndResponse'
+export const reviewResponsePath = 'reviewResponses'
 
 //hoster
 export const hosterPath = 'hoster'

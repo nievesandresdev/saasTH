@@ -2,18 +2,20 @@
   <nav class="h-full w-full bg-white shadow-menu flex flex-col">
     <div>
         <div class="py-[22px] px-[16px] flex justify-between items-center">
-            <h4 class="text-base font-semibold">Reseñas</h4>
+            <router-link :to="{ name: 'Reviews' }">
+                <h4 class="text-base font-semibold">Reseñas</h4>
+            </router-link>
             <p class="text-xs font-semibold">Últimos 30 días</p>
         </div>
         <div class="px-4 flex items-center space-x-2">
             <BaseTextField
-                v-model="formFilter.search"
+                v-model="searchFilter"
                 prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                 placeholder="Escribe algo"
                 class-content="w-[240px]"
                 :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: formFilter.search?.length >= 3 }"
-                @enter:search="searchFilter"
-                @input:search="reloadReviews"
+                @enter:search="handleSearchFilter"
+                @input:typing="handleSearchFilter"
                 @click:appendInner="resetFilter()"
             ></BaseTextField>
             <button
@@ -36,7 +38,7 @@
             </button>
         </div>
         <div class="px-4 flex justify-between items-center mt-4 mb-2">
-            <p class="text-xs font-semibold">{{ reviewsData.length }} Reseñas</p>
+            <p class="text-xs font-semibold">{{ reviewsData.length }} {{ reviewsData.length === 1 ? 'Reseña' : 'Reseñas' }}</p>
             <button
                 v-if="!emptyFilters"
                 class="underline text-xs font-semibold"
@@ -115,6 +117,7 @@
   </nav>
   <ReviewSiderbarModalFilter
         ref="reviewSiderbarModalFilter"
+        :numbers-filters-applied="numbersFiltersApplied.length"
         @reloadReviews="reloadReviews()"
   />
 </template>
@@ -125,8 +128,8 @@ import { ref, reactive, onMounted, provide, computed, nextTick, inject, watch } 
 
 import { $capitalize } from '@/utils/textWritingTypes';
 
-import { useRoute } from 'vue-router';
-const route = useRoute();
+import { useRouter } from 'vue-router';
+const route = useRouter();
 
 // COMPOSABLES
 import { useEventBus } from '@/composables/eventBus';
@@ -149,6 +152,7 @@ const baseFilters = {
 };
 
 // DATA
+const searchFilter = ref(null);
 const formFilter = reactive({...baseFilters});
 const filtersSelected = reactive({...baseFilters});
 const filtersDefault = reactive({...baseFilters});
@@ -197,7 +201,6 @@ const reviews = computed(() => {
 });
 
 // WATCH
-
 
 onMounted(async () => {
     await getByOtas();
@@ -249,12 +252,23 @@ function getNameIconAnswer (review) {
         return 'NOTANSWER.REVIEW';
     }
 }
-function searchFilter () {
-    reloadReviews();
+
+function handleSearchFilter (val) {
+    val = val ?? searchFilter;
+    if(val?.length == 0){
+        formFilter.search = null;
+        reloadReviews();
+    }
+    if(val?.length >= 3){
+        formFilter.search = val;
+        reloadReviews();
+    }
 }
+
 function resetFilter () {
     Object.assign(formFilter, filtersDefault);
     Object.assign(filtersSelected, filtersDefault);
+    searchFilter.value = null;
     reloadReviews();
 }
 function reloadReviews () {
@@ -272,12 +286,14 @@ async function getByOtas () {
     if (ok) {
         reviewsData.value = data.reviews;
         paginate();
-        otasWithUrls.value = data.otasWithUrls;
-        formFilter.otas = data.otasWithUrls;
-        filtersSelected.otas = data.otasWithUrls;
-        filtersDefault.otas = data.otasWithUrls;
-        formFilter.otas = data.otasWithUrls;
-        reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
+        if (reviewStore.otasWithUrls?.length <= 0) {
+            otasWithUrls.value = data.otasWithUrls;
+            formFilter.otas = data.otasWithUrls;
+            filtersSelected.otas = data.otasWithUrls;
+            filtersDefault.otas = data.otasWithUrls;
+            formFilter.otas = data.otasWithUrls;
+            reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
+        }
         summaryReviewOtas.value = data.summaryReviewOtas;
     } else {
 

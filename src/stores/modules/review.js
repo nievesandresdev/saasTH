@@ -39,12 +39,12 @@ export const useReviewStore = defineStore('review', () => {
 
     // FUNCTIONS
 
-    async function $findById (params) {
+    async function $findByIdReview (params) {
         let config = {
             showPreloader: false,
         }
         params.googleMapCid = hotelStore.hotelData.code;
-        const response = await reviewService.findByIdApi(params, config);
+        const response = await reviewService.findByIdReviewApi(params, config);
         return response;
     }
     async function $getByOtas (params) {
@@ -91,6 +91,14 @@ export const useReviewStore = defineStore('review', () => {
         const response = await reviewService.updateAttentionStatusApi(data, config);
         return response;
     }
+    async function $updateLanguage (data) {
+        let config = {
+            showPreloader: false,
+        }
+        data.googleMapCid = hotelStore.hotelData.code;
+        const response = await reviewService.updateLanguageApi(data, config);
+        return response;
+    }
 
     //
     return {
@@ -99,12 +107,13 @@ export const useReviewStore = defineStore('review', () => {
         otasWithUrls,
         numbersOtasWithUrls,
         setOtasWithUrls,
-        $findById,
+        $findByIdReview,
         $countReviewsPending,
         $getByOtas,
         $getNumbersDistributionByFilters,
         $getSummaryGeneral,
         $updateAttentionStatus,
+        $updateLanguage,
     }
 
 })

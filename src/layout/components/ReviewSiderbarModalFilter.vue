@@ -107,12 +107,11 @@
                 </div>
 
             </div>
-            <!-- {{formModalFilter}} -->
             <div class="p-4 border-t hborder-gray-400 flex justify-between">
                 <button
                     class="underline font-medium text-xs my-auto"
-                    :class="{'opacity-25': emptyformModalFilter}"
-                    :disabled="emptyformModalFilter"
+                    :class="{'opacity-25': numbersFiltersApplied <= 0}"
+                    :disabled="numbersFiltersApplied <= 0"
                     @click="resetFormFilter"
                 >
                     Restablecer
@@ -132,7 +131,7 @@
 </template>
 
 <script setup>
-import { ref, inject, defineEmits, reactive, watch, computed } from 'vue';
+import { ref, inject, defineEmits, reactive, watch, computed, defineProps, toRefs } from 'vue';
 
 import { $titleCase } from '@/utils/textWritingTypes';
 
@@ -140,6 +139,10 @@ import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+
+const { numbersFiltersApplied } = defineProps({
+    numbersFiltersApplied: Number 
+});
 
  //composable
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -159,6 +162,12 @@ const emptyFilters = inject('emptyFilters');
 // DATA
 
 const formModalFilter = reactive({
+    otas: [...reviewStore.otasWithUrls],
+    statusResponse: null,
+    scoreRange: null,
+    language: null,
+});
+const formModalFilterDefault = reactive({
     otas: [...reviewStore.otasWithUrls],
     statusResponse: null,
     scoreRange: null,
@@ -212,7 +221,7 @@ watch(isOpenModelFilter, (valNew, valOld) => {
 
 const emptyformModalFilter = computed(() => {
     return !formModalFilter.search &&
-        formModalFilter.otas?.length === reviewStore.numbersOtasWithUrls &&
+        formModalFilter.otas?.length === filtersSelected.otas.length &&
         !formModalFilter.statusResponse &&
         !formModalFilter.scoreRange &&
         !formModalFilter.language;

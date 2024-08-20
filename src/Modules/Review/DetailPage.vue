@@ -59,13 +59,16 @@
 
                     <div class="mt-4 flex justify-end">
                         <button class="text-xs font-medium hbtn-primary py-[12px] px-[8px]">
-                            {{ reviewData.isAnswered ? 'Abrir y responder en' : 'Abrir en' }}
+                            {{ !reviewData.isAnswered ? 'Abrir y responder en' : 'Abrir en' }}
                             <img
                                 :src="`/assets/icons/otas/${$capitalize(otaParamRoute)}.svg`"
                                 class="w-4 h-4 ml-1 inline-block "
                             >
                         </button>
-                        <button class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-4">
+                        <button
+                            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-4"
+                            @click="refDetailPageAsideHosty.generateResponse()"
+                        >
                             Generar con Hosty
                             <img
                                 src="/assets/icons/1.TH.IA.svg"
@@ -78,11 +81,13 @@
             </template>
          </div>
          <div class="sider w-[354px]">
-            <SkeletomAside v-if="loadingReview" />
-            <DetailPageAsideHosty v-else />
+            <SkeletomAside v-show="loadingReview" />
+            <DetailPageAsideHosty v-show="!loadingReview" ref="refDetailPageAsideHosty" />
          </div>
      </div>
-
+     <!-- <pre>{{ reviewData?.languageOrigin }}</pre> -->
+     <!-- <pre>{{ reviewData }}</pre> -->
+     <!-- <pre>{{ translateReviewData }}</pre> -->
 </div>
         
 </template>
@@ -92,7 +97,7 @@ import { onMounted, computed, provide, ref, watch } from 'vue';
 import { $capitalize, $titleCase } from '@/utils/textWritingTypes';
 
 import { useRoute } from 'vue-router';
-const route = useRoute();
+const router = useRoute();
 
 import { useReviewStore } from '@/stores/modules/review';
 const reviewStore = useReviewStore();
@@ -122,23 +127,26 @@ import DetailPageDetailExpedia from './DetailPageDetailExpedia';
 import DetailPageDetailAirbnb from './DetailPageDetailAirbnb';
 
 // DATA
+const refDetailPageAsideHosty = ref(null);
 const reviewData = ref({
     isAttended: false,
 });
 const loadingReview = ref(false);
 const languages = ref([]);
 const languageActiveTranslate = ref('default');
-const languageActiveResponse = ref('default');
-const responseReviewData = ref({});
+const languageActiveResponse = ref('originalLanguage');
+const translateAndResponseId = ref(null);
+const responseReviewData = ref([]);
 const translateReviewData = ref({});
 const responseShow = ref(false);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
-    	return route?.params?.ota?.toUpperCase();
+        console.log(router?.params?.ota?.toUpperCase());
+    	return router?.params?.ota?.toUpperCase();
 });
 const idOtaParamRoute = computed(() => {
-    	return route?.params?.id;
+    	return router?.params?.id;
 });
 const languagesObject = computed(() => {
     return languages.value.reduce((acc,item) => {
@@ -147,81 +155,41 @@ const languagesObject = computed(() => {
     },{});
 });
 
-const cribadoResponseReview = computed(() => {
-    return;
-    let originalLanguage = reviewData.value?.languageOrigin??'es';
-    let originalLanguageName =  languagesObject.value[originalLanguage];
-
-    var responseText = '';
-
-    switch (languageActiveResponse.value) {
-        case 'es':
-
-            response_text = response_review.value?.review_responses?.es
-            if (!response_text && original_language == 'es') {
-                response_text = response_review.value?.review_responses?.original_language_response
-            }
-            
-            break;
-
-        case 'en':
-
-            response_text = response_review.value?.review_responses?.en
-            if (!response_text && original_language == 'en') {
-                response_text = response_review.value?.review_responses?.original_language_response
-            }
-            
-            break;
-
-        case 'default':
-
-            response_text = response_review.value?.review_responses?.original_language_response
-            
-            break;
-    
-        default:
-            break;
-    }
-    let data = {
-        original_language,
-        response_text,
-    }
-    return data
+const fullDataTranslateReviews = computed (() => {
+    const full = !!reviewData.value?.travelerTitle ||
+        !!reviewData.value?.travelerText ||
+        !!reviewData.value?.travelerRextNegative ||
+        !!reviewData.value?.travelerTextPositive
+    return full;
 });
+
 const cribadoTranslateReview = computed(() => {
-    let languageOrigin = translateReviewData.value?.originalLanguage ?? 'es';
+    let languageOrigin = reviewData.value?.languageOrigin;
     let originalLanguageName =  languagesObject.value[languageOrigin];
-    // let languageOrigin = reviewData.value?.languageOrigin ?? 'es';
-    // let originalLanguageName =  languagesObject.value[languageOrigin];
 
-
-    let travelerTitle = ''
-    let travelerText = ''
-    let travelerTextNegative = ''
-    let travelerTextPositive = ''
-    
+    let travelerTitle = reviewData.value?.travelerTitle;
+    let travelerText = reviewData.value?.travelerText;
+    let travelerTextNegative = reviewData.value?.travelerTextNegative;
+    let travelerTextPositive = reviewData.value?.travelerTextPositive;
     switch (languageActiveTranslate.value) {
         case 'es':
-            travelerTitle = translateReviewData.value?.reviewTranslations?.spanishTranslation?.travelerTitle ?? reviewData?.travelerTitle;
-            travelerText = translateReviewData.value?.reviewTranslations?.spanishtranslation?.travelerText ?? reviewData?.travelerText;
-            travelerTextNegative = translateReviewData.value?.reviewTranslations?.spanishTranslation?.travelerTextNegative ?? reviewData?.travelerTextNegative;
-            travelerTextPositive = translateReviewData.value?.reviewTranslations?.spanishTranslation?.travelerTextPositive ?? reviewData?.travelerTextPositive;
+            travelerTitle = translateReviewData.value?.es?.travelerTitle ?? reviewData?.travelerTitle;
+            travelerText = translateReviewData.value?.es?.travelerText ?? reviewData?.travelerText;
+            travelerTextNegative = translateReviewData.value?.es?.travelerTextNegative ?? reviewData?.travelerTextNegative;
+            travelerTextPositive = translateReviewData.value?.es?.travelerTextPositive ?? reviewData?.travelerTextPositive;
             
             break;
 
         case 'en':
-            travelerTitle = translateReviewData.value?.reviewTranslations?.englishTranslation?.travelerTitle ?? reviewData.value?.travelerTitle;
-            travelerText = translateReviewData.value?.reviewTranslations?.englishTranslation?.traveler_text ?? reviewData.value?.travelerText;
-            travelerTextNegative = translateReviewData.value?.reviewTranslations?.englishTranslation?.travelerTextNegative ?? reviewData.value?.travelerTextNegative;
-            travelerTextPositive = translateReviewData.value?.reviewTranslations?.englishTranslation?.travelerTextPositive ?? reviewData.value?.travelerTextPositive;
+            travelerTitle = translateReviewData.value?.en?.travelerTitle ?? reviewData.value?.travelerTitle;
+            travelerText = translateReviewData.value?.en?.travelerText ?? reviewData.value?.travelerText;
+            travelerTextNegative = translateReviewData.value?.en?.travelerTextNegative ?? reviewData.value?.travelerTextNegative;
+            travelerTextPositive = translateReviewData.value?.en?.travelerTextPositive ?? reviewData.value?.travelerTextPositive;
             
             break;
     
         default:
-            travelerTitle = reviewData.value?.travelerTitle;
-            travelerText = reviewData.value?.travelerText;
-            travelerTextNegative = reviewData.value?.travelerTextNegative;
-            travelerTextPositive = reviewData.value?.travelerTextPositive;
+
 
             break;
     }
@@ -236,6 +204,16 @@ const cribadoTranslateReview = computed(() => {
     return data
 });
 
+const languageActiveResponseOriginal = computed(() => {
+    if (!reviewData.value?.languageOrigin) return '';
+    let languageActive = languageActiveResponse.value;
+    if (languageActive == 'originalLanguage') {
+        languageActive = reviewData.value.languageOrigin;
+    }
+    return languageActive;
+});
+
+// WATCH
 watch(idOtaParamRoute, (valNew, valOld) => {
     if (valNew != valOld) {
         loadData();
@@ -248,13 +226,19 @@ onMounted(async () => {
 });
 
 // PROVIDE
+provide('reviewStore', reviewStore);
 provide('toast', toast);
 provide('otaParamRoute', otaParamRoute);
+provide('fullDataTranslateReviews', fullDataTranslateReviews);
 provide('reviewData', reviewData);
 provide('languagesObject', languagesObject);
+provide('responseReviewData', responseReviewData);
 provide('translateReviewData', translateReviewData);
+provide('translateAndResponseId', translateAndResponseId);
 provide('cribadoTranslateReview', cribadoTranslateReview);
 provide('languageActiveTranslate', languageActiveTranslate);
+provide('languageActiveResponse', languageActiveResponse);
+provide('languageActiveResponseOriginal', languageActiveResponseOriginal);
 
 // FUNCTION
 
@@ -289,14 +273,15 @@ async function loadReview () {
         ota: otaParamRoute.value,
         id: idOtaParamRoute.value,
     }
-    const response = await reviewStore.$findById(params);
+    const response = await reviewStore.$findByIdReview(params);
     const { ok, data } = response;
     if (ok) {
         reviewData.value = data.review;
-    } else {
-        toast.warningToast(response?.message,'top-right');
-        route.push({name:'REVIEWS'});
     }
+    // } else {
+    //     toast.warningToast(response?.message,'top-right');
+    //     router.push({name:'REVIEWS'});
+    // }
     loadingReview.value = false;
 }
 
@@ -306,11 +291,11 @@ async function loadTranslateAndResponse () {
         reviewId: idOtaParamRoute.value,
     }
     const response = await translateAndResponseStore.$findByReviewId(params);
-    console.log(response)
     const { ok, data } = response;
     if (ok) {
-        responseReviewData.value = data.transAndResDocument.response;
-        translateReviewData.value = data.transAndResDocument.translate;
+        translateAndResponseId.value =  data.transAndResDocument?._id;
+        responseReviewData.value = data.transAndResDocument?.responses || [];
+        translateReviewData.value = data.transAndResDocument?.translate;
     }
 }
 
@@ -320,18 +305,15 @@ async function loadLanguages () {
     if (ok) {
         languages.value = data;
         loadConfigLanguages();
-    } else {
-        toast.warningToast(response?.message,'top-right');
-        route.push({name:'REVIEWS'});
     }
+    // } else {
+    //     toast.warningToast(response?.message,'top-right');
+    //     router.push({name:'REVIEWS'});
+    // }
 }
 
 function loadConfigLanguages () {
     loadLanguageResponseDefault();
-
-    if (responseReviewData.value?.readResponse) {
-        responseShow.value = true;
-    }
 }
 
 </script>

@@ -1,71 +1,11 @@
 <template>
 <!-- max-h-[554px] -->
-    <div class="w-full h-[80%] rounded-[10px] p-4 flex flex-col justify-between" style="box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);">
+    <div class="w-full h-min-[80%] rounded-[10px] p-4 flex flex-col justify-between" style="box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);">
         <p class="text-[14px] leading-[150%]" v-html="textGenerateInSteaming" />
         <div>
-            <transition>
-                <div v-if="!disabledButtons" class="mt-4">
-                    <p class="text-sm font-medium mb-2">Idioma original:</p>
-                    <button
-                        class="chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer mb-4"
-                        :class="{'chip-primary-active': true }"
-                    >
-                        <img
-                            class="w-4 h-4 mr-2"
-                            :src="`/assets/icons/flags/${'es'}.svg`"
-                        >
-                        Español
-                    </button>
-                    <p class="text-sm font-medium mb-2">Traducir a:</p>
-                    <div class="flex space-x-4">
-                        <button
-                            class="chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer"
-                            :class="{'chip-primary-active': true }"
-                        >
-                            <img
-                                class="w-4 h-4 mr-2"
-                                :src="`/assets/icons/flags/${'es'}.svg`"
-                            >
-                            Español
-                        </button>
-                        <button
-                            class="chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer"
-                            :class="{'chip-primary-active': true }"
-                        >
-                            <img
-                                class="w-4 h-4 mr-2"
-                                :src="`/assets/icons/flags/${'en'}.svg`"
-                            >
-                            Ingles
-                        </button>
-                    </div>
-                </div>
-            </transition>
+            <DetailPageAsideHostyResponseStreamingGroupButtonLanguage @change-language="handleChangeLanguage" />
             <div class="flex justify-end mt-2 w-full">
-                <div
-                    class="space-x-1 flex items-center"
-                    
-                >
-                    <button
-                        :class="{'opacity-35': disabledButtons}"
-                        :disabled="disabledButtons"
-                    >
-                        <img
-                            class="w-4 h-4 icon-inactive rotate-180"
-                            :src="`/assets/icons/1.TH.NEXT.svg`"
-                        >
-                    </button>
-                    <p class="text-base leading-[110%]" :class="{'opacity-25': !responseGenerated}">1/1</p>
-                    <button
-                        :class="{'opacity-35': disabledButtons}"
-                        :disabled="disabledButtons"
-                    >
-                        <img
-                            class="w-4 h-4"
-                            :src="`/assets/icons/1.TH.NEXT.svg`"
-                        >
-                    </button>
-                </div>
+                <PaginateResponse @change-page="handleChangePage" />
             </div>
         </div>
     </div>
@@ -83,8 +23,8 @@
             Copiar
         </button>
         <button
-            :disabled="disabledButtons"
             class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-2"
+            :disabled="disabledButtons"
             @click="generateNewResponse"
         >
             Generar otra respuesta
@@ -98,67 +38,121 @@
 </template>
 
 <script setup>
-import { ref, inject, computed } from 'vue';
+import { ref, inject, computed, watch, provide } from 'vue';
+
+// COMPONENTS
+import PaginateResponse from './components/PaginateResponses';
+import DetailPageAsideHostyResponseStreamingGroupButtonLanguage from './DetailPageAsideHostyResponseStreamingGroupButtonLanguage';
+
+// EMITS
+const emits = defineEmits(['generateResponse', 'change-language']);
+
+// STATE
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStorage = useHotelStore();
 
 // INJECT
+const toast = inject('toast');
+const translateAndResponseId = inject('translateAndResponseId');
+const pageCurrent = inject('pageCurrent');
+const responseCurrent = inject('responseCurrent');
+const languagesObject = inject('languagesObject');
 const loadingHosty = inject('loadingHosty');
-const streamingLiveData =  inject('streamingLiveData');
+const loadingStreaming =  inject('loadingStreaming');
+const loadingTranslation =  inject('loadingTranslation');
+const responseStringStreaming =  inject('responseStringStreaming');
 const responseGenerated =  inject('responseGenerated');
+const reviewData = inject('reviewData');
+const responseReviewData = inject('responseReviewData');
+const otaParamRoute = inject('otaParamRoute');
+const textGenerateInSteaming = inject('textGenerateInSteaming');
+const languageActiveResponse = inject('languageActiveResponse');
 
 // COMPOSABLES
 import { useCopy } from '@/composables/useCopy';
+import { useReviewResponseStore } from '../../stores/modules/reviewResponse';
+const reviewResponseStore = useReviewResponseStore();
 const copy = useCopy();
 
-// DATA
-const responseStringStreaming = ref('');
+// DATA\
 
-const textGenerateInSteaming = computed(() => {
-        const match = /"review_response":"(.*)$/s.exec(responseStringStreaming.value);
-        let textFormated = '';
-        if (match) {
-            // Extraer la parte del texto que ya está disponible
-            let partialResponse = match[1].replace(/\\n/g, '\n'); // Manejo de saltos de línea
-            partialResponse = partialResponse.replace(/\\"/g, '"'); // Manejo de comillas escapadas
+// COMPUTED
 
-            // Quitar cualquier parte incompleta al final (hasta el último carácter válido)
-            const lastCompleteCharIndex = partialResponse.lastIndexOf('"');
-            if (lastCompleteCharIndex !== -1) {
-            partialResponse = partialResponse.substring(0, lastCompleteCharIndex);
-            }
-
-            // Mostrar la parte extraída en tiempo real
-            textFormated = partialResponse;
-        }
-        return textFormated;
+const translationReady = computed(() => {
+    return !!responseCurrent.value?.es || !!responseCurrent.value?.en;
 });
 
 const disabledButtons = computed(() => {
-    return !responseGenerated.value;
+    // if (responseReviewData.value.length > 0) {
+        // return (!responseGenerated.value && loadingStreaming.value) || loadingTranslation.value;
+        return !responseGenerated.value && loadingStreaming.value;
+    // } else {
+    // }
 });
+
+// WATCH
+watch(textGenerateInSteaming, (valNew) => {
+    // console.log(valNew);
+    if (valNew && responseReviewData.value && responseReviewData.value?.[0]){
+        //  responseReviewData.value[0].originalLanguage = valNew;
+    }
+});
+
+// PROVIDE
+provide('disabledButtons', disabledButtons);
+provide('translationReady', translationReady);
 
 //FUNCTION
 function generateNewResponse () {
-    responseStringStreaming.value = "";
-    responseGenerated.value = false;
-    const VUE_APP_API_URL_REVIEW = process.env.VUE_APP_API_URL_REVIEW;
-    const X_KEY_API = process.env.VUE_APP_X_KEY_API;
+    emits('generateResponse');
+}
 
-    const eventSource = new EventSource(`${VUE_APP_API_URL_REVIEW}/translateAndResponse/generateResponseStreaming`);
+defineExpose({ generateNewResponse });
 
-    eventSource.onmessage = (event) => {
-        if (event.data === '[END]') {
-            eventSource.close();
-            responseGenerated.value = true;
-        } else {
-            responseStringStreaming.value += event.data;
+function handleChangePage (page) {
+    // if (languageActiveResponse.value && responseCurrent.value?.[languageActiveResponse.value]) {
+        resetDataDefault();
+    // }
+}
 
-        }
-    };
+async function handleChangeLanguage (lg) {
+    if (lg == 'originalLanguage' || translationReady.value) {
+        languageActiveResponse.value = lg;
+        responseStringStreaming.value = String(responseCurrent.value?.[lg]);
+        return;
+    }
+    translate(lg);
+}
 
-    eventSource.onerror = (error) => {
-    console.error('Error:', error);
-    eventSource.close();
-    };
+function updateResponseCurrent (newResponse) {
+
+    const index = responseReviewData.value.findIndex(item => item._id === responseCurrent.value._id);
+    let responseData = responseReviewData.value?.[index] || null;
+    if (!!responseData) {
+        Object.assign(responseData, newResponse);
+    }
+}
+
+async function translate (lg) {
+    loadingTranslation.value = true;
+    const bodyRequest = {
+        ota: otaParamRoute.value,
+        objectIdTranslateAndResponse: translateAndResponseId.value,
+        objectIdResponse: responseCurrent.value._id
+    }
+    const response = await reviewResponseStore.$tranlate(bodyRequest);
+    const { ok, data } = response;
+    if (ok) {
+        updateResponseCurrent(data.response);
+        languageActiveResponse.value = lg;
+        responseStringStreaming.value = responseCurrent.value?.[lg];
+    }
+    loadingTranslation.value = false;
+}
+
+function resetDataDefault () {
+    languageActiveResponse.value = 'originalLanguage';
+    responseStringStreaming.value = responseCurrent.value?.[languageActiveResponse.value];
 }
 
 function copyText () {
