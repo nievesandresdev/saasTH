@@ -247,7 +247,6 @@ async function loadData(resetList = false, showLoadPage = true){
     
     loading.value = true;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    console.log('loadData',data.value)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     totalValidCount.value = data.value.total_valid_count;
