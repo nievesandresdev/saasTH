@@ -1,5 +1,5 @@
 <template>
-    <HeadSection />
+    <!-- <HeadSection /> -->
     <div
         class="flex flex-col relative chat-container"
     >
@@ -43,7 +43,7 @@ import { ref, onMounted, watch, provide, onBeforeUnmount } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 //
-import HeadSection from '../components/HeadDetail.vue'
+// import HeadSection from '../components/HeadDetail.vue'
 import BodyChat from './BodyChat'
 import HeadChat from './HeadChat'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue';
@@ -76,7 +76,7 @@ const pusher = ref(null)
 onMounted(async() => {
     data.value.guests = await chatStore.$getGuestListWNoti(route.params.stayId);
     listGuests.value = data.value.guests;
-    session.value = await stayStore.$createSession(route.params.stayId ,'sessions')
+    stayStore.$createSession(route.params.stayId ,'sessions')
     //  stayStore.$getSessions(route.params.stayId)
     suscribePusher()
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -189,7 +189,7 @@ watch(() => route.query.g, async (newId) => {
     await getDataChat();
 }, { immediate: true });  
 provide('data',data)
-provide('session',session)
+// provide('session',session)
 </script>
 <style scoped>
 textarea:focus{

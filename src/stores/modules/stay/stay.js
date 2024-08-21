@@ -15,7 +15,8 @@ import {
     createSessionApi,
     deleteSessionApi,
     getDetailQueryByGuestApi,
-    getGuestListWithNotiApi
+    getGuestListWithNotiApi,
+    getDefaultGuestIdAndSessionsApi
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -161,12 +162,20 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
+    async function $getDefaultGuestIdAndSessions (stayId) {
+        const response = await getDefaultGuestIdAndSessionsApi(stayId)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
     return {
         $getAllByHotel,
         $statisticsByHotel,
         $getdetailData,
         $updateData,
-        $getSessions,
+        $getDefaultGuestIdAndSessions,
         //notes
         $getAllNotesByStay,
         $createOrupdateStayNote,
@@ -174,6 +183,7 @@ export const useStayStore = defineStore('stay', () => {
         $createOrupdateGuestNote,
         $deleteGuestNote,
         //sessions
+        $getSessions,
         $createSession,
         $deleteSession,
         $deleteSessionWithApiKey,

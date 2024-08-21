@@ -12,8 +12,8 @@
                 <p class="text-xs font-medium">Solicitud de reseña</p>
                 <p class="text-xs mt-4">Envío: 
                     <span class="font-medium">
-                    {{$formatTimestampDate(data.answeredTime,'dd/MM/yyyy')}} -
-                    {{$formatTimestampDate(data.answeredTime,'HH:mm')}}
+                    {{$formatTimestampDate(timeLineData?.request?.answeredTime,'dd/MM/yyyy')}} -
+                    {{$formatTimestampDate(timeLineData?.request?.answeredTime,'HH:mm')}}
                     </span>
                 </p>
             </template>
@@ -25,5 +25,4 @@
 import { inject, provide } from 'vue'
 import Tooltip from '@/components/Tooltip.vue'
 const timeLineData = inject('timeLineData')
-const data = timeLineData.request
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <Head />
+    <!-- <Head /> -->
     <section class="mt-6 px-6">
         <GuestTabs/>
     </section>
@@ -17,7 +17,7 @@
 <script setup>
 import { ref, onMounted, watch, provide, onBeforeUnmount } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
-import Head from '../components/HeadDetail.vue'
+// import Head from '../components/HeadDetail.vue'
 import TimeLineCard from './TimeLineCard.vue'
 import GuestTabs from './components/GuestTabs.vue'
 import ResponseCard from './ResponseCard.vue'
@@ -36,6 +36,7 @@ const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
+    console.log('data.value',data.value)
     stayStore.$createSession(stayId.value ,'sessions')
     window.addEventListener('beforeunload', handleBeforeUnload);
 })

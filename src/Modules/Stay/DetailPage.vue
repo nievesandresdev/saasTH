@@ -1,5 +1,5 @@
 <template>
-    <Head />
+    <!-- <Head /> -->
     <div class="p-6 z-[300]" v-if="data">
         <div class="3xl:flex 3xl:items-start 3xl:gap-6">
             <InfoSection/>
@@ -13,7 +13,7 @@
 import { ref, watch, provide, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 //components
-import Head from './components/HeadDetail.vue'
+// import Head from './components/HeadDetail.vue'
 import InfoSection from './components/Detail/InfoSection.vue';
 import GuestList from './components/Detail/GuestList.vue';
 import NotesList from './components/Detail/NotesList.vue';
@@ -69,11 +69,11 @@ watch(() => route.params.stayId, async (newId, oldId) => {
 
     id.value = newId;
     data.value = await stayStore.$getdetailData(id.value);
-    session.value = data.value?.sessions;
+    // session.value = data.value?.sessions;
     await stayStore.$createSession(id.value ,'sessions')
     
 }, { immediate: true });              
 
 provide('data',data)
-provide('session',session)
+// provide('session',session)
 </script>
