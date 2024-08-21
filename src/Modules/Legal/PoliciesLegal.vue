@@ -4,7 +4,7 @@
       <TabLegal />
       <span class="font-normal text-sm">{{ totalPolicies }} Políticas</span>
       <!-- <div class="grid grid-cols-5 gap-4 mt-4"> -->
-        <div class="grid grid-cols-4 1xl:grid-cols-2 1xl:w-2/3 3xl:grid-cols-5 3xl:w-full 3xl:gap-4 1xl:gap-4 mt-2">
+        <div class="grid grid-cols-4 1xl:grid-cols-3 1xl:w-full 3xl:grid-cols-4 3xl:w-full 3xl:gap-4 1xl:gap-4 mt-2">
             <!-- Botón para añadir política -->
             <div class="bg-white border rounded-lg shadow-hoster flex items-center justify-center p-4 h-[175px] w-[344px] cursor-pointer" @click="openModalCreatePolicies">
                 <div class="flex flex-col items-center space-x-2">
@@ -124,6 +124,8 @@ const showPolicy = (data) => {
 const showEditPolicy = (data) => {
     modalEditPolicies.value = true;
     policy.value = data;
+
+    modalCreatePolicies.value = false;
 }
 
 const closedeletePolicy = () => {
@@ -151,6 +153,8 @@ function truncateText(text, length) {
 const openModalCreatePolicies = () => {
     modalCreatePolicies.value = true;
     showSidePolicy.value = false;
+
+    modalEditPolicies.value = false;
 }
 
 const closeModalCreatePolicies = () => {
@@ -173,7 +177,7 @@ const handleCreatePolicies = async(form) => {
     const response = await storePoliciesLegal(form);
 
     if(response.ok){
-        toast.warningToast('Política creada con éxito creada con éxito','top-right')
+        toast.warningToast('Política creada con éxito','top-right')
         getPolicies();
     } else {
         toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
