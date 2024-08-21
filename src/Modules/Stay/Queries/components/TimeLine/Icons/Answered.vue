@@ -28,7 +28,17 @@
                         {{$formatTimestampDate(timeLineData[period].answeredTime,'HH:mm')}}
                     </span>
                 </p>
-                <p class="text-xs mt-2 underline">Feedback obtenido en {{translatePeriod}}</p>
+                <router-link 
+                    class="text-xs mt-2 underline block"
+                    :to="{ 
+                        name:'StayQueryDetail', 
+                        params: {stayId: route.params.stayId}, 
+                        query:  {g: route.query.g}, 
+                        hash: '#'+translatePeriod
+                    }"
+                >
+                    Feedback obtenido en {{translatePeriod}}
+                </router-link>
             </template>
         </Tooltip>
         <p class="absolute text-center text-xs leading-[90%] w-[130px] bottom-[-18px] left-[-45px]">Respondido</p>
@@ -37,11 +47,12 @@
 <script setup>
 import { inject, provide } from 'vue'
 import Tooltip from '@/components/Tooltip.vue'
-
+import { useRoute } from 'vue-router'
 const period = inject('period')
 const timeLineData = inject('timeLineData')
 const translatePeriod = inject('translatePeriod')
 
+const route = useRoute();
 // const feelingIcons = {
 //     "WRONG":"Pre-Stay",
 //     "NORMAL":"Stay",

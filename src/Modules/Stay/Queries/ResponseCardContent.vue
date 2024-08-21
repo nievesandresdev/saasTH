@@ -22,13 +22,18 @@
         <!-- original languaje -->
         <div class="flex items-center mt-2">
             <p class="text-xs font-normal mr-2">Idioma Original:</p>
-            <img v-if="data.response_lang !== 'Desconocido'" class="w-4 h-4" :src="`/assets/icons/flags/${data.response_lang}.svg`" alt="">
-                <p class="text-xs font-medium ml-1 leading-[110%]">{{ $nameLanguage(data.response_lang)}}</p>
+            <img 
+              v-if="data.response_lang == 'Desconocido' || data.response_lang == 'unknown'" 
+              src="/assets/icons/1.TH.SINIDIOMA.svg" 
+              class="w-4 h-4"
+            >
+            <img v-else class="w-4 h-4" :src="`/assets/icons/flags/${data.response_lang}.svg`" alt="">
+              <p class="text-xs font-medium ml-1 leading-[110%]">{{ $nameLanguage(data.response_lang)}}</p>
         </div>
 
         <!-- comment -->
         <div class="mt-2">
-            <span class="font-medium text-sm">{{ questions[period] }}</span>
+            <p class="font-medium text-sm">{{ questions[period] }}</p>
             <!-- qualification -->
             <div class="flex justify-left items-center mt-2">
                     <img
@@ -52,7 +57,7 @@
             <div class="flex gap-4 items-center">  
             <div
                 v-for="lang in data.languages" :key="lang?.code"
-                class="p-2 flex rounded-[6px] items-center cursor-pointer border-[1px] border-black"
+                class="py-2 px-3 flex rounded-[6px] items-center cursor-pointer border-[1px] border-black h-8"
                 :class="{'border-[1px] hborder-green-700 bg-[#ECF9F5]':selectedLang == lang?.code}"
                 @click="selectedLang = lang?.code"
                 v-show="lang?.code != data.response_lang"
@@ -60,7 +65,11 @@
                 <img v-if="lang.name !== 'Desconocido'" class="w-4 h-4" :src="`/assets/icons/flags/${lang?.code}.svg`" alt="">
                 <p class="text-sm font-medium ml-2 leading-[110%]">{{ lang.name }}</p>
             </div>
-            <span v-if="data.languages?.length > 0 && selectedLang != data.response_lang" class="font-medium text-black underline cursor-pointer"  @click="selectedLang = data.response_lang">Mostrar original</span>
+            <span 
+                v-if="data.languages?.length > 0 && selectedLang != data.response_lang" 
+                class="text-sm font-medium leading-[110%] underline cursor-pointer"  
+                @click="selectedLang = data.response_lang"
+              >Mostrar original</span>
             </div>
         </div>
     </div>
@@ -152,9 +161,9 @@ const queryQualificationText = {
   },
   "post-stay": {
     "VERYWRONG": "Muy mala.",
-    "WRONG": "Muy mala.",
+    "WRONG": "Mala.",
     "NORMAL": "Normal.",
-    "GOOD": "Muy buena.",
+    "GOOD": "Buena.",
     "VERYGOOD": "Muy buena.",
   },
 }
