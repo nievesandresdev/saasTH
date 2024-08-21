@@ -14,12 +14,13 @@ const stayGroupRoutes = [
   {
     path: '/estancias',
     component: AppLayout,
-    meta: { sidebar: 'StayList', sidebarWidth: '304px' },  
+    meta: { sidebar: 'StayList', sidebarWidth: '304px', componentOverContent: 'HeaderOfStaysContent' },  
     children: [
       {
         name: 'StayHomePage',
         path: '',
-        component: HomePage
+        component: HomePage,
+        meta: { componentOverContent: null},
       },
       {
         name: 'StayDetailPage',

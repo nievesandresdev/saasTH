@@ -168,7 +168,6 @@ const loading = ref(false);
 
 onMounted(async () => {
     await loadData();
-    firstLoad.value = true;
     connectPusher();
 
     nextTick(() => {
@@ -224,7 +223,9 @@ async function submit(data){
 
 async function searchInList(){
     if(search.value?.length == 0){
-        loadSearch(null);
+        firstLoad.value = false;
+        allFilters.value.search = null;
+        loadData(false, false, 10);
     }
     if(search.value?.length >= 3){
         loadSearch(search.value);
@@ -236,17 +237,17 @@ async function loadSearch(search){
     loadData(true, false);
 }
 
-async function loadData(resetList = false, showLoadPage = true){
+async function loadData(resetList = false, showLoadPage = true, limitDefault = 5){
     if(resetList){
         allFilters.value.offset = 0;
         allFilters.value.limit = list.value.length;
     }else{
-        allFilters.value.limit = list.value.length >= 10 ? 10 : 5;
+        allFilters.value.limit = list.value.length >= 10 ? 10 : limitDefault;
         allFilters.value.offset = list.value.length;    
     }
-    
     loading.value = true;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
+    firstLoad.value = true;
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     totalValidCount.value = data.value.total_valid_count;
@@ -275,10 +276,10 @@ const connectPusher = () =>{
     // });
 
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
-    console.log('channelUpdate.value',channelUpdate.value)
+    // console.log('channelUpdate.value',channelUpdate.value)
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
-        console.log('UpdateStayListEvent staylist',data)
+        // console.log('UpdateStayListEvent staylist',data)
         let showLoadPage = data.showLoadPage ?? true;
         loadData(true, showLoadPage);
     });

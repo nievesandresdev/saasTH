@@ -10,7 +10,7 @@ export const getAllByHotelApi = (data, showLoadPage) => apiHttp('POST', `${stayP
 export const statisticsByHotelApi = () => apiHttp('GET', `${stayPath}/${hosterPath}/statisticsByHotel`, null)
 export const getdetailDataApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getdetailData`, data, { showPreloader: true })
 export const updateDataApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/updateData`, data, { showPreloader: false })
-export const getSessionsApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getSessions`, data)
+export const getDefaultGuestIdAndSessionsApi = (stayId) => apiHttp('GET', `${stayPath}/${hosterPath}/getDefaultGuestIdAndSessions/${stayId}`, null, { showPreloader: false })
 //notes
 export const getAllNotesByStayApi = (data, showPreloader) => apiHttp('GET', `${stayPath}/${hosterPath}/getAllNotesByStay`, data,{ showPreloader })
 export const createOrupdateStayNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createOrupdateStayNote`, data, { showPreloader: false })
@@ -18,6 +18,7 @@ export const deleteStayNoteApi = (data) => apiHttp('POST', `${stayPath}/${hoster
 export const createOrupdateGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createOrupdateGuestNote`, data, { showPreloader: false })
 export const deleteGuestNoteApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteGuestNote`, data, { showPreloader: false })
 //sessions
+export const getSessionsApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getSessions`, data)
 export const createSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/createSession`, data, { showPreloader: false })
 export const deleteSessionApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSession`, data, { showPreloader: false })
 export const deleteSessionByHotelAndEmailApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/deleteSessionByHotelAndEmail`, data)

@@ -91,23 +91,24 @@
   
     const queryQualificationText = {
         "stay": {
-            "WRONG": "Muy malo",
+            "VERYWRONG": "Muy malo",
+            "WRONG": "Malo",
             "NORMAL": "Normal",
-            "GOOD": "Muy bien",
+            "GOOD": "Bueno",
+            "VERYGOOD": "Muy bueno",
             null : "-",
             "respondido" : "Respondido",
         },
         "postStay": {
-            "WRONG": "Muy mala",
+            "VERYWRONG": "Muy mala",
+            "WRONG": "Mala",
             "NORMAL": "Normal",
-            "GOOD": "Muy bien",
+            "GOOD": "Buena",
+            "VERYGOOD": "Muy buena",
             null : "-",
             "respondido" : "Respondido",
         },
         "preStay": {
-            "WRONG": "Muy mala.",
-            "NORMAL": "Normal.",
-            "GOOD": "Muy bien",
             null : "-",
             "respondido" : "Respondido",
         }
