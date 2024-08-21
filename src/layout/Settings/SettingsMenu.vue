@@ -335,7 +335,7 @@ const menu_section = reactive([
         {
             title: 'Textos legales',
             to: 'GeneralLegal',
-            icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
+            icon: '/assets/icons/1.TH.TEXTOS.LEGALES.svg',
             include: '/legal'
         },
         {
