@@ -5,6 +5,8 @@
         class="absolute bg-white shadow-xl flex-column add"
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
         ref="ref_section_edit"
+        @mousedown="handleMouseDown"
+        @mouseleave="handleMouseLeave"
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
@@ -278,6 +280,8 @@
   import { useToastAlert } from '@/composables/useToastAlert'
   import { useRoute, useRouter } from 'vue-router';
   import ModalNoSave from '@/components/ModalNoSave.vue';
+  import { useMouseHandle } from '@/composables/useMouseHandle';
+  const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
   
   const emits = defineEmits(['close','update']);
@@ -947,9 +951,9 @@ function closeModal(complete = false) {
             }else{
               showModalNoSave.value = false;
             }
-        } else {
-          emits('close');
+        } else if(!mouseDownInside.value) { // Si no hay cambios y el click fue fuera, cerrar el modal
           currentStep.value = 1;
+          emits('close');
         }
     }else{
         emits('close');

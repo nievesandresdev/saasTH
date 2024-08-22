@@ -5,6 +5,8 @@
         class="absolute bg-white shadow-xl add flex-column add "
         :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
         ref="ref_section_add"
+        @mousedown="handleMouseDown"
+        @mouseleave="handleMouseLeave"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-4">
@@ -306,11 +308,13 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, defineEmits,computed,watch,onBeforeUnmount } from 'vue';
+  import { ref, onMounted,onUnmounted, nextTick, defineEmits,computed,watch,onBeforeUnmount } from 'vue';
   import ModalSelect from './ModalSelect.vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
   import { useToastAlert } from '@/composables/useToastAlert'
+  import { useMouseHandle } from '@/composables/useMouseHandle';
+
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
   import { useRoute, useRouter } from 'vue-router';
@@ -320,6 +324,7 @@
   const userStore = useUserStore();
   //const authStore = useAuthStore();
   const toast = useToastAlert();
+  const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
   const emits = defineEmits(['close','store','alert']);
   
@@ -341,10 +346,9 @@ router.beforeEach((to, from, next) => {
   
   
 
-
-
   const handleCloseModal = () => {
     showModalNoSave.value = false;
+    emits('close');
   }
 
   const closeModalSaveCreate = () => {
@@ -352,6 +356,21 @@ router.beforeEach((to, from, next) => {
     window.location.reload();
   }
 
+
+
+  // Función para manejar el evento mousedown
+
+// Añadir los event listeners cuando el componente se monte
+onMounted(() => {
+  window.addEventListener('mousedown', handleMouseDown);
+  //window.addEventListener('mouseup', handleMouseUp);
+});
+
+// Eliminar los event listeners cuando el componente se desmonte
+onUnmounted(() => {
+  window.removeEventListener('mousedown', handleMouseDown);
+  //window.removeEventListener('mouseup', handleMouseUp);
+});
   
 
   const selectedText = ref(''); // variable que guardara texto seleccionado
@@ -764,6 +783,9 @@ const clearForm = () => {
 const ref_section_add = ref(null);  // Declarar la referencia
 const ref_modal_crud = ref(null);
 
+
+
+
 // Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
@@ -827,7 +849,7 @@ function closeModal() {
     } else { //si hay texto seleccionado, se cierra el modal sin alerta
       showModalNoSave.value = false;
     }
-  } else {
+  } else if(!mouseDownInside.value) { // Si no hay cambios y el click fue fuera, cerrar el modal
     emits('close');
   }
 }
