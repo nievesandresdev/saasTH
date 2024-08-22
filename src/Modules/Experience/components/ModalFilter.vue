@@ -13,11 +13,11 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Tu región
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2 space-y-2">
                         <div
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.all_cities"
                                     :value="false"
@@ -32,9 +32,9 @@
                             </p>
                         </div>
                         <div
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.all_cities"
                                     :value="true"
@@ -56,9 +56,9 @@
                     </label>
                     <div class="mt-2">
                         <div
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.free_cancelation"
                                     :checked="formFilter.free_cancelation"
@@ -77,12 +77,12 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Duración
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2  space-y-2">
                         <div
                             v-for="(duration, index) in numbersByFilters.duration"
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.duration"
                                     :value="index"
@@ -103,12 +103,12 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Valoraciones
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2 space-y-2">
                         <div
                             v-for="(score, index) in numbersByFilters.score"
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.score"
                                     :value="index"
@@ -128,28 +128,24 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Rango de precio
                     </label>
-                    <div class="mt-2">
-                        <div
-                            class="flex space-x-2"
-                        >
-                            <div>
-                                <label class="text-[10px] font-semibold inline-block">Desde</label>
-                                <BaseTextField
-                                    v-model="formModalFilter.price_min"
-                                    placeholder="€"
-                                    class-content="w-[64px]"
-                                    class-input="text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-semibold inline-block">Hasta</label>
-                                <BaseTextField
-                                    v-model="formModalFilter.price_max"
-                                    placeholder="€"
-                                    class-content="w-[64px]"
-                                    class-input="text-sm"
-                                />
-                            </div>
+                    <div class="mt-2 flex items-center space-x-4">
+                        <div class="flex flex-col">
+                            <p class="text-[10px] font-semibold inline-block mb-1">Desde</p>
+                            <BaseTextField
+                                v-model="formModalFilter.price_min"
+                                placeholder="€"
+                                classInput="p-2 h-9 text-sm "
+                                classContent="w-[64px]"
+                            />
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="text-[10px] font-semibold inline-block mb-1">Hasta</p>
+                            <BaseTextField
+                                v-model="formModalFilter.price_max"
+                                placeholder="€"
+                                classInput="p-2 h-9 text-sm w-[64px]"
+                                classContent="w-[64px]"
+                            />
                         </div>
                     </div>
                 </div>

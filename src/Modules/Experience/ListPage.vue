@@ -6,7 +6,7 @@
                 v-if="!hotelStore.hotelData.show_experiences"
                 class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
             >
-                La sección Experiencias está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
+                La sección <span class="font-semibold">Experiencias</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
             </div>
             <div>
                 <div class="pt-6">

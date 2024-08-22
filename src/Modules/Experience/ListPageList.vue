@@ -5,8 +5,9 @@
     <template v-if="experiencesData.length > 0">
         <div id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
             <template v-for="(experience, index) in experiencesData">
+                <!-- experiencesData[index-1]?.experience" -->
                 <div
-                    v-if="!formFilter.visibility && !experience?.is_visible && experiencesData[index-1]?.experience"
+                    v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !experience?.is_visible && experiencesData[index-1]?.is_visible"
                     class="w-[789px] 3xl:w-[1216px] relative"
                 >
                     <div
@@ -71,7 +72,7 @@
                     </div>
                     <div
                         v-if="experience.is_visible == 0"
-                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10"
+                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
                     />
                     <div class="p-2 truncate-2">
                         <div class="flex items-center space-x-[4px] h-[33px]">
