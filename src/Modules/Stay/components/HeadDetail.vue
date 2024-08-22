@@ -15,12 +15,14 @@
         <TabMenuContainer>
             <TabLink
                 label="Información"
+                :loading=" guestIdDefault ? false : true"
                 viewName="StayDetailPage"
                 :selected="route.name == 'StayDetailPage'"
                 :notify="false"
             />
             <TabLink
                 label="Seguimiento"
+                :loading=" guestIdDefault ? false : true"
                 viewName="StayQueryDetail"
                 :params="{ stayId: route.params.stayId }"
                 :query="{ g: guestIdDefault }"
@@ -29,6 +31,7 @@
             />
             <TabLink
                 label="Chat"
+                :loading=" guestIdDefault ? false : true"
                 :viewName="'StayChatRoom'"
                 :params="{ stayId: route.params.stayId }"
                 :query="{ g: guestIdDefault }"
@@ -47,6 +50,7 @@ import TabLink from '@/components/TabMenuLink.vue'
 import { useChatStore } from '@/stores/modules/chat/chat'
 import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query';
+import { useStayStore } from '@/stores/modules/stay/stay';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 
 
@@ -54,9 +58,10 @@ const queryStore = useQueryStore();
 
 const chatStore = useChatStore();
 const hotelStore = useHotelStore()
+const stayStore = useStayStore();
 
 const route = useRoute();
-const data = inject('data')
+// const data = inject('data')
 const session = inject('session');
 const user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -70,14 +75,19 @@ const pusher = ref(null);
 watch(() => route.params.stayId, async (newId, oldId) => {
     countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
-    updateDefaultGuest();
+    guestIdDefault.value = null;
+    stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
+        guestIdDefault.value = res?.guests[0].guestId;
+    });
+    // updateDefaultGuest();
 }, { immediate: true });      
 
-const updateDefaultGuest = () => {
-    if (data.value && data.value.guests && data.value.guests.length > 0) {
-        guestIdDefault.value = data.value.guests[0].id;
-    }
-};
+// const updateDefaultGuest = () => {
+    // console.log('updateDefaultGuest',data)
+    // if (data?.value && data?.value.guests && data?.value.guests.length > 0) {
+    //     guestIdDefault.value = data?.value.guests[0].id;
+    // }
+// };
 
 
 
@@ -111,6 +121,10 @@ const connectPusher = () =>{
 
 onMounted( async() => {
     connectPusher();
+    stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
+        guestIdDefault.value = res?.guests[0].guestId;
+    });
+
     // countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     // countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
 })

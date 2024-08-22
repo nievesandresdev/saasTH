@@ -26,6 +26,7 @@ d    dd
 
         <!-- central container -->
         <div id="main-content" class="overflow-y-auto flex-grow h-full bg-[#FAFAFA]">
+            <DinamicOverContent :headerName="componentOverContent"/>
             <router-view></router-view>
             <!-- <LoadPage v-if="activeRequests > 0" /> -->
         </div>
@@ -43,6 +44,7 @@ import { useRoute } from 'vue-router';
 
 import DinamicLeftSidebar from './DinamicLeftSidebar.vue';
 import DinamicRightSidebar from './DinamicRightSidebar.vue';
+import DinamicOverContent from './DinamicOverContent.vue';
 import MainSidebar from './MainSidebar.vue';
 import SuscriptionBanner from './SuscriptionBanner.vue';
 import NotifyPanel from './Notifications/NotifyPanel.vue'
@@ -58,6 +60,7 @@ const isNotifyPanelVisible = ref(false)
 
 const currentLeftSidebar = computed(() => route.meta.sidebar);
 const currentRightSidebar = computed(() => route.meta.sidebarRight);
+const componentOverContent = computed(() => route.meta.componentOverContent);
 const sidebarWidthz = computed(() => route.meta.sidebarWidth);
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
 

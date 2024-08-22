@@ -47,16 +47,42 @@ const $isOperator = () => {
 };
 
 const $nameLanguage = (lang) => {
-  switch (lang) {
-    case 'es':
-      return 'Español';
-    case 'en':
-      return 'Inglés';
-    case 'fr':
-      return 'Francés';
-    default:
-      return '-';
+  const languages = {
+    'es':'Español',
+    'en':'Inglés',
+    'fr':'Francés',
+    'pt':'Portugués',
+    'zh':'Chino',
+    'hi':'Hindi',
+    'ar':'Árabe',
+    'bn':'Bengalí',
+    'ru':'Ruso',
+    'ja':'Japonés',
+    'de':'Alemán',
+    'ko':'Coreano',
+    'tr':'Turco',
+    'it':'Italiano',
+    'pl':'Polaco',
+    'uk':'Ucraniano',
+    'ro':'Rumano',
+    'nl':'Holandés',
+    'id':'Indonesio',
+    'vi':'Vietnamita',
+    'th':'Tailandés',
+    'sv':'Sueco',
+    'el':'Griego',
+    'cs':'Checo',
+    'da':'Danés',
+    'fi':'Finés',
+    'hu':'Húngaro',
+    'no':'Noruego',
+    'sk':'Eslovaco'
   }
+  let result = 'Desconocido';
+  if(lang && languages[lang]){
+    result = languages[lang];
+  }
+  return result
 }
 
 const $translatePeriod = (period) => {

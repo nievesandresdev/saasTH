@@ -51,7 +51,7 @@
             <section class="flex justify-between items-center mb-2">
               <label class="text-sm font-medium">Penalización</label>
               <div class="flex items-center gap-1">
-                <span class="font-medium text-[10px]">No</span>
+                <span class="font-semibold text-[12px]">{{ form.penalization ? 'Si' : 'No' }}</span>
                 <BaseSwitchInput v-model="form.penalization" />
               </div>
             </section>
@@ -75,14 +75,14 @@
           </div>
         </div>
         <div 
-          class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
+          class="tertiary-black-200 py-6 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
           style="height: 72px;" 
         >
-          <button class="underline font-medium" @click="closeModal">
+          <button class="underline font-medium text-sm p-4" @click="closeModal">
             Cancelar
           </button>
           <button
-            class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
+            class="hbtn-cta px-4 py-3 font-medium text-sm rounded-[6px] leading-[110%]"
             @click="submit"
           >
             Guardar

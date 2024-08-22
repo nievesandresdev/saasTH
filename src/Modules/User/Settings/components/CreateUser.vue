@@ -316,17 +316,11 @@
   import { useRoute, useRouter } from 'vue-router';
 
   const router = useRouter();
+  const intendedRoute = ref(null);
+  const userStore = useUserStore();
+  //const authStore = useAuthStore();
+  const toast = useToastAlert();
 
-router.beforeEach((to, from, next) => {
-
-  if(to.fullPath !== from.fullPath){
-    showModalNoSave.value = false
-    intendedRoute.value = to.fullPath;
-  }
-
-});
-
-  
   const emits = defineEmits(['close','store','alert']);
   
   const props = defineProps({
@@ -334,9 +328,20 @@ router.beforeEach((to, from, next) => {
     workPositions: Array
   });
 
-  const userStore = useUserStore();
-  //const authStore = useAuthStore();
-  const toast = useToastAlert();
+router.beforeEach((to, from, next) => {
+  if(to.fullPath !== from.fullPath && props.modalAdd) {
+    showModalNoSave.value = false
+    intendedRoute.value = to.fullPath;
+  }else{
+    next()
+  }
+
+});
+
+  
+  
+
+
 
   const handleCloseModal = () => {
     showModalNoSave.value = false;
@@ -347,7 +352,7 @@ router.beforeEach((to, from, next) => {
     window.location.reload();
   }
 
-  const intendedRoute = ref(null);
+  
 
   const selectedText = ref(''); // variable que guardara texto seleccionado
   window.addEventListener('mouseup', () => { // evento que se dispara al soltar el click
@@ -764,7 +769,6 @@ const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
   const modalCrud = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
 
-  //console.log('modalisCrud',modalCrud,event.target)
   
   if (addSection && !addSection.contains(event.target) && modalCrud && !modalCrud.contains(event.target)) {
     //console.log('handleClickOutsideCreate',event.target)
