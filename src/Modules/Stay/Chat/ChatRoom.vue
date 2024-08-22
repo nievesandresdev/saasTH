@@ -14,10 +14,10 @@
         <!-- body -->
         <BodyChat :messages="dataMessages" />
         <!-- foot -->
-        <div class="py-2 mx-6 hbg-white-100 flex border-x sticky bottom-0">
+        <div class="mx-6 pt-2 pb-1 pl-6 pr-3 hbg-white-100 flex sticky bottom-0 border-x">
             <textarea
                 ref="messageTextarea"
-                class="flex-grow border-0 rounded-10 h-8 hbg-gray-100 resize-none overflow-hidden px-4 py-3"
+                class="flex-grow border-0 rounded-10 resize-none overflow-hidden pl-2 py-2.5 pr-0 text-sm leading-[115%]"
                 placeholder="Escribe un mensaje..."
                 v-model="msg"
                 rows="1"
@@ -25,12 +25,12 @@
                 @keyup.enter="sendMsg"
                 @keydown.enter="handleEnter"
             ></textarea>
-            <div class="ml-2 my-auto">
+            <div class="ml-1 my-auto">
                 <HoveredIcon
                     :src="'/assets/icons/2.TH.Sendicon.svg'"
                     :height_icon="'24px'"
                     :width_icon="'24px'"
-                    :padding_container="'8px'"
+                    :padding_container="'4px'"
                     style="--background-color: #f3f3f3;"
                     @click="sendMsg"
                 />
@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, provide, onBeforeUnmount } from 'vue';
+import { ref, onMounted, watch, provide, onBeforeUnmount, nextTick } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 //
@@ -80,6 +80,10 @@ onMounted(async() => {
     //  stayStore.$getSessions(route.params.stayId)
     suscribePusher()
     window.addEventListener('beforeunload', handleBeforeUnload);
+    nextTick(() => {
+        const textarea = messageTextarea.value;
+        textarea.style.height = '34px'; 
+    });
 })
 
 onBeforeUnmount(() => {
@@ -196,6 +200,6 @@ textarea:focus{
     border:none;
 }
 .chat-container {
-    height: calc(100vh - 139px);
+    height: calc(100vh - 143px);
 }
 </style>
