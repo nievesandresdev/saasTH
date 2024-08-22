@@ -1,16 +1,17 @@
 <template>
     <div class="" v-click-away="handleClickOutsideDropDown">
         <div
-            class="flex flex-shrink-0 p-2  hover:bg-[#FAFAFA] rounded-[10px] cursor-pointer"
-            :class="{'bg-[#FAFAFA]': dropdownOpenn}"
+            class="flex flex-shrink-0 p-2  hover:bg-[#F1F1F1] rounded-[10px] cursor-pointer"
+            :class="{'bg-[#F1F1F1]': dropdownOpenn}"
             @click="dropdownOpenn = !dropdownOpenn"
             
         >
             <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
-            <div 
+            <div
+                class="truncate-1"
                 :class="`flex items-center ${widthMenu} ${displayedMenu ? 'pl-4' : 'group-hover:pl-4'}`"
             >
-                <p class="text-sm htext-black-100 font-semibold ml-2 whitespace-nowrap text-left leading-[120%]">{{ hotelData.name }}</p>
+                <p class="text-sm htext-black-100 font-semibold ml-2 whitespace-nowrap text-left leading-[120%] truncate-1">{{ hotelData.name }}</p>
                 <img class="w-3 h-3 ml-auto" src="/assets/icons/1.TH.SWICHT.svg" alt="">
             </div>
         </div>
@@ -66,13 +67,13 @@
                                 >
                             </div>
                             <div class="truncate-1 flex-1">
-                                <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
-                                    {{ hotel.name }}
+                                <span class="text-sm font-medium htext-black-100 relative truncate-1">
+                                    {{ truncateNameHotelLong(hotel.name, 25) }}
                                     <div
                                         v-if="hotel.with_notification"
                                         class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                     />
-                                </h6>
+                                </span>
                                 <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
                                 <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                             </div>
@@ -115,14 +116,14 @@
                                 alt="photo default"
                             >
                         </div>
-                        <div class="truncate-1 flex-1">
-                            <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
-                                {{ hotel.name }}
+                        <div class="flex-1 truncate-1">
+                            <span class="text-sm font-medium htext-black-100 relative truncate-1">
+                                {{ truncateNameHotelLong(hotel.name, 25) }}
                                 <div
                                     v-if="hotel.with_notification"
                                     class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                 />
-                            </h6>
+                            </span>
                             <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
                             <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                         </div>
@@ -173,13 +174,7 @@ const dropdownOpenn = ref(false);
 const dropdownSearchOpen = ref(false);
 const hotelsFoundInSearch = ref([]);
 const search = ref(null);
-const hotels = ref([
-    {name: 'Hotel Tayko Sevilla', type: 'Hotel', zone: 'San fernando de Apure en Venezuela', subscribed: true, image: '/storage/gallery/1712045717-9140661-THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3-3.jpg' , with_notification: true},
-    {name: 'Hotel Plaza Sevilla', type: 'Hotel', zone: 'Sevilla', subscribed: false, image: '/storage/gallery/1712045717-9140661-THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3-3.jpg', with_notification: true},
-    {name: 'Hotel Custom Madrid', type: 'Hotel', zone: 'Sevilla', subscribed: false, image: '/storage/gallery/1712045717-9140661-THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3-3.jpg', with_notification: true},
-    {name: 'Sevilla Swid Hotel', type: 'Hostal', zone: 'Sevilla', subscribed: false, image: '/storage/gallery/1712045717-9140661-THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3-3.jpg', with_notification: false},
-    {name: 'Sevilla Swid Hotel', type: 'Mallorca', zone: 'Sevilla', subscribed: false, image: '/storage/gallery/1712045717-9140661-THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3-3.jpg', with_notification: true},
-]);
+const hotels = ref([]);
 
     
 onMounted(() => {
@@ -211,6 +206,14 @@ watch(onHoverMainMenu, (newValue, oldValue)=>{
 });
 
 // FUNCTIONS
+function truncateNameHotelLong (name, maxLength) {
+    if (name.length > maxLength) {
+        return name.slice(0, maxLength) + "...";
+    } else {
+        return name;
+    }
+}
+
 function submitSearch () {
 
 }

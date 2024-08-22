@@ -15,7 +15,7 @@
     >
       <img v-if="icon_left" :src="icon_left" :class="icon_left_class">
       <span
-        class="flex-grow truncate text-label font-medium mr-2"
+        class="flex-grow truncate text-label font-medium mr-2 hover-htext-green-600"
         :class="[
           {
             'htext-gray-500': !error && !modelValue,
@@ -281,11 +281,11 @@ export default {
   border-radius: 0px 0px 10px 10px;
 }
 .active {
-  background: #ecf9f5;
+  background: #ECF9F5;
   /* background: red; */
 }
 .option:hover {
-  background: #fafafa;
+  background: #F1F1F1;
   /* background: yellow; */
 }
 .disabled:hover {

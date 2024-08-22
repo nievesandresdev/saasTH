@@ -11,11 +11,11 @@
         </router-link>
 
         <!-- filters -->
-        <div class="px-4  border-b hborder-gray-400">
+        <div class="pl-4 border-b hborder-gray-400">
 
             <!-- input y button -->
-            <div class="flex items-center gap-1">
-                <div class="relative">
+            <div class="flex items-center pr-3">
+                <div class="relative w-[240px] flex-shrink-0">
                     <!-- :classInput="`py-2 px-3 h-10 text-sm ${ !search ? 'border-search-stay' : ''}`"  -->
                     <BaseTextField 
                         v-model="search" 
@@ -32,7 +32,7 @@
                     >
                 </div>
                 <!-- :container_classes="{'absolute top-[-10px] left-[-6px]':true}" -->
-                <div class="relative h-8">
+                <div class="relative h-8 ml-1">
                     <span 
                         v-if="filtersActive"
                         class="w-4 h-4 rounded-full hbg-green-600 absolute right-[-4px] top-[-4px] text-xs border border-white text-white text-center leading-[115%]"
@@ -49,7 +49,7 @@
             </div>
 
             <!-- counters -->
-            <div class="mt-4 pb-2">
+            <div class="mt-4 pb-2 pr-4">
                 <div class="flex items-center">
                     <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalCounts==1 ?'':'s' }}</h2>
                     <button 
@@ -276,10 +276,8 @@ const connectPusher = () =>{
     // });
 
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
-    // console.log('channelUpdate.value',channelUpdate.value)
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
-        // console.log('UpdateStayListEvent staylist',data)
         let showLoadPage = data.showLoadPage ?? true;
         loadData(true, showLoadPage);
     });

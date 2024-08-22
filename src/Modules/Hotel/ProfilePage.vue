@@ -6,7 +6,7 @@
                     <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
                     <BaseTooltipResponsive
                         size="l"
-                        :top="55"
+                        :top="35"
                         :left="-0"
                     >
                         <template #button>
@@ -52,7 +52,7 @@
                         />
                     </div>
                 </div>
-                <div class="space-y-2 w-[389px]">
+                <div class="space-y-2">
                     <label class="text-sm font-medium inline-block">Nombre de alojamiento</label>
                     <p class="text-sm">No introduzcas el tipo de alojamiento en el nombre</p>
                     <BaseTextField
@@ -202,7 +202,11 @@
                         <p class="text-sm htext-gray-500 text-justify">
                             Comunica a tus huéspedes si tu alojamiento cuenta con servicio de WiFi gratuito
                         </p>
-                        <BaseSwichInput id="toggle-wifi" v-model="form.with_wifi" />
+                        <div class="flex space-x-2">
+                            <label class="text-sm font-medium leading-[110%]" :class="!form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">No</label>
+                            <BaseSwichInput id="toggle-wifi" v-model="form.with_wifi" />
+                            <label class="text-sm font-medium leading-[110%]" :class="form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">Si</label>
+                        </div>
                     </div>
                 </div>
             </section>

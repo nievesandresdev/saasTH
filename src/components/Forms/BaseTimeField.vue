@@ -4,7 +4,9 @@
           <input 
               type="time" 
               :value="formattedTime || modelValue" 
-              :class="computeClasses" 
+              class="rounded-[6px] text-sm font-medium px-1 border hinput h-10 w-24 text-center"
+              :class="`${formattedTime || modelValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : 'hinput-green'}`"
+              :placeholder="placeholder"
               :disabled="disabled" 
               @input="handleInput"
               @blur="handleBlur"
@@ -64,17 +66,17 @@ export default {
   },
   computed: {
       computeClasses() {
-          return {
-              'h-10 rounded-[6px] text-sm font-medium px-1 border': true,
-              'hinput-green': this.isFocused && !this.error,  // Verde si está enfocado y no hay error
-              'hborder-black-100': this.modelValue && !this.error && !this.isFocused, // Borde negro si no hay error y no está enfocado
-              'hborder-gray-400 htext-gray-400': (!this.modelValue || this.modelValue === '') && !this.error && !this.isFocused,
-              'w-24 text-center': !this.customClasses,
-              'hborder-alert-negative htext-alert-negative': this.error,
-              'hoverForm': !this.error,
-              'no-hover-input': this.disabled && !this.error,
-              ...this.customClasses
-          }
+          // return {
+          //     'h-10 rounded-[6px] text-sm font-medium px-1 border hinput': true,
+          //     'hborder-black-100': this.modelValue && !this.error && !this.isFocused,
+          //     'hborder-gray-400 htext-gray-400': (!this.modelValue || this.modelValue === '') && !this.error && !this.isFocused,
+          //     'w-24 text-center': !this.customClasses,
+          //     'hborder-alert-negative htext-alert-negative': this.error,
+          //     'hoverForm': !this.error,
+          //     'no-hover-input': this.disabled && !this.error,
+          //     ...this.customClasses
+          // }
+          return '';
       }
   },
   methods: {
@@ -119,12 +121,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
 }
-.hinput-green {
-  border-color: #38A169; /* Verde para input activo */
+/* .hinput-green {
+  border-color: #38A169;
 }
 .hborder-black-100 {
-  border-color: #1F2937; /* Negro para input correcto */
-}
+  border-color: #1F2937;
+} */
 .hborder-alert-negative {
   border-color: #DC2626; /* Borde rojo */
 }

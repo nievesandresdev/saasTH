@@ -24,7 +24,7 @@
         </button>
         <button
             class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-2"
-            :disabled="disabledButtons"
+            :disabled="disabledButtons || numbersResponsesGenerated >= maximumResponsesGenerated"
             @click="generateNewResponse"
         >
             Generar otra respuesta
@@ -67,6 +67,8 @@ const responseReviewData = inject('responseReviewData');
 const otaParamRoute = inject('otaParamRoute');
 const textGenerateInSteaming = inject('textGenerateInSteaming');
 const languageActiveResponse = inject('languageActiveResponse');
+const numbersResponsesGenerated = inject('numbersResponsesGenerated');
+const maximumResponsesGenerated = inject('maximumResponsesGenerated');
 
 // COMPOSABLES
 import { useCopy } from '@/composables/useCopy';
