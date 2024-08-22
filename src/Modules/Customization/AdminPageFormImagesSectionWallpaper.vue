@@ -13,6 +13,13 @@
                 >
                     <div v-if="hoverCardWallpaper === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
                         <button
+                            v-if="imgSelectedBg.url"
+                                class="absolute left-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                                @click="removeWalpaper"
+                        >
+                            <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
+                        </button>
+                        <button
                             class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px] p-[2px]"
                             @click="openGallery"
                         >
@@ -36,7 +43,7 @@ import { ref, onMounted, computed, inject } from 'vue';
 
 import { $formatImage } from '@/utils/helpers';
 
-    const emit = defineEmits(['open:gallery']);
+    const emit = defineEmits(['open:gallery', 'remove:img']);
 
     const form = inject('form');
 
@@ -46,6 +53,9 @@ import { $formatImage } from '@/utils/helpers';
 
     function openGallery(){
         emit('open:gallery','wallpaper');
+    }
+    function removeWalpaper () {
+        emit('remove:img','wallpaper');
     }
 
     

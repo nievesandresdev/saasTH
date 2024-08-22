@@ -79,14 +79,26 @@
                                             v-model="imageSelected"
                                             class="w-[24px] h-[24px]"
                                         /> -->
-                                        <input
-                                            type="checkbox"
-                                            :checked="checkSelectedImage(img.url)"
-                                            :value="img.id"
-                                            :id="index"
-                                            class="hcheckbox w-[24px] h-[24px]"
-                                            @click="multiple ? selectImageMultiple(img, index) : selectImage(img, index)"
-                                        >
+                                        <template v-if="multiple">
+                                            <input
+                                                type="checkbox"
+                                                :checked="checkSelectedImage(img.url)"
+                                                :value="img.id"
+                                                :id="index"
+                                                class="hcheckbox w-[24px] h-[24px]"
+                                                @click="multiple ? selectImageMultiple(img, index) : selectImage(img, index)"
+                                            >
+                                        </template>
+                                        <template v-else>
+                                            <input
+                                                :value="img.id"
+                                                :checked="checkSelectedImage(img.url)"
+                                                :name="img.id"
+                                                type="radio"
+                                                class="w-[24px] h-[24px] hradio"
+                                                @click="multiple ? selectImageMultiple(img, index) : selectImage(img, index)"
+                                            >
+                                        </template>
                                     </div>
                                 </div>
                             </div>
@@ -122,6 +134,7 @@ import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
 
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
+import RadioButton from '@/components/Forms/RadioButton.vue';
 import BaseTab from '@/components/BaseTab.vue';
 import BasePreviewImage from '@/components/BasePreviewImage.vue';
 
@@ -147,6 +160,7 @@ import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
 
 const open = ref(false);
+const co = ref('');
 
 // const {
 //     //DATA
