@@ -26,7 +26,7 @@
             </div>
             <p class="text-sm mt-4">Rellena al menos un método de contacto:</p>
             <div class="mt-4 relative">
-                <div class="flex justify-between items-start pr-4">
+                <div class="flex justify-between items-start">
                     <label class="text-sm font-medium mb-2 leading-[110%]">Correo electrónico</label>
                     <Tooltip
                         size="s"
@@ -34,7 +34,7 @@
                         :right="0"
                     >
                         <template v-slot:button>
-                            <img class="w-5 h-5 cursor-pointer mt-[-2px]" src="/assets/icons/info.blue.svg">
+                            <img class="w-5 h-5 cursor-pointer mt-[-1px]" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">Añade el correo del huésped. Se le enviarán los mensajes automáticos al correo proporcionado.</p>
@@ -50,7 +50,7 @@
                 />
             </div>
             <div class="mt-4 relative">
-                <div class="flex justify-between items-start pr-4">
+                <div class="flex justify-between items-start">
                     <label class="text-sm font-medium mb-2 leading-[110%]">Teléfono móvil <strong class="htext-green-600 ml-1.5 font-medium">BETA</strong></label>
                     <Tooltip
                         size="s"
@@ -58,7 +58,7 @@
                         :right="0"
                     >
                         <template v-slot:button>
-                            <img class="w-5 h-5 cursor-pointer mt-[-2px]" src="/assets/icons/info.blue.svg">
+                            <img class="w-5 h-5 cursor-pointer mt-[-1px]" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">Añade el teléfono del huésped con el prefijo correspondiente. Se le enviarán los mensajes automáticos al teléfono proporcionado.</p>

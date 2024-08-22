@@ -79,7 +79,6 @@ watch(() => route.params.stayId, async (newId, oldId) => {
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
     guestIdDefault.value = null;
     stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
-        console.log('online 1',res)
         guestIdDefault.value = res?.guests[0].guestId;
         session.value =  res?.sessions ? res?.sessions[0] : null;
     });
@@ -87,7 +86,6 @@ watch(() => route.params.stayId, async (newId, oldId) => {
 }, { immediate: true });      
 
 // const updateDefaultGuest = () => {
-    // console.log('updateDefaultGuest',data)
     // if (data?.value && data?.value.guests && data?.value.guests.length > 0) {
     //     guestIdDefault.value = data?.value.guests[0].id;
     // }
@@ -106,7 +104,6 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-        console.log('NotifyStayHotelEvent headstay',data)
         if(data.stayId == route.params.stayId){
             if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
             if('pendingCountQueries' in data) countPendingQueries.value = data.pendingCountQueries;
@@ -114,10 +111,7 @@ const connectPusher = () =>{
     });
     channelSession.value = pusher.value.subscribe(channelSession.value);
     channelSession.value.bind('App\\Events\\SessionsStayEvent', async (data) => {
-        console.log('SessionsStayEvent',data)
-        console.log('SessionsStayEvent stayId',route.params.stayId)
         if(Number(data.stayId) == Number(route.params.stayId)){
-            console.log('online 2',data)
             session.value = data.session[0];
         }
     });
