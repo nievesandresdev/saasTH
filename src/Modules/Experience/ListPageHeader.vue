@@ -5,7 +5,8 @@
                 <h1 class="font-medium text-[22px]">Experiencias</h1>
                 <BaseTooltipResponsive
                     size="l"
-                    :top="55"
+                    :top="35"
+                    color="#fff"
                     :left="-0"
                 >
                     <template #button>
