@@ -2,10 +2,10 @@
     <div class="px-6 relative z-[201]">
         <div class="flex items-center mt-10">
             <h1 class="text-[22px] font-medium">Estancias</h1>
-            <div class="flex items-center ml-auto" v-if="session && session[0] && user.name !== session[0].userName">
+            <div class="flex items-center ml-auto" v-if="session && user.name !== session.userName">
                 <img 
                     class="rounded-full w-8 h-8 mr-2" 
-                    :src="`https://ui-avatars.com/api/?name=${session[0].userName}&color=fff&background=${session[0].userColor}`"
+                    :src="`https://ui-avatars.com/api/?name=${session.userName}&color=fff&background=${session.userColor}`"
                 >
                 <h1 class="text-sm font-semibold leading-[120%] htext-green-600">En línea</h1>
             </div>
@@ -62,9 +62,11 @@ const stayStore = useStayStore();
 
 const route = useRoute();
 // const data = inject('data')
-const session = inject('session');
+// const session = inject('session');
 const user = JSON.parse(sessionStorage.getItem('user'));
 
+
+const session = ref(null)
 const countPendingChats = ref(0)
 const countPendingQueries = ref(0)
 const guestIdDefault = ref(null)
@@ -77,7 +79,9 @@ watch(() => route.params.stayId, async (newId, oldId) => {
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
     guestIdDefault.value = null;
     stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
+        console.log('online 1',res)
         guestIdDefault.value = res?.guests[0].guestId;
+        session.value =  res?.sessions ? res?.sessions[0] : null;
     });
     // updateDefaultGuest();
 }, { immediate: true });      
@@ -113,18 +117,14 @@ const connectPusher = () =>{
         console.log('SessionsStayEvent',data)
         console.log('SessionsStayEvent stayId',route.params.stayId)
         if(Number(data.stayId) == Number(route.params.stayId)){
-            console.log('SessionsStayEvent entro')
-            session.value = data.session;
+            console.log('online 2',data)
+            session.value = data.session[0];
         }
     });
 }
 
 onMounted( async() => {
     connectPusher();
-    stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
-        guestIdDefault.value = res?.guests[0].guestId;
-    });
-
     // countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     // countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
 })
