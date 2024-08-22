@@ -67,13 +67,13 @@
                                 >
                             </div>
                             <div class="truncate-1 flex-1">
-                                <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
-                                    {{ hotel.name }}
+                                <span class="text-sm font-medium htext-black-100 relative truncate-1">
+                                    {{ truncateNameHotelLong(hotel.name, 25) }}
                                     <div
                                         v-if="hotel.with_notification"
                                         class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                     />
-                                </h6>
+                                </span>
                                 <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
                                 <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                             </div>
@@ -116,14 +116,14 @@
                                 alt="photo default"
                             >
                         </div>
-                        <div class="truncate-1 flex-1">
-                            <h6 class="text-sm font-medium htext-black-100 relative truncate-1">
-                                {{ hotel.name }}
+                        <div class="flex-1 truncate-1">
+                            <span class="text-sm font-medium htext-black-100 relative truncate-1">
+                                {{ truncateNameHotelLong(hotel.name, 25) }}
                                 <div
                                     v-if="hotel.with_notification"
                                     class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                 />
-                            </h6>
+                            </span>
                             <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
                             <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                         </div>
@@ -206,6 +206,14 @@ watch(onHoverMainMenu, (newValue, oldValue)=>{
 });
 
 // FUNCTIONS
+function truncateNameHotelLong (name, maxLength) {
+    if (name.length > maxLength) {
+        return name.slice(0, maxLength) + "...";
+    } else {
+        return name;
+    }
+}
+
 function submitSearch () {
 
 }
