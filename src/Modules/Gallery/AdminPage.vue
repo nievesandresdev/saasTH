@@ -16,7 +16,8 @@
             class-content="w-[345px]"
             :append-inner-icon="{icon: '/assets/icons/1.TH.CLOSE.svg', type: 'BUTTON', show: form.search?.length > 0 }"
             @enter:search="loadGallery"
-            @click:append_inner="resetFilter (tabCurrent)"
+            @input:typing="loadGallery"
+            @click:appendInner="resetFilter(tabCurrent)"
         />
         <p v-if="imagesContainer?.length <= 0" class="text-sm font-medium htext-gray-500 mt-6">No cuentas con imágenes. Busca imágenes en tu ordenador y añadelas</p>
         <p v-else-if="imagesContainer?.length > 0 && imageSelected?.length == 0" class="text-sm font-medium htext-gray-500 mt-6">{{ textNumbersImagesFound }}</p>
@@ -26,10 +27,10 @@
         </div>
         
         <div class="mt-4">
-            <div class="w-[968px] 3xl:w-[1464px] grid grid-cols-4 3xl:grid-cols-6 gap-4">
-                <label 
+            <div class="w-[968px] 3xl:w-[1464px] grid grid-cols-4 3xl:grid-cols-6 gap-6">
+                <label
                     for="fileInput"
-                    class="relative w-[239px] h-[160px] py-[12px] rounded-[6px] border hborder-black-100 cursor-pointer button-add flex flex-col justify-center items-center"
+                    class="relative w-[224px] h-[160px] py-[12px] rounded-[6px] border hborder-black-100 cursor-pointer button-add flex flex-col justify-center items-center"
                 >   
                     <img src="/assets/icons/1.TH.PLUS.svg" class=" w-[16px] h-[16px]" >
                     <span class="font-medium text-base">Añadir imagen</span>
@@ -55,7 +56,7 @@
                         >
 
                             <img 
-                                class="w-[239px] h-[160px] rounded-6 object-cover"
+                                class="w-[224px] h-[160px] rounded-6 object-cover"
                                 loading="lazy"
                                 :src="galleryStore.formatImage({ url: img.url, type: img.type, urlDefault: img?.default })"
                             >
@@ -94,7 +95,7 @@
     </div>
     <div class="p-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full">
         <button
-            class="py-3"
+            class="py-3 px-4"
             :class="{'opacity-25':!imageSelected?.length }"
             @click="resetSelected"
         >
@@ -298,7 +299,6 @@ function resetSelected () {
 
 function resetFilter  (TYPE) {
     tabCurrent.value = TYPE
-    search.value = ''
     form.search = ''
     loadGallery();
 }

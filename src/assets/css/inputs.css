@@ -73,6 +73,18 @@ input[type=radio]:hover {
   .hcheckbox:checked::before {
     content: '';
     position: absolute;
+    width: 30%;
+    height: 50%;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    /* transform-origin: bottom left; */
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(25deg);
+  }
+  /* .hcheckbox:checked::before {
+    content: '';
+    position: absolute;
     top: 6%;
     left: 40%;
     width: 15%;
@@ -81,9 +93,9 @@ input[type=radio]:hover {
     border-radius: 10px 10px 0 0;
     transform: rotate(45deg);
     transform-origin: bottom left;
-  }
+  } */
   
-  .hcheckbox:checked::after {
+  /* .hcheckbox:checked::after {
     content: '';
     position: absolute;
     top: 35%;
@@ -94,7 +106,7 @@ input[type=radio]:hover {
     border-radius: 10px 10px 0 0;
     transform: rotate(-45deg);
     transform-origin: bottom right;
-  }
+  } */
 
 
   /* ------------------------------------- */

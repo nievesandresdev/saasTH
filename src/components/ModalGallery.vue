@@ -10,7 +10,7 @@
                     </svg>
                 </button>
             </div>
-            <BaseTab v-model="tabCurrent" class="px-[24px] mt-[24px]" :items="ITEMS_TABS" />
+            <BaseTab v-model="tabCurrent" class="px-[24px]" :items="ITEMS_TABS" />
             <div class="h-[412px] overflow-auto">
                 <div class="px-6 space-y-6">
                     <p class="text-[16px] font-medium mt-6">Elige las imágenes que deseas añadir</p>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="mt-[16px] px-[24px] overlay-auto">
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-3 gap-6">
                         <label 
                             for="fileInput"
                             class="relative w-[224px] h-[149px] py-[12px] rounded-[6px] border hborder-black-100 cursor-pointer button-add flex flex-col justify-center items-center"
