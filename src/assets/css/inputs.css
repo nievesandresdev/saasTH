@@ -95,3 +95,35 @@ input[type=radio]:hover {
     transform: rotate(-45deg);
     transform-origin: bottom right;
   }
+
+
+  /* ------------------------------------- */
+
+  .hradio {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .hradio::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* transition: background-color 0.2s; */
+  }
+  
+  .hradio:checked::before {
+    background-color: #34A98F; /* Cambia este color por el que desees */
+  }

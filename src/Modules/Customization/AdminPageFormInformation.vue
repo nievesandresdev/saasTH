@@ -108,8 +108,9 @@ const OPTIONS_LANGUAGES = [
     { value: 'es', label: 'Español', img: '/assets/icons/flags/es.svg' },
     { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
     { value: 'fr', label: 'Francés', img: '/assets/icons/flags/fr.svg' },
-    { value: 'pr', label: 'Portugues', img: '/assets/icons/flags/pr.svg' },
+    { value: 'pt', label: 'Portugués', img: '/assets/icons/flags/pt.svg' },
     { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
+    { value: 'de', label: 'Alemán', img: '/assets/icons/flags/de.svg' },
     // { value: 'd', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
 ]
 

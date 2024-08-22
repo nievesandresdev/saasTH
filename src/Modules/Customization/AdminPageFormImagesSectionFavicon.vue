@@ -9,7 +9,7 @@
                     :left="0"
                 >
                     <template v-slot:button>
-                        <img class="w-4 h-4" src="/vendor_asset/img/hoster/icons/info.blue.svg">
+                        <img class="w-4 h-4" src="/assets/icons/TH.INFO.GREEN.svg">
                     </template>
                     <template v-slot:content>
                         <p class="text-sm font-medium">¿Qué es un favicon?</p>
@@ -30,15 +30,22 @@
                     <div class="flex items-end">
                         <div
                             class="card-logo rounded-[6px] p-2 flex justify-center items-center relative border hbg-gray-100 hborder-gray-400 overflow-hidden"
-                            @mouseenter="hoverCardFavicon = index"
+                            @mouseenter="hoverCardFavicon = true"
                             @mouseleave="hoverCardFavicon = null"
                         >
-                            <div v-if="hoverCardFavicon === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
+                            <div v-if="hoverCardFavicon === true" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
                                 <button
                                     class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px] p-[2px]"
                                     @click="openGallery"
                                 >
                                     <img src="/assets/icons/1.TH.EDIT.OUTLINED.svg" class=" w-[20px] h-[20px]">
+                                </button>
+                                <button
+                                    v-if="imgSelectedFav.url"
+                                    class="absolute left-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                                    @click="removeLogo"
+                                >
+                                    <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
                                 </button>
                             </div>
                             <img 
@@ -52,13 +59,13 @@
                                 src="/assets/icons/1.TH.icon.instalaciones.svg"
                             >
                         </div>
-                        <button 
+                        <!-- <button 
                             v-if="imgSelectedFav.url"
                             class="underline text-sm font-medium  cursor-pointer ml-[8px]"
                             @click="removeLogo"
                         >
                             Borrar    
-                        </button>
+                        </button> -->
                     </div>
                     <p v-if="imgSelectedFav?.name" class="text-xs mt-2">
                         {{ imgSelectedFav?.name ?? imgSelectedFav.file?.name }}
@@ -100,7 +107,7 @@ function openGallery(){
 }
 
 function removeLogo(){
-    emit('remove:img','favicon');
+    emit('remove:img','wallpaper');
 }
 
 

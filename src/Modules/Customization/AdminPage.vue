@@ -18,7 +18,6 @@
     <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10">
         <button
             class="hbtn-tertiary text-sm underline"
-            :class="{'primary-disabled': !isChanged || isloadingForm }"
             :disabled="!isChanged || isloadingForm"
             @click="cancelChanges"
         >
@@ -140,6 +139,7 @@ provide('faviconDefault', faviconDefault);
 provide('imgSelectedLogo', imgSelectedLogo);
 provide('imgSelectedFav', imgSelectedFav);
 provide('imgSelectedBg', imgSelectedBg);
+provide('bgDefault', bgDefault);
 provide('imgSelectedLogoDefault', imgSelectedLogoDefault);
 provide('imgSelectedFavDefault', imgSelectedFavDefault);
 provide('imgSelectedBgDefault', imgSelectedBgDefault);
