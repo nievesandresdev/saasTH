@@ -11,7 +11,7 @@
             class="w-full flex h-full"
             :class="loadingHosty ? 'items-center justify-center' : 'pt-6 px-6 pb-[68px] flex-col'"
         >
-            <div v-if="!loadingHosty && responseReviewData.length <= 0" class="text-center">
+            <div v-if="!loadingHosty && numbersResponsesGenerated <= 0" class="text-center">
                 <button
                     class="text-xs font-medium hbtn-primary py-[12px] px-[8px]"
                     @click="generateResponse"
@@ -55,6 +55,7 @@ const responseReviewData = inject('responseReviewData');
 const otaParamRoute = inject('otaParamRoute');
 const reviewData = inject('reviewData');
 const reviewStore = inject('reviewStore');
+const numbersResponsesGenerated = inject('numbersResponsesGenerated');
 
 // DATA
 const refDetailPageAsideHostyResponseStreaming =ref(null);

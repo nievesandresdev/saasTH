@@ -27,6 +27,8 @@ import { useReviewStore } from '@/stores/modules/review';
 const reviewStore = useReviewStore();
 
 // DATA
+const timeRespondedLastThirtyDays = ref(null);
+const percentageTimeResponseTwoMonthPrevious = ref(null);
 const summaryDataReview = ref({});
 const summaryByOta = ref([]);
 onMounted(() => {
@@ -36,14 +38,19 @@ onMounted(() => {
 provide('summaryDataReview', summaryDataReview);
 provide('summaryByOta', summaryByOta);
 provide('reviewStore', reviewStore);
+provide('timeRespondedLastThirtyDays', timeRespondedLastThirtyDays);
+provide('percentageTimeResponseTwoMonthPrevious', percentageTimeResponseTwoMonthPrevious);
 
 // FUNCTIONS
 async function loadData (){
     const response = await reviewStore.$getSummaryGeneral();
     const {ok, data} = response;
+    console.log(response);
     if (ok) {
         summaryDataReview.value = data.summaryAllOtas;
         summaryByOta.value = data.summaryByOta;
+        timeRespondedLastThirtyDays.value = data?.timeRespondedLastThirtyDays;
+        percentageTimeResponseTwoMonthPrevious.value = data?.percentageTimeResponseTwoMonthPrevious;
         // summaryDataReview.value = [];
         // summaryByOta.value = [];
     }

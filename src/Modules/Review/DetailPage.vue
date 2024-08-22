@@ -66,6 +66,7 @@
                             >
                         </button>
                         <button
+                            :disabled="numbersResponsesGenerated >= maximumResponsesGenerated"
                             class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-4"
                             @click="refDetailPageAsideHosty.generateResponse()"
                         >
@@ -87,7 +88,6 @@
      </div>
      <!-- <pre>{{ reviewData?.languageOrigin }}</pre> -->
      <!-- <pre>{{ reviewData }}</pre> -->
-     <!-- <pre>{{ translateReviewData }}</pre> -->
 </div>
         
 </template>
@@ -139,10 +139,10 @@ const translateAndResponseId = ref(null);
 const responseReviewData = ref([]);
 const translateReviewData = ref({});
 const responseShow = ref(false);
+const maximumResponsesGenerated = ref(3);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
-        console.log(router?.params?.ota?.toUpperCase());
     	return router?.params?.ota?.toUpperCase();
 });
 const idOtaParamRoute = computed(() => {
@@ -161,6 +161,10 @@ const fullDataTranslateReviews = computed (() => {
         !!reviewData.value?.travelerRextNegative ||
         !!reviewData.value?.travelerTextPositive
     return full;
+});
+
+const numbersResponsesGenerated = computed(() => {
+    return responseReviewData.value?.length;
 });
 
 const cribadoTranslateReview = computed(() => {
@@ -239,6 +243,8 @@ provide('cribadoTranslateReview', cribadoTranslateReview);
 provide('languageActiveTranslate', languageActiveTranslate);
 provide('languageActiveResponse', languageActiveResponse);
 provide('languageActiveResponseOriginal', languageActiveResponseOriginal);
+provide('numbersResponsesGenerated', numbersResponsesGenerated);
+provide('maximumResponsesGenerated', maximumResponsesGenerated);
 
 // FUNCTION
 
