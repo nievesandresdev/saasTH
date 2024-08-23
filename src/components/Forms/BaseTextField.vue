@@ -33,7 +33,7 @@
                 <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
-        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-3" @click="$emit('click:appendInner')">
+        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-2" @click="$emit('click:appendInner')">
             <img class="w-6 h-6" :src="appendInnerIcon.icon" alt="append inner icon">
         </button>
         <img v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show" class="w-6 h-6 absolute right-3 top-3" :src="appendInnerIcon.icon" alt="append inner icon">

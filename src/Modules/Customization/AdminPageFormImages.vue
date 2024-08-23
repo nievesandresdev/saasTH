@@ -93,7 +93,6 @@ function addNewsImages (e) {
 }
 
 function deleteImgSection(section){
-    console.log(bgDefault.value);
     section == 'logo' ? imgSelectedLogo.value.url = null : '';
     section == 'logo' ? form.img_selected_logo = imgSelectedLogo.value : '';
     if(section == 'favicon'){
