@@ -78,8 +78,8 @@ input[type=radio]:hover {
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
     /* transform-origin: bottom left; */
-    top: 46%;
-    left: 50%;
+    top: 43%;
+    left: 47%;
     transform: translate(-50%, -50%) rotate(25deg);
   }
   /* .hcheckbox:checked::before {
