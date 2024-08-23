@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-[24px] bg-[#FAFAFA]">
+    <div class="h-screen px-[24px] bg-[#FAFAFA] overflow-hidden">
         <HeadLegal />
         <TabLegal />
 
@@ -45,13 +45,13 @@
                         <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
                         <div class="flex">
                             <span class="text-sm font-semibold mr-1">{{ form.protection ? 'Si' : 'No' }}</span>
-                            <BaseSwitchInput v-model="form.protection" />
+                            <BaseSwitchInput v-model="form.protection" id="dataProtectionSwitch" />
                         </div>
                     </section>
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
                             <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="!isEmailProtectionValid"/>
+                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="!isEmailProtectionValid" ref="emailProtectionInput"/>
                             <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -63,13 +63,35 @@
                 </div>
             </template>
         </SectionConfig>
+        
+        
     </div>
-    <ChangesBar 
+    <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10">
+        <button
+            class="hbtn-tertiary text-sm underline"
+            :disabled="!changes"
+            @click="cancelChange"
+        >
+            Cancelar
+        </button>
+        <button
+            class="px-4 text-sm font-medium h-11 hbtn-cta"
+            :disabled="!valid || !changes"
+            @click="submit"
+        >
+            Guardar
+        </button>
+    </div>
+    <!-- <div class="absolute inset-x-0 bottom-0">
+        <ChangesBar 
         :existingChanges="changes"
         :validChanges="changes && valid"
         @cancel="cancelChange" 
         @submit="submit"
     />
+    </div> -->
+    
+    
 </template>
 
 <script setup>
@@ -80,8 +102,7 @@ import SectionConfig from '@/components/SectionConfig.vue';
 import BaseSwitchInput from "@/components/Forms/BaseSwichInput.vue";
 import { storeGeneralLegal, getGeneralLegal } from '@/api/services/legal/legal.services';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
-import ChangesBar from '@/components/Forms/ChangesBar.vue';
-import { useToastAlert } from '@/composables/useToastAlert'
+import { useToastAlert } from '@/composables/useToastAlert';
 
 const toast = useToastAlert();
 
@@ -97,14 +118,14 @@ const form = reactive({
 const initialForm = ref(null);
 const isEmailProtectionValid = ref(false);
 const isEmailValid = ref(false);
+const changes = ref(false); // Inicialmente en false
+const valid = ref(false); // Inicialmente en false
 
-onMounted(() => {
-    loadGoogleMapsScript();
+onMounted(async () => {
+    await getData();
     initialForm.value = JSON.stringify(form);
-
-    getData();
-    isEmailProtectionValid.value = false; 
-    isEmailValid.value = false; 
+    validateForm();
+    loadGoogleMapsScript();
 });
 
 const getData = async() => {
@@ -117,70 +138,46 @@ const getData = async() => {
     form.protection = response.data.legal?.protection || false;
     form.email_protection = response.data.legal?.email_protection || '';
 
+    validateForm();
+};
+
+watch([() => form.name, () => form.address, () => form.nif, () => form.email, () => form.email_protection, () => form.protection], validateForm);
+
+function validateForm() {
     isEmailValid.value = validateEmail(form.email);
     isEmailProtectionValid.value = validateEmail(form.email_protection);
-};
+    changes.value = JSON.stringify(form) !== initialForm.value;
+    valid.value = form.name.trim() && form.address.trim() && form.nif.trim() && 
+                  form.email.trim() && isEmailValid.value &&
+                  (!form.protection || (form.email_protection.trim() && isEmailProtectionValid.value));
+}
 
-watch(() => form.email, (newValue) => {
-    isEmailValid.value = validateEmail(newValue);
-});
+function cancelChange() {
+    Object.assign(form, JSON.parse(initialForm.value));
+    validateForm();
+}
 
-watch(() => form.email_protection, (newValue) => {
-    isEmailProtectionValid.value = validateEmail(newValue);
-});
-
-watch(() => form.protection, (newValue) => {
-    if(!newValue){
-        form.email_protection = '';
-        isEmailProtectionValid.value = true;
-    }
-});
-
-const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-};
-
-const changes = computed(() => {
-    return JSON.stringify(form) !== initialForm.value;
-});
-
-const valid = computed(() => {
-    return form.name.trim() !== '' && 
-           form.address.trim() !== '' && 
-           form.nif.trim() !== '' && 
-           form.email.trim() !== '' && isEmailValid.value &&
-           (!form.protection || (form.email_protection.trim() !== '' && isEmailProtectionValid.value));
-});
-
-const cancelChange = () => {
-    const oldValues = JSON.parse(initialForm.value);
-    form.name = oldValues.name;
-    form.address = oldValues.address;
-    form.nif = oldValues.nif;
-    form.email = oldValues.email;
-    form.protection = oldValues.protection;
-    form.email_protection = oldValues.email_protection;
-};
-
-const submit = async () => {
+async function submit() {
     if (!valid.value) {
         toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right');
         return;
     }
 
-    initialForm.value = JSON.stringify(form);
-
     const response = await storeGeneralLegal(form);
 
-    if(response.ok){
-        toast.warningToast('Se han guardado los cambios','top-right')
+    if (response.ok) {
+        toast.warningToast('Se han guardado los cambios', 'top-right');
+        initialForm.value = JSON.stringify(form);
+        changes.value = false; // Restablecer cambios
     } else {
-        toast.errorToast('Ha ocurrido un error al guardar los cambios','top-right')
+        toast.errorToast('Ha ocurrido un error al guardar los cambios', 'top-right');
     }
+}
 
-    console.log('Formulario guardado', form, response);
-};
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
 
 function loadGoogleMapsScript() {
     const script = document.createElement('script');
@@ -207,5 +204,23 @@ function initAutocomplete() {
         }
     });
 }
-
+const emailProtectionInput = ref(null);
+watch(() => form.protection, (newValue) => {
+    nextTick(() => {
+        if (newValue) {
+            // Scroll hacia abajo al input del email de protección de datos
+            if (emailProtectionInput.value) {
+                emailProtectionInput.value.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } else {
+            // Scroll hacia arriba a una posición adecuada cuando el switch se desactiva
+            // Asumiendo que tienes una referencia para el switch o cualquier otro elemento significativo
+            const switchElement = document.getElementById('dataProtectionSwitch'); // Asegúrate de tener este ID en tu HTML
+            if (switchElement) {
+                switchElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+});
 </script>
+

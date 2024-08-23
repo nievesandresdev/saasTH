@@ -1,32 +1,42 @@
 <template>
-    <div class="h-screen px-6 bg-gray-50">
-      <HeadLegal />
-      <TabLegal />
-      <span class="font-normal text-sm">{{ totalPolicies }} Políticas</span>
-      <!-- <div class="grid grid-cols-5 gap-4 mt-4"> -->
+    <div class="h-screen flex flex-col bg-gray-50">
+      <div class="px-6 flex-grow">
+        <HeadLegal />
+        <TabLegal />
+        <span class="font-normal text-sm">{{ totalPolicies }} Políticas</span>
         <div class="grid grid-cols-4 1xl:grid-cols-3 1xl:w-full 3xl:grid-cols-4 3xl:w-full 3xl:gap-4 1xl:gap-4 mt-2">
-            <!-- Botón para añadir política -->
-            <div class="bg-white border rounded-lg shadow-hoster flex items-center justify-center p-4 h-[175px] w-[344px] cursor-pointer" @click="openModalCreatePolicies">
-                <div class="flex flex-col items-center space-x-2">
-                    <img src="/assets/icons/1.TH.PLUS.svg" alt="Add" class="h-5 w-5">
-                    <h3 class="text-base font-medium">Añadir política</h3>
-                </div>
+          <!-- Botón para añadir política -->
+          <div
+            class="bg-white border rounded-lg shadow-hoster flex items-center justify-center p-4 h-[175px] w-[344px] cursor-pointer"
+            @click="openModalCreatePolicies"
+          >
+            <div class="flex flex-col items-center space-x-2">
+              <img src="/assets/icons/1.TH.PLUS.svg" alt="Add" class="h-5 w-5" />
+              <h3 class="text-base font-medium">Añadir política</h3>
             </div>
-            <!-- Divs de políticas existentes -->
-            <div v-for="policy in policies" :key="policy.id" class="bg-white border rounded-lg shadow-hoster flex flex-col justify-between p-4 h-[175px] w-[344px] cursor-pointer" >
-                <div @click="showPolicy(policy)">
-                    <h3 class="text-base font-medium mb-4">{{ truncateText(policy.title, 40) }}</h3>
-                    <div class="flex justify-start gap-4">
-                        <p class="text-base font-medium">Penalización: </p> 
-                        <p class="text-[10px] font-semibold bg-[#DADADA] rounded-full py-1 px-4">{{ policy.penalization ? 'Sí' : 'No' }}</p>
-                    </div>
-                </div>
-                <div class="flex justify-end">
-                    <DropdownMenu :user="policy.user" @edit="showEditPolicy(policy)" @delete="openDeletePolicy(policy)"/>
-                </div>
+          </div>
+          <!-- Divs de políticas existentes -->
+          <div
+            v-for="policy in policies"
+            :key="policy.id"
+            class="bg-white border rounded-lg shadow-hoster flex flex-col justify-between p-4 h-[175px] w-[344px] cursor-pointer"
+          >
+            <div @click="showPolicy(policy)">
+              <h3 class="text-base font-medium mb-4">{{ truncateText(policy.title, 40) }}</h3>
+              <div class="flex justify-start gap-4">
+                <p class="text-base font-medium">Penalización: </p>
+                <p class="text-[10px] font-semibold bg-[#DADADA] rounded-full py-1 px-4">
+                  {{ policy.penalization ? 'Sí' : 'No' }}
+                </p>
+              </div>
             </div>
+            <div class="flex justify-end">
+              <DropdownMenu :user="policy.user" @edit="showEditPolicy(policy)" @delete="openDeletePolicy(policy)" />
+            </div>
+          </div>
         </div>
-        <div class="mt-4">
+      </div>
+      <div class="mt-4 px-6"> <!-- Ajuste aquí -->
         <Pagination
           :current-page="currentPage"
           :total-pages="totalPages"
@@ -36,57 +46,33 @@
         />
       </div>
     </div>
-    
-
-    <CreatePoliciesLegal
-        :modal-add="modalCreatePolicies"
-        @close="closeModalCreatePolicies" 
-        @store="handleCreatePolicies"
-    />
-
-    <EditPolicy
-        :modal-edit="modalEditPolicies"
-        @close="closeModalEditPolicies" 
-        :data="policy"
-        @store="handleUpdatePolicies"
-    /> 
-
-    <ShowPolicy 
-        :modal-show="showSidePolicy"
-        @close="closeSidePolicy"
-        :data="policy"
-        @edit="showEditPolicy"
-        @delete="openDeletePolicy"
-    />
-
-    <ModalWindow  :isVisible="deletePolicy" @close="closedeletePolicy" :width="'384px'">
-        <template #content>
+  
+    <!-- Modales y otros componentes -->
+    <CreatePoliciesLegal :modal-add="modalCreatePolicies" @close="closeModalCreatePolicies" @store="handleCreatePolicies" />
+    <EditPolicy :modal-edit="modalEditPolicies" @close="closeModalEditPolicies" :data="policy" @store="handleUpdatePolicies" />
+    <ShowPolicy :modal-show="showSidePolicy" @close="closeSidePolicy" :data="policy" @edit="showEditPolicy" @delete="openDeletePolicy" />
+    <ModalWindow :isVisible="deletePolicy" @close="closedeletePolicy" :width="'384px'">
+      <template #content>
         <div class="flex justify-end">
-            <img
-                src="/assets/icons/1.TH.CLOSE.svg"
-                class="w-6 h-6 cursor-pointer"
-                @click="closedeletePolicy"
-            >
+          <img src="/assets/icons/1.TH.CLOSE.svg" class="w-6 h-6 cursor-pointer" @click="closedeletePolicy" />
         </div>
         <div class="flex justify-center mb-4">
-            <img
-            src="/assets/icons/warning-red.svg"
-            class="w-8 h-8"
-            >
+          <img src="/assets/icons/warning-red.svg" class="w-8 h-8" />
         </div>
         <p class="text-xl font-semibold mt-4 text-center mb-2">¿Quieres eliminar la política?</p>
         <p class="text-sm font-normal text-center">Esta acción es irreversible, pero siempre tendrás la opción de crear una nueva política o norma en cualquier momento.</p>
         <div class="flex justify-between mt-4">
-            <div @click="closedeletePolicy" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
-                Cancelar
-            </div>
-            <div @click="submitDelete(policy.id)" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer">
-                Eliminar
-            </div>
+          <div @click="closedeletePolicy" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
+            Cancelar
+          </div>
+          <div @click="submitDelete(policy.id)" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer">
+            Eliminar
+          </div>
         </div>
-        </template>
+      </template>
     </ModalWindow>
   </template>
+  
   
 <script setup>
 import HeadLegal from './components/HeadLegal.vue';
