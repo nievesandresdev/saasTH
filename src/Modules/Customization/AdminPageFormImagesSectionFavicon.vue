@@ -59,13 +59,6 @@
                                 src="/assets/icons/1.TH.icon.instalaciones.svg"
                             >
                         </div>
-                        <!-- <button 
-                            v-if="imgSelectedFav.url"
-                            class="underline text-sm font-medium  cursor-pointer ml-[8px]"
-                            @click="removeLogo"
-                        >
-                            Borrar    
-                        </button> -->
                     </div>
                     <p v-if="imgSelectedFav?.name" class="text-xs mt-2">
                         {{ imgSelectedFav?.name ?? imgSelectedFav.file?.name }}

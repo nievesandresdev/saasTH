@@ -77,36 +77,10 @@ input[type=radio]:hover {
     height: 53%;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    /* transform-origin: bottom left; */
-    top: 47%;
+    top: 45%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(30deg);
+    transform: translate(-50%, -50%) rotate(45deg);
   }
-  /* .hcheckbox:checked::before {
-    content: '';
-    position: absolute;
-    top: 6%;
-    left: 40%;
-    width: 15%;
-    height: 60%;
-    background: #fff;
-    border-radius: 10px 10px 0 0;
-    transform: rotate(45deg);
-    transform-origin: bottom left;
-  } */
-  
-  /* .hcheckbox:checked::after {
-    content: '';
-    position: absolute;
-    top: 35%;
-    left: 40%;
-    width: 15%;
-    height: 30%;
-    background: #fff;
-    border-radius: 10px 10px 0 0;
-    transform: rotate(-45deg);
-    transform-origin: bottom right;
-  } */
 
 
   /* ------------------------------------- */

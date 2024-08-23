@@ -4,8 +4,8 @@
           <input 
               type="time" 
               :value="formattedTime || modelValue" 
-              class="rounded-[6px] text-sm font-medium px-1 border hinput h-10 w-24 text-center"
-              :class="`${formattedTime || modelValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : 'hinput-green'}`"
+              class="rounded-[6px] text-sm font-medium px-1 border hinput h-10 w-[60px] text-center"
+              :class="`${customClasses} ${formattedTime || modelValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : 'hinput-green'}`"
               :placeholder="placeholder"
               :disabled="disabled" 
               @input="handleInput"
