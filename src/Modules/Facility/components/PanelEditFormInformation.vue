@@ -14,7 +14,7 @@
         </div>
         <div class="space-y-2">
              <label class="text-sm font-medium">Descripción</label>
-            <BaseTextField
+            <BaseTextareaField
                 v-model="form.description"
                 placeholder="Describe la nueva instalación"
                 class-content="flex-1"
@@ -58,6 +58,7 @@
 import { ref, reactive, onMounted, provide, computed, inject } from 'vue';
 // COMPONENTS
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
+import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 
 const form = inject('form');

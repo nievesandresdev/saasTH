@@ -7,6 +7,7 @@
                 class="text-center rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100 relative"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
+                @click="editFacility(item)"
             >
                 <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-[100]">
                     <span class="text-[10px] font-semibold">Oculto</span>
@@ -27,10 +28,8 @@
                         :src="facilityStore.formatImage(item.image)"
                     />
                 </div>
-                <div class="py-4 text-center bg-white">
-                    <h5 class="text-base htext-black-100 px-[20px]" v-html="item.title"></h5>
-                    <!-- {{`1: ${dragStartIndex}`}}
-                    {{`2: ${draggedItem}`}} -->
+                <div class="py-[19px] px-[12px] text-center bg-white truncate-1">
+                    <h5 class="text-base htext-black-100 px-[20px] leading-[110%] truncate-1" v-html="item.title"></h5>
                 </div>
             </div>
             <!-- <template
@@ -52,7 +51,7 @@ import { ref, reactive, onMounted, provide, computed, inject, nextTick } from 'v
 // COMPONENTS
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
-const emit = defineEmits(['update:reloadItems']);
+const emit = defineEmits(['update:reloadItems', 'click:editFacility']);
 
 // DATA
 const selectedCard = ref(null);
@@ -66,6 +65,10 @@ const hiddenFacilities = inject('hiddenFacilities');
 // FUNCTIONS
 
 ////
+
+function editFacility (facility) {
+    emit('click:editFacility', { action: 'EDIT', facility});
+}
 
 async function updateVisible (facility) {
     const data = {visible: facility.select, facility_hoster_id: facility.id}

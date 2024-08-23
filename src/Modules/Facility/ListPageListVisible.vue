@@ -3,7 +3,7 @@
         <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
             <label 
                 for="fileInput"
-                class="relative w-[224px] rounded-[6px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card h-[184px]"
+                class="relative w-[224px] rounded-[10px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card h-[184px]"
                 @click="addNewFacility"
             >   
                 <h5 class="text-base font-medium text-center flex flex-col items-center justify-center">
@@ -46,8 +46,8 @@
                     />
                     <div v-if="item.ad_tag" class="absolute bottom-[-12px] right-[8px] h-6 flex items-center text-enter z-10 hbg-yellow-cta p-2 rounded-full py-[4px] px-[8px] text-[10px] font-semibold">{{ item.ad_tag }}</div>
                 </div>
-                <div class="py-[19px] text-center bg-white px-[12px]">
-                    <h5 class="text-base htext-black-100" v-html="item.title"></h5>
+                <div class="py-[19px] text-center bg-white px-[12px] truncate-1">
+                    <h5 class="text-base htext-black-100 truncate-1 leading-[110%]" v-html="item.title"></h5>
                     <!-- {{`1: ${dragStartIndex}`}}
                     {{`2: ${draggedItem}`}} -->
                 </div>

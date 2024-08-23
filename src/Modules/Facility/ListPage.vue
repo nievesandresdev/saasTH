@@ -24,6 +24,7 @@
                 <ListPageListHidden
                     v-if="filter !== 'visible'"
                     @update:reloadItems="loadFacilities()"
+                    @click:editFacility="editFacility"
                 />
             </div>
         </div>

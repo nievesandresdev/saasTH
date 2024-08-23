@@ -165,7 +165,7 @@ const isChanged = computed(() => {
 
     changesPending.value = (form.subdomain !== subdomain) ||
                             (form.language_default_webapp !== language_default_webapp) ||
-                            (imgSelectedBg.value?.url !== bgImage && imgSelectedBg.value?.url !== bgDefault.url) ||
+                            (imgSelectedBg.value?.url !== bgImage) ||
                             (imgSelectedLogo.value.url !== logoImage) ||
                             (imgSelectedFav.value.url !== faviconImage);
                 
