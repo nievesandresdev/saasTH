@@ -153,6 +153,7 @@ function getTypeImg (url) {
 onMounted(() => {
     reloadHotel();
     loadMockup();
+    console.log(hotelData.value);
 });
 
 // computed
