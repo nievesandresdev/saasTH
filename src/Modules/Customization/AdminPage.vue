@@ -188,11 +188,13 @@ async function reloadHotel () {
 function initializeForm(hotel) {
     imgSelectedLogo.value = { url: hotelData.value.logo, type: getTypeImg(hotelData.value.logo) };
     imgSelectedFav.value = { url:hotelData.value.favicon, type: getTypeImg( hotelData.value.favicon) };
-    imgSelectedBg.value = hotelData.value.image ? { url: hotelData.value.image, type: getTypeImg(hotelData.value.image) } : bgDefault;
+    imgSelectedBg.value = { url:hotelData.value.image, type: getTypeImg( hotelData.value.image) };
+    // imgSelectedBg.value = hotelData.value.image ? { url: hotelData.value.image, type: getTypeImg(hotelData.value.image) } : bgDefault;
 
     imgSelectedLogoDefault.value = { url: hotelData.value.logo, type: getTypeImg(hotelData.value.logo) };
     imgSelectedFavDefault.value = { url: hotelData.value.favicon, type: getTypeImg( hotelData.value.favicon) };
-    imgSelectedBgDefault.value = hotelData.value.image ? { url: hotelData.value.image, type: getTypeImg(hotelData.value.image) } : bgDefault;
+    imgSelectedBgDefault.value = { url: hotelData.value.image, type: getTypeImg( hotelData.value.image) };
+    // imgSelectedBgDefault.value = hotelData.value.image ? { url: hotelData.value.image, type: getTypeImg(hotelData.value.image) } : bgDefault;
 
     form.hotel_id = hotelStore.hotelData.id || null;
     form.subdomain = hotelStore.hotelData.subdomain || null;
