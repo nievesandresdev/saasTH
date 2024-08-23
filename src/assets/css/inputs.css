@@ -74,13 +74,13 @@ input[type=radio]:hover {
     content: '';
     position: absolute;
     width: 30%;
-    height: 50%;
+    height: 53%;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
     /* transform-origin: bottom left; */
-    top: 43%;
-    left: 47%;
-    transform: translate(-50%, -50%) rotate(25deg);
+    top: 47%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(30deg);
   }
   /* .hcheckbox:checked::before {
     content: '';
