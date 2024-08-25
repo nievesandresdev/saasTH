@@ -30,7 +30,7 @@
                         <span class="text-sm font-medium"> {{ textNumbersImagesSelected }} </span>
                     </div>
                 </div>
-                <div class="mt-[16px] px-[24px] overlay-auto">
+                <div class="mt-[16px] px-[24px] overlay-auto pb-[24px]">
                     <div class="grid grid-cols-3 gap-6">
                         <label 
                             for="fileInput"
@@ -349,7 +349,7 @@ function selectImage (img, index) {
 function selectImageMultiple(img, index){
     if (checkSelectedImage(img.url)) {
         let indexImageSelected = imageSelected.value.findIndex(item => item.url === img.url)
-        imageSelected.value?.splice(index_image_selected, 1)     
+        imageSelected.value?.splice(indexImageSelected, 1)     
     } else {
         if(img?.file){
             imageSelected.value.push({id: null, name:img?.name ??img?.file?.name, url:img.url,exists:false,index, type: img.type, url_origin: img.url_origin })

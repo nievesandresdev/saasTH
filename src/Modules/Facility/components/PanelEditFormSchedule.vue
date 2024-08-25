@@ -6,23 +6,22 @@
                 id="toggle-always-open"
                 class="mr-4"
             />
-                 <!-- @change:value="changeAlwaysopen()" -->
             <label class="text-sm font-medium">Abierto todos los días 24hs</label>
         </div>
         <div class="space-y-6" :class="{'opacity-25': form.always_open}">
             <div
                 v-for="(schedule, indexSchedule) in form.schedules"
-                class="flex items-center justify-start space-x-2"
+                class="flex items-center justify-start"
             >
                 <div class="w-[96px] flex items-center" >
                     <Checkbox v-model="schedule.active" />
                     <span class="text-sm font-medium ml-2">{{schedule.name}}</span>
                 </div>
-                <div class="flex items-center space-x-1">
+                <div class="flex items-center space-x-1 ml-2">
                     <BaseTimeField
                         v-model="schedule.times[0].start"
                         :id="`time-${indexSchedule}-1`"
-                        :custom-classes="{'h-[32px] w-[60px]': true}"
+                        :custom-classes="{'h-[32px] w-[60px] text-sm': true}"
                     />
                     <span class="text-sm font-medium">a</span>
                     <BaseTimeField
@@ -33,6 +32,7 @@
                 </div>
                 <button
                     v-if="schedule.times.length < 2"
+                    class="ml-2"
                     @click="addTimeInSchedule(schedule)"
                 >
                     <img
@@ -41,11 +41,14 @@
                         class="inline w-[20px] h-[20px]"
                     />
                 </button>
-                <div v-if="schedule.times.length > 1" class="flex items-center space-x-1">
+                <div
+                    v-if="schedule.times.length > 1" class="flex items-center space-x-1"
+                    :class="schedule.times.length >= 2 ? 'ml-[32px]' : 'ml-2'"
+                >
                     <BaseTimeField
                         v-model="schedule.times[1].start"
                         :id="`time-${indexSchedule}-1`"
-                        :custom-classes="{'h-[32px] w-[60px]': true}"
+                        :custom-classes="{'h-[32px] w-[60px] text-sm': true}"
                     />
                     <span class="text-sm font-medium">a</span>
                     <BaseTimeField
@@ -56,6 +59,7 @@
                 </div>
                 <button
                     v-if="schedule.times.length > 1"
+                    class="ml-2"
                     @click="deleteTime(schedule)"
                 >
                     <img

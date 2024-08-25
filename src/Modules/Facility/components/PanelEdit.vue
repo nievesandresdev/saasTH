@@ -274,7 +274,7 @@ const changesform = computed(() => {
     let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.ad_tag) !== normalize(itemSelected.ad_tag)) ||
-        (Boolean(form.always_open) !== Boolean(itemSelected.value?.always_open)) ||
+        (Boolean(form.always_open) !== Boolean(itemSelected.always_open)) ||
         // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules)) ||
         !lodash.isEqual(form.schedules, itemSelected?.schedules) ||
         // !deepEqual(form.schedules, itemSelected?.schedules) ||
@@ -368,8 +368,8 @@ defineExpose({ editFacility });
 
 async function submitSave () {
     let body = { ...form };
+    // console.log(body);
     const response = await facilityStore.$storeOrUpdate(body);
-    // console.log(response, 'response');
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
