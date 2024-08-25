@@ -22,7 +22,8 @@
             class="bg-white border rounded-lg shadow-hoster flex flex-col justify-between p-4 h-[175px] w-[344px] cursor-pointer"
           >
             <div @click="showPolicy(policy)">
-              <h3 class="text-base font-medium mb-4">{{ truncateText(policy.title, 40) }}</h3>
+              <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 40) }}</h3>
+
               <div class="flex justify-start gap-4">
                 <p class="text-base font-medium">Penalización: </p>
                 <p class="text-[10px] font-semibold bg-[#DADADA] rounded-full py-1 px-4">

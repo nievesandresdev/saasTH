@@ -3,7 +3,7 @@
         <HeadLegal />
         <TabLegal />
 
-        <SectionConfig :widht="'67%'">
+        <SectionConfig :widht="'67%'" :marginBottom="'40px'">
             <template #title>
                 <div class="flex flex-col mb-6 gap-2">
                     <span class="font-semibold text-base">General</span>
@@ -66,7 +66,7 @@
         
         
     </div>
-    <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10">
+    <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10 ">
         <button
             class="hbtn-tertiary text-sm underline"
             :disabled="!changes"
