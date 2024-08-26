@@ -282,12 +282,10 @@ async function loadMore(){
     //guardar actual posicion del scroll
     const containerScroll = document.getElementById('container-list');
     currentPositionScroll.value = containerScroll.scrollTop;
-    console.log('test scroll',currentPositionScroll.value)
     //
     loading.value = true;
     // allFilters.value.page += 1;
     allFilters.value.offset = list.value.length;
-    console.log('test filters',allFilters.value)
     let data = await loadData();
     list.value = [...list.value, ...data];
     setTimeout(() => {
@@ -305,7 +303,6 @@ async function loadMore(){
 
 async function loadData(showLoadPage = false){
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    console.log('test response', data.value.stays)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     // totalCounts.value = data.value.stays.total;
@@ -321,6 +318,7 @@ async function reloadList(lim = 10){
     allFilters.value.offset = 0;
     allFilters.value.limit = lim;
     list.value = [];
+    totalCounts.value = 0;
     loadMore();
 }
 
@@ -328,7 +326,6 @@ async function updateList(){
     loading.value = true;
     allFilters.value.offset = 0;
     allFilters.value.limit = list.value.length;
-    console.log('test updateList',allFilters.value)
     let data = await loadData();
     list.value = data;
     //restaurar valores
