@@ -87,7 +87,7 @@
                 <CardtayList :stay="stay" :search="search"/>
             </template>
             <!-- loading skeleton -->
-            <template v-if="numberOfskeletonCards > 0">
+            <template v-if="numberOfskeletonCards > 0 && !staysNull">
                 <CardSkeleton v-for="card in numberOfskeletonCards" />
             </template>
             <div v-if="totalCounts == 0 && filtersActive && !search" class="mt-6 px-4">
@@ -156,6 +156,7 @@ const allFilters = ref({
     page : 0
 })
 const openFiltersModal = ref(false)
+const staysNull = ref(false)
 //pusher
 // const channelChat = ref(null);
 const channelQuery = ref(null);
@@ -302,6 +303,7 @@ async function loadMore(){
 }
 
 async function loadData(showLoadPage = false){
+    staysNull.value = false;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
@@ -311,6 +313,9 @@ async function loadData(showLoadPage = false){
     pendingCountsByPeriod.value = data.value.pending_counts_by_period;
     // allFilters.value.page = data.value.stays.current_page;
     // return data.value.stays.data;
+    if(data.value.stays.length == 0){
+        staysNull.value = true;
+    } 
     return data.value.stays;
 }
 
