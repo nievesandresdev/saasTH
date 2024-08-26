@@ -7,7 +7,7 @@
         >
             <h5 
                 class="text-base font-semibold leading-[120%] text-left group-hover:text-[#000]"
-            >Estancias</h5>
+            >Estancias {{ numberOfskeletonCards }}  list: {{ list.length }}</h5>
         </router-link>
 
         <!-- filters -->
@@ -86,10 +86,9 @@
             <template v-for="stay in list" :key="stay.id">
                 <CardtayList :stay="stay" :search="search"/>
             </template>
-            <div ref="loaderRef" class="loader-element"></div>
             <!-- loading skeleton -->
-            <template v-if="!firstLoad || totalCounts > 0 && list.length < totalCounts">
-                <CardSkeleton v-for="card in 5" />
+            <template v-if="numberOfskeletonCards > 0">
+                <CardSkeleton v-for="card in numberOfskeletonCards" />
             </template>
             <div v-if="totalCounts == 0 && filtersActive && !search" class="mt-6 px-4">
                 <p class="text-center text-sm font-medium leading-[140%]">No se han encontrado estancias que coincidan con tus criterios de búsqueda. Prueba a modificar los filtros.</p>
@@ -148,13 +147,13 @@ const totalValidCount = ref(0)
 const countsGeneralByPeriod = ref(0)
 const pendingCountsByPeriod = ref(0)
 const filtersModal = ref(null);
-const firstLoad = ref(false);
 const allFilters = ref({
     search: null,
     periods: ['pre-stay','in-stay','post-stay'],
     pendings:  'all',
     offset : 0,
     limit: 10,
+    page : 0
 })
 const openFiltersModal = ref(false)
 //pusher
@@ -163,38 +162,17 @@ const channelQuery = ref(null);
 const channelUpdate = ref(null);
 const pusher = ref(null);
 const observer = ref(null);
-const loaderRef = ref(null);
 const loading = ref(false);
+const isSearch = ref(false);
+const currentPositionScroll = ref(0);
 
 onMounted(async () => {
-    await loadData();
+    initScrollListener();
+    await loadMore();
     connectPusher();
-
-    nextTick(() => {
-        observer.value = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                if(totalCounts.value > 0 && list.value.length < totalCounts.value && !loading.value){
-                    loadData(false, false);
-                }
-            }
-        }, {
-            root: document.querySelector('#container-list'),
-            rootMargin: '0px',
-            threshold: 1.0  // Ajusta según la sensibilidad deseada
-        });
-
-        if (loaderRef.value) {
-            observer.value.observe(loaderRef.value);
-        }
-    });
-    loadData(false, false);
 });
 
 onUnmounted(() => {
-    // if (channelChat.value) {
-    //     channelChat.value.unbind('App\\Events\\NotifyStayHotelEvent');
-    //     pusher.value.unsubscribe(channelChat.value);
-    // }
     if (observer.value) {
         observer.value.disconnect();
     }
@@ -210,6 +188,63 @@ onUnmounted(() => {
     }
 });
 
+function initScrollListener() {
+    const container = document.querySelector('#container-list');
+    container.addEventListener('scroll', throttle(checkLoadMore, 300), true);
+}
+
+function checkLoadMore() {
+    const skeletons = document.querySelectorAll('.skeleton-stay-card');
+    for (let skeleton of skeletons) {
+        if (isElementVisible(skeleton) && !loading.value && list.value.length < totalCounts.value) {
+            loadMore();
+            // loadMore(null, 10);
+            break; // Carga datos y detiene la iteración
+        }
+    }
+    
+}
+
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    }
+}
+
+function scrollToPosition() {
+    const container = document.getElementById('container-list');
+    if (container) {
+        container.scrollTop = currentPositionScroll.value
+    }
+}
+
+function isElementVisible(el) {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+
 async function submit(data){
     openFiltersModal.value = false;
     allFilters.value = {
@@ -217,49 +252,99 @@ async function submit(data){
         periods: data[0],
         pendings: data[1]
     }
-    loadData();
+    reloadList();
     toast.warningToast('Filtros aplicados con éxito','top-right');
 }
 
 async function searchInList(){
     if(search.value?.length == 0){
-        firstLoad.value = false;
         allFilters.value.search = null;
-        loadData(false, false, 10);
+        isSearch.value = false;
+        reloadList();
     }
     if(search.value?.length >= 3){
+        isSearch.value = false;
         loadSearch(search.value);
     }
 }
 
+
 async function loadSearch(search){
+    isSearch.value = true;
     allFilters.value.search = search;
-    loadData(true, false);
+    allFilters.value.offset = 0;
+    // allFilters.value.page = 1;
+    let data = await loadData();
+    list.value = data;
 }
 
-async function loadData(resetList = false, showLoadPage = true, limitDefault = 5){
-    if(resetList){
-        allFilters.value.offset = 0;
-        allFilters.value.limit = list.value.length;
-    }else{
-        allFilters.value.limit = list.value.length >= 10 ? 10 : limitDefault;
-        allFilters.value.offset = list.value.length;    
-    }
+async function loadMore(){
+    //guardar actual posicion del scroll
+    const containerScroll = document.getElementById('container-list');
+    currentPositionScroll.value = containerScroll.scrollTop;
+    console.log('test scroll',currentPositionScroll.value)
+    //
     loading.value = true;
+    // allFilters.value.page += 1;
+    allFilters.value.offset = list.value.length;
+    console.log('test filters',allFilters.value)
+    let data = await loadData();
+    list.value = [...list.value, ...data];
+    setTimeout(() => {
+        loading.value = false;
+        const skeletons = document.querySelectorAll('.skeleton-stay-card');
+        for (let skeleton of skeletons) {
+            if (isElementVisible(skeleton) && list.value.length >= 10) {
+                scrollToPosition();
+                break;
+            }
+        }
+        checkLoadMore();
+    }, 700);
+}
+
+async function loadData(showLoadPage = false){
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    firstLoad.value = true;
+    console.log('test response', data.value.stays)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
+    // totalCounts.value = data.value.stays.total;
     totalValidCount.value = data.value.total_valid_count;
     countsGeneralByPeriod.value = data.value.counts_general_by_period;
     pendingCountsByPeriod.value = data.value.pending_counts_by_period;
-    if(resetList){
-        list.value = data.value.stays;
-    }else{
-        list.value = [...list.value, ...data.value.stays];
-    }
-    
-    loading.value = false;
+    // allFilters.value.page = data.value.stays.current_page;
+    // return data.value.stays.data;
+    return data.value.stays;
+}
+
+async function reloadList(lim = 10){
+    allFilters.value.offset = 0;
+    allFilters.value.limit = lim;
+    list.value = [];
+    loadMore();
+}
+
+async function updateList(){
+    loading.value = true;
+    allFilters.value.offset = 0;
+    allFilters.value.limit = list.value.length;
+    console.log('test updateList',allFilters.value)
+    let data = await loadData();
+    list.value = data;
+    //restaurar valores
+    allFilters.value.offset = list.value.length;
+    allFilters.value.limit = 10;
+    setTimeout(() => {
+        loading.value = false;
+        const skeletons = document.querySelectorAll('.skeleton-stay-card');
+        for (let skeleton of skeletons) {
+            if (isElementVisible(skeleton) && list.value.length >= 10) {
+                scrollToPosition();
+                break;
+            }
+        }
+        checkLoadMore();
+    }, 700);
 }
 
 const connectPusher = () =>{
@@ -278,15 +363,14 @@ const connectPusher = () =>{
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
-        let showLoadPage = data.showLoadPage ?? true;
-        loadData(true, showLoadPage);
+        // let showLoadPage = data.showLoadPage ?? true;
+        updateList();
     });
 
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
     channelQuery.value = pusher.value.subscribe(channelQuery.value);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
-        let showLoadPage = data.showLoadPage ?? true;
-        loadData(true, showLoadPage);
+        updateList();
     });
 }
 
@@ -297,6 +381,7 @@ function resetFilters(){
 }
 
 function cleanSearch(){
+    isSearch.value = false;
     search.value = null;
     allFilters.value = {
         search: search.value,
@@ -309,8 +394,7 @@ function cleanSearch(){
     //         params: { id: route.params.stayId }
     //     });
     // }
-    list.value = [];
-    loadData(false);
+    reloadList();
 }
 
 
@@ -327,6 +411,17 @@ const filtersActiveNumber = computed(() => {
     return acc;
 });
 
+const numberOfskeletonCards = computed(() => {
+    if(isSearch.value) return 0;
+    if(totalCounts.value > 0){//si ya hay estancias cargadas
+        let remainingCards = totalCounts.value - list.value.length;//obtener estancias que faltan por cargar
+        //si el restante es mayor al limite entonces solo mostrara el limite de estancias a cargar
+        remainingCards >= allFilters.value.limit ? remainingCards = allFilters.value.limit : '';
+        //sino entonces mostrara mostrara la cantidad de cards que faltan por cargar
+        return remainingCards;
+    }
+    return allFilters.value.limit;
+});
 
 const translatePeriod = {
     "pre-stay": "PRE-STAY",

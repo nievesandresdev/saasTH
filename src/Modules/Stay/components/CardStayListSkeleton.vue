@@ -1,6 +1,6 @@
 <template>
     <div
-        class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
+        class="skeleton-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
     >
         <div class="flex items-center">
             <div :class="loadClasses" class="w-5 h-5"></div>
