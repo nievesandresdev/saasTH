@@ -1,10 +1,10 @@
 <template>
     <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px]">
         <div class="space-x-2 flex">
-            <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
+            <h1 class="font-medium text-[22px]">Instalaciones</h1>
             <BaseTooltipResponsive
                 size="l"
-                :top="55"
+                :top="35"
                 :left="-0"
             >
                 <template #button>
@@ -27,7 +27,7 @@
                 />
             <BaseTooltipResponsive
                 size="l"
-                :top="50"
+                :top="35"
                 :right="0"
             >
                 <template #button>

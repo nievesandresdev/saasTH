@@ -100,10 +100,9 @@ function deleteImgSection(section){
         form.img_selected_fav = null
     }
     if(section == 'wallpaper'){
-        imgSelectedBg.value = bgDefault;
-        form.img_selected_bg = bgDefault;
+        imgSelectedBg.value.url = null;
+        form.img_selected_bg = null;
     }
-    // submit()
 }
 
 

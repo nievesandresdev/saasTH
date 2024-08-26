@@ -14,7 +14,6 @@
             class="w-full h-full"
             :class="{'opacity-50': isDisabled}"
         >
-        
         <div
             v-else
             class="border rounded w-full h-full hborder-black-100 hover-green-200 bg-white"
