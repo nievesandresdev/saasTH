@@ -1,5 +1,6 @@
 <template>
  <div class="bg-[#FAFAFA z-[100]  w-full">
+     
      <div class="flex justify-between">
         <div class="content flex-1 mx-[24px] pb-[70px]">
             <div class="header flex justify-between py-[20px] border-b border-[#BFBFBF] mb-6">
@@ -58,7 +59,12 @@
 
 
                     <div class="mt-4 flex justify-end">
-                        <button class="text-xs font-medium hbtn-primary py-[12px] px-[8px]">
+                        <button
+                            class="text-xs font-medium hbtn-primary py-[12px] px-[8px]"
+                            :disabled="!urlListReviewsInOta"
+                            @click="goUrlListReviewsInOta"
+                            
+                        >
                             {{ !reviewData.isAnswered ? 'Abrir y responder en' : 'Abrir en' }}
                             <img
                                 :src="`/assets/icons/otas/${$capitalize(otaParamRoute)}.svg`"
@@ -106,6 +112,15 @@ const translateAndResponseStore = useTranslateAndResponseStore();
 import { useUtilStore } from '@/stores/modules/util';
 const utilStore = useUtilStore();
 
+// DATA STATIC
+const URLS_LIST_REVIEWS_IN_OTAS = {
+    BOOKING: 'https://admin.booking.com/hotel/hoteladmin/extranet_ng/manage/reviews.html',
+    EXPEDIA: 'https://apps.expediapartnercentral.com/lodging/review/user_reviews.html?htid=[hotel_id]',
+    TRIPADVISOR: 'https://rentals.tripadvisor.com/bookings/reviews',
+    GOOGLE: 'https://maps.google.com/?cid=11533582623352697091',
+   AIRBNB: 'https://airbnb.com/users/reviews',
+}
+
  //composable
 import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
@@ -140,6 +155,7 @@ const responseReviewData = ref([]);
 const translateReviewData = ref({});
 const responseShow = ref(false);
 const maximumResponsesGenerated = ref(3);
+const hoteIdExpedia = ref(null);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
@@ -217,6 +233,14 @@ const languageActiveResponseOriginal = computed(() => {
     return languageActive;
 });
 
+const urlListReviewsInOta = computed(() => {
+    let url = URLS_LIST_REVIEWS_IN_OTAS?.[otaParamRoute.value];
+    if (otaParamRoute.value === 'EXPEDIA' && hoteIdExpedia.value) {
+        url = url.replace('[hotel_id]', hoteIdExpedia.value);
+    }
+    return url;
+});
+
 // WATCH
 watch(idOtaParamRoute, (valNew, valOld) => {
     if (valNew != valOld) {
@@ -247,7 +271,9 @@ provide('numbersResponsesGenerated', numbersResponsesGenerated);
 provide('maximumResponsesGenerated', maximumResponsesGenerated);
 
 // FUNCTION
-
+function goUrlListReviewsInOta() {
+    window.open(urlListReviewsInOta.value, '_blank');
+}
 async function loadData () {
     const promises = [loadReview(), loadTranslateAndResponse(), loadLanguages()];
     await Promise.all(promises);
@@ -283,6 +309,7 @@ async function loadReview () {
     const { ok, data } = response;
     if (ok) {
         reviewData.value = data.review;
+        hoteIdExpedia.value = data.hoteIdExpedia;
     }
     // } else {
     //     toast.warningToast(response?.message,'top-right');

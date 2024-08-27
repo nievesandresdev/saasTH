@@ -202,8 +202,8 @@ const draggableCard = ref(null);
 
 const textNumbersExperiencesVisiblesAndHidden = computed(() => {
     let text = null;
-    let visiblesText = 'lugares visibles';
-    let hiddensText = 'lugares ocultos';
+    let visiblesText = 'experiencias visibles';
+    let hiddensText = 'experiencias ocultos';
     let hidden = 'ocultos';
     //singular
     numberExperiencesVisible.value == 1 ? visiblesText = "experiencia visible": '';

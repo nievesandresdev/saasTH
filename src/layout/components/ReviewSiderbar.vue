@@ -285,14 +285,13 @@ async function getByOtas () {
     const { ok, data } = response;
     if (ok) {
         reviewsData.value = data.reviews;
-        paginate();
-        if (reviewStore.otasWithUrls?.length <= 0) {
+        paginate(); 
+        if (reviewStore.otasWithUrls?.length <= 0 && reviewStore.otasWithUrls?.length != data.otasWithUrls.length) {
             otasWithUrls.value = data.otasWithUrls;
+            reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
             formFilter.otas = data.otasWithUrls;
             filtersSelected.otas = data.otasWithUrls;
             filtersDefault.otas = data.otasWithUrls;
-            formFilter.otas = data.otasWithUrls;
-            reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
         }
         summaryReviewOtas.value = data.summaryReviewOtas;
     } else {

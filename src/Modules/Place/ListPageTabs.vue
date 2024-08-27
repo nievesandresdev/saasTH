@@ -17,8 +17,8 @@
         </div>
         <div 
             class=" px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] ml-4 cursor-pointer"
-            :class="{'border hborder-green-700 hbg-green-200 htext-green-600' : formFilter.recommendated, 'border htext-black-100 hborder-black-100 htext-gray-500 bg-white' : !formFilter.recommendated}"
-            @click="changeRecommented()"
+            :class="{'border hborder-green-700 hbg-green-200 htext-green-600' : formFilter.visibility === 'recommendated', 'border htext-black-100 hborder-black-100 htext-gray-500 bg-white' : formFilter.visibility !== 'recommendated'}"
+            @click="changeVisibility('recommendated')"
         >
             Recomendados
         </div>
@@ -28,7 +28,7 @@
 <script setup>
     import { ref, reactive, onMounted, provide, computed, inject, nextTick } from 'vue';
 
-    const emits = defineEmits(['reloadExperiences']);
+    const emits = defineEmits(['reloadPlaces']);
 
     // DATA
     
@@ -48,17 +48,21 @@
     // FUNCTIONS
 
     function changeVisibility (visibility) {
+        if (changePendingInForm.value) {
+            openModalChangeInForm();
+            return;
+        }
         if(formFilter.visibility?.includes(visibility)){
             formFilter.visibility = null
         }else{
             formFilter.visibility = visibility;
         }
-        emits('reloadExperiences');
+        emits('reloadPlaces');
     }
 
     function changeRecommented () {
         formFilter.recommendated = !formFilter.recommendated;
-        emits('reloadExperiences');
+        emits('reloadPlaces');
     }
 
     function openModalChangeInForm () {

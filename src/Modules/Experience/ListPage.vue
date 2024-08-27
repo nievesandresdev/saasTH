@@ -30,7 +30,7 @@
                     <ListPageTabs @reloadExperiences="reloadExperiences()" class="mt-6 px-6"/>
                 </div>
                 <div class="px-6 mt-4">
-                    <ListPageList 
+                    <ListPageList
                         ref="listPageListRef"
                         class="px-6 mt-4"
                         @reloadExperiences="reloadExperiences()"
