@@ -117,7 +117,7 @@ const URLS_LIST_REVIEWS_IN_OTAS = {
     BOOKING: 'https://admin.booking.com/hotel/hoteladmin/extranet_ng/manage/reviews.html',
     EXPEDIA: 'https://apps.expediapartnercentral.com/lodging/review/user_reviews.html?htid=[hotel_id]',
     TRIPADVISOR: 'https://rentals.tripadvisor.com/bookings/reviews',
-    GOOGLE: 'https://maps.google.com/?cid=11533582623352697091',
+    GOOGLE: 'https://maps.google.com/?cid=[cid]',
    AIRBNB: 'https://airbnb.com/users/reviews',
 }
 
@@ -156,6 +156,7 @@ const translateReviewData = ref({});
 const responseShow = ref(false);
 const maximumResponsesGenerated = ref(3);
 const hoteIdExpedia = ref(null);
+const hotelOtaData = ref(null);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
@@ -238,6 +239,9 @@ const urlListReviewsInOta = computed(() => {
     if (otaParamRoute.value === 'EXPEDIA' && hoteIdExpedia.value) {
         url = url.replace('[hotel_id]', hoteIdExpedia.value);
     }
+    if (otaParamRoute.value === 'GOOGLE' &&  hotelOtaData.value?.url) {
+        url = hotelOtaData.value.url;
+    }
     return url;
 });
 
@@ -310,6 +314,7 @@ async function loadReview () {
     if (ok) {
         reviewData.value = data.review;
         hoteIdExpedia.value = data.hoteIdExpedia;
+        hotelOtaData.value = data.hotelOta;
     }
     // } else {
     //     toast.warningToast(response?.message,'top-right');
