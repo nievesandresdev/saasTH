@@ -114,7 +114,7 @@ const sendMsg = async (e) => {
         let text = msg.value
         msg.value = null
         await chatStore.$sendMsg(route.query.g, route.params.stayId, text)
-        await getDataChat(false);
+        // await getDataChat(false);
     }
 }
 
@@ -130,7 +130,13 @@ const suscribePusher = () => {
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
-        if(data?.message?.messageable_id == route.query.g || data?.message?.automatic){
+        console.log('cons UpdateChatEvent',data)
+        // data?.message?.messageable_id == route.query.g ||  //mensaje de parte de huesped
+        if(
+            data?.message?.automatic || //mensaje automatico departe del hoster
+            dataChat.value?.id == data.message?.chat_id //mensaje del hoster a otros hosters
+        ){
+            console.log('cons UpdateChatEvent entro')
             dataMessages.value = [...dataMessages.value, data.message]
         }
         listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);
