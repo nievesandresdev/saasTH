@@ -30,7 +30,7 @@
   
           <div class="p-6">
             <!-- <hr class="mb-4"> -->
-            <div class="flex items-center justify-between px-4 mb-5">
+            <!-- <div class="flex items-center justify-between px-4 mb-5">
               <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center">
                 <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
                   {{ step.number }}
@@ -38,10 +38,24 @@
                 <div :class="['text-sm mt-2', currentStep >= step.number ? 'text-black' : 'text-gray-500']" class="font-semibold">
                   {{ step.label }}
                 </div>
-                <!-- border -->
                 <div v-if="index !== steps.length - 1" :class="['absolute w-[170px] h-0 border top-5 left-3', currentStep >= (step.number + 1) ? 'border-[#34A98F]' : '']"></div>
               </div>
+            </div> -->
+            <div class="flex items-center justify-between mb-5">
+              <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
+                <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
+                  {{ step.number }}
+                </div>
+                <div :class="['text-sm mt-2 text-center break-words', currentStep >= step.number ? 'text-black' : 'text-gray-500']" class="font-semibold">
+                  {{ step.label }}
+                </div>
+                <!-- border -->
+                <div v-if="index !== steps.length - 1" :class="['absolute h-0 border top-5', currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300']" 
+                    :style="{ width: `calc(100% - 40px)`, left: 'calc(50% + 20px)' }"></div>
+              </div>
             </div>
+
+
             <hr class="mb-5">
             <div v-if="currentStep === 1">
               <div class="flex flex-col text-black">
@@ -225,11 +239,11 @@
                 </div>
             </div> <!-- fin step 1-->
             <div v-if="currentStep === 2">
-                <div class="flex flex-col mb-8 text-left">
-                    <strong class="mb-5 text-xl">Hoteles</strong>
-                    <span class="font-normal">
+                <div class="flex flex-col mb-6 text-left">
+                    <strong class="mb-5 text-[18px] font-medium">Alojamientos</strong>
+                    <!-- <span class="font-normal">
                         Selecciona los alojamientos en donde se encontrará activo este usuario.
-                    </span>
+                    </span> -->
                 </div>
                 <div class="space-y-2">
                     <!-- Checkbox para "Todos los hoteles" -->
@@ -716,7 +730,8 @@ if (form.value.role === 1) {
   const steps = [
     { number: 1, label: 'Usuario' },
     { number: 2, label: 'Hoteles' },
-    { number: 3, label: 'Accesos' }
+    { number: 3, label: 'Accesos' },
+    { number: 4, label: 'Notificaciones'}
   ];
   
   const nextStep = () => {

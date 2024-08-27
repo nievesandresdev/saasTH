@@ -6,7 +6,7 @@
         <div id="list-places" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
             <template v-for="(place, index) in placesData">
                 <div
-                    v-if="!formFilter.visibility && !place?.is_visible && placesData[index-1]?.is_visible"
+                    v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !place?.is_visible && placesData[index-1]?.is_visible"
                     class="w-[789px] 3xl:w-[1216px] relative"
                 >
                     <div
@@ -87,10 +87,10 @@
                                 <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reviews</p>
                             </div>
                         </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
+                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }} {{ place.id }}</h6>
                         <div class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }} {{ place.is_visible }}</p>
+                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }}</p>
                         </div>
                         <div v-if="place.distance" class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.FOOTSTEP.svg" alt="1.TH.FOOTSTEP">
@@ -203,6 +203,9 @@ const textNumbersPlacesVisiblesAndHidden = computed(() => {
     }
     if(formFilter.visibility){
         if(formFilter.visibility.includes('visible')){
+            text =` ${numberPlacesVisible.value} ${visiblesText}`
+        }
+        if(formFilter.visibility.includes('recommendated')){
             text =` ${numberPlacesVisible.value} ${visiblesText}`
         }
         if(formFilter.visibility.includes('hidden')){
@@ -324,12 +327,11 @@ async function updateVisible (place) {
         return;
     }
     const data = {
-        visivility: !place.is_visible,
+        visivility: place.is_visible,
         place_id: place.id,
         selected_place: formFilter.selected_place,
         selected_subplace: formFilter.selected_subplace,
     }
-    // console.log(data, 'data');
     const response = await placeStore.$updateVisibility(data);
     const { ok } = response;
     if (ok) {

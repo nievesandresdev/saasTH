@@ -5,7 +5,7 @@
                 <h1 class="font-medium text-[22px]">Destino - {{ typePlaceCurrent?.name }}</h1>
                 <BaseTooltipResponsive
                     size="l"
-                    :top="55"
+                    :top="35"
                     :left="-0"
                 >
                     <template #button>
