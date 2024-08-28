@@ -104,6 +104,7 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+        // console.log('chat NotifyStayHotelEvent',data)
         if(data.stayId == route.params.stayId){
             if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
             if('pendingCountQueries' in data) countPendingQueries.value = data.pendingCountQueries;
@@ -111,6 +112,7 @@ const connectPusher = () =>{
     });
     channelSession.value = pusher.value.subscribe(channelSession.value);
     channelSession.value.bind('App\\Events\\SessionsStayEvent', async (data) => {
+        // console.log('chat SessionsStayEvent',data)
         if(Number(data.stayId) == Number(route.params.stayId)){
             session.value = data.session[0];
         }
