@@ -130,13 +130,14 @@ const suscribePusher = () => {
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
-        console.log('cons UpdateChatEvent',data)
-        // data?.message?.messageable_id == route.query.g ||  //mensaje de parte de huesped
+        // console.log('cons UpdateChatEvent',data)
+        dataChat.value = data.chatData;
+        
         if(
             data?.message?.automatic || //mensaje automatico departe del hoster
             dataChat.value?.id == data.message?.chat_id //mensaje del hoster a otros hosters
         ){
-            console.log('cons UpdateChatEvent entro')
+            // console.log('cons UpdateChatEvent entro')
             dataMessages.value = [...dataMessages.value, data.message]
         }
         listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);
@@ -146,8 +147,8 @@ const suscribePusher = () => {
         // }
     })
     channelChat.value.bind('App\\Events\\MsgReadChatEvent', function (data) {
-        dataChat.value = { ...dataChat.value, pending: true };
-        dataChat.value = dataChat.value;
+        // dataChat.value = { ...dataChat.value, pending: true };
+        // dataChat.value = dataChat.value;
         const count_msgs = dataMessages.value.length
         const arr = dataMessages.value
         for (let i = count_msgs - 1; i >= 0; i--) {

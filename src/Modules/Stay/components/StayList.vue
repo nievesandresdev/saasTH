@@ -7,7 +7,8 @@
         >
             <h5 
                 class="text-base font-semibold leading-[120%] text-left group-hover:text-[#000]"
-            >Estancias {{ numberOfskeletonCards }}  list: {{ list.length }}</h5>
+            >Estancias</h5>
+            <!-- {{ numberOfskeletonCards }}  list: {{ list.length }} -->
         </router-link>
 
         <!-- filters -->
@@ -304,9 +305,7 @@ async function loadMore(){
 
 async function loadData(showLoadPage = false){
     staysNull.value = false;
-    console.log('cons allFilters',allFilters.value)
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    console.log('cons loadData',data.value)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     // totalCounts.value = data.value.stays.total;
@@ -333,7 +332,6 @@ async function updateList(){
     loading.value = true;
     allFilters.value.offset = 0;
     allFilters.value.limit = list.value.length;
-    console.log('cons updateList',allFilters.value)
     let data = await loadData();
     list.value = data;
     //restaurar valores
@@ -368,7 +366,7 @@ const connectPusher = () =>{
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
-        console.log('cons UpdateStayListEvent',data)
+        // console.log('cons UpdateStayListEvent',data)
         // let showLoadPage = data.showLoadPage ?? true;
         updateList();
     });
@@ -376,7 +374,7 @@ const connectPusher = () =>{
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
     channelQuery.value = pusher.value.subscribe(channelQuery.value);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
-        console.log('cons NotifySendQueryEvent',data)
+        // console.log('cons NotifySendQueryEvent',data)
         updateList();
     });
 }

@@ -228,7 +228,7 @@ const connectPusher = async () => {
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
-        // console.log('NotifyUnreadMsg',data)
+        console.log('NotifyUnreadMsg',data)
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
