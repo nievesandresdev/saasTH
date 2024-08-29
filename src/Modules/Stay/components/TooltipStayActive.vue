@@ -1,7 +1,7 @@
 <template>
     <Tooltip
         size="l"
-        :top="25"
+        :top="16"
         :right="0"
         v-if="type=='post-stay'"
     >
@@ -9,17 +9,16 @@
             <img class="w-4 h-4 ml-2" src="/assets/icons/info.blue.svg">
         </template>
         <template v-slot:content>
-            <p class="text-sm leading-[150%] font-normal">
-                Se consideran en
-                    <span class="font-semibold">POST-STAY</span> todas las estancias de huéspedes que utilicen tu 
-                    <span class="font-semibold">WebApp</span> luego de haber realizado su  
-                    <span class="font-semibold">Check-out</span>
-            </p>
+            <p class="text-sm leading-[150%] font-normal">Las estancias que utilicen tu WebApp después de la hora máxima de check-out se clasificarán como Post-Stay.</p>
+            <span 
+                class="text-sm leading-[150%] block mt-2 underline cursor-pointer font-normal"
+                @click="goProfile"
+            >Alojamiento > Perfil > Horario Check-in / Check-out</span>
         </template>
     </Tooltip>
     <Tooltip
         size="l"
-        :top="25"
+        :top="16"
         :left="0"
         v-else
     >
@@ -27,33 +26,33 @@
             <img class="w-4 h-4 ml-2" src="/assets/icons/info.blue.svg">
         </template>
         <template v-slot:content>
-            <p class="text-sm leading-[150%] font-normal">
-                <template v-if="type == 'title'">
-                    Aquí verás las estancias de aquellos huéspedes que hayan accedido a tu <span class="font-semibold">WebApp</span> y cargado sus datos.
-                </template>
-                <template v-if="type == 'pre-stay'">
-                    Se consideran en <span class="font-semibold">PRE-STAY</span>
-                    todas las estancias de huéspedes que utilicen tu 
-                    <span class="font-semibold">WebApp</span> y aún no hayan llegado a su fecha de 
-                    <span class="font-semibold">Check-In</span>
-                </template>
-                <template v-if="type == 'in-stay'">
-                    Se consideran en 
-                    <span class="font-semibold">STAY</span> todas las estancias de huéspedes que utilicen tu 
-                    <span class="font-semibold">WebApp</span> luego de su fecha de 
-                    <span class="font-semibold">Check-In</span> y antes de su 
-                    <span class="font-semibold">Check-out</span>
-                </template>
+            <p class="text-sm leading-[150%] font-normal" v-if="type == 'title'">
+                Aquí verás las estancias de aquellos huéspedes que hayan accedido a tu <span class="font-semibold">WebApp</span> y cargado sus datos.
             </p>
+            <template v-else-if="type == 'pre-stay' || type == 'in-stay'">
+                <p v-if="type == 'pre-stay'" class="text-sm leading-[150%] font-normal">Las estancias que utilicen tu WebApp antes del check-in se clasificarán como Pre-Stay. Alcanzada la hora mínima de llegada el día del check-in, la estancia se actualizará a la categoría Stay.</p>
+                <p v-else class="text-sm leading-[150%] font-normal">Las estancias que utilicen tu WebApp entre el check-in y el check-out se clasificarán como Stay. Una vez pasada la hora máxima de salida el día del check-out, la estancia se actualizará a Post-Stay.</p>
+                <span 
+                    class="text-sm leading-[150%] block mt-2 underline cursor-pointer font-normal"
+                    @click="goProfile"
+                >Alojamiento > Perfil > Horario Check-in / Check-out</span>
+            </template>
         </template>
     </Tooltip>
 </template>
 <script setup>
 import Tooltip from '@/components/Tooltip.vue'
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 defineProps({
     type:{
         type: String,
         default: ''
     }
 })
+
+const goProfile = async () => {
+    router.push('/alojamiento/perfil#checkin-checkout')
+}
 </script>

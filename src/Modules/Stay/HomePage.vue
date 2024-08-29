@@ -73,8 +73,9 @@
             <div class="flex gap-4 items-end">
                 <!-- stay periods card -->
                 <div class="flex-grow flex-1" v-for="(count, key, index) in statistics?.countsByPeriod" :key="index">
-                    <h3 class="text-sm font-semibold leading-[120%] flex items-center" v-if="key == 'pre-stay'">
-                        Estancias activas en tu WebApp
+                    <h3 class="htext-green-800 text-[10px] font-semibold leading-[130%]" v-if="key == 'pre-stay'">ESTANCIAS</h3>
+                    <h3 class="text-sm font-semibold leading-[120%] flex items-center mt-2" v-if="key == 'pre-stay'">
+                        Activas en tu WebApp
                         <TooltipStayActive type="title"/>
                     </h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px]">
@@ -98,7 +99,7 @@
                 </div>
                 <!-- languages card -->
                 <div class="flex-grow flex-1">
-                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados por tus huéspedes</h3>
+                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados </h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
                         <div v-for="(lang,index) in ['es','en','fr']" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
                             <img v-if="statistics?.percentageLangs && statistics?.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
