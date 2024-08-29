@@ -5,7 +5,8 @@
       class="fixed inset-0 flex items-center justify-center bg-[#00000088] z-[10000]"
       @click.self="closeModal"
     >
-      <div :style="{ width: modalWidth }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all">
+      <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all absolute">
+        <slot name="header"></slot>
         <div :class="computedPaddingContent" class="">
           <slot name="content"></slot>
         </div>
@@ -49,6 +50,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  topOffset: {
+    type: String,
+    default: '20%' 
+  }
 });
 
 const closeModal = () => {
@@ -57,6 +62,10 @@ const closeModal = () => {
 
 const modalWidth = computed(() => {
   return props.width;
+});
+
+const modalTop = computed(() => {
+  return props.topOffset;
 });
 
 const computedPaddingContent = computed(() => {
