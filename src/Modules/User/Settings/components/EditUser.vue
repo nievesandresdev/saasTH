@@ -1044,9 +1044,9 @@ function closeModal(complete = false) {
     opacity: 1;
   }
 
-  .rounded-bottom-border {
-    position: relative;
-  }
+.rounded-bottom-border {
+  position: relative;
+}
 
 .rounded-bottom-border::after {
   content: '';
