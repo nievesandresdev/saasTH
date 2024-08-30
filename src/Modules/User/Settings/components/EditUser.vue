@@ -345,9 +345,8 @@ const form = ref({
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
         form.value.permissions = props.dataUser.permissions || [];
         form.value.notifications = props.dataUser.notifications || [];
-        form.value.periodicityChat = props.dataUser.periodicityChat || 5;
-        form.value.periodicityStay = props.dataUser.periodicityStay || 5;
-       console.log('formsssini',form.value)
+        form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
+        form.value.periodicityStay = props.dataUser.periodicity_stay || 5;
 
         /* const firstHotel = computed(() => {
             if (props.dataUser?.hotels && props.dataUser.hotels.length > 0) {

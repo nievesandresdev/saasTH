@@ -10,7 +10,7 @@
         <ul
           v-if="!section?.disabled"
         >
-            <li class="pl-6 py-[11.5px] text-sm font-semibold">
+            <li class="pl-6 py-[11.5px] text-sm font-semibold" v-show="section.title">
               <h5 class="text-sm font-semibold uppercase leading-[124%]">{{ section.title }}</h5>
             </li>
             <template
@@ -40,11 +40,11 @@
                       :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     >
                       <div
-                        class="w-full h-full block pl-[44px] pr-[24px] cursor-pointer"
+                        class="w-full h-full block pl-[37px] pr-[24px] cursor-pointer"
                         @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''"
                       >
                         <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
-                          <span v-if="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[24px] w-[3px]  rounded-full left-[-2.4px]"></span>
+                          <span v-if="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[30px] w-[4px]  rounded-full left-[-2px]"></span>
                           <div class="py-[8px] ml-[20px]">
                             <span class="text-sm normal-case">{{ sub_menu.title }}</span>
                           </div>
@@ -63,7 +63,7 @@
                         <div class="flex items-center h-10 relative">
                           <div class="w-6 h-full relative">
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
-                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="w-[3px] h-6 bg-[#2A8973] absolute inset-0 mx-auto my-2 rounded-full"></div>
+                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[30px] w-[4px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
                           </div>
                           <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
                         </div>
@@ -200,7 +200,7 @@ const placeStore = usePlaceStore();
 
 const menu_section = reactive([
   {
-      title: 'Costumer experience',
+      title: '',
       group: [
           {
               title: 'Alojamiento',
@@ -269,7 +269,7 @@ const menu_section = reactive([
       ],
   },
   {
-      title: 'Reputación online',
+      title: '',
       group: [
           {
               title: 'Seguimiento',
@@ -326,8 +326,15 @@ const menu_section = reactive([
       title: 'General',
       group: [
         {
+            title: 'Comunicaciones',
+            icon: '/assets/icons/1.TH.COMUNICACIONES.svg',
+            to: 'Customization',
+            include: '',
+            selectedArr: ['Customization'],
+        },
+        {
             title: 'Personalización',
-            icon: '/assets/icons/1.TH.PERSONALIZACION.svg',
+            icon: '/assets/icons/1.TH.PERSONALIZAR.svg',
             to: 'Customization',
             include: '/personalizacion',
             selectedArr: ['Customization'],
@@ -449,10 +456,10 @@ function goLinkWithRoute() {
 
 <style scoped>
 a:hover{
-color:#333;
-text-decoration: none;
+  color:#333;
+  text-decoration: none;
 }
 .shadow-menu{
-box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
 }
 </style>

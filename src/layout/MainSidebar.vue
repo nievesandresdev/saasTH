@@ -291,12 +291,6 @@ const menu_links = ref([
         include: ['Reviews'],
         url: '/resenas',
       },
-      {
-        title: 'Análisis',
-        icon: '1.TH.DASHBOARDNEW',
-        include: ['-'],
-        url: '/dashboard',
-      },
     ],
   },
   {
@@ -304,7 +298,7 @@ const menu_links = ref([
     group: [
       {
         title: 'WebApp',
-        icon: '1.TH.DASHBOARDNEW',
+        icon: '1.TH.MM.WEBAPP',
         include: [
           'ReviewRequestSettingsIndex',
           'SettingsPreStayPage',
@@ -317,17 +311,17 @@ const menu_links = ref([
         ],
         url: '/webapp',
       },
-      {
+      /* {
         title: 'Comunicaciones',
         icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
-      },
+      }, */
       {
-        title: 'Plataforma',
-        icon: '1.TH.DASHBOARDNEW',
+        title: 'Hoster',
+        icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings'],
-        url: '/equipo/configuracion/notificaciones',
+        url: '/equipo/configuracion/usuarios',
       },
     ],
   },
