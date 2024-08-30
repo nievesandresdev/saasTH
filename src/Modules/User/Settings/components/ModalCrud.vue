@@ -21,6 +21,7 @@
     v-if="isCreating"
     :isVisible="isCreating"
     @close="closeCreateModal"
+    @storeWorkPosition="pushData"
     :width="'400px'"
   />
 
@@ -56,6 +57,10 @@ const emit = defineEmits(['close', 'select']);
 
 const isEditing = ref(false);
 const isCreating = ref(false);
+
+const pushData  = (data) => {
+  props.data.push(data);
+};
 
 const selectOption = (option) => {
   emit('select', option);

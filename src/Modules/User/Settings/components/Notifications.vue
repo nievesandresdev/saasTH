@@ -1,5 +1,5 @@
 <template>
-    <div class="notifications-container">
+    <div class="notifications-container" :style="{ maxHeight: maxHeight + 'px' }">
       <div class="space-y-6">
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
@@ -20,7 +20,7 @@
             <span class="text-sm font-[600]">Notificaciones en plataforma Hoster</span>
             <BaseTooltipResponsive size="s" :top="25" :right="-55">
               <template v-slot:button>
-                <img src="/assets/icons/info.blue.svg" class="w-6 h-6 ml-1 mb-4" alt="icon_info">
+                <img src="/assets/icons/info.blue.svg" class="w-6 h-6 ml-1 mb-2" alt="icon_info">
               </template>
               <template v-slot:content>
                 <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
@@ -34,7 +34,7 @@
               <BaseTextField
                 v-model="periodicityChat"
                 placeholder="Ejemplo: 5 minutos"
-                classContent="mt-2 w-[34px]"
+                classContent="mt-2 w-[40px]"
                 :type="'number'"
                 :errors="errors"
                 name="notifications"
@@ -50,15 +50,15 @@
           </div>
           <div class="flex justify-between items-center mb-2">
             <span class="text-sm font-[400]">1. Nuevo chat</span>
-            <input type="checkbox" v-model="newChat" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.newChat" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
           </div>
           <div class="flex justify-between items-center mb-2">
             <span class="text-sm font-[400]">2. Chat pendiente hace 10 minutos</span>
-            <input type="checkbox" v-model="PendingChat10" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.PendingChat10" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
           </div>
           <div class="flex justify-between items-center mb-8">
             <span class="text-sm font-[400]">3. Chat pendiente hace 30 minutos</span>
-            <input type="checkbox" v-model="pendingChat30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.pendingChat30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
           </div>
   
           <!-- Sección de Estancias - Seguimiento -->
@@ -75,7 +75,7 @@
               <BaseTextField
                 v-model="periodicityStay"
                 placeholder="Ejemplo: 5 minutos"
-                classContent="mt-2 w-[34px]"
+                classContent="mt-2 w-[40px]"
                 :type="'number'"
                 :errors="errors"
                 name="notifications"
@@ -97,31 +97,34 @@
   const props = defineProps({
     periodicityChat: String,
     periodicityStay: String,
-    newChat: Boolean,
-    PendingChat10: Boolean,
-    pendingChat30: Boolean,
+    notifications: {
+      type: Object,
+      default: () => ({
+        newChat: false,
+        PendingChat10: false,
+        pendingChat30: false,
+      }),
+    },
+    maxHeight: {
+      type: Number,
+      default: 400, // Altura máxima predeterminada
+    },
   });
-  
-  const emits = defineEmits([
-    'update:periodicityChat', 
-    'update:periodicityStay', 
-    'update:newChat', 
-    'update:PendingChat10', 
-    'update:pendingChat30'
-  ]);
+
+const emits = defineEmits([
+  'update:periodicityChat',
+  'update:periodicityStay',
+  'update:notifications'
+]);
   
   const periodicityChat = ref(props.periodicityChat);
   const periodicityStay = ref(props.periodicityStay);
-  const newChat = ref(props.newChat);
-  const PendingChat10 = ref(props.PendingChat10);
-  const pendingChat30 = ref(props.pendingChat30);
+  const notifications = ref({ ...props.notifications });
   
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
-    emits('update:newChat', newChat.value);
-    emits('update:PendingChat10', PendingChat10.value);
-    emits('update:pendingChat30', pendingChat30.value);
     emits('update:periodicityStay', periodicityStay.value);
+    emits('update:notifications', notifications.value);
   };
   </script>
   
