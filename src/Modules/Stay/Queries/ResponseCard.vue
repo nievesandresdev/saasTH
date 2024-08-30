@@ -84,7 +84,7 @@ onMounted(() => {
 })
 
 watch(() => route.hash, (newHash, oldHash) => {
-  console.log('newHash',newHash)
+  // console.log('newHash',newHash)
   if (newHash) {
     scrollToElement();
   }

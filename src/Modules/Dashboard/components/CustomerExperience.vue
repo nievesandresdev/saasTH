@@ -1,10 +1,10 @@
 <template>
-    <div class="flex flex-col border border-[#BFBFBF] rounded-lg p-4">
+    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] p-4">
         <div class="flex flex-col">
-            <span class="text-[#0B6357] text-xs font-semibold mb-2">CUSTOMER EXPERIENCE</span>
+            <span class="htext-green-800 text-[10px] font-semibold mb-2 leading-[130%]">ESTANCIAS</span>
             <div class="flex gap-4 items-center">
                 <span class="font-semibold text-sm flex gap-2 items-center col-span-1">
-                    Estancias activas en tu WebApp
+                    Activas en tu WebApp
                     <Tooltip size="l" :top="25" :left="5">
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
@@ -15,20 +15,24 @@
                     </Tooltip>
                 </span>
                 <div class="flex-1"></div> <!-- Espacio en blanco para alineación -->
-                <span class="font-semibold text-sm text-left col-span-1">Idiomas más utilizados por tus huéspedes</span>
+                <span class="font-semibold text-sm text-left col-span-1 pr-[4%]">Idiomas más utilizados</span>
             </div>
         </div>
         <!-- contenido -->
         <div class="grid grid-cols-4 gap-4 mt-4">
-            <div class="bg-white border border-[#BFBFBF] rounded-lg  relative">
-                <div class="bg-[#D9E8F2] py-2 px-3 flex items-center gap-3">
+            <div class="bg-white border border-[#BFBFBF] rounded-[10px]  relative">
+                <div class="bg-[#D9E8F2] py-2 px-3 flex items-center gap-3 rounded-t-[10px]">
                     <span class="text-sm font-semibold">PRE-STAY</span>
-                    <Tooltip :top="25" :left="5" size="m" >
+                    <Tooltip :top="16" :left="5" size="l" >
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Se consideran en <strong>PRE-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> y aún no hayan llegado a su fecha de <strong>Check-In</strong></p>
+                            <p class="text-sm leading-[150%]">Las estancias que utilicen tu WebApp antes del check-in se clasificarán como Pre-Stay. Alcanzada la hora mínima de llegada el día del check-in, la estancia se actualizará a la categoría Stay.</p>
+                            <span 
+                                class="text-sm leading-[150%] block mt-2 underline cursor-pointer"
+                                @click="goProfile"
+                            >Alojamiento > Perfil > Horario Check-in / Check-out</span>
                         </template>
                     </Tooltip>
                 </div>
@@ -43,17 +47,19 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg ">
-                <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
+            <div class="bg-white border border-[#BFBFBF] rounded-[10px] ">
+                <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3 rounded-t-[10px]">
                     <span class="text-sm font-semibold">STAY</span>
-                    <Tooltip :top="25" :left="5" size="m">
+                    <Tooltip :top="16" :left="5" size="l">
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">
-                                Se consideran en <strong>STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> luego de su fecha de <strong>Check-in</strong> y antes de su <strong>Check-out</strong>
-                            </p>
+                            <p class="text-sm leading-[150%]">Las estancias que utilicen tu WebApp entre el check-in y el check-out se clasificarán como Stay. Una vez pasada la hora máxima de salida el día del check-out, la estancia se actualizará a Post-Stay.</p>
+                            <span 
+                                class="text-sm leading-[150%] block mt-2 underline cursor-pointer"
+                                @click="goProfile"
+                            >Alojamiento > Perfil > Horario Check-in / Check-out</span>
                         </template>
                     </Tooltip>
                 </div>
@@ -68,15 +74,19 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg ">
-                <div class="bg-[#F2F2F2] py-2 px-3 flex items-center gap-3">
+            <div class="bg-white border border-[#BFBFBF] rounded-[10px] ">
+                <div class="bg-[#F2F2F2] py-2 px-3 flex items-center gap-3 rounded-t-[10px]">
                     <span class="text-sm font-semibold">POST-STAY</span>
-                    <Tooltip :top="25" :left="5" size="m">
+                    <Tooltip :top="16" :right="0" size="l">
                         <template v-slot:button>
                             <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
-                            <p class="text-sm">Se consideran en <strong>POST-STAY</strong> todas las estancias de huéspedes que utilicen tu <strong>WebApp</strong> luego de haber realizado su <strong>Check-out</strong></p>
+                            <p class="text-sm leading-[150%]">Las estancias que utilicen tu WebApp después de la hora máxima de check-out se clasificarán como Post-Stay.</p>
+                            <span 
+                                class="text-sm leading-[150%] block mt-2 underline cursor-pointer"
+                                @click="goProfile"
+                            >Alojamiento > Perfil > Horario Check-in / Check-out</span>
                         </template>
                     </Tooltip>
                 </div>
@@ -93,12 +103,12 @@
             </div>
             <div class="flex flex-col h-full">
                 <!-- <span class="font-semibold text-sm text-left block mb-2">Idiomas más utilizados por tus huéspedes</span> -->
-                <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden flex-1">
+                <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden flex-1">
                     <div class="p-4 h-full flex flex-col items-start justify-center">
                         <div v-for="lang in processedLanguages" :key="lang.name" class="flex items-center gap-2">
                             <img :src="lang.icon" class="w-6 h-6">
                             <span class="text-base font-semibold">{{ lang.percentaje }}%</span>
-                            <span class="text-sm font-medium">{{ $nameLanguage(lang.name) }}</span>
+                            <span class="text-sm font-medium">{{ lang.name ? $nameLanguage(lang.name) : '-' }}</span>
                         </div> 
                     </div>
                 </div>
@@ -112,8 +122,10 @@ import Tooltip from '@/components/Tooltip.vue'
 import { onMounted, ref, computed } from 'vue'
 import { dataCustomerExperience } from '@/api/services/dashboard/dashboard.services';
 import { useToastAlert } from '@/composables/useToastAlert'
+import { useRouter } from 'vue-router';
 
 const toast = useToastAlert();
+const router = useRouter();
 
 const countPreStay = ref(0);
 const countStay = ref(0);
@@ -138,7 +150,7 @@ const processedLanguages = computed(() => {
             };
         } else {
             return {
-                name: '',
+                name: null,
                 percentaje: "--",
                 icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
             };
@@ -165,5 +177,9 @@ const handleData = async () => {
     }else{
         toast.errorToast(response.data.message, 'top-right')
     }
+}
+
+const goProfile = async () => {
+    router.push('/alojamiento/perfil#checkin-checkout')
 }
 </script>

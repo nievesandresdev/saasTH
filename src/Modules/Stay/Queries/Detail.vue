@@ -36,7 +36,7 @@ const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
-    console.log('data.value',data.value)
+    // console.log('data.value',data.value)
     stayStore.$createSession(stayId.value ,'sessions')
     window.addEventListener('beforeunload', handleBeforeUnload);
 })
