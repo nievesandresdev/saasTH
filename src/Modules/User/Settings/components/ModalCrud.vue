@@ -30,6 +30,7 @@
     v-if="isEditing"
     :isVisible="isEditing"
     @close="closeEditModal"
+    :data="dataEdit"
     :width="'400px'"
   />
 </template>
@@ -58,6 +59,8 @@ const emit = defineEmits(['close', 'select']);
 const isEditing = ref(false);
 const isCreating = ref(false);
 
+const dataEdit = ref({});
+
 const pushData  = (data) => {
   props.data.push(data);
 };
@@ -74,6 +77,7 @@ const openCreateModal = () => {
 const openEditModal = (option) => {
   isCreating.value = false;
   isEditing.value = true;
+  dataEdit.value = option;
 };
 
 const closeCreateModal = () => {

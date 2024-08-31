@@ -285,7 +285,6 @@
   
   const editUser = (data) => {
     dataEdit.value = data;
-    console.log('dataEdit',data);
     modalEdit.value = true;
     visibleDropdown.value = null;
     workPositions('edit');

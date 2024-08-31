@@ -87,7 +87,7 @@
                   </div>
 
                   <div class="mt-4">
-                        <label class="text-sm font-medium">Nombre *</label>
+                        <label class="text-sm font-medium">Nombre*</label>
                         <div class="relative">
                             <input
                                 v-model="form.name"
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <label class="text-sm font-medium">Apellido *</label>
+                        <label class="text-sm font-medium">Apellido*</label>
                         <div class="relative">
                             <input
                                 v-model="form.lastname"
@@ -225,31 +225,37 @@
                         </span> -->
                     </div>
                     <div class="space-y-6">
-                        <!-- Sección de Operación -->
-                        <div>
+                      <!-- Sección de Operación -->
+                      <div>
                           <div class="flex items-center justify-between mb-4">
                               <span class="text-sm font-semibold">Todos los accesos</span>
-                              <input type="checkbox" v-model="form.permissions" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin">
-                            </div>
-                            <span class="block mb-2 font-semibold text-sm">Operación</span>
-                            <div class="space-y-2 ml-2">
-                                <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
-                                    <span class="text-sm font-[500]">{{ item.name }}</span>
-                                    <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Sección de Administración -->
-                        <div>
-                            <span class="block mb-2 font-semibold text-sm">Administración</span>
-                            <div class="space-y-2 ml-2">
-                                <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
-                                    <span class="text-sm font-[500]">{{ item.name }}</span>
-                                    <input type="checkbox" v-model="item.selected" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                              <input type="checkbox" v-model="selectAll"  @change="toggleAllPermissions" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                          </div>
+                          <span class="block mb-2 font-semibold text-sm">Operación</span>
+                          <div class="space-y-2 ml-2">
+                              <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
+                                  <span class="text-sm font-[500]">{{ item.name }}</span>
+                                  <input type="checkbox" v-model="item.selected" 
+                                      :disabled="item.disabled || form.work_position_id"
+                                      class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
+                                      @change="handleCheckPermission(item.value, item.selected)">
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Sección de Administración -->
+                      <div>
+                          <span class="block mb-2 font-semibold text-sm">Administración</span>
+                          <div class="space-y-2 ml-2">
+                              <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
+                                  <span class="text-sm font-[500]">{{ item.name }}</span>
+                                  <input type="checkbox" v-model="item.selected" 
+                                      :disabled="item.disabled || form.work_position_id"
+                                      class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
+                                      @change="handleCheckPermission(item.value, item.selected)">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                 </div>
                 <div v-if="currentStep === 4">
                   <Notifications 
@@ -313,6 +319,7 @@
   const router = useRouter();
   const intendedRoute = ref(null);
   const userStore = useUserStore();
+  const selectAll = ref(false);
   //const authStore = useAuthStore();
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
@@ -387,7 +394,7 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
     password_confirmation: '',
     hotels: [],
     access: [],
-    permissions: [],
+    permissions: {},
     periodicityChat: 5, 
     periodicityStay: 5,
     notifications: {
@@ -438,34 +445,19 @@ const adminAccess = ref([
     let periodicity_chat = position.periodicity_chat;
     let periodicity_stay = position.periodicity_stay;
 
-    //console.log('notifF',notifications,periodicity_chat,periodicity_stay)
-
     form.value.notifications = notifications;
     form.value.periodicityChat = periodicity_chat;
     form.value.periodicityStay = periodicity_stay;
-
 
     // Función para actualizar los checkboxes y el objeto permissions
     const updateCheckboxesAndPermissions = (accessList, permissions) => {
         accessList.forEach((accessItem) => {
             const permissionKey = accessItem.value;
-            
-            // Verifica si el permiso está activo
             const isSelected = permissions[permissionKey] && permissions[permissionKey].status;
-
-            // Marca o desmarca el checkbox
+            
+            // Marca o desmarca el checkbox y lo deshabilita si está seleccionado
             accessItem.selected = isSelected;
-
-            // Actualiza el objeto permissions para reflejar los cambios
-            if (isSelected) {
-              console.log('permissionKey',permissionKey)
-                permissions[permissionKey] = {
-                    can: {}, // Agrega la lógica para "can" según tus necesidades
-                    status: true,
-                };
-            } else {
-                delete permissions[permissionKey];
-            }
+            accessItem.disabled = isSelected;
 
             // Llama a handleCheckPermission para actualizar form.value.access
             handleCheckPermission(permissionKey, isSelected);
@@ -478,14 +470,9 @@ const adminAccess = ref([
 
     // Actualiza form.value.permissions con el nuevo objeto permissions
     form.value.permissions = permissions;
-
-    //console.log('form.value.permissions',form.value)
 };
 
 
-
-
-  
 
 const isFormIncomplete = computed(() => {
       //email
@@ -496,7 +483,7 @@ const isFormIncomplete = computed(() => {
 
     if (currentStep.value === 1) {
         return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
-            !form.value.password_confirmation || !form.value.phone || !form.value.prefix  || !form.value.work_position_id  || !isValidPassword;
+            !form.value.password_confirmation  || !isValidPassword;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
@@ -650,7 +637,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
     form.value.hotels.forEach(hotelId => {
         const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
         
-        if (index !== -1) { // Si existe el hotel
+        if (index !== -1) { 
             if (!isSelected) {
                 // Eliminar de jsonHotel
                 delete jsonHotel.value[index][hotelId][permissionName];
@@ -658,7 +645,6 @@ const handleCheckPermission = (permissionName, isSelected) => {
                     jsonHotel.value.splice(index, 1);
                 }
             } else {
-                // Actualizar el objeto
                 if (!jsonHotel.value[index][hotelId]) {
                     jsonHotel.value[index][hotelId] = {};
                 }
@@ -667,7 +653,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
                     status: true
                 };
             }
-        } else { // Si no existe el hotel
+        } else { 
             const newHotel = { [hotelId]: {} };
             newHotel[hotelId][permissionName] = {
                 can: {}
@@ -677,18 +663,37 @@ const handleCheckPermission = (permissionName, isSelected) => {
     });
 
     if (isSelected) {
-        // Crear el JSON en form.value.permissions
         form.value.permissions[permissionName] = {
             can: {},
             status: true
         };
     } else {
-        // Eliminar del JSON en form.value.permissions
         delete form.value.permissions[permissionName];
     }
 
     form.value.access = jsonHotel.value;
 };
+
+
+const toggleAllPermissions = () => {
+    const isSelected = selectAll.value;
+
+    // Actualizar todos los permisos de operación
+    operationAccess.value.forEach(item => {
+        item.selected = isSelected;
+        item.disabled = isSelected;
+        handleCheckPermission(item.value, isSelected);
+    });
+
+    // Actualizar todos los permisos de administración
+    adminAccess.value.forEach(item => {
+        item.selected = isSelected;
+        item.disabled = isSelected;
+        handleCheckPermission(item.value, isSelected);
+    });
+};
+
+
 
 
 

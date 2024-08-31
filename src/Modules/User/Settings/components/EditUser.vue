@@ -161,7 +161,9 @@
               <AccessPermissions
                 v-model:permissions="form.permissions"
                 :isRoleAdmin="isRoleAdmin"
-              />
+                :workPositionId="form.work_position_id"
+            />
+
             </div>
             <div v-if="currentStep === 4">
               <Notifications 
@@ -480,58 +482,37 @@ const form = ref({
   };
   
   const selectWorkPosition = (position) => {
-    selectedWorkPositionName.value = position.name;
-    form.value.work_position_id = position.id;
-    isModalCrudOpen.value = false;
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
+  isModalCrudOpen.value = false;
 
-    // Parseamos el JSON de permisos
-    let permissions = JSON.parse(position.permissions);
-    let notifications = JSON.parse(position.notifications);
-    let periodicity_chat = position.periodicity_chat;
-    let periodicity_stay = position.periodicity_stay;
+  let permissions = JSON.parse(position.permissions);
+  let notifications = JSON.parse(position.notifications);
+  let periodicity_chat = position.periodicity_chat;
+  let periodicity_stay = position.periodicity_stay;
 
-    //console.log('notifF',notifications,periodicity_chat,periodicity_stay)
+  form.value.notifications = notifications;
+  form.value.periodicityChat = periodicity_chat;
+  form.value.periodicityStay = periodicity_stay;
 
-    form.value.notifications = notifications;
-    form.value.periodicityChat = periodicity_chat;
-    form.value.periodicityStay = periodicity_stay;
+  const updateCheckboxesAndPermissions = (accessList, permissions) => {
+    accessList.forEach((accessItem) => {
+      const permissionKey = accessItem.value;
+      const isSelected = permissions[permissionKey] && permissions[permissionKey].status;
+      
+      accessItem.selected = isSelected;
+      accessItem.disabled = isSelected;
 
+      handleCheckPermission(permissionKey, isSelected);
+    });
+  };
 
-    // Función para actualizar los checkboxes y el objeto permissions
-    const updateCheckboxesAndPermissions = (accessList, permissions) => {
-        accessList.forEach((accessItem) => {
-            const permissionKey = accessItem.value;
-            
-            // Verifica si el permiso está activo
-            const isSelected = permissions[permissionKey] && permissions[permissionKey].status;
+  updateCheckboxesAndPermissions(operationAccess.value, permissions);
+  updateCheckboxesAndPermissions(adminAccess.value, permissions);
 
-            // Marca o desmarca el checkbox
-            accessItem.selected = isSelected;
-
-            // Actualiza el objeto permissions para reflejar los cambios
-            if (isSelected) {
-                permissions[permissionKey] = {
-                    can: {}, // Agrega la lógica para "can" según tus necesidades
-                    status: true,
-                };
-            } else {
-                delete permissions[permissionKey];
-            }
-
-            // Llama a handleCheckPermission para actualizar form.value.access
-            handleCheckPermission(permissionKey, isSelected);
-        });
-    };
-
-    // Actualizamos los checkboxes de operación y administración
-    updateCheckboxesAndPermissions(operationAccess.value, permissions);
-    updateCheckboxesAndPermissions(adminAccess.value, permissions);
-
-    // Actualiza form.value.permissions con el nuevo objeto permissions
-    form.value.permissions = permissions;
-
-    //console.log('form.value.permissions',form.value)
+  form.value.permissions = permissions;
 };
+
   
 
   
@@ -542,7 +523,7 @@ const form = ref({
       //contrase;a
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email ||  !form.value.phone || !form.value.prefix  || !form.value.work_position_id;
+        return !form.value.name || !form.value.lastname || !form.value.email;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
