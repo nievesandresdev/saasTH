@@ -59,10 +59,10 @@
                   {{ user.name }}
                 </th>
                 <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
-                  {{ $getRoleName(user.role.name) }}
+                  {{ user.work_position }}
                 </td>
                 <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
-                  {{ user.work_position }}
+                  {{ user.time }}
                 </td>
                 <td @click="showUser(user)" class="py-4 whitespace-normal break-words w-1/4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
                   <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
@@ -77,8 +77,7 @@
                     :user="user"
                     :index="index"
                     :visibleDropdown="visibleDropdown"
-                    :isAdmin="$isAdmin"
-                    :isOperator="$isOperator"
+                   
                     @close="closeToggleDropdown"
                     @editUser="editUser"
                     @openModalDelete="openModalDelete"
@@ -337,7 +336,7 @@
     }
   };
   
-  const ownerAccount = (user) => {
+/*   const ownerAccount = (user) => {
     return user.role.name == 'Associate' && ($isAdmin() || $isOperator());
   };
   
@@ -352,7 +351,7 @@
         visibleDropdown.value = index;
       }
     }
-  };
+  }; */
   
   const closeToggleDropdown = () => {
     visibleDropdown.value = null;

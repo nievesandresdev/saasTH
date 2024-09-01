@@ -282,36 +282,46 @@ const handleDataOta = async () => {
         let count = 0;
         const reviews = response.data.summaryReviews || [];
         reviews.forEach(review => {
+            // Default data review values in case data_review is missing
+            const defaultDataReview = { reviews_rating: '--', reviews_count: '--' };
+            const dataReview = review.data_review || defaultDataReview;
+
+            // Assign data based on OTA type
             switch (review.ota) {
                 case 'TRIPADVISOR':
-                    tripadvisorReview.value = review;
+                    tripadvisorReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'EXPEDIA':
-                    expediaReview.value = review;
+                    expediaReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'BOOKING':
-                    bookingReview.value = review;
+                    bookingReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'GOOGLE':
-                    googleReview.value = review;
+                    googleReview.value = { ...review, data_review: dataReview };
+                    break;
+                case 'AIRBNB':
+                    airbnbReview.value = { ...review, data_review: dataReview };
                     break;
                 default:
                     break;
             }
 
-            if (review.data_review && review.data_review.reviews_rating !== '--') {
-                totalRating += parseFloat(review.data_review.reviews_rating);
+            // Only calculate ratings if data_review has valid rating data
+            if (dataReview.reviews_rating !== '--') {
+                totalRating += parseFloat(dataReview.reviews_rating);
                 count++;
             }
-
-            average.value = count > 0 ? (totalRating / count) * 10 : 0;
         });
-        
+
+        // Calculate the average rating if count is greater than 0
+        average.value = count > 0 ? (totalRating / count) * 10 : 0;
     } else {
         toast.errorToast(response.data.message, 'top-right');
         average.value = 0; // Ensure average is 0 if there was an error
     }
 };
+
 </script>
 
 <style scoped>

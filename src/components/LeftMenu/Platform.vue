@@ -19,15 +19,15 @@
                             <img :src="item.icon" class="w-6 h-6 mr-3" />
                             <span class="text-sm font-medium">{{ item.text }}</span>
                         </div>
-                        <img v-if="item.text === 'Equipo'" src="/assets/icons/1.TH.I.dropdown.svg" :class="{'rotate-180': showSubmenu || isActiveSubmenu(item.text), 'transition-transform': true, 'duration-300': true}" class="w-4 h-4 ml-3" />
+                       <!--  <img v-if="item.text === 'Equipo'" src="/assets/icons/1.TH.I.dropdown.svg" :class="{'rotate-180': showSubmenu || isActiveSubmenu(item.text), 'transition-transform': true, 'duration-300': true}" class="w-4 h-4 ml-3" /> -->
                     </div>
                 </router-link>
-                <transition name="fade">
+                <!-- <transition name="fade">
                     <ul v-if="showSubmenu || isActiveSubmenu('Equipo')" class="submenu mt-2">
-                        <router-link to="/equipo/configuracion/usuarios" v-show="!$isOperator()" class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Usuarios</router-link>
+                        <router-link to="/equipo/configuracion/usuarios" class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/usuarios' }">Usuarios</router-link>
                         <router-link to="/equipo/configuracion/notificaciones"  class="submenu-item py-2 pl-6 text-sm" :class="{ 'submenu-item-active': route.path === '/equipo/configuracion/notificaciones' }">Notificaciones</router-link>
                     </ul>
-                </transition>
+                </transition> -->
             </ul>
         </nav>
     </aside>
@@ -40,8 +40,9 @@ import { useRoute } from 'vue-router';
 const title = 'Plataforma';
 const menuItems = [
     { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' },
-    { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  },
-    { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' }
+    /* { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  }, */
+    { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' , url: '/equipo/configuracion/usuarios' },
+    /* { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' } */
 ];
 
 const showSubmenu = ref(false);
