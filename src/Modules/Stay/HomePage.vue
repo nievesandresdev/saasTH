@@ -2,7 +2,7 @@
     <div class="px-6">
         <!-- head -->
         <section class="py-5 flex justify-between items-end border-b hborder-gray-400">
-            <h1 class="text-[22px] font-medium leading-[110%]">Estancias</h1>
+            <h1 class="text-[22px] font-medium leading-[110%]">Visión general de las estancias</h1>
             <Tooltip
                 size="l"
                 :top="25"

@@ -52,7 +52,7 @@
             <!-- counters -->
             <div class="mt-4 pb-2 pr-4">
                 <div class="flex items-center">
-                    <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalCounts==1 ?'':'s' }}</h2>
+                    <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalValidCount==1 ?'':'s' }}</h2>
                     <button 
                         v-if="filtersActive" 
                         class="text-xs font-semibold leading-130% underline ml-auto"
