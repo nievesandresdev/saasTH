@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'//getDataRoom
 import { ref } from 'vue'
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
 
 import {
     getDataRoomApi,
@@ -13,6 +14,8 @@ import {
 
 export const useChatStore = defineStore('chat', () => {
     
+    const staySessionsStore = useStaySessionsStore();
+
     async function $getDataRoom (stayId, guestId, showLoadPage = true) {
         let data = { stayId, guestId };
         const response = await getDataRoomApi(data, showLoadPage)
@@ -32,8 +35,10 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     async function $togglePending (guestId, stayId, pendingBool) {
-        let data = { guestId, stayId, pendingBool };
-        const response = await togglePendingApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(stayId);
+        let data = { guestId, pendingBool };
+        let newData = {...data,...dataUser};
+        const response = await togglePendingApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
@@ -41,8 +46,10 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     async function $sendMsg (guestId, stayId, text) {
-        let data = { guestId, stayId, text };
-        const response = await sendMsgApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(stayId);
+        let data = { guestId, text };
+        let newData = {...data,...dataUser};
+        const response = await sendMsgApi(newData)
         const { ok } = response   
         if(ok){
             return response.data

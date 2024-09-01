@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
 
 import {
     getFeedbackSummaryByGuestApi,
@@ -11,7 +12,7 @@ import {
 export const useQueryStore = defineStore('query', () => {
     
     // STATE
-
+    const staySessionsStore = useStaySessionsStore();
     // ACTIONS
     async function $getFeedbackSummaryByGuest (data) {
 
@@ -22,9 +23,11 @@ export const useQueryStore = defineStore('query', () => {
         }
     }
 
-    async function $togglePendingState (queryId, bool) {
+    async function $togglePendingState (queryId, bool, stayId) {
+        let dataUser = staySessionsStore.$getUserDataSession(stayId);
         let data = { queryId, bool };
-        const response = await togglePendingStateApi(data)
+        let newData = {...data,...dataUser};
+        const response = await togglePendingStateApi(newData)
         const { ok } = response   
         if(ok){
             return response.data

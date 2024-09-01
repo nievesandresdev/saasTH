@@ -48,10 +48,10 @@ import BodyChat from './BodyChat'
 import HeadChat from './HeadChat'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue';
 //store
-import { useStayStore } from '@/stores/modules/stay/stay';
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
 import { useChatStore } from '@/stores/modules/chat/chat'
 
-const stayStore = useStayStore();
+const staySessionsStore = useStaySessionsStore();
 const chatStore = useChatStore();
 
 const route = useRoute();
@@ -76,8 +76,6 @@ const pusher = ref(null)
 onMounted(async() => {
     data.value.guests = await chatStore.$getGuestListWNoti(route.params.stayId);
     listGuests.value = data.value.guests;
-    stayStore.$createSession(route.params.stayId ,'sessions')
-    //  stayStore.$getSessions(route.params.stayId)
     suscribePusher()
     window.addEventListener('beforeunload', handleBeforeUnload);
     nextTick(() => {
@@ -85,11 +83,6 @@ onMounted(async() => {
         textarea.style.height = '34px'; 
     });
 })
-
-onBeforeUnmount(() => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-})
-
 
 onBeforeRouteLeave((to, from, next) => {
     if (
@@ -105,7 +98,7 @@ onBeforeRouteLeave((to, from, next) => {
 
 const handleBeforeUnload = (event) => {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    staySessionsStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
     delete event['returnValue']; // Evitar la alerta del navegador
 }
 
@@ -192,7 +185,7 @@ const adjustTextareaHeight = () => {
 const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
     if(user){
-        await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+        await staySessionsStore.$deleteSession(route.params.stayId ,'sessions', user.email);
     }
 }
 

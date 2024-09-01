@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
 import { getUserData } from '@/api/services/users/userSettings.service';
-import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/stay.services'
+import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/staySession.services'
 import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {

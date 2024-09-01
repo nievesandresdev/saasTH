@@ -1,26 +1,25 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
 
 import {
     getAllByHotelApi,
     statisticsByHotelApi,
     getdetailDataApi,
     updateDataApi,
-    getSessionsApi,
     getAllNotesByStayApi,
     createOrupdateStayNoteApi,
     deleteStayNoteApi,
     createOrupdateGuestNoteApi,
     deleteGuestNoteApi,
-    createSessionApi,
-    deleteSessionApi,
     getDetailQueryByGuestApi,
-    getGuestListWithNotiApi,
-    getDefaultGuestIdAndSessionsApi
+    getGuestListWithNotiApi
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
     
+    const staySessionsStore = useStaySessionsStore();
+
     // STATE
     const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
 
@@ -35,7 +34,6 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $statisticsByHotel () {
         const response = await statisticsByHotelApi()
-        console.log('statisticsByHotel',response)
         const { ok } = response   
         if(ok){
             return response.data
@@ -54,7 +52,9 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $updateData (data) {
-        const response = await updateDataApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(data.stayId);
+        let newData = {...data,...dataUser};
+        const response = await updateDataApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
@@ -70,7 +70,9 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $createOrupdateStayNote (data) {
-        const response = await createOrupdateStayNoteApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(data.stayId);
+        let newData = {...data,...dataUser};
+        const response = await createOrupdateStayNoteApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
@@ -78,7 +80,9 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $deleteStayNote (data) {
-        const response = await deleteStayNoteApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(data.stayId);
+        let newData = {...data,...dataUser};
+        const response = await deleteStayNoteApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
@@ -86,7 +90,9 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $createOrupdateGuestNote (data) {
-        const response = await createOrupdateGuestNoteApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(data.stayId);
+        let newData = {...data,...dataUser};
+        const response = await createOrupdateGuestNoteApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
@@ -94,47 +100,15 @@ export const useStayStore = defineStore('stay', () => {
     }
 
     async function $deleteGuestNote (data) {
-        const response = await deleteGuestNoteApi(data)
+        let dataUser = staySessionsStore.$getUserDataSession(data.stayId);
+        let newData = {...data,...dataUser};
+        const response = await deleteGuestNoteApi(newData)
         const { ok } = response   
         if(ok){
             return response.data
         }
-    }
-
-    async function $createSession (stayId, field) {
-        let user = JSON.parse(sessionStorage.getItem('user'));
-        let userEmail = user.email;
-        let userName = user.name;
-        let userColor = user.color;
-        let data = { stayId, field, userEmail, userName, userColor };
-        const response = await createSessionApi(data)
-        const { ok } = response   
-        if(ok){
-            return response.data
-        }
-    }
-
-    async function $deleteSession (stayId, field, userEmail) {
-        let data = { stayId, field, userEmail };
-        const response = await deleteSessionApi(data)
-        const { ok } = response   
-        if(ok){
-            return response.data
-        }
-    }
-
-    async function $deleteSessionWithApiKey (stayId, userEmail) {
-        // Crea una URL con parámetros de consulta
-        let endpoint = `${URL_BASE_BACKEND_GENERAL}/stay/hoster/deleteSessionWithApiKey?`;
-        endpoint += `stayId=${encodeURIComponent(stayId)}`;
-        endpoint += `&userEmail=${encodeURIComponent(userEmail)}`;
-        endpoint += `&field=sessions`;
-        endpoint += `&xKeyApi=${encodeURIComponent(process.env.VUE_APP_X_KEY_API)}`;
-        // Llama a navigator.sendBeacon con la URL
-        navigator.sendBeacon(endpoint);
     }
     
-
     async function $getDetailQueryByGuest (stayId, guestId) {
         let data = { stayId, guestId };
         const response = await getDetailQueryByGuestApi(data)
@@ -153,40 +127,17 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
-    async function $getSessions (stayId) {
-        let data = { stayId };
-        const response = await getSessionsApi(data)
-        const { ok } = response   
-        if(ok){
-            return response.data
-        }
-    }
-
-    async function $getDefaultGuestIdAndSessions (stayId) {
-        const response = await getDefaultGuestIdAndSessionsApi(stayId)
-        const { ok } = response   
-        if(ok){
-            return response.data
-        }
-    }
-
     return {
         $getAllByHotel,
         $statisticsByHotel,
         $getdetailData,
         $updateData,
-        $getDefaultGuestIdAndSessions,
         //notes
         $getAllNotesByStay,
         $createOrupdateStayNote,
         $deleteStayNote,
         $createOrupdateGuestNote,
         $deleteGuestNote,
-        //sessions
-        $getSessions,
-        $createSession,
-        $deleteSession,
-        $deleteSessionWithApiKey,
         //query
         $getDetailQueryByGuest,
         //guests
