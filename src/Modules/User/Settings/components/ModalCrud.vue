@@ -8,7 +8,21 @@
         @click="selectOption(option)"
       >
         <span class="m-2">{{ option.name }}</span>
-        <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-5 w-5 cursor-pointer" @click.stop="openEditModal(option)" />
+        <div class="flex gap-2">
+          <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-4 w-4 cursor-pointer" @click.stop="openEditModal(option)" />
+          <img
+            src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
+            class="w-4 h-4 mr-2"
+            alt="icon_trash"
+            @click.stop="openEditDelete(option.id)"
+          />
+        </div>
+        <!-- <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-4 w-4 cursor-pointer" @click.stop="openEditModal(option)" />
+        <img
+            src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
+            class="w-4 h-4 mr-2"
+            alt="icon_trash"
+          /> -->
       </div>
       <div @click="openCreateModal" class="text-center px-4 py-2 mt-2 text-sm text-black border border-black m-3 rounded-md cursor-pointer hover:bg-gray-50">
         Crear puesto de trabajo
@@ -31,6 +45,7 @@
     :isVisible="isEditing"
     @close="closeEditModal"
     :data="dataEdit"
+    @storeWorkPosition="getWorkPositions"
     :width="'400px'"
   />
 </template>
@@ -54,7 +69,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select']);
+const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP']);
 
 const isEditing = ref(false);
 const isCreating = ref(false);
@@ -69,6 +84,10 @@ const selectOption = (option) => {
   emit('select', option);
 };
 
+const getWorkPositions = () => {
+  emit('getWorkPositions');
+};
+
 const openCreateModal = () => {
   isCreating.value = true;
   isEditing.value = false;
@@ -78,6 +97,10 @@ const openEditModal = (option) => {
   isCreating.value = false;
   isEditing.value = true;
   dataEdit.value = option;
+};
+
+const openEditDelete = (option) => {
+  emit('deleteWP', option);
 };
 
 const closeCreateModal = () => {

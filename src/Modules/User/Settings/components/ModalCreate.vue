@@ -39,7 +39,6 @@
       <div v-if="currentStep === 1" class="mb-6">
         <AccessPermissions
           v-model:permissions="form.permissions"
-          :isRoleAdmin="isRoleAdmin"
         />
       </div>
       <div v-if="currentStep === 2">
@@ -107,7 +106,6 @@ const isRoleAdmin = ref(false);
 
 const submitForm = async() => {
   //console.log(JSON.stringify(form)); // Se muestra el objeto final de permisos
-  console.log('submiting',form)
 
   const response = await createWorkPosition(form);
 
@@ -115,6 +113,8 @@ const submitForm = async() => {
     toast.warningToast('Puesto creado con éxito','top-right')
     cancel();
     emit('storeWorkPosition',response.data.wPosition)
+  }else{
+    toast.errorToast('Error al crear el puesto','top-right')
   }
 }
 

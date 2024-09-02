@@ -32,6 +32,7 @@
             <span class="text-sm font-[500]">{{ item.name }}</span>
             <input type="checkbox" 
                    :checked="item.selected" 
+                   @change="togglePermission(item)"
                    class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
                    :disabled="isDisabled || item.disabled">
           </div>
@@ -45,6 +46,7 @@
             <span class="text-sm font-[500]">{{ item.name }}</span>
             <input type="checkbox" 
                    :checked="item.selected" 
+                   @change="togglePermission(item)"
                    class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
                    :disabled="isDisabled || item.disabled">
           </div>
@@ -63,10 +65,6 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  isRoleAdmin: {
-    type: Boolean,
-    default: false,
-  },
   workPositionId: {
     type: [Number, String],
     default: null,
@@ -78,6 +76,7 @@ const emits = defineEmits(['update:permissions']);
 const selectAll = ref(false);
 
 const formPermissions = ref({ ...props.permissions });
+
 
 const isDisabled = computed(() => props.workPositionId !== null);
 
@@ -120,7 +119,7 @@ const toggleAllPermissions = () => {
     item.selected = isSelected;
     item.disabled = isSelected || isDisabled.value; // Deshabilita todos si selecciona "Todos los accesos" o si workPositionId no es null
     if (isSelected) {
-      formPermissions.value[item.value] = { can: [], status: true };
+      formPermissions.value[item.value] = { can: {}, status: true };
     } else {
       delete formPermissions.value[item.value];
     }
@@ -130,12 +129,25 @@ const toggleAllPermissions = () => {
     item.selected = isSelected;
     item.disabled = isSelected || isDisabled.value; // Deshabilita todos si selecciona "Todos los accesos" o si workPositionId no es null
     if (isSelected) {
-      formPermissions.value[item.value] = { can: [], status: true };
+      formPermissions.value[item.value] = { can: {}, status: true };
     } else {
       delete formPermissions.value[item.value];
     }
   });
 
+  emits('update:permissions', formPermissions.value);
+};
+
+
+
+const togglePermission = (item) => {
+  item.selected = !item.selected;
+
+  if (item.selected) {
+    formPermissions.value[item.value] = { can: {}, status: true };
+  } else {
+    delete formPermissions.value[item.value];
+  }
   emits('update:permissions', formPermissions.value);
 };
 </script>

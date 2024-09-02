@@ -67,6 +67,8 @@
                       :open="isModalCrudOpen"
                       @close="closeModalWorkPosition"
                       @select="selectWorkPosition"
+                      @getWorkPositions="getWorkPositions"
+                      @deleteWP="deleteWorkPosition"
                     />
                   </div>
                 </transition>
@@ -171,6 +173,7 @@
                 v-model:periodicityStay="form.periodicityStay"
                 v-model:notifications="form.notifications"
                 :maxHeight="600"
+                :workPositionId="form.work_position_id"
               />
             </div>
           </div>
@@ -201,6 +204,7 @@
           :url="intendedRoute"
           @hidden="handleCloseModal"
         />
+        <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
       </div>
       
     </transition>
@@ -220,11 +224,12 @@
   import AccessPermissions from './AccessPermisions.vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import Notifications from './Notifications.vue';
+  import ModalDeleteWork from './ModalDeleteWork.vue';
 
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
   
-  const emits = defineEmits(['close','update']);
+  const emits = defineEmits(['close','update','workPositionGet','handleDeleteWP']);
 
   const router = useRouter();
   const route = useRoute();
@@ -237,6 +242,24 @@
     workPositions: Array,
     dataUser : Object
   });
+
+  const getWorkPositions = () => {
+    emits('workPositionGet');
+    emits('handleDeleteWP');
+  };
+
+  const isDeleteWorkPositions = ref(false);
+  const IdDeleteWP = ref({});
+
+  const deleteWorkPosition = (option) => {
+    //emits('deleteWP',option);
+    isDeleteWorkPositions.value = true;
+    IdDeleteWP.value = option;
+  }
+
+  const closeDeleteWorkPositions = () => {
+    isDeleteWorkPositions.value = false;
+  }
 
 
 
@@ -308,7 +331,7 @@ const form = ref({
   password_confirmation: '', */
   hotels: [],
   access: [],
-  permissions: [],
+  permissions: {},
   periodicityChat: 5, 
   periodicityStay: 5,
   notifications: {
@@ -369,7 +392,9 @@ const form = ref({
 
         // Función para actualizar accesos
         const updateAccess = () => {
-            const permissions = form.value.access;
+            const permissions = form.value.permissions;
+
+            console.log('permissiosssns',permissions)
 
             /* console.log('permissions',permissions,firstHotel.value) */
 
@@ -497,8 +522,10 @@ const form = ref({
 
   const updateCheckboxesAndPermissions = (accessList, permissions) => {
     accessList.forEach((accessItem) => {
+      /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
       const permissionKey = accessItem.value;
-      const isSelected = permissions[permissionKey] && permissions[permissionKey].status;
+      
+      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
       
       accessItem.selected = isSelected;
       accessItem.disabled = isSelected;
@@ -731,7 +758,7 @@ const handleCheckPermissionOLD = (permissionName, isSelected) => {
     //console.log('jsonHotelhandleCheckPermission', jsonHotel.value);
 };
 
-const handleCheckPermission = (permissionName, isSelected) => {
+const handleCheckPermission = (permissionName, isSelected ) => {
     form.value.hotels.forEach(hotelId => {
         const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
         

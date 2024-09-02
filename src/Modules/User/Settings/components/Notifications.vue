@@ -38,6 +38,7 @@
                 :type="'number'"
                 :errors="errors"
                 name="notifications"
+                :disabled="isDisabled"
                 @input="emitChanges"
               />
               <span class="text-sm font-[400] mt-2">min</span>
@@ -50,15 +51,15 @@
           </div>
           <div class="flex justify-between items-center mb-2">
             <span class="text-sm font-[400]">1. Nuevo chat</span>
-            <input type="checkbox" v-model="notifications.newChat" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.newChat" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
           </div>
           <div class="flex justify-between items-center mb-2">
             <span class="text-sm font-[400]">2. Chat pendiente hace 10 minutos</span>
-            <input type="checkbox" v-model="notifications.PendingChat10" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.PendingChat10" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
           </div>
           <div class="flex justify-between items-center mb-8">
             <span class="text-sm font-[400]">3. Chat pendiente hace 30 minutos</span>
-            <input type="checkbox" v-model="notifications.pendingChat30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F]">
+            <input type="checkbox" v-model="notifications.pendingChat30" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
           </div>
   
           <!-- Sección de Estancias - Seguimiento -->
@@ -78,6 +79,7 @@
                 classContent="mt-2 w-[40px]"
                 :type="'number'"
                 :errors="errors"
+                :disabled="isDisabled"
                 name="notifications"
                 @input="emitChanges"
               />
@@ -90,7 +92,7 @@
   </template>
   
   <script setup>
-  import { ref, defineProps, defineEmits } from 'vue';
+  import { ref, defineProps, defineEmits,computed } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
   
@@ -109,6 +111,10 @@
       type: Number,
       default: 400, // Altura máxima predeterminada
     },
+    workPositionId: {
+      type: [Number, String],
+      default: null,
+    },
   });
 
 const emits = defineEmits([
@@ -116,16 +122,25 @@ const emits = defineEmits([
   'update:periodicityStay',
   'update:notifications'
 ]);
+
+const isDisabled = computed(() => props.workPositionId !== null);
   
   const periodicityChat = ref(props.periodicityChat);
   const periodicityStay = ref(props.periodicityStay);
   const notifications = ref({ ...props.notifications });
   
   const emitChanges = () => {
-    emits('update:periodicityChat', periodicityChat.value);
-    emits('update:periodicityStay', periodicityStay.value);
-    emits('update:notifications', notifications.value);
-  };
+  emits('update:periodicityChat', periodicityChat.value);
+  emits('update:periodicityStay', periodicityStay.value);
+  emits('update:notifications', notifications.value);
+
+  /* console.log('Emit changes:', {
+    periodicityChat: periodicityChat.value,
+    periodicityStay: periodicityStay.value,
+    notifications: notifications.value,
+  }); */
+};
+
   </script>
   
   <style scoped>

@@ -38,7 +38,6 @@
       <div v-if="currentStep === 1" class="mb-6">
         <AccessPermissions
           v-model:permissions="form.permissions"
-          :isRoleAdmin="isRoleAdmin"
         />
       </div>
       <div v-if="currentStep === 2">
@@ -47,6 +46,7 @@
           v-model:periodicityStay="form.periodicityStay"
           v-model:notifications="form.notifications"
         />
+
       </div>
     </template>
 
@@ -71,13 +71,14 @@
 </template>
   
 <script setup>
-import { ref, reactive,defineEmits,defineProps } from 'vue';
+import { ref, reactive,defineEmits,defineProps,watch } from 'vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import AccessPermissions from './AccessPermisions.vue';
 import Notifications from './Notifications.vue';
-import { createWorkPosition } from '@/api/services/users/userSettings.service';
+import { updateWorkPosition } from '@/api/services/users/userSettings.service';
 import { useToastAlert } from '@/composables/useToastAlert'
+import { nextTick } from 'vue';
 
 const toast = useToastAlert();
 
@@ -87,13 +88,25 @@ const props = defineProps({
   data: Object,
 });
 
+
 const form = reactive({
+  id: props.data.id,
   name: props.data.name,
-  permissions: JSON.parse(props.data.permissions), // Mantén los permisos como un objeto enlazado
-  periodicityChat: props.data.periodicity_chat, 
-  periodicityStay: props.data.periodicity_stay,
-  notifications: JSON.parse(props.data.notifications),
+  permissions: JSON.parse(props.data.permissions),
+  periodicityChat: props.data.periodicity_chat ?? 5,
+  periodicityStay: props.data.periodicity_stay ?? 5,
+  notifications: {
+    newChat: JSON.parse(props.data.notifications || '{}').newChat ?? false,
+    PendingChat10: JSON.parse(props.data.notifications || '{}').PendingChat10 ?? false,
+    pendingChat30: JSON.parse(props.data.notifications || '{}').pendingChat30 ?? false,
+  },
 });
+
+
+
+/* watch(() => form.permissions, (newValue) => {
+  console.log('form.permissionsnew',newValue)
+}) */
 
 const currentStep = ref(1);
 const steps = [
@@ -101,21 +114,26 @@ const steps = [
   { number: 2, label: 'Notificaciones' },
 ];
 
-const isRoleAdmin = ref(false);
 
 
-const submitForm = async() => {
-  //console.log(JSON.stringify(form)); // Se muestra el objeto final de permisos
-  console.log('submiting',form)
+const submitForm = async () => {
+  await nextTick();
+  //console.log('Submitting form:', form);
 
-  const response = await createWorkPosition(form);
+  const response = await updateWorkPosition(form);
 
   if (response.ok) {
-    toast.warningToast('Puesto creado con éxito','top-right')
+    toast.warningToast('Cambios guardados con éxito', 'top-right');
     cancel();
-    emit('storeWorkPosition',response.data.wPosition)
+    emit('storeWorkPosition', response.data.wPosition);
   }
-}
+};
+
+
+/* watch(() => form, (newForm) => {
+  console.log('Form updated:', newForm);
+}, { deep: true }); */
+
 
 const cancel = () => {
   form.name = '';

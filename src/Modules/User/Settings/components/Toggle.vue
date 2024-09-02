@@ -87,6 +87,7 @@
   
   const editUser = (user) => {
     visible.value = false;
+    console.log('dddd',user);
     emits('editUser', user);
   };
   

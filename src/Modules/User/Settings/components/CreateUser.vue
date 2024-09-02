@@ -81,6 +81,7 @@
                           :open="isModalCrudOpen"
                           @close="closeModalWorkPosition"
                           @select="selectWorkPosition"
+                          @deleteWP="deleteWorkPosition"
                         />
                       </div>
                     </transition>
@@ -229,7 +230,7 @@
                       <div>
                           <div class="flex items-center justify-between mb-4">
                               <span class="text-sm font-semibold">Todos los accesos</span>
-                              <input type="checkbox" v-model="selectAll"  @change="toggleAllPermissions" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                              <input type="checkbox" v-model="selectAll"  @change="toggleAllPermissions" :disabled="form.work_position_id" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                           </div>
                           <span class="block mb-2 font-semibold text-sm">Operación</span>
                           <div class="space-y-2 ml-2">
@@ -263,6 +264,7 @@
                     v-model:periodicityStay="form.periodicityStay"
                     v-model:notifications="form.notifications"
                     :maxHeight="600"
+                    :workPositionId="form.work_position_id"
                   />
                 </div>
               </div>
@@ -296,6 +298,8 @@
               :url="intendedRoute"
               @hidden="handleCloseModal"
             />
+
+            <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
       </div>
     </transition>
 
@@ -311,6 +315,8 @@
   import { useMouseHandle } from '@/composables/useMouseHandle';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import Notifications from './Notifications.vue';
+  import ModalWindow from '@/components/ModalWindow.vue';
+  import ModalDeleteWork from './ModalDeleteWork.vue';
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -324,7 +330,7 @@
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
-  const emits = defineEmits(['close','store','alert']);
+  const emits = defineEmits(['close','store','alert','workPositionGet','deleteWP','handleDeleteWP']);
   
   const props = defineProps({
     modalAdd: Boolean,
@@ -340,6 +346,23 @@ router.beforeEach((to, from, next) => {
   }
 
 });
+
+const isDeleteWorkPositions = ref(false);
+const IdDeleteWP = ref({});
+
+const deleteWorkPosition = (option) => {
+  //emits('deleteWP',option);
+  isDeleteWorkPositions.value = true;
+  IdDeleteWP.value = option;
+}
+
+const getWorkPositions = (option) => {
+  emits('handleDeleteWP',option);
+}
+
+const closeDeleteWorkPositions = () => {
+  isDeleteWorkPositions.value = false;
+}
 
   
   
@@ -408,7 +431,6 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
   const selectedWorkPositionName = ref('Elige el puesto de trabajo');
-  const isModalOpen = ref(false);
   const isModalCrudOpen = ref(false);
   const rolAlert = ref(0);
 

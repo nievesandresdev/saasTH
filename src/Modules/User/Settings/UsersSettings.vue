@@ -107,13 +107,18 @@
       @store="handleConfirmCreateUser"
       @alert="confirmCreateUser" 
       :work-positions="workPositionsData" 
+      @workPositionGet="workPositions"
+      @deleteWP="isDeleteWorkPositions = true"
+      @handleDeleteWP="getUserAndWP"
     />
     <EditUser 
       :modal-edit="modalEdit"
       @close="closeModalEdit" 
       @update="handleGetUsers" 
       :work-positions="workPositionsData" 
-      :data-user="dataEdit" 
+      :data-user="dataEdit"
+      @workPositionGet="workPositions" 
+      @handleDeleteWP="getUserAndWP"
     />
     <ShowUser 
       :modal-show="modalShow" 
@@ -167,6 +172,7 @@
         </div>
       </template>
     </ModalWindow>
+    
   </template>
   
   <script setup>
@@ -182,7 +188,6 @@
   import { useUserStore } from '@/stores/modules/users/users';
   import ModalWindow from '@/components/ModalWindow.vue';
   import { useToastAlert } from '@/composables/useToastAlert';
-  import { $isAdmin, $isOperator } from '@/utils/helpers';
   
   const modalAdd = ref(false);
   const workPositionsData = ref([]);
@@ -194,6 +199,8 @@
   
   const selectedUser = ref(null);
   const userData = ref({});
+
+  const isDeleteWorkPositions = ref(false);
   
   const openConfirmCreateUser = ref(false);
   
@@ -211,6 +218,10 @@
   
   const closeDeleteUser = () => {
     deleteUser.value = false;
+  };
+
+  const closeDeleteWorkPositions = () => {
+    isDeleteWorkPositions.value = false;
   };
   
   onMounted(() => {
@@ -312,6 +323,11 @@
     }
     visibleDropdown.value = null;
   };
+
+  const getUserAndWP = () => {
+    workPositions('create');
+    handleGetUsers();
+  };  
   
   const closeModal = () => {
     modalAdd.value = false;
