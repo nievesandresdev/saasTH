@@ -48,9 +48,11 @@
                     <template #msg>Personaliza el mensaje que incluirás en el mensaje de confirmación de reserva para tus huéspedes.</template>
                     <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">OTA</h1></template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <router-link :to="{ name : 'comunicationInvitationByBooking'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
                             Instrucciones
-                        </div>
+                        </router-link>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Desde tu PMS" period="pre-stay">

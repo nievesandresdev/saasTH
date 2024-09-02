@@ -72,6 +72,7 @@
                   </template>
                 </ul>
               </li>
+              <!-- normal link -->
               <li
                 v-else
                 class="hover-gray-100"
@@ -329,7 +330,7 @@ const menu_section = reactive([
             title: 'Comunicaciones',
             icon: '/assets/icons/1.TH.COMUNICACIONES.svg',
             to: 'ComunicationHome',
-            include: '/comunicacion',
+            include: '/comunicaciones',
             selectedArr: ['ComunicationHome'],
         },
         {
