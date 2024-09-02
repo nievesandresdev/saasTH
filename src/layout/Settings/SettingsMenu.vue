@@ -328,9 +328,9 @@ const menu_section = reactive([
         {
             title: 'Comunicaciones',
             icon: '/assets/icons/1.TH.COMUNICACIONES.svg',
-            to: 'Customization',
-            include: '',
-            selectedArr: ['Customization'],
+            to: 'ComunicationHome',
+            include: '/comunicacion',
+            selectedArr: ['ComunicationHome'],
         },
         {
             title: 'Personalización',
