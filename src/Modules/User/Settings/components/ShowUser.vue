@@ -3,7 +3,7 @@
       <div
         v-if="modalShow"
         class="absolute bg-white shadow-xl add flex-column"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
+        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 601;`"
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
@@ -34,6 +34,30 @@
             <div class="flex flex-col mb-5">
                 <span class="text-sm font-semibold">Teléfono</span>
                 <span class="text-base font-normal">{{ dataUser?.prefix }} {{ dataUser?.phone }}</span>
+            </div>
+            <div class="flex flex-col mb-5">
+                <span class="text-sm font-semibold">Antigüedad</span>
+                <span class="text-base font-normal">{{ dataUser?.time }}</span>
+            </div>
+            <div class="flex flex-col mb-5">
+                <span class="text-sm font-semibold">Estado del usuario</span>
+                <div class="flex justify-between mt-[10px]">
+                  <span v-if="dataUser.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                    Activo
+                  </span>
+                  <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                    Inactivo
+                  </span>
+                  <div v-if="dataUser.del == 0" class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8" @click="createUser">
+                    <img src="/assets/icons/1.TH.PAUSE.svg" class="w-4 h-4 mr-2" alt="plus icon">
+                    <span class="font-medium text-sm">Inactivar</span>
+                  </div>
+                  <div v-else class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8" @click="createUser">
+                    <img src="/assets/icons/1.TH.PAUSE.svg" class="w-4 h-4 mr-2" alt="plus icon">
+                    <span class="font-medium text-sm">Activar</span>
+                  </div>
+                  
+                </div>
             </div>
             <hr class="mb-4">
             <div class="flex justify-between mb-5">
