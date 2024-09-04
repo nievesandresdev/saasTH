@@ -7,19 +7,7 @@
     <AlertShowGuest :show_guest="form.show_guest"/>
     <section class="px-6 min-h-screen">
       <HeadChat/>
-      <div class="flex justify-start mt-5 gap-2">
-          <span class="text-[18px] font-semibold">Respuestas automáticas en el chat</span>
-          <Tooltip size="m" :top="25" :left="5">
-            <template v-slot:button>
-                <img class="w-[20px] h-[20px]" src="/assets/icons/info.blue.svg">
-            </template>
-            <template v-slot:content>
-                <p class="text-sm">Aquí podrás configurar las respuestas automáticas que recibirán tus huéspedes cuando los operadores no estén disponibles para atender el Chat.
-                </p>
-            </template>
-        </Tooltip>
-      </div>
-      <SectionConfig class="mb-5">
+      <SectionConfig :marginTop="'24px'">
         <template #title>
             <h1 class="text-base font-medium mb-2">Chat Disponible</h1>
             <p class="text-sm mt-2 mb-5">
@@ -99,7 +87,7 @@
           </div>
         </template>
       </SectionConfig>
-      <SectionConfig>
+      <SectionConfig :marginTop="'24px'">
         <template #title>
             <h1 class="text-base font-medium mb-2">Chat No Disponible</h1>
             <p class="text-sm mt-2 mb-5">
@@ -109,7 +97,7 @@
           <template #content>
           <!-- contenido-->
           <div class="flex justify-between items-center">
-            <label class="text-sm font-medium mb-2 block">Después de 1 minuto sin recibir una respuesta</label>
+            <label class="text-sm font-semibold mb-2 block">Cuando un huésped envíe un mensaje fuera del horario de atención</label>
             <div class="flex">
               <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
               <BaseSwichInput
