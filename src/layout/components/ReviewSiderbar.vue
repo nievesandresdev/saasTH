@@ -1,5 +1,5 @@
 <template>
-  <nav class="h-full w-full bg-white shadow-menu flex flex-col">
+  <nav class="h-full w-full bg-white shadow-menu flex flex-col shadow-md">
     <div>
         <div class="py-[22px] px-[16px] flex justify-between items-center">
             <router-link :to="{ name: 'Reviews' }">
