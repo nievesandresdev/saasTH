@@ -18,6 +18,8 @@ export const createUser = (data) => apiHttp('POST', `${userPath}/store`, data)
 export const updateUser = (data) => apiHttp('POST', `${userPath}/update`, data)
 export const updateProfile = (data) => apiHttp('POST', `${userPath}/update-profile`, data)
 export const deleteUser = (data) => apiHttp('POST', `${userPath}/delete`, data)
+export const enableUser = (data) => apiHttp('POST', `${userPath}/enabled`, data)
+export const disableUser = (data) => apiHttp('POST', `${userPath}/disabled`, data)
 export const getSubscriptionStatus = () => apiHttp('GET', `${userPath}/get-subscription-status`)
 
 

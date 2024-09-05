@@ -32,7 +32,8 @@ export const useAuthStore = defineStore('auth', () => {
                 sessionStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
                 this.$router.push('/dashboard');
             } else {
-                errorLogin.value = 'Credenciales incorrectas';
+                errorLogin.value = response.data.motives.message;
+                console.log('errorLogin', response.data);
             }
 
         } catch (error) {
