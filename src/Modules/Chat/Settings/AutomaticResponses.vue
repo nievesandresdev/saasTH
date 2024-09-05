@@ -18,7 +18,7 @@
           <!-- contenido-->
           <section class="mb-4">
             <div class="flex justify-between items-center">
-              <label class="text-sm font-medium mb-2 block">Después de 1 minuto sin recibir una respuesta</label>
+              <label class="text-sm font-semibold mb-2 block">Después de 1 minuto sin recibir una respuesta</label>
               <div class="flex">
                 <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
                 <BaseSwichInput
@@ -40,7 +40,7 @@
           </section>
           <section class="mb-4">
             <div class="flex justify-between items-center">
-              <label class="text-sm font-medium mb-2 block">Después de 5 minutos sin recibir una respuesta</label>
+              <label class="text-sm font-semibold mb-2 block">Después de 5 minutos sin recibir una respuesta</label>
               <div class="flex">
                 <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
                 <BaseSwichInput
@@ -61,7 +61,7 @@
           </section>
           <section class="mb-4">
               <div class="flex justify-between items-center">
-                <label class="text-sm font-medium mb-2 block">Después de 10 minutos sin recibir una respuesta</label>
+                <label class="text-sm font-semibold mb-2 block">Después de 10 minutos sin recibir una respuesta</label>
                 <div class="flex">
                   <label class="text-sm font-semibold mb-2 mr-2 block">Activado</label>
                   <BaseSwichInput
