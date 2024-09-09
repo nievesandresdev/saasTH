@@ -82,10 +82,19 @@
             Guardar
         </button>
     </div>
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, nextTick, watch } from 'vue';
+import { ref, reactive, onMounted, nextTick, watch } from 'vue';
 import HeadLegal from './components/HeadLegal.vue';
 import TabLegal from './components/TabLegal.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
@@ -93,6 +102,7 @@ import BaseSwitchInput from "@/components/Forms/BaseSwichInput.vue";
 import { storeGeneralLegal, getGeneralLegal } from '@/api/services/legal/legal.services';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import { useToastAlert } from '@/composables/useToastAlert';
+import ModalNoSave from '@/components/ModalNoSave.vue'
 
 const toast = useToastAlert();
 
