@@ -126,7 +126,7 @@
 
 import { ref, reactive, onMounted, provide, computed, nextTick, inject, watch } from 'vue';
 
-import { $capitalize } from '@/utils/textWritingTypes';
+import { $capitalize, $titleCase } from '@/utils/textWritingTypes';
 
 import { useRouter } from 'vue-router';
 const route = useRouter();
