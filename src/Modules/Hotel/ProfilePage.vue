@@ -377,23 +377,23 @@
     });
 
     const typeLodging = [
-        { value: "Hotel", label: "Hotel", disabled: false },
-        { value: "Hostal", label: "Hostal", disabled: false },
-        { value: "Pensión", label: "Pensión", disabled: false },
+        { value: "Hotel", label: "hotel", disabled: false },
+        { value: "hostal", label: "hostal", disabled: false },
+        { value: "pension", label: "Pensión", disabled: false },
         {
-            value: "Complejo de apartamentos",
+            value: "ca",
             label: "Complejo de apartamentos",
             disabled: true,
             tag: { text: "Próximamente", class: "success-tag" }
         },
         {
-            value: "Apartamento turístico",
+            value: "at",
             label: "Apartamento turístico",
             disabled: true,
             tag: { text: "Próximamente", class: "success-tag" }
         },
         {
-            value: "Vivienda con fines turísticos",
+            value: "vft",
             label: "Vivienda con fines turísticos",
             disabled: true,
             tag: { text: "Próximamente", class: "success-tag" }
