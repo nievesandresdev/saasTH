@@ -110,6 +110,15 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+    
+    async function $updateSenderMailMask (data) {
+        const response = await hotelService.updateSenderMailMaskApi(data);
+        console.log('updateSenderMailMask',response)
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+    
 
     async function $updateVisivilityFacilities () {
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
@@ -139,6 +148,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
     async function $updateVisivilityCategory (body) {
         const response = await hotelService.updateVisivilityCategoryApi(body);
         return response;
@@ -147,6 +157,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
     async function $updateVisivilityTypePlace (body) {
         const response = await hotelService.updateVisivilityTypePlaceApi(body);
         return response;
@@ -155,6 +166,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
     async function $verifySubdomainExistPerHotel (params) {
         const response = await hotelService.verifySubdomainExistPerHotel(params, {showPreloader: false});
         return response;
@@ -163,6 +175,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
     async function $updateCustomization (data) {
         const response = await hotelService.updateCustomization(data);
         return response;
@@ -194,6 +207,7 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateVisivilityTypePlace,
         $verifySubdomainExistPerHotel,
         $updateCustomization,
+        $updateSenderMailMask
     }
 
 })

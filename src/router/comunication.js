@@ -1,10 +1,15 @@
 const AppLayout = () => import('@/layout/AppLayout');
 
 const comunicationHome = () => import('@/Modules/Comunication/ComunicationHome');
+
 const invitationByAirbnb = () => import('@/Modules/Comunication/InvitationByOtas/Airbnb');
 const invitationByBooking = () => import('@/Modules/Comunication/InvitationByOtas/Booking');
 const invitationByExpedia = () => import('@/Modules/Comunication/InvitationByOtas/Expedia');
 
+const FromPMS = () => import('@/Modules/Comunication/FromPMS');
+const Signage = () => import('@/Modules/Comunication/Signage');
+const FromQRTV = () => import('@/Modules/Comunication/FromQRTV');
+const FromYourWeb = () => import('@/Modules/Comunication/FromYourWeb');
 
 const comunicationRoutes = [
   {
@@ -36,7 +41,27 @@ const comunicationRoutes = [
               component: invitationByExpedia
             },
           ]
-        }
+        },
+        {
+          name: 'ComunicationFromPMS',
+          path: 'desde-tu-pms',
+          component: FromPMS
+        },
+        {
+          name: 'ComunicationSignage',
+          path: 'senaletica',
+          component: Signage
+        },
+        {
+          name: 'ComunicationFromQRTV',
+          path: 'codigo-qt-desde-tv',
+          component: FromQRTV
+        },
+        {
+          name: 'ComunicationFromYourWeb',
+          path: 'desde-tu-web',
+          component: FromYourWeb
+        },
     ]
   }
 ];

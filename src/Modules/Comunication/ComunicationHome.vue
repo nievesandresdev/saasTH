@@ -59,9 +59,11 @@
                     <template #msg>Personaliza el mensaje que añadirás en el mensaje de reserva para tus huéspedes en tu PMS.</template>
                     <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">PMS</h1></template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <router-link :to="{ name : 'ComunicationFromPMS'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
                             Instrucciones
-                        </div>
+                        </router-link>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Señalética" period="stay">
@@ -72,9 +74,11 @@
                         </div>
                     </template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <router-link :to="{ name : 'ComunicationSignage'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
                             Instrucciones
-                        </div>
+                        </router-link>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Código QR en TV" period="stay">
@@ -85,9 +89,11 @@
                         </div>
                     </template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <router-link :to="{ name : 'ComunicationFromQRTV'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
                             Instrucciones
-                        </div>
+                        </router-link>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Desde tu Web" period="pre-stay">
@@ -98,9 +104,11 @@
                         </div>
                     </template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <router-link :to="{ name : 'ComunicationFromYourWeb'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
                             Instrucciones
-                        </div>
+                        </router-link>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Entre huéspedes">
@@ -111,9 +119,13 @@
                         </div>
                     </template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('betweenGuests')"
+                        >
                             Configurar
-                        </div>
+                        </a>
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Invitación manual ">
@@ -124,9 +136,13 @@
                         </div>
                     </template>
                     <template #button>
-                        <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('manualInvitation')"
+                        >
                             Configurar
-                        </div>
+                        </a>
                     </template>
                 </CardSectionHome>
             </div>
@@ -146,9 +162,13 @@
                     </div>
                 </template>
                 <template #button>
-                    <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('welcomeMsg')"
+                    >
                         Configurar
-                    </div>
+                    </a>
                 </template>
             </CardSectionHome>
             <CardSectionHome title="Recordatorio chat" period="stay" special>
@@ -159,16 +179,49 @@
                     </div>
                 </template>
                 <template #button>
-                    <div class="cursor-pointer hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8">
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('reminderChatMsg')"
+                    >
                         Configurar
-                    </div>
+                    </a>
                 </template>
             </CardSectionHome>
         </div>
     </section>
+
+    <SidePanel />
 </template>
 <script setup>
+import { ref, provide, onMounted } from 'vue'
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import CardSectionHome from "./CardSectionHome.vue";
+import SidePanel from "./components/SidePanel.vue";
+
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStorage = useHotelStore();
+
+const isOpenSidePanel = ref(false)
+const conceptPanel = ref(null)
+const maskEmail = ref("no-reply@thehoster.es")
+
+const openSidePanel = (concept) =>{
+    conceptPanel.value = concept;
+    isOpenSidePanel.value = true;
+}
+
+onMounted(async() => {
+    // {subdomain: sessionStorage.getItem('current_subdomain')}
+    let dataHotel = await hotelStorage.$findByParams()
+    if(dataHotel.sender_mail_mask){
+        maskEmail.value = dataHotel.sender_mail_mask;
+    }
+})
+
+
+provide('isOpenSidePanel',isOpenSidePanel)
+provide('conceptPanel',conceptPanel)
+provide('maskEmail',maskEmail)
 </script>
