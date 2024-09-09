@@ -14,7 +14,7 @@
                 <div class="w-full">
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">Razón social</label>
-                        <BaseTextField v-model="form.name" placeholder="Ejemplo: Tecnologías Innovadoras S.A." />
+                        <BaseTextField v-model="form.name" placeholder="Ejemplo: Tecnologías Innovadoras S.A." :error="form.nameError" />
                     </section>
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal</label>
@@ -23,17 +23,17 @@
                             id="fiscal_address"
                             type="text"
                             placeholder="Ejemplo: Plaza Trinidad 15, 5C - Sevilla"
-                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border hinput-green"
-                            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'}`"
+                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border  border-black"
+                            :class="form.addressError ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
                         >
                     </section>
                     <section class="mb-4">
                         <label class="text-sm font-medium mb-[6px] block">NIF</label>
-                        <BaseTextField v-model="form.nif" placeholder="Ejemplo: A87654321" />
+                        <BaseTextField v-model="form.nif" placeholder="Ejemplo: A87654321" :error="form.nifError" />
                     </section>
                     <section class="mb-6">
                         <label class="text-sm font-medium mb-[6px] block">Email de contacto</label>
-                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" :error="!isEmailValid"/>
+                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" :error="form.emailError"/>
                         <div v-if="!isEmailValid" class="flex mt-1 text-[#FF6666] justify-left">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -51,7 +51,7 @@
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
                             <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="!isEmailProtectionValid" ref="emailProtectionInput"/>
+                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="form.emailProtectionError" ref="emailProtectionInput"/>
                             <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -82,16 +82,6 @@
             Guardar
         </button>
     </div>
-    <!-- <div class="absolute inset-x-0 bottom-0">
-        <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes && valid"
-        @cancel="cancelChange" 
-        @submit="submit"
-    />
-    </div> -->
-    
-    
 </template>
 
 <script setup>
@@ -112,7 +102,12 @@ const form = reactive({
     nif: '',
     email: '',
     protection: false,
-    email_protection: ''
+    email_protection: '',
+    nameError: false,
+    addressError: false,
+    nifError: false,
+    emailError: false,
+    emailProtectionError: false
 });
 
 const initialForm = ref(null);
@@ -146,10 +141,17 @@ watch([() => form.name, () => form.address, () => form.nif, () => form.email, ()
 function validateForm() {
     isEmailValid.value = validateEmail(form.email);
     isEmailProtectionValid.value = validateEmail(form.email_protection);
+
+    // Verificación de campos vacíos
+    form.nameError = !form.name.trim();
+    form.addressError = !form.address.trim();
+    form.nifError = !form.nif.trim();
+    form.emailError = !form.email.trim() || !isEmailValid.value;
+    form.emailProtectionError = form.protection && (!form.email_protection.trim() || !isEmailProtectionValid.value);
+
     changes.value = JSON.stringify(form) !== initialForm.value;
-    valid.value = form.name.trim() && form.address.trim() && form.nif.trim() && 
-                  form.email.trim() && isEmailValid.value &&
-                  (!form.protection || (form.email_protection.trim() && isEmailProtectionValid.value));
+    valid.value = !form.nameError && !form.addressError && !form.nifError && 
+                  !form.emailError && (!form.protection || !form.emailProtectionError);
 }
 
 function cancelChange() {
@@ -208,14 +210,11 @@ const emailProtectionInput = ref(null);
 watch(() => form.protection, (newValue) => {
     nextTick(() => {
         if (newValue) {
-            // Scroll hacia abajo al input del email de protección de datos
             if (emailProtectionInput.value) {
                 emailProtectionInput.value.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         } else {
-            // Scroll hacia arriba a una posición adecuada cuando el switch se desactiva
-            // Asumiendo que tienes una referencia para el switch o cualquier otro elemento significativo
-            const switchElement = document.getElementById('dataProtectionSwitch'); // Asegúrate de tener este ID en tu HTML
+            const switchElement = document.getElementById('dataProtectionSwitch');
             if (switchElement) {
                 switchElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
@@ -223,4 +222,3 @@ watch(() => form.protection, (newValue) => {
     });
 });
 </script>
-
