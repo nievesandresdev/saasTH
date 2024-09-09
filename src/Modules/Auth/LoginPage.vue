@@ -37,6 +37,11 @@
                   :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                   required
                 >
+                <div v-show="authStore.errorLogin" class="flex justify-start gap-2 mt-[7.5px]">
+                  <img class="w-4 h-4 cursor-pointer" src="/assets/icons/1.TH.WARNING.RED.svg" alt="">
+                  <span class="text-[#FF6666] text-xs font-normal "> {{ authStore.errorLogin }}</span>
+                </div>
+                
               </div>
               <div class="mb-2">
                 <label class="font-medium text-lg mb-1">Contraseña</label>

@@ -1,16 +1,16 @@
 <template>
     <aside class="w-full h-full flex flex-col bg-white shadow-custom">
-        <button class="py-[23px] px-4 block">
+        <div class="py-3 px-3 block">
             <h5 class="text-base font-semibold leading-[120%] text-left">{{ title }}</h5>
-        </button>
+        </div>
 
-        <nav class="px-4">
+        <nav class="">
             <ul>
                 <router-link 
                     v-for="item in menuItems" 
                     :key="item.text" 
                     :to="item?.url || '#'" 
-                    class="menu-item relative rounded-lg flex flex-col" 
+                    class="menu-item relative flex flex-col" 
                     @click.native="toggleSubmenu(item.text)"
                     :class="{ 'active': isActive(item.url) }"
                 >
@@ -37,7 +37,7 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-const title = 'Plataforma';
+const title = 'Hoster';
 const menuItems = [
     { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' },
     /* { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  }, */
@@ -93,7 +93,7 @@ nav ul {
 }
 .menu-item:hover {
     background-color: #ECF9F5;
-    border-radius: 0.5rem; /* rounded-lg */
+    /* border-radius: 0.5rem; */
 }
 .menu-item.active {
     background-color: #ECF9F5;

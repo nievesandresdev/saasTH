@@ -1,7 +1,7 @@
 <template>
   <nav class="h-full w-full bg-white shadow-menu">
       <div class="py-3">
-          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-4">WebApp</p>
+          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6">WebApp</p>
       </div>
       <template
         v-for="(section, index_section) in menu_section"
@@ -380,6 +380,7 @@ const dataTypePlaces = reactive([
 ]);
 
 onMounted(() => {
+  loadMenuState();
   getTypePlaces()
   focusMenu()
 })
@@ -406,39 +407,63 @@ if (response.ok) {
 }
 }
 
-function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
-console.log({
-  'partidea': 'toggleSubMenu',
-  'index_section_selected': index_section_selected,
-  'index_menu_selected': index_menu_selected,
-  'section_selected': section_selected,
-  'menu_selected': menu_selected
-})
-
-menu_selected.expanded = !menu_selected.expanded
-}
-
-function focusMenu () {
-menu_section.forEach((section, index_section) => {
-  section.group.forEach((menu, index_menu) => {
-    menu.expanded = menu.selectedArr && menu.selectedArr.includes(route.name);
-    /* console.log({
-      'partidea': 'focusMenu',
-      'index_section': index_section,
-      'index_menu': index_menu,
-      'menu': menu,
-      'route': route.name,
-      'menu.selectedArr': menu.selectedArr,
-      'menu.expanded': menu.expanded
-    }) */
-    menu?.group?.forEach((sub_menu) => {
-      if (fullUrl.value?.includes(sub_menu.include)) {
-        menu_section[index_section].group[index_menu].expanded = true;
-      }
-    })
+/* function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
+  console.log({
+    'partidea': 'toggleSubMenu',
+    'index_section_selected': index_section_selected,
+    'index_menu_selected': index_menu_selected,
+    'section_selected': section_selected,
+    'menu_selected': menu_selected
   })
-})
+
+  menu_selected.expanded = !menu_selected.expanded
+} */
+
+function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
+    menu_selected.expanded = !menu_selected.expanded;
+    saveMenuState();
 }
+
+function saveMenuState() {
+    const menuState = menu_section.map(section => {
+        return section.group.map(menu => menu.expanded);
+    });
+    localStorage.setItem('menuState', JSON.stringify(menuState));
+}
+
+function loadMenuState() {
+    const menuState = JSON.parse(localStorage.getItem('menuState'));
+    if (menuState && menuState.length === menu_section.length) {
+        menu_section.forEach((section, index_section) => {
+            if (menuState[index_section] && menuState[index_section].length === section.group.length) {
+                section.group.forEach((menu, index_menu) => {
+                    menu.expanded = menuState[index_section][index_menu];
+                });
+            }
+        });
+    }
+}
+
+function focusMenu() {
+    // No cambiaremos el estado `expanded` si ya ha sido cargado.
+    menu_section.forEach((section, index_section) => {
+        section.group.forEach((menu, index_menu) => {
+            if (!menu.expanded && menu.selectedArr && menu.selectedArr.includes(route.name)) {
+                menu.expanded = true;
+            }
+            menu?.group?.forEach((sub_menu) => {
+                if (fullUrl.value?.includes(sub_menu.include)) {
+                    menu.expanded = true;
+                }
+            });
+        });
+    });
+}
+
+watch(route, (to, from) => {
+    // Cuando cambia la ruta, solo aplicamos el focus si es necesario
+    focusMenu();
+});
 
 function goLink(viewName) {
   router.push({ name: viewName});

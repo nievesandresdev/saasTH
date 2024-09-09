@@ -13,8 +13,12 @@
       <router-link
         @mousemove="handleMouseMove('Dashboard')"
         @click="handleMenuItemClick('Dashboard')"
-        class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
-        :class="{'hbg-green-600 shadow-lg': $route.name === 'DashboardIndex', 'hover-gray-100': $route.name !== 'DashboardIndex'}"
+        class="rounded-[10px]  flex items-center p-2 mt-6"
+        :class="
+        {
+          'hbg-green-600  shadow-lg': $route.name === 'DashboardIndex',
+          'hover-gray-100 bg-[#e2f8f2]': $route.name !== 'DashboardIndex'
+         }"
         to="/dashboard"
       >
         <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARDNEW.svg" :class="{'icon-white': $route.name === 'DashboardIndex'}">
@@ -343,9 +347,9 @@ const user_buttons = ref([
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false)
 const widthMenu = computed(() => {
   let withStyles =
-    'w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out'
+    'w-0 group-hover:w-[196px] overflow-hidden transition-all duration-500 ease-in-out'
   if (displayedMenu.value) {
-    withStyles = 'w-[188px]'
+    withStyles = 'w-[196px]'
   }
   return withStyles
 })
@@ -438,4 +442,5 @@ const logout = async () => {
 .hbg-green-600 {
   background-color: #34A98F;
 }
+
 </style>
