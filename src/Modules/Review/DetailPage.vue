@@ -14,7 +14,7 @@
                     <div class="flex justify-between  mb-[8px]">
                         <div class="space-x-[8px] flex">
                             <img
-                                :src="`/assets/icons/otas/${$capitalize(otaParamRoute)}.svg`"
+                                :src="`/assets/icons/otas/${$titleCase(otaParamRoute)}.svg`"
                                 class="w-[24px] h-[24px]"
                             >
                             <h5 class="text-base font-medium">{{ reviewData?.name }}</h5>

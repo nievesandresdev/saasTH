@@ -16,6 +16,7 @@
       <div
         v-if="visible"
         class="absolute w-48 bg-white rounded-md shadow-md py-1 z-50 right-3"
+        style="z-index: 1000000;"
       >
         <a
           href="#"
@@ -29,18 +30,30 @@
           />
           <span class="font-normal text-sm">Editar</span>
         </a>
-        <a
-          href="#"
-          @click="editUser(user)"
-          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+        <div
+        v-if="user.status == 1"
+          @click="disabled"
+          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
         >
         <img
             src="/assets/icons/1.TH.PAUSE.svg"
-            class="w-6 h-6 mr-2"
+            class="w-6 h-6 mr-2 "
             alt="icon_disable"
           />
           <span class="font-normal text-sm">Inactivar</span>
-        </a>
+        </div>
+        <div
+          v-else
+          @click="enabled"
+          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+        >
+        <img
+            src="/assets/icons/octicon_play-16.svg"
+            class="w-6 h-6 mr-2 "
+            alt="icon_disable"
+          />
+          <span class="font-normal text-sm">Activar</span>
+        </div>
         <hr class="my-1" />
         <a
           href="#"
@@ -61,8 +74,12 @@
   <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick,computed } from 'vue';
   import { defineProps, defineEmits } from 'vue';
+  import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
+  import { useToastAlert } from '@/composables/useToastAlert'
+
+  const toast = useToastAlert();
   
-  const emits = defineEmits(['editUser', 'openModalDelete', 'close']);
+  const emits = defineEmits(['editUser', 'openModalDelete', 'close' , 'updateStatus']);
   const props = defineProps({
     user: Object,
     index: Number,
@@ -70,6 +87,41 @@
     isAdmin: Boolean,
     isOperator: Boolean,
   });
+
+  const enabled = async() => {
+      visible.value = false;
+
+      const params = {
+        user_id: props.user.id,
+      }
+
+      const response = await enableUser(params);
+
+      if (response.ok) {
+        toast.warningToast('Usuario activado con éxito','top-right')
+        emits('updateStatus',response.data.user)
+      }else{
+        toast.errorToast('Error al activar el usuario','top-right')
+      }
+      
+    }
+    
+    const disabled = async() => {
+      visible.value = false;
+      
+      const params = {
+        user_id: props.user.id,
+      }
+      const response = await disableUser(params);
+
+      if (response.ok) {
+        toast.warningToast('Usuario inactivado','top-right')
+        emits('updateStatus',response.data.user)
+      }else{
+        toast.errorToast('Error al inactivar el usuario','top-right')
+      }
+      
+    }
   
   const visible = ref(false);
   
@@ -78,16 +130,24 @@
   });
   
   const toggleDropdown = () => {
-    if (visible.value || props.user.del === 1) {
-        visible.value = false;
-      } else {
-        visible.value = true;
-      }
-  };
+  if (props.user.role?.name === 'Associate') {
+    return; // No abrir el dropdown si el rol es "Associate"
+  }
+
+  const toggleRect = ref_section_toggle.value.getBoundingClientRect();
+  const dropdownHeight = 150; // Aproximación de la altura del dropdown
+
+  if (window.innerHeight - toggleRect.bottom < dropdownHeight) {
+    dropdownPosition.value = 'bottom-full mb-1'; // Mostrar hacia arriba si no hay espacio suficiente
+  } else {
+    dropdownPosition.value = 'top-full mt-1'; // Mostrar hacia abajo
+  }
+
+  visible.value = !visible.value;
+};
   
   const editUser = (user) => {
     visible.value = false;
-    console.log('dddd',user);
     emits('editUser', user);
   };
   

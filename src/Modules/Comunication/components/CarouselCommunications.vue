@@ -6,11 +6,11 @@
         :slides-per-view="'auto'"
         :spaceBetween="24"
       >
-        <swiper-slide v-for="slide in 4" :key="slide" class="swiper-slide-custom">
-          <p class="text-sm leading-[140%] mb-4" v-html="texts[slide]"></p>
+        <swiper-slide v-for="slide in numberPages" :key="slide" :style="`width: 800px; height: ${heightSlide};`">
+          <p class="text-sm leading-[140%] mb-4" :style="`height: ${heightDescriptionSlide};`" v-html="texts[slide]"></p>
           <img
-            class="w-[800px] max-w-[800px] h-[377px] max-h-[377px]"
-            :src="`/assets/img/communications/otas/slider-${concept}-${slide}.png`"
+            class="w-[800px] max-w-[800px] h-[377px] max-h-[377px] shadow-hoster rounded-[10px]"
+            :src="`/assets/img/communications/${directoryImages}/slider-${concept}-${slide}.png`"
             alt=""
           />
         </swiper-slide>
@@ -46,6 +46,22 @@
         type:String,
         default: 'booking'
     },
+    numberPages:{
+        type:Number,
+        default: 4
+    },
+    directoryImages:{
+        type:String,
+        default: 'otas'
+    },
+    heightSlide:{
+      type:Number,
+      default: '416px'
+    },
+    heightDescriptionSlide:{
+      type:Number,
+      default: '20px'
+    },
   })
   
   const mySwiper = ref(null);
@@ -76,8 +92,9 @@
   </script>
   
   <style scoped>
-  .swiper-slide-custom {
-    width: 800px; 
+
+  strong{
+    font-weight: 600;
   }
   </style>
   

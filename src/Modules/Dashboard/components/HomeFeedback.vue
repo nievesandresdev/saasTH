@@ -1,26 +1,26 @@
 <template>
-    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] p-4 mt-7">
-        <div class="grid grid-cols-3 gap-4 mt-4">
+    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] px-4 py-6 mt-6">
+        <div class="grid grid-cols-3 gap-4">
             <div class="flex flex-col items-start">
                 <span :class="subscribed ? 'htext-green-800 text-[10px] font-semibold mb-2 leading-[130%]' : 'text-xs font-semibold mb-2 text-normal-color'">
                     {{ subscribed ? 'REPUTACIÓN ONLINE' : 'Contrata REPUTACIÓN ONLINE' }}
                 </span>
                 <div :class="subscribed ? '' : 'grayscale opacity-50'">
-                    <span class="font-semibold text-sm flex gap-4">
+                    <span class="font-semibold text-sm">
                         Feedback de tus huéspedes
                     </span>
                 </div>
             </div>
             <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
-                    <span class="font-semibold text-sm flex gap-4">
+                    <span class="font-semibold text-sm">
                         Integraciones
                     </span>
                 </div>
             </div>
             <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
-                    <span class="font-semibold text-sm flex gap-4">
+                    <span class="font-semibold text-sm">
                         Promedio de tu hotel
                     </span>
                 </div>
