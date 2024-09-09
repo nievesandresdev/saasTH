@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia';
 import { login as loginService, logout as LogoutService } from '@/api/services/auth';
 import { getUserData } from '@/api/services/users/userSettings.service';
-import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/stay.services'
+import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/staySession.services'
 import { computed, ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -32,7 +32,8 @@ export const useAuthStore = defineStore('auth', () => {
                 sessionStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
                 this.$router.push('/dashboard');
             } else {
-                errorLogin.value = 'Credenciales incorrectas';
+                errorLogin.value = response.data.motives.message;
+                console.log('errorLogin', response.data);
             }
 
         } catch (error) {

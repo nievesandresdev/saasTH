@@ -35,6 +35,7 @@
 <script setup>
 import { inject, reactive } from 'vue'
 import Modal from '@/components/ModalWindow.vue'
+import { useRoute } from 'vue-router';
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 //store
@@ -42,6 +43,7 @@ import { useStayStore } from '@/stores/modules/stay/stay';
 
 const stayStore = useStayStore();
 const toast = useToastAlert();
+const route = useRoute();
 
 const emit = defineEmits(['reloadList'])
 
@@ -50,11 +52,13 @@ const noteType = inject('noteType')
 const openDeleteModal = inject('openDeleteModal')
 
 const form = reactive({
-    noteId: null
+    noteId: null,
+    stayId:null
 });
 
 const deleteNote = async () => {
     openDeleteModal.value = false;
+    form.stayId = route.params.stayId;
     form.noteId = deleteNoteId.value;
     if(noteType.value == 'HU'){
         await stayStore.$deleteGuestNote(form)

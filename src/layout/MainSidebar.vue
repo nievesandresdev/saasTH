@@ -13,8 +13,12 @@
       <router-link
         @mousemove="handleMouseMove('Dashboard')"
         @click="handleMenuItemClick('Dashboard')"
-        class="rounded-[10px] hbg-green-200 flex items-center p-2 mt-6"
-        :class="{'hbg-green-600 shadow-lg': $route.name === 'DashboardIndex', 'hover-gray-100': $route.name !== 'DashboardIndex'}"
+        class="rounded-[10px]  flex items-center p-2 mt-6"
+        :class="
+        {
+          'hbg-green-600  shadow-lg': $route.name === 'DashboardIndex',
+          'hover-gray-100 bg-[#e2f8f2]': $route.name !== 'DashboardIndex'
+         }"
         to="/dashboard"
       >
         <img class="w-6 h-6" src="/assets/icons/1.TH.DASHBOARDNEW.svg" :class="{'icon-white': $route.name === 'DashboardIndex'}">
@@ -212,7 +216,7 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-       console.log('NotifySendQueryEvent',data)
+      //  console.log('NotifySendQueryEvent',data)
        let routeData = {
             name : 'StayQueryDetail',
             params : { stayId : data.stayId },
@@ -243,7 +247,7 @@ const connectPusher = async () => {
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-        console.log('NotifyStayHotelEvent',data)
+        // console.log('NotifyStayHotelEvent',data)
         if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
@@ -291,12 +295,6 @@ const menu_links = ref([
         include: ['Reviews'],
         url: '/resenas',
       },
-      {
-        title: 'Análisis',
-        icon: '1.TH.DASHBOARDNEW',
-        include: ['-'],
-        url: '/dashboard',
-      },
     ],
   },
   {
@@ -304,7 +302,7 @@ const menu_links = ref([
     group: [
       {
         title: 'WebApp',
-        icon: '1.TH.DASHBOARDNEW',
+        icon: '1.TH.MM.WEBAPP',
         include: [
           'ReviewRequestSettingsIndex',
           'SettingsPreStayPage',
@@ -317,17 +315,17 @@ const menu_links = ref([
         ],
         url: '/webapp',
       },
-      {
+      /* {
         title: 'Comunicaciones',
         icon: '1.TH.DASHBOARDNEW',
         include: ['-'],
         url: '/dashboard',
-      },
+      }, */
       {
-        title: 'Plataforma',
-        icon: '1.TH.DASHBOARDNEW',
+        title: 'Hoster',
+        icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings'],
-        url: '/equipo/configuracion/notificaciones',
+        url: '/equipo/configuracion/usuarios',
       },
     ],
   },
@@ -349,9 +347,9 @@ const user_buttons = ref([
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false)
 const widthMenu = computed(() => {
   let withStyles =
-    'w-0 group-hover:w-[188px] overflow-hidden transition-all duration-500 ease-in-out'
+    'w-0 group-hover:w-[196px] overflow-hidden transition-all duration-500 ease-in-out'
   if (displayedMenu.value) {
-    withStyles = 'w-[188px]'
+    withStyles = 'w-[196px]'
   }
   return withStyles
 })
@@ -444,4 +442,5 @@ const logout = async () => {
 .hbg-green-600 {
   background-color: #34A98F;
 }
+
 </style>

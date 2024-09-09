@@ -7,7 +7,8 @@
         >
             <h5 
                 class="text-base font-semibold leading-[120%] text-left group-hover:text-[#000]"
-            >Estancias {{ numberOfskeletonCards }}  list: {{ list.length }}</h5>
+            >Estancias</h5>
+            <!-- {{ numberOfskeletonCards }}  list: {{ list.length }} -->
         </router-link>
 
         <!-- filters -->
@@ -51,7 +52,7 @@
             <!-- counters -->
             <div class="mt-4 pb-2 pr-4">
                 <div class="flex items-center">
-                    <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalCounts==1 ?'':'s' }}</h2>
+                    <h2 class="text-xs font-semibold leading-[130%]">{{totalValidCount}} estancia{{ totalValidCount==1 ?'':'s' }}</h2>
                     <button 
                         v-if="filtersActive" 
                         class="text-xs font-semibold leading-130% underline ml-auto"
@@ -365,6 +366,7 @@ const connectPusher = () =>{
     channelUpdate.value = 'private-update-stay-list-hotel.' + hotelStore.hotelData.id;
     channelUpdate.value = pusher.value.subscribe(channelUpdate.value);
     channelUpdate.value.bind('App\\Events\\UpdateStayListEvent', (data) => {
+        // console.log('cons UpdateStayListEvent',data)
         // let showLoadPage = data.showLoadPage ?? true;
         updateList();
     });
@@ -372,6 +374,7 @@ const connectPusher = () =>{
     channelQuery.value = 'notify-send-query.' + hotelStore.hotelData.id;
     channelQuery.value = pusher.value.subscribe(channelQuery.value);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', (data) => {
+        // console.log('cons NotifySendQueryEvent',data)
         updateList();
     });
 }

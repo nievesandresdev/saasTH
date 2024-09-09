@@ -1,8 +1,8 @@
 <template>
     <div :class="{'hidden': hiddenQr}">
         <QRCodeVue3
-            :width="300"
-            :height="300"
+            :width="width"
+            :height="height"
             imgclass="souvenirs_img"
             :value="url"
             :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
@@ -46,7 +46,15 @@ const props = defineProps({
     hiddenQr: {
         type: Boolean,
         default: false,
-    }
+    },
+    width: {
+        type: Number,
+        default: 300,
+    },
+    height: {
+        type: Number,
+        default: 300,
+    },
 })
 
 function copyUrl () {

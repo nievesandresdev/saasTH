@@ -1,8 +1,8 @@
 <template>
-    <div :class="subscribed ? 'flex flex-col border border-[#BFBFBF] rounded-lg p-4 mt-7' : 'flex flex-col border border-[#BFBFBF] rounded-lg p-4 mt-7'">
+    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] p-4 mt-7">
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="flex flex-col items-start">
-                <span :class="subscribed ? 'text-[#0B6357] text-xs font-semibold mb-2' : 'text-xs font-semibold mb-2 text-normal-color'">
+                <span :class="subscribed ? 'htext-green-800 text-[10px] font-semibold mb-2 leading-[130%]' : 'text-xs font-semibold mb-2 text-normal-color'">
                     {{ subscribed ? 'REPUTACIÓN ONLINE' : 'Contrata REPUTACIÓN ONLINE' }}
                 </span>
                 <div :class="subscribed ? '' : 'grayscale opacity-50'">
@@ -14,7 +14,7 @@
             <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
                     <span class="font-semibold text-sm flex gap-4">
-                        Reseñas por OTAs
+                        Integraciones
                     </span>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="row-span-2 flex gap-6 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
+                <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <div class="py-2 px-3 flex items-center">
                         <span class="text-xs font-semibold">STAY</span>
                     </div>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden">
+                <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <div class="py-2 px-3 flex items-center">
                         <span class="text-xs font-semibold">POST-STAY</span>
                     </div>
@@ -64,66 +64,101 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="pt-4 px-3 gap-3">
-                    <div class="flex justify-between items-center">
-                        <div class="flex gap-1 items-center w-1/3">
+            <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
+                <div class="py-6 px-4 flex flex-col gap-4">
+                    <!-- Booking -->
+                    <div class="flex items-center">
+                        <div class="flex gap-1 items-center w-[108px]">
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{  bookingReview.data_review.reviews_rating }}/10</span>
-                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{  bookingReview.data_review.reviews_count }}</span>
-                            <span>Reseñas</span>
-                        </div>
+                        <template v-if="bookingReview?.data_review">
+                            <div class="ml-auto">
+                                <span class="text-sm font-medium">{{  bookingReview.data_review.reviews_rating }}</span>
+                                <span class="text-[10px] font-medium">/10</span>
+                            </div>
+                            <div class="text-[10px] ml-auto">
+                                <p class="font-semibold leading-[90%]">{{  bookingReview.data_review.reviews_count }}</p>
+                                <p class="font-medium leading-[90%]">reseñas</p>
+                            </div>
+                        </template>
+                        <AddLinkOtaButton v-else/>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Google.svg" alt="Google">
-                            <span class="text-sm font-medium">Google</span>
-                        </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{  googleReview.data_review.reviews_rating }}/10</span>
-                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{  googleReview.data_review.reviews_count }}</span>
-                            <span>Reseñas</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <div class="flex gap-1 items-center w-1/3">
-                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
-                            <span class="text-sm font-medium">Tripadvisor</span>
-                        </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{  tripadvisorReview.data_review.reviews_rating }}/10</span>
-                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{  tripadvisorReview.data_review.reviews_count }}</span>
-                            <span>Reseñas</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <div class="flex gap-1 items-center w-1/3">
+                    <!-- Expedia -->
+                    <div class="flex items-center">
+                        <div class="flex gap-1 items-center w-[108px]">
                             <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{  expediaReview.data_review.reviews_rating }}/10</span>
-                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{  expediaReview.data_review.reviews_count }}</span>
-                            <span>Reseñas</span>
-                        </div>
+                        <template v-if="bookingReview?.data_review">
+                            <div class="ml-auto">
+                                <span class="text-sm font-medium">{{  expediaReview.data_review.reviews_rating }}</span>
+                                <span class="text-[10px] font-medium">/10</span>
+                            </div>
+                            <div class="text-[10px] ml-auto">
+                                <p class="font-semibold leading-[90%]">{{  expediaReview.data_review.reviews_count }}</p>
+                                <p class="font-medium leading-[90%]">reseñas</p>
+                            </div>
+                        </template>
+                        <AddLinkOtaButton v-else/>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <div class="flex gap-1 items-center w-1/3">
+                    <!-- Google -->
+                    <div class="flex items-center">
+                        <div class="flex gap-1 items-center w-[108px]">
+                            <img src="/assets/icons/otas/Google.svg" alt="Google">
+                            <span class="text-sm font-medium">Google</span>
+                        </div>
+                        <template v-if="googleReview?.data_review">
+                            <div class="ml-auto">
+                                <span class="text-sm font-medium">{{  googleReview.data_review.reviews_rating }}</span>
+                                <span class="text-[10px] font-medium">/5</span>
+                            </div>
+                            <div class="text-[10px] ml-auto">
+                                <p class="font-semibold leading-[90%]">{{  googleReview.data_review.reviews_count }}</p>
+                                <p class="font-medium leading-[90%]">reseñas</p>
+                            </div>
+                        </template>
+                        <AddLinkOtaButton v-else/>
+                    </div>
+                    <!-- Tripadvisor -->
+                    <div class="flex items-center">
+                        <div class="flex gap-1 items-center w-[108px]">
+                            <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
+                            <span class="text-sm font-medium">Tripadvisor</span>
+                        </div>
+                        <template v-if="tripadvisorReview?.data_review">
+                            <div class="ml-auto">
+                                <span class="text-sm font-medium">{{  tripadvisorReview.data_review.reviews_rating }}</span>
+                                <span class="text-[10px] font-medium">/5</span>
+                            </div>
+                            <div class="text-[10px] ml-auto">
+                                <p class="font-semibold leading-[90%]">{{  tripadvisorReview.data_review.reviews_count }}</p>
+                                <p class="font-medium leading-[90%]">reseñas</p>
+                            </div>
+                        </template>
+                        <AddLinkOtaButton v-else/>
+                    </div>
+                    <!-- AirBnb -->
+                    <div class="flex items-center">
+                        <div class="flex gap-1 items-center w-[108px]">
                             <img src="/assets/icons/otas/Airbnb.svg" alt="Airbnb">
                             <span class="text-sm font-medium">Airbnb</span>
                         </div>
-                        <span class="text-sm font-medium w-1/3 text-center">{{  airbnbReview.data_review.reviews_rating }}/10</span>
-                        <div class="flex flex-col items-center font-semibold text-[10px] w-1/3">
-                            <span>{{  airbnbReview.data_review.reviews_count }}</span>
-                            <span>Reseñas</span>
-                        </div>
+                        <template v-if="airbnbReview?.data_review">
+                            <div class="ml-auto">
+                                <span class="text-sm font-medium">{{  airbnbReview.data_review.reviews_rating }}</span>
+                                <span class="text-[10px] font-medium">/5</span>
+                            </div>
+                            <div class="text-[10px] ml-auto">
+                                <p class="font-semibold leading-[90%]">{{  airbnbReview.data_review.reviews_count }}</p>
+                                <p class="font-medium leading-[90%]">reseñas</p>
+                            </div>
+                        </template>
+                        <AddLinkOtaButton v-else/>
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-[#BFBFBF] rounded-lg overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
+            <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
                     <span class="text-sm font-semibold">TheHoster REVIEW INDEX™</span>
                 </div>
@@ -156,6 +191,7 @@
 import { onMounted, ref } from 'vue';
 
 import { dataFeedback, dataReviewOTA } from '@/api/services/dashboard/dashboard.services';
+import AddLinkOtaButton from './AddLinkOtaButton.vue'
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useUserStore } from '@/stores/modules/users/users'
 import CircleProgress from 'vue3-circle-progress';
@@ -182,16 +218,16 @@ const feelingsPostStay = ref([
 
 const defaultReview = {
     data_review: {
-        reviews_rating: '-.-',
-        reviews_count: '-.-',
+        reviews_rating: '--',
+        reviews_count: null,
     }
 };
 
-const tripadvisorReview = ref({ ...defaultReview, ota: 'TRIPADVISOR' });
-const expediaReview = ref({ ...defaultReview, ota: 'EXPEDIA' });
-const bookingReview = ref({ ...defaultReview, ota: 'BOOKING' });
-const googleReview = ref({ ...defaultReview, ota: 'GOOGLE' });
-const airbnbReview = ref({ ...defaultReview, ota: 'AIRBNB' });
+const tripadvisorReview = ref({ ota: 'TRIPADVISOR' });
+const expediaReview = ref({ ota: 'EXPEDIA' });
+const bookingReview = ref({ ota: 'BOOKING' });
+const googleReview = ref({ ota: 'GOOGLE' });
+const airbnbReview = ref({ ota: 'AIRBNB' });
 
 const average = ref(0);
 const subscribed = ref(true); // Variable para determinar la suscripción
@@ -239,42 +275,53 @@ const handleDataFeedback = async () => {
 
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
+    console.log('response',response)
 
     if (response.ok) {
         let totalRating = 0;
         let count = 0;
         const reviews = response.data.summaryReviews || [];
         reviews.forEach(review => {
+            // Default data review values in case data_review is missing
+            const defaultDataReview = { reviews_rating: '--', reviews_count: '--' };
+            const dataReview = review.data_review || defaultDataReview;
+
+            // Assign data based on OTA type
             switch (review.ota) {
                 case 'TRIPADVISOR':
-                    tripadvisorReview.value = review;
+                    tripadvisorReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'EXPEDIA':
-                    expediaReview.value = review;
+                    expediaReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'BOOKING':
-                    bookingReview.value = review;
+                    bookingReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'GOOGLE':
-                    googleReview.value = review;
+                    googleReview.value = { ...review, data_review: dataReview };
+                    break;
+                case 'AIRBNB':
+                    airbnbReview.value = { ...review, data_review: dataReview };
                     break;
                 default:
                     break;
             }
 
-            if (review.data_review && review.data_review.reviews_rating !== '--') {
-                totalRating += parseFloat(review.data_review.reviews_rating);
+            // Only calculate ratings if data_review has valid rating data
+            if (dataReview.reviews_rating !== '--') {
+                totalRating += parseFloat(dataReview.reviews_rating);
                 count++;
             }
-
-            average.value = count > 0 ? (totalRating / count) * 10 : 0;
         });
-        
+
+        // Calculate the average rating if count is greater than 0
+        average.value = count > 0 ? (totalRating / count) * 10 : 0;
     } else {
         toast.errorToast(response.data.message, 'top-right');
         average.value = 0; // Ensure average is 0 if there was an error
     }
 };
+
 </script>
 
 <style scoped>

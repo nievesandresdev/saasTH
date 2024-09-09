@@ -17,6 +17,7 @@ import webAppRoutes from './webAppRoutes';
 import customizationRoutes from './customizationRoutes';
 import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 import reviewRoutes from './reviewRoutes'
+import comunicationRoutes from './comunication'
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
@@ -36,6 +37,7 @@ const routes = [
   { path: '/', redirect: '/login' }, // Redirigir la raíz a /login
   ...authRoutes,
   ...dashboardRoutes,
+  ...comunicationRoutes,
   // Grupos de rutas por módulo
   ...chatGroupRoutes,
   ...userGroupRoutes,

@@ -1,5 +1,5 @@
 <template>
-  <section :style="{ width: width, marginBottom: marginBottom }">
+  <section :style="{ width: width, marginBottom: marginBottom , marginTop: marginTop}">
     <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
       <slot name="title"></slot>
       <slot name="content"></slot>
@@ -16,6 +16,10 @@ const props = defineProps({
     default: '100%'
   },
   marginBottom: {
+    type: String,
+    default: '0'
+  },
+  marginTop: {
     type: String,
     default: '0'
   }

@@ -10,7 +10,7 @@
             <input
                 ref="inputElement"
                 :id="inputId" 
-                type="text"
+                :type="type"
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
                 class="w-full hinput border  rounded-[6px]"
@@ -48,6 +48,10 @@ const emit = defineEmits(['click:appendInner', 'update:modelValue', 'blur:valida
 const inputElement = ref(null);
 
 const props = defineProps({
+    type: {
+        type: String,
+        default: 'text',
+    },
     classContent: {
         type: String,
         default: ''

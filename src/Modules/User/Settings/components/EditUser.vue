@@ -12,7 +12,7 @@
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
           <div class="flex justify-between items-center px-6 py-5 mt-4">
             <div class="flex-1 text-left">
-              <h1 class="font-medium text-[22px]">Editar usuario {{ $getRoleName(dataUser.role.name) }}</h1>
+              <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal()">
@@ -22,73 +22,26 @@
           </div>
   
           <div class="pb-6 pr-6 pl-6">
-              <div class="flex items-center w-full">
+            <div class="flex items-center w-full overflow-x-hidden">
+              <div class="flex w-full" style="scroll-snap-type: x mandatory;">
                 <h3
-                  class="flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative"
                   v-for="(step, index) in steps"
                   :key="step.number"
                   :class="{
-                    'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step': currentStep === step.number,
-                    'text-gray-300': currentStep !== step.number
+                    'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step px-4': currentStep === step.number,
+                    'text-gray-300 px-2': currentStep !== step.number
                   }"
-                  @click="currentStep = step.number"
+                  class="text-center py-2 text-lg font-semibold cursor-pointer relative"
+                  @click="scrollToStep(index)"
+                  style="flex: 1 0 25%; scroll-snap-align: start;"
+                  ref="stepRefs"
                 >
                   {{ step.label }}
                 </h3>
               </div>
-
-            <!-- <div class="mb-5">
-                <h3
-                    class="inline-block mr-4 text-lg font-medium text-gray-300 cursor-pointer text-semibold "
-                    v-for="(step, index) in steps" :key="step.number"
-                    :class="{'category-select':currentStep === step.number}"
-                    @click="currentStep = step.number"
-                >
-                    {{step.label}}
-                </h3>
-            </div> -->
+            </div>
             <hr class="mb-5 px-4">
             <div v-if="currentStep === 1">
-              <div class="flex flex-col text-black">
-                <span class="text-sm font-medium">Elige tu tipo de usuario</span>
-                <span class="text-sm font-normal mt-2">Aquí podrás elegir el tipo de usuario que quieres crear.</span>
-              </div>
-              <div class="relative mt-2">
-                <div class="relative w-full">
-                  <input
-                    type="text"
-                    @click="toggleModalSelect"
-                    :value="selectedRoleName"
-                    readonly
-                    class="bg-white w-full rounded-md border-solid border border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
-                    placeholder="Selecciona el tipo de usuario deseado..."
-                  />
-                  <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                  </div>
-                </div>
-                <transition name="modal-fade">
-                  <ModalSelect
-                    :open="isModalOpen"
-                    :options="seletedRoleUser"
-                    @close="toggleModalSelect"
-                    @select="selectRole"
-                  />
-                </transition>
-                <div v-if="rolAlert == 1" class="flex items-center">
-                  <img  src="/assets/icons/1.TH.WARNING.svg" alt="Warning" class="h-5 w-5 mr-2">
-                  <span class="text-gray-600 text-sm">Este usuario tiene el rango más alto y acceso completo a todas las funciones.</span>
-                </div>
-                <div v-show="rolAlert == 2" class="flex items-center">
-                  <img src="/assets/icons/1.TH.WARNING.svg" alt="Warning" class="h-5 w-5 mr-2">
-                  <span class="text-gray-600 text-sm">Este usuario tiene permisos para crear administradores y usuarios operativos.</span>
-                </div>
-                <div v-show="rolAlert == 3" class="flex items-center">
-                  <img src="/assets/icons/1.TH.WARNING.svg" alt="Warning" class="h-5 w-5 mr-2">
-                  <span class="text-gray-600 text-sm">Este usuario tiene el nivel de acceso más bajo. No tendrá acceso a crear usuarios.</span>
-                </div>
-
-              </div>
               <div class="relative mt-4">
                 <div class="flex flex-col text-black">
                   <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
@@ -114,6 +67,8 @@
                       :open="isModalCrudOpen"
                       @close="closeModalWorkPosition"
                       @select="selectWorkPosition"
+                      @getWorkPositions="getWorkPositions"
+                      @deleteWP="deleteWorkPosition"
                     />
                   </div>
                 </transition>
@@ -205,37 +160,21 @@
             </div>
 
             <div v-if="currentStep === 3">
-                <div class="flex flex-col mb-5 text-left">
-                   <!--  <strong class="mb-5 text-xl">Accesos</strong> -->
-                    <span class="font-normal">
-                        Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
-                    </span>
-                </div>
-                <!-- <pre>{{ jsonHotel }}</pre> -->
-                <div class="space-y-6">
-                    <!-- Sección de Operación -->
-                    <div>
-                        <span class="block mb-2 font-semibold text-lg">Operación</span>
-                        <div class="space-y-2">
-                            <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between  rounded-lg">
-                                <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox disabled:opacity-50 w-[20px] h-[20px] text-[#34A98F] rounded focus:ring-[#34A98F]" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sección de Administración -->
-                    <div>
-                        <span class="block mb-2 font-semibold text-lg">Administración</span>
-                        <div class="space-y-2">
-                            <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
-                                <span class="text-sm font-[500]">{{ item.name }}</span>
-                                <input type="checkbox" v-model="item.selected" class="hcheckbox w-[20px] h-[20px] text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" :disabled="isRoleAdmin" @change="handleCheckPermission(item.value, item.selected)">
-                                <!-- <Checkbox v-model="item.selected" :isDisabled="isRoleAdmin" :sizeClasses="`h-5 w-5`" @change="handleCheckPermission(item.value, item.selected)"/> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <AccessPermissions
+                v-model:permissions="form.permissions"
+                :isRoleAdmin="isRoleAdmin"
+                :workPositionId="form.work_position_id"
+            />
+
+            </div>
+            <div v-if="currentStep === 4">
+              <Notifications 
+                v-model:periodicityChat="form.periodicityChat"
+                v-model:periodicityStay="form.periodicityStay"
+                v-model:notifications="form.notifications"
+                :maxHeight="600"
+                :workPositionId="form.work_position_id"
+              />
             </div>
           </div>
         </div>
@@ -246,11 +185,11 @@
           </button>
           <button
             class="px-4 py-2 font-medium rounded text-black"
-            @click="currentStep === 3 ? handleUpdateUser() : nextStep()"
+            @click="currentStep === 4 ? handleUpdateUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
-            {{ currentStep === 3 ? 'Guardar cambios' : 'Guardar cambios' }}
+            {{ currentStep === 4 ? 'Guardar' : 'Guardar' }}
           </button>
         </div>
         <ModalNoSave
@@ -265,6 +204,7 @@
           :url="intendedRoute"
           @hidden="handleCloseModal"
         />
+        <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
       </div>
       
     </transition>
@@ -281,18 +221,18 @@
   import { useRoute, useRouter } from 'vue-router';
   import ModalNoSave from '@/components/ModalNoSave.vue';
   import { useMouseHandle } from '@/composables/useMouseHandle';
+  import AccessPermissions from './AccessPermisions.vue';
+  import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+  import Notifications from './Notifications.vue';
+  import ModalDeleteWork from './ModalDeleteWork.vue';
+
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
   
-  const emits = defineEmits(['close','update']);
+  const emits = defineEmits(['close','update','workPositionGet','handleDeleteWP']);
 
   const router = useRouter();
   const route = useRoute();
-
-
-
-
-
 
 
   const initPermissions = ref([])
@@ -302,6 +242,24 @@
     workPositions: Array,
     dataUser : Object
   });
+
+  const getWorkPositions = () => {
+    emits('workPositionGet');
+    emits('handleDeleteWP');
+  };
+
+  const isDeleteWorkPositions = ref(false);
+  const IdDeleteWP = ref({});
+
+  const deleteWorkPosition = (option) => {
+    //emits('deleteWP',option);
+    isDeleteWorkPositions.value = true;
+    IdDeleteWP.value = option;
+  }
+
+  const closeDeleteWorkPositions = () => {
+    isDeleteWorkPositions.value = false;
+  }
 
 
 
@@ -372,7 +330,15 @@ const form = ref({
  /*  password: '',
   password_confirmation: '', */
   hotels: [],
-  access: []
+  access: [],
+  permissions: {},
+  periodicityChat: 5, 
+  periodicityStay: 5,
+  notifications: {
+    newChat: false,
+    PendingChat10: false,
+    pendingChat30: false,
+  },
 });
 
 
@@ -388,16 +354,13 @@ const form = ref({
   
   const handleChecked = ref(false)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
-
-
-
   
 
   const initializeForm = () => {
     if (props.dataUser) {
         form.value.user_id = props.dataUser.id || null;
         form.value.work_position_id = props.dataUser.work_position_id || null;
-        form.value.role = props.dataUser.role.id || null;
+        form.value.role = props.dataUser.role?.id || null;
         form.value.name = props.dataUser.name || '';
         form.value.lastname = props.dataUser.lastname || '';
         form.value.prefix = props.dataUser.prefix || null;
@@ -405,7 +368,10 @@ const form = ref({
         form.value.email = props.dataUser.email || '';
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
-       
+        form.value.permissions = props.dataUser.permissions || [];
+        form.value.notifications = props.dataUser.notifications || [];
+        form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
+        form.value.periodicityStay = props.dataUser.periodicity_stay || 5;
 
         /* const firstHotel = computed(() => {
             if (props.dataUser?.hotels && props.dataUser.hotels.length > 0) {
@@ -416,7 +382,7 @@ const form = ref({
             return null
           }) */
 
-        selectedRoleName.value = 'Usuario '+props.dataUser.role.name
+        selectedRoleName.value = 'Usuario '+props.dataUser.role?.name
         selectedWorkPositionName.value = props.dataUser.work_position
        
         props.dataUser.hotels.forEach(hotel => {
@@ -426,7 +392,9 @@ const form = ref({
 
         // Función para actualizar accesos
         const updateAccess = () => {
-            const permissions = form.value.access;
+            const permissions = form.value.permissions;
+
+            console.log('permissiosssns',permissions)
 
             /* console.log('permissions',permissions,firstHotel.value) */
 
@@ -539,11 +507,39 @@ const form = ref({
   };
   
   const selectWorkPosition = (position) => {
-    selectedWorkPositionName.value = position.name;
-    form.value.work_position_id = position.id;
-    isModalCrudOpen.value = false;
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
+  isModalCrudOpen.value = false;
 
+  let permissions = JSON.parse(position.permissions);
+  let notifications = JSON.parse(position.notifications);
+  let periodicity_chat = position.periodicity_chat;
+  let periodicity_stay = position.periodicity_stay;
+
+  form.value.notifications = notifications;
+  form.value.periodicityChat = periodicity_chat;
+  form.value.periodicityStay = periodicity_stay;
+
+  const updateCheckboxesAndPermissions = (accessList, permissions) => {
+    accessList.forEach((accessItem) => {
+      /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
+      const permissionKey = accessItem.value;
+      
+      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
+      
+      accessItem.selected = isSelected;
+      accessItem.disabled = isSelected;
+
+      handleCheckPermission(permissionKey, isSelected);
+    });
   };
+
+  updateCheckboxesAndPermissions(operationAccess.value, permissions);
+  updateCheckboxesAndPermissions(adminAccess.value, permissions);
+
+  form.value.permissions = permissions;
+};
+
   
 
   
@@ -554,7 +550,7 @@ const form = ref({
       //contrase;a
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email ||  !form.value.phone || !form.value.prefix || !form.value.role || !form.value.work_position_id;
+        return !form.value.name || !form.value.lastname || !form.value.email;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
@@ -727,7 +723,7 @@ const handleSelection = (hotelId, add = null) => {
     //console.log('jsonHotelhandleSelection', jsonHotel.value);
 };
 
-const handleCheckPermission = (permissionName, isSelected) => {
+const handleCheckPermissionOLD = (permissionName, isSelected) => {
     //console.log(`Permiso seleccionado: ${permissionName}`);
 
     form.value.hotels.forEach(hotelId => {
@@ -760,6 +756,50 @@ const handleCheckPermission = (permissionName, isSelected) => {
 
     form.value.access = jsonHotel.value;
     //console.log('jsonHotelhandleCheckPermission', jsonHotel.value);
+};
+
+const handleCheckPermission = (permissionName, isSelected ) => {
+    form.value.hotels.forEach(hotelId => {
+        const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
+        
+        if (index !== -1) { // Si existe el hotel
+            if (!isSelected) {
+                // Eliminar de jsonHotel
+                delete jsonHotel.value[index][hotelId][permissionName];
+                if (Object.keys(jsonHotel.value[index][hotelId]).length === 0) {
+                    jsonHotel.value.splice(index, 1);
+                }
+            } else {
+                // Actualizar el objeto
+                if (!jsonHotel.value[index][hotelId]) {
+                    jsonHotel.value[index][hotelId] = {};
+                }
+                jsonHotel.value[index][hotelId][permissionName] = {
+                    can: {},
+                    status: true
+                };
+            }
+        } else { // Si no existe el hotel
+            const newHotel = { [hotelId]: {} };
+            newHotel[hotelId][permissionName] = {
+                can: {}
+            };
+            jsonHotel.value.push(newHotel);
+        }
+    });
+
+    if (isSelected) {
+        // Crear el JSON en form.value.permissions
+        form.value.permissions[permissionName] = {
+            can: {},
+            status: true
+        };
+    } else {
+        // Eliminar del JSON en form.value.permissions
+        delete form.value.permissions[permissionName];
+    }
+
+    form.value.access = jsonHotel.value;
 };
 
 const handleUpdateAllPermissions = (add) => {
@@ -813,8 +853,16 @@ if (form.value.role === 1 || form.value.role === 2) {
   const steps = [
     { number: 1, label: 'Usuario' },
     { number: 2, label: 'Hoteles' },
-    { number: 3, label: 'Accesos' }
+    { number: 3, label: 'Accesos' },
+    { number: 4, label: 'Notificaciones'}
   ];
+
+  const stepRefs = ref([]);
+
+  const scrollToStep = (index) => {
+  currentStep.value = steps[index].number;
+  stepRefs.value[index].scrollIntoView({ behavior: 'smooth', inline: 'end' });
+};
   
   const nextStep = () => {
     if (currentStep.value < steps.length) currentStep.value++;
@@ -1044,9 +1092,9 @@ function closeModal(complete = false) {
     opacity: 1;
   }
 
-  .rounded-bottom-border {
-    position: relative;
-  }
+.rounded-bottom-border {
+  position: relative;
+}
 
 .rounded-bottom-border::after {
   content: '';

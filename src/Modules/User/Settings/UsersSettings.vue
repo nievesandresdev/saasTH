@@ -33,7 +33,8 @@
       <div class="flex-1 flex flex-col justify-between">
         <div>
           <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
-          <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 overflow-hidden rounded-lg" v-if="totalUsers > 0">
+          <!-- <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0"> -->
+          <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0">
             <thead class="text-xs font-semibold text-gray-700 text-left dark:bg-gray-700 bg-gray-100 h-3">
               <tr>
                 <th scope="col" class="px-5 py-3 w-1/4">Nombre y Apellidos</th>
@@ -59,13 +60,13 @@
                   {{ user.name }}
                 </th>
                 <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
-                  {{ $getRoleName(user.role.name) }}
-                </td>
-                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
                   {{ user.work_position }}
                 </td>
+                <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
+                  {{ user.time }}
+                </td>
                 <td @click="showUser(user)" class="py-4 whitespace-normal break-words w-1/4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
-                  <span v-if="user.del == 0" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                  <span v-if="user.status == 1" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
                     Activo
                   </span>
                   <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
@@ -77,11 +78,10 @@
                     :user="user"
                     :index="index"
                     :visibleDropdown="visibleDropdown"
-                    :isAdmin="$isAdmin"
-                    :isOperator="$isOperator"
                     @close="closeToggleDropdown"
                     @editUser="editUser"
                     @openModalDelete="openModalDelete"
+                    @updateStatus="handleGetUsers"
                   />
                 </td>
               </tr>
@@ -108,13 +108,18 @@
       @store="handleConfirmCreateUser"
       @alert="confirmCreateUser" 
       :work-positions="workPositionsData" 
+      @workPositionGet="workPositions"
+      @deleteWP="isDeleteWorkPositions = true"
+      @handleDeleteWP="getUserAndWP"
     />
     <EditUser 
       :modal-edit="modalEdit"
       @close="closeModalEdit" 
       @update="handleGetUsers" 
       :work-positions="workPositionsData" 
-      :data-user="dataEdit" 
+      :data-user="dataEdit"
+      @workPositionGet="workPositions" 
+      @handleDeleteWP="getUserAndWP"
     />
     <ShowUser 
       :modal-show="modalShow" 
@@ -122,6 +127,7 @@
       :data-user="selectedUser" 
       @update="editUser"
       @delete="openModalDelete"
+      @updateStatus="handleGetUsers"
     />
     <ModalWindow width="344px" v-if="openConfirmCreateUser" :isVisible="openConfirmCreateUser" @close="closeConfirmCreateUser()" paddingBottom="8" paddingTop="4" paddingRight="4" paddingLeft="4">
       <template #content>
@@ -168,6 +174,7 @@
         </div>
       </template>
     </ModalWindow>
+    
   </template>
   
   <script setup>
@@ -183,7 +190,6 @@
   import { useUserStore } from '@/stores/modules/users/users';
   import ModalWindow from '@/components/ModalWindow.vue';
   import { useToastAlert } from '@/composables/useToastAlert';
-  import { $isAdmin, $isOperator } from '@/utils/helpers';
   
   const modalAdd = ref(false);
   const workPositionsData = ref([]);
@@ -195,6 +201,8 @@
   
   const selectedUser = ref(null);
   const userData = ref({});
+
+  const isDeleteWorkPositions = ref(false);
   
   const openConfirmCreateUser = ref(false);
   
@@ -212,6 +220,10 @@
   
   const closeDeleteUser = () => {
     deleteUser.value = false;
+  };
+
+  const closeDeleteWorkPositions = () => {
+    isDeleteWorkPositions.value = false;
   };
   
   onMounted(() => {
@@ -313,6 +325,11 @@
     }
     visibleDropdown.value = null;
   };
+
+  const getUserAndWP = () => {
+    workPositions('create');
+    handleGetUsers();
+  };  
   
   const closeModal = () => {
     modalAdd.value = false;
@@ -337,7 +354,7 @@
     }
   };
   
-  const ownerAccount = (user) => {
+/*   const ownerAccount = (user) => {
     return user.role.name == 'Associate' && ($isAdmin() || $isOperator());
   };
   
@@ -352,7 +369,7 @@
         visibleDropdown.value = index;
       }
     }
-  };
+  }; */
   
   const closeToggleDropdown = () => {
     visibleDropdown.value = null;

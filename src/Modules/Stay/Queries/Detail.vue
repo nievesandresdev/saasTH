@@ -23,8 +23,12 @@ import GuestTabs from './components/GuestTabs.vue'
 import ResponseCard from './ResponseCard.vue'
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
+
 
 const stayStore = useStayStore();
+const staySessionsStore = useStaySessionsStore();
+
 const route = useRoute();
 
 const stayId = ref(route.params.stayId);
@@ -36,14 +40,8 @@ const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
-    console.log('data.value',data.value)
-    stayStore.$createSession(stayId.value ,'sessions')
-    window.addEventListener('beforeunload', handleBeforeUnload);
 })
 
-onBeforeUnmount(() => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-})
 
 onBeforeRouteLeave((to, from, next) => {
     if (
@@ -66,17 +64,10 @@ watch(() => route.query.g, async (newId) => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,newId);
 }, { immediate: true });  
 
-const handleBeforeUnload = (event) => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    if(user){
-        stayStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
-    }
-    delete event['returnValue']; // Evitar la alerta del navegador
-}
 
 const deleteSession = async () => {
     let user = JSON.parse(sessionStorage.getItem('user'));
-    await stayStore.$deleteSession(route.params.stayId ,'sessions', user.email);
+    await staySessionsStore.$deleteSession(route.params.stayId ,'sessions', user.email);
 }
 
 provide('data',data)

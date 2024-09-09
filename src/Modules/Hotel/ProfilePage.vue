@@ -133,7 +133,10 @@
                     {{`address: ${form.address}`}} -->
                 </div>
             </section>
-            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+            <section 
+                class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4"
+                id="checkin-checkout"
+            >
                 <div class="max-w-profile">
                     <h2 class="font-medium text-lg">Horario Check in / Check out</h2>
                     <p class="text-sm htext-gray-500 text-justify mt-2">
@@ -283,7 +286,7 @@
 </template>
 
 <script setup>
-    import { ref, reactive, onMounted, provide, computed } from 'vue';
+    import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
     //COMPONENTS
     import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
     import ToggleShowProfile from '@/Modules/Hotel/Components/ToggleShowProfile.vue';
@@ -298,10 +301,10 @@
     import ModalNoSave from '@/components/ModalNoSave.vue'
     import ProfilePageSectionMap from "./ProfilePageSectionMap.vue";
     import ProfilePageSectionPhotos from "./ProfilePageSectionPhotos.vue";
-
+    
     import { useFormValidation } from '@/composables/useFormValidation'
     import * as rules from '@/utils/rules';
-
+    
     // STATE
     import { useHotelStore } from '@/stores/modules/hotel';
     const hotelStorage = useHotelStore();
@@ -312,7 +315,8 @@
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
-    
+    import useScrollToElement from '@/composables/useScrollToElement';
+    const { scrollToElement } = useScrollToElement();
     //DATA
     const form = reactive({
         hotel_id: null,
@@ -404,10 +408,11 @@
     provide('form', form)
     provide('hotelData', hotelData)
 
-    onMounted(() => {
+    onMounted(async() => {
         loadHotel()
         loadMockup()
-        // console.log(hotelData, 'hotelData')
+        await nextTick();
+        useScrollToElement();
     })
 
     // COMPUTED

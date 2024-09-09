@@ -3,7 +3,7 @@
       <div
         v-if="modalShow"
         class="absolute bg-white shadow-xl add flex-column"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 10;`"
+        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 601;`"
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
@@ -35,16 +35,41 @@
                 <span class="text-sm font-semibold">Teléfono</span>
                 <span class="text-base font-normal">{{ dataUser?.prefix }} {{ dataUser?.phone }}</span>
             </div>
+            <div class="flex flex-col mb-5">
+                <span class="text-sm font-semibold">Antigüedad</span>
+                <span class="text-base font-normal">{{ dataUser?.time }}</span>
+            </div>
+            <div class="flex flex-col mb-5">
+                <span class="text-sm font-semibold">Estado del usuario</span>
+                <div class="flex justify-between mt-[10px]">
+                  <span v-if="dataUser.status == 1" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                    Activo
+                  </span>
+                  <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                    Inactivo
+                  </span>
+                  <div v-if="dataUser?.role?.name != 'Associate'">
+                    <div v-if="dataUser.status == 1" @click="disabled" class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8">
+                      <img src="/assets/icons/1.TH.PAUSE.svg" class="w-4 h-4 mr-2 text-black" alt="plus icon">
+                      <span class="font-medium text-sm">Inactivar</span>
+                    </div>
+                    <div v-else @click="enabled" class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8">
+                      <img src="/assets/icons/octicon_play-16.svg" class="w-4 h-4 mr-2" alt="plus icon">
+                      <span class="font-medium text-sm">Activar</span>
+                    </div>
+                  </div>
+                </div>
+            </div>
             <hr class="mb-4">
-            <div class="flex justify-between mb-5">
-                <span class="text-base font-semibold">Hoteles asociados</span>
+            <div class="flex justify-start mb-5">
+                <span class="text-base font-semibold mr-2">Hoteles asociados</span>
                 <Tooltip
-                        size="m"
+                        size="s"
                         :top="25"
-                        :right="0"
+                        :left="-55"
                     >
                         <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/1.TH.INFO.svg">
+                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
                         </template>
                         <template v-slot:content>
                             <p class="text-sm">
@@ -54,14 +79,12 @@
                     </Tooltip>
             </div>
             <div class="flex flex-col items-left mb-4">
-                <div class="ml-2 flex justify-between mb-2"  v-for="(hotel,index) in dataUser?.hotelsNameId" :key="index">
-                    <span class="font-normal text-base">{{hotel}}</span>
-                    <span class="px-4 py-2 font-[600] text-[12px] rounded-full min-w-[80px] text-center bg-[#ECF9F5] text-[#0B6357]">
-                        Activo
-                    </span>
-
-                </div>
+              <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
+                <span class="mr-2 text-[#0B6357]">•</span> <!-- Punto antes del nombre del hotel -->
+                <span class="font-normal text-base">{{ hotel }}</span>
+              </div>
             </div>
+            
           </div>
         </div>
         <!-- <div 
@@ -72,7 +95,6 @@
         <div 
             class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
             style="height: 72px;" 
-            v-if="!$isOperator()"
         >
             <button
                 class="underline font-medium"
@@ -94,8 +116,12 @@
   <script setup>
     import { ref, onMounted, nextTick, defineEmits,defineProps,watch } from 'vue';
     import Tooltip from '@/components/Tooltip.vue'
+    import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
+    import { useToastAlert } from '@/composables/useToastAlert'
+
+    const toast = useToastAlert();
     
-    const emits = defineEmits(['close','update','delete']);
+    const emits = defineEmits(['close','update','delete','updateStatus']);
     
     const props = defineProps({
         modalShow: Boolean,
@@ -157,6 +183,38 @@
     const unregisterClickOutside = () => {
       document.removeEventListener('click', handleClickOutside);
     };
+    
+    const enabled = async() => {
+      const params = {
+        user_id: props.dataUser.id,
+      }
+
+      const response = await enableUser(params);
+
+      if (response.ok) {
+        toast.warningToast('Usuario activado con éxito','top-right')
+        closeModal();
+        emits('updateStatus',response.data.user)
+      }else{
+        toast.errorToast('Error al activar el usuario','top-right')
+      }
+    }
+    
+    const disabled = async() => {
+
+      const params = {
+        user_id: props.dataUser.id,
+      }
+      const response = await disableUser(params);
+
+      if (response.ok) {
+        toast.warningToast('Usuario inactivado','top-right')
+        closeModal();
+        emits('updateStatus',response.data.user)
+      }else{
+        toast.errorToast('Error al inactivar el usuario','top-right')
+      }
+    }
 
 
 

@@ -84,7 +84,7 @@ onMounted(() => {
 })
 
 watch(() => route.hash, (newHash, oldHash) => {
-  console.log('newHash',newHash)
+  // console.log('newHash',newHash)
   if (newHash) {
     scrollToElement();
   }
@@ -99,7 +99,7 @@ const toggleAttended = async () => {
   let pending_bool = attended.value
   let msg = pending_bool ? 'Feedback atendido' : 'Feedback pendiente'
 
-  await queryStore.$togglePendingState (props.data.id, pending_bool);
+  await queryStore.$togglePendingState (props.data.id, pending_bool, route.params.stayId);
   toast.warningToast(msg,'top-right');
   sendingChange.value = false;
 }

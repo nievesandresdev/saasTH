@@ -7,7 +7,7 @@
         <AlertShowGuest :show_guest="form.show_guest"/>
         <section class="px-6 min-h-screen">
             <HeadChat/>
-            <SectionConfig>
+            <SectionConfig :marginTop="'24px'">
                 <template #title>
                     <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
                 </template>

@@ -43,14 +43,14 @@
 
 </template>
 <script setup>
-import { ref, inject, watch, onMounted, onUnmounted } from 'vue'
+import { ref, inject, watch, onMounted, onUnmounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router';
 import TabMenuContainer from '@/components/TabMenuWSlot.vue'
 import TabLink from '@/components/TabMenuLink.vue'
 import { useChatStore } from '@/stores/modules/chat/chat'
 import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query';
-import { useStayStore } from '@/stores/modules/stay/stay';
+import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 
 
@@ -58,7 +58,7 @@ const queryStore = useQueryStore();
 
 const chatStore = useChatStore();
 const hotelStore = useHotelStore()
-const stayStore = useStayStore();
+const staySessionsStore = useStaySessionsStore();
 
 const route = useRoute();
 // const data = inject('data')
@@ -78,10 +78,19 @@ watch(() => route.params.stayId, async (newId, oldId) => {
     countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
     guestIdDefault.value = null;
-    stayStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
+    staySessionsStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
         guestIdDefault.value = res?.guests[0].guestId;
         session.value =  res?.sessions ? res?.sessions[0] : null;
     });
+
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    if(oldId && newId){
+        await staySessionsStore.$deleteSession(oldId ,'sessions', user.email);
+    }
+    if(newId){
+        await staySessionsStore.$createSession(newId ,'sessions')
+    }
+    
     // updateDefaultGuest();
 }, { immediate: true });      
 
@@ -90,8 +99,6 @@ watch(() => route.params.stayId, async (newId, oldId) => {
     //     guestIdDefault.value = data?.value.guests[0].id;
     // }
 // };
-
-
 
 const connectPusher = () =>{
     /*
@@ -104,6 +111,7 @@ const connectPusher = () =>{
     pusher.value = getPusherInstance();
     channelChat.value = pusher.value.subscribe(channelChat.value);
     channelChat.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+        // console.log('chat NotifyStayHotelEvent',data)
         if(data.stayId == route.params.stayId){
             if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
             if('pendingCountQueries' in data) countPendingQueries.value = data.pendingCountQueries;
@@ -111,16 +119,26 @@ const connectPusher = () =>{
     });
     channelSession.value = pusher.value.subscribe(channelSession.value);
     channelSession.value.bind('App\\Events\\SessionsStayEvent', async (data) => {
+        // console.log('chat SessionsStayEvent',data)
         if(Number(data.stayId) == Number(route.params.stayId)){
             session.value = data.session[0];
         }
     });
 }
 
+const handleBeforeUnload = (event) => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    staySessionsStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
+    delete event['returnValue']; // Evitar la alerta del navegador
+}
+
 onMounted( async() => {
     connectPusher();
-    // countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
-    // countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
 })
 
 onUnmounted(() => {
