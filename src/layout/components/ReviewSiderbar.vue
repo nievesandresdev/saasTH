@@ -66,7 +66,7 @@
                         <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
                         <div class="flex justify-between items-center mb-[4px]">
                             <div class="flex items-center truncate-1">
-                                <img class="w-6 h-6" :src="`/assets/icons/otas/${$capitalize(review.detail.otaOrigin)}.svg`" alt="Booking">
+                                <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
                                 <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
                             </div>
                             <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
