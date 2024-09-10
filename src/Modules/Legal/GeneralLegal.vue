@@ -13,27 +13,39 @@
             <template #content>
                 <div class="w-full">
                     <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">Razón social</label>
-                        <BaseTextField v-model="form.name" placeholder="Ejemplo: Tecnologías Innovadoras S.A." :error="form.nameError" />
+                        <label class="text-sm font-medium mb-[6px] block">Razón social*</label>
+                        <BaseTextField 
+                            v-model="form.name" 
+                            :placeholder="form.nameError ? 'Debes introducir Razón social' : 'Ejemplo: Tecnologías Innovadoras S.A.'" 
+                            :error="form.nameError" 
+                        />
                     </section>
                     <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal</label>
+                        <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal*</label>
                         <input
                             v-model="form.address"
                             id="fiscal_address"
                             type="text"
-                            placeholder="Ejemplo: Plaza Trinidad 15, 5C - Sevilla"
-                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border  border-black"
+                            :placeholder="form.addressError ? 'Debes introducir Domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
+                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border border-black"
                             :class="form.addressError ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
                         >
                     </section>
                     <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">NIF</label>
-                        <BaseTextField v-model="form.nif" placeholder="Ejemplo: A87654321" :error="form.nifError" />
+                        <label class="text-sm font-medium mb-[6px] block">NIF*</label>
+                        <BaseTextField 
+                            v-model="form.nif" 
+                            :placeholder="form.nifError ? 'Debes introducir NIF' : 'Ejemplo: A87654321'" 
+                            :error="form.nifError" 
+                        />
                     </section>
                     <section class="mb-6">
-                        <label class="text-sm font-medium mb-[6px] block">Email de contacto</label>
-                        <BaseTextField v-model="form.email" placeholder="Ejemplo: direccion@dominio.com" :error="form.emailError"/>
+                        <label class="text-sm font-medium mb-[6px] block">Correo electrónico de la empresa*</label>
+                        <BaseTextField 
+                            v-model="form.email" 
+                            :placeholder="form.emailError ? 'Introduce el correo electrónico de la empresa' : 'Ejemplo: direccion@dominio.com'" 
+                            :error="form.emailError"
+                        />
                         <div v-if="!isEmailValid" class="flex mt-1 text-[#FF6666] justify-left">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -51,7 +63,12 @@
                     <transition name="fade">
                         <section v-if="form.protection" class="mb-6">
                             <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField v-model="form.email_protection" placeholder="Ejemplo: direccion2@dominio.com" :error="form.emailProtectionError" ref="emailProtectionInput"/>
+                            <BaseTextField 
+                                v-model="form.email_protection" 
+                                :placeholder="form.emailProtectionError ? 'Introduce el correo electrónico del delegado' : 'Ejemplo: direccion2@dominio.com'" 
+                                :error="form.emailProtectionError" 
+                                ref="emailProtectionInput"
+                            />
                             <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -63,10 +80,8 @@
                 </div>
             </template>
         </SectionConfig>
-        
-        
     </div>
-    <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10 ">
+    <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10">
         <button
             class="hbtn-tertiary text-sm underline"
             :disabled="!changes"
@@ -85,13 +100,14 @@
 
     <ModalNoSave
         :id="'not-saved'"
-        :open="changes &&  valid"
+        :open="changes && valid"
         text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
         textbtn="Guardar"
         @saveChanges="submit"
         type="save_changes"
     />
 </template>
+
 
 <script setup>
 import { ref, reactive, onMounted, nextTick, watch } from 'vue';
@@ -149,20 +165,33 @@ const getData = async() => {
 watch([() => form.name, () => form.address, () => form.nif, () => form.email, () => form.email_protection, () => form.protection], validateForm);
 
 function validateForm() {
+    // Validación independiente para el email principal
     isEmailValid.value = validateEmail(form.email);
-    isEmailProtectionValid.value = validateEmail(form.email_protection);
+    form.emailError = !form.email.trim() || !isEmailValid.value;
 
-    // Verificación de campos vacíos
+    // Validación independiente para el email de protección de datos
+    isEmailProtectionValid.value = validateEmail(form.email_protection);
+    form.emailProtectionError = form.protection && (!form.email_protection.trim() || !isEmailProtectionValid.value);
+
+    // Verificación de otros campos
     form.nameError = !form.name.trim();
     form.addressError = !form.address.trim();
     form.nifError = !form.nif.trim();
-    form.emailError = !form.email.trim() || !isEmailValid.value;
-    form.emailProtectionError = form.protection && (!form.email_protection.trim() || !isEmailProtectionValid.value);
 
-    changes.value = JSON.stringify(form) !== initialForm.value;
-    valid.value = !form.nameError && !form.addressError && !form.nifError && 
+    // Calcular si el formulario es válido
+    valid.value = !form.nameError && !form.addressError && !form.nifError &&
                   !form.emailError && (!form.protection || !form.emailProtectionError);
+
+    // Determinar si hay cambios
+    changes.value = JSON.stringify(form) !== initialForm.value;
 }
+
+function validateEmail(email) {
+    if (email === '') return true; // Permite campo vacío en la validación (lo manejas por separado)
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
 
 function cancelChange() {
     Object.assign(form, JSON.parse(initialForm.value));
@@ -178,7 +207,7 @@ async function submit() {
     const response = await storeGeneralLegal(form);
 
     if (response.ok) {
-        toast.warningToast('Se han guardado los cambios', 'top-right');
+        toast.warningToast('Guardado con éxito', 'top-right');
         initialForm.value = JSON.stringify(form);
         changes.value = false; // Restablecer cambios
     } else {
@@ -186,10 +215,7 @@ async function submit() {
     }
 }
 
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
+
 
 function loadGoogleMapsScript() {
     const script = document.createElement('script');
