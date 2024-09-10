@@ -1,6 +1,9 @@
 <template>
-  <section :style="{ width: width, marginBottom: marginBottom , marginTop: marginTop}">
-    <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
+  <section
+    :class="[baseClass, xlClass, xl3Class]"
+    :style="{ width: width, marginBottom: marginBottom, marginTop: marginTop }"
+  >
+    <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster" :class="[baseClass, xlClass, xl3Class]">
       <slot name="title"></slot>
       <slot name="content"></slot>
     </div>
@@ -22,8 +25,18 @@ const props = defineProps({
   marginTop: {
     type: String,
     default: '0'
+  },
+  xlClass: {
+    type: String,
+    default: '1xl:w-full'
+  },
+  xl3Class: {
+    type: String,
+    default: '3xl:w-full'
   }
 })
+
+const baseClass = 'w-full'
 </script>
 
 <style scoped>

@@ -18,7 +18,7 @@ const views = ref([
         viewName :'GeneralLegal'
     },
     {
-        name: 'Políticas',
+        name: 'Normas',
         active : route.name == 'PoliciesLegal',
         viewName :'PoliciesLegal'
     },

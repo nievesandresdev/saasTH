@@ -3,7 +3,11 @@
         <HeadLegal />
         <TabLegal />
 
-        <SectionConfig :widht="'67%'" :marginBottom="'40px'">
+        <SectionConfig 
+            :widht="'67%'" 
+            :marginBottom="'40px'" 
+            :xl3Class="'3xl:w-[50%]'"
+        >
             <template #title>
                 <div class="flex flex-col mb-6 gap-2">
                     <span class="font-semibold text-base">General</span>
