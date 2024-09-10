@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] p-4">
+    <div class="bg-white flex flex-col border border-[#BFBFBF] rounded-[10px] py-6 px-4">
         <div class="flex flex-col">
             <span class="htext-green-800 text-[10px] font-semibold mb-2 leading-[130%]">ESTANCIAS</span>
             <div class="flex gap-4 items-center">
-                <span class="font-semibold text-sm flex gap-2 items-center col-span-1">
+                <span class="font-semibold text-sm leading-[120%] flex gap-2 items-center">
                     Activas en tu WebApp
                     <Tooltip size="l" :top="25" :left="5">
                         <template v-slot:button>
@@ -14,8 +14,8 @@
                         </template>
                     </Tooltip>
                 </span>
-                <div class="flex-1"></div> <!-- Espacio en blanco para alineación -->
-                <span class="font-semibold text-sm text-left col-span-1 pr-[4%]">Idiomas más utilizados</span>
+                <!-- <div class="flex-1"></div> -->
+                <span class="font-semibold text-sm leading-[120%] text-left ml-auto w-[23.5%] 3xl:w-[24%]">Idiomas más utilizados</span>
             </div>
         </div>
         <!-- contenido -->

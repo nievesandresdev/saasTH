@@ -26,7 +26,7 @@
             <!-- today info-->
             <div class="border hborder-gray-400 rounded-[10px] py-6 pl-4 pr-4 3xl:pl-[37px] 3xl:pr-[91px] flex items-center flex-shrink-0 bg-white">
                 <!-- current date -->
-                <div class="w-[87px]">
+                <div class="w-[96px]">
                     <h3 class="text-[20px] font-semibold leading-[90%] text-center">Hoy</h3>
                     <h1 class="text-[64px] font-semibold leading-[90%] text-center mt-1"> {{ statistics?.today ?? 0 }}</h1>
                     <h4 class="text-base font-semibold leading-[90%] text-center mt-1">{{ statistics?.month ?? 0 }}</h4>
@@ -62,7 +62,7 @@
                     <p class="text-sm leading-[150%]">
                         O puedes invitar a tus huéspedes desde el botón:
                     </p>
-                    <button class="hbtn-primary py-3 px-2 text-xs font-medium leading-[90%] ml-auto mt-auto" @click="openInviteGuest = true">
+                    <button class="hbtn-primary py-3 px-2 h-8 text-xs font-medium leading-[0%] ml-auto mt-auto" @click="openInviteGuest = true">
                         Invitar huésped
                     </button>
                 </div>

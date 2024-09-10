@@ -1,9 +1,12 @@
 <template>
     <div class="px-6">
-        <h1 class="text-[22px] font-medium leading-[110%] py-5">Dashboard {{ authStore.$currentHotelName }}</h1>
-        <div class="border-b border-[#BFBFBF] mb-5"></div>
-        <CustomerExperience />
-        <HomeFeedback />
+        <div class="border-b border-[#BFBFBF] py-5">
+            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ authStore.$currentHotelName }}</h1>
+        </div>
+        <div class="mt-6">
+            <CustomerExperience />
+            <HomeFeedback />
+        </div>
     </div>
     
 </template>
