@@ -18,7 +18,7 @@
                 </div>
                 <!-- tabs -->
                 <ul
-                    class="flex space-x-2 px-[24px]"
+                    class="flex space-x-2 mx-[24px]  border-b hborder-gray-400"
                 >
                     <li
                         v-for="(item ,index) in tabs"
@@ -36,7 +36,7 @@
                         <span class="w-full h-[3px] rounded-full" :class="tabSelected === index ? 'hbg-green-800' : 'bg-white'" />
                     </li>
                 </ul>   
-                <div class="px-6 mt-[31px]">
+                <div class="px-6 mt-[24px]">
                     <template v-if="tabSelected === INFORMATION">
                         <PanelEditFormInformation />
                     </template>
@@ -44,7 +44,7 @@
                         <PanelEditFormSchedule />
                     </template>
                     <template v-else-if="tabSelected === GALLERY">
-                        <PanelEditFormPhotos @open:gallery="openGallery" />
+                    <PanelEditFormPhotos @open:gallery="openGallery" />
                     </template>
                 </div>    
             </div>

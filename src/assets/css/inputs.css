@@ -65,6 +65,9 @@ input[type=radio]:hover {
     background-color: #34A98F;
     border-color: #34A98F;
   }
+  .hcheckbox:hover {
+    background-color: #ECF9F5;
+  }
   .hcheckbox:disabled {
     background-color: #DADADA;
     border-color: #DADADA;

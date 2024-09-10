@@ -1,6 +1,7 @@
 <template>
+    <p class="text-sm font-medium htext-gray-500">{{ textFacilitiesFound }}</p>
     <div class="space-y-6">
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 gap-4 mt-4">
                 <div
                     class="button-add h-24 w-full border hborder-black-100 flex flex-col justify-center items-center rounded-xl cursor-pointer"
                     @click="openGallery"
@@ -62,6 +63,13 @@ const urlsimages = inject('urlsimages');
 const facilityStore = inject('facilityStore');
 const previewUrl = inject('previewUrl');
 const isPreviewOpen  = inject('isPreviewOpen');
+
+// COMPUTED
+const textFacilitiesFound = computed(() => {
+    let numbers = form.images?.length || 0;
+    let text = numbers === 1 ? `${numbers} imágen encontrada` : `${numbers} imágenes encontradas`;
+    return text;
+});
 
 // FUNCTIONS
 function openGallery (){

@@ -44,7 +44,7 @@
                     </template>
                 </div>
             </div>
-             {{ form.place_id}}
+             <!-- {{ form.place_id}} -->
             <div class="py-4 px-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
