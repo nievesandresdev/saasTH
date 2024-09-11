@@ -1,4 +1,10 @@
 <template>
+    <div
+        v-if="modelActive"
+        class="h-full w-full fixed top-0 left-0 z-[40]"
+        @click="closeModal"
+    >
+    </div>
     <transition>
         <div
             v-if="modelActive"
@@ -75,7 +81,7 @@
             @saveChanges="submitSave"
             type="save_changes"
             :force-open="modalChangePendinginForm"
-            @close="closeModal()"
+            @close="closeModalForce()"
         />
     </template>
 </template>
@@ -261,6 +267,12 @@ function closeModal () {
         openModalChangeInForm();
         return;
     }
+    changePendingInForm.value = false;
+    modelActive.value = null;
+    tabSelected.value = INFORMATION;
+    resetData();
+}
+function closeModalForce () {
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;

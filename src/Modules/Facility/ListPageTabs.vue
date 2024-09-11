@@ -44,7 +44,7 @@
             openModalChangeInForm();
             return;
         }
-        modalAdd.value =false;
+        // modalAdd.value =false;
         selectedCard.value = null;
         if(filter.value === visibility){
             filter.value = null;

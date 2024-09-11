@@ -1,4 +1,10 @@
 <template>
+    <div
+        v-if="modelActive"
+        class="h-full w-full fixed top-0 left-0 z-[40]"
+        @click="closeModal"
+    >
+    </div>
     <transition>
         <div
             v-if="modelActive"
@@ -113,14 +119,14 @@
             @saveChanges="submitSave"
             type="save_changes"
             :force-open="modalChangePendinginForm"
-            @close="closeModal()"
+            @close="closeModalForce()"
         />
     </template>
 </template>
 
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, toRefs, inject } from 'vue';
+import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick } from 'vue';
 import lodash from 'lodash';
 
 // COMPONENTS
@@ -278,8 +284,8 @@ const changesform = computed(() => {
         // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules)) ||
         !lodash.isEqual(form.schedules, itemSelected?.schedules) ||
         // !deepEqual(form.schedules, itemSelected?.schedules) ||
-        (form.images.length !== itemSelected?.images.length) ||
-        form.images.find(item => item?.image);
+        // (form.images.length !== itemSelected?.images.length) ||
+        !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid
 });
@@ -399,6 +405,16 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+    changePendingInForm.value = false;
+    modelActive.value = null;
+    tabSelected.value = INFORMATION;
+    resetData();
+}
+function closeModalForce () {
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
@@ -426,6 +442,13 @@ function addNewsImages (images) {
         let { url, name, type } = item
         // urls_image.value.push({ url, name, type })
         form.images.push({ id:null, url, name, type })
+    });
+}
+
+function openModalChangeInForm () {
+    modalChangePendinginForm.value = true;
+    nextTick(() => {
+        modalChangePendinginForm.value = false;
     });
 }
 </script>

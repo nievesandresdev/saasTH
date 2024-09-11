@@ -40,6 +40,7 @@
             </div>
         </div>
         <ModalFilter @reloadExperiences="reloadExperiences()" />
+        
         <PanelEdit
             ref="panelEditRef"
             @load:resetPageData="reloadExperiences()"

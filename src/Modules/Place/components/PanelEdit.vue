@@ -1,4 +1,10 @@
 <template>
+    <div
+        v-if="modelActive"
+        class="h-full w-full fixed top-0 left-0 z-[40]"
+        @click="closeModal"
+    >
+    </div>
     <transition>
         <div
             v-if="modelActive"

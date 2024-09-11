@@ -116,6 +116,7 @@ const router = useRouter();
 function closeModal() {
   visitNow.value = false;
   emit('close');
+
 }
 
 function onlySaveChanges() {

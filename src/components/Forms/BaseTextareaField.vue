@@ -11,7 +11,7 @@
                 rows="5"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-[108px] rounded-[6px] border"
+                class="w-full h-[108px] max-h-[225px] rounded-[6px] border"
                 :class="`${customInputClass} ${modelValue ? 'hborder-black-100 hinput-green' : disabled ? 'hborder-gray-300' : 'hborder-gray-400 hinput-green'} ${error ? 'hinput-error' : ''}`"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
