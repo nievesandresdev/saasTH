@@ -65,7 +65,7 @@
                                 class="text-[10px] font-semibold"
                                 :class="place.featured ? 'htext-white-100' : 'htext-black-100'"
                             >
-                                Recomendar
+                                 {{ place.featured ? 'Recomendado' : 'Recomendar' }}
                             </span>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                                         class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
                                     >
                                 </div>
-                                <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reviews</p>
+                                <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reseñas</p>
                             </div>
                         </div>
                         <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }} {{ place.id }}</h6>

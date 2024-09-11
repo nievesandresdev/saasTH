@@ -140,7 +140,7 @@
                 <div class="max-w-profile">
                     <h2 class="font-medium text-lg">Horario Check-in / Check-out</h2>
                     <p class="text-sm htext-gray-500 text-justify mt-2">
-                        Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check in y Check Out para cada estancia en particular cuando lo necesites.
+                        Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check-in y Check-out para cada estancia en particular cuando lo necesites.
                     </p>
                     <div class="w-[411px] mt-[24px] space-y-4">
                         <div class="flex space-x-[24px]">

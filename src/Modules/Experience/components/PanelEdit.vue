@@ -6,7 +6,7 @@
             :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
             ref="refPanelEdit"
         >
-            <div class="overflow-y-auto scrolling-sticky">
+            <div class="overflow-y-auto scrolling-sticky flex-1">
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
                         <h1 class="text-[22px] font-medium text-center">Sobre la experiencia</h1>
@@ -257,10 +257,10 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
-    // if (changePendingInForm.value) {
-    //     openModalChangeInForm();
-    //     return;
-    // }
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
@@ -288,7 +288,7 @@ function openModalChangeInForm () {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-enter-active,
 .v-leave-active {
     transition: transform 0.5s ease;
