@@ -14,7 +14,7 @@
             <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">{{ title ?? '¿Estás seguro?'}}</h3>
             <p class="mt-2 text-sm leading-[150%] htext-black-100">{{ text }}</p>
           </div>
-          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit' && type !== 'alone_exit_save' ">
+          <div class="mt-4 flex justify-between" v-if="type !== 'exit' && type !== 'exit_save' && type !== 'alone_exit' && type !== 'alone_exit_save' && type !== 'alone_save' ">
               <button @click.prevent="goLink" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
@@ -48,6 +48,14 @@
                   Salir sin guardar
               </button>
               <button @click="hiddenModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
+                {{ textbtn ?? 'Seguir' }}
+              </button>
+          </div>
+          <div class="mt-4 flex justify-between" v-if="type == 'alone_save'">
+              <button  @click.prevent="goLinkUrl" class="hbtn-tertiary text-sm font-medium underline my-auto">
+                  Salir sin guardar
+              </button>
+              <button @click="onlySaveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium border">
                 {{ textbtn ?? 'Seguir' }}
               </button>
           </div>
@@ -88,7 +96,7 @@ const intendedRoute = ref(null);
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
   if (!props.forceOpen) {
-    if (props.type === 'exit_save' || props.type === 'alone_exit' || props.type === 'alone_exit_save') {
+    if (props.type === 'exit_save' || props.type === 'alone_exit' || props.type === 'alone_exit_save' || props.type === 'alone_save') {
       visitNow.value = newVal;
       showModal.value = true;
     } else {

@@ -95,14 +95,26 @@
       </div>
     </div>
   </transition>
-  <ModalNoSave
+  <!-- <ModalNoSave
     :id="'not-saved'"
     :open="showModalNoSave"
     text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
     textbtn="Guardar"
     @saveChanges="submit"
     @close="closeModalNoSave"
-    type="save_changes"
+    type="alone_exit_save"
+  /> -->
+
+  <ModalNoSave
+    :id="'not-saved'"
+    :open="showModalNoSave"
+    text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+    textbtn="Guardar"
+    @close="closeModalNoSave"
+    @saveChanges="submit"
+    :type="'alone_save'"
+    :url="intendedRoute"
+    @hidden="handleClose"
   />
 </template>
 
@@ -112,11 +124,14 @@ import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import BaseSwitchInput from '@/components/Forms/BaseSwichInput.vue';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import { useRouter } from 'vue-router';
 
 const emits = defineEmits(['close', 'store']);
 const props = defineProps({
   modalAdd: Boolean,
 });
+
+const router = useRouter();
 
 const form = reactive({
   title: '',
@@ -129,6 +144,20 @@ const errors = reactive({
   title: true, // Inicialmente en true para mostrar el error
   description: true, // Inicialmente en true para mostrar el error
   penalizationDetails: false // Inicialmente en false, solo si penalization es true se muestra
+});
+
+const intendedRoute = ref(null);
+
+router.beforeEach((to, from, next) => {
+  
+  if(to.fullPath !== from.fullPath && props.modalAdd) {
+    showModalNoSave.value = true
+    intendedRoute.value = to.fullPath;
+  }else{
+    /* window.location.href = intendedRoute.value; */
+    next();
+  }
+
 });
 
 const containerTop = ref(0);
@@ -160,6 +189,7 @@ const closeModal = () => {
 
 const closeModalNoSave = () => {
   showModalNoSave.value = false;
+  location.reload();
 };
 
 const submit = () => {

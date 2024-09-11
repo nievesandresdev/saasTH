@@ -158,6 +158,7 @@ const closeModalCreatePolicies = () => {
 };
 
 const handleUpdatePolicies = async (form) => {
+  console.log('formateo',form);
   const response = await updatePoliciesLegal(form);
   if (response.ok) {
     toast.warningToast('Cambios guardados con éxito', 'top-right');

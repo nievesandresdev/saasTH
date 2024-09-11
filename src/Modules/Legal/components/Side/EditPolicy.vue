@@ -26,12 +26,6 @@
               :placeholder="errors.title ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
               :error="errors.title" 
             />
-           <!--  <div v-if="errors.title" class="flex mt-1 text-[#FF6666] justify-left">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-              </svg>
-              <small>{{ errors.title }}</small>
-            </div> -->
             <div class="text-sm text-right">{{ form.title.length }}/50</div>
           </section>
           <section class="mb-4">
@@ -44,12 +38,6 @@
               name="description"
               :error="errors.description"
             />
-           <!--  <div v-if="errors.description" class="flex mt-1 text-[#FF6666] justify-left">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-              </svg>
-              <small>{{ errors.description }}</small>
-            </div> -->
           </section>
           <section class="flex justify-between items-center mb-2">
             <label class="text-sm font-medium">Penalización</label>
@@ -68,12 +56,6 @@
               name="penalizationDetails"
               :error="errors.penalizationDetails"
             />
-            <!-- <div v-if="errors.penalizationDetails" class="flex mt-1 text-[#FF6666] justify-left">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-              </svg>
-              <small>{{ errors.penalizationDetails }}</small>
-            </div> -->
           </section>
         </div>
       </div>
@@ -81,7 +63,7 @@
         class="tertiary-black-200 py-6 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
         style="height: 72px;" 
       >
-        <button class="underline font-medium text-sm p-4" @click="closeModal">
+        <button class="underline font-medium text-sm p-4" @click="handleClose">
           Cancelar
         </button>
         <button
@@ -94,6 +76,18 @@
       </div>
     </div>
   </transition>
+
+  <ModalNoSave
+    :id="'not-saved'"
+    :open="showModalNoSave"
+    text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+    textbtn="Guardar"
+    @close="closeModalNoSave"
+    @saveChanges="submit"
+    :type="'alone_save'"
+    :url="intendedRoute"
+    @hidden="handleClose"
+  />
 </template>
 
 <script setup>
@@ -101,14 +95,17 @@ import { ref, onMounted, defineEmits, defineProps, reactive, watch } from 'vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import BaseSwitchInput from '@/components/Forms/BaseSwichInput.vue';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
+import ModalNoSave from '@/components/ModalNoSave.vue';
+import { useRouter } from 'vue-router';
 
 const emits = defineEmits(['close', 'store']);
 const props = defineProps({
     modalEdit: Boolean,
-    data : Object
+    data: Object
 });
 
 const form = reactive({
+    id: props.data.id || null,
     title: props.data.title || '',
     description: props.data.description || '',
     penalization: props.data.penalization || false,
@@ -121,8 +118,14 @@ const errors = reactive({
     penalizationDetails: false
 });
 
+const changes = ref(false);
+const showModalNoSave = ref(false);
+const intendedRoute = ref(null);
+
 const containerTop = ref(0);
 const ref_section_edit = ref(null);
+
+const router = useRouter();
 
 onMounted(() => {
     const sectionExpElement = document.getElementById('layout-hoster');
@@ -130,24 +133,50 @@ onMounted(() => {
         containerTop.value = sectionExpElement.offsetTop;
     }
 
-    form.title = props.data.title || '';
-if (props.modalEdit) {
-    console.log('data', props.data);
-}
-    
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.fullPath !== from.fullPath && props.modalEdit) {
+        showModalNoSave.value = true;
+        intendedRoute.value = to.fullPath;
+    } else {
+        /* window.location.href = intendedRoute.value; */
+        next();
+    }
 });
 
 const closeModal = () => {
+    if (changes.value) {
+        showModalNoSave.value = true;
+    } else {
+        resetForm();
+        emits('close');
+    }
+};
+
+const onlyCloseModal = () => {
     resetForm();
     emits('close');
+};
+
+const closeModalNoSave = () => {
+    showModalNoSave.value = false;
+    location.reload();
+};
+
+const handleClose = () => {
+    if (changes.value) {
+        showModalNoSave.value = true;
+    } else {
+        closeModal();
+    }
 };
 
 const submit = () => {
     validateForm();
     if (!errors.title && !errors.description && !errors.penalizationDetails) {
         emits('store', form);
-        closeModal()
-        emits('close');
+        onlyCloseModal();
     }
 };
 
@@ -156,18 +185,6 @@ const validateForm = () => {
     errors.description = !form.description.trim() ? 'Es necesario llenar este campo' : false;
     errors.penalizationDetails = (form.penalization && !form.penalizationDetails.trim()) ? 'Es necesario llenar este campo' : false;
 };
-
-watch(() => props.modalEdit, (newVal) => {
-    if (newVal) {
-       form.title = props.data.title || '';
-        form.description = props.data.description || '';
-        form.penalization = props.data.penalization || false;
-        form.penalizationDetails = props.data.penalization_details || '';
-
-        console.log('data', props.data);
-
-    }
-});
 
 // Watchers para detectar cambios en el formulario y validar en tiempo real
 watch(() => form.title, (newVal) => {
@@ -180,6 +197,7 @@ watch(() => form.title, (newVal) => {
     } else {
         errors.title = 'Es necesario llenar este campo';
     }
+    changes.value = true;
 });
 
 watch(() => form.description, (newVal) => {
@@ -188,6 +206,7 @@ watch(() => form.description, (newVal) => {
     } else {
         errors.description = 'Es necesario llenar este campo';
     }
+    changes.value = true;
 });
 
 watch(() => form.penalizationDetails, (newVal) => {
@@ -196,6 +215,7 @@ watch(() => form.penalizationDetails, (newVal) => {
     } else {
         errors.penalizationDetails = 'Es necesario llenar este campo';
     }
+    changes.value = true;
 });
 
 watch(() => form.penalization, () => {
@@ -203,6 +223,18 @@ watch(() => form.penalization, () => {
         errors.penalizationDetails = false;
     } else if (!form.penalizationDetails.trim()) {
         errors.penalizationDetails = 'Es necesario llenar este campo';
+    }
+    changes.value = true;
+});
+
+watch(() => props.modalEdit, (newVal) => {
+    if (newVal) {
+        form.title = props.data.title || '';
+        form.description = props.data.description || '';
+        form.penalization = props.data.penalization || false;
+        form.penalizationDetails = props.data.penalization_details || '';
+        form.id = props.data.id || null;
+
     }
 });
 
@@ -214,6 +246,8 @@ function resetForm() {
     errors.title = false;
     errors.description = false;
     errors.penalizationDetails = false;
+    changes.value = false;
+    showModalNoSave.value = false;
 }
 </script>
 
