@@ -1,7 +1,7 @@
 <template>
     <div class="space-y-4">
         <div class="flex space-x-2">
-            <div class="mr-2 font-semibold text-sm" :class="form.featured ? 'htext-green-800' : 'htext-black-100'">LUGAR RECOMENDADO</div>
+            <div class="mr-2 font-medium text-sm" :class="form.featured ? 'htext-green-800' : 'htext-black-100'">LUGAR RECOMENDADO</div>
             <BaseSwichInput
                 id="swich-recommendarion"
                 v-model="form.featured"
