@@ -69,7 +69,7 @@
         <button
           class="hbtn-cta px-4 py-3 font-medium text-sm rounded-[6px] leading-[110%]"
           @click="submit"
-          :disabled="errors.title || errors.description || errors.penalizationDetails"
+          :disabled="errors.title || errors.description || errors.penalizationDetails || !changes"
         >
           Guardar
         </button>
@@ -91,17 +91,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, defineProps, reactive, watch } from 'vue';
+import { ref, onMounted, defineEmits, defineProps, reactive, computed, watch } from 'vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import BaseSwitchInput from '@/components/Forms/BaseSwichInput.vue';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import { useRouter } from 'vue-router';
 
-const emits = defineEmits(['close', 'store']);
+const emits = defineEmits(['close', 'store','ToFrom']);
 const props = defineProps({
     modalEdit: Boolean,
-    data: Object
+    data: Object,
+    from: Boolean
 });
 
 const form = reactive({
@@ -112,13 +113,14 @@ const form = reactive({
     penalizationDetails: props.data.penalization_details || ''
 });
 
+const initialFormState = ref({ ...form });
+
 const errors = reactive({
     title: false,
     description: false,
     penalizationDetails: false
 });
 
-const changes = ref(false);
 const showModalNoSave = ref(false);
 const intendedRoute = ref(null);
 
@@ -132,7 +134,12 @@ onMounted(() => {
     if (sectionExpElement) {
         containerTop.value = sectionExpElement.offsetTop;
     }
+    // Guardar el estado inicial del formulario
+    initialFormState.value = { ...form };
+});
 
+const changes = computed(() => {
+    return JSON.stringify(form) !== JSON.stringify(initialFormState.value);
 });
 
 router.beforeEach((to, from, next) => {
@@ -140,7 +147,6 @@ router.beforeEach((to, from, next) => {
         showModalNoSave.value = true;
         intendedRoute.value = to.fullPath;
     } else {
-        /* window.location.href = intendedRoute.value; */
         next();
     }
 });
@@ -165,6 +171,12 @@ const closeModalNoSave = () => {
 };
 
 const handleClose = () => {
+    if(props.from && !changes.value) {
+        emits('ToFrom',props.data);
+    }else{
+        closeModal();
+    }
+
     if (changes.value) {
         showModalNoSave.value = true;
     } else {
@@ -197,7 +209,6 @@ watch(() => form.title, (newVal) => {
     } else {
         errors.title = 'Es necesario llenar este campo';
     }
-    changes.value = true;
 });
 
 watch(() => form.description, (newVal) => {
@@ -206,7 +217,6 @@ watch(() => form.description, (newVal) => {
     } else {
         errors.description = 'Es necesario llenar este campo';
     }
-    changes.value = true;
 });
 
 watch(() => form.penalizationDetails, (newVal) => {
@@ -215,7 +225,6 @@ watch(() => form.penalizationDetails, (newVal) => {
     } else {
         errors.penalizationDetails = 'Es necesario llenar este campo';
     }
-    changes.value = true;
 });
 
 watch(() => form.penalization, () => {
@@ -224,7 +233,6 @@ watch(() => form.penalization, () => {
     } else if (!form.penalizationDetails.trim()) {
         errors.penalizationDetails = 'Es necesario llenar este campo';
     }
-    changes.value = true;
 });
 
 watch(() => props.modalEdit, (newVal) => {
@@ -235,6 +243,7 @@ watch(() => props.modalEdit, (newVal) => {
         form.penalizationDetails = props.data.penalization_details || '';
         form.id = props.data.id || null;
 
+        initialFormState.value = { ...form }; // Actualiza el estado inicial
     }
 });
 
@@ -246,10 +255,10 @@ function resetForm() {
     errors.title = false;
     errors.description = false;
     errors.penalizationDetails = false;
-    changes.value = false;
     showModalNoSave.value = false;
 }
 </script>
+
 
 <style lang="scss">
 .add {

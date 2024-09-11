@@ -56,8 +56,8 @@
 
   <!-- Modales y otros componentes -->
   <CreatePoliciesLegal :modal-add="modalCreatePolicies" @close="closeModalCreatePolicies" @store="handleCreatePolicies" />
-  <EditPolicy :modal-edit="modalEditPolicies" @close="closeModalEditPolicies" :data="policy" @store="handleUpdatePolicies" />
-  <ShowPolicy :modal-show="showSidePolicy" @close="closeSidePolicy" :data="policy" @edit="showEditPolicy" @delete="openDeletePolicy" />
+  <EditPolicy :modal-edit="modalEditPolicies" @close="closeModalEditPolicies" :data="policy" @store="handleUpdatePolicies" :from="typeFromEdit" @ToFrom="showPolicy"/>
+  <ShowPolicy :modal-show="showSidePolicy" @close="closeSidePolicy" :data="policy" @edit="showEditPolicy" @delete="openDeletePolicy" @toEdit="showPolicy" />
   <ModalWindow :isVisible="deletePolicy" @close="closedeletePolicy" :width="'384px'">
     <template #content>
       <div class="flex justify-end">
@@ -114,10 +114,15 @@ const showPolicy = (data) => {
   policy.value = data;
 };
 
-const showEditPolicy = (data) => {
+const typeFromEdit = ref(false);
+const showEditPolicy = (data,type = false) => {
   modalEditPolicies.value = true;
   policy.value = data;
   modalCreatePolicies.value = false;
+  console.log('secreto',type)
+  if(type){
+    typeFromEdit.value = true;
+  }
 };
 
 const closedeletePolicy = () => {
@@ -158,7 +163,6 @@ const closeModalCreatePolicies = () => {
 };
 
 const handleUpdatePolicies = async (form) => {
-  console.log('formateo',form);
   const response = await updatePoliciesLegal(form);
   if (response.ok) {
     toast.warningToast('Cambios guardados con éxito', 'top-right');
