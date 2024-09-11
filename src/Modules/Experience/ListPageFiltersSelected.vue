@@ -17,11 +17,14 @@
                 v-if="filtersSelected.duration.includes(index)"
                 class="chip chip--green py-2 px-[12px] flex items-center cursor-pointer text-sm font-medium space-x-2"
             >
-                <img src="/assets/icons/1.TH.PINPOINT.OUTLINE.svg" alt="1.TH.OUTLINE">
+                <img
+                    src="/assets/icons/1.TH.PINPOINT.OUTLINE.svg"
+                    alt="1.TH.PINPOINT.OUTLINE"
+                >
                 <span>{{ duration.name  }}</span>
                 <img
                     src="/assets/icons/1.TH.CLOSE.GREEN.svg"
-                    alt="1.TH.CLOSE.GREEN"
+                    alt="1.TH.STArt.GREEN"
                     @click="cleanFilter('duration', index)"
                 >
             </div>
@@ -31,7 +34,11 @@
                 v-if="filtersSelected.score.includes(index)"
                 class="chip chip--green py-2 px-[12px] flex items-center cursor-pointer text-sm font-medium space-x-2"
             >
-                <img src="/assets/icons/1.TH.CLOCK.OUTLINE.svg" alt="1.TH.OUTLINE">
+                <img
+                    class="size-4"
+                    src="/assets/icons/1.TH.STAR.GREEN.svg"
+                    alt="1.TH.STAR.GREEN"
+                >
                 <span>{{ score.name }}</span>
                 <img
                     src="/assets/icons/1.TH.CLOSE.GREEN.svg"
@@ -55,7 +62,7 @@
             <img
                 src="/assets/icons/1.TH.CLOSE.GREEN.svg"
                 alt="1.TH.CLOSE.GREEN"
-                @click="cleanFilter('price_max')"
+                @click="cleanFilter('free_cancelation')"
             >
         </div>
         <button
@@ -94,10 +101,17 @@ const durations = ref({
 });
 
 // FUNCTION
-function cleanFilter (field) {
-    filtersSelected[field] = filtersSelectedDefault[field];
-    formFilter[field] = filtersSelectedDefault[field];
-    if(fiel === 'price_max') {
+function cleanFilter (field, value) {
+    if (value === undefined) {
+        filtersSelected[field] = filtersSelectedDefault[field];
+        formFilter[field] = filtersSelectedDefault[field];
+    }   else {
+        let index = filtersSelected[field].findIndex(item => item === value);
+        filtersSelected[field].splice(index, 1);
+        formFilter[field] = filtersSelected[field];
+    }
+
+    if(field === 'price_max') {
         formFilter['price_min'] = filtersSelectedDefault['price_min'];
     }
     emits('reloadExperiences');

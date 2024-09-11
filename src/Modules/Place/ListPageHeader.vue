@@ -1,5 +1,5 @@
 <template>
-    <section class="sticky top-0 hbg-white-100 z-[100]">
+    <section class="sticky top-0 hbg-gray-100 z-[100]">
         <div class="flex justify-between py-[20px] px-[24px]">
             <div class="space-x-2 flex">
                 <h1 class="font-medium text-[22px]">Destino - {{ typePlaceCurrent?.name }}</h1>

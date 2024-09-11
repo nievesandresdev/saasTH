@@ -1,7 +1,7 @@
 <template>
     <div class="space-y-4">
         <div class="flex space-x-2">
-            <div class="mr-2 font-semibold text-sm" :class="form.featured ? 'htext-green-800' : 'htext-black-100'">EXPERIENCIA RECOMENDADO</div>
+            <div class="mr-2 font-medium text-sm" :class="form.featured ? 'htext-green-800' : 'htext-black-100'">EXPERIENCIA RECOMENDADA</div>
             <BaseSwichInput
                 id="swich-recommendarion"
                 v-model="form.featured"
@@ -30,7 +30,6 @@
                 v-model="form.recommendation"
                 placeholder="Cuéntales a tus huéspedes por qué este lugar es especial"
                 class-content="flex-1"
-                class-input="text-sm h-[44px]"
                 name="recommendation"
                 :max="'300'"
             />

@@ -1,5 +1,5 @@
 <template>
-    <section class="sticky top-0 hbg-white-100 z-[100]  w-full">
+    <section class="sticky top-0 hbg-white-100 z-[100]  w-full hbg-gray-100">
         <div class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px]">
             <div class="space-x-2 flex">
                 <h1 class="font-medium text-[22px]">Experiencias</h1>

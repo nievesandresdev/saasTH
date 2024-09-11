@@ -12,7 +12,7 @@
                 <div class="text-center">
                     <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
                     <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">¿Eliminar experiencia?</h3>
-                    <p class="mt-2 text-sm leading-[150%] htext-black-100">Recuerda que puedes optar por ocultar una instalación que no desees mostrar</p>
+                    <p class="mt-2 text-sm leading-[150%] htext-black-100">Recuerda que puedes optar por ocultar una experiencia que no desees mostrar</p>
                 </div>
             </div>
             <div class="mt-4 flex justify-between">
@@ -21,7 +21,7 @@
                 </button>
                 
                 <button  @click="submit" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
-                    Si, eliminar
+                    Sí, eliminar
                 </button>
             </div>
         </template>

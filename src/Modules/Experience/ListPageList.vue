@@ -2,6 +2,7 @@
     <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms">
         {{ textNumbersExperiencesVisiblesAndHidden }}
     </p>
+    <!-- {{ idsToggleExperienciesVisibles }} -->
     <template v-if="experiencesData.length > 0">
         <div id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
             <template v-for="(experience, index) in experiencesData">
@@ -26,7 +27,7 @@
                 <div
                     class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
                     @dragover="handlerDragOver"
-                    @drop="handlerDrop(index, item)"
+                    @drop="handlerDrop(index, experience)"
                     :draggable="true"
                     @dragstart="handlerDragStart(index, $event)"
                     @dragend="handlerDragEnd"
@@ -66,7 +67,7 @@
                                 class="text-[10px] font-semibold"
                                 :class="experience.featured ? 'htext-white-100' : 'htext-black-100'"
                             >
-                                Recomendar
+                                {{ experience.featured ? 'Recomendado' : 'Recomendar' }}
                             </span>
                         </div>
                     </div>
@@ -85,10 +86,11 @@
                                         class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
                                     >
                                 </div>
-                                <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reviews</p>
+                                <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reseñas</p>
                             </div>
                         </div>
                         <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px] mt-[8px]">{{ experience.title }}</h6>
+                        <!-- {{ experience.toggle_product_id }} -->
                         <span class="text-sm htext-black-100 font-semibold truncate-2 mt-[12px]">Desde {{ experience.from_price }}€</span>
                         <div class="flex space-x-1 mt-[12px]">
                             <img class="" src="/assets/icons/1.TH.CLOCK.svg" alt="1.TH.LOCATION">
@@ -229,6 +231,11 @@ const textNumbersExperiencesVisiblesAndHidden = computed(() => {
     return text;
 });
 
+const idsToggleExperienciesVisibles = computed(() => {
+    const idsExperiences = experiencesData.value.filter(item => item.is_visible).map(item => item.toggle_product_id);
+    return idsExperiences;
+});
+
 
 // FUNCTIONS
 
@@ -264,7 +271,53 @@ const handlerDragOver = (event) => {
   event.preventDefault();
 };
 
-const handlerDrop = (index, facility) => {
+const findFirstNonFeaturedPosition = () => {
+    return experiencesData.value.findIndex(item => item.featured === false);
+}
+const findLastFeaturedPosition = () => {
+    return experiencesData.value
+            .map(item => item.featured)
+            .lastIndexOf(true);
+}
+
+
+const handlerDrop = (index, experience) => {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+  const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
+  if (draggedIndex !== index) {
+    const droppedItem = experiencesData.value[draggedIndex];
+
+    // Verifica si el elemento arrastrado tiene featured: false
+    if (!droppedItem.featured) {
+        // Encuentra la primera posición con featured: false
+        const firstNonFeaturedPosition = findFirstNonFeaturedPosition();
+        // Si el índice de destino está entre elementos con featured: true
+        if (index < firstNonFeaturedPosition) {
+            index = firstNonFeaturedPosition;
+        }
+    } else {
+        // Encuentra la última posición con featured: true
+        const lastFeaturedPosition = findLastFeaturedPosition();
+
+        // Si el índice de destino está en una posición con featured: false
+        if (index > lastFeaturedPosition) {
+            index = lastFeaturedPosition;
+        }
+    }
+
+    // Realiza el movimiento
+    experiencesData.value.splice(draggedIndex, 1);
+    experiencesData.value.splice(index, 0, droppedItem);
+    updatePosition();
+  }
+  draggedItem.value = null;
+  dragStartIndex.value = null;
+};
+
+const handlerDropOld = (index, facility) => {
     if (changePendingInForm.value) {
         openModalChangeInForm();
         return;
@@ -283,8 +336,7 @@ const handlerDragEnd = () => {
   draggedItem.value = null;
   dragStartIndex.value = null;
 
-};
-
+}; 
 ///
 
 function converStar(value){
@@ -322,19 +374,18 @@ async function loadExperiences ({ showPageLoading, showLoadingMore }) {
 defineExpose({ loadExperiences });
 
 async function updatePosition () {
-    const idsExperiences = experiencesData.value.filter(item => item.is_visible).map(item => item.toggle_product_id);
+    const idsExperiences = idsToggleExperienciesVisibles.value;
     const data = {
         position: idsExperiences,
     };
 
     const response = await experienceStore.$updatePosition(data);
-    console.log(response, 'response');
     const { ok } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
     } else {
         toast.warningToast(data?.message,'top-right');
-    }
+    }git a
     mockupStore.$reloadIframe();
 }
 function handlerClickSwichVisibility (event) {
