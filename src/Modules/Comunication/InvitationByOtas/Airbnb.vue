@@ -3,10 +3,10 @@
     <!-- slider -->
     <section class="px-6 mt-6">
         <div class="rounded-[20px] shadow-hoster p-6 bg-white">
-            <h1 class="text-base font-semibold leading-[120%]">Instrucciones de configuración de Airbnb</h1>
-            <p class="mt-2 text-sm leading-[140%]">Te ofrecemos una explicación detallada de la configuración del mensaje de reserva en Airbnb, paso a paso.</p>
+            <h1 class="text-base font-semibold leading-[120%]">Instrucciones de configuración para mensaje en Airbnb</h1>
+            <p class="mt-2 text-sm leading-[140%]">Aquí te ofrecemos una guía detallada paso a paso, para personalizar tu mensaje de confirmación de reserva en Airbnb.</p>
             <p class="mt-4 text-sm font-semibold leading-[120%]">
-                Primero ingresa a Airbnb: 
+                Para editar el mensaje, debes ingersar a Airbnb: 
                 <a 
                     href="https://www.airbnb.es/hosting" 
                     target="_blank" 

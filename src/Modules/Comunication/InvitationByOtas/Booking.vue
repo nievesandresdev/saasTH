@@ -3,10 +3,10 @@
     <!-- slider -->
     <section class="px-6 mt-6">
         <div class="rounded-[20px] shadow-hoster p-6 bg-white">
-            <h1 class="text-base font-semibold leading-[120%]">Instrucciones de configuración de Booking</h1>
-            <p class="mt-2 text-sm leading-[140%]">Te ofrecemos una explicación detallada de la configuración del mensaje de reserva en Booking, paso a paso.</p>
+            <h1 class="text-base font-semibold leading-[120%]">Instrucciones de configuración para mensaje en Booking</h1>
+            <p class="mt-2 text-sm leading-[140%]">Aquí te ofrecemos una guía detallada paso a paso para personalizar tu mensaje de confirmación de reserva en Booking</p>
             <p class="mt-4 text-sm font-semibold leading-[120%]">
-                Primero ingresa a la extranet de booking:
+                Para editar el mensaje, debes ingersar en la extranet de Booking: 
                 <a 
                     href="https://admin.booking.com/" 
                     target="_blank" 
@@ -28,7 +28,7 @@
     <section class="px-6 mt-6 mb-20">
         <div class="rounded-[20px] shadow-hoster p-6 bg-white max-w-[1092px]">
             <h1 class="text-base font-semibold leading-[120%]">Caja de herramientas:</h1>
-            <p class="mt-2 text-sm leading-[120%]">Aquí encontrarás todo lo necesario (mensaje, enlace y QR) listo para copiar y pegar en tu mensaje de reserva de la OTA.</p>
+            <p class="mt-2 text-sm leading-[120%]">Aquí encontrarás el contenido necesario para copiar y pegar en tu mensaje de confirmación de reserva de la OTA.</p>
             <div class="mt-4 flex justify-between items-start">
                 <CopyInfoCard />
                 <QRCardUrl/>

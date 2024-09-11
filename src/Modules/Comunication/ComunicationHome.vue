@@ -44,8 +44,8 @@
         <!-- cards -->
         <div class="flex justify-start">
             <div class="mt-6 grid grid-cols-3 3xl:grid-cols-5 gap-6">
-                <CardSectionHome title="Desde tu OTA" period="pre-stay">
-                    <template #msg>Personaliza el mensaje que incluirás en el mensaje de confirmación de reserva para tus huéspedes.</template>
+                <CardSectionHome title="Desde la OTA" period="pre-stay">
+                    <template #msg>Personaliza el texto que incluirás en el mensaje de confirmación de reserva para tus huéspedes.</template>
                     <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">OTA</h1></template>
                     <template #button>
                         <router-link :to="{ name : 'comunicationInvitationByBooking'}"
@@ -56,7 +56,7 @@
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Desde tu PMS" period="pre-stay">
-                    <template #msg>Personaliza el mensaje que añadirás en el mensaje de reserva para tus huéspedes en tu PMS.</template>
+                    <template #msg>Personaliza el texto que incluirás en el mensaje de reserva para tus huéspedes en tu PMS.</template>
                     <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">PMS</h1></template>
                     <template #button>
                         <router-link :to="{ name : 'ComunicationFromPMS'}"
@@ -67,7 +67,7 @@
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Señalética" period="stay">
-                    <template #msg>Utiliza displays físicos con un código QR para acceso rápido a tu WebApp. Descárgalos desde aquí.</template>
+                    <template #msg>Utiliza medios físicos con un código QR para brindar acceso a tu WebApp. Descárgalos desde aquí.</template>
                     <template #canal>
                         <div class="h-full w-full py-2">
                             <img class="mx-auto w-6 h-6" src="/assets/icons/1.TH.QR.svg" alt="">
@@ -81,8 +81,8 @@
                         </router-link>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Código QR en TV" period="stay">
-                    <template #msg>Accede a la Web App desde la pantalla de los televisores en las habitaciones de tu hotel.</template>
+                <CardSectionHome title="Códigos QR en TVs" period="stay">
+                    <template #msg>Ofrece acceso a tu WebApp desde las pantallas de los televisores en las habitaciones de tu alojamiento.</template>
                     <template #canal>
                         <div class="h-full w-full py-2.5">
                             <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.PC.svg" alt="">
@@ -96,8 +96,8 @@
                         </router-link>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Desde tu Web" period="pre-stay">
-                    <template #msg>Incluye un enlace de invitación a tu Web App en tu página web, ya sea a través de un banner o del chat.</template>
+                <CardSectionHome title="Desde tu Sitio Web" period="pre-stay">
+                    <template #msg>Incluye en tu sitio web un enlace de invitación a tu WebApp, ya sea en un banner o a través del chat.</template>
                     <template #canal>
                         <div class="h-full w-full py-2.5">
                             <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.WEB.svg" alt="">
@@ -112,7 +112,7 @@
                     </template>
                 </CardSectionHome>
                 <CardSectionHome title="Entre huéspedes">
-                    <template #msg>Tus huéspedes podrán invitar a otros a tu WebApp. Configura esta opción desde aquí.</template>
+                    <template #msg>Tus huéspedes podrán invitar a otros a unirse a tu WebApp. Configura sus invitaciones aquí.</template>
                     <template #canal>
                         <div class="h-full w-full py-2">
                             <img class="mx-auto w-6 h-6" src="/assets/icons/1.TH.MOBILE2.svg" alt="">
@@ -154,8 +154,8 @@
         <h2 class="text-lg font-medium leading-[120%]">Mensajes desde el acceso a la WebApp</h2>
         <!-- cards -->
         <div class="flex justify-start gap-6 mt-6">
-            <CardSectionHome title="De bienvenida">
-                <template #msg>El mensaje que recibirán tus huéspedes al acceder por primera vez a tu WebApp.</template>
+            <CardSectionHome title="Bienvenida">
+                <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -171,8 +171,8 @@
                     </a>
                 </template>
             </CardSectionHome>
-            <CardSectionHome title="Recordatorio chat" period="stay" special>
-                <template #msg>Se utiliza para recordar al huésped sobre un mensaje no respondido.</template>
+            <CardSectionHome title="Recordatorio: Chat" period="stay" special>
+                <template #msg>Podrás recordarles a tus huéspedes sobre mensajes no respondidos en la WebApp.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
