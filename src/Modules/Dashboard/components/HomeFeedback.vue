@@ -29,37 +29,37 @@
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="row-span-2 flex gap-6 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
-                    <div class="py-2 px-3 flex items-center">
-                        <span class="text-xs font-semibold">STAY</span>
-                    </div>
+                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                    <p class="text-xs font-semibold leading-[130%]">STAY</p>
                     <!--caritas STAY -->
-                    <div class="grid grid-cols-5">
+                    <div class="flex justify-between mt-[13px]">
                         <div 
                             v-for="feeling in feelingsInStay" 
                             :key="feeling.name" 
-                            class="w-full p-2 flex flex-col items-center"
-                            :class="subscribed && feeling.percentage.isMax ? 'rounded-bottom-border' : ''"
+                            class="w-[35px]"
                         >
-                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{feeling.percentage.percentage ?? '--'  }}%</span>
+                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-6 h-6 mx-auto">
+                            <p class="text-sm font-medium text-center leading-[140%] mt-2">{{feeling.percentage.percentage ?? '--'  }}%</p>
+                            <div class="w-full h-[7px] mt-2" v-if="subscribed && feeling.percentage.isMax">
+                                <div class="w-full h-full rounded-t-[10px] hbg-green-800"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
-                    <div class="py-2 px-3 flex items-center">
-                        <span class="text-xs font-semibold">POST-STAY</span>
-                    </div>
+                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                    <p class="text-xs font-semibold leading-[130%]">POST-STAY</p>
                     <!--caritas POST-STAY -->
-                    <div class="grid grid-cols-5">
+                    <div class="flex justify-between mt-[13px]">
                         <div 
                             v-for="feeling in feelingsPostStay" 
                             :key="feeling.name" 
-                            class="w-full p-2 flex flex-col items-center"
-                            :class="subscribed && feeling.percentage.isMax ? 'rounded-bottom-border' : ''"
+                            class="w-[35px]"
                         >
-                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-8 h-8">
-                            <span class="text-sm font-medium">{{feeling.percentage.percentage ?? '--'  }}%</span>
+                            <img :src="subscribed ? `/assets/icons/reviews/${feeling.name}.svg` : `/assets/icons/reviews/VOID.svg`" class="w-6 h-6 mx-auto">
+                            <p class="text-sm font-medium text-center leading-[140%] mt-2">{{feeling.percentage.percentage ?? '--'  }}%</p>
+                            <div class="w-full h-[7px] mt-2" v-if="subscribed && feeling.percentage.isMax">
+                                <div class="w-full h-full rounded-t-[10px] hbg-green-800"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,26 +159,26 @@
                 </div>
             </div>
             <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden row-span-2" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="bg-[#D9F2E9] py-2 px-3 flex items-center gap-3">
-                    <span class="text-sm font-semibold">TheHoster REVIEW INDEX™</span>
+                <div class="bg-[#D9F2E9] py-2 px-4">
+                    <p class="text-xs font-semibold leading-[130%]">TheHoster REVIEW INDEX™</p>
                 </div>
-                <div class="p-4 flex gap-4 items-center">
+                <div class="p-4 3xl:p-8 flex gap-4 items-center h-[86.5%]">
                     <CircleProgress
-                        :size="120"
+                        :size="screenWidth > 1919 ? 98 : 72"
                         :percent="subscribed ? average : 100"
                         border-width="22"
-                        border-bg-width="22"
+                        border-bg-width="14"
                         :linecap="'line'"
                         :fill-color="'#34A98F'"
                         :empty-color="'#ECF9F5'"
                         class="transformCircle"
                     />
-                    <div class="flex flex-col gap-2 w-1/2">
-                        <span class="text-sm">Promedio de todas las OTAs vinculadas a tu hotel</span>
+                    <div class="flex flex-col gap-3 w-[118px] 3xl:w-[164px]">
+                        <span class="text-xs leading-[normal]">Promedio de todas las OTAs vinculadas a tu hotel</span>
                         <div class="flex items-center">
-                            <span class="text-2xl font-semibold">{{ subscribed && average != 0 ? average.toFixed(1) : '-.-' }}</span>
-                            <span class="text-[23.642px] font-semibold">/</span>
-                            <span class="text-base font-semibold flex mt-1">100</span>
+                            <span class="text-[24px] font-semibold leading-[90%]">{{ subscribed && average != 0 ? average.toFixed(1) : '-.-' }}</span>
+                            <span class="text-[24px] font-semibold leading-[90%]">/</span>
+                            <span class="text-base font-semibold mt-auto leading-[90%]">100</span>
                         </div>
                     </div>
                 </div>
@@ -230,6 +230,7 @@ const googleReview = ref({ ota: 'GOOGLE' });
 const airbnbReview = ref({ ota: 'AIRBNB' });
 
 const average = ref(0);
+const screenWidth = ref(screen.width);
 const subscribed = ref(true); // Variable para determinar la suscripción
 
 onMounted(async () => {
@@ -329,7 +330,7 @@ const handleDataOta = async () => {
     color: #0B6357;
 }
 
-.rounded-bottom-border {
+/* .rounded-bottom-border {
     position: relative;
 }
 
@@ -343,7 +344,7 @@ const handleDataOta = async () => {
     height: 7px;
     background-color: #0B6357;
     border-radius: 10px 10px 0 0;
-}
+} */
 
 .transformCircle {
     transform: rotate(150deg);

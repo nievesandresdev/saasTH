@@ -48,7 +48,7 @@
   <script setup>
 import { ref, onMounted, defineEmits, defineProps } from 'vue';
 
-const emits = defineEmits(['close','edit','delete']);
+const emits = defineEmits(['close','edit','delete','toEdit']);
 const props = defineProps({
     modalShow: Boolean,
     data: Object
@@ -60,7 +60,7 @@ const closeModal = () => {
 
 const editPolicy = () => {
     closeModal();
-    emits('edit', props.data);
+    emits('edit', props.data,true);
 };
 
 const deletePolicy = () => {

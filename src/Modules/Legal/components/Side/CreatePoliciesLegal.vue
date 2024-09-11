@@ -22,31 +22,35 @@
           <!-- Contenido del formulario -->
           <section class="mb-2">
             <label class="text-sm font-medium block">Título*</label>
-            <BaseTextField v-model="form.title" placeholder="Ejemplo: No salir sin camiseta" :error="errors.title" />
-            <div v-if="errors.title" class="flex mt-1 text-[#FF6666] justify-left">
+            <BaseTextField 
+              v-model="form.title" 
+              :placeholder="errors.title ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
+              :error="errors.title" 
+            />
+            <div v-if="errors.title === 'Te has pasado el límite de caracteres'" class="flex mt-1 text-[#FF6666] justify-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
               </svg>
               <small>{{ errors.title }}</small>
             </div>
-            <div class="text-sm text-right">{{ form.title.length }}/50</div>
+            <div class="text-sm text-right">{{ form.title.length }}/100</div>
           </section>
           <section class="mb-4">
             <label class="text-sm font-medium mb-[6px] block">Descripción*</label>
             <BaseTextareaField
               v-model="form.description"
-              placeholder="Ejemplo: No se permite salir sin camiseta por los pasillos para evitar incomodar a los demás huéspedes"
+              :placeholder="errors.description ? 'Debes añadir una descripción' : 'Ejemplo: No se permite salir sin camiseta por los pasillos para evitar incomodar a los demás huéspedes'"
               class-content="flex-1"
-              class-input="text-sm h-[100px] min-h-[64px] p-3"
+              class-input="text-sm h-[140px] min-h-[64px] p-3"
               name="description"
               :error="errors.description"
             />
-            <div v-if="errors.description" class="flex mt-1 text-[#FF6666] justify-left">
+            <!-- <div v-if="errors.description != null" class="flex mt-1 text-[#FF6666] justify-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
               </svg>
               <small>{{ errors.description }}</small>
-            </div>
+            </div> -->
           </section>
           <section class="flex justify-between items-center mb-2">
             <label class="text-sm font-medium">Penalización</label>
@@ -59,18 +63,18 @@
             <BaseTextareaField
               v-model="form.penalizationDetails"
               :disabled="!form.penalization"
-              placeholder="Ejemplo: Se penalizará con 30€ la primera vez y 100€ si la acción es repetida"
+              :placeholder="errors.penalizationDetails ? 'Debes añadir la penalización' : 'Ejemplo: Se penalizará con 30€ la primera vez y 100€ si la acción es repetida'"
               class-content="flex-1"
-              class-input="text-sm h-[100px] min-h-[64px] p-3"
+              class-input="text-sm h-[140px] min-h-[64px] p-3"
               name="penalizationDetails"
               :error="errors.penalizationDetails"
             />
-            <div v-if="errors.penalizationDetails" class="flex mt-1 text-[#FF6666] justify-left">
+            <!-- <div v-if="errors.penalizationDetails" class="flex mt-1 text-[#FF6666] justify-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
               </svg>
               <small>{{ errors.penalizationDetails }}</small>
-            </div>
+            </div> -->
           </section>
         </div>
       </div>
@@ -84,22 +88,34 @@
         <button
           class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] text-sm"
           @click="submit"
+          :disabled="errors.title || errors.description || errors.penalizationDetails"
         >
           Crear
         </button>
       </div>
     </div>
   </transition>
-  <ModalNoSave
-        :id="'not-saved'"
-        :open="showModalNoSave"
-        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
-        textbtn="Guardar"
-        @saveChanges="submit"
-        @close="closeModalNoSave"
-        type="save_changes"
-    />
+  <!-- <ModalNoSave
+    :id="'not-saved'"
+    :open="showModalNoSave"
+    text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+    textbtn="Guardar"
+    @saveChanges="submit"
+    @close="closeModalNoSave"
+    type="alone_exit_save"
+  /> -->
 
+  <ModalNoSave
+    :id="'not-saved'"
+    :open="showModalNoSave"
+    text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+    textbtn="Guardar"
+    @close="closeModalNoSave"
+    @saveChanges="submit"
+    :type="'alone_save'"
+    :url="intendedRoute"
+    @hidden="handleClose"
+  />
 </template>
 
 <script setup>
@@ -108,11 +124,14 @@ import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import BaseSwitchInput from '@/components/Forms/BaseSwichInput.vue';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import { useRouter } from 'vue-router';
 
 const emits = defineEmits(['close', 'store']);
 const props = defineProps({
   modalAdd: Boolean,
 });
+
+const router = useRouter();
 
 const form = reactive({
   title: '',
@@ -122,9 +141,23 @@ const form = reactive({
 });
 
 const errors = reactive({
-  title: false,
-  description: false,
-  penalizationDetails: false
+  title: true, // Inicialmente en true para mostrar el error
+  description: true, // Inicialmente en true para mostrar el error
+  penalizationDetails: false // Inicialmente en false, solo si penalization es true se muestra
+});
+
+const intendedRoute = ref(null);
+
+router.beforeEach((to, from, next) => {
+  
+  if(to.fullPath !== from.fullPath && props.modalAdd) {
+    showModalNoSave.value = true
+    intendedRoute.value = to.fullPath;
+  }else{
+    /* window.location.href = intendedRoute.value; */
+    next();
+  }
+
 });
 
 const containerTop = ref(0);
@@ -156,6 +189,7 @@ const closeModal = () => {
 
 const closeModalNoSave = () => {
   showModalNoSave.value = false;
+  location.reload();
 };
 
 const submit = () => {
@@ -167,15 +201,21 @@ const submit = () => {
 };
 
 const validateForm = () => {
-  errors.title = !form.title.trim() ? 'Es necesario llenar este campo' : (form.title.length > 50 ? 'Te has pasado el límite de caracteres' : false);
+  errors.title = !form.title.trim() ? 'Es necesario llenar este campo' : (form.title.length > 100 ? 'Te has pasado el límite de caracteres' : false);
   errors.description = !form.description.trim() ? 'Es necesario llenar este campo' : false;
   errors.penalizationDetails = (form.penalization && !form.penalizationDetails.trim()) ? 'Es necesario llenar este campo' : false;
 };
 
-// Watchers para detectar cambios en el formulario
+// Watchers para detectar cambios en el formulario y quitar el error cuando empiecen a escribir
 watch(() => form.title, (newVal) => {
-  if (newVal.trim() && newVal.length <= 50) {
+  if (newVal.trim()) {
+    if (newVal.length <= 100) {
       errors.title = false;
+    } else {
+      errors.title = 'Te has pasado el límite de caracteres';
+    }
+  } else {
+    errors.title = 'Es necesario llenar este campo';
   }
   changes.value = true;
 });
@@ -183,6 +223,8 @@ watch(() => form.title, (newVal) => {
 watch(() => form.description, (newVal) => {
   if (newVal.trim()) {
       errors.description = false;
+  } else {
+      errors.description = 'Es necesario llenar este campo';
   }
   changes.value = true;
 });
@@ -190,11 +232,18 @@ watch(() => form.description, (newVal) => {
 watch(() => form.penalizationDetails, (newVal) => {
   if (!form.penalization || (form.penalization && newVal.trim())) {
       errors.penalizationDetails = false;
+  } else {
+      errors.penalizationDetails = 'Es necesario llenar este campo';
   }
   changes.value = true;
 });
 
 watch(() => form.penalization, () => {
+  if (!form.penalization) {
+      errors.penalizationDetails = false;
+  } else if (!form.penalizationDetails.trim()) {
+      errors.penalizationDetails = 'Es necesario llenar este campo';
+  }
   changes.value = true;
 });
 
@@ -203,8 +252,8 @@ function resetForm() {
   form.description = '';
   form.penalization = false;
   form.penalizationDetails = '';
-  errors.title = false;
-  errors.description = false;
+  errors.title = true;
+  errors.description = true;
   errors.penalizationDetails = false;
   changes.value = false;
   showModalNoSave.value = false;
