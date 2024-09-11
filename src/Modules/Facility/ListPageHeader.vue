@@ -19,7 +19,6 @@
         </div>
         <div class="flex items-center">
             <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
-           
                 <BaseSwichInput
                     v-model="hotelData.show_facilities"
                     class="mr-4"

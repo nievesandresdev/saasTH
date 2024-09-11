@@ -106,7 +106,7 @@
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium inline-block">Teléfono principal</label>
+                        <label class="text-sm font-medium inline-block">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"
@@ -138,14 +138,14 @@
                 id="checkin-checkout"
             >
                 <div class="max-w-profile">
-                    <h2 class="font-medium text-lg">Horario Check in / Check out</h2>
+                    <h2 class="font-medium text-lg">Horario Check-in / Check-out</h2>
                     <p class="text-sm htext-gray-500 text-justify mt-2">
-                        Horario general de check in y check out de tu alojamiento. Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check in y Check Out para cada estancia en particular cuando lo necesites.
+                        Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check in y Check Out para cada estancia en particular cuando lo necesites.
                     </p>
                     <div class="w-[411px] mt-[24px] space-y-4">
                         <div class="flex space-x-[24px]">
                             <div class="flex items-center">
-                                <label class="text-sm font-medium w-20 mr-6">Check in</label>
+                                <label class="text-sm font-medium w-20 mr-6">Check-in</label>
                                 <BaseTimeField
                                     ref="checkin"
                                     v-model="form.checkin"
@@ -165,7 +165,7 @@
                         </div>
                         <div class="flex space-x-[24px]">
                             <div class="flex items-center">
-                                <label class="text-sm font-medium w-20 mr-6">Check Out</label>
+                                <label class="text-sm font-medium w-20 mr-6">Check-out</label>
                                 <BaseTimeField
                                     ref="checkin"
                                     v-model="form.checkout"
