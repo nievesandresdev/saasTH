@@ -40,7 +40,7 @@ d    dd
 </template>
 <script setup>
 import { computed, ref, provide } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 
 import DinamicLeftSidebar from './DinamicLeftSidebar.vue';
 import DinamicRightSidebar from './DinamicRightSidebar.vue';
@@ -50,7 +50,9 @@ import SuscriptionBanner from './SuscriptionBanner.vue';
 import NotifyPanel from './Notifications/NotifyPanel.vue'
 import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
 import { usePreloaderStore } from '@/stores/modules/preloader';
+import { useMockupStore } from '@/stores/modules/mockup';
 
+const mockupStore = useMockupStore();
 const preloaderStore = usePreloaderStore();
 const activeRequests = computed(() => preloaderStore.activeRequests);
 const route = useRoute();
@@ -64,6 +66,10 @@ const componentOverContent = computed(() => route.meta.componentOverContent);
 const sidebarWidthz = computed(() => route.meta.sidebarWidth);
 const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
 
+onBeforeRouteLeave((to, from, next) => {
+    mockupStore.$resetStore();
+    next();
+});
 provide('isNotifyPanelVisible',isNotifyPanelVisible)
 </script>
 <style scoped>

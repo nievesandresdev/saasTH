@@ -1,6 +1,7 @@
 <template>
     <span
         class="icon relative flex items-center leading-3"
+        v-if="styles"
     >
         <slot name="button"></slot>
         <div class="tooltipp " :class="size_custom ? `w-[${size_custom}px]` : `width-${size}`" :style="styles">
@@ -10,8 +11,8 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    const { size, top, right, left, color, size_custom } = defineProps({
+    import { ref, onMounted } from 'vue'
+    const { size, top, bottom, right, left, color, size_custom } = defineProps({
         //S M L XS
         size: {
             type: String,
@@ -22,7 +23,11 @@
         },
         top: {
             type: Number,
-            default: 25
+            default: 26
+        },
+        bottom: {
+            type: Number,
+            default: null
         },
         right: {
             type: Number,
@@ -38,7 +43,20 @@
         },
     })
 
-    const styles = ref(left == null ? {top: `${top}px !important`, right: `${right}px`, backgroundColor: `${color}`} :{top: `${top}px !important`, left: `${left}px`, backgroundColor: `${color}`});
+    const leftDefault = ref(`left: ${left}px !important;`);
+    const rightDefault = ref(`right: ${right}px !important;`);
+    const topDefault = ref(`top: ${top}px !important;`);
+    const bottomDefault = ref(`bottom: ${bottom}px !important;`);
+    const backgroundColorDefault = ref(`background-color: ${color} !important;`);
+
+    const styles = ref(null);
+
+    onMounted(() => {
+        let verticalAlign = bottom !== null ? bottomDefault.value : topDefault.value;
+        let horizontalAlign = left !== null ? leftDefault.value : rightDefault.value;
+        styles.value = `${verticalAlign}${horizontalAlign}${backgroundColorDefault.value}`
+    })
+    // const styles = ref(left == null ? {top: `${top}px !important`, right: `${right}px`, backgroundColor: `${color}`} :{top: `${top}px !important`, left: `${left}px`, backgroundColor: `${color}`});
 
 </script>
 

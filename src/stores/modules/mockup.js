@@ -40,6 +40,13 @@ export const useMockupStore = defineStore('mockupStore', () => {
   function $setLanguageTooltip(show = false){
     languageRef.value = show;
   }
+  
+  function $resetStore() {
+    iframeUrlRef.value = null;
+    infoText1Ref.value = null;
+    languageRef.value = null;
+    infoTextIcon1Ref.value = null;
+  }
 
   const iframeUrl = computed(() => iframeUrlRef.value);
   const infoText1 = computed(() => infoText1Ref.value);
@@ -55,6 +62,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
     $setInfo1,
     $reloadIframe,
     $setLanguageTooltip,
-    setLanguage
+    setLanguage,
+    $resetStore
   };
 });
