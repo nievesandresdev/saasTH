@@ -385,7 +385,7 @@ async function updatePosition () {
         toast.warningToast('Cambios guardados con éxito','top-right');
     } else {
         toast.warningToast(data?.message,'top-right');
-    }git a
+    }
     mockupStore.$reloadIframe();
 }
 function handlerClickSwichVisibility (event) {
