@@ -186,7 +186,7 @@ const submitDelete = async (id) => {
   let params = { id: id };
   const response = await apiDeletePolicy(params);
   if (response.ok) {
-    toast.warningToast('Política/norma eliminada', 'top-right');
+    toast.warningToast('Norma eliminada', 'top-right');
     getPolicies();
     deletePolicy.value = false;
   } else {
