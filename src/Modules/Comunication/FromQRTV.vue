@@ -6,7 +6,7 @@
                 <router-link to="/comunicaciones">
                     <img class="w-6 h-6" src="/assets/icons/1.TH.ARROW.LEFT.svg" alt="">
                 </router-link>
-                <h1 class="text-[24px] font-medium leading-[110%]">Código QR desde TV</h1>
+                <h1 class="text-[24px] font-medium leading-[110%]">Códigos QR en TVs</h1>
             </div>
         </section>
 

@@ -164,7 +164,7 @@
                 </div>
                 <div class="p-4 3xl:p-8 flex gap-4 items-center h-[86.5%]">
                     <CircleProgress
-                        :size="screenWidth > 1919 ? 98 : 72"
+                        :size="98"
                         :percent="subscribed ? average : 100"
                         border-width="22"
                         border-bg-width="14"
