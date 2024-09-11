@@ -23,7 +23,6 @@
                 </BaseTooltipResponsive>
             </div>
         </section>
-
         <section class="mt-6 rounded-[20px] p-6 bg-white shadow-hoster">
             <h1 class="text-base font-semibold leading-[120%]">Instrucciones Generales:</h1>
             <p class="mt-2 text-base leading-[140%]">Te sugerimos diferentes formas de promocionar e incentivar a tus huéspedes a acceder a tu WebApp. Puedes instertar el código QR de acceso en diferentes medios físicos:</p>
