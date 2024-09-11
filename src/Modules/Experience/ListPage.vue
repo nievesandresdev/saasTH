@@ -179,6 +179,12 @@ provide('changePendingInForm', changePendingInForm);
 provide('modalChangePendinginForm', modalChangePendinginForm);
 
 
+watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
 // ONMOUNTED
 onMounted(async () => {
     loadQueryInFormFilter();

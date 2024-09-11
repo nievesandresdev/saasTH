@@ -257,10 +257,10 @@ function resetCompoent () {
     resetPageData();
 }
 function closeModal () {
-    // if (changePendingInForm.value) {
-    //     openModalChangeInForm();
-    //     return;
-    // }
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
     changePendingInForm.value = false;
     modelActive.value = null;
     tabSelected.value = INFORMATION;
