@@ -18,7 +18,7 @@
                 </template>
                 <template #content>
                 <p class="text-sm leading-[150%] font-normal">
-                    Este toggle te permite mostrar u ocultar las subcategorías de esta sección. Por ejemplo: Puedes optar por ocultar “Museos” pero “Monumentos” y “Zonas verdes” seguirán visibles para tus huéspedes en tu WebApp.
+                    Este toggle te permite mostrar u ocultar las subcategorías de esta sección. Por ejemplo: Puedes optar por ocultar “Museos” pero “Monumentos” y “Naturaleza” seguirán visibles para tus huéspedes en tu WebApp.
                 </p>
             </template>
         </BaseTooltipResponsive>

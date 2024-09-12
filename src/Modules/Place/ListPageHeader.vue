@@ -13,7 +13,7 @@
                         </template>
                         <template #content>
                         <p class="text-sm leading-[150%] font-normal">
-                            Aquí podrás gestionar, recomendar y ofrecer la información esencial de los Destinos que mostrarás a tus huéspedes en tu WebApp.
+                            Aquí podrás gestionar, recomendar y ofrecer la información esencial de los lugares que mostrarás a tus huéspedes en tu WebApp.
                         </p>
                     </template>
                 </BaseTooltipResponsive>

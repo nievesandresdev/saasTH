@@ -7,7 +7,7 @@
             class-content="w-[345px]"
             @click="onClick"
         ></BaseTextField>
-        <div v-if="dropdownSearch" class="absolute left-0 py-6 bg-white top-11 rounded-[10px] z-50 " style="width: 519px;box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);">
+        <div v-if="dropdownSearch" class="absolute left-0 py-6 bg-white top-11 rounded-[10px] z-[1000]" style="width: 519px;box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);">
             <div
                 class="flex px-4 py-2 cursor-pointer"
                 v-for="(p, i) in searchList" :key="i"
