@@ -247,7 +247,7 @@ const formDefault = reactive({
     images: [],
 });
 const formRules = {
-    title: [value => value.trim() ? true : 'Introduce el nombre de tu instalación'],
+    title: [value => !!value.trim() ? true : 'Introduce el nombre de tu instalación'],
 };
 
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
