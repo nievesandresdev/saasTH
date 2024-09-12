@@ -259,7 +259,7 @@ const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
 function resetCompoent () {
-    closeModal();
+    closeModalForce();
     resetPageData();
 }
 function closeModal () {

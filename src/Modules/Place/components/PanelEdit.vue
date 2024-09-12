@@ -246,7 +246,8 @@ const changesform = computed(() => {
         (normalize(form.email) !== normalize(itemSelected.email)) ||
         (normalize(form.url_web) !== normalize(itemSelected.url_web)) ||
         (Boolean(form.featured) !== Boolean(itemSelected?.featured)) ||
-        (form.images.length !== itemSelected?.images.length);
+        // (form.images.length !== itemSelected?.images.length);
+        !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
 });
@@ -361,7 +362,7 @@ const normalize = (value) => {
 }
 function resetCompoent () {
     resetPageData();
-    closeModal();
+    closeModalForce();
 }
 function closeModal () {
     if (changePendingInForm.value) {
@@ -421,7 +422,7 @@ function addNewsImages (images) {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped >
 .v-enter-active,
 .v-leave-active {
     transition: transform 0.5s ease;

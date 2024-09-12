@@ -241,7 +241,52 @@ const handlerDragOver = (event) => {
   event.preventDefault();
 };
 
-const handlerDrop = (index, facility) => {
+const findFirstNonFeaturedPosition = () => {
+    return placesData.value.findIndex(item => item.featured === false);
+}
+const findLastFeaturedPosition = () => {
+    return placesData.value
+            .map(item => item.featured)
+            .lastIndexOf(true);
+}
+
+const handlerDrop = (index, place) => {
+    if (changePendingInForm.value) {
+        openModalChangeInForm();
+        return;
+    }
+  const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
+  if (draggedIndex !== index) {
+    const droppedItem = placesData.value[draggedIndex];
+
+    // Verifica si el elemento arrastrado tiene featured: false
+    if (!droppedItem.featured) {
+        // Encuentra la primera posición con featured: false
+        const firstNonFeaturedPosition = findFirstNonFeaturedPosition();
+        // Si el índice de destino está entre elementos con featured: true
+        if (index < firstNonFeaturedPosition) {
+            index = firstNonFeaturedPosition;
+        }
+    } else {
+        // Encuentra la última posición con featured: true
+        const lastFeaturedPosition = findLastFeaturedPosition();
+
+        // Si el índice de destino está en una posición con featured: false
+        if (index > lastFeaturedPosition) {
+            index = lastFeaturedPosition;
+        }
+    }
+
+    // Realiza el movimiento
+    placesData.value.splice(draggedIndex, 1);
+    placesData.value.splice(index, 0, droppedItem);
+    updatePosition();
+  }
+  draggedItem.value = null;
+  dragStartIndex.value = null;
+};
+
+const handlerDropOld = (index, facility) => {
     if (changePendingInForm.value) {
         openModalChangeInForm();
         return;

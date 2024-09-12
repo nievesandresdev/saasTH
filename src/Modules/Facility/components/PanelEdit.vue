@@ -374,7 +374,6 @@ defineExpose({ editFacility });
 
 async function submitSave () {
     let body = { ...form };
-    // console.log(body);
     const response = await facilityStore.$storeOrUpdate(body);
     const { ok, data } = response;
     if (ok) {
@@ -401,7 +400,7 @@ const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
 function resetCompoent () {
-    closeModal();
+    closeModalForce();
     resetPageData();
 }
 function closeModal () {
