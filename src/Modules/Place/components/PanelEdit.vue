@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[40]"
+        class="h-full w-full fixed top-0 left-0 z-[100]"
         @click="closeModal"
     >
     </div>

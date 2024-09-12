@@ -52,7 +52,7 @@
                         </div>
                         <div
                             v-if="place.featured || ((hoverItem == index) && place.is_visible)"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-[100]"
+                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
                             :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
                             @click.prevent="updateRecommendation($event, place)"
                         >
