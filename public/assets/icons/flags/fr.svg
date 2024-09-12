@@ -1,16 +1,16 @@
-<svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="France (FR)">
-<g clip-path="url(#clip0_2073_5348)">
+<g clip-path="url(#clip0_2437_1445)">
 <g id="Group">
-<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M0 0H22V16H0V0Z" fill="white"/>
-<path id="Vector_2" fill-rule="evenodd" clip-rule="evenodd" d="M0 0H7.33219V16H0V0Z" fill="#002654"/>
-<path id="Vector_3" fill-rule="evenodd" clip-rule="evenodd" d="M14.6678 0H22V16H14.6678V0Z" fill="#CE1126"/>
+<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M0.666992 0.666748H15.3337V11.3334H0.666992V0.666748Z" fill="white"/>
+<path id="Vector_2" fill-rule="evenodd" clip-rule="evenodd" d="M0.666992 0.666748H5.55512V11.3334H0.666992V0.666748Z" fill="#002654"/>
+<path id="Vector_3" fill-rule="evenodd" clip-rule="evenodd" d="M10.4453 0.666748H15.3334V11.3334H10.4453V0.666748Z" fill="#CE1126"/>
 </g>
 </g>
 </g>
 <defs>
-<clipPath id="clip0_2073_5348">
-<rect width="22" height="16" rx="2" fill="white"/>
+<clipPath id="clip0_2437_1445">
+<rect x="0.666992" y="0.666748" width="14.6667" height="10.6667" rx="2" fill="white"/>
 </clipPath>
 </defs>
 </svg>

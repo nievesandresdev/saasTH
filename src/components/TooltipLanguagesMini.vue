@@ -32,7 +32,7 @@ import Tooltip from '@/components/Tooltip.vue'
 
 const languages = [
         { value: 'es', label: 'Español', img: '/assets/icons/flags/es.svg' },
-        { value: 'pt', label: 'Portugues', img: '/assets/icons/flags/pt.svg' },
+        { value: 'pt', label: 'Portugués', img: '/assets/icons/flags/pt.svg' },
         { value: 'al', label: 'Alemán', img: '/assets/icons/flags/al.svg' },
         { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
         { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
