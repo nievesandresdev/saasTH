@@ -554,10 +554,14 @@ const submit = async () => {
 
     //console.log('Saving changes:', payload);
 
+    
+
     const params = {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
         urls: payload
     }
+
+    //console.log('Params:', params);
 
     const response = await platformsStore.$bulkUpdateOTAS(params);
 

@@ -104,7 +104,7 @@
           >
           <div :class="widthMenu">
             <p 
-              class="text-sm font-semibold ml-2 text-left leading-[120%]"
+              class="text-sm font-semibold ml-2 text-left leading-[120%] whitespace-nowrap"
               :class="{'text-white': route.name === 'UserPanel'}"
             >{{ authStore.fullName }}</p>
           </div>
@@ -325,7 +325,7 @@ const menu_links = ref([
         title: 'Hoster',
         icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings'],
-        url: '/equipo/configuracion/usuarios',
+        url: '/equipo/configuracion/plataformas-externas',
       },
     ],
   },

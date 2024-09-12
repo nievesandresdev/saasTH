@@ -40,11 +40,15 @@
                       :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     >
                       <div
-                        class="w-full h-full block pl-[37px] pr-[24px] cursor-pointer"
+                        class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
                         @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''"
                       >
                         <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
-                          <span v-if="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[30px] w-[4px]  rounded-full left-[-2px]"></span>
+                          <span 
+                          v-if="isActive(sub_menu, index_sub_menu)"
+                          class="absolute inline-block bg-[#2A8873] h-[25px] w-[3px]  rounded-full left-[-2px]"
+                          >
+                        </span>
                           <div class="py-[8px] ml-[20px]">
                             <span class="text-sm normal-case">{{ sub_menu.title }}</span>
                           </div>
@@ -63,7 +67,7 @@
                         <div class="flex items-center h-10 relative">
                           <div class="w-6 h-full relative">
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
-                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[30px] w-[4px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
+                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[25px] w-[3px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
                           </div>
                           <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
                         </div>
@@ -189,7 +193,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, computed, watch } from 'vue'
+import { reactive, onMounted, computed, watch,watchEffect } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
 
 const route = useRoute();
@@ -198,6 +202,8 @@ const status_subscription = false
 
 import { usePlaceStore } from '@/stores/modules/place';
 const placeStore = usePlaceStore();
+
+
 
 const menu_section = reactive([
   {
@@ -379,6 +385,7 @@ const dataTypePlaces = reactive([
 },
 ]);
 
+
 onMounted(() => {
   loadMenuState();
   getTypePlaces()
@@ -406,6 +413,37 @@ if (response.ok) {
   });
 }
 }
+
+// Función isActive
+const isActive = (sub_menu, index_sub_menu) => {
+  return fullUrl.value.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) ||
+         (fullUrl.value === '/places' && dataTypePlaces?.[index_sub_menu]?.name === 'Qué visitar');
+};
+
+// Usa onMounted para ejecutar la lógica inicial
+onMounted(() => {
+  dataTypePlaces.forEach((place, index) => {
+    if (isActive(place, index)) {
+      const activeMenuItem = document.querySelector(`[data-id="${place.id}"] .border-element`);
+      if (activeMenuItem) {
+        activeMenuItem.classList.add('active-border-class');
+      }
+    }
+  });
+});
+
+// También puedes usar watchEffect para monitorear cambios reactivos
+watchEffect(() => {
+  dataTypePlaces.forEach((place, index) => {
+    if (isActive(place, index)) {
+      const activeMenuItem = document.querySelector(`[data-id="${place.id}"] .border-element`);
+      if (activeMenuItem) {
+        activeMenuItem.classList.add('active-border-class');
+      }
+    }
+  });
+});
+
 
 /* function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
   console.log({
