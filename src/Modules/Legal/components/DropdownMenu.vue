@@ -2,7 +2,7 @@
     <div class="relative" ref="dropdownRef">
       <svg
         @click="toggleDropdown"
-        class="cursor-pointer"
+        class="cursor-pointer hover:bg-[#F3F3F3] hover:text-black rounded-full p-1"
         width="24"
         height="24"
         viewBox="0 0 24 24"
