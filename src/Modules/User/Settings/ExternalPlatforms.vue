@@ -193,10 +193,11 @@
                                 class-content="w-full"
                                 @input="markAdditionalLinkChange(index)"
                                 :error="link.errors"
+                                :disabled="link.disabled"
                             />
                         </div>
-                        <div class="flex items-center mt-3 justify-end" @click="openDeleteModal(index,'Airbnb')">
-                            <div class="flex cursor-pointer group hover:text-green-500">
+                        <div class="flex items-center mt-3 justify-end" >
+                            <div class="flex cursor-pointer group hover:text-green-500" @click="openDeleteModal(index,'Airbnb')">
                                 <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3 h-[15px] w-[15px]" viewBox="0 0 16 16">
                                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                                 </svg>
@@ -325,16 +326,18 @@ onMounted(async () => {
 });
 
 const getSettings = async () => {
+    additionalLinks.value = []; // Limpiar las URLs adicionales antes de cargar las nuevas.
 
     const params = {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
-    }
-    
+    };
+
     try {
         const response = await platformsStore.$getDataOTAS(params);
         if (response && response.data && response.data.otas) {
             response.data.otas.forEach(ota => {
-                switch(ota.ota.toLowerCase()) {
+                const otaName = ota.ota.toLowerCase();
+                switch (otaName) {
                     case 'tripadvisor':
                         disabledInput.value.tripadvisor = ota.attemptsToUpdate >= 3;
                         form.tripadvisor.url = ota.url;
@@ -356,8 +359,22 @@ const getSettings = async () => {
                         form.booking._id = ota._id;
                         break;
                     case 'airbnb':
-                        form.airbnb.url = ota.url;
-                        form.airbnb._id = ota._id;
+                        if (!form.airbnb.url) {
+                            // Asigna el primer enlace de Airbnb al campo principal
+                            form.airbnb.url = ota.url;
+                            form.airbnb._id = ota._id;
+                            disabledInput.value.airbnb = ota.attemptsToUpdate >= 3;
+                        } else {
+                            // Los demás enlaces de Airbnb se añaden a additionalLinks
+                            additionalLinks.value.push({
+                                url: ota.url,
+                                _id: ota._id,
+                                errors: false,
+                                disabled: ota.attemptsToUpdate >= 3,
+                                errorMessage: '',
+                                status: 1 // Considera que el link está activo por defecto
+                            });
+                        }
                         break;
                 }
             });
@@ -366,6 +383,8 @@ const getSettings = async () => {
         console.error('Error fetching data:', error);
     }
 };
+
+
 
 const validateUrl = (url, type) => {
     //console.log('Validating:', url, type);
@@ -417,7 +436,9 @@ const validateUrl = (url, type) => {
             }
             break;
         case 'airbnb':
-            console.log('Validating Airbnb:', url);
+            if (!url.startsWith('https://es.airbnb.com/rooms/')) {
+                return 'El formato del enlace de Airbnb es incorrecto. Debe comenzar con "https://es.airbnb.com/rooms/".';
+            }
             break;
         case 'expedia':
             // Añadir validación específica para Expedia si es necesario
@@ -504,7 +525,6 @@ const handleEmail = async () => {
         google: form.google,
         airbnb: additionalLinks.value.filter(link => link.status !== 0)
     };
-    console.log('handleEmail:', dataMail.value);
 
     const params = {
         type: dataMailtype.value,
@@ -527,8 +547,7 @@ const handleEmail = async () => {
 const submit = async () => {
     const payload = [];
 
-    const buildPayloadEntry = (otaName, data) => {
-        const initialData = JSON.parse(initialForm.value)[otaName];
+    const buildPayloadEntry = (otaName, data, initialData) => {
         if (data.url && data.url !== initialData.url) {
             payload.push({
                 ota: otaName.toUpperCase(),
@@ -538,42 +557,50 @@ const submit = async () => {
         }
     };
 
-    buildPayloadEntry('booking', form.booking);
-    buildPayloadEntry('tripadvisor', form.tripadvisor);
-    buildPayloadEntry('expedia', form.expedia);
-    buildPayloadEntry('google', form.google);
-    buildPayloadEntry('airbnb', form.airbnb);
+    const initialData = JSON.parse(initialForm.value);
 
-    additionalLinks.value.filter(link => link.status !== 0).forEach(link => {
-        payload.push({
-            ota: 'AIRBNB',
-            url: link.url,
-            _id: link._id || ""
-        });
+    // Verifica cambios en el campo principal de Airbnb
+    buildPayloadEntry('airbnb', form.airbnb, initialData.airbnb);
+
+    // Verifica cambios en additionalLinks (URLs adicionales de Airbnb)
+    additionalLinks.value.forEach(link => {
+        const initialLink = initialData.additionalLinks.find(initialLink => initialLink._id === link._id);
+        if (initialLink) {
+            if (link.url !== initialLink.url) {
+                // URL modificada
+                payload.push({
+                    ota: 'AIRBNB',
+                    url: link.url,
+                    _id: link._id
+                });
+            }
+        } else if (link.status !== 0) {
+            // Nueva URL
+            payload.push({
+                ota: 'AIRBNB',
+                url: link.url,
+                _id: link._id || ""
+            });
+        }
     });
-
-    //console.log('Saving changes:', payload);
-
-    
 
     const params = {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
         urls: payload
-    }
-
-    //console.log('Params:', params);
+    };
 
     const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if(response.ok){
-        toast.warningToast('Cambios aplicados con éxito', 'top-right')
+        toast.warningToast('Cambios aplicados con éxito', 'top-right');
         await getSettings();
-    }else{
-        toast.errorToast(response.data.message, 'top-right')
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
     }
 
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Actualiza el estado inicial después de guardar
 };
+
 
 const changesComputed = computed(() => {
     return JSON.stringify({ ...form, additionalLinks: additionalLinks.value }) !== initialForm.value;
