@@ -201,6 +201,11 @@ watch(modelActive, (valNew, valOld) => {
         loadMockup();
     }
 });
+// watch(queryRouter, (valNew, valOld) => {
+//     console.log(valNew, 'valNew');
+//     resetDataPlaceAndReloadPlaces();
+//     loadMockup();
+// });
 
 // COMPUTED
 const categoryCurrent = computed(() => {
