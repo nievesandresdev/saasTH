@@ -155,7 +155,6 @@ watch(() => route.query.g, async (newId) => {
         }
         data.value = await queryStore.$getFeedbackSummaryByGuest(params);
         countStayTest.value = data.value.countStayTest;
-        console.log('test query',data.value)
         if(!showSideBar.value){
             showSideBar.value = true;
         }
