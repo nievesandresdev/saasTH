@@ -130,7 +130,6 @@ export const useStayStore = defineStore('stay', () => {
 
     async function $deleteTestStays () {
         const response = await deleteTestStaysApi()
-        console.log('test deleteTestStays',response)
         const { ok } = response   
         if(ok){
             return response.data
