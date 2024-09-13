@@ -13,7 +13,8 @@ import {
     createOrupdateGuestNoteApi,
     deleteGuestNoteApi,
     getDetailQueryByGuestApi,
-    getGuestListWithNotiApi
+    getGuestListWithNotiApi,
+    deleteTestStaysApi
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -127,11 +128,21 @@ export const useStayStore = defineStore('stay', () => {
         }
     }
 
+    async function $deleteTestStays () {
+        const response = await deleteTestStaysApi()
+        console.log('test deleteTestStays',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
     return {
         $getAllByHotel,
         $statisticsByHotel,
         $getdetailData,
         $updateData,
+        $deleteTestStays,
         //notes
         $getAllNotesByStay,
         $createOrupdateStayNote,

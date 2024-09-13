@@ -6,8 +6,11 @@
             <img class="w-4 h-4" src="/assets/icons/1.TH.schedule.svg" alt="">
             <p class="text-xs font-normal ml-2">
               {{$formatTimestampDate(data.responded_at,'dd/MM/yyyy')}} 
-              <template v-if="parseInt(daysDifference) > 0">
-                | {{ parseInt(daysDifference) }} {{ dayLabel }} {{ beforeOrAfter }} del {{ periodLabel }}
+              <template v-if="daysDifference > 0">
+                | {{ daysDifference }} {{ dayLabel }} {{ beforeOrAfter }} del {{ periodLabel }}
+              </template>
+              <template v-else>
+                | dia del {{ periodLabel }}
               </template>
             </p>
         </div>
@@ -108,7 +111,7 @@ const translateQualification = ref(null)
 
 // Computed properties
 const referenceDate = computed(() => {
-  if (props.period === 'post-stay') {
+  if (props.period == 'post-stay') {
     return DateTime.fromISO(props.stay.check_out)
   }
   return DateTime.fromISO(props.stay.check_in)
@@ -123,8 +126,15 @@ const daysDifference = computed(() => {
     return 0;
   }
 
+  let result;
   // Calcular la diferencia en días y asegurar que es un valor absoluto
-  return Math.abs(referenceDate.value.diff(respondedAt, 'days').days);
+  if (referenceDate.value > respondedAt) {
+    result = referenceDate.value.diff(respondedAt, 'days').days;
+  }else{
+    result = respondedAt.diff(referenceDate.value, 'days').days;
+  }
+  // console.log('test result', result)
+  return Math.round(result < 1 ? 0 : result);
 });
 
 
@@ -141,8 +151,7 @@ const periodLabel = computed(() => {
 
 const beforeOrAfter = computed(() => {
   const respondedAt = DateTime.fromFormat(props.data.responded_at, 'yyyy-MM-dd HH:mm:ss', { zone: 'Europe/Madrid' });
-  // console.log('responded_at',respondedAt)
-  // console.log('referenceDate.value',referenceDate.value)
+  // console.log('test result',respondedAt < referenceDate.value)
   return respondedAt < referenceDate.value ? 'antes' : 'después'
 })
 
