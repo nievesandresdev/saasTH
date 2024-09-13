@@ -32,16 +32,21 @@
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
-                <ul v-if="menu.expanded">
+                <ul ref="menuRef" v-if="menu.expanded">
                   <template v-for="(sub_menu, index_sub_menu) in menu.group" :key="index_sub_menu">
-                    <li
+                    <!-- <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-gray-100"
                       :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                    > -->
+                    <li
+                      v-if="sub_menu.place"
+                      class=" w-full h-full hover-gray-100"
+                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
                     >
                       <div
                         class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
-                        @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''"
+                        @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}},index_sub_menu) : ''"
                       >
                         <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
                           <span 
@@ -50,7 +55,7 @@
                           >
                         </span>
                           <div class="py-[8px] ml-[20px]">
-                            <span class="text-sm normal-case">{{ sub_menu.title }}</span>
+                            <span class="text-sm normal-case">{{ sub_menu.title }} </span>
                           </div>
                         </div>
                       </div>
@@ -402,60 +407,19 @@ focusMenu();
 });
 
 async function getTypePlaces(){
-const response = await placeStore.$getTypePlaces();
-if (response.ok) {
-  let typePlaces = response.data;
-  typePlaces.forEach(item => {
-    let type = dataTypePlaces.find(t => t.name == item.name);
-    if (type) {
-      type.id = item.id;
-    }
-  });
-}
-}
-
-// Función isActive
-const isActive = (sub_menu, index_sub_menu) => {
-  return fullUrl.value.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) ||
-         (fullUrl.value === '/places' && dataTypePlaces?.[index_sub_menu]?.name === 'Qué visitar');
-};
-
-// Usa onMounted para ejecutar la lógica inicial
-onMounted(() => {
-  dataTypePlaces.forEach((place, index) => {
-    if (isActive(place, index)) {
-      const activeMenuItem = document.querySelector(`[data-id="${place.id}"] .border-element`);
-      if (activeMenuItem) {
-        activeMenuItem.classList.add('active-border-class');
+  const response = await placeStore.$getTypePlaces();
+  if (response.ok) {
+    let typePlaces = response.data;
+    typePlaces.forEach(item => {
+      let type = dataTypePlaces.find(t => t.name == item.name);
+      if (type) {
+        type.id = item.id;
+        //sessionStorage.setItem('selected_place', item.id);
       }
-    }
-  });
-});
+    });
+  }
+}
 
-// También puedes usar watchEffect para monitorear cambios reactivos
-watchEffect(() => {
-  dataTypePlaces.forEach((place, index) => {
-    if (isActive(place, index)) {
-      const activeMenuItem = document.querySelector(`[data-id="${place.id}"] .border-element`);
-      if (activeMenuItem) {
-        activeMenuItem.classList.add('active-border-class');
-      }
-    }
-  });
-});
-
-
-/* function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
-  console.log({
-    'partidea': 'toggleSubMenu',
-    'index_section_selected': index_section_selected,
-    'index_menu_selected': index_menu_selected,
-    'section_selected': section_selected,
-    'menu_selected': menu_selected
-  })
-
-  menu_selected.expanded = !menu_selected.expanded
-} */
 
 function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
     menu_selected.expanded = !menu_selected.expanded;
@@ -507,11 +471,34 @@ function goLink(viewName) {
   router.push({ name: viewName});
 }
 
-function goLinkPlace(r) {
+watch(
+      () => route.fullPath, // Observa la URL completa
+      (newUrl) => {
+        if (!newUrl.startsWith('/places')) {
+          // Si la URL no comienza con "/places", elimina el selected_place
+          sessionStorage.removeItem('selected_place');
+        }
+      }
+    );  
+
+function goLinkPlace(r,d) {
+  sessionStorage.setItem('selected_place', d); //guardar ese item para que cargue el active apenas inicie el componente 
+
   router.replace(r);
-  const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`
+  const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`;
   window.location.assign(newUrl);
 }
+
+const isActive = (sub_menu, index_sub_menu) => {
+  const savedPlaceId = sessionStorage.getItem('selected_place');
+  return savedPlaceId == index_sub_menu || fullUrl.value == '/places';
+};
+
+/* onMounted(() => {
+  const savedPlaceId = sessionStorage.getItem('selected_place');
+
+  console.log('savedPlaceId', savedPlaceId);
+}); */
 
 function goLinkWithRoute() {
 }
