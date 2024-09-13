@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, provide, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, watch, provide, onUnmounted, nextTick } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { getPusherInstance } from '@/utils/pusherSingleton'
 //
@@ -76,7 +76,6 @@ const pusher = ref(null)
 onMounted(async() => {
     data.value.guests = await chatStore.$getGuestListWNoti(route.params.stayId);
     listGuests.value = data.value.guests;
-    suscribePusher()
     window.addEventListener('beforeunload', handleBeforeUnload);
     nextTick(() => {
         const textarea = messageTextarea.value;
@@ -84,6 +83,9 @@ onMounted(async() => {
     });
 })
 
+onUnmounted(() => {
+    unSuscribePusher()
+});
 onBeforeRouteLeave((to, from, next) => {
     if (
         !['StayDetailPage', 'StayQueryDetail', 'StayChatRoom'].includes(to.name) || 
@@ -96,6 +98,14 @@ onBeforeRouteLeave((to, from, next) => {
     next();
 });
 
+
+const unSuscribePusher = () => {
+    if (channelChat.value) {
+        channelChat.value.unbind('App\\Events\\UpdateChatEvent');
+        channelChat.value.unbind('App\\Events\\MsgReadChatEvent');
+        pusher.value.unsubscribe(channelChat.value);
+    }
+}
 const handleBeforeUnload = (event) => {
     const user = JSON.parse(sessionStorage.getItem('user'));
     staySessionsStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
@@ -118,12 +128,12 @@ const handleEnter = (e) => {
     }
 }
 
-const suscribePusher = () => {
-    channelChat.value = 'private-update-chat.' + route.params.stayId
+const suscribePusher = (guestId) => {
+    channelChat.value = 'private-update-chat.' + guestId
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
-        // console.log('cons UpdateChatEvent',data)
+        // console.log('test UpdateChatEvent', data)
         dataChat.value = data.chatData;
         
         if(
@@ -189,7 +199,11 @@ const deleteSession = async () => {
     }
 }
 
-watch(() => route.query.g, async (newId) => {
+watch(() => route.query.g, async (newId,oldId) => {
+    if(oldId){
+        unSuscribePusher()
+    }
+    suscribePusher(newId)
     await getDataChat();
 }, { immediate: true });  
 provide('data',data)
