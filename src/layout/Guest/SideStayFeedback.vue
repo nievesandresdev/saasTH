@@ -2,7 +2,11 @@
     <aside class="w-[354px] flex-shrink-0 h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
         <div class="flex flex-col h-full" :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
             <!-- guest data -->
-            <div v-if="data?.guest" class="py-8 px-6 border-b-2 hborder-color-gray-400 header-shadow bg-white">
+            <div 
+                v-if="data?.guest" 
+                class="pt-8 px-6 header-shadow bg-white"
+                :class="{'pb-8':countStayTest == 0,'pb-2':countStayTest > 0}"
+            >
                 <div class="flex items-center">
                     <img
                         class="w-20 h-12 rounded-[10px] object-cover"
@@ -20,6 +24,12 @@
                     </div>
                 </div>
             </div>
+            <!-- alert section test -->
+            <div class="bg-[#FFF2CC] px-6 py-2 flex items-start gap-2" v-if="countStayTest > 0">
+                <img class="w-5 h-5" src="/assets/icons/info.svg">
+                <p class="text-xs font-medium leading-[150%]">Hemos generado huéspedes  de prueba para mejorar tu experiencia durante el free trial.</p>
+            </div>
+            <div class="border-t-2 hborder-color-gray-400"></div>
             <div v-if="data?.guest" class="overflow-y-auto flex-grow custom-scrollbar bg-white">
                 <div class="pt-8"></div>
                 <div class="px-6">
@@ -132,6 +142,7 @@ const queryStore = useQueryStore();
 const data = ref(null)
 const openNotes = ref(false)
 const showSideBar = ref(false)
+const countStayTest = ref(0)
 
 const route = useRoute();
 
@@ -143,6 +154,8 @@ watch(() => route.query.g, async (newId) => {
             stayId: route.params.stayId,
         }
         data.value = await queryStore.$getFeedbackSummaryByGuest(params);
+        countStayTest.value = data.value.countStayTest;
+        console.log('test query',data.value)
         if(!showSideBar.value){
             showSideBar.value = true;
         }

@@ -2,7 +2,7 @@
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
         :class="{'hbg-green-200':route.params.stayId == stay.id}"
-        @click="goDetailStay(stay.id)"
+        @click="goDetailStay(stay.id, stay.trial)"
     >
         <div class="flex items-center">
             <img class="w-5 h-5" src="/assets/icons/1.TH.schedule.svg" alt="">
@@ -39,6 +39,14 @@
                     v-if="stay.guests.length > 2"
                     class="text-xs font-semibold leading-[120%]"
                 >{{ '+'+(stay.guests.length - 2) }}</p>
+                <!-- tag trail stay -->
+                <div 
+                    class="rounded-full ml-2 bg-[#FFF3CC] px-2 py-1 flex items-center gap-2"
+                    v-if="stay.trial"
+                >
+                    <img class="w-4 h-4" src="/assets/icons/1.TH.logo.svg" alt="">
+                    <h1 class="text-[10px] font-semibold leading-[90%]">Prueba</h1>
+                </div>
             </div>
 
             <!-- iconos de notificacion -->
@@ -99,11 +107,15 @@ const translatePeriod = {
     "invalid-stay": "POST-STAY",
 };
 
-function goDetailStay(id) {
+function goDetailStay(id,trial) {
+    let queryParams = { search: searchUpdate.value };
+    if(trial){
+        queryParams = { search: searchUpdate.value, trial: true }
+    }
     router.push({
         name: 'StayDetailPage',
         params: { stayId: id },
-        query: { search: searchUpdate.value }
+        query: queryParams
     });
 }
 

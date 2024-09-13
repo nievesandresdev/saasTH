@@ -112,9 +112,25 @@
                 <p class="text-xs font-semibold leading-[150%] htext-gray-500 text-center">No hay más estancias</p>
             </div>
         </div>
-
+        <!-- section test to delete -->
+        <div class="p-4 bg-[#FFF2CC]" v-if="countStayTest > 0">
+            <div class="flex items-start gap-2">
+                <img class="w-5 h-5" src="/assets/icons/info.svg">
+                <p class="text-xs font-medium leading-[150%]">Hemos generado estancias de prueba para mejorar tu experiencia durante el free trial.</p>
+            </div>
+            <div class="mt-2 text-right">
+                <a 
+                    href="javascript:void(0)" 
+                    class="hbtn-primary bg-white py-3 px-2 text-xs font-medium leading-[50%] h-8 inline-block"
+                    @click="showDeleteModal = true"
+                >
+                    Eliminar
+                </a>
+            </div>
+        </div>
         <FiltersModal ref="filtersModal" @submit="submit" />
     </aside>
+    <DeleteModalStayTest />
 </template>
 <script setup>
 import { onMounted, ref, provide, computed, onUnmounted, nextTick } from 'vue'
@@ -123,7 +139,8 @@ import CardSkeleton from './CardStayListSkeleton.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
-import MiniSpinner from './MiniSpinner.vue'
+// import MiniSpinner from './MiniSpinner.vue'
+import DeleteModalStayTest from './DeleteModalStayTest.vue'
 
 import { getPusherInstance } from '@/utils/pusherSingleton'
 import { useStayStore } from '@/stores/modules/stay/stay';
@@ -140,11 +157,14 @@ const hotelStore = useHotelStore()
 const stayStore = useStayStore();
 
 const list = ref([])
+const showDeleteModal = ref(false)
 const data = ref(null)
 const search = ref(null)
 const countsByPeriod = ref(null)
 const totalCounts = ref(0)
 const totalValidCount = ref(0)
+const countStayTest = ref(0)
+
 const countsGeneralByPeriod = ref(0)
 const pendingCountsByPeriod = ref(0)
 const filtersModal = ref(null);
@@ -168,6 +188,7 @@ const loading = ref(false);
 const isSearch = ref(false);
 const currentPositionScroll = ref(0);
 
+provide('showDeleteModal',showDeleteModal)
 onMounted(async () => {
     initScrollListener();
     await loadMore();
@@ -289,6 +310,7 @@ async function loadMore(){
     // allFilters.value.page += 1;
     allFilters.value.offset = list.value.length;
     let data = await loadData();
+
     list.value = [...list.value, ...data];
     setTimeout(() => {
         loading.value = false;
@@ -306,10 +328,11 @@ async function loadMore(){
 async function loadData(showLoadPage = false){
     staysNull.value = false;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
+    // console.log('test',data.value)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
-    // totalCounts.value = data.value.stays.total;
     totalValidCount.value = data.value.total_valid_count;
+    countStayTest.value = data.value.count_stay_test
     countsGeneralByPeriod.value = data.value.counts_general_by_period;
     pendingCountsByPeriod.value = data.value.pending_counts_by_period;
     // allFilters.value.page = data.value.stays.current_page;
