@@ -52,7 +52,7 @@
                         </div>
                         <div
                             v-if="place.featured || ((hoverItem == index) && place.is_visible)"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-[100]"
+                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
                             :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
                             @click.prevent="updateRecommendation($event, place)"
                         >
@@ -71,7 +71,7 @@
                     </div>
                     <div
                         v-if="place.is_visible == 0"
-                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10"
+                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
                     />
                     <div class="pt-2 px-2 pb-4 truncate-2 space-y-[8px]">
                         <div class="flex items-center space-x-[4px] pb-[7px]">
@@ -87,7 +87,8 @@
                                 <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reseñas</p>
                             </div>
                         </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }} {{ place.id }}</h6>
+                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
+                        <!-- {{ place.id }} -->
                         <div class="flex space-x-1">
                             <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
                             <p class="text-[10px] font-semibold htext-black-100">{{ place.city }}</p>
@@ -398,6 +399,8 @@ async function updateRecommendation (event, place) {
     const data = {
         recommedation: !place.featured,
         place_id: place.id,
+        selected_place: formFilter.selected_place,
+        selected_subplace: formFilter.selected_subplace,
     }
     const response = await placeStore.$updateRecommendation(data);
     const { ok } = response;

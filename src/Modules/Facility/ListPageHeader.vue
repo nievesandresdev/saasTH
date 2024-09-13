@@ -1,5 +1,5 @@
 <template>
-    <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px]">
+    <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px] z-[100]">
         <div class="space-x-2 flex">
             <h1 class="font-medium text-[22px]">Instalaciones</h1>
             <BaseTooltipResponsive

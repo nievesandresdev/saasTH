@@ -3,7 +3,7 @@
     <div class="px-6 flex-grow">
       <HeadLegal />
       <TabLegal />
-      <span class="font-normal text-sm">{{ totalPolicies }} Políticas</span>
+      <span class="font-normal text-sm">{{ totalPolicies }} normas</span>
       <div class="grid grid-cols-4 1xl:grid-cols-3 1xl:w-5/6 3xl:grid-cols-5 3xl:w-full 3xl:gap-4 1xl:gap-4 mt-2">
         <!-- Botón para añadir política -->
         <div
@@ -26,9 +26,9 @@
             'bg-white  rounded-lg shadow-md flex flex-col justify-between p-4 h-[162px] w-[295px] cursor-pointer hover:shadow-lg transition-shadow duration-200 ease-in-out': true,
             'shadow-lg border border-1 border-gray-300': selectedPolicyId === policy.id
           }"
-          
+          @click="showPolicy(policy)"
         >
-          <div @click="showPolicy(policy)">
+          <div>
             <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 40) }}</h3>
             <div class="flex justify-start gap-4">
               <p class="text-base font-medium">Penalización: </p>
@@ -38,7 +38,12 @@
             </div>
           </div>
           <div class="flex justify-end">
-            <DropdownMenu :user="policy.user" @edit="showEditPolicy(policy)" @delete="openDeletePolicy(policy)" />
+            <DropdownMenu 
+              :user="policy.user" 
+              @edit="showEditPolicy(policy)" 
+              @delete="openDeletePolicy(policy)" 
+              @click.stop
+            />
           </div>
         </div>
       </div>
@@ -61,7 +66,7 @@
   <ModalWindow :isVisible="deletePolicy" @close="closedeletePolicy" :width="'384px'">
     <template #content>
       <div class="flex justify-end">
-        <img src="/assets/icons/1.TH.CLOSE.svg" class="w-6 h-6 cursor-pointer" @click="closedeletePolicy" />
+        <img src="/assets/icons/1.TH.CLOSE.svg" class="w-8 h-8 cursor-pointer hover:bg-[#F3F3F3] rounded-full p-1" @click="closedeletePolicy" />
       </div>
       <div class="flex justify-center mb-4">
         <img src="/assets/icons/warning-red.svg" class="w-8 h-8" />

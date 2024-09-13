@@ -1,11 +1,11 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[40]"
+        class="h-full w-full fixed top-0 left-0 z-[100]"
         @click="closeModal"
     >
     </div>
-    <transition>
+    <transition name="slide">
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[100] w-[500px] fixed"
@@ -423,14 +423,19 @@ function addNewsImages (images) {
 </script>
 
 <style lang="scss" scoped >
-.v-enter-active,
-.v-leave-active {
-    transition: transform 0.5s ease;
+/* Define las transiciones para entrar y salir */
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.5s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
-    transform: translateX(100%);
+/* Estado inicial al entrar y estado final al salir */
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+}
+
+/* Estado final al entrar y estado inicial al salir */
+.slide-enter-to, .slide-leave-from {
+  transform: translateX(0);
 }
 
 .scrolling-sticky {

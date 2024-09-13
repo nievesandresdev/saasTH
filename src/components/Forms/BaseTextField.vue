@@ -28,7 +28,7 @@
             <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
                 <p class="text-[10px] font-medim text-left mt-[4px] text-red-600 flex items-center">
                     <img :class="{'invisible':!(errors?.[name] !== true && errors?.[name] !== undefined)}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
-                    {{ errors?.[name] !== true || !inputValue ? errors?.[name] : '' }}
+                    {{ errors?.[name] !== true  || (!inputValue && errors?.[name] !== true) ? errors?.[name] : '' }}
                 </p>
                 <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
@@ -111,6 +111,7 @@ const inputValue = ref(props.modelValue);
 watch(inputValue, (newValue) => {
     emit('update:modelValue', newValue);
     emit('input:typing', newValue);
+    emit('blur:validate');
 });
 
 watch(() => props.modelValue, (newValue) => {
@@ -130,12 +131,13 @@ const onClick = () => {
 };
 
 const handleBlur = () => {
-    emit('blur:validate');
+    // emit('blur:validate');
 };
 
 const updateValue = (value) => {
     inputValue.value = value;
     emit('input:search', event);
+    
 };
 
 const handleKeyup = (event) => {

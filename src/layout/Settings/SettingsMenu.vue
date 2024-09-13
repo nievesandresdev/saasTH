@@ -32,21 +32,30 @@
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
-                <ul v-if="menu.expanded">
+                <ul ref="menuRef" v-if="menu.expanded">
                   <template v-for="(sub_menu, index_sub_menu) in menu.group" :key="index_sub_menu">
-                    <li
+                    <!-- <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-gray-100"
                       :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
+                    > -->
+                    <li
+                      v-if="sub_menu.place"
+                      class=" w-full h-full hover-gray-100"
+                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
                     >
                       <div
-                        class="w-full h-full block pl-[37px] pr-[24px] cursor-pointer"
-                        @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}}) : ''"
+                        class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
+                        @click="dataTypePlaces?.[index_sub_menu]?.id ? goLinkPlace({name: 'Places', query: {selected_place: dataTypePlaces?.[index_sub_menu]?.id}},index_sub_menu) : ''"
                       >
                         <div class="flex items-center border-l-[1px] border-[#BFBFBF] relative">
-                          <span v-if="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar'" class="absolute inline-block bg-[#2A8873] h-[30px] w-[4px]  rounded-full left-[-2px]"></span>
+                          <span 
+                          v-if="isActive(sub_menu, index_sub_menu)"
+                          class="absolute inline-block bg-[#2A8873] h-[25px] w-[3px]  rounded-full left-[-2px]"
+                          >
+                        </span>
                           <div class="py-[8px] ml-[20px]">
-                            <span class="text-sm normal-case">{{ sub_menu.title }}</span>
+                            <span class="text-sm normal-case">{{ sub_menu.title }} </span>
                           </div>
                         </div>
                       </div>
@@ -63,7 +72,7 @@
                         <div class="flex items-center h-10 relative">
                           <div class="w-6 h-full relative">
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
-                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[30px] w-[4px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
+                            <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[25px] w-[3px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
                           </div>
                           <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
                         </div>
@@ -189,7 +198,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, computed, watch } from 'vue'
+import { reactive, onMounted, computed, watch,watchEffect } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
 
 const route = useRoute();
@@ -198,6 +207,8 @@ const status_subscription = false
 
 import { usePlaceStore } from '@/stores/modules/place';
 const placeStore = usePlaceStore();
+
+
 
 const menu_section = reactive([
   {
@@ -379,6 +390,7 @@ const dataTypePlaces = reactive([
 },
 ]);
 
+
 onMounted(() => {
   loadMenuState();
   getTypePlaces()
@@ -395,29 +407,19 @@ focusMenu();
 });
 
 async function getTypePlaces(){
-const response = await placeStore.$getTypePlaces();
-if (response.ok) {
-  let typePlaces = response.data;
-  typePlaces.forEach(item => {
-    let type = dataTypePlaces.find(t => t.name == item.name);
-    if (type) {
-      type.id = item.id;
-    }
-  });
-}
+  const response = await placeStore.$getTypePlaces();
+  if (response.ok) {
+    let typePlaces = response.data;
+    typePlaces.forEach(item => {
+      let type = dataTypePlaces.find(t => t.name == item.name);
+      if (type) {
+        type.id = item.id;
+        //sessionStorage.setItem('selected_place', item.id);
+      }
+    });
+  }
 }
 
-/* function toggleSubMenu (index_section_selected, index_menu_selected, section_selected , menu_selected) {
-  console.log({
-    'partidea': 'toggleSubMenu',
-    'index_section_selected': index_section_selected,
-    'index_menu_selected': index_menu_selected,
-    'section_selected': section_selected,
-    'menu_selected': menu_selected
-  })
-
-  menu_selected.expanded = !menu_selected.expanded
-} */
 
 function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
     menu_selected.expanded = !menu_selected.expanded;
@@ -469,11 +471,34 @@ function goLink(viewName) {
   router.push({ name: viewName});
 }
 
-function goLinkPlace(r) {
+watch(
+      () => route.fullPath, // Observa la URL completa
+      (newUrl) => {
+        if (!newUrl.startsWith('/places')) {
+          // Si la URL no comienza con "/places", elimina el selected_place
+          sessionStorage.removeItem('selected_place');
+        }
+      }
+    );  
+
+function goLinkPlace(r,d) {
+  sessionStorage.setItem('selected_place', d); //guardar ese item para que cargue el active apenas inicie el componente 
+
   router.replace(r);
-  const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`
+  const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`;
   window.location.assign(newUrl);
 }
+
+const isActive = (sub_menu, index_sub_menu) => {
+  const savedPlaceId = sessionStorage.getItem('selected_place');
+  return savedPlaceId == index_sub_menu || fullUrl.value == '/places';
+};
+
+/* onMounted(() => {
+  const savedPlaceId = sessionStorage.getItem('selected_place');
+
+  console.log('savedPlaceId', savedPlaceId);
+}); */
 
 function goLinkWithRoute() {
 }

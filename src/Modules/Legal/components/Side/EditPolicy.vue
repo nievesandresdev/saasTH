@@ -13,7 +13,7 @@
           </div>
           <div class="flex justify-end">
             <button @click="closeModal">
-              <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-6 h-6">
+              <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-6 h-6 hover:bg-[#F3F3F3] rounded-full p-1">
             </button>
           </div>
         </div>

@@ -5,7 +5,7 @@
         @click="closeModal"
     >
     </div>
-    <transition>
+    <transition name="slide">
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
@@ -247,7 +247,7 @@ const formDefault = reactive({
     images: [],
 });
 const formRules = {
-    title: [value => value.trim() ? true : 'Introduce el nombre de tu instalación'],
+    title: [value => !!value.trim() ? true : 'Introduce el nombre de tu instalación'],
 };
 
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
@@ -452,15 +452,20 @@ function openModalChangeInForm () {
 }
 </script>
 
-<style lang="scss">
-.v-enter-active,
-.v-leave-active {
-    transition: transform 0.5s ease;
+<style lang="scss" scoped>
+/* Define las transiciones para entrar y salir */
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.5s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
-    transform: translateX(100%);
+/* Estado inicial al entrar y estado final al salir */
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+}
+
+/* Estado final al entrar y estado inicial al salir */
+.slide-enter-to, .slide-leave-from {
+  transform: translateX(0);
 }
 
 .scrolling-sticky {
