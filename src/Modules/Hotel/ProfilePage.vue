@@ -73,8 +73,8 @@
                         v-model="form.description"
                         placeholder="Descripción..."
                         class-content="flex-1"
-                        class-input="text-sm h-[44px] p-3"
                         name="description"
+                        :max="'500'"
                     />
                 </div>
             </section>
