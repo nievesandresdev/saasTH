@@ -119,8 +119,8 @@ const values = {
     },
     'reminderChatMsg':{
         title: 'Mensaje de recordatorio chat',
-        description: 'Invitación a tus huéspedes a tu WebApp desde un link o correro electrónico.',
-        trigger: 'El huésped no ha respondido al mensaje en la WebApp en los después de 30 minutos',
+        description: 'Si tus huéspedes no han leído un mensaje de respuesta en el chat después de 30 minutos, recibirán un correo de recordatorio.',
+        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
         issue: 'Tienes un chat pendiente en la WebApp'
     }
 }
