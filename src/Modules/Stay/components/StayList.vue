@@ -113,7 +113,7 @@
             </div>
         </div>
         <!-- section test to delete -->
-        <div class="p-4 bg-[#FFF2CC]" v-if="countStayTest > 0">
+        <div class="p-4 bg-[#FFF2CC] mt-auto" v-if="countStayTest > 0">
             <div class="flex items-start gap-2">
                 <img class="w-5 h-5" src="/assets/icons/info.svg">
                 <p class="text-xs font-medium leading-[150%]">Hemos generado estancias de prueba para mejorar tu experiencia durante el free trial.</p>
