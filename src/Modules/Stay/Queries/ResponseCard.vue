@@ -20,6 +20,7 @@
               @change="toggleAttended"
               :id="`toggle-${data.id}`"
               disabledColor="#FFC506"
+              disabledColorHover="#EBC44C"
               :disabled="sendingChange"
             />
             <p class="text-sm font-medium ml-2"
@@ -36,7 +37,7 @@
 
         <div class="mt-4" v-if="data.histories.length > 0">
             <button @click="openHistory = !openHistory" class="flex items-center h-6">
-              <h1 class="text-sm font-medium leading-[110%]">Ver feedbacks anteriores</h1>
+              <h1 class="text-sm font-medium leading-[110%] text-[#333] hover:text-[#000] underline">Ver feedbacks anteriores</h1>
               <img class="ml-2 w-6 h-6" :src="`/assets/icons/${openHistory ? '1.TH.I.DROPDOWN.OPEN' : '1.TH.I.dropdown'}.svg`" alt="">
             </button>
             <div v-if="openHistory" class="mt-4 flex w-full items-center">
@@ -44,8 +45,9 @@
               <h1 class="px-4 text-sm font-medium leading-[110%]">{{ data.histories.length }} feedback</h1>
               <div class="h-[1px] flex-grow"><div class="w-full h-full hbg-gray-400"></div></div>
             </div>
-            <div v-if="openHistory" class="mt-4" v-for="dataQ in data.histories" :key="dataQ.id">
+            <div v-if="openHistory" class="mt-4" v-for="(dataQ, index) in data.histories" :key="dataQ.id">
               <ResponseCardContent :data="dataQ" :period="data?.period" :stay="stay"/>
+              <div class="my-4 border-b hborder-gray-400" v-if="index < (data.histories.length-1)"></div>
             </div>
         </div>
       </div>

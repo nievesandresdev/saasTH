@@ -188,7 +188,9 @@
     border: 1px solid var(--h-green-600);
     color: var(--h-green-600);
 }
-.chip-primary:hover{
+
+.chip-primary:hover,
+.chip-primary:hover .chip-text{
     color: var(--h-green-600);
 }
 
