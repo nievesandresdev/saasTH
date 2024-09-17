@@ -1,12 +1,12 @@
 <template>
     <div class="mt-6 3xl:mt-0 3xl:w-[362px] px-4 3xl:px-2 py-6 shadow-hoster rounded-[10px] bg-white">
-        <h3 class="text-base font-semibold leading-[120%] pl-2">Huésped</h3>
+        <h3 class="text-base font-semibold leading-[120%] pl-2">Huéspedes</h3>
         <span class="mt-4 block text-[10px] font-semibold leading-[120%] pl-2 text-gray-500">
             {{data.guests.length}} {{ data.guests.length > 1 ? 'HUESPEDES' : 'HUESPED' }} 
         </span>
         <router-link 
             class="p-2 block w-full rounded-[6px]" v-for="g in data.guests" :key="g.id"
-            :class="{'hbg-green-200': route.query.g == g.id}"
+            :class="{'hbg-green-200': route.query.g == g.id,'hover-hbg-gray-200':!(route.query.g == g.id)}"
             :to="{ name: 'StayDetailPage',params: { id: data.id }, query: { g: g.id }}"
         >
             <div class="flex items-center">
