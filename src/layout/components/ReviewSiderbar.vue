@@ -191,13 +191,13 @@ const emptyFilters = computed(() => {
     return numbersFiltersApplied.value.length == 0;
 });
 const reviews = computed(() => {
-    let reviews = paginatedItems.value.map(review => {
+    let r = paginatedItems.value.map(review => {
         return {
             ...review,
             increasesAverageRating: verifyIncreasesAverageRating(review),
         }
     });
-    return reviews;
+    return r;
 });
 
 // WATCH
@@ -220,22 +220,25 @@ function paginate () {
     const end = start + itemsPerPage;
     let items = reviewsData.value.slice(start, end);
     items.forEach(item => {
-        paginatedItems.value.push(item);
+        if (!paginatedItems.value.includes(item)) {
+            paginatedItems.value.push(item);
+        }
     });
+    console.log(paginatedItems.value, paginatedItems.value?.length, 'paginatedItems.value');
 }
 
 async function nextPage() {
     if (currentPage.value < totalPages.value) {
         currentPage.value++;
-  }
-    await paginate();
+        await paginate();
+    }
 }
 
 
 function verifyIncreasesAverageRating (review) {
     let { otaOrigin } = review.detail;
     let ratingAverageOta = summaryReviewOtas.value.find(item => item.ota === otaOrigin);
-    return review.detail.rating > ratingAverageOta.summaryReviewOta.reviewsRating;
+    return review.detail.rating >= ratingAverageOta.summaryReviewOta.reviewsRating;
 } 
 function getNameIconAnswer (review) {
     let { isAttended, isAnswered } = review.detail;
@@ -307,17 +310,17 @@ function onScroll () {
         const { scrollTop, scrollHeight, clientHeight } = containerElement;
 
         if (scrollTop + clientHeight >= scrollHeight - 50 ) {
-                loadingPagination.value = true;
-        }
-        setTimeout(async () => {
-            const containerElement = containerListRef.value;
-            const { scrollTop, scrollHeight, clientHeight } = containerElement;
+            loadingPagination.value = true;
+            setTimeout(async () => {
+                const containerElement = containerListRef.value;
+                const { scrollTop, scrollHeight, clientHeight } = containerElement;
 
-            if (scrollTop + clientHeight >= scrollHeight - 50 ) {
-                    await nextPage();
-                    loadingPagination.value = false;
-            }
-        }, 2000);
+                if (scrollTop + clientHeight >= scrollHeight - 50 ) {
+                        await nextPage();
+                        loadingPagination.value = false;
+                }
+            }, 2000);
+        }
     }
 }
 </script>
