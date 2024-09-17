@@ -67,7 +67,7 @@
                         >
                             {{ !reviewData.isAnswered ? 'Abrir y responder en' : 'Abrir en' }}
                             <img
-                                :src="`/assets/icons/otas/${$capitalize(otaParamRoute)}.svg`"
+                                :src="`/assets/icons/otas/${$titleCase(otaParamRoute)}.svg`"
                                 class="w-4 h-4 ml-1 inline-block "
                             >
                         </button>
