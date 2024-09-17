@@ -67,7 +67,7 @@
                         <div class="flex justify-between items-center mb-[4px]">
                             <div class="flex items-center truncate-1">
                                 <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
-                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
+                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }} {{ idOtaParamRoute }}</h6>
                             </div>
                             <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
                         </div>
@@ -170,10 +170,10 @@ const loadingList = ref(false);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
-    	return route?.params?.ota?.toUpperCase();
+    	return route?.currentRoute?.value?.params?.ota?.toUpperCase();
 });
 const idOtaParamRoute = computed(() => {
-    	return route?.params?.id;
+    	return route?.currentRoute?.value?.params?.id;
 });
 
 const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage));
