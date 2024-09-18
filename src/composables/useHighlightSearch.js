@@ -14,7 +14,7 @@ export function useHighlightSearch () {
     // }, { immediate: true });
 
     function load(text, searchText) {
-        console.log(searchText, 'searchText')
+        // console.log(searchText, 'searchText')
         if (!searchText) return text;
         const re = new RegExp(searchText, 'gi');
         return text.replace(re, match => `<span style="background-color:#fff1be;">${match}</span>`);

@@ -209,7 +209,7 @@ const reviews = computed(() => {
 // WATCH
 
 onMounted(async () => {
-    await getByOtas();
+    await getByOtas(true);
 });
 
 provide('formFilter', formFilter);
@@ -287,7 +287,7 @@ function reloadReviews () {
     getByOtas();
 }
 
-async function getByOtas () {
+async function getByOtas (loadOtas = false) {
     loadingList.value = true; 
     let params = formFilter;
     const response = await reviewStore.$getByOtas(params);
@@ -297,7 +297,7 @@ async function getByOtas () {
         reviewsData.value = data.reviews;
         // console.log(reviewsData.value, reviewsData.value.length, 'reviewsData.value')
         paginate(); 
-        if (reviewStore.otasWithUrls?.length <= 0 && reviewStore.otasWithUrls?.length != data.otasWithUrls.length) {
+        if ((reviewStore.otasWithUrls?.length <= 0 && reviewStore.otasWithUrls?.length != data.otasWithUrls.length) || loadOtas) {
             otasWithUrls.value = data.otasWithUrls;
             reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
             formFilter.otas = data.otasWithUrls;
