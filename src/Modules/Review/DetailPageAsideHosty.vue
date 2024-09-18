@@ -11,9 +11,9 @@
             class="w-full flex h-full"
             :class="loadingHosty ? 'items-center justify-center' : 'pt-6 px-6 pb-[68px] flex-col'"
         >
-            <div v-if="!loadingHosty && numbersResponsesGenerated <= 0" class="text-center">
+            <div v-if="!loadingHosty && numbersResponsesGenerated <= 0" class="flex justify-center w-full">
                 <button
-                    class="text-xs font-medium hbtn-primary py-[12px] px-[8px]"
+                    class="text-xs font-medium hbtn-primary leading-[90%] p-[8px] flex items-center h-[32px]"
                     @click="generateResponse"
                 >
                     Generar con Hosty

@@ -28,11 +28,14 @@
           }"
           @click="showPolicy(policy)"
         >
-          <div>
-            <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 40) }}</h3>
+        <div>
+          <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 75) }}</h3>
+        </div>
+        <div class="flex justify-between items-start mt-auto">
+           
             <div class="flex justify-start gap-4">
               <p class="text-base font-medium">Penalización: </p>
-              <p class="text-[10px] font-semibold bg-[#DADADA] rounded-full py-1 px-2">
+              <p class="text-[10px] font-semibold  rounded-full py-1 px-2" :class="policy.penalization ? 'bg-[#D9F2E9]' : 'bg-[#DADADA]'">
                 {{ policy.penalization ? 'Sí' : 'No' }}
               </p>
             </div>
@@ -124,7 +127,6 @@ const showEditPolicy = (data,type = false) => {
   modalEditPolicies.value = true;
   policy.value = data;
   modalCreatePolicies.value = false;
-  console.log('secreto',type)
   if(type){
     typeFromEdit.value = true;
   }

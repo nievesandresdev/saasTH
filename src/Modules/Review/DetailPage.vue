@@ -21,7 +21,11 @@
                         </div>
                         <div class="flex items-center space-x-[4px]">
                             <span class="font-semibold text-sm">Pendiente</span>
-                            <BaseSwichInput v-model="reviewData.isAttended" @change:value="changeStatusAttended()" />
+                            <BaseSwichInput
+                                v-model="reviewData.isAttended"
+                                @change:value="changeStatusAttended()"
+                                color-disabled="#FFC506"
+                            />
                             <span class="font-semibold text-sm text-[#858181]">Atendida</span>
                         </div>
                     </div>
@@ -60,7 +64,7 @@
 
                     <div class="mt-4 flex justify-end">
                         <button
-                            class="text-xs font-medium hbtn-primary py-[12px] px-[8px]"
+                            class="text-xs font-medium hbtn-primary leading-[90%] h-[32px] p-[8px] flex items-center"
                             :disabled="!urlListReviewsInOta"
                             @click="goUrlListReviewsInOta"
                             
@@ -73,7 +77,7 @@
                         </button>
                         <button
                             :disabled="numbersResponsesGenerated >= maximumResponsesGenerated"
-                            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-4"
+                            class="text-xs font-medium hbtn-primary leading-[90%] h-[32px] p-[8px] ml-4 flex items-center"
                             @click="refDetailPageAsideHosty.generateResponse()"
                         >
                             Generar con Hosty
@@ -154,7 +158,7 @@ const translateAndResponseId = ref(null);
 const responseReviewData = ref([]);
 const translateReviewData = ref({});
 const responseShow = ref(false);
-const maximumResponsesGenerated = ref(3);
+const maximumResponsesGenerated = ref(10);
 const hoteIdExpedia = ref(null);
 const hotelOtaData = ref(null);
 
@@ -260,6 +264,7 @@ onMounted(async () => {
 // PROVIDE
 provide('reviewStore', reviewStore);
 provide('toast', toast);
+provide('router', router);
 provide('otaParamRoute', otaParamRoute);
 provide('fullDataTranslateReviews', fullDataTranslateReviews);
 provide('reviewData', reviewData);
@@ -291,7 +296,7 @@ async function changeStatusAttended () {
     const response = await reviewStore.$updateAttentionStatus(params);
     const { ok, data } = response;
     if (ok) {
-        toast.warningToast('Actualizado con éxito','top-right');
+        toast.warningToast('Reseña atendida','top-right');
         emitEvent('get-reviews');
     } else {
         reviewData.isAttended = !reviewData.isAttended;

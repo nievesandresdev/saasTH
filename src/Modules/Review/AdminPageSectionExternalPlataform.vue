@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-[10px] border hborder-gray-400 bg-white px-4 py-6 space-y-4 w-full space-y-4">
-        <h5 class="text-base font-medium">Reseñas en los últimos 30 días</h5>
+        <h5 class="text-base font-medium">Reseñas por plataformas externas en los últimos 30 días</h5>
         <div
             v-for="(ota, index) in reviewStore.otas"
             :key="index"
@@ -13,12 +13,17 @@
                 <img class="w-[24px] h-[24px]" :src="`/assets/icons/otas/${$titleCase(ota)}.svg`">
                 <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}</span>
             </div>
-            <div :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}">
+
+            <div
+                :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}"
+                class="w-[42px] text-center"
+            >
                 <span
                     class="text-[14px] font-semibold"
                 >{{ calcSummaryByOta(ota)?.note || '--' }}</span><span class="text-[10px] font-medium">/{{ calcSummaryByOta(ota)?.scaleRating }}</span>
             </div>
-            <div>
+            
+            <div class="w-[82px]">
                 <template v-if="!!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)">
                     <button
                         class="hbtn-tertiary underline text-sm font-medium"
