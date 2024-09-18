@@ -12,14 +12,14 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const languageRef = ref(null);
   const infoTextIcon1Ref = ref(null);
 
-  function $setIframeUrl(uri, params = 'test=x') {
+  function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
       let subdomain = sessionStorage.getItem('current_subdomain');
       let urlBase = $urlBaseWebapp();
       // console.log(subdomain)
       // if(ENVIROMENT == 'test'){
       //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       // }
-      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&lang=es&mockup=true&${params}`;
+      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&lang=${lang}&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
   }
 

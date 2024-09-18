@@ -226,7 +226,7 @@ const co = ref('');
     function handleFiles(e) {
         const files = Array.from(e.target.files);
         const maxSize = 5 * 1024 * 1024;
-
+        console.log('test handleFiles',files)
         files.forEach((file) => {
             if (!(file instanceof File)) return;
             if (file.size > maxSize) {
@@ -237,12 +237,16 @@ const co = ref('');
             const reader = new FileReader();
 
             reader.onload = (e) => {
+                console.log('test 3 file',file)
                 if(file.type == "image/svg+xml" || file.type == "image/jpeg" || file.type == "image/png" || file.type == "image/jpg"){
+                        console.log('test 3 guardo')
                         uploadFile(e.target.result,file);
                 }else{
+                    console.log('test 3 noguardo')
                     toast.error("Tipo de archivo no permitido", { position: "top-right", });
                 }
             };
+            console.log('test ultimo')
             reader.readAsDataURL(file);
         });
     }
