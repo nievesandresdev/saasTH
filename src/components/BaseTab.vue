@@ -15,7 +15,7 @@
             >
                     {{ item.name }}
             </span>
-            <span class="w-full h-[3px] rounded-full" :class="value === item.value ? 'hbg-green-800' : 'bg-white'" />
+            <span class="w-full h-[3px] rounded-full" :class="value === item.value ? 'hbg-green-800' : ''" />
         </li>
     </ul>
 </template>
