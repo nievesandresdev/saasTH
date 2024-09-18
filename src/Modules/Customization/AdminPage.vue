@@ -153,7 +153,6 @@ function getTypeImg (url) {
 onMounted(() => {
     reloadHotel();
     loadMockup();
-    console.log(hotelData.value);
 });
 
 // computed
@@ -175,11 +174,12 @@ const isChanged = computed(() => {
 
 // FUNCTIONS
 function loadMockup () {
-    mockupStore.$setIframeUrl('/')
+    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp)
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
 }
 async function reloadHotel () {
     const hotel = await hotelStore.reloadHotel();
+    console.log('hotel', hotel)
     tabCurrent.value = GENERAL;
     Object.assign(hotelData.value, hotel);
     initializeForm(hotel);
@@ -205,6 +205,7 @@ function initializeForm(hotel) {
     form.img_selected_fav = imgSelectedFav.value || null;
     form.img_selected_bg = imgSelectedBg.value || null;
     Object.assign(formDefault, form);
+    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp)
 
 }
 function reloadDataComponent () {
