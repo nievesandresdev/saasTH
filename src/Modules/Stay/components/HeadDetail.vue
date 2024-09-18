@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 relative z-[201]">
         <div class="flex items-center mt-10">
-            <h1 class="text-[22px] font-medium">Estancias</h1>
+            <h1 class="text-[22px] font-medium">Estancia</h1>
             <div class="flex items-center ml-auto" v-if="session && user.name !== session.userName">
                 <img 
                     class="rounded-full w-8 h-8 mr-2" 

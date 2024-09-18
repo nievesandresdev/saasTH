@@ -77,11 +77,22 @@ const distances = ref({
 });
 
 // FUNCTION
-function cleanFilter (field, valueArray) {
-    filtersSelected[field] = filtersSelectedDefault[field];
-    formFilter[field] = filtersSelectedDefault[field];
+function cleanFilter (field, value) {
+    if (value === undefined) {
+        filtersSelected[field] = filtersSelectedDefault[field];
+        formFilter[field] = filtersSelectedDefault[field];
+    }   else {
+        let index = filtersSelected[field].findIndex(item => item === value);
+        filtersSelected[field].splice(index, 1);
+        formFilter[field] = filtersSelected[field];
+    }
     emits('reloadPlaces');
 }
+// function cleanFilter (field, valueArray) {
+//     filtersSelected[field] = filtersSelectedDefault[field];
+//     formFilter[field] = filtersSelectedDefault[field];
+//     emits('reloadPlaces');
+// }
 
 function deleteAllFilters () {
     emits('deleteAllFilters');

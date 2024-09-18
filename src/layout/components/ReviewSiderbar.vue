@@ -67,7 +67,7 @@
                         <div class="flex justify-between items-center mb-[4px]">
                             <div class="flex items-center truncate-1">
                                 <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
-                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
+                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }} {{ idOtaParamRoute }}</h6>
                             </div>
                             <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
                         </div>
@@ -170,10 +170,10 @@ const loadingList = ref(false);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
-    	return route?.params?.ota?.toUpperCase();
+    	return route?.currentRoute?.value?.params?.ota?.toUpperCase();
 });
 const idOtaParamRoute = computed(() => {
-    	return route?.params?.id;
+    	return route?.currentRoute?.value?.params?.id;
 });
 
 const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage));
@@ -191,13 +191,13 @@ const emptyFilters = computed(() => {
     return numbersFiltersApplied.value.length == 0;
 });
 const reviews = computed(() => {
-    let reviews = paginatedItems.value.map(review => {
+    let r = paginatedItems.value.map(review => {
         return {
             ...review,
             increasesAverageRating: verifyIncreasesAverageRating(review),
         }
     });
-    return reviews;
+    return r;
 });
 
 // WATCH
@@ -220,22 +220,25 @@ function paginate () {
     const end = start + itemsPerPage;
     let items = reviewsData.value.slice(start, end);
     items.forEach(item => {
-        paginatedItems.value.push(item);
+        if (!paginatedItems.value.includes(item)) {
+            paginatedItems.value.push(item);
+        }
     });
+    console.log(paginatedItems.value, paginatedItems.value?.length, 'paginatedItems.value');
 }
 
 async function nextPage() {
     if (currentPage.value < totalPages.value) {
         currentPage.value++;
-  }
-    await paginate();
+        await paginate();
+    }
 }
 
 
 function verifyIncreasesAverageRating (review) {
     let { otaOrigin } = review.detail;
     let ratingAverageOta = summaryReviewOtas.value.find(item => item.ota === otaOrigin);
-    return review.detail.rating > ratingAverageOta.summaryReviewOta.reviewsRating;
+    return review.detail.rating >= ratingAverageOta.summaryReviewOta.reviewsRating;
 } 
 function getNameIconAnswer (review) {
     let { isAttended, isAnswered } = review.detail;
@@ -307,17 +310,17 @@ function onScroll () {
         const { scrollTop, scrollHeight, clientHeight } = containerElement;
 
         if (scrollTop + clientHeight >= scrollHeight - 50 ) {
-                loadingPagination.value = true;
-        }
-        setTimeout(async () => {
-            const containerElement = containerListRef.value;
-            const { scrollTop, scrollHeight, clientHeight } = containerElement;
+            loadingPagination.value = true;
+            setTimeout(async () => {
+                const containerElement = containerListRef.value;
+                const { scrollTop, scrollHeight, clientHeight } = containerElement;
 
-            if (scrollTop + clientHeight >= scrollHeight - 50 ) {
-                    await nextPage();
-                    loadingPagination.value = false;
-            }
-        }, 2000);
+                if (scrollTop + clientHeight >= scrollHeight - 50 ) {
+                        await nextPage();
+                        loadingPagination.value = false;
+                }
+            }, 2000);
+        }
     }
 }
 </script>

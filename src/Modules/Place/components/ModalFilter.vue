@@ -13,11 +13,11 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Tu región
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2 space-y-2">
                         <div
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.all_cities"
                                     :value="false"
@@ -32,9 +32,9 @@
                             </p>
                         </div>
                         <div
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.all_cities"
                                     :value="true"
@@ -54,12 +54,12 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Distancia del alojamiento
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2 space-y-2">
                         <div
                             v-for="(distance, index) in numbersByFilters.distances"
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.distances"
                                     :value="index"
@@ -79,12 +79,12 @@
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Valoraciones
                     </label>
-                    <div class="mt-2">
+                    <div class="mt-2 space-y-2">
                         <div
                             v-for="(score, index) in numbersByFilters.scores"
-                            class="flex space-y-2"
+                            class="flex items-center"
                         >
-                            <div>
+                            <div class="flex items-center">
                                 <input
                                     v-model="formModalFilter.points"
                                     :value="index"

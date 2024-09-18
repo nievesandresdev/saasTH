@@ -323,7 +323,6 @@ defineExpose({ edit });
 
 async function submitSave () {
     let body = { ...form };
-    // console.log(body, 'body');
     const response = await placeStore.$update(body);
     const { ok, data } = response;
     if (ok) {

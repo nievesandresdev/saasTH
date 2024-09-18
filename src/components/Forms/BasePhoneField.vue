@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed, inject } from 'vue';
+import { ref, watch, onMounted, computed, inject, toRefs } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import axios from 'axios';
 
@@ -85,7 +85,8 @@ const props = defineProps({
       type: String,
       default: 'Teléfono de contacto',
   },
-})
+});
+const { modelValue } = toRefs(props);
 
 const emit = defineEmits(['update:modelValue', 'keyupInput', 'handlePhoneError', 'blur:validate'])
 
@@ -131,16 +132,6 @@ const getCodeList = () => {
   })
     .then(res => {
       codeList.value = res.data;
-      codeList.value
-        .map(item => item.value)
-        .forEach(item => {
-          let phoneString = props.modelValue;
-          phoneString = phoneString?.replace(/\s+/g, '');
-          if (phoneString && phoneString.startsWith(item)) {
-            code.value = item;
-            phone.value = phoneString.replace(code.value, '');
-          }
-        });
     })
     .catch(error => {
       console.log(error, 'error');
@@ -165,6 +156,21 @@ const validPhone = (phone, code) => {
   }
 };
 
+watch(modelValue, (newVal, oldVal) => {
+  if (newVal?.length > 0) {
+    let phoneString = props.modelValue;
+    codeList.value
+      .map(item => item.value)
+      .forEach(item => {
+        phoneString = phoneString?.replace(/\s+/g, '');
+        if (phoneString && phoneString.startsWith(item)) {
+          code.value = item;
+          phone.value = phoneString.replace(code.value, '');
+        }
+      });
+  }
+});
+
 watch(phone, (newVal, oldVal) => {
   if (!initialLoad.value) return;
   let phoneNumber = code.value + newVal;
@@ -187,9 +193,7 @@ watch(code, (newVal, oldVal) => {
   emit('blur:validate');
 });
 
-onMounted(() => {
-  getCodeList()
-});
+  getCodeList();
 
 
 

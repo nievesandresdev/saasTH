@@ -90,7 +90,7 @@
     .hbg-gray-100 {
         background-color: var(--h-gray-100);
     }
-    .hover-gray-100:hover,
+    .hover-hbg-gray-200:hover,
     .hbg-gray-200 {
         background-color: var(--h-gray-200);
     }
