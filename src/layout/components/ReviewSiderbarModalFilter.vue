@@ -11,7 +11,7 @@
             <div class="space-y-4 p-4 w-full overflow-scroll overflow-x-hidden" style="max-height:27rem">
                 <div class="">
                     <label class="mb-2 text-base font-medium block htext-black-100">
-                        Estado de la reseña {{typeof formModalFilter.statusResponse }}
+                        Estado de la reseña
                     </label>
                     <BaseSelectField
                         v-model="formModalFilter.statusResponse"
