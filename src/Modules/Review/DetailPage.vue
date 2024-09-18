@@ -302,10 +302,10 @@ async function changeStatusAttended () {
     const response = await reviewStore.$updateAttentionStatus(params);
     const { ok, data } = response;
     if (ok) {
-        toast.warningToast(reviewData.isAttended ? 'Reseña atendida':'Reseña pendiente','top-right');
+        toast.warningToast(reviewData.value.isAttended ? 'Reseña atendida':'Reseña pendiente','top-right');
         emitEvent('get-reviews');
     } else {
-        reviewData.isAttended = !reviewData.isAttended;
+        reviewData.value.isAttended = !reviewData.value.isAttended;
         toast.warningToast(response?.message,'top-right');
     }
 }
