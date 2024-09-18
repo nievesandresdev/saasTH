@@ -98,7 +98,7 @@
      </div>
      <!-- <pre>{{ reviewData?.languageOrigin }}</pre> -->
      <!-- <pre>{{ reviewData }}</pre> -->
-     <pre>{{ hotelStore.hotelData.code }}</pre>
+     <!-- <pre>{{ hotelStore.hotelData.code }}</pre> -->
 </div>
         
 </template>
