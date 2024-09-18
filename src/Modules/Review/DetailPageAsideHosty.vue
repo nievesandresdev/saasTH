@@ -56,6 +56,7 @@ const otaParamRoute = inject('otaParamRoute');
 const reviewData = inject('reviewData');
 const reviewStore = inject('reviewStore');
 const numbersResponsesGenerated = inject('numbersResponsesGenerated');
+const pageCurrent = inject('pageCurrent');
 
 // DATA
 const refDetailPageAsideHostyResponseStreaming =ref(null);
@@ -64,7 +65,7 @@ const loadingStreaming = ref(false);
 const loadingTranslation = ref(false);
 const responseGenerated = ref(false);
 const responseStringStreaming = ref("");
-const pageCurrent = ref(1);
+
 
 // COMPUTED
 
@@ -111,7 +112,6 @@ watch(responseReviewData, (responses)=>{
 // PROVIDE
 
 provide('responseCurrent', responseCurrent);
-provide('pageCurrent', pageCurrent);
 provide('loadingHosty', loadingHosty);
 provide('loadingStreaming', loadingStreaming);
 provide('loadingTranslation', loadingTranslation);

@@ -143,6 +143,7 @@ async function translate (lg) {
         objectIdResponse: responseCurrent.value._id
     }
     const response = await reviewResponseStore.$tranlate(bodyRequest);
+    console.log(response, 'translate');
     const { ok, data } = response;
     if (ok) {
         updateResponseCurrent(data.response);

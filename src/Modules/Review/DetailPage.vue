@@ -98,6 +98,7 @@
      </div>
      <!-- <pre>{{ reviewData?.languageOrigin }}</pre> -->
      <!-- <pre>{{ reviewData }}</pre> -->
+     <pre>{{ hotelStore.hotelData.code }}</pre>
 </div>
         
 </template>
@@ -115,6 +116,8 @@ import { useTranslateAndResponseStore } from '@/stores/modules/translateAndRespo
 const translateAndResponseStore = useTranslateAndResponseStore();
 import { useUtilStore } from '@/stores/modules/util';
 const utilStore = useUtilStore();
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
 // DATA STATIC
 const URLS_LIST_REVIEWS_IN_OTAS = {
@@ -161,6 +164,7 @@ const responseShow = ref(false);
 const maximumResponsesGenerated = ref(10);
 const hoteIdExpedia = ref(null);
 const hotelOtaData = ref(null);
+const pageCurrent = ref(1);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
@@ -265,6 +269,7 @@ onMounted(async () => {
 provide('reviewStore', reviewStore);
 provide('toast', toast);
 provide('router', router);
+provide('pageCurrent', pageCurrent);
 provide('otaParamRoute', otaParamRoute);
 provide('fullDataTranslateReviews', fullDataTranslateReviews);
 provide('reviewData', reviewData);
@@ -284,6 +289,7 @@ function goUrlListReviewsInOta() {
     window.open(urlListReviewsInOta.value, '_blank');
 }
 async function loadData () {
+    pageCurrent.value = 1;
     const promises = [loadReview(), loadTranslateAndResponse(), loadLanguages()];
     await Promise.all(promises);
 }
