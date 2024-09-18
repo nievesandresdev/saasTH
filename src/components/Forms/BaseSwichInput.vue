@@ -10,7 +10,7 @@
             @click="handleCLick"
         />
         <div
-        :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : `bg-[${colorDisabled}]`]"
+        :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : `${colorDisabled}`]"
         ></div>
         <div  
           :class="['dot absolute left-[0.125rem] top-[0.125rem] w-3.5 h-3.5 rounded-full transition ', modelValue ? 'translate-x-[0.75rem] bg-white' : 'bg-white']"
@@ -34,7 +34,7 @@ const props = defineProps({
   },
   colorDisabled: {
       type: String,
-      default: '#BFBFBF'
+      default: 'bg-[#BFBFBF]'
   }
 })
 
