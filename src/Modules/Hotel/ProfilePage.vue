@@ -27,6 +27,12 @@
                     />
                 </div>
             </section>
+            <div 
+                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
+                v-if="hotelData.show_profile !== undefined && !hotelData.show_profile"
+            >
+                <h1 class="text-center text-sm font-medium leading-[140%]">Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.</h1>
+            </div>
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="flex space-x-[16px]">
                     <div class="flex-1">
@@ -252,14 +258,17 @@
             </section>
 
         </div>
-        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-end z-10">
-            <!-- <button
-                class="hbtn-primary px-4 py-3 text-sm"
+        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 mx-[-24px]">
+            <button 
+                class="text-base leading-[110%] font-medium underline"
+                :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
+                :disabled="!isChanged"
+                @click="loadHotel"
             >
                 Cancelar
-            </button> -->
+            </button>
             <button
-                class="px-4 text-sm font-medium h-11 hbtn-cta"
+                class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium h-11"
                 :disabled="isloadingForm || formInvalid || !isChanged"
                 :class="{'cta-disabled':isloadingForm || formInvalid || !isChanged}"
                 @click="submit"
@@ -381,8 +390,8 @@
     });
 
     const typeLodging = [
-        { value: "Hotel", label: "hotel", disabled: false },
-        { value: "hostal", label: "hostal", disabled: false },
+        { value: "Hotel", label: "Hotel", disabled: false },
+        { value: "hostal", label: "Hostal", disabled: false },
         { value: "pension", label: "Pensión", disabled: false },
         {
             value: "ca",
@@ -483,8 +492,6 @@
         form.show_profile = hotel.show_profile || false;
         form.with_wifi = hotel.with_wifi || false;
     }
-
-    
 
     function updateShowHotel (val) {
         form.show_profile = val
