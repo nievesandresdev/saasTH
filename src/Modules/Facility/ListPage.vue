@@ -187,10 +187,11 @@
 
     function resetPageData () {
         changePendingInForm.value = false;
-        mockupStore.$reloadIframe();
+        //mockupStore.$reloadIframe();
         loadMockup();
         loadFacilities();
         filter.value = null;
+
     }
 
 
