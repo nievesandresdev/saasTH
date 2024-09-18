@@ -86,6 +86,7 @@ const props = defineProps({
       default: 'Teléfono de contacto',
   },
 });
+
 const { modelValue } = toRefs(props);
 
 const emit = defineEmits(['update:modelValue', 'keyupInput', 'handlePhoneError', 'blur:validate'])
@@ -100,6 +101,10 @@ const searchList = ref([]);
 const error_phone = ref(false);
 const initialLoad = ref(false);
 
+// onMounted(async ()=>{
+//   console.log('test mounted phone component')
+  
+// })
 // COMPUTED
 const isError = computed(() => {
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
@@ -110,6 +115,31 @@ const isError = computed(() => {
 })
 
 // fucntions
+const defineFullPhone = async (stringPhone) => {
+  if (initialLoad.value) return;
+  console.log('test defineFullPhone',stringPhone)
+  axios({
+    url: 'https://dashboard.thehoster.io/api/phone-codes',
+    method: 'GET',
+  })
+  .then(res => {
+    codeList.value = res.data;
+    if (stringPhone) {
+      let phoneString = props.modelValue?.replace(/\s+/g, '');
+      // console.log('test codeList.value',codeList.value)
+      codeList.value.map(item => item.value).some(item => {
+        if (phoneString && phoneString.startsWith(item)) {
+          code.value = item;
+          phone.value = phoneString.replace(code.value, '');
+          return true; // Detiene las iteraciones
+        }
+        return false;
+      });
+    }
+    initialLoad.value = true;
+  })
+};
+
 const searchCodes = () => {
   searchList.value = [];
   for (let ph of codeList.value) {
@@ -125,21 +155,24 @@ const searchCodes = () => {
   }
 };
 
-const getCodeList = () => {
-  axios({
-    url: 'https://dashboard.thehoster.io/api/phone-codes',
-    method: 'GET',
-  })
-    .then(res => {
-      codeList.value = res.data;
-    })
-    .catch(error => {
-      console.log(error, 'error');
-    })
-    .finally(() => {
-      initialLoad.value = true;
-    });
-};
+
+
+// const getCodeList = async () => {
+//   axios({
+//     url: 'https://dashboard.thehoster.io/api/phone-codes',
+//     method: 'GET',
+//   })
+//     .then(res => {
+//       console.log('test finalize',res.data)
+//       codeList.value = res.data;
+//     })
+//     .catch(error => {
+//       console.log(error, 'error');
+//     })
+//     .finally(() => {
+//       initialLoad.value = true;
+//     });
+// };
 
 const selectOption = (value) => {
   searchList.value = [];
@@ -157,21 +190,12 @@ const validPhone = (phone, code) => {
 };
 
 watch(modelValue, (newVal, oldVal) => {
-  if (newVal?.length > 0) {
-    let phoneString = props.modelValue;
-    codeList.value
-      .map(item => item.value)
-      .forEach(item => {
-        phoneString = phoneString?.replace(/\s+/g, '');
-        if (phoneString && phoneString.startsWith(item)) {
-          code.value = item;
-          phone.value = phoneString.replace(code.value, '');
-        }
-      });
-  }
+  defineFullPhone(newVal)
 });
 
+
 watch(phone, (newVal, oldVal) => {
+  console.log('test phone ',newVal)
   if (!initialLoad.value) return;
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
@@ -183,6 +207,7 @@ watch(phone, (newVal, oldVal) => {
 });
 
 watch(code, (newVal, oldVal) => {
+  console.log('test code ',newVal)
   if (!initialLoad.value) return;
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
@@ -193,7 +218,6 @@ watch(code, (newVal, oldVal) => {
   emit('blur:validate');
 });
 
-  getCodeList();
 
 
 
