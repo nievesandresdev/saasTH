@@ -21,7 +21,11 @@
         <p class="text-sm font-medium ml-1">{{ languagesObject[reviewData.languageOrigin] }}</p>
     </div>
     <p v-if="cribadoTranslateReview?.travelerTitle" class="text-sm font-medium mt-2" v-html="cribadoTranslateReview?.travelerTitle" />
-    <p v-if="cribadoTranslateReview?.travelerText" class="text-sm mt-2" v-html="cribadoTranslateReview?.travelerText" />
+    <p
+        v-if="cribadoTranslateReview?.travelerText"
+        class="text-sm mt-2"
+        v-html="load(cribadoTranslateReview?.travelerText, router?.query?.search)"
+    ></p>
     <div v-if="reviewData?.subratings?.length" class="mt-2 space-y-2">
         <div class="flex">
             <BaseRatingIcons 
@@ -55,8 +59,11 @@ import { inject, computed } from 'vue';
 import BaseRatingIcons from '@/components/BaseRatingIcons';
 
 //COMPOSABLES
+import { useHighlightSearch } from '@/composables/useHighlightSearch';
+const { searchQuery, load } = useHighlightSearch();
 
 //INJECT
+const router = inject('router');
 const reviewData = inject('reviewData');
 const languagesObject = inject('languagesObject');
 const cribadoTranslateReview = inject('cribadoTranslateReview');

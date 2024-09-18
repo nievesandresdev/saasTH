@@ -4,7 +4,7 @@
         <p class="text-sm font-medium mb-2">Idioma original:</p>
         <div
             v-if="languageOrigin"
-            class="inline-block w-max chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer mb-4"
+            class="inline-block w-max chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer mb-4 h-[24px]"
             :class="{'chip-primary-active': languageActiveResponse === 'originalLanguage' , 'opacity-30': loadingTranslation}"
             @click="selectLanguage('originalLanguage')"
         >
@@ -18,7 +18,7 @@
         <div class="flex space-x-4">
             <div
                 v-for="(language, index) in languagesButtonsAvailable"
-                class=" inline-block chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer"
+                class=" inline-block chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer h-[24px]"
                 :class="{'chip-primary-active': languageActiveResponse === language , 'opacity-30': loadingTranslation }"
                 @click="selectLanguage(language)"
             >

@@ -19,11 +19,11 @@
     <div v-if="cribadoTranslateReview?.travelerTextPositive || cribadoTranslateReview?.travelerTextNegative" class="mt-2">
         <p v-if="cribadoTranslateReview?.travelerTextPositive" class="text-sm">
             <img class="w-[13.3px] h-[13.3px] inline mr-2" src="/assets/icons/1.TH.EMOJI.HAPPY.svg" alt="">
-            <span class="text-sm" v-html="cribadoTranslateReview?.travelerTextPositive"></span>
+            <span class="text-sm" v-html="load(cribadoTranslateReview?.travelerTextPositive, router?.query?.search)"></span>
         </p>
         <p v-if="cribadoTranslateReview?.travelerTextNegative" class="text-sm mt-2" >
             <img class="w-[13.3px] h-[13.3px] inline mr-2" src="/assets/icons/1.TH.EMOJI.SAD.svg" alt="">
-            <span class="text-sm" v-html="cribadoTranslateReview?.travelerTextNegative"></span>
+            <span class="text-sm" v-html="load(cribadoTranslateReview?.travelerTextNegative, router?.query?.search)"></span>
         </p>
     </div>
 </template>
@@ -33,8 +33,11 @@ import { inject, computed } from 'vue';
 import BaseRatingIcons from '@/components/BaseRatingIcons';
 
 //COMPOSABLES
+import { useHighlightSearch } from '@/composables/useHighlightSearch';
+const { searchQuery, load } = useHighlightSearch();
 
 //INJECT
+const router = inject('router');
 const reviewData = inject('reviewData');
 const languagesObject = inject('languagesObject');
 const cribadoTranslateReview = inject('cribadoTranslateReview');

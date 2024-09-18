@@ -9,10 +9,10 @@
             </div>
         </div>
     </div>
-    <div class="mt-4 text-end">
+    <div class="mt-4 flex justify-end">
         <button
             :disabled="disabledButtons"
-            class="text-xs font-medium hbtn-primary py-[12px] px-[8px]"
+            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] flex items-center h-[32px] p-[8px] h-[32px]"
             @click="copyText()"
         >
             <img
@@ -23,7 +23,7 @@
             Copiar
         </button>
         <button
-            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-2"
+            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-2 flex items-center h-[32px] p-[8px] h-[32px]"
             :disabled="disabledButtons || numbersResponsesGenerated >= maximumResponsesGenerated"
             @click="generateNewResponse"
         >

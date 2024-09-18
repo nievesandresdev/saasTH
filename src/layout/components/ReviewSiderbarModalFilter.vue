@@ -11,7 +11,7 @@
             <div class="space-y-4 p-4 w-full overflow-scroll overflow-x-hidden" style="max-height:27rem">
                 <div class="">
                     <label class="mb-2 text-base font-medium block htext-black-100">
-                        Estado de la reseña
+                        Estado de la reseña {{typeof formModalFilter.statusResponse }}
                     </label>
                     <BaseSelectField
                         v-model="formModalFilter.statusResponse"
@@ -20,6 +20,7 @@
                         :options="statusResponse"
                         mandatory
                         :error="false"
+                        focusedAlweys
                     />
                 </div>
                 <div class="">
@@ -33,6 +34,7 @@
                         :options="scoreRanges"
                         mandatory
                         :error="false"
+                        focusedAlweys
                     />
                 </div>
                 <div class="">
@@ -46,6 +48,7 @@
                         :options="languages"
                         mandatory
                         :error="false"
+                        focusedAlweys
                     />
                 </div>
                 <div class="">
@@ -217,6 +220,10 @@ watch(isOpenModelFilter, (valNew, valOld) => {
     }
 });
 
+watch(formModalFilter, (valNew, valOld) => {
+    getNumbersDistributionByFilters();
+}, { deep: true } );
+
 // COMPUTED
 
 const emptyformModalFilter = computed(() => {
@@ -255,13 +262,15 @@ function submitFilter () {
 }
 
 async function getNumbersDistributionByFilters () {
+    let fromDataMerge = Object.assign(formFilter, formModalFilter);
     let bodyRequest = {
-        ...formFilter,
+        ...fromDataMerge,
     }
     const response = await reviewStore.$getNumbersDistributionByFilters(bodyRequest);
     const { ok, data } = response;
     if (ok) {
         numbersFilters.value = data.summaryAllOtas;
+        console.log(numbersFilters.value, 'numbersFilters.value')
     }
 }
 
