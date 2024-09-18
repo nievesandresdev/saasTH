@@ -98,7 +98,7 @@
             :class="{ 
                 'hbtn-cta-disabled': !changes || !valid,
                 'hbtn-cta': changes && valid
-                    }"
+            }"
             @click="submit"
         >
             Guardar

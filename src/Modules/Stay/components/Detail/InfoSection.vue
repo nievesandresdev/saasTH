@@ -49,26 +49,26 @@
             <!-- hab number and ota reserve -->
             <div class="w-[362px]">
                 <div>
-                    <label class="text-sm font-medium mb-2 leading-3">Medio de la reserva</label>
-                    <BaseSelectField
-                        :icon_left="iconLeftDropdown"
-                        textLabel="Selecciona el medio de la reserva"
-                        :options="middle_optiones"
-                        v-model="form.middle_reservation"
-                        mandatory
-                        @change="update"
-                    />
-                </div>
-                <div class="mt-4">
+                    <label class="text-sm font-medium mb-2 leading-[110%]">Número de habitación</label>
                     <BaseTextField
                         prependInnerIcon="/assets/icons/1.TH.ROOM.svg"
-                        textLabel="Número de habitación"
                         placeholder="Añade el nº de habitación"
                         :customClasses="{
                             'hborder-gray-400':!form.room,
                         }"
                         v-model="form.room"
                         @blur:validate="update"
+                    />
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium mb-2 leading-[110%]">Medio de la reserva</label>
+                    <BaseSelectField
+                        textLabel="Elige el medio de la reserva"
+                        :icon_left="iconLeftDropdown"
+                        :options="middle_optiones"
+                        v-model="form.middle_reservation"
+                        mandatory
+                        @change="update"
                     />
                 </div>
             </div>

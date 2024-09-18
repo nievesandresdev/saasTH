@@ -18,6 +18,7 @@ import customizationRoutes from './customizationRoutes';
 import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 import reviewRoutes from './reviewRoutes'
 import comunicationRoutes from './comunication'
+import whatsapp from './test/whatsapp'
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
@@ -52,6 +53,7 @@ const routes = [
   ...customizationRoutes,
   ...reviewRoutes,
   ...legalTextGroupRoutes,
+  ...whatsapp,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ];
 

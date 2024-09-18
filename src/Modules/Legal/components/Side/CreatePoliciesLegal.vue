@@ -26,13 +26,14 @@
               v-model="form.title" 
               :placeholder="errors.title ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
               :error="errors.title" 
+              @input="handleInput"
             />
-            <div v-if="errors.title === 'Te has pasado el límite de caracteres'" class="flex mt-1 text-[#FF6666] justify-left">
+            <!-- <div v-if="errors.title === 'Te has pasado el límite de caracteres'" class="flex mt-1 text-[#FF6666] justify-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
               </svg>
               <small>{{ errors.title }}</small>
-            </div>
+            </div> -->
             <div class="text-sm text-right">{{ form.title.length }}/100</div>
           </section>
           <section class="mb-4">
@@ -85,12 +86,22 @@
         <button class="underline font-medium text-sm p-4" @click="handleClose">
           Cancelar
         </button>
-        <button
+        <!-- <button
           class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] text-sm"
           @click="submit"
           :disabled="errors.title || errors.description || errors.penalizationDetails"
         >
           Crear
+        </button> -->
+        <button
+            class="px-4 py-3 font-medium rounded-[6px] leading-[110%] text-sm"
+            :class="{ 
+                'hbtn-cta-disabled':  !form.title || !form.description,
+                'hbtn-cta': form.title && form.description
+            }"
+            @click="submit"
+        >
+            Guardar
         </button>
       </div>
     </div>
@@ -141,8 +152,8 @@ const form = reactive({
 });
 
 const errors = reactive({
-  title: true, // Inicialmente en true para mostrar el error
-  description: true, // Inicialmente en true para mostrar el error
+  title: false, // Inicialmente en true para mostrar el error
+  description: false, // Inicialmente en true para mostrar el error
   penalizationDetails: false // Inicialmente en false, solo si penalization es true se muestra
 });
 
@@ -159,6 +170,13 @@ router.beforeEach((to, from, next) => {
   }
 
 });
+
+const handleInput = (event) => {
+  if (event.target.value.length > 100) {
+    form.title = event.target.value.slice(0, 100); // Recorta el texto al límite de 100 caracteres
+    event.target.value = form.title;
+  }
+};
 
 const containerTop = ref(0);
 const ref_section_add = ref(null);
@@ -241,9 +259,9 @@ watch(() => form.penalizationDetails, (newVal) => {
 watch(() => form.penalization, () => {
   if (!form.penalization) {
       errors.penalizationDetails = false;
-  } else if (!form.penalizationDetails.trim()) {
+  } /* else if (!form.penalizationDetails.trim()) {
       errors.penalizationDetails = 'Es necesario llenar este campo';
-  }
+  } */
   changes.value = true;
 });
 
@@ -310,5 +328,11 @@ function resetForm() {
 
 .modal-fade-enter-to, .modal-fade-leave-from {
     opacity: 1;
+}
+
+.hbtn-cta-disabled{
+    background-color: #DADADA !important;
+    border-radius: 6px;
+    color:  #A0A0A0;
 }
 </style>

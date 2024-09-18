@@ -24,9 +24,11 @@
             <BaseTextField 
               v-model="form.title" 
               :placeholder="errors.title ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
-              :error="errors.title" 
+              :error="errors.title"
+              :maxLength="100" 
+              @input="handleInput"
             />
-            <div class="text-sm text-right">{{ form.title.length }}/50</div>
+            <div class="text-sm text-right">{{ form.title.length }}/100</div>
           </section>
           <section class="mb-4">
             <label class="text-sm font-medium mb-[6px] block">Descripción*</label>
@@ -138,6 +140,15 @@ onMounted(() => {
     initialFormState.value = { ...form };
 });
 
+const handleInput = (event) => {
+  if (event.target.value.length > 100) {
+    form.title = event.target.value.slice(0, 100); // Recorta el texto al límite de 100 caracteres
+    event.target.value = form.title; 
+  }
+};
+
+
+
 const changes = computed(() => {
     return JSON.stringify(form) !== JSON.stringify(initialFormState.value);
 });
@@ -193,13 +204,13 @@ const submit = () => {
 };
 
 const validateForm = () => {
-    errors.title = !form.title.trim() ? 'Es necesario llenar este campo' : (form.title.length > 50 ? 'Te has pasado el límite de caracteres' : false);
+    errors.title = !form.title.trim() ? 'Es necesario llenar este campo' : (form.title.length > 100 ? 'Te has pasado el límite de caracteres' : false);
     errors.description = !form.description.trim() ? 'Es necesario llenar este campo' : false;
     errors.penalizationDetails = (form.penalization && !form.penalizationDetails.trim()) ? 'Es necesario llenar este campo' : false;
 };
 
 // Watchers para detectar cambios en el formulario y validar en tiempo real
-watch(() => form.title, (newVal) => {
+/* watch(() => form.title, (newVal) => {
     if (newVal.trim()) {
         if (newVal.length <= 50) {
             errors.title = false;
@@ -209,7 +220,23 @@ watch(() => form.title, (newVal) => {
     } else {
         errors.title = 'Es necesario llenar este campo';
     }
+}); */
+
+watch(() => form.title, (newVal) => {
+  if (newVal.length > 100) {
+    form.title = form.title.slice(0, 100); // Recorta el texto al límite de 100 caracteres
+  }
+
+  if (newVal.trim()) {
+    errors.title = false;
+  } else {
+    errors.title = 'Es necesario llenar este campo';
+  }
+  changes.value = true;
 });
+
+
+
 
 watch(() => form.description, (newVal) => {
     if (newVal.trim()) {
