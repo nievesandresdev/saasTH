@@ -8,7 +8,7 @@
         size ? style.content : '',
         {
             'hborder-gray-400': !modelValue,
-            'hborder-black-100': modelValue,
+            'hborder-black-100': modelValue || focusedAlweys,
           },
       ]"
       @click="toggleOptions"
@@ -18,9 +18,9 @@
         class="flex-grow truncate text-label font-medium mr-2 hover-htext-green-600"
         :class="[
           {
-            'htext-gray-500': !error && !modelValue,
+            'htext-gray-500': !error && !modelValue && !focusedAlweys,
             'htext-alert-negative': error,
-            'htext-black-100': modelValue,
+            'htext-black-100': modelValue || focusedAlweys,
           },
           size ? style.text : ''
         ]"
@@ -150,6 +150,7 @@ export default {
       type: String,
       default: '', //opciones : top-auto
     },
+    focusedAlweys: Boolean
   },
   setup(props, { emit }) {
     const showOptions = ref(false);

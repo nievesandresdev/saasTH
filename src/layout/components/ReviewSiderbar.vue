@@ -61,13 +61,13 @@
                         :key="index"
                         class="px-4 py-[12px] h-[72px] border-b hborder-bottom-gray-400 relative cursor-pointer"
                         :class="{'selected-hover': idOtaParamRoute === review.dataFull.id, 'hover:bg-[#F1F1F1]': idOtaParamRoute != review.dataFull.id}"
-                        @click="$router.push({name: 'ReviewDetail', params: { ota: review.detail.otaOrigin.toLowerCase(), id: review.dataFull.id }})"
+                        @click="goReviewDetail(review)"
                     >
                         <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
                         <div class="flex justify-between items-center mb-[4px]">
                             <div class="flex items-center truncate-1">
                                 <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
-                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }} {{ idOtaParamRoute }}</h6>
+                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
                             </div>
                             <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
                         </div>
@@ -77,7 +77,7 @@
                                 <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
                                 <div
                                     class="rounded-full h-[20px] px-[8px] text-[10px] font-semibold w-[91px] text-white flex justify-between items-center"
-                                    :class="review.increasesAverageRating ? 'bg-green-600' : 'bg-[#FF6666]'"
+                                    :class="review.increasesAverageRating ? 'bg-[#16a34a]' : 'bg-[#FF6666]'"
                                 >
                                     Nota media
                                     <img class="w-[12px] h-[12px]" :src="`/assets/icons/1.TH.ARROW.${review.increasesAverageRating ? 'TOP' : 'BOTTOM'}.svg`" alt="1.TH.ARROW.TOP">
@@ -88,9 +88,9 @@
                     </div>
                     <div class="h-[72px] w-full flex justify-center items-center text-center">
                         <template v-if="loadingPagination">
-                        <BaseLoadingScroll />
+                            <BaseLoadingScroll />
                         </template>
-                        <template v-else>
+                        <template v-else-if="reviews.length >= reviewsData.length">
                             <p class="htext-gray-500 text-sm font-medium">No hay más reseñas</p>
                         </template>
                     </div>
@@ -162,13 +162,19 @@ const otasWithUrls = ref([]);
 const summaryReviewOtas = ref([]);
 const containerListRef = ref(null);
 
-const itemsPerPage = 12;
 const currentPage = ref(1);
 const paginatedItems = ref([]);
 const loadingPagination = ref(false);
 const loadingList = ref(false);
 
 // COMPUTED
+const itemsPerPage = computed(() => {
+    const containerElement = containerListRef.value;
+    const { clientHeight } = containerElement;
+    let totalPage = Math.ceil(clientHeight / 72);
+    // console.log(totalPage);
+    return totalPage;
+});
 const otaParamRoute = computed(() => {
     	return route?.currentRoute?.value?.params?.ota?.toUpperCase();
 });
@@ -176,7 +182,7 @@ const idOtaParamRoute = computed(() => {
     	return route?.currentRoute?.value?.params?.id;
 });
 
-const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage));
+const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage.value));
 
 const numbersFiltersApplied = computed(() => {
     let filters = [];
@@ -216,15 +222,15 @@ provide('reviewStore', reviewStore);
 // FUNCTIONS
 
 function paginate () {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
     let items = reviewsData.value.slice(start, end);
     items.forEach(item => {
         if (!paginatedItems.value.includes(item)) {
             paginatedItems.value.push(item);
         }
     });
-    console.log(paginatedItems.value, paginatedItems.value?.length, 'paginatedItems.value');
+    // console.log(paginatedItems.value, paginatedItems.value?.length, 'paginatedItems.value');
 }
 
 async function nextPage() {
@@ -287,7 +293,9 @@ async function getByOtas () {
     const response = await reviewStore.$getByOtas(params);
     const { ok, data } = response;
     if (ok) {
+        paginatedItems.value = [];
         reviewsData.value = data.reviews;
+        // console.log(reviewsData.value, reviewsData.value.length, 'reviewsData.value')
         paginate(); 
         if (reviewStore.otasWithUrls?.length <= 0 && reviewStore.otasWithUrls?.length != data.otasWithUrls.length) {
             otasWithUrls.value = data.otasWithUrls;
@@ -323,6 +331,15 @@ function onScroll () {
         }
     }
 }
+
+function goReviewDetail (review) {
+    let routeData = {name: 'ReviewDetail', params: { ota: review.detail.otaOrigin.toLowerCase(), id: review.dataFull.id }};
+    if (formFilter.search) {
+        Object.assign(routeData, { query: { search: formFilter.search } });
+    }
+    route.push(routeData);
+}
+
 </script>
 
 <style lang="scss">
