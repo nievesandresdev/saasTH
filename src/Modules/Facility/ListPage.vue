@@ -139,6 +139,7 @@
     // FUNCTIONS
 
     function loadMockup (path = '/') {
+        console.log('loadMockup', path);
         mockupStore.$setIframeUrl(`/instalaciones${path}`);
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
         mockupStore.$setLanguageTooltip(true)
@@ -187,10 +188,12 @@
 
     function resetPageData () {
         changePendingInForm.value = false;
-        mockupStore.$reloadIframe();
+        //mockupStore.$reloadIframe();
         loadMockup();
         loadFacilities();
         filter.value = null;
+
+        console.log('resetPageDataTEST');
     }
 
 
