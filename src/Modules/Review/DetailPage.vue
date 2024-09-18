@@ -24,7 +24,7 @@
                             <BaseSwichInput
                                 v-model="reviewData.isAttended"
                                 @change:value="changeStatusAttended()"
-                                colorDisabled="#FFC506"
+                                colorDisabled="bg-[#FFC506]"
                             />
                             <span class="font-semibold text-sm text-[#858181]">Atendida</span>
                         </div>
