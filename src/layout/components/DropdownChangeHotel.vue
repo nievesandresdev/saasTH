@@ -137,14 +137,13 @@
             <div class="p-4 hborder-top-gray-400">
                 <button
                     class="hbtn-tertiary text-sm htext-black-100 font-medium underline"
-                    @click="openModalInfoNewHotel"
+                    @click="modalInfoNewHotel = true"
                 >
                     ¿Quieres añadir otro alojamiento?
                 </button>
             </div>
         </div>
     </div>
-    <ModalInfoNewHotel ref="modalInfoNewHotelRef" />
 </template>
 
 <script setup>
@@ -157,7 +156,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 import BaseTextField from '@/components/Forms/BaseTextField';
-import ModalInfoNewHotel from './ModalInfoNewHotel';
 
 const props = defineProps({
     widthMenu: String,
@@ -166,10 +164,10 @@ const props = defineProps({
 
 const hotelStore = inject('hotelStore');
 const onHoverMainMenu = inject('onHoverMainMenu');
+const modalInfoNewHotel = inject('modalInfoNewHotel');
 
 const { hotelData, hotelsAvailables } = hotelStore;
 
-const modalInfoNewHotelRef = ref(null);
 const dropdownOpenn = ref(false);
 const dropdownSearchOpen = ref(false);
 const hotelsFoundInSearch = ref([]);
@@ -246,10 +244,6 @@ function handleClickOutsideDropDownSearch (event) {
 async function changeHotel (hotel) {
     await hotelStore.changeHotel(hotel);
     router.go();
-}
-
-function openModalInfoNewHotel () {
-    modalInfoNewHotelRef.value.open();
 }
 
 
