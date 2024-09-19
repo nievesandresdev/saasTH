@@ -1,5 +1,5 @@
 <template>
-  <nav class="h-full w-full bg-white shadow-menu">
+  <nav class="h-full w-full bg-white shadow-menu overflow-y-auto">
       <div class="py-3">
           <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6">WebApp</p>
       </div>

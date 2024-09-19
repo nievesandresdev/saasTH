@@ -18,7 +18,7 @@
             </Tooltip>
         </div>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
-            <p class="text-sm font-semibold">Mostrar al huésped</p>
+            <p class="text-sm font-semibold">Mostrar en la WebApp</p>
             <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0">
                 <input
                     :checked="defaultToggle"
@@ -44,7 +44,7 @@
                 </template>
                 <template v-slot:content>
                     <p class="text-sm">
-                        Con el interruptor "Mostrar al huésped" controlas la visibilidad de cierta información para el huésped.<br><br>
+                        Con el interruptor "Mostrar en la WebApp" controlas la visibilidad de cierta información para el huésped.<br><br>
                             Mientras se encuentre apagado, tus huéspedes dejarán de ver el contenido de esta sección en tu WebApp.
                     </p>
                 </template>

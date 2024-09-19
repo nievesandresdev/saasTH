@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <!-- General Configuration Section -->
-                <div>
+                <div class="">
                     <div class="flex justify-start items-center m-4 pt-2">
                         <span class="text-[18px] font-medium mb-4">
                             Administración general
@@ -135,9 +135,23 @@
                     
                     <div class="grid fixed-grid w-1/2">
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
+                            <router-link :to="{ path: '/comunicaciones' }" class="block p-3">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/webapp/Comunicaciones.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Comunicaciones</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
+                                    <p class="text-sm">Configura los medios y mensajes para comunicarte con tus huéspedes.</p>
+                                </div>
+                            </router-link>
+                        </div>
+
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
                             <router-link :to="{ path: '/personalizacion' }" class="block p-3">
                                 <div class="flex items-center ">
-                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Personalización.png" alt="icon" class="w-8 h-8">
+                                    <img src="/assets/icons/webapp/Personalización.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Personalización</h3>
                                     </div>
@@ -151,7 +165,7 @@
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
                             <router-link :to="{ path: '/legal/general' }" class="block p-3">
                                 <div class="flex items-center ">
-                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Textos legales.png" alt="icon" class="w-8 h-8">
+                                    <img src="/assets/icons/webapp/1.TH.Icon.Textos legales.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Textos legales</h3>
                                     </div>
