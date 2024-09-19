@@ -101,13 +101,13 @@
                     </div>
                 </div>
             </div>
-            <div class="p-4 border-t hborder-gray-400 flex justify-between">
-                <a 
+            <div class="p-4 border-t hborder-gray-400 flex justify-end">
+                <!-- <a 
                     href="javascript:void(0)"
                     class="underline font-medium text-xs my-auto"
                 >
                     Quitar filtros
-                </a>
+                </a> -->
                 <button 
                     class="hbtn-primary font-medium text-sm h-10"
                     style="width:126px;"
