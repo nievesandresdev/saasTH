@@ -206,7 +206,7 @@ provide('emptyFilters', emptyFilters);
 // FUNCTIONS
 
 function mergeDataFormInUrlMockup (stringQuery, dataForm) {
-    if (dataForm.visibility === 'recommendated') {
+    if (dataForm.visility === 'recommendated') {
         stringQuery += '&featured=true';
     }
     Object.keys(dataForm).forEach(key => {
@@ -229,10 +229,10 @@ function loadMockup (experienceSlug = null) {
         mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
     } else {
         let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
-        query = `mobile=1&city=${formFilter.city}`;
+        query = 'mobile=1';
 
         query = mergeDataFormInUrlMockup(query, dataForm);
-        console.log(query, 'query');
+        console.log(query, 'query')
         mockupStore.$setIframeUrl(`/experiencias`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');

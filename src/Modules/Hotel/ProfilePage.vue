@@ -391,9 +391,9 @@
     });
 
     const typeLodging = [
-        { value: "Hotel", label: "Hotel", disabled: false },
+        { value: "hotel", label: "Hotel", disabled: false },
         { value: "hostal", label: "Hostal", disabled: false },
-        { value: "Pensión", label: "Pensión", disabled: false },
+        { value: "pensión", label: "Pensión", disabled: false },
         {
             value: "ca",
             label: "Complejo de apartamentos",
