@@ -6,7 +6,7 @@
                 v-if="!hotelStore.hotelData.show_experiences"
                 class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
             >
-                La sección <span class="font-semibold">Experiencias</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar en la WebApp" para hacerla visible.
+                La sección <span class="font-semibold">Experiencias</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
             </div>
             <div>
                 <div class="pt-6">
@@ -205,12 +205,34 @@ provide('emptyFilters', emptyFilters);
 
 // FUNCTIONS
 
+function mergeDataFormInUrlMockup (stringQuery, dataForm) {
+    if (dataForm.visibility === 'recommendated') {
+        stringQuery += '&featured=true';
+    }
+    Object.keys(dataForm).forEach(key => {
+        let value = dataForm[key];
+        
+        if (Array.isArray(value)) {
+            value.forEach(item => {
+                stringQuery += `&${key}=${encodeURIComponent(item)}`;
+            });
+        } else if (value !== undefined && value !== null && value !== '') {
+            stringQuery += `&${key}=${encodeURIComponent(value)}`;
+        }
+    });
+    return stringQuery;
+}
+
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
         mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
     } else {
+        let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
         query = `mobile=1&city=${formFilter.city}`;
+
+        query = mergeDataFormInUrlMockup(query, dataForm);
+        console.log(query, 'query');
         mockupStore.$setIframeUrl(`/experiencias`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
@@ -288,7 +310,7 @@ function loadQueryInFormFilter () {
             }
         }
     }
-    console.log(formFilter, 'filtersSelected');
+    // console.log(formFilter, 'filtersSelected');
 }
 
 function validValueQuery (field, value) {
