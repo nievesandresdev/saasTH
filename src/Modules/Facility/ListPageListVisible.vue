@@ -20,7 +20,7 @@
                 @dragstart="handlerDragStart(index, $event)"
                 @dragend="handlerDragEnd"
                 ref="draggableCard"
-                class="text-center rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100 relative"
+                class="text-center rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100"
                 :class="{'shadow-draginng border border-gray-300' : item.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
@@ -146,6 +146,7 @@ async function updateVisible (facility) {
     }
     const data = {visible: facility.select, facility_hoster_id: facility.id}
     const response = await facilityStore.$updateVisible(data)
+    mockupStore.$reloadIframe();
     emit('update:reloadItems')
 }
 async function updateOrder () {
