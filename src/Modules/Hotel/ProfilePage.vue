@@ -84,6 +84,7 @@
                     />
                 </div>
             </section>
+            <!-- phones, email and location -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
@@ -263,7 +264,7 @@
                 class="text-base leading-[110%] font-medium underline"
                 :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
                 :disabled="!isChanged"
-                @click="loadHotel"
+                @click="cancelChanges"
             >
                 Cancelar
             </button>
@@ -392,7 +393,7 @@
     const typeLodging = [
         { value: "Hotel", label: "Hotel", disabled: false },
         { value: "hostal", label: "Hostal", disabled: false },
-        { value: "pension", label: "Pensión", disabled: false },
+        { value: "Pensión", label: "Pensión", disabled: false },
         {
             value: "ca",
             label: "Complejo de apartamentos",
@@ -506,6 +507,10 @@
         mockupStore.$setIframeUrl('/sobre-nosotros')
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
         mockupStore.$setLanguageTooltip(true)
+    }
+
+    function cancelChanges(){
+        window.location.reload();
     }
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 

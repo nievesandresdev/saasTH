@@ -55,6 +55,7 @@ const emit = defineEmits(['update:reloadItems', 'click:editFacility']);
 
 // DATA
 const selectedCard = ref(null);
+const mockupStore = inject('mockupStore');
 //
 const hoverItem = ref(null);
 
@@ -76,6 +77,7 @@ async function updateVisible (facility) {
     const response = await facilityStore.$updateVisible(data)
     // console.log(response, 'response')
     emit('update:reloadItems')
+    mockupStore.$reloadIframe();
 }
 
 
