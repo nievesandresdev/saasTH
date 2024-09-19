@@ -20,7 +20,7 @@
                     </BaseTooltipResponsive>
                 </div>
                 <div class="flex items-center">
-                    <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+                    <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
                     <ToggleShowProfile
                         :showProfile="form.show_profile"
                         @updateShowHotel="updateShowHotel"

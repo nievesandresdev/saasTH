@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+        <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
             <BaseSwichInput
                 id="swich-visible-type-place"
                 v-model="visibilityTypePlace"
@@ -17,7 +17,7 @@
                 </template>
                 <template #content>
                 <p class="text-sm leading-[150%] font-normal">
-                    Con el interruptor "Mostrar al huésped" puedes controlar la visibilidad de la información de esta sección.
+                    Con el interruptor "Mostrar en la WebApp" puedes controlar la visibilidad de la información de esta sección.
                 </p>
                 <p class="mt-2 text-sm leading-[150%] font-normal">
                     Si está apagado, tus huéspedes no podrán ver este contenido en tu WebApp.

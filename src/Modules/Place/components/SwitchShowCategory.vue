@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+        <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
     
             <BaseSwichInput
                 id="swich-visible-category"
