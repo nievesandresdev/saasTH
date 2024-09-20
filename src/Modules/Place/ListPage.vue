@@ -317,7 +317,7 @@ function filterNonNullAndNonEmpty(obj) {
             }
         }
     })
-    return filteredObject
+    return filteredObject;
 }
 function loadQueryInFormFilter () {
     for (const [key, value] of Object.entries(queryRouter.value || {})) {
@@ -400,12 +400,37 @@ function edit (payload) {
     });
 }
 
+
+function mergeDataFormInUrlMockup (stringQuery, dataForm) {
+    if (dataForm.visility === 'recommendated') {
+        stringQuery += '&featured=true';
+    }
+    Object.keys(dataForm).forEach(key => {
+        let value = dataForm[key];
+        
+        if (Array.isArray(value)) {
+            value.forEach(item => {
+                stringQuery += `&${key}=${encodeURIComponent(item)}`;
+            });
+        } else if (value !== undefined && value !== null && value !== '') {
+            if (!stringQuery.includes(key) && !['selected_place', 'selected_subplace'].includes(key)){
+                stringQuery += `&${key}=${encodeURIComponent(value)}`;
+            }
+        }
+    });
+    return stringQuery;
+}
+
 function loadMockup (placeId = null) {
     let query = null;
     if (placeId) {
         mockupStore.$setIframeUrl(`/places/${placeId}`);
     } else {
-        query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}&city=${formFilter.current_city}&featured=${formFilter.featured}`;
+        let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
+        // query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
+        query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
+        query = mergeDataFormInUrlMockup(query, dataForm);
+        console.log(query, 'loadMockup');
         mockupStore.$setIframeUrl(`/places`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
