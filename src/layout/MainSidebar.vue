@@ -231,7 +231,7 @@ const menu_links = ref([
       {
         title: 'Estancias',
         icon: '1.TH.ESTANCIAS.MM',
-        include: ['StayHomePage'],
+        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
         url: '/estancias',
       },
       {
