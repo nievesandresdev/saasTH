@@ -2,88 +2,79 @@
     <div class="h-screen px-[24px] bg-[#FAFAFA] overflow-hidden">
         <HeadLegal />
         <TabLegal />
-
-        <SectionConfig 
-            :widht="'67%'" 
-            :marginBottom="'40px'" 
-            :xl3Class="'3xl:w-[50%]'"
-        >
-            <template #title>
-                <div class="flex flex-col mb-4 gap-2">
-                    <span class="font-semibold text-base">General</span>
-                    <span class="text-sm font-normal mb-2">Información general que se utilizará para redactar los distintos textos legales.</span>
-                </div>
-            </template>
-            <template #content>
-                <div class="w-full">
-                    <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">Razón social*</label>
+        <div class="w-[720px] 3xl:w-[1040px] py-6 px-4 rounded-[10px] shadow-hoster bg-white mb-10">
+            <div class="flex flex-col mb-4 gap-2">
+                <span class="font-semibold text-base">General</span>
+                <span class="text-sm font-normal mb-2">Información general que se utilizará para redactar los distintos textos legales.</span>
+            </div>
+            <div class="w-full">
+                <section class="mb-4">
+                    <label class="text-sm font-medium mb-[6px] block">Razón social*</label>
+                    <BaseTextField 
+                        v-model="form.name" 
+                        :placeholder="form.nameError && submitted ? 'Debes introducir la razón social' : 'Ejemplo: Tecnologías Innovadoras S.A.'" 
+                        :error="form.nameError && submitted" 
+                    />
+                </section>
+                <section class="mb-4">
+                    <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal*</label>
+                    <input
+                        v-model="form.address"
+                        id="fiscal_address"
+                        type="text"
+                        :placeholder="form.addressError && submitted ? 'Debes introducir el domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
+                        class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border"
+                        :class="form.addressError && submitted ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
+                    >
+                </section>
+                <section class="mb-4">
+                    <label class="text-sm font-medium mb-[6px] block">NIF*</label>
+                    <BaseTextField 
+                        v-model="form.nif" 
+                        :placeholder="form.nifError && submitted ? 'Debes introducir NIF' : 'Ejemplo: A87654321'" 
+                        :error="form.nifError && submitted" 
+                    />
+                </section>
+                <section class="mb-6">
+                    <label class="text-sm font-medium mb-[6px] block">Correo electrónico de la empresa*</label>
+                    <BaseTextField 
+                        v-model="form.email" 
+                        :placeholder="form.emailError && submitted ? 'Introduce el correo electrónico de la empresa' : 'Ejemplo: direccion@dominio.com'" 
+                        :error="form.emailError && submitted || !isEmailValid"
+                    />
+                    <div v-if="!isEmailValid" class="flex mt-1 text-[#FF6666] justify-left">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                        <small>El formato de correo electrónico introducido es incorrecto</small>
+                    </div>
+                </section>
+                <section class="flex justify-between items-center">
+                    <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
+                    <div class="flex">
+                        <span class="text-sm font-semibold mr-1">{{ form.protection ? 'Si' : 'No' }}</span>
+                        <BaseSwitchInput v-model="form.protection" id="dataProtectionSwitch" />
+                    </div>
+                </section>
+                <transition name="fade">
+                    <section v-if="form.protection" class="mb-6">
+                        <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
                         <BaseTextField 
-                            v-model="form.name" 
-                            :placeholder="form.nameError ? 'Debes introducir la razón social' : 'Ejemplo: Tecnologías Innovadoras S.A.'" 
-                            :error="form.nameError" 
+                            v-model="form.email_protection" 
+                            :placeholder="form.emailProtectionError && submitted ? 'Introduce el correo electrónico del delegado' : 'Ejemplo: direccion2@dominio.com'" 
+                            :error="form.emailProtectionError && submitted || !isEmailProtectionValid" 
+                            ref="emailProtectionInput"
                         />
-                    </section>
-                    <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">Domicilio fiscal*</label>
-                        <input
-                            v-model="form.address"
-                            id="fiscal_address"
-                            type="text"
-                            :placeholder="form.addressError ? 'Debes introducir el domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
-                            class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border"
-                            :class="form.addressError ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
-                        >
-                    </section>
-                    <section class="mb-4">
-                        <label class="text-sm font-medium mb-[6px] block">NIF*</label>
-                        <BaseTextField 
-                            v-model="form.nif" 
-                            :placeholder="form.nifError ? 'Debes introducir NIF' : 'Ejemplo: A87654321'" 
-                            :error="form.nifError" 
-                        />
-                    </section>
-                    <section class="mb-6">
-                        <label class="text-sm font-medium mb-[6px] block">Correo electrónico de la empresa*</label>
-                        <BaseTextField 
-                            v-model="form.email" 
-                            :placeholder="form.emailError ? 'Introduce el correo electrónico de la empresa' : 'Ejemplo: direccion@dominio.com'" 
-                            :error="form.emailError"
-                        />
-                        <div v-if="!isEmailValid && submitted" class="flex mt-1 text-[#FF6666] justify-left">
+                        <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <small>El formato de correo electrónico introducido es incorrecto</small>
                         </div>
                     </section>
-                    <section class="flex justify-between items-center mb-4">
-                        <label class="text-sm font-semibold">¿Cuentan con delegado de protección de datos?</label>
-                        <div class="flex">
-                            <span class="text-sm font-semibold mr-1">{{ form.protection ? 'Si' : 'No' }}</span>
-                            <BaseSwitchInput v-model="form.protection" id="dataProtectionSwitch" />
-                        </div>
-                    </section>
-                    <transition name="fade">
-                        <section v-if="form.protection" class="mb-6">
-                            <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
-                            <BaseTextField 
-                                v-model="form.email_protection" 
-                                :placeholder="form.emailProtectionError ? 'Introduce el correo electrónico del delegado' : 'Ejemplo: direccion2@dominio.com'" 
-                                :error="form.emailProtectionError" 
-                                ref="emailProtectionInput"
-                            />
-                            <div v-if="!isEmailProtectionValid && submitted" class="flex mt-1 text-[#FF6666] justify-left">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                </svg>
-                                <small>El formato de correo electrónico introducido es incorrecto</small>
-                            </div>
-                        </section>
-                    </transition>
-                </div>
-            </template>
-        </SectionConfig>
+                </transition>
+            </div>
+        </div>
     </div>
     <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between z-10">
         <button
@@ -172,8 +163,10 @@ const getData = async() => {
 watch([() => form.name, () => form.address, () => form.nif, () => form.email, () => form.email_protection, () => form.protection], validateForm);
 
 function validateForm() {
-    if (!submitted.value) return; // Si no se ha intentado enviar, no mostrar errores
-
+    submitted.value = false;
+    console.log('test validateForm')
+    // if (!submitted.value) return; // Si no se ha intentado enviar, no mostrar errores
+    console.log('test validateForm 2')
     // Validación independiente para el email principal
     isEmailValid.value = validateEmail(form.email);
     form.emailError = !form.email.trim() || !isEmailValid.value;
@@ -207,13 +200,18 @@ function cancelChange() {
 }
 
 async function submit() {
-    submitted.value = true;  // Activar las validaciones
+    if(!changes.value || !valid.value){
+        submitted.value = true;
+        return;
+    }else{
+        submitted.value = false;
+    }
     validateForm();  // Validar el formulario
 
-    if (!valid.value) {
-        /* toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right'); */
-        return;
-    } 
+    // if (!valid.value) {
+    //     /* toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right'); */
+    //     return;
+    // } 
 
     const response = await storeGeneralLegal(form);
 

@@ -28,9 +28,7 @@
           }"
           @click="showPolicy(policy)"
         >
-        <div>
-          <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 75) }}</h3>
-        </div>
+        <p class="text-base font-medium leading-[140%] h-[66px] mb-4 truncate-3">{{ policy.title }}</p>
         <div class="flex justify-between items-start mt-auto">
            
             <div class="flex justify-start gap-4">
@@ -153,9 +151,9 @@ const closeModalEditPolicies = () => {
   selectedPolicyId.value = null;
 };
 
-function truncateText(text, length) {
-  return text.length > length ? `${text.substr(0, length)}...` : text;
-}
+// function truncateText(text, length) {
+//   return text.length > length ? `${text.substr(0, length)}...` : text;
+// }
 
 const openModalCreatePolicies = () => {
   modalCreatePolicies.value = true;
@@ -166,6 +164,7 @@ const openModalCreatePolicies = () => {
 };
 
 const closeModalCreatePolicies = () => {
+  console.log('test closeModalCreatePolicies')
   modalCreatePolicies.value = false;
 };
 
