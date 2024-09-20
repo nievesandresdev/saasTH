@@ -99,11 +99,17 @@
                 <div class="mt-4">
                   <label class="text-sm font-medium">Teléfono móvil</label>
                     <div class="flex rounded">
-                        <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px] border-solid  border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
+                        <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px] border-solid  border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
                             <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
+                        </select> -->
+                        <select v-model="form.prefix"
+                          :class="{'border-red-600': errorPrefix, '': !errorPrefix}" 
+                          class="bg-white w-1/4 rounded-l-lg border border-solid border-gray-300 pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
+                          style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
+                          <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                         </select>
                             <input type="text"
-                                placeholder="Número de teléfono"
+                                placeholder="Teléfono de contacto"
                                 class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
                                 :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
                                 v-model="form.phone"
@@ -124,7 +130,7 @@
                             v-model="form.email"
                             type="email"
                             class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
-                            placeholder="Correo con el que iniciara sesión"
+                            placeholder="Correo con el que iniciará sesión"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
