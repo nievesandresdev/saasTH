@@ -70,6 +70,7 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
+        mockupStore.$setIframeUrl('/');
         mockupStore.$reloadIframe();
     }
 </script>
