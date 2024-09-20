@@ -231,7 +231,7 @@ const menu_links = ref([
       {
         title: 'Estancias',
         icon: '1.TH.ESTANCIAS.MM',
-        include: ['StayHomePage'],
+        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
         url: '/estancias',
       },
       {
@@ -356,7 +356,7 @@ const displayNotification = (title, text, route, timeout) => {
     }, timeout);
 }
 onMounted(async() => {
-    hotelStore.loadHotelsAvailables();
+    hotelStore.loadHotelsAvailables(true);
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
     conuntReviewsPending.value = await reviewStore.$countReviewsPending();

@@ -34,7 +34,9 @@
                         alt="photo default "
                     >
                 </div>
-                <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4">{{ hotelData.name }}</h5>
+                <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4 relative">
+                    {{ hotelData.name }}
+                </h5>
                 <div class="w-full flex items-center justify-center">
                     <p class="text-xs font-semibold htext-gray-500 mt-[4px] capitalize">
                         {{ $formatTypeLodging(hotelData.type) }}
@@ -44,7 +46,7 @@
                     </p>
                 </div>
             </div>
-            <div v-if="hotelStore.hotelsAvailables?.length  > 1" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
+            <div v-if="hotelStore.hotelsAvailables?.length" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
                 <BaseTextField
                     v-model="search"
                     prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
@@ -77,7 +79,7 @@
                                 <span class="text-sm font-medium htext-black-100 relative truncate-1">
                                     {{ truncateNameHotelLong(hotel.name, 25) }}
                                     <div
-                                        v-if="hotel.with_notification"
+                                        v-if="hotel.with_notificartion"
                                         class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                     />
                                 </span>
@@ -97,7 +99,7 @@
                     </template>
                 </ul>
             </div>
-            <div v-if="hotelStore.hotelsAvailables?.length  > 1" class="mt-[12px]">
+            <div v-if="hotelStore.hotelsAvailables?.length" class="mt-[12px]">
                 <div id="container-search-title" class="px-4 pb-[8px] bg-white">
                     <h6 class="text-sm font-semibold htext-black-100">Cambiar de alojamiento</h6>
                 </div>
@@ -131,7 +133,7 @@
                             <span class="text-sm font-medium htext-black-100 relative truncate-1">
                                 {{ truncateNameHotelLong(hotel.name, 25) }}
                                 <div
-                                    v-if="hotel.with_notification"
+                                    v-if="hotel.with_notificartion"
                                     class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                 />
                             </span>
@@ -202,9 +204,12 @@ onMounted(() => {
 });
 
 watch(search, (newVal) => {
-    // if (newVal) {
+    if (newVal) {
         filterHolter();
-    // }
+    }else{
+        dropdownSearchOpen.value = false;
+        hotelsFoundInSearch.value = []; 
+    }
 });
 
 
@@ -237,7 +242,7 @@ function filterHolter () {
     hotelsFoundInSearch.value = hotelStore.hotelsAvailables.filter(hotel =>
             hotel.name.toLowerCase().includes(term) ||
             hotel.type.toLowerCase().includes(term) ||
-            hotel.zone.toLowerCase().includes(term)
+            hotel?.zone?.toLowerCase().includes(term)
     );
 }
 
