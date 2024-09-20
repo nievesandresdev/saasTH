@@ -10,9 +10,11 @@ body{
 *> :not(i){
   font-family: 'Montserrat', sans-serif;
 }
-p,a{
+p,a,h1,h2,h3,h4,h5,h6,span,button,label{
     font-family: 'Montserrat', sans-serif !important;
+    color:#333;
 }
+
 /* Eliminar el anillo (outline) predeterminado en todos los elementos de entrada al enfocar */
 input:focus,
 textarea:focus,
@@ -25,6 +27,10 @@ button:focus {
 
 button:focus {
   border-width: 0;
+}
+
+[type='checkbox']:checked {
+  background-color: #34a98f !important;
 }
 
 .icon-green {
@@ -45,7 +51,7 @@ button:focus {
 }
 
 .icon-white{
-  filter: grayscale(100%) invert(100%) saturate(100%);
+  filter: brightness(0) invert(1);
 }
 
 .icon-orange{
@@ -69,3 +75,116 @@ button:focus {
   overflow: hidden; /* Oculta el texto que sobrepasa el ancho del contenedor */
   text-overflow: ellipsis; /* Agrega los tres puntos al final del texto truncado */
 }
+
+.shadow-hoster{
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+}
+
+:root {
+  --scrollbar-bg: #F3F3F3;
+  --scrollbar-thumb: #A0A0A0;
+  --scrollbar-thumb-radius: 22.5px;
+  --scrollbar-width: 12px;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-thumb-radius);
+  border: 3px solid var(--scrollbar-bg);
+}
+
+.no-scrollbar::-webkit-scrollbar{
+  display: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  background-color: transparent;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* custom toast */
+.warning-toast {
+  background-color: #FFD453; /* Color de fondo */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 8px; 
+  width: auto !important; 
+  min-width: 0;
+  min-height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* custom toast error */
+.error-toast {
+  background-color: #FF453A; /* Color de fondo */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 8px; 
+  width: auto !important; 
+  min-width: 0;
+  min-height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Estilos para el cuerpo del toast */
+.warning-toast-body {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 110%;
+  color:#333;
+  white-space: nowrap; 
+}
+
+.position-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* [type='checkbox']:checked {
+  background-color: #34a98f !important;
+}
+[type='checkbox']:focus {
+outline: 2px solid transparent;
+--tw-ring-color: #ffffff00;
+}
+
+[type='checkbox']:focus, [type='checkbox']:hover {
+background-color: #EBF9F0;
+} */
+
+/*clase para vue-quill editor */
+.container-text-quill {
+  list-style-type: disc;
+}
+
+.container-text-quill ul,
+.container-text-quill ol {
+  list-style: initial; /* Asegura que los estilos de lista iniciales se mantengan */
+  padding-left:  32px; /* Añade espacio a la izquierda para una mejor visualización */
+}
+
+.container-text-quill ul {
+  list-style-type: disc; /* Para listas no ordenadas, utiliza bullets */
+}
+
+.container-text-quill ol {
+  list-style-type: decimal; /* Para listas ordenadas, utiliza números */
+}
+
+/*FIN clase para vue-quill editor */

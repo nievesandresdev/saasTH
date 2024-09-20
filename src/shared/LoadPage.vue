@@ -1,7 +1,7 @@
 <template>
     <!-- load page -->
-    <div class="hbg-white-100 flex flex-col fixed h-screen w-screen left-0 top-0 z-[6000]">
-        <div class="spinner-container mx-auto my-auto">
+    <div class="hbg-white-100 flex flex-col fixed h-screen w-screen left-0 top-0 z-[1000]">
+        <div class="spinner-container mx-auto mt-32 mb-auto">
             <svg class="spinner" viewBox="0 0 50 50">
                 <defs>
                     <linearGradient id="spinnerGradient" x1="100%" y1="0%" x2="0%" y2="0%">
@@ -12,10 +12,10 @@
                 </defs>
                 <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
             </svg>
-            <img class="icon w-14 sp:w-[81px] h-14 sp:h-[81px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
+            <img class="icon w-[86px] h-[86px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
         </div>
         <p class="font-medium text-[24px] text-center mt-10">{{ message }}</p>
-        <!-- <img class="w-[130px] sp:w-[216px] h-10 mt-[114px] sp:mt-[225px] mx-auto mb-auto" src="/assets/icons/1.TH.logo.full.svg" alt=""> -->
+        <img class="w-60 absolute bottom-14 left-0 right-0 z-10 mx-auto" src="/assets/img/hoster/th_logo.png" alt="">
     </div>
 </template>
 <script setup>
@@ -40,21 +40,6 @@
     // await nextTick();
     // animateSpinner();
   });
-
-
-  // let offst = 0;  // Inicializa en 0
-  // function animateSpinner() {
-  //   offst += 5;  // Incrementa en lugar de decrementar
-  //   const maxOffset = 125.6;  // Longitud de la circunferencia
-  //   if (offst >= maxOffset) {
-  //     offst = offset % maxOffset;
-  //   }
-  //   if (circle.value) {  // Verificar si circle.value es null
-  //     const actualOffset = maxOffset - offst;  // Invertir dirección
-  //     circle.value.setAttribute('stroke-dashoffset', actualOffset);
-  //   }
-  //   requestAnimationFrame(animateSpinner);
-  // }
 
 </script>
 
@@ -98,7 +83,7 @@ circle {
 }
 .icon {
   position: absolute;
-  top: 100px; /* Padding + spacing */
+  top: 90px; /* Padding + spacing */
   left: 100px; /* Padding + spacing */
   z-index: 2;
 }

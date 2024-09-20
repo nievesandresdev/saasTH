@@ -1,0 +1,42 @@
+<template>
+    <div class="px-6">
+        <div class="border-b border-[#BFBFBF] py-5">
+            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ authStore.$currentHotelName }}</h1>
+        </div>
+        <div class="mt-6">
+            <CustomerExperience />
+            <HomeFeedback />
+        </div>
+    </div>
+    
+</template>
+<script setup>
+import { onMounted,computed } from 'vue'
+import { useToastAlert } from '@/composables/useToastAlert'
+import { useMockupStore } from '@/stores/modules/mockup'
+import { useAuthStore } from '@/stores/modules/auth/login';
+import CustomerExperience from './components/CustomerExperience.vue'
+import HomeFeedback from './components/HomeFeedback.vue'
+
+
+const mockupStore = useMockupStore();
+const authStore = useAuthStore();
+
+const toast = useToastAlert();
+
+//computed current_hotel
+const current_hotel = computed(() => authStore.current_hotel?.name)
+
+onMounted(()=>{
+    mockupStore.$setIframeUrl('')
+    // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    mockupStore.$setLanguageTooltip(true)
+})
+
+/* function defineMockupData() {
+    mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
+    mockupStore.$setInfo1('Guarda', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    toast.warningToast('texto','top-right')
+} */
+
+</script>

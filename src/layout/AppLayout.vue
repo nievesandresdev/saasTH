@@ -1,34 +1,99 @@
 <template>
+    <SuscriptionBanner v-if="showSuscriptionBanner" />
+    <!-- <div class="px-3.5 md:px-6 h-10 w-full hbg-green-600 flex justify-between items-center">
+d    dd
+    </div> -->
     <div 
-        id="main-container"
-         class="h-screen flex"
+        class="flex" id="main-container"
+        :class="showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'"
     >
-        <!-- hole for main side -->
-        <div class="w-16 flex-shrink-0 bg-red-700 h-full"></div>
-        <!-- hole for side section -->
-        <div class="w-[236px] flex-shrink-0 bg-red-700 h-full"></div>
-        <!-- main side -->
-        <aside class="h-screen flex-shrink-0 bg-red-100 fixed top-0 left-0 z-[500] flex">
-            <div class="group px-3 py-2">
-                <div class="flex flex-shrink-0 p-2">
-                    <img class="w-6 h-8" src="/assets/icons/1.TH.logo.svg" alt="">
-                    <div class="w-0 group-hover:w-[188px] overflow-hidden group-hover:pl-4 flex items-center">
-                        <p class="text-lg ml-2">hotel michos</p>
-                        <img class="w-3 h-3 ml-auto" src="/assets/icons/1.TH.I.dropdown.svg" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="w-[236px] flex-shrink-0">
-                <SettingsLayout />
+        <!-- hole for collapse main sidebar -->
+        <div v-if="!displayedMenu" class="w-16 flex-shrink-0 h-full"></div>
+        <!-- hole for left sidebar section -->
+        <div class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`"></div>
+
+        <!-- container side left -->
+        <!-- para el menu estado desplayed se posicion sticky -->
+        <aside 
+            :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[2000] flex ${showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
+        >
+            <MainSidebar @openmodalHelp="openModalHelp" />
+            <!-- container dinamic side left -->
+            <div v-if="currentLeftSidebar" class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`">
+                <DinamicLeftSidebar :sidebarName="currentLeftSidebar"/>
             </div>
         </aside>
-        <div id="main-content" class="overflow-y-auto bg-gray-500">
+
+        <!-- central container -->
+        <div id="main-content" class="overflow-y-auto flex-grow h-full bg-[#FAFAFA]">
+            <DinamicOverContent :headerName="componentOverContent"/>
             <router-view></router-view>
+            <!-- <LoadPage v-if="activeRequests > 0" /> -->
         </div>
+
+        <!-- side right -->
+        <aside v-if="currentRightSidebar" class="h-screen">
+            <DinamicRightSidebar :sidebarName="currentRightSidebar"/>
+        </aside>
     </div>
-  </template>
-  <script setup>
-  import SettingsLayout from '@/layout/Settings/SettingsLayout.vue'
-  
-  </script>
+    <NotifyPanel />
+    <ModalHelp ref="modalHelpRef"/>
+    <SessionModal />
+    <ModalInfoNewHotel />
+</template>
+<script setup>
+import { computed, ref, provide } from 'vue';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
+
+import ModalHelp from '../layout/components/ModalHelp.vue'
+import ModalInfoNewHotel from './components/ModalInfoNewHotel.vue';
+import SessionModal from './components/SessionModal.vue'
+import DinamicLeftSidebar from './DinamicLeftSidebar.vue';
+import DinamicRightSidebar from './DinamicRightSidebar.vue';
+import DinamicOverContent from './DinamicOverContent.vue';
+import MainSidebar from './MainSidebar.vue';
+import SuscriptionBanner from './SuscriptionBanner.vue';
+import NotifyPanel from './Notifications/NotifyPanel.vue'
+import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
+import { usePreloaderStore } from '@/stores/modules/preloader';
+import { useMockupStore } from '@/stores/modules/mockup';
+
+const mockupStore = useMockupStore();
+const preloaderStore = usePreloaderStore();
+const activeRequests = computed(() => preloaderStore.activeRequests);
+const route = useRoute();
+
+const showSuscriptionBanner = false;
+const isNotifyPanelVisible = ref(false)
+const modalHelpRef = ref(false)
+const modalProfile = ref(false)
+const modalInfoNewHotel = ref(false)
+
+const currentLeftSidebar = computed(() => route.meta.sidebar);
+const currentRightSidebar = computed(() => route.meta.sidebarRight);
+const componentOverContent = computed(() => route.meta.componentOverContent);
+const sidebarWidthz = computed(() => route.meta.sidebarWidth);
+const displayedMenu = computed(() => route.meta.displayedMenu ?? false);
+
+onBeforeRouteLeave((to, from, next) => {
+    mockupStore.$resetStore();
+    next();
+});
+
+const openModalHelp = () => {
+  modalHelpRef.value.open();
+}
+
+provide('isNotifyPanelVisible',isNotifyPanelVisible)
+provide('modalProfile',modalProfile)
+provide('modalInfoNewHotel',modalInfoNewHotel)
+</script>
+<style scoped>
+.h-without-banner{
+    height: 100vh;
+}
+.h-with-banner{
+    height: calc(100vh - 40px);
+}
+</style>
   

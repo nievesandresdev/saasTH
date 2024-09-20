@@ -2,6 +2,17 @@ input[type=radio]:hover {
     background-color: var(--h-green-200);
 }
 
+.hinput{
+    color: #333333;
+    border-radius: 6px;
+}
+.hinput--grey{
+    border: 1px solid #BFBFBF;
+    color: #333333;
+    border-radius: 6px;
+}
+
+
 .hinput-primary{
     border: 1px solid #BFBFBF;
     color: #333333;
@@ -9,19 +20,99 @@ input[type=radio]:hover {
 }
 .hinput-primary:focus{
     outline: none;
-    border: 1px solid #333333;
+    border: 1px solid #34A98F !important;
 }
-
 .hinput-primary:hover{
-    border: 1px solid var(--h-green-600);
-}
-
-.hinput-primary:hover::placeholder,
-.hinput-primary:hover{
-    color: var(--h-green-600);
+    border: 1px solid #34A98F;
 }
 
 .hinput-error{
-    border: 1px solid #FF6666;
-    color: #FF6666;
+    border: 1px solid #FF6666 !important;
+    color: #FF6666 !important;
+
 }
+.hinput-error::placeholder{
+    color: #FF6666 !important;
+
+}
+
+.hinput-green:hover {
+    border: 1px solid #34A98F;
+    color: #34A98F;
+}
+
+.hinput-green:hover::placeholder {
+    color: #34A98F;
+}
+
+
+/* ========================= */
+
+.hcheckbox {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid #333;
+    border-radius: 3px;
+    width: 20px;
+    height: 20px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    background-color: #fff;
+  }
+  
+  .hcheckbox:checked {
+    background-color: #34A98F;
+    border-color: #34A98F;
+  }
+  .hcheckbox:hover {
+    background-color: #ECF9F5;
+  }
+  .hcheckbox:disabled {
+    background-color: #DADADA;
+    border-color: #DADADA;
+  }
+  
+  .hcheckbox:checked::before {
+    content: '';
+    position: absolute;
+    width: 30%;
+    height: 53%;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+
+  /* ------------------------------------- */
+
+  .hradio {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .hradio::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* transition: background-color 0.2s; */
+  }
+  
+  .hradio:checked::before {
+    background-color: #34A98F; /* Cambia este color por el que desees */
+  }

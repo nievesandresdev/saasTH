@@ -7,6 +7,9 @@
   p,a{
       font-family: 'Montserrat', sans-serif !important;
   }
+  label{
+    margin-bottom: 0px;
+  }
 
 body {
     /* font-family: 'Work Sans', sans-serif;*/
@@ -31,8 +34,8 @@ body {
 input:focus{
     --tw-ring-inset: none !important;
     --tw-ring-color: none !important;
-    border-color: initial !important;
-    border: 1px solid var(--h-green-600);
+    /* border-color: initial !important;
+    border: 1px solid var(--h-green-600); */
 }
 
 input[type="number"]::-webkit-inner-spin-button, 
@@ -63,9 +66,9 @@ textarea::-webkit-scrollbar{
     border-bottom-left-radius: 10px;
     margin-right: 4px;
   }
-  textarea:focus{
+  /* textarea:focus{
     border: 1px solid #A0A0A0;
-  }
+  } */
 
  /* h4 a:hover {
      color: #31516B;
