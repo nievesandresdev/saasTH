@@ -132,6 +132,18 @@ const $formatImage = (payload) => {
   return path
 }
 
+const $formatTypeLodging = (valueType) => {
+  const typeLodging = {
+    hotel: "Hotel",
+    hostal: "Hostal",
+    pensión: "Pensión",
+    ca: "Complejo de apartamentos",
+    at: "Apartamento turístico",
+    vft: "Vivienda con fines turísticos",
+  }
+  return typeLodging?.[valueType] ?? null;
+}
+
 export {
     $getRoleName,
     $isAssociate,
@@ -143,4 +155,5 @@ export {
     $getPropertyInUrl,
     $urlBaseWebapp,
     $formatImage,
+    $formatTypeLodging 
 };

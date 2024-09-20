@@ -35,7 +35,7 @@
                     >
                 </div>
                 <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4">{{ hotelData.name }}</h5>
-                <p class="text-xs font-semibold htext-gray-500 mt-[4px]">{{ hotelData.type }} - {{ hotelData.zone }}</p>
+                <p class="text-xs font-semibold htext-gray-500 mt-[4px]">{{ $formatTypeLodging(hotelData.type) }} - {{ hotelData.zone }}</p>
             </div>
             <div v-if="hotelStore.hotelsAvailables?.length  > 1" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
                 <BaseTextField
@@ -150,7 +150,7 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, watch, inject } from 'vue';
 
-import { $isAssociate, $isAdmin } from '@/utils/helpers';
+import { $isAssociate, $isAdmin, $formatTypeLodging } from '@/utils/helpers';
 
 import { useRouter } from 'vue-router';
 
