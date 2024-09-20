@@ -2,7 +2,7 @@
     <div class="mt-6 flex justify-between items-center">
         <h1 class="text-lg font-medium">Feedback en {{ status }} </h1>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
-            <p class="text-sm font-semibold">Mostrar feedback al huésped</p>
+            <p class="text-sm font-semibold">Mostrar feedback en la WebApp</p>
             <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0 group">
                 <input
                     :checked="defaultToggle"

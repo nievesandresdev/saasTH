@@ -205,12 +205,33 @@ provide('emptyFilters', emptyFilters);
 
 // FUNCTIONS
 
+function mergeDataFormInUrlMockup (stringQuery, dataForm) {
+    if (dataForm.visility === 'recommendated') {
+        stringQuery += '&featured=true';
+    }
+    Object.keys(dataForm).forEach(key => {
+        let value = dataForm[key];
+        
+        if (Array.isArray(value)) {
+            value.forEach(item => {
+                stringQuery += `&${key}=${encodeURIComponent(item)}`;
+            });
+        } else if (value !== undefined && value !== null && value !== '') {
+            stringQuery += `&${key}=${encodeURIComponent(value)}`;
+        }
+    });
+    return stringQuery;
+}
+
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
         mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
     } else {
-        query = `mobile=1&city=${formFilter.city}`;
+        let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
+        query = 'mobile=1';
+
+        query = mergeDataFormInUrlMockup(query, dataForm);
         mockupStore.$setIframeUrl(`/experiencias`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
@@ -288,7 +309,7 @@ function loadQueryInFormFilter () {
             }
         }
     }
-    console.log(formFilter, 'filtersSelected');
+    // console.log(formFilter, 'filtersSelected');
 }
 
 function validValueQuery (field, value) {

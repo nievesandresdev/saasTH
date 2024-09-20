@@ -29,11 +29,12 @@ export const useHotelStore = defineStore('hotel', () => {
 
     // ACTIONS
 
-    async function loadHotelsAvailables () {
+    async function loadHotelsAvailables (withoutCurrent = false) {
         if (hotelsAvailables.value?.length <= 0) {
-            const response = await $getAll();
+            const response = await $getAll(withoutCurrent);
             const { ok } = response;
             hotelsAvailables.value = ok ? response.data : null;
+            // console.log('test hotelsAvailables.value',hotelsAvailables.value)
         }
     }
 
@@ -68,8 +69,9 @@ export const useHotelStore = defineStore('hotel', () => {
         return hotel;
     }
 
-    async function $getAll () {
-        const response = await hotelService.getAllApi();
+    async function $getAll (withoutCurrent = false) {
+        let data = { withoutCurrent };
+        const response = await hotelService.getAllApi(data);
         return response;
         const { ok } = response
         hotelData.value = ok ? response.data : null
@@ -113,7 +115,7 @@ export const useHotelStore = defineStore('hotel', () => {
     
     async function $updateSenderMailMask (data) {
         const response = await hotelService.updateSenderMailMaskApi(data);
-        console.log('updateSenderMailMask',response)
+        // console.log('updateSenderMailMask',response)
         const { ok } = response
         hotelData.value = ok ? response.data : null
         return response;

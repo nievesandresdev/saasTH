@@ -28,10 +28,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import ModalWindow from "@/components/ModalWindow.vue";
 
-const isOpen = ref(false);
+const isOpen = inject('modalInfoNewHotel');
 
 function closeModal () {
     isOpen.value = false;

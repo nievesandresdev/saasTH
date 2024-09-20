@@ -6,7 +6,7 @@
                 v-if="!visibilityCategory"
                 class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
             >
-                La sección <span class="font-semibold">{{ categoryCurrent?.name }}</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
+                La sección <span class="font-semibold">{{ categoryCurrent?.name }}</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar en la WebApp" para hacerla visible.
             </div>
             <!-- {{ formFilter.selected_subplace }} -->
             <!-- {{typePlaceCurrent}} -->
@@ -317,7 +317,7 @@ function filterNonNullAndNonEmpty(obj) {
             }
         }
     })
-    return filteredObject
+    return filteredObject;
 }
 function loadQueryInFormFilter () {
     for (const [key, value] of Object.entries(queryRouter.value || {})) {
@@ -400,12 +400,37 @@ function edit (payload) {
     });
 }
 
+
+function mergeDataFormInUrlMockup (stringQuery, dataForm) {
+    if (dataForm.visility === 'recommendated') {
+        stringQuery += '&featured=true';
+    }
+    Object.keys(dataForm).forEach(key => {
+        let value = dataForm[key];
+        
+        if (Array.isArray(value)) {
+            value.forEach(item => {
+                stringQuery += `&${key}=${encodeURIComponent(item)}`;
+            });
+        } else if (value !== undefined && value !== null && value !== '') {
+            if (!stringQuery.includes(key) && !['selected_place', 'selected_subplace'].includes(key)){
+                stringQuery += `&${key}=${encodeURIComponent(value)}`;
+            }
+        }
+    });
+    return stringQuery;
+}
+
 function loadMockup (placeId = null) {
     let query = null;
     if (placeId) {
         mockupStore.$setIframeUrl(`/places/${placeId}`);
     } else {
-        query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}&city=${formFilter.current_city}&featured=${formFilter.featured}`;
+        let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
+        // query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
+        query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
+        query = mergeDataFormInUrlMockup(query, dataForm);
+        console.log(query, 'loadMockup');
         mockupStore.$setIframeUrl(`/places`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');

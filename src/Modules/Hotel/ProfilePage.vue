@@ -20,7 +20,7 @@
                     </BaseTooltipResponsive>
                 </div>
                 <div class="flex items-center">
-                    <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar al huésped</div>
+                    <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
                     <ToggleShowProfile
                         :showProfile="form.show_profile"
                         @updateShowHotel="updateShowHotel"
@@ -391,9 +391,9 @@
     });
 
     const typeLodging = [
-        { value: "Hotel", label: "Hotel", disabled: false },
+        { value: "hotel", label: "Hotel", disabled: false },
         { value: "hostal", label: "Hostal", disabled: false },
-        { value: "Pensión", label: "Pensión", disabled: false },
+        { value: "pensión", label: "Pensión", disabled: false },
         {
             value: "ca",
             label: "Complejo de apartamentos",
