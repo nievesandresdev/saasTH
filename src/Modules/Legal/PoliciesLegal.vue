@@ -32,8 +32,8 @@
         <div class="flex justify-between items-start mt-auto">
            
             <div class="flex justify-start gap-4">
-              <p class="text-base font-medium">Penalización: </p>
-              <p class="text-[10px] font-semibold  rounded-full py-1 px-2" :class="policy.penalization ? 'bg-[#D9F2E9]' : 'bg-[#DADADA]'">
+              <p class="text-base font-medium leading-[140%]">Penalización: </p>
+              <p class="text-[10px] font-semibold  leading-[1] rounded-full py-[7px] px-2 h-6" :class="policy.penalization ? 'bg-[#D9F2E9]' : 'bg-[#F2F2F2]'">
                 {{ policy.penalization ? 'Sí' : 'No' }}
               </p>
             </div>
