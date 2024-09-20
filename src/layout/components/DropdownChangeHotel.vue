@@ -35,7 +35,14 @@
                     >
                 </div>
                 <h5 class="text-base htext-black-100 font-semibold mt-[12px] px-4">{{ hotelData.name }}</h5>
-                <p class="text-xs font-semibold htext-gray-500 mt-[4px]">{{ $formatTypeLodging(hotelData.type) }} - {{ hotelData.zone }}</p>
+                <div class="w-full flex items-center justify-center">
+                    <p class="text-xs font-semibold htext-gray-500 mt-[4px] capitalize">
+                        {{ $formatTypeLodging(hotelData.type) }}
+                        <template v-if="hotelData.zone">
+                            - {{ hotelData.zone }}
+                        </template>
+                    </p>
+                </div>
             </div>
             <div v-if="hotelStore.hotelsAvailables?.length  > 1" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
                 <BaseTextField
@@ -74,8 +81,12 @@
                                         class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                     />
                                 </span>
-                                <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
-                                <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
+                                <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">{{ hotel.type }}
+                                    <template v-if="hotel.zone">
+                                        - {{ hotel.zone }}
+                                    </template>
+                                </p>
+                                <div class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                             </div>
                         </li>
                     </template>
@@ -124,8 +135,13 @@
                                     class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
                                 />
                             </span>
-                            <p class="text-xs font-semibold htext-gray-500 truncate-1">{{ hotel.type }} - {{ hotel.zone }}</p>
-                            <div class="bg-white border text-[10px] p-[2px] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
+                            <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">
+                                {{ hotel.type }}
+                                <template v-if="hotel.zone">
+                                    - {{ hotel.zone }}
+                                </template>
+                            </p>
+                            <div class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
                         </div>
                     </li>
                 </ul>
@@ -134,17 +150,11 @@
                 </div>
             </div>
             <!-- <div v-if="$isAssociate()" class="p-4 hborder-top-gray-400"> -->
-            <div class="p-4 hborder-top-gray-400">
-                <button
-                    class="hbtn-tertiary text-sm htext-black-100 font-medium underline"
-                    @click="openModalInfoNewHotel"
-                >
-                    ¿Quieres añadir otro alojamiento?
-                </button>
+            <div class="p-4 hborder-top-gray-400 cursor-pointer hover-hbg-gray-200 rounded-b-[6px]" @click="modalInfoNewHotel = true">
+                <p class="hbtn-tertiary text-sm htext-black-100 font-medium underline">¿Quieres añadir otro alojamiento?</p>
             </div>
         </div>
     </div>
-    <ModalInfoNewHotel ref="modalInfoNewHotelRef" />
 </template>
 
 <script setup>
@@ -157,7 +167,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 import BaseTextField from '@/components/Forms/BaseTextField';
-import ModalInfoNewHotel from './ModalInfoNewHotel';
 
 const props = defineProps({
     widthMenu: String,
@@ -166,10 +175,10 @@ const props = defineProps({
 
 const hotelStore = inject('hotelStore');
 const onHoverMainMenu = inject('onHoverMainMenu');
+const modalInfoNewHotel = inject('modalInfoNewHotel');
 
 const { hotelData, hotelsAvailables } = hotelStore;
 
-const modalInfoNewHotelRef = ref(null);
 const dropdownOpenn = ref(false);
 const dropdownSearchOpen = ref(false);
 const hotelsFoundInSearch = ref([]);
@@ -246,10 +255,6 @@ function handleClickOutsideDropDownSearch (event) {
 async function changeHotel (hotel) {
     await hotelStore.changeHotel(hotel);
     router.go();
-}
-
-function openModalInfoNewHotel () {
-    modalInfoNewHotelRef.value.open();
 }
 
 

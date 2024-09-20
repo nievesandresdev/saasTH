@@ -17,7 +17,7 @@ d    dd
         <aside 
             :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[2000] flex ${showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
         >
-            <MainSidebar />
+            <MainSidebar @openmodalHelp="openModalHelp" />
             <!-- container dinamic side left -->
             <div v-if="currentLeftSidebar" class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`">
                 <DinamicLeftSidebar :sidebarName="currentLeftSidebar"/>
@@ -37,11 +37,17 @@ d    dd
         </aside>
     </div>
     <NotifyPanel />
+    <ModalHelp ref="modalHelpRef"/>
+    <SessionModal />
+    <ModalInfoNewHotel />
 </template>
 <script setup>
 import { computed, ref, provide } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 
+import ModalHelp from '../layout/components/ModalHelp.vue'
+import ModalInfoNewHotel from './components/ModalInfoNewHotel.vue';
+import SessionModal from './components/SessionModal.vue'
 import DinamicLeftSidebar from './DinamicLeftSidebar.vue';
 import DinamicRightSidebar from './DinamicRightSidebar.vue';
 import DinamicOverContent from './DinamicOverContent.vue';
@@ -59,6 +65,9 @@ const route = useRoute();
 
 const showSuscriptionBanner = false;
 const isNotifyPanelVisible = ref(false)
+const modalHelpRef = ref(false)
+const modalProfile = ref(false)
+const modalInfoNewHotel = ref(false)
 
 const currentLeftSidebar = computed(() => route.meta.sidebar);
 const currentRightSidebar = computed(() => route.meta.sidebarRight);
@@ -70,7 +79,14 @@ onBeforeRouteLeave((to, from, next) => {
     mockupStore.$resetStore();
     next();
 });
+
+const openModalHelp = () => {
+  modalHelpRef.value.open();
+}
+
 provide('isNotifyPanelVisible',isNotifyPanelVisible)
+provide('modalProfile',modalProfile)
+provide('modalInfoNewHotel',modalInfoNewHotel)
 </script>
 <style scoped>
 .h-without-banner{
