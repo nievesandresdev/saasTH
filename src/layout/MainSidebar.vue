@@ -356,7 +356,7 @@ const displayNotification = (title, text, route, timeout) => {
     }, timeout);
 }
 onMounted(async() => {
-    hotelStore.loadHotelsAvailables();
+    hotelStore.loadHotelsAvailables(true);
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
     conuntReviewsPending.value = await reviewStore.$countReviewsPending();

@@ -3,7 +3,7 @@ import {
     hotelPath,
 } from '../config/apiRoute'
 
-export const getAllApi = () => apiHttp('GET', `${hotelPath}/getAll`);
+export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
 export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: false });
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data);
 export const updateSenderMailMaskApi = (data) => apiHttp('POST', `${hotelPath}/updateSenderMailMask`, data, {showPreloader: false });
