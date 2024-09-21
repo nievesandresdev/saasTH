@@ -39,10 +39,10 @@ export const usePlaceStore = defineStore('place', () => {
     async function $getTypePlaces (params) {
         let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
         let newParams = {
-            // hotel: { id: idHotel, name: nameName, zone: zoneHotel },
-            // ...params
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...params
         }
-        const response = await placeService.getTypePlacesApi(newParams);
+        const response = await placeService.getTypePlacesApi();
         return response;
     }
     async function $getAll (params, config = {}) {
