@@ -408,7 +408,7 @@ focusMenu();
 
 async function getTypePlaces(){
   const response = await placeStore.$getTypePlaces();
-
+  console.log(response, 'response');
   if (response.ok) {
     let typePlaces = response.data;
     console.log(typePlaces, 'typePlaces');
