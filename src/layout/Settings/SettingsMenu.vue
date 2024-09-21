@@ -408,8 +408,10 @@ focusMenu();
 
 async function getTypePlaces(){
   const response = await placeStore.$getTypePlaces();
+
   if (response.ok) {
     let typePlaces = response.data;
+    console.log(typePlaces, 'typePlaces');
     typePlaces.forEach(item => {
       let type = dataTypePlaces.find(t => t.name == item.name);
       if (type) {
