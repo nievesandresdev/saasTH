@@ -414,6 +414,7 @@ async function getTypePlaces(){
     console.log(typePlaces, 'typePlaces');
     typePlaces.forEach(item => {
       let type = dataTypePlaces.find(t => t.name == item.name);
+      console.log(type, 'type');
       if (type) {
         type.id = item.id;
         //sessionStorage.setItem('selected_place', item.id);
