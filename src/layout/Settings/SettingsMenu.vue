@@ -408,8 +408,10 @@ focusMenu();
 
 async function getTypePlaces(){
   const response = await placeStore.$getTypePlaces();
+  console.log(response, 'response');
   if (response.ok) {
     let typePlaces = response.data;
+    console.log(typePlaces, 'typePlaces');
     typePlaces.forEach(item => {
       let type = dataTypePlaces.find(t => t.name == item.name);
       if (type) {
@@ -417,6 +419,7 @@ async function getTypePlaces(){
         //sessionStorage.setItem('selected_place', item.id);
       }
     });
+    console.log(dataTypePlaces, 'dataTypePlaces');
   }
 }
 

@@ -15,7 +15,7 @@ const X_KEY_API = process.env.VUE_APP_X_KEY_API
 function getPreloaderStore() {// función auxiliar que devuelve el store de preloader
   return usePreloaderStore();
 }
-
+//
 axios.interceptors.request.use(config => {
    // Obtén la ruta actual
    const currentRoute = router.currentRoute.value;
