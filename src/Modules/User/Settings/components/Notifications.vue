@@ -86,6 +86,18 @@
               <span class="text-sm font-[400] mt-2">min</span>
             </div>
           </div>
+          <!-- Emails de Recordatorio -->
+          <div class="flex items-center justify-start mb-4 w-3/4">
+            <span class="text-sm font-[600]">Emails</span>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-[400]">1. Nuevo feedback</span>
+            <input type="checkbox" v-model="notifications.newFeedback" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-[400]">2. Feedback pendiente hace 10 min</span>
+            <input type="checkbox" v-model="notifications.pendingFeedback10" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+          </div>
         </div>
       </div>
     </div>
@@ -130,15 +142,15 @@ const isDisabled = computed(() => props.workPositionId !== null);
   const notifications = ref({ ...props.notifications });
   
   const emitChanges = () => {
-  emits('update:periodicityChat', periodicityChat.value);
-  emits('update:periodicityStay', periodicityStay.value);
-  emits('update:notifications', notifications.value);
+    emits('update:periodicityChat', periodicityChat.value);
+    emits('update:periodicityStay', periodicityStay.value);
+    emits('update:notifications', notifications.value);
 
-  /* console.log('Emit changes:', {
-    periodicityChat: periodicityChat.value,
-    periodicityStay: periodicityStay.value,
-    notifications: notifications.value,
-  }); */
+    /* console.log('Emit changes:', {
+      periodicityChat: periodicityChat.value,
+      periodicityStay: periodicityStay.value,
+      notifications: notifications.value,
+    }); */
 };
 
   </script>

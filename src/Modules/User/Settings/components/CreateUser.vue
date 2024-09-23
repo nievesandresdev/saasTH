@@ -284,7 +284,7 @@
                     v-model:periodicityChat="form.periodicityChat"
                     v-model:periodicityStay="form.periodicityStay"
                     v-model:notifications="form.notifications"
-                    :maxHeight="600"
+                    :maxHeight="900"
                     :workPositionId="form.work_position_id"
                   />
                 </div>
@@ -445,6 +445,8 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
       newChat: false,
       PendingChat10: false,
       pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10 : false,
     },
   });
 
@@ -463,7 +465,7 @@ const operationAccess = ref([
 
 const adminAccess = ref([
     { name: 'WebApp', selected: false , value: 'webapp' },
-    { name: 'Comunicaciones', selected: false , value: 'comunicaciones' },
+    /* { name: 'Comunicaciones', selected: false , value: 'comunicaciones' }, */
     { name: 'Hoster', selected: false , value: 'hoster' },
 ]);
   
@@ -856,6 +858,8 @@ const clearForm = () => {
         newChat: false,
         PendingChat10: false,
         pendingChat30: false,
+        newFeedback: false,
+        pendingFeedback10: false,
       },
     };
     selectedRoleName.value = 'Selecciona el tipo de usuario deseado';
