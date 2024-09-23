@@ -9,7 +9,7 @@
       <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
         <div class="flex justify-between items-center px-6 py-5">
           <div class="text-center">
-            <h1 class="font-[500] text-[22px]">Crear política</h1>
+            <h1 class="font-[500] text-[22px]">Crear norma</h1>
           </div>
           <div class="flex justify-end">
             <button @click="handleClose">
