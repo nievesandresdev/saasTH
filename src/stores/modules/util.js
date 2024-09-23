@@ -13,9 +13,16 @@ export const useUtilStore = defineStore('util', () => {
         const response = await utilService.getLanguagesApi(params);
         return response;
     }
+
+    async function $getPhoneCodesApi () {
+        return utilService.getPhoneCodesApi();
+        // console.log('test getPhoneCodesApi',response)
+        // return response;
+    }
     //
     return {
         $getLanguages,
+        $getPhoneCodesApi
     }
 
 })
