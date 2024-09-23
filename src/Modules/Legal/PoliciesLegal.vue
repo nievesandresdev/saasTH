@@ -28,14 +28,12 @@
           }"
           @click="showPolicy(policy)"
         >
-        <div>
-          <h3 class="text-base font-medium mb-4 break-words whitespace-normal">{{ truncateText(policy.title, 75) }}</h3>
-        </div>
+        <p class="text-base font-medium leading-[140%] h-[66px] mb-4 truncate-3">{{ policy.title }}</p>
         <div class="flex justify-between items-start mt-auto">
            
             <div class="flex justify-start gap-4">
-              <p class="text-base font-medium">Penalización: </p>
-              <p class="text-[10px] font-semibold  rounded-full py-1 px-2" :class="policy.penalization ? 'bg-[#D9F2E9]' : 'bg-[#DADADA]'">
+              <p class="text-base font-medium leading-[140%]">Penalización: </p>
+              <p class="text-[10px] font-semibold  leading-[1] rounded-full py-[7px] px-2 h-6" :class="policy.penalization ? 'bg-[#D9F2E9]' : 'bg-[#F2F2F2]'">
                 {{ policy.penalization ? 'Sí' : 'No' }}
               </p>
             </div>
@@ -153,9 +151,9 @@ const closeModalEditPolicies = () => {
   selectedPolicyId.value = null;
 };
 
-function truncateText(text, length) {
-  return text.length > length ? `${text.substr(0, length)}...` : text;
-}
+// function truncateText(text, length) {
+//   return text.length > length ? `${text.substr(0, length)}...` : text;
+// }
 
 const openModalCreatePolicies = () => {
   modalCreatePolicies.value = true;
@@ -166,6 +164,7 @@ const openModalCreatePolicies = () => {
 };
 
 const closeModalCreatePolicies = () => {
+  console.log('test closeModalCreatePolicies')
   modalCreatePolicies.value = false;
 };
 
