@@ -274,7 +274,7 @@ const handleDataFeedback = async () => {
     }
 };
 
-const handleDataOta = async () => {
+/* const handleDataOta = async () => {
     const response = await dataReviewOTA();
     console.log('response',response)
 
@@ -321,7 +321,64 @@ const handleDataOta = async () => {
         toast.errorToast(response.data.message, 'top-right');
         average.value = 0; // Ensure average is 0 if there was an error
     }
+}; */
+
+const handleDataOta = async () => {
+    const response = await dataReviewOTA();
+    console.log('response', response);
+
+    if (response.ok) {
+        let totalRating = 0;
+        let count = 0;
+        const reviews = response.data.summaryReviews || [];
+        reviews.forEach(review => {
+            // Default data review values in case data_review is missing
+            const defaultDataReview = { reviews_rating: '--', reviews_count: '--' };
+            const dataReview = review.data_review || defaultDataReview;
+
+            let rating = parseFloat(dataReview.reviews_rating);
+
+            // Assign data based on OTA type and scale ratings if necessary
+            switch (review.ota) {
+                case 'TRIPADVISOR':
+                    tripadvisorReview.value = { ...review, data_review: dataReview };
+                    rating = rating * 2; // Escalar de 5 a 10
+                    break;
+                case 'EXPEDIA':
+                    expediaReview.value = { ...review, data_review: dataReview };
+                    // Expedia está en escala de 10, no necesita ajuste
+                    break;
+                case 'BOOKING':
+                    bookingReview.value = { ...review, data_review: dataReview };
+                    // Booking está en escala de 10, no necesita ajuste
+                    break;
+                case 'GOOGLE':
+                    googleReview.value = { ...review, data_review: dataReview };
+                    rating = rating * 2; // Escalar de 5 a 10
+                    break;
+                case 'AIRBNB':
+                    airbnbReview.value = { ...review, data_review: dataReview };
+                    // Airbnb está en escala de 5, agregar ajuste si se usa
+                    break;
+                default:
+                    break;
+            }
+
+            // Solo calcular las calificaciones si data_review tiene un rating válido
+            if (dataReview.reviews_rating !== '--') {
+                totalRating += rating;  // Añadir la calificación ajustada al total
+                count++;
+            }
+        });
+
+        // Calcular el promedio de calificación si el count es mayor que 0
+        average.value = count > 0 ? (totalRating / count) * 10 : 0;
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
+        average.value = 0; // Asegurarse que el promedio sea 0 si hubo un error
+    }
 };
+
 
 </script>
 
