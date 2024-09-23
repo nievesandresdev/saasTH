@@ -17,10 +17,11 @@
             <img src="/assets/icons/1.TH.SEARCH.svg" class="w-6 h-6" alt="search icon">
           </div>
         </div>
-        <div class="flex items-center px-4 py-2 text-black border border-[#333333] rounded hover:bg-gray-100 cursor-pointer" @click="createUser">
-          <img src="/assets/icons/1.TH.PLUS.svg" class="w-6 h-6 mr-2" alt="plus icon">
-          <span class="font-medium text-sm">Crear usuario</span>
-        </div>
+        <div class="group flex items-center px-4 py-2 text-black border border-[#333333] rounded bg-white cursor-pointer hover:border-[#2A8873]" @click="createUser">
+    <img src="/assets/icons/1.TH.PLUS.svg" class="w-6 h-6 mr-2" alt="plus icon">
+    <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
+</div>
+
       </div>
       <div class="flex gap-4 mb-4 z-[600]">
         <ButtonFilter @click="change_type(0)" :active="data_filter.type == 0">Todos</ButtonFilter>
