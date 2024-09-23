@@ -19,7 +19,8 @@ export const useAuthStore = defineStore('auth', () => {
 
         try {
             const response = await loginService(credentials);
-
+            console.log('login',response)
+            return;
             if (response.ok) {
                 token.value = response.data.token;
                 user.value = response.data.user;
