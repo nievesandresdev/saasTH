@@ -22,24 +22,28 @@
           </div>
   
           <div class="pb-6 pr-6 pl-6">
-            <div class="flex items-center w-full overflow-x-hidden">
-              <div class="flex w-full" style="scroll-snap-type: x mandatory;">
-                <h3
-                  v-for="(step, index) in steps"
-                  :key="step.number"
-                  :class="{
-                    'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step px-4': currentStep === step.number,
-                    'text-gray-300 px-2': currentStep !== step.number
-                  }"
-                  class="text-center py-2 text-lg font-semibold cursor-pointer relative"
-                  @click="scrollToStep(index)"
-                  style="flex: 1 0 25%; scroll-snap-align: start;"
-                  ref="stepRefs"
-                >
-                  {{ step.label }}
-                </h3>
-              </div>
-            </div>
+            <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
+    <div
+      class="flex w-full"
+      style="scroll-snap-type: x mandatory; scroll-padding-right: 16px;"
+    >
+      <h3
+        v-for="(step, index) in steps"
+        :key="step.number"
+        :class="[
+          'flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative px-4',
+          currentStep === step.number
+            ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step'
+            : 'text-gray-300',
+        ]"
+        @click="scrollToStep(index)"
+        style="scroll-snap-align: start;"
+        :ref="el => stepRefs[index] = el"
+      >
+        {{ step.label }}
+      </h3>
+    </div>
+  </div>
             <hr class="mb-5 px-4">
             <div v-if="currentStep === 1">
               <div class="relative mt-4">
@@ -887,9 +891,24 @@ if (form.value.role === 1 || form.value.role === 2) {
 
   const stepRefs = ref([]);
 
-  const scrollToStep = (index) => {
+const addToStepRefs = (el) => {
+  if (el) {
+    stepRefs.value.push(el);
+  }
+};
+
+const scrollToStep = (index) => {
+  const stepElement = stepRefs.value[index];
+
+  const options = { behavior: 'smooth', inline: 'start' };
+
+  if (index === steps.length - 1) {
+    // Si es la última pestaña
+    options.inline = 'end';
+  }
+
+  stepElement.scrollIntoView(options);
   currentStep.value = steps[index].number;
-  stepRefs.value[index].scrollIntoView({ behavior: 'smooth', inline: 'end' });
 };
   
   const nextStep = () => {
@@ -1140,6 +1159,18 @@ function closeModal(complete = false) {
   margin-left: -0.5rem; 
   padding-right: 0.5rem; 
 } */
+
+/* Ocultar scrollbar en Chrome, Safari y Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ocultar scrollbar en IE, Edge y Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 
 </style>
   

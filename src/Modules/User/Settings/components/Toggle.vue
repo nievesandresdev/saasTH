@@ -152,6 +152,7 @@
   };
   
   const openModalDelete = (user) => {
+    visible.value = false;
     emits('openModalDelete', user);
   };
   
