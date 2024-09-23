@@ -1,41 +1,35 @@
 <template>
     <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" :width="'369px'" padding-content="p-0" footer="true">
     <template #content>
-      <div>
-        <!-- <div class="flex justify-end w-full mb-[-15px]">
-          <button @click="closeModalProfile" class="mt-[15px] mr-5">
-            <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-8 w-8" />
+      <div class="px-8 pt-4 relative">
+          <button @click="closeModalProfile" class="absolute top-4 right-4">
+            <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
           </button>
-        </div> -->
-        <!-- <div class="text-center"> -->
-          <div class="flex justify-between">
-            <div class="flex-none w-14"></div>
-            <img :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`" alt="Avatar" class="rounded-full mx-auto mb-2 mt-5" width="80" height="80" />
-            <button @click="closeModalProfile" class="mr-4 mt-[-50px]">
-              <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
+          <img 
+            :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`"
+            alt="Avatar" 
+            class="rounded-full w-[72px] h-[72px] mx-auto"
+          />
+          <div class="text-center mt-3 pb-6">
+            <h3 class="text-base font-semibold leading-[120%]">{{ authStore.fullName }}</h3>
+            <p class="text-xs font-semibold leading-[130%] mt-1 text-[#8A8A8A]">{{ $getRoleName(authStore.user.role) }}</p>
+            <button @click="redirectToUserPanel" class="flex items-center group mx-auto mt-3">
+              <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-1" />
+              <span class="text-[#8A8A8A] font-semibold text-xs leading-[130%] group-hover:text-[#34A98F]">Ajustes de cuenta</span>
             </button>
-          </div>
-          <div class="text-center px-8">
-            <h3 class="text-lg font-medium">{{ authStore.fullName }}</h3>
-            <p class="text-sm text-gray-500 font-semibold">{{ $getRoleName(authStore.user.role) }}</p>
-            <div class="mt-3 mb-6 flex justify-center gap-4">
+            
               <!-- <button v-if="$isAssociate()" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
                 <img src="/assets/icons/1.TH.SUSCRIPCIÓN.svg" alt="Ver Suscripción" class="h-5 w-5 mb-1 mr-2 icon-hover" />
                 Ver Suscripción
               </button> -->
-              <button @click="redirectToUserPanel" class="modal-button flex items-center justify-center py-2 text-[#8A8A8A] font-semibold text-xs hover:text-[#34A98F]">
-                <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-2 icon-hover" />
-                Ajustes de cuenta
-              </button>
-            </div>
           </div>
       </div>
     </template>
     <template #footer>
-      <div class="border-t border-[#BFBFBF] mt-1 px-8 w-full py-4 hover:bg-[#FAFAFA] hover:rounded-b-[10px]">
-        <button class="flex items-center  text-gray-700 w-full font-medium text-sm" @click.stop="logout">
+      <div class="border-t border-[#BFBFBF] px-8 w-full py-[18px]">
+        <button class="flex items-center" @click.stop="logout">
           <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
-          Cerrar sesión
+          <span class="font-medium text-sm leading-[140%] text-[#333]">Cerrar sesión</span>
         </button>
       </div>
     </template>

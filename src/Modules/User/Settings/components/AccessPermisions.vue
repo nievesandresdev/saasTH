@@ -88,7 +88,7 @@ const operationAccess = ref([
 
 const adminAccess = ref([
   { name: 'WebApp', selected: false, value: 'webapp', disabled: false },
-  { name: 'Comunicaciones', selected: false, value: 'comunicaciones', disabled: false },
+  /* { name: 'Comunicaciones', selected: false, value: 'comunicaciones', disabled: false }, */
   { name: 'Hoster', selected: false, value: 'hoster', disabled: false },
 ]);
 

@@ -47,14 +47,19 @@
                   <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                 </div>
                 <div class="relative w-full">
+                  {{ selectedWorkPositionName ?? null }}
                   <input
                       type="text"
                       id="workPositionInput"
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md border-solid border border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
-                      placeholder="Selecciona el tipo de usuario deseado..."
+                      class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0]"
+                      :class="{
+                        'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                      'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
+                      }"
+                      :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
                     />
                   <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                     <img src="/assets/icons/1.TH.I.dropdownBig.svg">
@@ -80,7 +85,12 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            :class="
+                            {
+                              'border-black': form.name,
+                              'border-gray-300': !form.name
+                            }"
                             placeholder="Nombre del usuario"
                         />
                     </div>
@@ -91,7 +101,12 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            :class="
+                            {
+                              'border-black': form.lastname,
+                              'border-gray-300': !form.lastname
+                            }"
                             placeholder="Apellido del usuario"
                         />
                     </div>
@@ -99,24 +114,32 @@
                 <div class="mt-4">
                   <label class="text-sm font-medium">Teléfono móvil</label>
                     <div class="flex rounded">
-                        <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px] border-solid  border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
+                        <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px]   border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
                             <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                         </select> -->
                         <select v-model="form.prefix"
-                          :class="{'border-red-600': errorPrefix, '': !errorPrefix}" 
-                          class="bg-white w-1/4 rounded-l-lg border border-solid border-gray-300 pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
+                          :class="{
+                            'border-red-600': errorPrefix, '': !errorPrefix,
+                            'border-black': form.prefix,
+                            'border-gray-300': !form.prefix
+                          }" 
+                          class="bg-white w-1/4 rounded-l-lg border pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
                           style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
                           <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                         </select>
                             <input type="text"
                                 placeholder="Teléfono de contacto"
-                                class="p-2.5 block border border-gray-300 w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
-                                :class="errorPhone ? 'hover:border-red-600' : 'hoverForm'"
+                                class="p-2.5 block border w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
+                                :class="{
+                                  'border-black': form.phone,
+                                  'border-gray-300': !form.phone,
+                                  'hover:border-red-600': errorPhone
+                                }"
                                 v-model="form.phone"
                                 @input="validatePhone"
                             >
                     </div>
-                    <div class="flex justify-end mt-1 text-red-600" v-if="errorPhone">
+                    <div class="flex justify-start mt-1 text-red-600" v-if="errorPhone">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                         </svg>
@@ -129,7 +152,12 @@
                         <input
                             v-model="form.email"
                             type="email"
-                            class="w-full h-10 p-3 text-sm font-medium border-solid border border-gray-300 rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                            :class="
+                            {
+                              'border-black': form.email && !errorEmail,
+                              'border-gray-300': !form.email || errorEmail
+                            }"
                             placeholder="Correo con el que iniciará sesión"
                         />
                         <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
@@ -178,7 +206,7 @@
                 v-model:periodicityChat="form.periodicityChat"
                 v-model:periodicityStay="form.periodicityStay"
                 v-model:notifications="form.notifications"
-                :maxHeight="600"
+                :maxHeight="900"
                 :workPositionId="form.work_position_id"
               />
             </div>
@@ -434,12 +462,6 @@ const form = ref({
 
 };
 
-  
-  const seletedRoleUser = ref([
-    { id: 1, name: 'Usuario Propietario', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
-    { id: 2, name: 'Usuario Administrador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' },
-    { id: 3, name: 'Usuario Operador', description: 'Este tipo de usuario tiene permiso a todo, desde la creación de distintos tipos de usuario hasta poder ver la suscripción activa.' }
-  ]);
   const prefixes = ref([null,'+1', '+34', '+91'])
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
