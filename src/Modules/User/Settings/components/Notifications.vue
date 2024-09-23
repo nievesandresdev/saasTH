@@ -32,14 +32,14 @@
             <div class="flex gap-2 items-center justify-start w-1/2">
               <span class="text-sm font-[400] mt-2">Periocidad:</span>
               <BaseTextField
-                v-model="periodicityChat"
-                placeholder="Ejemplo: 5 minutos"
-                classContent="mt-2 w-[40px]"
-                :type="'number'"
-                :errors="errors"
-                name="notifications"
-                :disabled="isDisabled"
-                @input="emitChanges"
+                  v-model="periodicityChat"
+                  placeholder="Ejemplo: 5 minutos"
+                  classContent="mt-2 w-[35px] ml-2"
+                  :type="'number'"
+                  :errors="errors"
+                  name="notifications"
+                  :disabled="isDisabled"
+                  @input="emitChanges"
               />
               <span class="text-sm font-[400] mt-2">min</span>
             </div>
@@ -76,7 +76,7 @@
               <BaseTextField
                 v-model="periodicityStay"
                 placeholder="Ejemplo: 5 minutos"
-                classContent="mt-2 w-[40px]"
+                classContent="mt-2 w-[35px]"
                 :type="'number'"
                 :errors="errors"
                 :disabled="isDisabled"
