@@ -63,10 +63,10 @@
                         <li
                             v-for="(hotel, index) in hotelsFoundInSearch"
                             :key="index"
-                            class="px-4 py-[12px] flex items-center space-x-2 h-[77px] cursor-pointer hover-gray-100"
+                            class="px-4 py-[12px] flex items-center h-[77px] cursor-pointer hover-gray-100"
                             @click="changeHotel(hotel)"
                         >
-                            <div class="w-[34px] h-[34px] rounded-[3px]">
+                            <div class="w-[34px] h-[34px] rounded-[3px] mr-2 flex-shrink-0">
                                 <img v-if="hotel?.image" class="rounded-[3px] w-[34px] h-[34px] object-cover" :src="hotelStore.formatImage({url: hotel?.image})" alt="photo perfil ">
                                 <img
                                     v-else
@@ -75,14 +75,19 @@
                                     alt="photo default "
                                 >
                             </div>
-                            <div class="truncate-1 flex-1">
-                                <span class="text-sm font-medium htext-black-100 relative truncate-1">
-                                    {{ truncateNameHotelLong(hotel.name, 25) }}
-                                    <div
-                                        v-if="hotel.with_notificartion"
-                                        class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2.5px] right-[-11px]"
-                                    />
-                                </span>
+                            <div class="">
+                                <div class="flex w-auto max-w-[178px]">
+                                    <p class="text-sm font-medium htext-black-100 relative truncate">
+                                        <!-- {{ truncateNameHotelLong(hotel.name, 25) }} -->
+                                        {{ hotel.name }}
+                                    </p>
+                                    <div class="relative w-[8px] h-full flex-shrink-0">
+                                        <div
+                                            v-if="hotel.with_notificartion"
+                                            class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2px] right-0 z-10"
+                                        />
+                                    </div>
+                                </div>
                                 <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">{{ hotel.type }}
                                     <template v-if="hotel.zone">
                                         - {{ hotel.zone }}
@@ -129,11 +134,19 @@
                                 alt="photo default"
                             >
                         </div>
-                        <div class="truncate w-auto max-w-[202px]">
-                            <span class="text-sm font-medium htext-black-100 relative truncate">
-                                <!-- {{ truncateNameHotelLong(hotel.name, 25) }} -->
-                                {{ hotel.name }}
-                            </span>
+                        <div class="">
+                            <div class="flex truncate w-auto max-w-[210px]">
+                                <span class="text-sm font-medium htext-black-100 relative truncate">
+                                    <!-- {{ truncateNameHotelLong(hotel.name, 25) }} -->
+                                    {{ hotel.name }}
+                                </span>
+                                <div class="relative w-[10px] h-full flex-shrink-0">
+                                    <div
+                                        v-if="hotel.with_notificartion"
+                                        class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-0 right-0 z-10"
+                                    />
+                                </div>
+                            </div>
                             <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">
                                 {{ hotel.type }}
                                 <template v-if="hotel.zone">
@@ -141,12 +154,6 @@
                                 </template>
                             </p>
                             <div class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
-                        </div>
-                        <div class="relative w-[8px] h-full flex-shrink-0">
-                            <div
-                                v-if="hotel.with_notificartion"
-                                class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2px] right-0 z-10"
-                            />
                         </div>
                     </li>
                 </ul>
