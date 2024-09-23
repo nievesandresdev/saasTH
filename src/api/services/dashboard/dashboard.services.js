@@ -8,4 +8,4 @@ export const dataCustomerExperience = () => apiHttp('GET', `${dashboardPath}/dat
 //feedback
 export const dataFeedback = () => apiHttp('GET', `${dashboardPath}/dataFeedback`)
 export const dataReviewOTA = () => apiHttp('GET', `${dashboardPath}/getDataReviewOTA`)
-export const dataReviewOTADirect = (params) => apiHttp('GET', `/hotels/getSummaryReviewsOtas`,params,{},'API_REVIEW')
+export const dataReviewOTADirect = (params) => apiHttp('GET', `/hotels/getSummaryReviewsOtas`,params,{},'API_REVIEW');

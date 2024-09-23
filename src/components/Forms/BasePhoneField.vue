@@ -119,7 +119,7 @@ const defineFullPhone = async (stringPhone) => {
   if (initialLoad.value) return;
   console.log('test defineFullPhone',stringPhone)
   axios({
-    url: 'https://dashboard.thehoster.io/api/phone-codes',
+    url: 'https://admin.thehoster.io/api/phone-codes',
     method: 'GET',
   })
   .then(res => {
