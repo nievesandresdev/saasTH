@@ -276,52 +276,52 @@ const handleDataFeedback = async () => {
 
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
-    console.log('response', response);
+    console.log('response',response)
 
     if (response.ok) {
         let totalRating = 0;
         let count = 0;
         const reviews = response.data.summaryReviews || [];
-
-        const scores = reviews.map(review => {
+        reviews.forEach(review => {
+            // Default data review values in case data_review is missing
             const defaultDataReview = { reviews_rating: '--', reviews_count: '--' };
             const dataReview = review.data_review || defaultDataReview;
 
-            let max = 10; // Define un máximo predeterminado
+            // Assign data based on OTA type
             switch (review.ota) {
                 case 'TRIPADVISOR':
+                    tripadvisorReview.value = { ...review, data_review: dataReview };
+                    break;
                 case 'EXPEDIA':
+                    expediaReview.value = { ...review, data_review: dataReview };
+                    break;
                 case 'BOOKING':
+                    bookingReview.value = { ...review, data_review: dataReview };
+                    break;
                 case 'GOOGLE':
-                    max = 10; // Estas plataformas tienen una escala de 10
+                    googleReview.value = { ...review, data_review: dataReview };
                     break;
                 case 'AIRBNB':
-                    max = 5; // Airbnb usa una escala de 5
+                    airbnbReview.value = { ...review, data_review: dataReview };
                     break;
                 default:
                     break;
             }
 
-            // Si no hay rating válido, devuelve null para evitar cálculos
-            if (dataReview.reviews_rating === '--') return null;
+            // Only calculate ratings if data_review has valid rating data
+            if (dataReview.reviews_rating !== '--') {
+                totalRating += parseFloat(dataReview.reviews_rating);
+                count++;
+            }
+        });
 
-            // Convierte la nota a una escala de 100
-            return { score: parseFloat(dataReview.reviews_rating), max: max };
-        }).filter(entry => entry !== null); // Filtra entradas nulas
-
-        // Escalar cada nota a una escala de 100
-        const scaledScores = scores.map(entry => (entry.score / entry.max) * 100);
-
-        // Calcular el promedio
-        const averageScore = scaledScores.reduce((sum, score) => sum + score, 0) / scaledScores.length;
-
-        average.value = averageScore;
+        // Calculate the average rating if count is greater than 0
+        average.value = count > 0 ? (totalRating / count) * 10 : 0;
     } else {
         toast.errorToast(response.data.message, 'top-right');
-        average.value = 0; // Asegura que el promedio sea 0 si hubo un error
+        average.value = 0; // Ensure average is 0 if there was an error
     }
 };
-
 
 </script>
 
