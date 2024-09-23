@@ -3,22 +3,18 @@
       <HeadLegal />
       <TabLegal />
   
-      <SectionConfig :widht="'67%'">
-        <template v-slot:title>
-          <div class="flex flex-col gap-2">
-            <span class="text-[16px] font-semibold text-gray-800">Política de privacidad</span>
-            <p class="font-normal text-sm">
-              La política de privacidad explica de manera clara y sencilla cómo recopilamos y tratamos los datos personales de los huéspedes, cumpliendo con la legislación vigente. Además, informamos detalladamente sobre sus derechos en materia de protección de datos.
-            </p>
-            <div class="flex justify-end">
-              <div @click="generatePDF" class="flex cursor-pointer">
-                <img src="/assets/icons/1.TH.DOWNLOAD.svg" alt="info" class="w-3 h-3">
-                <span class="text-xs font-medium text-black ml-1">Descargar</span>
-              </div>
-            </div>
+      <div class="bg-white shadow-hoster rounded-[10px] py-6 px-4 w-[720px] 3xl:w-[1040px]">  
+        <p class="text-[16px] leading-[120%] font-semibold">Política de privacidad</p>
+        <p class="font-normal text-sm mt-2 leading-[140%]">
+          La política de privacidad explica de manera clara y sencilla cómo recopilamos y tratamos los datos personales de los huéspedes, cumpliendo con la legislación vigente. Además, informamos detalladamente sobre sus derechos en materia de protección de datos.
+        </p>
+        <div class="flex justify-end mt-2 w-full">
+          <div @click="generatePDF" class="flex cursor-pointer items-center gap-2">
+            <img src="/assets/icons/1.TH.DOWNLOAD.svg" alt="info" class="w-3 h-3">
+            <span class="text-xs font-medium leading-[90%]">Descargar</span>
           </div>
-        </template>
-      </SectionConfig>
+        </div>
+      </div>
     </div>
   </template>
   
@@ -26,7 +22,7 @@
   import { ref, onMounted } from 'vue';
   import HeadLegal from './components/HeadLegal.vue';
   import TabLegal from './components/TabLegal.vue';
-  import SectionConfig from '@/components/SectionConfig.vue';
+  // import SectionConfig from '@/components/SectionConfig.vue';
   import { generatePolicyPDF } from '@/pdf/legal/policy';
     import { generateDelegatePDF } from '@/pdf/legal/policyDelegate';
   import { getGeneralLegal } from '@/api/services/legal/legal.services';
