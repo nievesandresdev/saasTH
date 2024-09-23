@@ -54,8 +54,10 @@
 <script setup>
 import { ref, watch, onMounted, computed, inject, toRefs } from 'vue';
 import { defineProps, defineEmits } from 'vue';
+import { useUtilStore } from '@/stores/modules/util';
 import axios from 'axios';
 
+const utilStore = useUtilStore();
 const props = defineProps({
   error: {
     type: Boolean,
@@ -117,12 +119,15 @@ const isError = computed(() => {
 // fucntions
 const defineFullPhone = async (stringPhone) => {
   if (initialLoad.value) return;
-  console.log('test defineFullPhone',stringPhone)
-  axios({
-    url: 'https://dashboard.thehoster.io/api/phone-codes',
-    method: 'GET',
-  })
+  
+  // console.log('test defineFullPhone',stringPhone)
+  // axios({
+  //   url: 'https://dashboard.thehoster.io/api/phone-codes',
+  //   method: 'GET',
+  // })
+  utilStore.$getPhoneCodesApi()
   .then(res => {
+    console.log('test codes',res)
     codeList.value = res.data;
     if (stringPhone) {
       let phoneString = props.modelValue?.replace(/\s+/g, '');

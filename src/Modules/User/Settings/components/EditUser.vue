@@ -178,7 +178,7 @@
                 v-model:periodicityChat="form.periodicityChat"
                 v-model:periodicityStay="form.periodicityStay"
                 v-model:notifications="form.notifications"
-                :maxHeight="600"
+                :maxHeight="900"
                 :workPositionId="form.work_position_id"
               />
             </div>
