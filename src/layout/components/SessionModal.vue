@@ -1,5 +1,5 @@
 <template>
-    <ModalWindow v-if="true" :isVisible="true" @close="closeModalProfile()" :width="'369px'" padding-content="p-0" footer="true">
+    <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" :width="'369px'" padding-content="p-0" footer="true">
     <template #content>
       <div class="px-8 pt-4 relative">
           <button @click="closeModalProfile" class="absolute top-4 right-4">
