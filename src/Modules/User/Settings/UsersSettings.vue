@@ -50,7 +50,7 @@
                 @mouseover="hoverTable(index)"
                 @mouseleave="hoverTable(index)"
                 :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
+                class="border-b dark:bg-gray-800 dark:border-gray-700 "
                 :class="{
                   'bg-[#ECF9F5]': selectedShow == user.id,
                   'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
@@ -378,8 +378,8 @@
   
   const openModalDelete = (user) => {
     userData.value = user;
-    visibleDropdown.value = null;
     deleteUser.value = true;
+    
   };
   
   const submitDelete = async () => {

@@ -91,7 +91,6 @@
           </div>
         </button>
 
-        <!-- User Name -->
         <button 
           @mousemove="handleMouseMove('User Profile')"
           @click="modalProfile = true"
@@ -102,11 +101,13 @@
             class="w-8 h-8 rounded-full" :src="userAvatar"
             :class="{'icon-white': false, 'border border-white': route.name === 'UserPanel'}"
           >
-          <div :class="widthMenu">
+          <div :class="widthMenu + ' max-w-[200px]'">
             <p 
-              class="text-sm font-semibold ml-2 text-left leading-[120%] whitespace-nowrap"
+              class="text-sm font-semibold ml-2 text-left leading-[120%] whitespace-nowrap overflow-hidden text-ellipsis"
               :class="{'text-white': route.name === 'UserPanel'}"
-            >{{ authStore.fullName }}</p>
+            >
+              {{ authStore.fullName }}
+            </p>
           </div>
         </button>
       </div>

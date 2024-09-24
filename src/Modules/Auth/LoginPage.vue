@@ -71,8 +71,8 @@
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
-                  class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium" 
-                  :disabled="authStore.loading"
+                  class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium disabled:opacity-50" 
+                  :disabled="authStore.loading || form.email === 'admin@email.com' "
                 >
                   Iniciar sesión
                 </button>
