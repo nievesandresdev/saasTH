@@ -165,7 +165,7 @@ const submitForm = async () => {
   const response = await createWorkPosition(form);
 
   if (response.ok) {
-    toast.successToast('Puesto creado con éxito', 'top-right');
+    toast.warningToast('Puesto creado con éxito', 'top-right');
     resetForm();
     closeModal();
     emit('storeWorkPosition', response.data.wPosition);
