@@ -170,7 +170,7 @@ const submitForm = async () => {
   const response = await updateWorkPosition(form);
 
   if (response.ok) {
-    toast.successToast('Cambios guardados con éxito', 'top-right');
+    toast.warningToast('Cambios guardados con éxito', 'top-right');
     resetForm();
     closeModal();
     emit('storeWorkPosition', response.data.wPosition);
