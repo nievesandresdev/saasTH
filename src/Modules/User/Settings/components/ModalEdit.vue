@@ -1,24 +1,57 @@
 <template>
-  <ModalWindow :isVisible="isVisible" width="341px" footer :paddingTop="4" :paddingBottom="4" :paddingLeft="6" :paddingRight="6" :topOffset="'10%'" >
+  <ModalWindow
+    :isVisible="isVisible"
+    width="341px"
+    footer
+    :paddingTop="4"
+    :paddingBottom="4"
+    :paddingLeft="6"
+    :paddingRight="6"
+    :topOffset="'10%'"
+  >
     <template #header>
       <div class="flex items-center justify-between py-4 px-6">
         <h1 class="text-lg font-medium leading-[110%]">Editar puesto de trabajo</h1>
-        <button @click.prevent="closeModal">
-          <img class="w-5 h-5" src="/assets/icons/1.TH.CLOSE.svg" alt="">
+        <button @click.stop.prevent="closeModal">
+          <img class="w-5 h-5" src="/assets/icons/1.TH.CLOSE.svg" alt="" />
         </button>
       </div>
-      <hr>
+      <hr />
     </template>
     <template #content>
-      <label class="text-sm font-semibold">Nombre del puesto de trabajosss*</label>
+      <label class="text-sm font-semibold">Nombre del puesto de trabajo*</label>
       <BaseTextField
         v-model="form.name"
         placeholder="Ejemplo: Manager"
         classContent="mt-2"
-        :errors="errors"
+        :error="nameError"
         name="name"
-        @input:typing="validate"
+        @input="validateName"
       />
+
+      <!-- Mensaje de error debajo del campo de nombre -->
+      <div class="flex mt-2 htext-alert-negative justify-left" v-if="nameError">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165
+            13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0
+            1.438-.99.98-1.767zM8 5c.535 0
+            .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1
+            5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0
+            0 1 0-2"
+          />
+        </svg>
+        <p class="text-xs htext-alert-negative">
+          Es necesario otorgar un nombre a este puesto
+        </p>
+      </div>
 
       <div class="flex justify-start w-full mt-4">
         <h3
@@ -26,42 +59,41 @@
           v-for="(step, index) in steps"
           :key="step.number"
           :class="{
-            'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step': currentStep === step.number,
-            'text-gray-300': currentStep !== step.number
+            'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step':
+              currentStep === step.number,
+            'text-gray-300': currentStep !== step.number,
           }"
           @click="currentStep = step.number"
         >
           {{ step.label }}
         </h3>
       </div>
-      <hr class="mb-5 px-4">
+      <hr class="mb-5 px-4" />
       <div v-if="currentStep === 1" class="mb-6">
-        <AccessPermissions
-          v-model:permissions="form.permissions"
-        />
+        <AccessPermissions v-model:permissions="form.permissions" />
       </div>
       <div v-if="currentStep === 2">
-        <Notifications 
+        <Notifications
           v-model:periodicityChat="form.periodicityChat"
           v-model:periodicityStay="form.periodicityStay"
           v-model:notifications="form.notifications"
         />
-
       </div>
     </template>
 
     <template #footer>
       <div class="border-t hborder-gray-400 py-4 px-6 flex items-center justify-between">
-        <button 
-          @click="cancel"
-          class="text-sm font-medium leading-[110%] underline"
-        >
-        Cancelar
+        <button @click="cancel" class="text-sm font-medium leading-[110%] underline">
+          Cancelar
         </button>
 
-        <button 
+        <button
           @click="submitForm"
-          class="px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta"
+          :disabled="isSubmitDisabled"
+          :class="[
+            'px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta',
+            { 'opacity-50 cursor-not-allowed': isSubmitDisabled },
+          ]"
         >
           Guardar
         </button>
@@ -69,26 +101,25 @@
     </template>
   </ModalWindow>
 </template>
-  
+
 <script setup>
-import { ref, reactive,defineEmits,defineProps,watch } from 'vue';
+import { ref, reactive, computed, defineEmits, defineProps } from 'vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import AccessPermissions from './AccessPermisions.vue';
 import Notifications from './Notifications.vue';
 import { updateWorkPosition } from '@/api/services/users/userSettings.service';
-import { useToastAlert } from '@/composables/useToastAlert'
-import { nextTick } from 'vue';
+import { useToastAlert } from '@/composables/useToastAlert';
 
 const toast = useToastAlert();
 
-const emit = defineEmits(['storeWorkPosition','close']);
+const emit = defineEmits(['storeWorkPosition', 'close']);
 
 const props = defineProps({
   data: Object,
 });
 
-
+// Reactive form with initial data
 const form = reactive({
   id: props.data.id,
   name: props.data.name,
@@ -102,54 +133,73 @@ const form = reactive({
   },
 });
 
-
-
-/* watch(() => form.permissions, (newValue) => {
-  console.log('form.permissionsnew',newValue)
-}) */
-
 const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Accesos' },
   { number: 2, label: 'Notificaciones' },
 ];
 
+const nameError = ref(false);
 
+// Computed property to check if permissions object is empty
+const isPermissionsEmpty = computed(() => {
+  return Object.keys(form.permissions).length === 0;
+});
+
+// Computed property to disable the submit button
+const isSubmitDisabled = computed(() => {
+  return form.name.trim() === '' || isPermissionsEmpty.value;
+});
+
+const validateName = () => {
+  if (form.name.trim() === '') {
+    nameError.value = true;
+  } else {
+    nameError.value = false;
+  }
+};
 
 const submitForm = async () => {
-  await nextTick();
-  //console.log('Submitting form:', form);
+  validateName();
+
+  if (nameError.value || isPermissionsEmpty.value) {
+    toast.errorToast('Por favor, completa todos los campos requeridos.', 'top-right');
+    return;
+  }
 
   const response = await updateWorkPosition(form);
 
   if (response.ok) {
-    toast.warningToast('Cambios guardados con éxito', 'top-right');
-    cancel();
+    toast.successToast('Cambios guardados con éxito', 'top-right');
+    resetForm();
+    closeModal();
     emit('storeWorkPosition', response.data.wPosition);
+  } else {
+    toast.errorToast('Error al guardar los cambios', 'top-right');
   }
 };
 
-
-/* watch(() => form, (newForm) => {
-  console.log('Form updated:', newForm);
-}, { deep: true }); */
-
-
-const cancel = () => {
-  form.name = '';
-  form.permissions = {};
-  form.periodicityChat = 5;
-  form.periodicityStay = 5;
+const resetForm = () => {
+  form.name = props.data.name;
+  form.permissions = JSON.parse(props.data.permissions);
+  form.periodicityChat = props.data.periodicity_chat ?? 5;
+  form.periodicityStay = props.data.periodicity_stay ?? 5;
   form.notifications = {
-    newChat: false,
-    PendingChat10: false,
-    pendingChat30: false,
+    newChat: JSON.parse(props.data.notifications || '{}').newChat ?? false,
+    PendingChat10: JSON.parse(props.data.notifications || '{}').PendingChat10 ?? false,
+    pendingChat30: JSON.parse(props.data.notifications || '{}').pendingChat30 ?? false,
   };
   currentStep.value = 1;
+  nameError.value = false;
+};
+
+const cancel = () => {
+  resetForm();
   closeModal();
-}
+};
 
 const closeModal = () => {
+  resetForm();
   emit('close');
-}
+};
 </script>

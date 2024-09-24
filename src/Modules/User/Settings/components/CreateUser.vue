@@ -100,10 +100,10 @@
                                 class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
                                 placeholder="Nombre"
                                 :class="
-                                  {
-                                    'hborder-black-100 htext-black-100 font-medium': form.name,
-                                    'hborder-gray-400 htext-gray-500': !form.name
-                                  }"
+                                {
+                                  'hborder-black-100 htext-black-100 font-medium': form.name,
+                                  'hborder-gray-400 htext-gray-500': !form.name
+                                }"
                             />
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
                                   'hborder-gray-400 htext-gray-500': !form.phone,
-                                  'hborder-alert-negative': errorPhone
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPhone
                                 }"
                                 v-model="form.phone"
                                 @input="validatePhone"
@@ -184,13 +184,14 @@
                                 :class="
                                 {
                                   'hborder-black-100 htext-black-100 font-medium': form.email && !errorEmail,
-                                  'hborder-gray-400 htext-gray-500': !form.email || errorEmail
+                                  'hborder-gray-400 htext-gray-500': !form.email || errorEmail,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                                 }"
                                 placeholder="Correo con el que iniciará sesión"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                 </svg>
                                 <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
                             </div>
@@ -205,13 +206,14 @@
                                 class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                                  'hborder-gray-400 htext-gray-500': !form.password || errorPassword
+                                  'hborder-gray-400 htext-gray-500': !form.password || errorPassword,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword
                                 }"
                                 placeholder="Clave de acceso al sistema"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                 </svg>
                                 <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
                             </div>
@@ -226,7 +228,8 @@
                                 class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                                  'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch
+                                  'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch
                                 }"
                                 placeholder="Repite la clave"
                             />
@@ -987,6 +990,7 @@ function closeModal() {
     }
   } else if(!mouseDownInside.value) { // Si no hay cambios y el click fue fuera, cerrar el modal
     emits('close');
+    isModalCrudOpen.value = false;
   }
 }
 
