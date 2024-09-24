@@ -18,14 +18,19 @@
                 </div>
                 <!-- body -->
                 <div class="px-6 flex-grow overflow-y-auto bg-white">
-                    <template v-for="novelty in  data" :key="novelty.id">
-                        <NoveltyCard v-if="novelty.type == 'news'" :data="novelty"/>
-                        <NotificationCard v-else :data="novelty"/>
-                    </template>
-                    <div class="py-6" v-if="!data.length">
-                        <h2 class="text-base font-semibold leading-[120%] htext-gray-500">Sin novedades</h2>
-                        <h2 class="text-sm leading-[140%] mt-2 htext-gray-500">Muy pronto te las comunicaremos por aquí </h2>
+                    <div v-if="loading" class="pt-6">
+                        <MiniSpinner/>
                     </div>
+                    <template v-else>
+                        <template v-for="novelty in  data" :key="novelty.id">
+                            <NoveltyCard v-if="novelty.type == 'news'" :data="novelty"/>
+                            <NotificationCard v-else :data="novelty"/>
+                        </template>
+                        <div class="py-6" v-if="!data.length">
+                            <h2 class="text-base font-semibold leading-[120%] htext-gray-500">Sin novedades</h2>
+                            <h2 class="text-sm leading-[140%] mt-2 htext-gray-500">Muy pronto te las comunicaremos por aquí </h2>
+                        </div>
+                    </template>
                 </div>
             </div>
         </aside>
@@ -40,17 +45,21 @@ import { ref, inject, watch } from 'vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
 import NotificationCard from './NotificationCard.vue'
 import NoveltyCard from './NoveltyCard.vue'
-
+import MiniSpinner from '@/components/MiniSpinner.vue'
 import { useNotifyUserStore } from '@/stores/modules/users/notifiyUser';
 
 const notifyUserStore = useNotifyUserStore();
 const isVisible = inject('isNotifyPanelVisible');
 const data = ref([]);
+const loading = ref(false);
+
 watch(() => isVisible.value, async (newVal) => {
+    loading.value = true;
     data.value = [];
     if(newVal){
         data.value = await notifyUserStore.$getNotificationsByUser();
     }
+    loading.value = false;
 });  
 </script>
 
