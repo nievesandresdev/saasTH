@@ -97,12 +97,12 @@
                             <input
                                 v-model="form.name"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
-                                placeholder="Nombre del usuario"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
+                                placeholder="Nombre"
                                 :class="
                                   {
-                                    'border-black': form.name,
-                                    'border-gray-300': !form.name
+                                    'hborder-black-100 htext-black-100 font-medium': form.name,
+                                    'hborder-gray-400 htext-gray-500': !form.name
                                   }"
                             />
                         </div>
@@ -113,13 +113,13 @@
                             <input
                                 v-model="form.lastname"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
                                 :class="
                                   {
-                                    'border-black': form.lastname,
-                                    'border-gray-300': !form.lastname
+                                    'hborder-black-100 htext-black-100 font-medium': form.lastname,
+                                    'hborder-gray-400 htext-gray-500': !form.lastname
                                   }"
-                                placeholder="Apellido del usuario"
+                                placeholder="Apellidos"
                             />
                         </div>
                     </div>
@@ -131,11 +131,11 @@
                             </select> -->
                             <select v-model="form.prefix"
                               :class="{
-                                'border-red-600': errorPrefix, '': !errorPrefix,
-                                'border-black': form.prefix,
-                                'border-gray-300': !form.prefix
+                                'hborder-alert-negative': errorPrefix, '': !errorPrefix,
+                                'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
+                                'hborder-gray-400 htext-gray-500': !form.phone
                               }" 
-                              class="bg-white w-1/4 rounded-l-lg border pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
+                              class="bg-white w-[92px] rounded-l-lg h-10 border pr-1 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
                               style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
                               <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                             </select>
@@ -157,21 +157,21 @@
                             </div> -->
                             <input type="text"
                                 placeholder="Teléfono de contacto"
-                                class="p-2.5 block border w-full text-sm text-gray-900 bg-white rounded-r-lg"
+                                class="p-2.5 block border flex-grow h-10 text-sm text-gray-900 bg-white rounded-r-lg border-l-none"
                                 :class="{
-                                  'border-black': form.phone,
-                                  'border-gray-300': !form.phone,
-                                  'hover:border-red-600': errorPhone
+                                  'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
+                                  'hborder-gray-400 htext-gray-500': !form.phone,
+                                  'hborder-alert-negative': errorPhone
                                 }"
                                 v-model="form.phone"
                                 @input="validatePhone"
                             >
                         </div>
-                        <div class="flex justify-start w-full mt-1 mr-2 text-red-600" v-if="errorPhone">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="mr-1 w-6 h-6 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                        <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
-                            <small> Introduce solo números en el campo de teléfono</small>
+                            <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -183,16 +183,16 @@
                                 class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                                 :class="
                                 {
-                                  'border-black': form.email && !errorEmail,
-                                  'border-gray-300': !form.email || errorEmail
+                                  'hborder-black-100 htext-black-100 font-medium': form.email && !errorEmail,
+                                  'hborder-gray-400 htext-gray-500': !form.email || errorEmail
                                 }"
                                 placeholder="Correo con el que iniciará sesión"
                             />
-                            <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                 </svg>
-                                <small v-text="errorEmailText"></small>
+                                <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
                             </div>
                         </div>
                     </div>
@@ -204,16 +204,16 @@
                                 type="password"
                                 class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                                 :class="{
-                                  'border-black': form.password && !errorPassword,
-                                  'border-gray-300': !form.password || errorPassword
+                                  'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
+                                  'hborder-gray-400 htext-gray-500': !form.password || errorPassword
                                 }"
                                 placeholder="Clave de acceso al sistema"
                             />
-                            <div class="flex mt-1 text-red-600 justify-left" v-if="errorPassword">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                 </svg>
-                                <small>Debe tener minimo 8 caracteres</small>
+                                <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
                             </div>
                         </div>
                     </div>
@@ -225,16 +225,16 @@
                                 type="password"
                                 class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                                 :class="{
-                                  'border-black': form.password_confirmation && !errorPasswordMatch,
-                                  'border-gray-300': !form.password_confirmation || errorPasswordMatch
+                                  'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
+                                  'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch
                                 }"
                                 placeholder="Repite la clave"
                             />
-                            <div class="flex mt-1 text-red-600 justify-left" v-if="errorPasswordMatch">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                 </svg>
-                                <small>Debe tener minimo 8 caracteres</small>
+                                <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
                             </div>
                         </div>
                     </div>
