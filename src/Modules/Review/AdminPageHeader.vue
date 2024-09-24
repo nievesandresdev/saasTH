@@ -1,5 +1,5 @@
 <template>
-    <section class="hbg-white-100 z-[100]  w-full">
+    <section class="bg-[#FAFAFA] z-[100]  w-full">
         <div class="flex justify-between py-[20px] mx-[24px] border-b border-[#BFBFBF]">
             <div class="space-x-2 flex justify-between w-full">
                 <h1 class="font-medium text-[22px]">Visión general de las reseñas</h1>

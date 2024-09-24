@@ -15,12 +15,17 @@
             </div>
 
             <div
-                :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}"
-                class="w-[42px] text-center"
+                :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota), 'pr-[6px]': calcSummaryByOta(ota)?.scaleRating == 5}"
+                class="w-[42px] text-right"
+
             >
                 <span
                     class="text-[14px] font-semibold"
-                >{{ calcSummaryByOta(ota)?.note || '--' }}</span><span class="text-[10px] font-medium">/{{ calcSummaryByOta(ota)?.scaleRating }}</span>
+                >
+                    {{ !!calcSummaryByOta(ota)?.note && !!calcSummaryByOta(ota)?.totalReviews ? calcSummaryByOta(ota)?.note : '--' }}
+                </span>
+                <span class="text-[10px] font-medium">/</span>
+                <span class="text-[10px] font-medium">{{ calcSummaryByOta(ota)?.scaleRating }}</span>
             </div>
             
             <div class="w-[82px]">
@@ -50,7 +55,11 @@ const reviewStore = inject('reviewStore');
 
 function calcSummaryByOta (ota){
     let summary = summaryByOta.value?.find(item => item.ota == ota);
-    let note = summary?.summary?.sumAndAvgRatings?.toFixed(1) || 0;
+    let noteNumeric = summary?.summary?.sumAndAvgRatings;
+    let note = noteNumeric > 0 ? noteNumeric?.toFixed(1) : 0;
+    if (ota === 'BOOKING') {
+        note = '10.0';
+    }
     let scaleRating = reviewStore?.scaleRating[ota];
     let totalReviews = summary?.summary?.totalReviews || 0;
     return {
