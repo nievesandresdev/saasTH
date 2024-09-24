@@ -31,16 +31,18 @@
             <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un chat pendiente.</span>
             <div class="flex gap-2 items-center justify-start mt-2">
               <p class="text-sm leading-[150%]">Periocidad:</p>
-              <BaseTextField
+              <div class="w-[38px]">
+                <BaseTextField
                   v-model="periodicityChat"
                   placeholder="Ejemplo: 5 minutos"
-                  classInput="w-[38px] h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
                   :disabled="isDisabled"
                   @input="emitChanges"
-              />
+                />
+              </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
           </div>
@@ -73,16 +75,18 @@
             <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un feedback pendiente.</span>
             <div class="flex gap-2 items-center justify-start mt-2">
               <p class="text-sm leading-[150%]">Periocidad:</p>
-              <BaseTextField
-                v-model="periodicityStay"
-                placeholder="Ejemplo: 5 minutos"
-                classInput="w-[38px] h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
-                :type="'number'"
-                :errors="errors"
-                :disabled="isDisabled"
-                name="notifications"
-                @input="emitChanges"
-              />
+              <div class="w-[38px]">
+                <BaseTextField
+                  v-model="periodicityStay"
+                  placeholder="Ejemplo: 5 minutos"
+                  classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  :type="'number'"
+                  :errors="errors"
+                  :disabled="isDisabled"
+                  name="notifications"
+                  @input="emitChanges"
+                />
+              </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
           </div>
