@@ -13,14 +13,14 @@ const props = defineProps({
 });
 
 const activeClass = computed(() => {
-    return props.active ? 'border-green-700 hbg-green-200 htext-green-600' : 'border-black';
+    return props.active ? 'border-[#2A8873] hbg-green-200 text-[#34A98F]' : 'border-black';
 });
 </script>
 
 <template>
     <div
         :type="props.type"
-        class="border p-2 text-sm font-medium leading-[110%] rounded-[6px] mt-5 cursor-pointer"
+        class="border p-2 text-sm font-medium leading-[110%] rounded-[6px] mt-5 cursor-pointer hover:border-[#34A98F] hover:text-[#34A98F]"
         :class="activeClass"
     >
         <slot />
