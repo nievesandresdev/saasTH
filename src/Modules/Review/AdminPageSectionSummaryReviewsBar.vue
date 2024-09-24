@@ -4,12 +4,12 @@
             v-for="(item, index) in distribution"
             :key="index"
         >
-            <p class="text-sm font-medium">{{ item.name }}</p>
+            <p class="text-sm font-medium leading-[90%] mb-[3px]">{{ item.name }}</p>
             <div class="flex justify-between items-center">
                 <div class="progress-container w-[428px] 3xl:w-[668px]">
                     <div :style="{ width: getPercentage(item.numbers) + '%',  borderRadius: getPercentage(item.numbers) == 100 ? '6px' : '6px 0px 0px 6px' }" class="progress"></div>
                 </div>
-                <span class="text-sm font-medium">{{ item.numbers }}</span>
+                <span class="text-sm font-medium leading-none">{{ item.numbers }}</span>
             </div>
         </div>
     </div>

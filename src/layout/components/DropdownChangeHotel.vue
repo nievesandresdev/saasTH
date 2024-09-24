@@ -93,7 +93,10 @@
                                         - {{ hotel.zone }}
                                     </template>
                                 </p>
-                                <div class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
+                                <div 
+                                    v-if="!hotel.subscribed" 
+                                    class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block hborder-alert-negative htext-alert-negative"
+                                >No Suscrito</div>
                             </div>
                         </li>
                     </template>
@@ -153,7 +156,10 @@
                                     - {{ hotel.zone }}
                                 </template>
                             </p>
-                            <div class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block" :class="!hotel.subscribed ?'hborder-alert-negative htext-alert-negative' : 'hborder-green-600 htext-green-600'">{{ hotel.subscribed ? 'Suscrito' : 'No Suscrito' }}</div>
+                            <div
+                                v-if="!hotel.subscribed" 
+                                class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block hborder-alert-negative htext-alert-negative" 
+                            >No Suscrito</div>
                         </div>
                     </li>
                 </ul>

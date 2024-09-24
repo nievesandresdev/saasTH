@@ -213,7 +213,7 @@
 */
 .ghost-green-600:focus,
 .ghost-green-600:hover{
-    color: var(--h-green-600);
+    color: var(--h-green-600) !important;
     text-decoration: none !important;
 }
 .ghost-green-600:focus > .ghost-green-600-icon,

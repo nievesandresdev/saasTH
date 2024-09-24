@@ -22,24 +22,28 @@
           </div>
   
           <div class="pb-6 pr-6 pl-6">
-            <div class="flex items-center w-full overflow-x-hidden">
-              <div class="flex w-full" style="scroll-snap-type: x mandatory;">
-                <h3
-                  v-for="(step, index) in steps"
-                  :key="step.number"
-                  :class="{
-                    'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step px-4': currentStep === step.number,
-                    'text-gray-300 px-2': currentStep !== step.number
-                  }"
-                  class="text-center py-2 text-lg font-semibold cursor-pointer relative"
-                  @click="scrollToStep(index)"
-                  style="flex: 1 0 25%; scroll-snap-align: start;"
-                  ref="stepRefs"
+            <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
+                <div
+                  class="flex w-full"
+                  style="scroll-snap-type: x mandatory; scroll-padding-right: 16px;"
                 >
-                  {{ step.label }}
-                </h3>
+                  <h3
+                    v-for="(step, index) in steps"
+                    :key="step.number"
+                    :class="[
+                      'flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative px-4',
+                      currentStep === step.number
+                        ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step'
+                        : 'text-gray-300',
+                    ]"
+                    @click="scrollToStep(index)"
+                    style="scroll-snap-align: start;"
+                    :ref="el => stepRefs[index] = el"
+                  >
+                    {{ step.label }}
+                  </h3>
+                </div>
               </div>
-            </div>
             <hr class="mb-5 px-4">
             <div v-if="currentStep === 1">
               <div class="relative mt-4">
@@ -47,7 +51,6 @@
                   <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                 </div>
                 <div class="relative w-full">
-                  {{ selectedWorkPositionName ?? null }}
                   <input
                       type="text"
                       id="workPositionInput"
@@ -88,8 +91,8 @@
                             class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
                             :class="
                             {
-                              'border-black': form.name,
-                              'border-gray-300': !form.name
+                              'hborder-black-100 htext-black-100 font-medium': form.name,
+                              'hborder-gray-400 htext-gray-500': !form.name
                             }"
                             placeholder="Nombre del usuario"
                         />
@@ -104,8 +107,8 @@
                             class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
                             :class="
                             {
-                              'border-black': form.lastname,
-                              'border-gray-300': !form.lastname
+                              'hborder-black-100 htext-black-100 font-medium': form.lastname,
+                              'hborder-gray-400 htext-gray-500': !form.lastname
                             }"
                             placeholder="Apellido del usuario"
                         />
@@ -119,11 +122,11 @@
                         </select> -->
                         <select v-model="form.prefix"
                           :class="{
-                            'border-red-600': errorPrefix, '': !errorPrefix,
-                            'border-black': form.prefix,
-                            'border-gray-300': !form.prefix
+                            'hborder-alert-negative': errorPrefix, '': !errorPrefix,
+                            'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
+                            'hborder-gray-400 htext-gray-500': !form.phone
                           }" 
-                          class="bg-white w-1/4 rounded-l-lg border pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
+                          class="bg-white w-[92px] rounded-l-lg border pr-1 text-gray-700 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
                           style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
                           <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                         </select>
@@ -131,19 +134,19 @@
                                 placeholder="Teléfono de contacto"
                                 class="p-2.5 block border w-full text-sm text-gray-900 bg-white rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
                                 :class="{
-                                  'border-black': form.phone,
-                                  'border-gray-300': !form.phone,
-                                  'hover:border-red-600': errorPhone
+                                  'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
+                                  'hborder-gray-400 htext-gray-500': !form.phone,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPhone
                                 }"
                                 v-model="form.phone"
                                 @input="validatePhone"
                             >
                     </div>
-                    <div class="flex justify-start mt-1 text-red-600" v-if="errorPhone">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <div class="flex justify-start mt-2 htext-alert-negative" v-if="errorPhone">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                         </svg>
-                        <small> Introduce solo números en el campo de teléfono</small>
+                        <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
                     </div>
                 </div>
                 <div class="mt-4">
@@ -155,16 +158,17 @@
                             class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
                             :class="
                             {
-                              'border-black': form.email && !errorEmail,
-                              'border-gray-300': !form.email || errorEmail
+                              'hborder-black-100 htext-black-100 font-medium': form.email && !errorEmail,
+                              'hborder-gray-400 htext-gray-500': !form.email || errorEmail,
+                              'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                             }"
                             placeholder="Correo con el que iniciará sesión"
                         />
-                        <div class="flex mt-1 text-red-600 justify-left" v-if="errorEmail">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                        <div class="flex mt-2 justify-left htext-alert-negative" v-if="errorEmail">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <small v-text="errorEmailText"></small>
+                          </svg>
+                            <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
                         </div>
                     </div>
                 </div>
@@ -887,9 +891,24 @@ if (form.value.role === 1 || form.value.role === 2) {
 
   const stepRefs = ref([]);
 
-  const scrollToStep = (index) => {
+const addToStepRefs = (el) => {
+  if (el) {
+    stepRefs.value.push(el);
+  }
+};
+
+const scrollToStep = (index) => {
+  const stepElement = stepRefs.value[index];
+
+  const options = { behavior: 'smooth', inline: 'start' };
+
+  if (index === steps.length - 1) {
+    // Si es la última pestaña
+    options.inline = 'end';
+  }
+
+  stepElement.scrollIntoView(options);
   currentStep.value = steps[index].number;
-  stepRefs.value[index].scrollIntoView({ behavior: 'smooth', inline: 'end' });
 };
   
   const nextStep = () => {
@@ -1140,6 +1159,18 @@ function closeModal(complete = false) {
   margin-left: -0.5rem; 
   padding-right: 0.5rem; 
 } */
+
+/* Ocultar scrollbar en Chrome, Safari y Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ocultar scrollbar en IE, Edge y Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 
 </style>
   

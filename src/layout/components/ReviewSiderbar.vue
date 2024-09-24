@@ -74,14 +74,14 @@
                         <div class="flex items-center justify-between">
                             <div class="space-x-2 flex">
                                 <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
-                                <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
-                                <div
+                                <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
+                                <!-- <div
                                     class="rounded-full h-[20px] px-[8px] text-[10px] font-semibold w-[91px] text-white flex justify-between items-center"
                                     :class="review.increasesAverageRating ? 'bg-[#16a34a]' : 'bg-[#FF6666]'"
                                 >
                                     Nota media
                                     <img class="w-[12px] h-[12px]" :src="`/assets/icons/1.TH.ARROW.${review.increasesAverageRating ? 'TOP' : 'BOTTOM'}.svg`" alt="1.TH.ARROW.TOP">
-                                </div>
+                                </div> -->
                             </div>
                             <img class="w-[20px] h-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
                         </div>

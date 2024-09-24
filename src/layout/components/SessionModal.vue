@@ -2,8 +2,15 @@
     <ModalWindow v-if="modalProfile" :isVisible="modalProfile" @close="closeModalProfile()" :width="'369px'" padding-content="p-0" footer="true">
     <template #content>
       <div class="px-8 pt-4 relative">
-          <button @click="closeModalProfile" class="absolute top-4 right-4">
-            <img src="/assets/icons/1.TH.CLOSE.svg" alt="Cerrar" class="h-6 w-6" />
+          <button  class="absolute top-2 right-2">
+            <HoveredIcon 
+                src="/assets/icons/1.TH.CLOSE.svg"
+                :height_icon="'24px'"
+                :width_icon="'24px'"
+                :padding_container="'8px'"
+                style="--background-color: #f3f3f3;"
+                @click="closeModalProfile"
+            />
           </button>
           <img 
             :src="`https://ui-avatars.com/api/?name=${authStore.user.name}&color=fff&background=${authStore.user.color}`"
@@ -13,8 +20,8 @@
           <div class="text-center mt-3 pb-6">
             <h3 class="text-base font-semibold leading-[120%]">{{ authStore.fullName }}</h3>
             <p class="text-xs font-semibold leading-[130%] mt-1 text-[#8A8A8A]">{{ $getRoleName(authStore.user.role) }}</p>
-            <button @click="redirectToUserPanel" class="flex items-center group mx-auto mt-3">
-              <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-1" />
+            <button @click="redirectToUserPanel" class="flex items-center group mx-auto mt-3 ghost-green-600">
+              <img src="/assets/icons/1.TH.Settings.svg" alt="Ajustes de cuenta" class="h-5 w-5 mr-1 ghost-green-600-icon" />
               <span class="text-[#8A8A8A] font-semibold text-xs leading-[130%] group-hover:text-[#34A98F]">Ajustes de cuenta</span>
             </button>
             
@@ -37,6 +44,7 @@
 </template>
 <script setup>
 import { inject } from 'vue'
+import HoveredIcon from '@/components/Buttons/HoveredIcon.vue';
 import ModalWindow from '@/components/ModalWindow.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'

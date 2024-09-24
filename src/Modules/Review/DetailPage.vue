@@ -21,10 +21,17 @@
                         </div>
                         <div class="flex items-center space-x-[4px]">
                             <span class="font-semibold text-sm">Pendiente</span>
-                            <BaseSwichInput
+                            <!-- <BaseSwichInput
                                 v-model="reviewData.isAttended"
                                 @change:value="changeStatusAttended()"
                                 colorDisabled="bg-[#FFC506]"
+                            /> -->
+                            <ToggleButton
+                                v-model="reviewData.isAttended"
+                                @change="changeStatusAttended()"
+                                disabledColor="#FFC506"
+                                disabledColorHover="#EBC44C"
+                                :id="`toggle-${reviewData?.id}`"
                             />
                             <span class="font-semibold text-sm text-[#858181]">Atendida</span>
                         </div>
@@ -106,6 +113,7 @@
 <script setup>
 import { onMounted, computed, provide, ref, watch } from 'vue';
 import { $capitalize, $titleCase } from '@/utils/textWritingTypes';
+import ToggleButton from '@/components/Buttons/ToggleButton.vue'
 
 import { useRoute } from 'vue-router';
 const router = useRoute();

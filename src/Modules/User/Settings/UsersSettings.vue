@@ -6,7 +6,7 @@
         <div class="relative flex w-1/3" ref="ref_dropdown_container" :class="{'mb-4':data_filter.search_terms}">
           <input
             type="text"
-            class="pl-10 text-sm border border-[#BFBFBF] h-11 rounded w-full"
+            class="pl-10 text-sm border border-[#BFBFBF] h-11 rounded w-full hover:border-[#34A98F] hover:placeholder:text-[#34A98F]"
             placeholder="Buscar por nombre o por puesto de trabajo"
             v-model="formFilter.search_terms"
             :class="{'border-dark':formFilter.search_terms}"
@@ -50,10 +50,10 @@
                 @mouseover="hoverTable(index)"
                 @mouseleave="hoverTable(index)"
                 :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 bg-white"
+                class="border-b dark:bg-gray-800 dark:border-gray-700 "
                 :class="{
                   'bg-[#ECF9F5]': selectedShow == user.id,
-                  'hover:bg-[#F9FFFD]': selectedUser?.id != user.id,
+                  'hover:bg-[#F1F1F1]': selectedUser?.id != user.id,
                   'shadow-sm': hoverSelected == index
                 }"
               >
@@ -229,7 +229,7 @@
   
   onMounted(() => {
     handleGetUsers();
-    handleTestMail();
+    //  handleTestMail();
     adjustBodyPadding(); // Ajustar el padding al cargar la página
     window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
   });
@@ -378,8 +378,8 @@
   
   const openModalDelete = (user) => {
     userData.value = user;
-    visibleDropdown.value = null;
     deleteUser.value = true;
+    
   };
   
   const submitDelete = async () => {
