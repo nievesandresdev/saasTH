@@ -48,14 +48,34 @@
                   <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
                     Inactivo
                   </span>
-                  <div v-if="dataUser?.role?.name != 'Associate'">
-                    <div v-if="dataUser.status == 1" @click="disabled" class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8">
-                      <img src="/assets/icons/1.TH.PAUSE.svg" class="w-4 h-4 mr-2 text-black" alt="plus icon">
-                      <span class="font-medium text-sm">Inactivar</span>
+                  <div>
+                    <div v-if="dataUser.status == 1" @click="disabled" class="group flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:border-[#2A8873] cursor-pointer h-8">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="mr-2" fill="none">
+                        <circle 
+                          cx="8.00016" 
+                          cy="7.99967" 
+                          r="6.26667" 
+                          stroke="#333333" 
+                          stroke-width="0.8" 
+                          class="group-hover:stroke-[#2A8873]" 
+                        />
+                        <path d="M6.6665 10.6663V5.33301M9.33317 10.6663V5.33301" stroke="#333333" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                      <span class="font-medium text-sm group-hover:text-[#2A8873]">Inactivar</span>
                     </div>
-                    <div v-else @click="enabled" class="flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:bg-gray-100 cursor-pointer h-8">
-                      <img src="/assets/icons/octicon_play-16.svg" class="w-4 h-4 mr-2" alt="plus icon">
-                      <span class="font-medium text-sm">Activar</span>
+                    <div v-else @click="enabled" class="group flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:border-[#2A8873] cursor-pointer h-8">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="mr-2" fill="none">
+                        <circle 
+                          cx="8.00016" 
+                          cy="7.99967" 
+                          r="6.26667" 
+                          stroke="#333333" 
+                          stroke-width="0.8" 
+                          class="group-hover:stroke-[#2A8873]" 
+                        />
+                        <path d="M6.72266 5.5L10.6115 8L6.72266 10.5V5.5Z" fill="#333333" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span class="font-medium text-sm group-hover:text-[#2A8873]">Activar</span>
                     </div>
                   </div>
                 </div>

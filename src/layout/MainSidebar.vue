@@ -91,6 +91,24 @@
           </div>
         </button>
 
+        <!-- User Name -->
+        <!-- <button 
+          @mousemove="handleMouseMove('User Profile')"
+          @click="modalProfile = true"
+          class="rounded-[10px] flex items-center p-1 max-h-[40px]"
+          :class="{'hbg-green-600 shadow-lg': route.name === 'UserPanel', 'hover-gray-100': route.name !== 'UserPanel'}"
+        >
+          <img 
+            class="w-8 h-8 rounded-full" :src="userAvatar"
+            :class="{'icon-white': false, 'border border-white': route.name === 'UserPanel'}"
+          >
+          <div :class="widthMenu">
+            <p 
+              class="text-sm font-semibold ml-2 text-left leading-[120%] whitespace-nowrap"
+              :class="{'text-white': route.name === 'UserPanel'}"
+            >{{ authStore.fullName }}</p>
+          </div>
+        </button> -->
         <button 
           @mousemove="handleMouseMove('User Profile')"
           @click="modalProfile = true"

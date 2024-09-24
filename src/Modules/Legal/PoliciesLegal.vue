@@ -72,8 +72,8 @@
       <div class="flex justify-center mb-4">
         <img src="/assets/icons/warning-red.svg" class="w-8 h-8" />
       </div>
-      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Quieres eliminar la política?</p>
-      <p class="text-sm font-normal text-center">Esta acción es irreversible, pero siempre tendrás la opción de crear una nueva política o norma en cualquier momento.</p>
+      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Quieres eliminar la norma?</p>
+      <p class="text-sm font-normal text-center">Esta acción es irreversible, pero siempre tendrás la opción de crear una nueva norma en cualquier momento.</p>
       <div class="flex justify-between mt-4">
         <div @click="closedeletePolicy" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
           Cancelar
