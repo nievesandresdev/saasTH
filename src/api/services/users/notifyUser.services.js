@@ -4,7 +4,7 @@ import {
     notificationsPath,
 } from '../../config/apiRoute'
 
-export const getNotificationsByUserApi = (UserId) => apiHttp('GET', `${hosterPath}/${notificationsPath}/getNotificationsByUser/${UserId}`,null)
+export const getNotificationsByUserApi = (UserId) => apiHttp('GET', `${hosterPath}/${notificationsPath}/getNotificationsByUser/${UserId}`,null, { showPreloader: false })
 export const voteApi = (data) => apiHttp('POST', `${hosterPath}/${notificationsPath}/vote`, data, { showPreloader: false })
 
 

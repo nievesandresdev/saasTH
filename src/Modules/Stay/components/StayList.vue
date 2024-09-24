@@ -139,7 +139,6 @@ import CardSkeleton from './CardStayListSkeleton.vue'
 import FiltersModal from './FiltersModal.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
-// import MiniSpinner from './MiniSpinner.vue'
 import DeleteModalStayTest from './DeleteModalStayTest.vue'
 
 import { getPusherInstance } from '@/utils/pusherSingleton'
