@@ -325,7 +325,7 @@ const handleDataFeedback = async () => {
 
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
-    console.log('response', response);
+    console.log('test response', response);
 
     if (response.ok) {
         let totalRating = 0;
@@ -333,11 +333,14 @@ const handleDataOta = async () => {
         const reviews = response.data.summaryReviews || [];
         reviews.forEach(review => {
             // Default data review values in case data_review is missing
-            const defaultDataReview = { reviews_rating: '--', reviews_count: '--' };
-            const dataReview = review.data_review || defaultDataReview;
+            // const defaultDataReview = { reviews_rating: '--', reviews_count: '-' };
+            const dataReview = { 
+                reviews_rating: review.data_review?.reviews_rating ?? '--', 
+                reviews_count: review.data_review?.reviews_count ?? '-', 
+            };
 
-            let rating = parseFloat(dataReview.reviews_rating);
-
+            let rating = parseFloat(dataReview.reviews_rating ?? 0);
+            
             // Assign data based on OTA type and scale ratings if necessary
             switch (review.ota) {
                 case 'TRIPADVISOR':
@@ -363,9 +366,9 @@ const handleDataOta = async () => {
                 default:
                     break;
             }
-
+            
             // Solo calcular las calificaciones si data_review tiene un rating válido
-            if (dataReview.reviews_rating !== '--') {
+            if (dataReview.reviews_rating && dataReview.reviews_rating !== '--') {
                 totalRating += rating;  // Añadir la calificación ajustada al total
                 count++;
             }
