@@ -29,19 +29,19 @@
           </div>
           <div class="flex flex-col w-full mb-6">
             <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un chat pendiente.</span>
-            <div class="flex gap-2 items-center justify-start w-1/2">
-              <span class="text-sm font-[400] mt-2">Periocidad:</span>
+            <div class="flex gap-2 items-center justify-start mt-2">
+              <p class="text-sm leading-[150%]">Periocidad:</p>
               <BaseTextField
                   v-model="periodicityChat"
                   placeholder="Ejemplo: 5 minutos"
-                  classContent="mt-2 w-[35px] ml-2"
+                  classInput="w-[38px] h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
                   :disabled="isDisabled"
                   @input="emitChanges"
               />
-              <span class="text-sm font-[400] mt-2">min</span>
+              <p class="text-sm leading-[150%]">min</p>
             </div>
           </div>
   
@@ -71,19 +71,19 @@
               <span class="text-sm font-[600]">Notificaciones en plataforma Hoster</span>
             </div>
             <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un feedback pendiente.</span>
-            <div class="flex gap-2 items-center justify-start w-1/2">
-              <span class="text-sm font-[400] mt-2">Periocidad:</span>
+            <div class="flex gap-2 items-center justify-start mt-2">
+              <p class="text-sm leading-[150%]">Periocidad:</p>
               <BaseTextField
                 v-model="periodicityStay"
                 placeholder="Ejemplo: 5 minutos"
-                classContent="mt-2 w-[35px]"
+                classInput="w-[38px] h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                 :type="'number'"
                 :errors="errors"
                 :disabled="isDisabled"
                 name="notifications"
                 @input="emitChanges"
               />
-              <span class="text-sm font-[400] mt-2">min</span>
+              <p class="text-sm leading-[150%]">min</p>
             </div>
           </div>
           <!-- Emails de Recordatorio -->
