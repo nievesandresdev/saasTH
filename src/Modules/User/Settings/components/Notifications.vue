@@ -121,6 +121,8 @@
         newChat: false,
         PendingChat10: false,
         pendingChat30: false,
+        newFeedback: false,
+        pendingFeedback10: false,
       }),
     },
     maxHeight: {

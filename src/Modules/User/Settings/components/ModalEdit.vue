@@ -130,6 +130,8 @@ const form = reactive({
     newChat: JSON.parse(props.data.notifications || '{}').newChat ?? false,
     PendingChat10: JSON.parse(props.data.notifications || '{}').PendingChat10 ?? false,
     pendingChat30: JSON.parse(props.data.notifications || '{}').pendingChat30 ?? false,
+    newFeedback: JSON.parse(props.data.notifications || '{}').newFeedback ?? false,
+    pendingFeedback10: JSON.parse(props.data.notifications || '{}').pendingFeedback10 ?? false,
   },
 });
 
