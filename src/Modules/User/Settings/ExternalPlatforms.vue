@@ -634,7 +634,8 @@ const submit = async () => {
             payload.push({
                 ota: otaName.toUpperCase(),
                 url: data.url,
-                _id: data._id || ""
+                _id: data._id || "",
+                status: 1
             });
         } else if (!data.url && initialData.url) {
             // URL eliminada
@@ -664,14 +665,15 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    status: 0 // Indicamos que la URL debe ser eliminada
+                    status: 0 // aqui la URL debe ser eliminada
                 });
             } else if (link.url !== initialLink.url) {
                 // URL modificada
                 payload.push({
                     ota: 'AIRBNB',
                     url: link.url,
-                    _id: link._id
+                    _id: link._id,
+                    status: 1
                 });
             }
             // Si la URL no ha cambiado y no está marcada para eliminación, no hacemos nada
@@ -693,17 +695,17 @@ const submit = async () => {
 
     console.log('paramsTESTEXTERNAL', params);
 
-    /* const response = await platformsStore.$bulkUpdateOTAS(params);
+     const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if (response.ok) {
-        toast.successToast('Cambios aplicados con éxito', 'top-right');
+        toast.warningToast('Cambios aplicados con éxito', 'top-right');
         await getSettings();
     } else {
         toast.errorToast(response.data.message, 'top-right');
     }
 
-    // Actualizamos initialForm después de guardar
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); */
+    // Actualizamos initialForm
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 };
 
 
