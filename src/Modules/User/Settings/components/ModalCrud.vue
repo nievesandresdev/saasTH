@@ -77,6 +77,7 @@ const isCreating = ref(false);
 const dataEdit = ref({});
 
 const pushData  = (data) => {
+  emit('getWorkPositions');
   props.data.push(data);
 };
 
@@ -97,6 +98,7 @@ const openEditModal = (option) => {
   isCreating.value = false;
   isEditing.value = true;
   dataEdit.value = option;
+  
 };
 
 const openEditDelete = (option) => {

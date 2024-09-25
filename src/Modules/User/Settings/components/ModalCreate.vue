@@ -125,6 +125,9 @@ const form = reactive({
     newChat: false,
     PendingChat10: false,
     pendingChat30: false,
+    newFeedback: false,
+    pendingFeedback10: false,
+
   },
 });
 
@@ -183,6 +186,8 @@ const resetForm = () => {
     newChat: false,
     PendingChat10: false,
     pendingChat30: false,
+    newFeedback: false,
+    pendingFeedback10: false,
   };
   currentStep.value = 1;
   nameError.value = false;
