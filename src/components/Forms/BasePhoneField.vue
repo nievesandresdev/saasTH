@@ -7,7 +7,7 @@
         ]"
     >
         <div
-            class="flex h-full items-center w-[151px] relative"
+            class="flex h-full items-center w-[92px] relative px-3 py-2.5"
             :class="{
                 'br-gray': !code || !phone,
                 'br-negative': isError,
@@ -16,10 +16,11 @@
         >
             <input
                 type="text" 
-                class="hinput-green w-full p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none"
+                class="hinput-green w-full p-0 text-sm font-medium focus:border-none hover:border-none border-none"
                 v-model="code"
                 @keyup="searchCodes"
-                :placeholder="'+ Código país'"
+                placeholder="+34"
+                :disabled="!initialLoad"
             >
             <div v-if="code" class="dropdown-code absolute left-0 z-[50] w-full top-[40px] hbg-white-100 overflow-hidden">
                 <p 
@@ -30,21 +31,22 @@
                     {{cde.label}}
                 </p>
             </div>
-            <div class="bg-white w-6 h-6 mx-2 flex-shrink-0 cursor-default">
+            <!-- <div class="bg-white w-6 h-6 mx-2 flex-shrink-0 cursor-default">
               <img class="w-full h-full" src="/assets/icons/1.TH.I.dropdownBig.svg" alt="">
-            </div>
+            </div> -->
         </div>
     
         <input 
             type="number" 
-            class="hinput-green flex-grow p-0 text-sm font-medium pl-3 focus:border-none hover:border-none border-none rounded-[6px]"
+            class="hinput-green flex-grow px-3 py-2.5 text-sm font-medium focus:border-none hover:border-none border-none rounded-[6px]"
             :class="{'htext-alert-negative': isError}"
             :placeholder="placeholderPhone"
             v-model="phone"
+            :disabled="!initialLoad"
         >
     </div>
-    <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined)" class="flex justify-between">
-      <p class="text-[10px] font-medim text-left mt-[4px]  text-red-600 flex items-center">
+    <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined)" class="mt-2">
+      <p class="text-xs font-medim flex items-center htext-alert-negative leading-[10%]">
           <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
           {{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}
       </p>
@@ -102,11 +104,11 @@ const codeList = ref([]);
 const searchList = ref([]);
 const error_phone = ref(false);
 const initialLoad = ref(false);
+const uniqueLook = ref(false);
 
-// onMounted(async ()=>{
-//   console.log('test mounted phone component')
-  
-// })
+onMounted(async ()=>{
+  defineFullPhone()
+})
 // COMPUTED
 const isError = computed(() => {
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
@@ -117,21 +119,17 @@ const isError = computed(() => {
 })
 
 // fucntions
-const defineFullPhone = async (stringPhone) => {
-  if (initialLoad.value) return;
-  
-  // console.log('test defineFullPhone',stringPhone)
+const defineFullPhone = async (stringPhone = null) => {
+  // console.log('test defineFullPhone')
   // axios({
   //   url: 'https://dashboard.thehoster.io/api/phone-codes',
   //   method: 'GET',
   // })
   utilStore.$getPhoneCodesApi()
   .then(res => {
-    console.log('test codes',res)
     codeList.value = res.data;
     if (stringPhone) {
       let phoneString = props.modelValue?.replace(/\s+/g, '');
-      // console.log('test codeList.value',codeList.value)
       codeList.value.map(item => item.value).some(item => {
         if (phoneString && phoneString.startsWith(item)) {
           code.value = item;
@@ -145,7 +143,7 @@ const defineFullPhone = async (stringPhone) => {
   })
 };
 
-const searchCodes = () => {
+const searchCodes = async () => {
   searchList.value = [];
   for (let ph of codeList.value) {
     if (searchList.value.length >= 5) break;
@@ -168,7 +166,6 @@ const searchCodes = () => {
 //     method: 'GET',
 //   })
 //     .then(res => {
-//       console.log('test finalize',res.data)
 //       codeList.value = res.data;
 //     })
 //     .catch(error => {
@@ -195,30 +192,30 @@ const validPhone = (phone, code) => {
 };
 
 watch(modelValue, (newVal, oldVal) => {
+  if (uniqueLook.value) return;
   defineFullPhone(newVal)
+  uniqueLook.value = true;
 });
 
 
 watch(phone, (newVal, oldVal) => {
-  console.log('test phone ',newVal)
-  if (!initialLoad.value) return;
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, code.value);
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
+  if (!code.value) return;
   emit('update:modelValue', phoneNumber);
   emit('blur:validate');
 });
 
 watch(code, (newVal, oldVal) => {
-  console.log('test code ',newVal)
-  if (!initialLoad.value) return;
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, newVal);
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
+  if (!phone.value && newVal.length < 2) return;
   emit('update:modelValue', phoneNumber);
   emit('blur:validate');
 });
