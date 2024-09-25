@@ -1,25 +1,39 @@
 <template>
     <div class="flex items-center space-x-[8px]">
         <BaseRatingIcons
-            :rating="4"
+            :rating="reviewData.travelerStart"
             :icon_full="'/assets/icons/1.TH.REVIEW.BLACK.svg'"
             :icon_empty="'/assets/icons/1.TH.REVIEW.BLACK.OUTLINE.svg'"
         />
-        <span class="text-sm font-medium">3 de 5</span>
+        <span class="text-sm font-medium">{{ reviewData.travelerStart }} de 5</span>
     </div>
     <div class="flex items-center mt-2">
         <p class="text-sm">Idioma original:</p>
         <img 
             class="w-4 h-4 ml-2"
-            :src="`/assets/icons/flags/es.svg`"
+            :src="`/assets/icons/flags/${reviewData.languageOrigin}.svg`"
         >
-        <p class="text-sm font-medium ml-1">Español</p>
+        <p class="text-sm font-medium ml-1">{{ languagesObject[reviewData.languageOrigin] }}</p>
     </div>
-    <p class="text-sm mt-2">L'hotel è molto ben posizionato, tutto è vicino. Le camere sono molto belle, spaziose e confortevoli. Il personale è stato molto gentile, abbiamo avuto un problema con la nostra camera e Antonio si è occupato di cambiare la nostra camera e risolvere il problema.</p>
+    <p
+        v-if="cribadoTranslateReview?.travelerText"
+        class="text-sm mt-2"
+        v-html="load(cribadoTranslateReview?.travelerText, router?.query?.search)"
+    ></p>
 </template>
 
 <script setup>
+import { inject, computed } from 'vue';
+import BaseRatingIcons from '@/components/BaseRatingIcons';
 
-import BaseRatingIcons from '@/components/BaseRatingIcons'
+//COMPOSABLES
+import { useHighlightSearch } from '@/composables/useHighlightSearch';
+const { searchQuery, load } = useHighlightSearch();
+
+//INJECT
+const router = inject('router');
+const reviewData = inject('reviewData');
+const languagesObject = inject('languagesObject');
+const cribadoTranslateReview = inject('cribadoTranslateReview');
 
 </script>

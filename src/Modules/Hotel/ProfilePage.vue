@@ -431,8 +431,8 @@
             form.name !== hotelData.name || form.type !== hotelData.type ||
             Number(form.category) !== Number(hotelData.category) ||
             normalize(form.email) !== normalize(hotelData.email) ||
-            normalize(form.phone) !== normalize(hotelData.phone) ||
-            normalize(form.phone_optional) !== normalize(hotelData?.phone_optional) ||
+            normalizePhone(form.phone) !== normalizePhone(hotelData.phone) ||
+            normalizePhone(form.phone_optional) !== normalizePhone(hotelData?.phone_optional) ||
             Boolean(form.with_wifi) !== Boolean(hotelData.with_wifi) ||
             normalize(form.address) !== hotelData.address ||
             normalize(form.checkin) !== hotelData.checkin ||
@@ -446,10 +446,15 @@
             normalize(form.urlX) !== hotelData.x_url ||
             form.images_hotel?.length !== hotelData.images?.length ||
             Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
+
         return c;
     });
 
     //FUNCTIONS
+
+    const normalizePhone = (str) => {
+        return str === null || str === undefined ? null : str.replace(/\s/g, '');
+    }
 
     const normalize = (value) => {
       return value === "" || value === null || value === undefined ? null : value;
