@@ -107,7 +107,8 @@ const initialLoad = ref(false);
 const uniqueLook = ref(false);
 
 onMounted(async ()=>{
-  defineFullPhone()
+  defineFullPhone(modelValue.value?.trim() ?? null)
+  console.log('test mounted',modelValue.value)
 })
 // COMPUTED
 const isError = computed(() => {
@@ -120,7 +121,7 @@ const isError = computed(() => {
 
 // fucntions
 const defineFullPhone = async (stringPhone = null) => {
-  // console.log('test defineFullPhone')
+  console.log('test defineFullPhone')
   // axios({
   //   url: 'https://dashboard.thehoster.io/api/phone-codes',
   //   method: 'GET',
@@ -192,6 +193,7 @@ const validPhone = (phone, code) => {
 };
 
 watch(modelValue, (newVal, oldVal) => {
+  console.log('test watch', newVal)
   if (uniqueLook.value) return;
   defineFullPhone(newVal)
   uniqueLook.value = true;
