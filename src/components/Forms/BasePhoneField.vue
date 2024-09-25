@@ -26,7 +26,7 @@
                 <p 
                     v-for="cde in searchList" :key="cde" 
                     class="cursor-pointer relative p-3 text-sm htext-black-100 hover-gray-100"
-                    @click="selectOption(cde.value)"
+                    @click.stop.prevent="selectOption(cde.value)"
                 >
                     {{cde.label}}
                 </p>
