@@ -19,7 +19,7 @@
                 class="hinput-green w-full p-0 text-sm font-medium focus:border-none hover:border-none border-none"
                 v-model="code"
                 @keyup="searchCodes"
-                placeholder="+34"
+                placeholder="+ Código"
                 :disabled="!initialLoad"
             >
             <div v-if="code" class="dropdown-code absolute left-0 z-[50] w-full top-[40px] hbg-white-100 overflow-hidden">

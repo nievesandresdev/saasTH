@@ -407,8 +407,9 @@ const form = ref({
         form.value.role = props.dataUser.role?.id || null;
         form.value.name = props.dataUser.name || '';
         form.value.lastname = props.dataUser.lastname || '';
-        form.value.prefix = props.dataUser.prefix || null;
-        form.value.phone = props.dataUser.prefix+props.dataUser.phone ?? '';
+        // form.value.prefix = props.dataUser.prefix || null;
+        form.value.phone = props.dataUser.phone ?? '';
+        // console.log('test data prefix',props.dataUser.prefix)
         form.value.email = props.dataUser.email || '';
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
@@ -600,18 +601,18 @@ const form = ref({
 
   const errorPrefix = ref(false);
 
-  const validatePhone = (event) => {
-    const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
-    form.value.phone = newValue;
-    errorPhone.value = newValue.length === 0;
+  // const validatePhone = (event) => {
+  //   const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
+  //   form.value.phone = newValue;
+  //   errorPhone.value = newValue.length === 0;
 
-    // Verifica el valor del prefijo
-    if (newValue.length > 0 && !form.value.prefix) {
-      errorPrefix.value = true;
-    } else {
-      errorPrefix.value = false;
-    }
-  };
+  //   // Verifica el valor del prefijo
+  //   if (newValue.length > 0 && !form.value.prefix) {
+  //     errorPrefix.value = true;
+  //   } else {
+  //     errorPrefix.value = false;
+  //   }
+  // };
 
   // Watch para validar el prefijo cuando cambia el teléfono
   // watch(() => form.value.phone, (newVal) => {
