@@ -34,7 +34,6 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityChat"
-                  placeholder="Ejemplo: 5 minutos"
                   classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
@@ -78,7 +77,6 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityStay"
-                  placeholder="Ejemplo: 5 minutos"
                   classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"

@@ -169,6 +169,9 @@
                         <BaseEmailField
                             placeholder="Correo con el que iniciará sesión"
                             v-model="form.email"
+                            :enableLiveCheck="true"
+                            :userId="form.user_id"
+                            @errorMessage="errorEmailText = $event"
                             @handleError="errorEmail = $event"    
                         />
                         <div class="flex mt-2 justify-left htext-alert-negative" v-if="errorEmail">
@@ -478,8 +481,6 @@ const form = ref({
     }
 
 };
-
-  const prefixes = ref([null,'+1', '+34', '+91'])
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
   const selectedWorkPositionName = ref('Elige el puesto de trabajo');
@@ -490,7 +491,7 @@ const form = ref({
     const operationAccess = ref([
         { name: 'Estancias', selected: false , value : 'estancias' },
         { name: 'Reseñas', selected: false, value: 'resenas' },
-        { name: 'Análisis', selected: false , value: 'analisis' },
+        /* { name: 'Análisis', selected: false , value: 'analisis' }, */
     ]);
 
     const adminAccess = ref([
@@ -590,12 +591,12 @@ const form = ref({
   
   const isFormIncomplete = computed(() => {
       //email
-      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
+      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
 
       //contrase;a
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email;
+        return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
@@ -603,6 +604,8 @@ const form = ref({
     }
 
 });
+
+
   const errorPhone = ref(false);
 
   const errorPrefix = ref(false);

@@ -83,7 +83,7 @@ const isDisabled = computed(() => props.workPositionId !== null);
 const operationAccess = ref([
   { name: 'Estancias', selected: false, value: 'estancias', disabled: false },
   { name: 'Reseñas', selected: false, value: 'resenas', disabled: false },
-  { name: 'Análisis', selected: false, value: 'analisis', disabled: false },
+  /* { name: 'Análisis', selected: false, value: 'analisis', disabled: false }, */
 ]);
 
 const adminAccess = ref([

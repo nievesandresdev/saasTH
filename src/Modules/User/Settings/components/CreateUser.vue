@@ -186,6 +186,8 @@
                             <BaseEmailField
                                 placeholder="Correo con el que iniciará sesión"
                                 v-model="form.email"
+                                :enableLiveCheck="true"
+                                @errorMessage="errorEmailText = $event"
                                 @handleError="errorEmail = $event"    
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
@@ -234,6 +236,7 @@
                                   'hinput-green' : !errorPasswordMatch
                                 }"
                                 placeholder="Repite la clave"
+                                autocomplete="nope"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -503,7 +506,7 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
 const operationAccess = ref([
     { name: 'Estancias', selected: false , value : 'estancias' },
     { name: 'Reseñas', selected: false, value: 'resenas' },
-    { name: 'Análisis', selected: false , value: 'analisis' },
+    /* { name: 'Análisis', selected: false , value: 'analisis' }, */
 ]);
 
 const adminAccess = ref([
@@ -563,27 +566,28 @@ const adminAccess = ref([
 
 
 const isFormIncomplete = computed(() => {
-      //email
-      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
+    // Email
+    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
 
-      //contrase;a
-      const isValidPassword = form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
+    // Contraseña
+    const isValidPassword = form.value.password && form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
-            !form.value.password_confirmation  || !isValidPassword;
-      } else if (currentStep.value === 2) {
-          return !form.value.hotels.length;
-      } else if (currentStep.value === 3) {
-          return !form.value.access.length;
+      return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
+        !form.value.password_confirmation || !isValidPassword || !isValidEmail || errorEmail.value;
+    } else if (currentStep.value === 2) {
+      return !form.value.hotels.length;
+    } else if (currentStep.value === 3) {
+      return !form.value.access.length;
     }
-
 });
+
+
   const errorPhone = ref(false);
 
   const errorPrefix = ref(false);
 
-  const validatePhone = (event) => {
+/*   const validatePhone = (event) => {
     const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
     form.value.phone = newValue;
     errorPhone.value = newValue.length === 0;
@@ -594,9 +598,9 @@ const isFormIncomplete = computed(() => {
     } else {
       errorPrefix.value = false;
     }
-  };
+  }; */
 
-  // Watch para validar el prefijo cuando cambia el teléfono
+ /*  // Watch para validar el prefijo cuando cambia el teléfono
   watch(() => form.value.phone, (newVal) => {
     if (newVal.length > 0 && !form.value.prefix) {
       errorPrefix.value = true;
@@ -610,7 +614,7 @@ const isFormIncomplete = computed(() => {
     if (newVal) {
       errorPrefix.value = false;
     }
-  });
+  }); */
 
   watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword, newPasswordConfirmation]) => {
       errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
