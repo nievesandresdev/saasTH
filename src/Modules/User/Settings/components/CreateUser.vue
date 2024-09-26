@@ -9,7 +9,7 @@
         @mouseleave="handleMouseLeave"
       >
             <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex justify-between items-center px-6 py-[18px]">
+              <div class="flex justify-between items-center px-6 py-[20px]">
                 <div class="flex justify-end">
                 </div>
                 <div class="flex-1 text-center">
@@ -66,7 +66,7 @@
                           id="workPositionInput"
                           @click.stop="toggleModalWorkPosition"
                           readonly
-                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal "
+                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
                           :class="{
                             'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
                             'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
@@ -97,7 +97,7 @@
                             <input
                                 v-model="form.name"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
                                 placeholder="Nombre"
                                 :class="
                                 {
@@ -113,7 +113,7 @@
                             <input
                                 v-model="form.lastname"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
                                 :class="
                                   {
                                     'hborder-black-100 htext-black-100 font-medium': form.lastname,
@@ -170,18 +170,23 @@
                     <div class="mt-4">
                         <label class="text-sm font-medium">Correo electrónico *</label>
                         <div class="relative">
-                            <input
+                            <!-- <input
                                 v-model="form.email"
                                 type="email"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
                                 :class="
                                 {
-                                  'hborder-black-100 htext-black-100 font-medium': form.email && !errorEmail,
-                                  'hborder-gray-400 htext-gray-500': !form.email || errorEmail,
+                                  'hborder-black-100 htext-black-100 font-medium ': form.email && !errorEmail,
+                                  'hborder-gray-400 htext-gray-500 hinput-green': !form.email || errorEmail,
                                   'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                                 }"
                                 placeholder="Correo con el que iniciará sesión"
                                 autocomplete="nope"
+                            /> -->
+                            <BaseEmailField
+                                placeholder="Correo con el que iniciará sesión"
+                                v-model="form.email"
+                                @handleError="errorEmail = $event"    
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -197,11 +202,12 @@
                             <input
                                 v-model="form.password"
                                 type="password"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                                  'hborder-gray-400 htext-gray-500': !form.password || errorPassword,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword
+                                  'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
+                                  'hinput-green' : !errorPassword
                                 }"
                                 placeholder="Clave de acceso al sistema"
                                 autocomplete="nope"
@@ -224,7 +230,8 @@
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
                                   'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
+                                  'hinput-green' : !errorPasswordMatch
                                 }"
                                 placeholder="Repite la clave"
                             />
@@ -244,7 +251,7 @@
                     <div class="space-y-2">
                         <!-- Checkbox para "Todos los hoteles" -->
                         <div class="flex items-center justify-between mb-4 rounded-lg">
-                            <span class="text-sm font-bold">Todos los alojamientos</span>
+                            <span class="text-sm font-semibold">Todos los alojamientos</span>
                             <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
                         </div>
                         <!-- Checkboxes para los hoteles individuales -->
@@ -372,6 +379,7 @@
   import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';

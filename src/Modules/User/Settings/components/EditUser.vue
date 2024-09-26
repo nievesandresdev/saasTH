@@ -10,7 +10,7 @@
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-[18px] mt-4">
+          <div class="flex justify-between items-center px-6 py-[20px] mt-4">
             <div class="flex-1 text-left">
               <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
@@ -57,7 +57,7 @@
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0]"
+                      class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
                       :class="{
                         'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
                       'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
@@ -88,7 +88,7 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
                             :class="
                             {
                               'hborder-black-100 htext-black-100 font-medium': form.name,
@@ -104,7 +104,7 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
                             :class="
                             {
                               'hborder-black-100 htext-black-100 font-medium': form.lastname,
@@ -154,7 +154,7 @@
                 <div class="mt-4">
                     <label class="text-sm font-medium">Correo electrónico *</label>
                     <div class="relative">
-                        <input
+                        <!-- <input
                             v-model="form.email"
                             type="email"
                             class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
@@ -165,6 +165,11 @@
                               'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                             }"
                             placeholder="Correo con el que iniciará sesión"
+                        /> -->
+                        <BaseEmailField
+                            placeholder="Correo con el que iniciará sesión"
+                            v-model="form.email"
+                            @handleError="errorEmail = $event"    
                         />
                         <div class="flex mt-2 justify-left htext-alert-negative" v-if="errorEmail">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -185,7 +190,7 @@
                 <div class="space-y-2">
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
-                        <span class="text-sm font-bold">Todos los hoteles</span>
+                        <span class="text-sm font-semibold">Todos los hoteles</span>
                         <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50" :disabled="isRoleAdmin">
                         <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleAdmin"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
@@ -266,6 +271,7 @@
   import Notifications from './Notifications.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
   
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 

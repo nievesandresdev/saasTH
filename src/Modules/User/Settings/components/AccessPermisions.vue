@@ -12,7 +12,7 @@
           <template v-slot:button>
             <img
               src="/assets/icons/info.blue.svg"
-              class="w-5 h-5 ml-1"
+              class="w-5 h-5"
               alt="icon_info"
             >
           </template>

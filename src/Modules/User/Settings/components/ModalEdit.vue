@@ -61,7 +61,7 @@
           :class="{
             'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step':
               currentStep === step.number,
-            'text-gray-300': currentStep !== step.number,
+            'text-[#333333]': currentStep !== step.number,
           }"
           @click="currentStep = step.number"
         >
@@ -82,7 +82,7 @@
     </template>
 
     <template #footer>
-      <div class="border-t hborder-gray-400 py-4 px-6 flex items-center justify-between">
+      <div class="border-t hborder-gray-400 py-6 px-6 flex items-center justify-between h-[88px]">
         <button @click="cancel" class="text-sm font-medium leading-[110%] underline">
           Cancelar
         </button>
@@ -91,7 +91,7 @@
           @click="submitForm"
           :disabled="isSubmitDisabled"
           :class="[
-            'px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta',
+            'px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta h-10',
             { 'opacity-50 cursor-not-allowed': isSubmitDisabled },
           ]"
         >
