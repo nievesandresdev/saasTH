@@ -263,6 +263,7 @@
       per_page: 20,
     };
     const response = await userStore.$getUsers(params);
+    console.log('test users',response)
     data.value = response.data.users;
     totalUsers.value = response.data.total;
     perPage.value = response.data.per_page;
