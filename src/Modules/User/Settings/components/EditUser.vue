@@ -2,21 +2,21 @@
     <transition>
       <div
         v-if="modalEdit"
-        class="absolute bg-white shadow-xl flex-column add"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
+        class="absolute bg-white shadow-xl add flex flex-col"
+        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
         ref="ref_section_edit"
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5 mt-4">
+          <div class="flex justify-between items-center px-6 py-[20px] mt-4">
             <div class="flex-1 text-left">
               <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal()">
-                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
               </button>
             </div>
           </div>
@@ -57,7 +57,7 @@
                       @click.stop="toggleModalWorkPosition"
                       :value="selectedWorkPositionName"
                       readonly
-                      class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0]"
+                      class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
                       :class="{
                         'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
                       'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
@@ -88,7 +88,7 @@
                         <input
                             v-model="form.name"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
                             :class="
                             {
                               'hborder-black-100 htext-black-100 font-medium': form.name,
@@ -104,7 +104,7 @@
                         <input
                             v-model="form.lastname"
                             type="text"
-                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md"
+                            class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
                             :class="
                             {
                               'hborder-black-100 htext-black-100 font-medium': form.lastname,
@@ -154,7 +154,7 @@
                 <div class="mt-4">
                     <label class="text-sm font-medium">Correo electrónico *</label>
                     <div class="relative">
-                        <input
+                        <!-- <input
                             v-model="form.email"
                             type="email"
                             class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
@@ -165,6 +165,14 @@
                               'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                             }"
                             placeholder="Correo con el que iniciará sesión"
+                        /> -->
+                        <BaseEmailField
+                            placeholder="Correo con el que iniciará sesión"
+                            v-model="form.email"
+                            :enableLiveCheck="true"
+                            :userId="form.user_id"
+                            @errorMessage="errorEmailText = $event"
+                            @handleError="errorEmail = $event"    
                         />
                         <div class="flex mt-2 justify-left htext-alert-negative" v-if="errorEmail">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -185,7 +193,7 @@
                 <div class="space-y-2">
                     <!-- Checkbox para "Todos los hoteles" -->
                     <div class="flex items-center justify-between mb-4 rounded-lg">
-                        <span class="text-sm font-bold">Todos los hoteles</span>
+                        <span class="text-sm font-semibold">Todos los hoteles</span>
                         <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50" :disabled="isRoleAdmin">
                         <!-- <Checkbox v-model="selectAllHotels" :isDisabled="isRoleAdmin"  @change="handleSelectAll(true)" :sizeClasses="`h-5 w-5`"/> -->
                     </div>
@@ -219,7 +227,7 @@
           </div>
         </div>
   
-        <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
+        <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
           <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
               Cancelar
           </button>
@@ -266,6 +274,7 @@
   import Notifications from './Notifications.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
   
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
@@ -407,8 +416,9 @@ const form = ref({
         form.value.role = props.dataUser.role?.id || null;
         form.value.name = props.dataUser.name || '';
         form.value.lastname = props.dataUser.lastname || '';
-        form.value.prefix = props.dataUser.prefix || null;
-        form.value.phone = props.dataUser.prefix+props.dataUser.phone ?? '';
+        // form.value.prefix = props.dataUser.prefix || null;
+        form.value.phone = props.dataUser.phone ?? '';
+        // console.log('test data prefix',props.dataUser.prefix)
         form.value.email = props.dataUser.email || '';
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
@@ -471,8 +481,6 @@ const form = ref({
     }
 
 };
-
-  const prefixes = ref([null,'+1', '+34', '+91'])
   
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
   const selectedWorkPositionName = ref('Elige el puesto de trabajo');
@@ -483,7 +491,7 @@ const form = ref({
     const operationAccess = ref([
         { name: 'Estancias', selected: false , value : 'estancias' },
         { name: 'Reseñas', selected: false, value: 'resenas' },
-        { name: 'Análisis', selected: false , value: 'analisis' },
+        /* { name: 'Análisis', selected: false , value: 'analisis' }, */
     ]);
 
     const adminAccess = ref([
@@ -583,12 +591,12 @@ const form = ref({
   
   const isFormIncomplete = computed(() => {
       //email
-      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
+      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
 
       //contrase;a
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email;
+        return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
       } else if (currentStep.value === 2) {
           return !form.value.hotels.length;
       } else if (currentStep.value === 3) {
@@ -596,22 +604,24 @@ const form = ref({
     }
 
 });
+
+
   const errorPhone = ref(false);
 
   const errorPrefix = ref(false);
 
-  const validatePhone = (event) => {
-    const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
-    form.value.phone = newValue;
-    errorPhone.value = newValue.length === 0;
+  // const validatePhone = (event) => {
+  //   const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
+  //   form.value.phone = newValue;
+  //   errorPhone.value = newValue.length === 0;
 
-    // Verifica el valor del prefijo
-    if (newValue.length > 0 && !form.value.prefix) {
-      errorPrefix.value = true;
-    } else {
-      errorPrefix.value = false;
-    }
-  };
+  //   // Verifica el valor del prefijo
+  //   if (newValue.length > 0 && !form.value.prefix) {
+  //     errorPrefix.value = true;
+  //   } else {
+  //     errorPrefix.value = false;
+  //   }
+  // };
 
   // Watch para validar el prefijo cuando cambia el teléfono
   // watch(() => form.value.phone, (newVal) => {

@@ -7,7 +7,7 @@
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       
       <div class="inline-block bg-white rounded-[10px] text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-[344px] p-4">  
-          <img class="h-6 w-6 cursor-pointer ml-auto hover:bg-[#F3F3F3] rounded-full p-1" @click="type == 'alone_exit' ? hiddenModal() : visitNow = false" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
+          <img class="h-8 w-8 cursor-pointer ml-auto hover:bg-[#F3F3F3] rounded-full p-1" @click="type == 'alone_exit' ? hiddenModal() : visitNow = false" src="/assets/icons/1.TH.CLOSE.svg" alt="Close">
 
           <div class="text-center">
             <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
