@@ -364,7 +364,7 @@ const getSettings = async () => {
                                 errors: false,
                                 disabled: ota.attemptsToUpdate >= 3,
                                 errorMessage: '',
-                                status: 1 // Considera que el link está activo por defecto
+                                delete: 1 // Considera que el link está activo por defecto
                             });
                         }
                         break;
@@ -472,7 +472,7 @@ const markAdditionalLinkChange = (index) => {
 
 
 const addAnotherLink = () => {
-    additionalLinks.value.push({ url: '', _id: "", errors: false, errorMessage: '', status: 1 });
+    additionalLinks.value.push({ url: '', _id: "", errors: false, errorMessage: '', delete: 1 });
 };
 
 const openDeleteModal = (index,name = false) => {
@@ -635,7 +635,7 @@ const submit = async () => {
                 ota: otaName.toUpperCase(),
                 url: data.url,
                 _id: data._id || "",
-                status: 1
+                delete: 1
             });
         } else if (!data.url && initialData.url) {
             // URL eliminada
@@ -643,7 +643,7 @@ const submit = async () => {
                 ota: otaName.toUpperCase(),
                 url: '',
                 _id: data._id || "",
-                status: 0 // Indicamos que la URL debe ser eliminada
+                delete: 0 // Indicamos que la URL debe ser eliminada
             });
         }
     };
@@ -665,7 +665,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    status: 0 // aqui la URL debe ser eliminada
+                    delete: 0 // aqui la URL debe ser eliminada
                 });
             } else if (link.url !== initialLink.url) {
                 // URL modificada
@@ -673,7 +673,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    status: 1
+                    delete: 1
                 });
             }
             // Si la URL no ha cambiado y no está marcada para eliminación, no hacemos nada

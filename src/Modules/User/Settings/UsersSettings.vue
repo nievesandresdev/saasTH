@@ -18,17 +18,16 @@
           </div>
         </div>
         <div class="group flex items-center px-4 py-2 text-black border border-[#333333] rounded bg-white cursor-pointer hover:border-[#2A8873]" @click="createUser">
-    <img src="/assets/icons/1.TH.PLUS.svg" class="w-6 h-6 mr-2" alt="plus icon">
-    <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
-</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
+            <path d="M11.9898 4V12M11.9898 20V12M11.9898 12H20M11.9898 12H4" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#2A8873]"/>
+          </svg>
+          <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
+      </div>
 
       </div>
       <div class="flex gap-4 mb-4 z-[600]">
         <ButtonFilter @click="change_type(0)" :active="data_filter.type == 0">Todos</ButtonFilter>
         <ButtonFilter @click="change_type(1)" :active="data_filter.type == 1">Activos</ButtonFilter>
-        <!-- <ButtonFilter @click="change_type(1)" :active="data_filter.type == 1">Propietarios</ButtonFilter>
-        <ButtonFilter @click="change_type(2)" :active="data_filter.type == 2">Administradores</ButtonFilter>
-        <ButtonFilter @click="change_type(3)" :active="data_filter.type == 3">Operadores</ButtonFilter> -->
         <ButtonFilter @click="change_type(4)" :active="data_filter.type == 4">Inactivos</ButtonFilter>
       </div>
       <div class="flex-1 flex flex-col justify-between">

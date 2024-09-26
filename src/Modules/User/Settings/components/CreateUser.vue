@@ -2,22 +2,22 @@
     <transition>
       <div
         v-if="modalAdd"
-        class="absolute bg-white shadow-xl add flex-column add "
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
+        class="absolute bg-white shadow-xl add flex flex-col"
+        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
         ref="ref_section_add"
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"
       >
             <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex justify-between items-center px-6 py-4">
+              <div class="flex justify-between items-center px-6 py-[18px]">
                 <div class="flex justify-end">
                 </div>
                 <div class="flex-1 text-center">
-                  <h1 class="font-[600] text-xl">Crear usuario</h1>
+                  <h1 class="font-medium text-xl">Crear usuario</h1>
                 </div>
                 <div class="flex justify-end">
                   <button class="" @click="closeModal">
-                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
+                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
                   </button>
                 </div>
               </div>
@@ -324,7 +324,7 @@
               </div>
             </div>
     
-            <div class="py-4 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 72px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
+            <div class="py-6 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 88px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
               <button  
                 class="hbtn-tertiary text-sm font-medium underline my-auto"
                 @click.prevent="prevStep()"
@@ -845,13 +845,11 @@ const prevStep = () => {
     currentStep.value--;
   }
 
-  console.log('currentStep22',currentStep.value)
 };
 
 
 const handleStoreUser = async () => {
 
-  console.log('formCreateUSer',form.value)
   let store = await userStore.$storeUser(form.value);
 
   if (store.ok) {
