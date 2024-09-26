@@ -16,7 +16,8 @@
         >
             <input
                 type="text" 
-                class="hinput-green w-full p-0 text-sm font-medium focus:border-none hover:border-none border-none"
+                class="hinput-green w-full p-0 text-sm focus:border-none hover:border-none border-none"
+                :class="{'htext-alert-negative placeholder-negative': isError}"
                 v-model="code"
                 @keyup="searchCodes"
                 placeholder="+ Código"
@@ -38,8 +39,8 @@
     
         <input 
             type="number" 
-            class="hinput-green flex-grow px-3 py-2.5 text-sm font-medium focus:border-none hover:border-none border-none rounded-[6px]"
-            :class="{'htext-alert-negative': isError}"
+            class="hinput-green flex-grow px-3 py-2.5 text-sm focus:border-none hover:border-none border-none rounded-[6px]"
+            :class="{'htext-alert-negative placeholder-negative': isError}"
             :placeholder="placeholderPhone"
             v-model="phone"
             :disabled="!initialLoad"
@@ -91,12 +92,11 @@ const props = defineProps({
   },
 });
 
-const { modelValue } = toRefs(props);
+const { modelValue, error } = toRefs(props);
 
 const emit = defineEmits(['update:modelValue', 'keyupInput', 'handlePhoneError', 'blur:validate'])
 
 const showOptions = ref(false);
-const hoverOption = ref(false);
 const selected = ref(false);
 const phone = ref('');
 const code = ref('');
@@ -108,11 +108,11 @@ const uniqueLook = ref(false);
 
 onMounted(async ()=>{
   defineFullPhone(modelValue.value?.trim() ?? null)
-  console.log('test mounted',modelValue.value)
+  // console.log('test mounted',modelValue.value)
 })
 // COMPUTED
 const isError = computed(() => {
-    if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
+    if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true || error.value) {
         // c = `hinput-error`;
         return true;
     }
@@ -121,7 +121,7 @@ const isError = computed(() => {
 
 // fucntions
 const defineFullPhone = async (stringPhone = null) => {
-  console.log('test defineFullPhone')
+  // console.log('test defineFullPhone')
   // axios({
   //   url: 'https://dashboard.thehoster.io/api/phone-codes',
   //   method: 'GET',
@@ -159,24 +159,6 @@ const searchCodes = async () => {
   }
 };
 
-
-
-// const getCodeList = async () => {
-//   axios({
-//     url: 'https://dashboard.thehoster.io/api/phone-codes',
-//     method: 'GET',
-//   })
-//     .then(res => {
-//       codeList.value = res.data;
-//     })
-//     .catch(error => {
-//       console.log(error, 'error');
-//     })
-//     .finally(() => {
-//       initialLoad.value = true;
-//     });
-// };
-
 const selectOption = (value) => {
   searchList.value = [];
   code.value = value;
@@ -193,7 +175,7 @@ const validPhone = (phone, code) => {
 };
 
 watch(modelValue, (newVal, oldVal) => {
-  console.log('test watch', newVal)
+  // console.log('test watch', newVal)
   if (uniqueLook.value) return;
   defineFullPhone(newVal)
   uniqueLook.value = true;
@@ -217,7 +199,7 @@ watch(code, (newVal, oldVal) => {
   validPhone(phoneNumber, newVal);
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
-  if (!phone.value && newVal.length < 2) return;
+  // if (!phone.value && newVal.length < 2) return;
   emit('update:modelValue', phoneNumber);
   emit('blur:validate');
 });

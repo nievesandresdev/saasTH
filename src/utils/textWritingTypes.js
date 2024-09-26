@@ -33,9 +33,15 @@ const  $capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
+const  $removeSpaces = (string) => {
+    let newString = string.replace(/\s+/g, "");
+    return newString;
+}
+
 export {
     $capitalize,
     $camelCase,
     $titleCase,
-    $capitalizeFirstLetter
+    $capitalizeFirstLetter,
+    $removeSpaces
 }
