@@ -2,21 +2,21 @@
     <transition>
       <div
         v-if="modalEdit"
-        class="absolute bg-white shadow-xl flex-column add"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
+        class="absolute bg-white shadow-xl add flex flex-col"
+        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
         ref="ref_section_edit"
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5 mt-4">
+          <div class="flex justify-between items-center px-6 py-[18px] mt-4">
             <div class="flex-1 text-left">
               <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal()">
-                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
               </button>
             </div>
           </div>
@@ -219,7 +219,7 @@
           </div>
         </div>
   
-        <div class="py-4 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 72px;">
+        <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
           <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
               Cancelar
           </button>
