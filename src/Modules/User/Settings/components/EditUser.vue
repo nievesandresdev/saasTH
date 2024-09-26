@@ -116,10 +116,12 @@
                 </div>
                 <div class="mt-4">
                   <label class="text-sm font-medium">Teléfono móvil</label>
-                    <div class="flex rounded">
-                        <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, 'focus:ring-blue-500 focus:border-blue-500': !errorPrefix}" class="bg-white w-2/5 rounded-l-lg border border-r-[1px]   border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
-                            <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
-                        </select> -->
+                  <BasePhoneField
+                        v-model="form.phone"
+                        name="phone"
+                        @handlePhoneError="errorPhone = $event"
+                    />
+                    <!-- <div class="flex rounded">
                         <select v-model="form.prefix"
                           :class="{
                             'hborder-alert-negative': errorPrefix, '': !errorPrefix,
@@ -141,7 +143,7 @@
                                 v-model="form.phone"
                                 @input="validatePhone"
                             >
-                    </div>
+                    </div> -->
                     <div class="flex justify-start mt-2 htext-alert-negative" v-if="errorPhone">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -263,7 +265,8 @@
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import Notifications from './Notifications.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
-
+  import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
   
@@ -274,6 +277,7 @@
 
 
   const initPermissions = ref([])
+  const PhoneFieldError = ref(false)
   
   const props = defineProps({
     modalEdit: Boolean,
@@ -404,7 +408,7 @@ const form = ref({
         form.value.name = props.dataUser.name || '';
         form.value.lastname = props.dataUser.lastname || '';
         form.value.prefix = props.dataUser.prefix || null;
-        form.value.phone = props.dataUser.phone || '';
+        form.value.phone = props.dataUser.prefix+props.dataUser.phone ?? '';
         form.value.email = props.dataUser.email || '';
         form.value.hotels = props.dataUser.hotels || [];
         form.value.access = props.dataUser.hotelPermissions[0][props.dataUser?.hotels[0]] || [];
@@ -610,13 +614,13 @@ const form = ref({
   };
 
   // Watch para validar el prefijo cuando cambia el teléfono
-  watch(() => form.value.phone, (newVal) => {
-    if (newVal.length > 0 && !form.value.prefix) {
-      errorPrefix.value = true;
-    } else {
-      errorPrefix.value = false;
-    }
-  });
+  // watch(() => form.value.phone, (newVal) => {
+  //   if (newVal.length > 0 && !form.value.prefix) {
+  //     errorPrefix.value = true;
+  //   } else {
+  //     errorPrefix.value = false;
+  //   }
+  // });
 
   // Watch para verificar si se seleccionó un prefijo
   watch(() => form.value.prefix, (newVal) => {

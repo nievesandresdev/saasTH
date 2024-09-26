@@ -123,12 +123,9 @@
                             />
                         </div>
                     </div>
-                    <div class="mt-4">
+                    <!-- <div class="mt-4">
                       <label class="text-sm font-medium">Teléfono móvil</label>
                         <div class="flex rounded">
-                            <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, '': !errorPrefix}" class="bg-white w-1/5 rounded-l-lg border border-r-[1px]   border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
-                                <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
-                            </select> -->
                             <select v-model="form.prefix"
                               :class="{
                                 'hborder-alert-negative': errorPrefix, '': !errorPrefix,
@@ -139,22 +136,6 @@
                               style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
                               <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                             </select>
-
-
-
-                            <!-- <div class="relative w-1/5">
-                              <input
-                                  type="text"
-                                  id="workPositionInput"
-                                  @click.stop="toggleModalWorkPosition"
-                                  readonly
-                                  class="bg-white w-full rounded-md  border border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
-                                  placeholder="+34"
-                                />
-                              <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                              </div>
-                            </div> -->
                             <input type="text"
                                 placeholder="Teléfono de contacto"
                                 class="p-2.5 block border flex-grow h-10 text-sm text-gray-900 bg-white rounded-r-lg border-l-none"
@@ -167,12 +148,24 @@
                                 @input="validatePhone"
                             >
                         </div>
+                        
+                    </div> -->
+                    <div class="mt-4">
+                      <!-- {{ String(PhoneFieldError)}} -->
+                      <label class="text-sm font-medium">Teléfono móvil </label>
+                      <BasePhoneField
+                            v-model="form.phone"
+                            name="phone"
+                            @handlePhoneError="errorPhone = $event"
+                        />
                         <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
                         </div>
+                        <!-- :errors="errors"
+                            @blur:validate="validate('phone')" -->
                     </div>
                     <div class="mt-4">
                         <label class="text-sm font-medium">Correo electrónico *</label>
@@ -188,6 +181,7 @@
                                   'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                                 }"
                                 placeholder="Correo con el que iniciará sesión"
+                                autocomplete="nope"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -210,6 +204,7 @@
                                   'hborder-negative placeholder:text-[#FF6666]' : errorPassword
                                 }"
                                 placeholder="Clave de acceso al sistema"
+                                autocomplete="nope"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -376,6 +371,7 @@
   import Notifications from './Notifications.vue';
   import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
+  import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -385,6 +381,7 @@
   const intendedRoute = ref(null);
   const userStore = useUserStore();
   const selectAll = ref(false);
+  const PhoneFieldError = ref(false);
   //const authStore = useAuthStore();
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();

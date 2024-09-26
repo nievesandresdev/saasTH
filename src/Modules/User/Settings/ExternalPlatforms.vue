@@ -22,13 +22,13 @@
                             <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6 mr-2" alt="Booking">
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
-                        <div v-show="disabledInput.booking" :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('booking', form.booking.url)">
+                        <div v-show="disabledInput.booking" :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('booking', form.booking.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
                             </svg>
-                            <span class="text-sm font-medium" :class="errors.booking ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                            <span class="text-sm font-medium" :class="errors.booking ? 'text-red-500' : 'group-hover:text-[#34A98F]'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div>
@@ -54,13 +54,13 @@
                             <img src="/assets/icons/otas/Expedia.svg" class="w-6 h-6 mr-2" alt="Expedia">
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
-                        <div v-show="disabledInput.expedia" :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('expedia', form.expedia.url)">
+                        <div v-show="disabledInput.expedia" :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('expedia', form.expedia.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
                             </svg>
-                            <span class="text-sm font-medium" :class="errors.expedia ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                            <span class="text-sm font-medium" :class="errors.expedia ? 'text-red-500' : 'group-hover:text-[#34A98F]'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div>
@@ -86,13 +86,13 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" class="w-6 h-6 mr-2" alt="Tripadvisor">
                             <span class="font-semibold text-sm">Tripadvisor</span>
                         </div>
-                        <div v-show="disabledInput.tripadvisor" :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
+                        <div v-show="disabledInput.tripadvisor" :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
                             </svg>
-                            <span class="text-sm font-medium" :class="errors.tripadvisor ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                            <span class="text-sm font-medium" :class="errors.tripadvisor ? 'text-red-500' : 'group-hover:text-[#34A98F]'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div>
@@ -118,13 +118,13 @@
                             <img src="/assets/icons/otas/Google.svg" class="w-6 h-6 mr-2" alt="Google">
                             <span class="font-semibold text-sm">Google</span>
                         </div>
-                        <div v-show="disabledInput.google" :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('google', form.google.url)">
+                        <div v-show="disabledInput.google" :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('google', form.google.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
                             </svg>
-                            <span class="text-sm font-medium" :class="errors.google ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                            <span class="text-sm font-medium" :class="errors.google ? 'text-red-500' : 'group-hover:text-[#34A98F]'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div>
@@ -160,13 +160,13 @@
                                 </Tooltip>
                             </div>
                         </div>
-                        <div v-show="disabledInput.airbnb" :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
+                        <div v-show="disabledInput.airbnb" :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('airbnb', form.airbnb.url)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
                             </svg>
-                            <span class="text-sm font-medium" :class="errors.airbnb ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
+                            <span class="text-sm font-medium" :class="errors.airbnb ? 'text-red-500' : 'group-hover:text-[#34A98F]'">¿Necesitas cambiar el enlace?</span>
                         </div>
                     </div>
                     <div>
@@ -184,7 +184,7 @@
                         <p class="text-red-500">{{ errorMessage.airbnb }}</p>
                     </div>
                     
-                    <div v-for="(link, index) in additionalLinks" class="mt-2" :key="index" v-if="link?.status !== 0">
+                    <div v-for="(link,index) in displayedAdditionalLinks" :key="link._id || link.url" class="mt-2" >
                         <hr class="mb-4 w-full">
                         <div :class="['flex', link.errors ? 'border-red-500' : 'border-gray-300']">
                             <BaseTextField
@@ -197,11 +197,11 @@
                             />
                         </div>
                         <div class="flex items-center mt-3 justify-end" >
-                            <div class="flex cursor-pointer group hover:text-green-500" @click="openDeleteModal(index,'Airbnb')">
+                            <div class="flex cursor-pointer group hover:text-[#34A98F]" @click="openDeleteModal(link,'Airbnb')">
                                 <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3 h-[15px] w-[15px]" viewBox="0 0 16 16">
                                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                                 </svg>
-                                <span class="text-sm font-medium group-hover:text-green-500 ml-1">Eliminar</span>
+                                <span class="text-sm font-medium group-hover:text-[#34A98F] ml-1">Eliminar</span>
                             </div>
                         </div>
                         <div v-if="link.errors" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
@@ -210,22 +210,13 @@
                         </div>
                     </div>
                     <div class="flex items-center mt-3" @click="addAnotherLink">
-                        <div class=" flex cursor-pointer group hover:text-green-500">
+                        <div class=" flex cursor-pointer group hover:text-[#34A98F]">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-plus h-6 w-6" viewBox="0 0 16 16">
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                             </svg>
-                            <span class="text-sm font-medium group-hover:text-green-500 mt-[4px]">Añadir otro enlace</span>
+                            <span class="text-sm font-medium group-hover:text-[#34A98F] mt-[4px]">Añadir otro enlace</span>
                         </div>
                     </div>
-                    <!-- <div  :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-green-500']" @click="changeUrlModal('airbnb', form.airbnb.url)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
-                            <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
-                            <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-                            <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
-                        </svg>
-                        
-                        <span class="text-sm font-medium" :class="errors.airbnb ? 'text-red-500' : 'group-hover:text-green-500'">¿Necesitas cambiar el enlace?</span>
-                    </div> -->
                 </div>
             </div>
             
@@ -319,6 +310,7 @@ const disabledInput = ref({
 
 const additionalLinks = ref([]);
 const initialForm = ref(null);
+const linkToDelete = ref(null);
 
 onMounted(async () => {
     await getSettings();
@@ -379,6 +371,9 @@ const getSettings = async () => {
                 }
             });
         }
+
+        // Actualiza initialForm después de obtener los datos
+        initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -485,10 +480,11 @@ const openDeleteModal = (index,name = false) => {
         nameOtaDelete.value = name;
     }
     indexToDelete.value = index;
+    linkToDelete.value = index;
     openModalDeleteURL.value = !openModalDeleteURL.value;
 };
 
-const submitDelete = () => {
+/* const submitDelete = () => {
     const index = indexToDelete.value;
     if (additionalLinks.value[index].url === '') {
         additionalLinks.value.splice(index, 1);
@@ -497,7 +493,28 @@ const submitDelete = () => {
     }
     openModalDeleteURL.value = false;
     changes.value += 1;
+}; */
+
+const submitDelete = () => {
+    const link = linkToDelete.value;
+    if (link.url === '') {
+        // Si la URL está vacía, eliminamos el objeto del array
+        const index = additionalLinks.value.indexOf(link);
+        if (index !== -1) {
+            additionalLinks.value.splice(index, 1);
+        }
+    } else {
+        // Marcamos el objeto como eliminado
+        link.status = 0;
+    }
+    openModalDeleteURL.value = false;
+    changes.value += 1;
 };
+
+const displayedAdditionalLinks = computed(() => {
+    return additionalLinks.value.filter(link => link.status !== 0);
+});
+
 
 const changeUrlModal = (type, url) => {
     dataMail.value = url;
@@ -544,7 +561,7 @@ const handleEmail = async () => {
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
 };
 
-const submit = async () => {
+/* const submit = async () => {
     const payload = [];
 
     const buildPayloadEntry = (otaName, data, initialData) => {
@@ -561,6 +578,11 @@ const submit = async () => {
 
     // Verifica cambios en el campo principal de Airbnb
     buildPayloadEntry('airbnb', form.airbnb, initialData.airbnb);
+    buildPayloadEntry('booking', form.booking, initialData.booking);
+    buildPayloadEntry('tripadvisor', form.tripadvisor, initialData.tripadvisor);
+    buildPayloadEntry('expedia', form.expedia, initialData.expedia);
+    buildPayloadEntry('google', form.google, initialData.google);
+
 
     // Verifica cambios en additionalLinks (URLs adicionales de Airbnb)
     additionalLinks.value.forEach(link => {
@@ -589,6 +611,8 @@ const submit = async () => {
         urls: payload
     };
 
+    console.log('paramsTESTEXTERNAL',params);
+
     const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if(response.ok){
@@ -599,7 +623,91 @@ const submit = async () => {
     }
 
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Actualiza el estado inicial después de guardar
+}; */
+
+const submit = async () => {
+    const payload = [];
+
+    const buildPayloadEntry = (otaName, data, initialData) => {
+        if (data.url && data.url !== initialData.url) {
+            // URL modificada o nueva
+            payload.push({
+                ota: otaName.toUpperCase(),
+                url: data.url,
+                _id: data._id || "",
+                status: 1
+            });
+        } else if (!data.url && initialData.url) {
+            // URL eliminada
+            payload.push({
+                ota: otaName.toUpperCase(),
+                url: '',
+                _id: data._id || "",
+                status: 0 // Indicamos que la URL debe ser eliminada
+            });
+        }
+    };
+
+    const initialData = JSON.parse(initialForm.value);
+
+    // Construimos el payload para todas las plataformas
+    ['airbnb', 'booking', 'tripadvisor', 'expedia', 'google'].forEach(otaName => {
+        buildPayloadEntry(otaName, form[otaName], initialData[otaName]);
+    });
+
+    // Manejo de additionalLinks (URLs adicionales de Airbnb)
+    additionalLinks.value.forEach(link => {
+        const initialLink = initialData.additionalLinks.find(initialLink => initialLink._id === link._id);
+        if (initialLink) {
+            if (link.status === 0) {
+                // URL eliminada
+                payload.push({
+                    ota: 'AIRBNB',
+                    url: link.url,
+                    _id: link._id,
+                    status: 0 // aqui la URL debe ser eliminada
+                });
+            } else if (link.url !== initialLink.url) {
+                // URL modificada
+                payload.push({
+                    ota: 'AIRBNB',
+                    url: link.url,
+                    _id: link._id,
+                    status: 1
+                });
+            }
+            // Si la URL no ha cambiado y no está marcada para eliminación, no hacemos nada
+        } else if (link.status !== 0) {
+            // Nueva URL
+            payload.push({
+                ota: 'AIRBNB',
+                url: link.url,
+                _id: link._id || ""
+            });
+        }
+        // Si link.status === 0 y es una nueva URL (sin _id), no hacemos nada
+    });
+
+    const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        urls: payload
+    };
+
+    console.log('paramsTESTEXTERNAL', params);
+
+     const response = await platformsStore.$bulkUpdateOTAS(params);
+
+    if (response.ok) {
+        toast.warningToast('Cambios aplicados con éxito', 'top-right');
+        await getSettings();
+    } else {
+        toast.errorToast(response.data.message, 'top-right');
+    }
+
+    // Actualizamos initialForm
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 };
+
 
 
 const changesComputed = computed(() => {

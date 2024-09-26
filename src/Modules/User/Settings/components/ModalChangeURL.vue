@@ -4,7 +4,7 @@
             <div>
                 <div class="flex justify-between w-full items-center">
                     <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6 ml-[50px] mb-[14px]">Solicitud de cambio de enlace</h3>
-                <button @click="closeModal" class="rounded-full bg-[#F3F3F3] p-1">
+                <button @click="closeModal" class="rounded-full hover:bg-[#F3F3F3] p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
