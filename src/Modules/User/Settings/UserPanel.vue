@@ -10,7 +10,7 @@
                         <form @submit.prevent="handleUpdateProfile"  autocomplete="off">
                             <h1 class="text-lg font-semibold text-center flex mb-6">Información de perfil</h1>
                             <div class="mb-4 flex flex-col">
-                                <label class="font-medium text-sm mb-1">Nombre {{ String(!form.name) }}  {{ String(attemptedSending) }}</label>
+                                <label class="font-medium text-sm mb-1">Nombre</label>
                                 <BaseTextField
                                     placeholder="Introduce el nombre"
                                     v-model="form.name" 
@@ -221,10 +221,9 @@ const showChangePass = () => {
 
 const handleUpdateProfile = async () => {
     attemptedSending.value = true;
-    console.log
     if(changes.value && valid.value){
         const response = await userStore.$updateProfile(form);
-        console.log('test response', response);
+        // console.log('test response', response);
         if (response.ok) {
             authStore.$setUser(response.data.user);
             toast.warningToast(response.data.message, 'top-right');
@@ -252,8 +251,6 @@ const changes = computed(() => {
     if (changePassword.value) {
         ch = ch || (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
     }
-
-    console.log('test ch', ch);
     return ch;
 });
 
@@ -266,7 +263,6 @@ const valid = computed(()=>{
     if(changePassword.value){
         val = val && (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
     }
-    console.log('test val', val);
     return val;
 })
 
