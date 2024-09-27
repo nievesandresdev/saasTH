@@ -48,7 +48,7 @@
                   <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-[100px]">
                     Inactivo
                   </span>
-                  <div>
+                  <div v-show="authStore.user.id != dataUser.id">
                     <div v-if="dataUser.status == 1" @click="disabled" class="group flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:border-[#2A8873] cursor-pointer h-8">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="mr-2" fill="none">
                         <circle 
@@ -107,10 +107,16 @@
           </div>
         </div>
         <div 
-            class="tertiary-black-200 py-6 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
+            class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
             style="height: 88px;" 
+            :class="
+                {
+                    'justify-end': authStore.user.id === dataUser.id,
+                    'justify-between': authStore.user.id != dataUser.id
+                }"
         >
             <button
+                v-show="authStore.user.id != dataUser.id"
                 class="underline font-medium text-sm"
                 @click="deleteUser(dataUser)"
             >
@@ -132,8 +138,10 @@
     import Tooltip from '@/components/Tooltip.vue'
     import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
     import { useToastAlert } from '@/composables/useToastAlert'
+    import { useAuthStore } from '@/stores/modules/auth/login'
 
     const toast = useToastAlert();
+    const authStore = useAuthStore();
     
     const emits = defineEmits(['close','update','delete','updateStatus']);
     

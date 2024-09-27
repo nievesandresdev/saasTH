@@ -166,7 +166,7 @@
                             }"
                             placeholder="Correo con el que iniciará sesión"
                         /> -->
-                        <BaseEmailField
+                        <BaseEmailFieldLive
                             placeholder="Correo con el que iniciará sesión"
                             v-model="form.email"
                             :enableLiveCheck="true"
@@ -289,7 +289,7 @@
   import Notifications from './Notifications.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
-  import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
+  import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
   
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
