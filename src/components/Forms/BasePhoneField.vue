@@ -108,7 +108,6 @@ const uniqueLook = ref(false);
 
 onMounted(async ()=>{
   defineFullPhone(modelValue.value?.trim() ?? null)
-  // console.log('test mounted',modelValue.value)
 })
 // COMPUTED
 const isError = computed(() => {
@@ -121,11 +120,6 @@ const isError = computed(() => {
 
 // fucntions
 const defineFullPhone = async (stringPhone = null) => {
-  // console.log('test defineFullPhone')
-  // axios({
-  //   url: 'https://dashboard.thehoster.io/api/phone-codes',
-  //   method: 'GET',
-  // })
   utilStore.$getPhoneCodesApi()
   .then(res => {
     codeList.value = res.data;
@@ -166,8 +160,8 @@ const selectOption = (value) => {
 
 const validPhone = (phone, code) => {
   const pattern = /^\+?\d{9,13}$/;
-
-  if (phone && !pattern.test(phone) || !code) {
+  console.log('test valid',phone)
+  if (phone && !pattern.test(phone) || !code && phone) {
     error_phone.value = true;
   } else {
     error_phone.value = false;
@@ -175,7 +169,6 @@ const validPhone = (phone, code) => {
 };
 
 watch(modelValue, (newVal, oldVal) => {
-  // console.log('test watch', newVal)
   if (uniqueLook.value) return;
   defineFullPhone(newVal)
   uniqueLook.value = true;
@@ -186,6 +179,7 @@ watch(phone, (newVal, oldVal) => {
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, code.value);
+  console.log('test phone error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   if (!code.value) return;
@@ -197,6 +191,7 @@ watch(code, (newVal, oldVal) => {
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, newVal);
+  console.log('test code error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   // if (!phone.value && newVal.length < 2) return;
