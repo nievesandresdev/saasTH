@@ -252,17 +252,35 @@
                         <strong class="text-[18px] font-medium">Alojamientos</strong>
                     </div>
                     <div class="space-y-2">
-                        <!-- Checkbox para "Todos los hoteles" -->
-                        <div class="flex items-center justify-between mb-4 rounded-lg">
-                            <span class="text-sm font-semibold">Todos los alojamientos</span>
-                            <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        </div>
-                        <!-- Checkboxes para los hoteles individuales -->
-                        <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
-                            <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                            <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        </div>
-                    </div>
+                  <!-- Checkbox para "Todos los hoteles" -->
+                  <div class="flex items-center justify-between mb-4 rounded-lg">
+                    <span class="text-sm font-semibold">Todos los hoteles</span>
+                    <input
+                      type="checkbox"
+                      v-model="selectAllHotels"
+                      @change="handleSelectAll(selectAllHotels)"
+                      class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
+                      :disabled="isRoleAdmin"
+                    />
+                  </div>
+
+                  <!-- Checkboxes para los hoteles individuales -->
+                  <div
+                    v-for="hotel in userStore.$getHotels(['id', 'name'])"
+                    :key="hotel.id"
+                    class="flex items-center justify-between mb-4 rounded-lg"
+                  >
+                    <span class="text-sm font-[500]">{{ hotel.name }}</span>
+                    <input
+                      type="checkbox"
+                      :value="hotel.id"
+                      v-model="form.hotels" 
+                      @change="handleSelection(hotel.id)"
+                      class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
+                      :disabled="isRoleAdmin"
+                    />
+                  </div>
+              </div>
                     <!-- <pre>{{ jsonHotel }}</pre> -->
                 </div>
 
@@ -660,7 +678,7 @@ const isFormIncomplete = computed(() => {
       
 }, { immediate: true });
 
-const handleSelectAll = (initial = false) => {
+/* const handleSelectAll = (initial = false) => {
     //const allSelected = selectAllHotels.value;
   //alert('handleSelectAll')
     handleChecked.value = initial;
@@ -723,6 +741,73 @@ const handleSelection = (hotelId, add = null) => {
 
     //console.log(`Hotel seleccionado: ${hotelId}`);
     //console.log('jsonHotelhandleSelection', jsonHotel.value);
+}; */
+
+const handleSelectAll = (initial = false) => {
+    handleChecked.value = initial;
+
+    if (handleChecked.value) {
+        // Seleccionar todos los hoteles
+        const hotels = userStore.$getHotels(['id','name']);
+        form.value.hotels = hotels.map(hotel => hotel.id); // Actualizar el estado de hoteles seleccionados
+        hotels.forEach(hotel => {
+            handleSelection(hotel.id, true);
+        });
+    } else {
+        // Deseleccionar todos los hoteles
+        form.value.hotels = []; // Vaciar el estado de hoteles seleccionados
+        jsonHotel.value = [];
+        operationAccess.value.forEach(access => {
+            access.selected = false;
+        });
+        adminAccess.value.forEach(access => {
+            access.selected = false;
+        });
+    }
+};
+
+// Método de selección individual
+const handleSelection = (hotelId, add = null) => {
+    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
+
+    // Si add es null, verificamos si el hotel está seleccionado
+    if (add === null) {
+        add = form.value.hotels.includes(hotelId);
+    }
+
+    // Agregar el hotel seleccionado
+    if (add && index === -1) {
+        const newHotel = { [hotelId]: {} };
+        operationAccess.value.forEach(access => {
+            if (access.selected) {
+                newHotel[hotelId][access.value] = {
+                    status: true,
+                    can: {}
+                };
+            }
+        });
+        adminAccess.value.forEach(access => {
+            if (access.selected) {
+                newHotel[hotelId][access.value] = {
+                    status: true,
+                    can: {}
+                };
+            }
+        });
+        jsonHotel.value.push(newHotel);
+    } 
+    // Eliminar el hotel si está deseleccionado
+    else if (!add && index !== -1) {
+        jsonHotel.value.splice(index, 1);
+    }
+
+    // Lógica para desmarcar "Todos los alojamientos" si no están seleccionados todos
+    const totalHotels = userStore.$getHotels(['id', 'name']).length;
+    if (form.value.hotels.length < totalHotels) {
+        selectAllHotels.value = false;  // Desmarcar el checkbox de "Todos los alojamientos"
+    } else if (form.value.hotels.length === totalHotels) {
+        selectAllHotels.value = true;  // Marcar "Todos los alojamientos" si están seleccionados todos
+    }
 };
 
 const handleCheckPermission = (permissionName, isSelected) => {

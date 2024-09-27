@@ -88,11 +88,11 @@ export default {
             type: Boolean,
             default: false
         },
-        showEmailExistsError: { // Nueva prop para controlar la visualización del error de existencia
+        showEmailExistsError: { //  controlar la visualización del error de existencia
             type: Boolean,
             default: true
         },
-        enableLiveCheck: { // Nueva prop para activar/desactivar la verificación en vivo
+        enableLiveCheck: { //  activar/desactivar la verificación en vivo
             type: Boolean,
             default: false
         },
@@ -159,7 +159,7 @@ export default {
                 clearTimeout(this.debounceTimeout);
             }
 
-            // Validar el formato del email
+            // Validar el email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (email) {
                 this.hasError = !emailRegex.test(email);
@@ -167,10 +167,10 @@ export default {
                     this.currentErrorMessage = this.textError;
                 } else if (this.enableLiveCheck) {
                     const params = { email, userId: this.userId };
-                    // Si el formato es correcto y se habilita la verificación en vivo, verificar la existencia con debounce
+                    // Si es correcto y se habilita la verificación en vivo, verificar la existencia con debounce
                     this.debounceTimeout = setTimeout(() => {
                         this.validateEmail(params);
-                    }, 500); // 500ms de retraso
+                    }, 500); 
                 }
             } else {
                 this.hasError = false;
@@ -181,7 +181,7 @@ export default {
             this.isChecking = true;
             try {
                 const response = await verifyExistMail(email);
-                // Asumiendo que la respuesta tiene una propiedad `exists` que indica si el email existe
+                
                 const exists = response.data.exists;
                 if (exists) {
                     this.hasError = true;
@@ -202,7 +202,7 @@ export default {
         }
     },
     beforeDestroy() {
-        // Limpiar el timeout si el componente se destruye
+        // Limpiar el timeout
         if (this.debounceTimeout) {
             clearTimeout(this.debounceTimeout);
         }
