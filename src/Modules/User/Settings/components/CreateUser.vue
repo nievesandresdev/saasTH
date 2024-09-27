@@ -183,7 +183,7 @@
                                 placeholder="Correo con el que iniciará sesión"
                                 autocomplete="nope"
                             /> -->
-                            <BaseEmailField
+                            <BaseEmailFieldLive
                                 placeholder="Correo con el que iniciará sesión"
                                 v-model="form.email"
                                 :enableLiveCheck="true"
@@ -400,7 +400,7 @@
   import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
-  import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
+  import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';

@@ -71,13 +71,15 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick,computed } from 'vue';
+  import { ref, onMounted, onBeforeUnmount, nextTick,computed, watch } from 'vue';
   import { defineProps, defineEmits } from 'vue';
   import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
   import { useToastAlert } from '@/composables/useToastAlert'
+  import { useAuthStore } from '@/stores/modules/auth/login'
 
   const toast = useToastAlert();
-  
+  const authStore = useAuthStore();
+
   const emits = defineEmits(['editUser', 'openModalDelete', 'close' , 'updateStatus']);
   const props = defineProps({
     user: Object,
@@ -86,6 +88,7 @@
     isAdmin: Boolean,
     isOperator: Boolean,
   });
+
 
   const enabled = async() => {
       visible.value = false;
@@ -129,7 +132,7 @@
   });
   
   const toggleDropdown = () => {
-  if (props.user.role?.name === 'Associate') {
+  if (props.user.id === authStore.user.id) {
     return; // No abrir el dropdown si el rol es "Associate"
   }
 
