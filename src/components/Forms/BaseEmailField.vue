@@ -8,7 +8,7 @@
             ref="emailInput"
             :id="id"
             type="email"
-            :class="`${computeClasses} ${modelValue} ? 'hborder-black-100' : 'hborder-gray-400'`"
+            :class="`${computeClasses} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
             :placeholder="placeholderText"
             :value="modelValue"
             @input="validateEmail"

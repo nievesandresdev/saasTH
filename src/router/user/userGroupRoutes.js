@@ -8,7 +8,7 @@ const userGroupRoutes = [
     component: AppLayout,
     meta: { 
         displayedMenu: false,
-        sidebar: 'Platform',
+        sidebar: 'SideHosterPlatform',
         sidebarWidth: '236px'
     },
     children: [
