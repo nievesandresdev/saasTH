@@ -463,7 +463,7 @@ const form = ref({
         const updateAccess = () => {
             const permissions = form.value.permissions;
 
-            console.log('permissiosssns',permissions)
+            //console.log('permissiosssns',permissions)
 
             /* console.log('permissions',permissions,firstHotel.value) */
 
