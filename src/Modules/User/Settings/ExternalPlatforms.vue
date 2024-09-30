@@ -399,7 +399,7 @@ const validateUrl = (url, type) => {
     const hostname = urlParts.origin; 
     let pathname = urlParts.pathname; // /path/to/
 
-    // Verifica que el dominio termine en .com
+    // Verifica que  termine en .com
     if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
@@ -436,7 +436,7 @@ const validateUrl = (url, type) => {
             }
             break;
         case 'expedia':
-            // Añadir validación específica para Expedia si es necesario
+            
             break;
         default:
             return 'Tipo de enlace no soportado';
@@ -458,7 +458,7 @@ const marcarCambio = (field) => {
 };
 
 const markAdditionalLinkChange = (index) => {
-    changes.value += 1;  // Incrementa el contador de cambios cada vez que se verifica un enlace.
+    changes.value += 1;  // Incrementa el contador de cambios 
     const validationError = validateUrl(additionalLinks.value[index].url, 'airbnb');
     if (!validationError) {
         additionalLinks.value[index].errors = false;
@@ -484,21 +484,11 @@ const openDeleteModal = (index,name = false) => {
     openModalDeleteURL.value = !openModalDeleteURL.value;
 };
 
-/* const submitDelete = () => {
-    const index = indexToDelete.value;
-    if (additionalLinks.value[index].url === '') {
-        additionalLinks.value.splice(index, 1);
-    } else {
-        additionalLinks.value[index].status = 0;
-    }
-    openModalDeleteURL.value = false;
-    changes.value += 1;
-}; */
 
 const submitDelete = () => {
     const link = linkToDelete.value;
     if (link.url === '') {
-        // Si la URL está vacía, eliminamos el objeto del array
+        // Si la URL está vacía, eliminamos el objeto 
         const index = additionalLinks.value.indexOf(link);
         if (index !== -1) {
             additionalLinks.value.splice(index, 1);
@@ -558,72 +548,10 @@ const handleEmail = async () => {
     }else{
         toast.errorToast(response.data.message, 'top-right')
     }
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); 
 };
 
-/* const submit = async () => {
-    const payload = [];
 
-    const buildPayloadEntry = (otaName, data, initialData) => {
-        if (data.url && data.url !== initialData.url) {
-            payload.push({
-                ota: otaName.toUpperCase(),
-                url: data.url,
-                _id: data._id || ""
-            });
-        }
-    };
-
-    const initialData = JSON.parse(initialForm.value);
-
-    // Verifica cambios en el campo principal de Airbnb
-    buildPayloadEntry('airbnb', form.airbnb, initialData.airbnb);
-    buildPayloadEntry('booking', form.booking, initialData.booking);
-    buildPayloadEntry('tripadvisor', form.tripadvisor, initialData.tripadvisor);
-    buildPayloadEntry('expedia', form.expedia, initialData.expedia);
-    buildPayloadEntry('google', form.google, initialData.google);
-
-
-    // Verifica cambios en additionalLinks (URLs adicionales de Airbnb)
-    additionalLinks.value.forEach(link => {
-        const initialLink = initialData.additionalLinks.find(initialLink => initialLink._id === link._id);
-        if (initialLink) {
-            if (link.url !== initialLink.url) {
-                // URL modificada
-                payload.push({
-                    ota: 'AIRBNB',
-                    url: link.url,
-                    _id: link._id
-                });
-            }
-        } else if (link.status !== 0) {
-            // Nueva URL
-            payload.push({
-                ota: 'AIRBNB',
-                url: link.url,
-                _id: link._id || ""
-            });
-        }
-    });
-
-    const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
-        urls: payload
-    };
-
-    console.log('paramsTESTEXTERNAL',params);
-
-    const response = await platformsStore.$bulkUpdateOTAS(params);
-
-    if(response.ok){
-        toast.warningToast('Cambios aplicados con éxito', 'top-right');
-        await getSettings();
-    } else {
-        toast.errorToast(response.data.message, 'top-right');
-    }
-
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Actualiza el estado inicial después de guardar
-}; */
 
 const submit = async () => {
     const payload = [];
@@ -643,14 +571,14 @@ const submit = async () => {
                 ota: otaName.toUpperCase(),
                 url: '',
                 _id: data._id || "",
-                delete: 0 // Indicamos que la URL debe ser eliminada
+                delete: 0
             });
         }
     };
 
     const initialData = JSON.parse(initialForm.value);
 
-    // Construimos el payload para todas las plataformas
+    // Construimos el payload 
     ['airbnb', 'booking', 'tripadvisor', 'expedia', 'google'].forEach(otaName => {
         buildPayloadEntry(otaName, form[otaName], initialData[otaName]);
     });
@@ -665,7 +593,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    delete: 0 // aqui la URL debe ser eliminada
+                    delete: 1 // aqui la URL debe ser eliminada
                 });
             } else if (link.url !== initialLink.url) {
                 // URL modificada
@@ -673,7 +601,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    delete: 1
+                    delete: 0
                 });
             }
             // Si la URL no ha cambiado y no está marcada para eliminación, no hacemos nada
@@ -685,7 +613,7 @@ const submit = async () => {
                 _id: link._id || ""
             });
         }
-        // Si link.status === 0 y es una nueva URL (sin _id), no hacemos nada
+        
     });
 
     const params = {
@@ -699,7 +627,11 @@ const submit = async () => {
 
     if (response.ok) {
         toast.warningToast('Cambios aplicados con éxito', 'top-right');
-        await getSettings();
+        //await getSettings();
+
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
     } else {
         toast.errorToast(response.data.message, 'top-right');
     }

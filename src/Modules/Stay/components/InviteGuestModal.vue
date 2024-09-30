@@ -19,8 +19,7 @@
                         classInput="h-[36px] text-sm px-3 py-2"
                         :placeholder="'Introduce el nombre del huésped'"
                         v-model="form.name"
-                        :error="alertNameNull"
-                        @input:typing="verifyName"
+                        :error="alertNull && !form.name.trim()"
                     />
                 </div>
             </div>
@@ -46,7 +45,7 @@
                     :placeholder="'Introduce el correo del huésped'"
                     v-model="form.email"
                     @handleError="EmailFieldError = $event"    
-                    @input:typing="verifyName"
+                    :activeError="alertNull && !form.email.trim()"
                 />
             </div>
             <div class="mt-4 relative">
@@ -67,12 +66,6 @@
                 </div>
                 <BasePhoneField
                     heigthClass="h-[36px]"
-                    :textLabel="'+ Código país'"
-                    :options="[
-                        {value:'+34',label:'+34'},
-                        {value:'+33',label:'+33'},
-                        {value:'+1',label:'+1'},
-                    ]"
                     v-model="form.phone"
                     @handlePhoneError="PhoneFieldError = $event"
                     placeholderPhone="Teléfono del huésped"
@@ -120,11 +113,11 @@ const openInviteGuest = inject('openInviteGuest');
 
 const EmailFieldError = ref(false);
 const PhoneFieldError = ref(false);
-const alertNameNull = ref(false);
+const alertNull = ref(false);
 
 const form = reactive({
-    name:null,
-    email:null,
+    name:'',
+    email:'',
     phone:'',
 });
 
@@ -134,32 +127,26 @@ const closeModal = () =>{
 }
 
 const cleanForm = () =>{
-    form.name =  null
+    form.name =  ''
     form.phone = ''
-    form.email = null
-    alertNameNull.value = false;
+    form.email = ''
+    alertNull.value = false;
 }
 
-const verifyName = () =>{
-    if(!form.name){
-        alertNameNull.value = true;
-    }else{
-        alertNameNull.value = false;
-    }
-}
 
 const submit = async () =>{
-    verifyName();
+    alertNull.value = true;
     if(valid_form.value){
         openInviteGuest.value = false;
         await guestStore.$inviteToHotel(form);
+        alertNull.value = false;
         cleanForm();
         toast.warningToast('Invitacion enviada.','top-right');
     }
 }
 
 const valid_form = computed(()=>{
-    let valid = form.name !== null && form.name !== '' && (form.phone !== '' || form.email) && !EmailFieldError.value && !PhoneFieldError.value
+    let valid = form.name.trim() && form.email.trim() && !EmailFieldError.value && !PhoneFieldError.value
     return valid;
 });
 

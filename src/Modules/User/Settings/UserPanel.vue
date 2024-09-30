@@ -23,9 +23,9 @@
                                 <BaseTextField
                                     placeholder="Introduce apellidos"
                                     v-model="form.lastname" 
-                                    :error="!form.lastname && attemptedSending"
                                     @input:typing="attemptedSending = false"
                                 />
+                                <!-- :error="!form.lastname && attemptedSending" -->
                             </div>
                             <!-- email -->
                             <div class="mb-4 flex flex-col">
@@ -66,7 +66,7 @@
                                         :class="{
                                             'hborder-black-100':form.current_password,
                                             'hborder-gray-400':!form.current_password.trim(),
-                                            'hborder-alert-negative htext-alert-negative': !form.current_password && attemptedSending || passError,
+                                            'hborder-alert-negative htext-alert-negative': changePassword && !form.current_password && attemptedSending || passError,
                                         }"
                                         :placeholder="placeholderPassword"
                                         v-model="form.current_password"
@@ -134,7 +134,6 @@
                                     type="submit" 
                                     class="hbtn-cta w-1/4 h-14 rounded-lg text-base font-medium" 
                                     :class="{'cta-disabled':!valid}"
-                                    :disabled="!valid"
                                 >
                                     Guardar
                                 </button>
@@ -145,6 +144,15 @@
             </div>
         </div>  
     </div> 
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="handleUpdateProfile"
+        type="save_changes"
+    />
 </template>
 
 <script setup>
@@ -155,6 +163,7 @@ import { useToastAlert } from '@/composables/useToastAlert';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
 import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useRouter } from 'vue-router';
 import { $removeSpaces } from '@/utils/textWritingTypes'
 
@@ -214,7 +223,7 @@ const handleUpdateProfile = async () => {
     attemptedSending.value = true;
     if(changes.value && valid.value){
         const response = await userStore.$updateProfile(form);
-        console.log('test response', response);
+        // console.log('test response', response);
         if (response.ok) {
             authStore.$setUser(response.data.user);
             toast.warningToast(response.data.message, 'top-right');
@@ -237,27 +246,23 @@ const handleUpdateProfile = async () => {
 
 const changes = computed(() => {
     attemptedSending.value = false;
-    let ch = form.name !== authStore.user?.name || form.lastname !== authStore.user?.lastname || 
-             form.email !== authStore.user?.email || $removeSpaces(form.phone) !== $removeSpaces(authStore.user?.phone);
-
+    let ch = form.name !== authStore.user?.name || form.lastname !== authStore.user?.lastname || form.email !== authStore.user?.email || 
+        $removeSpaces(form.phone) !== $removeSpaces(authStore.user?.phone);
     if (changePassword.value) {
         ch = ch || (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
     }
-
-    console.log('test ch', ch);
     return ch;
 });
 
 
 const valid = computed(()=>{
     
-    let val = changes.value && form.name.trim() && form.lastname.trim() && form.email.trim() && form.phone.trim() && 
+    let val = changes.value && form.name.trim() && form.email.trim() && form.phone.trim() && 
                 !errorPhone.value && !EmailFieldError.value;
     
     if(changePassword.value){
         val = val && (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
     }
-    console.log('test val', val);
     return val;
 })
 
