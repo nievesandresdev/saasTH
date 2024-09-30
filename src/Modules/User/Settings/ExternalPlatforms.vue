@@ -484,16 +484,6 @@ const openDeleteModal = (index,name = false) => {
     openModalDeleteURL.value = !openModalDeleteURL.value;
 };
 
-/* const submitDelete = () => {
-    const index = indexToDelete.value;
-    if (additionalLinks.value[index].url === '') {
-        additionalLinks.value.splice(index, 1);
-    } else {
-        additionalLinks.value[index].status = 0;
-    }
-    openModalDeleteURL.value = false;
-    changes.value += 1;
-}; */
 
 const submitDelete = () => {
     const link = linkToDelete.value;
@@ -561,69 +551,7 @@ const handleEmail = async () => {
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
 };
 
-/* const submit = async () => {
-    const payload = [];
 
-    const buildPayloadEntry = (otaName, data, initialData) => {
-        if (data.url && data.url !== initialData.url) {
-            payload.push({
-                ota: otaName.toUpperCase(),
-                url: data.url,
-                _id: data._id || ""
-            });
-        }
-    };
-
-    const initialData = JSON.parse(initialForm.value);
-
-    // Verifica cambios en el campo principal de Airbnb
-    buildPayloadEntry('airbnb', form.airbnb, initialData.airbnb);
-    buildPayloadEntry('booking', form.booking, initialData.booking);
-    buildPayloadEntry('tripadvisor', form.tripadvisor, initialData.tripadvisor);
-    buildPayloadEntry('expedia', form.expedia, initialData.expedia);
-    buildPayloadEntry('google', form.google, initialData.google);
-
-
-    // Verifica cambios en additionalLinks (URLs adicionales de Airbnb)
-    additionalLinks.value.forEach(link => {
-        const initialLink = initialData.additionalLinks.find(initialLink => initialLink._id === link._id);
-        if (initialLink) {
-            if (link.url !== initialLink.url) {
-                // URL modificada
-                payload.push({
-                    ota: 'AIRBNB',
-                    url: link.url,
-                    _id: link._id
-                });
-            }
-        } else if (link.status !== 0) {
-            // Nueva URL
-            payload.push({
-                ota: 'AIRBNB',
-                url: link.url,
-                _id: link._id || ""
-            });
-        }
-    });
-
-    const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
-        urls: payload
-    };
-
-    console.log('paramsTESTEXTERNAL',params);
-
-    const response = await platformsStore.$bulkUpdateOTAS(params);
-
-    if(response.ok){
-        toast.warningToast('Cambios aplicados con éxito', 'top-right');
-        await getSettings();
-    } else {
-        toast.errorToast(response.data.message, 'top-right');
-    }
-
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Actualiza el estado inicial después de guardar
-}; */
 
 const submit = async () => {
     const payload = [];
@@ -665,7 +593,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    delete: 0 // aqui la URL debe ser eliminada
+                    delete: 1 // aqui la URL debe ser eliminada
                 });
             } else if (link.url !== initialLink.url) {
                 // URL modificada
@@ -673,7 +601,7 @@ const submit = async () => {
                     ota: 'AIRBNB',
                     url: link.url,
                     _id: link._id,
-                    delete: 1
+                    delete: 0
                 });
             }
             // Si la URL no ha cambiado y no está marcada para eliminación, no hacemos nada
@@ -699,7 +627,11 @@ const submit = async () => {
 
     if (response.ok) {
         toast.warningToast('Cambios aplicados con éxito', 'top-right');
-        await getSettings();
+        //await getSettings();
+
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
     } else {
         toast.errorToast(response.data.message, 'top-right');
     }
