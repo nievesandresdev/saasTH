@@ -399,7 +399,7 @@ const validateUrl = (url, type) => {
     const hostname = urlParts.origin; 
     let pathname = urlParts.pathname; // /path/to/
 
-    // Verifica que el dominio termine en .com
+    // Verifica que  termine en .com
     if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
     }
@@ -436,7 +436,7 @@ const validateUrl = (url, type) => {
             }
             break;
         case 'expedia':
-            // Añadir validación específica para Expedia si es necesario
+            
             break;
         default:
             return 'Tipo de enlace no soportado';
@@ -458,7 +458,7 @@ const marcarCambio = (field) => {
 };
 
 const markAdditionalLinkChange = (index) => {
-    changes.value += 1;  // Incrementa el contador de cambios cada vez que se verifica un enlace.
+    changes.value += 1;  // Incrementa el contador de cambios 
     const validationError = validateUrl(additionalLinks.value[index].url, 'airbnb');
     if (!validationError) {
         additionalLinks.value[index].errors = false;
@@ -488,7 +488,7 @@ const openDeleteModal = (index,name = false) => {
 const submitDelete = () => {
     const link = linkToDelete.value;
     if (link.url === '') {
-        // Si la URL está vacía, eliminamos el objeto del array
+        // Si la URL está vacía, eliminamos el objeto 
         const index = additionalLinks.value.indexOf(link);
         if (index !== -1) {
             additionalLinks.value.splice(index, 1);
@@ -548,7 +548,7 @@ const handleEmail = async () => {
     }else{
         toast.errorToast(response.data.message, 'top-right')
     }
-    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); // Update the initial state after saving
+    initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value }); 
 };
 
 
@@ -571,14 +571,14 @@ const submit = async () => {
                 ota: otaName.toUpperCase(),
                 url: '',
                 _id: data._id || "",
-                delete: 0 // Indicamos que la URL debe ser eliminada
+                delete: 0
             });
         }
     };
 
     const initialData = JSON.parse(initialForm.value);
 
-    // Construimos el payload para todas las plataformas
+    // Construimos el payload 
     ['airbnb', 'booking', 'tripadvisor', 'expedia', 'google'].forEach(otaName => {
         buildPayloadEntry(otaName, form[otaName], initialData[otaName]);
     });
@@ -613,7 +613,7 @@ const submit = async () => {
                 _id: link._id || ""
             });
         }
-        // Si link.status === 0 y es una nueva URL (sin _id), no hacemos nada
+        
     });
 
     const params = {
