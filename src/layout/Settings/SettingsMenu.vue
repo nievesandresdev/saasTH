@@ -24,7 +24,7 @@
                 <a
                   href="javascript:void(0)"
                   @click="toggleSubMenu(index_section, index_menu, section, menu)"
-                  class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-gray-100"
+                  class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-hbg-gray-200"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 
@@ -36,12 +36,12 @@
                   <template v-for="(sub_menu, index_sub_menu) in menu.group" :key="index_sub_menu">
                     <!-- <li
                       v-if="sub_menu.place"
-                      class=" w-full h-full hover-gray-100"
+                      class=" w-full h-full hover-hbg-gray-200"
                       :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                     > -->
                     <li
                       v-if="sub_menu.place"
-                      class=" w-full h-full hover-gray-100"
+                      class=" w-full h-full hover-hbg-gray-200"
                       :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
                     >
                       <div
@@ -63,7 +63,7 @@
                     <li
                       v-else
                       class=" w-full h-full"
-                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-gray-100'"
+                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-hbg-gray-200'"
                     >
                       <div
                         class="w-full block px-6 cursor-pointer"
@@ -84,7 +84,7 @@
               <!-- normal link -->
               <li
                 v-else
-                class="hover-gray-100"
+                class="hover-hbg-gray-200"
                 :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
               >
                 <a
@@ -124,7 +124,7 @@
                         >
                           <a
                             href="javascript:void(0)"
-                            class="text-sm font-medium flex items-center justify-between py-[8px] px-[24px] hover-gray-100"
+                            class="text-sm font-medium flex items-center justify-between py-[8px] px-[24px] hover-hbg-gray-200"
                           >
                             <div class="flex items-center">
                               <img :src="menu.icon" class="inline-block w-6 h-6 mr-2">
@@ -136,7 +136,7 @@
                             <template v-for="(sub_menu, index_sub_menu) in menu.group" :key="index_sub_menu">
                               <li
                                 v-if="sub_menu.place"
-                                class=" w-full h-full hover-gray-100"
+                                class=" w-full h-full hover-hbg-gray-200"
                                 :class="fullUrl.includes(`selected_place=${dataTypePlaces?.[index_sub_menu]?.id}`) || fullUrl == '/places' && dataTypePlaces?.[index_sub_menu]?.name == 'Qué visitar' ? 'hbg-green-200' : ''"
                               >
                                 <a
@@ -151,7 +151,7 @@
                               </li>
                               <li
                                 v-else
-                                class=" w-full h-full hover-gray-100"
+                                class=" w-full h-full hover-hbg-gray-200"
                                 :class="fullUrl.includes(sub_menu.include) ? 'hbg-green-200' : ''"
                               >
                                 <a
@@ -169,7 +169,7 @@
                         </li>
                         <li
                           v-else
-                          class="hover-gray-100"
+                          class="hover-hbg-gray-200"
                           :class="fullUrl.includes(menu.include) ? 'hbg-green-700' : ''"
                         >
                           <a

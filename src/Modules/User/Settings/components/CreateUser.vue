@@ -2,22 +2,22 @@
     <transition>
       <div
         v-if="modalAdd"
-        class="absolute bg-white shadow-xl add flex-column add "
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 3000;`"
+        class="absolute bg-white shadow-xl add flex flex-col"
+        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
         ref="ref_section_add"
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"
       >
             <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex justify-between items-center px-6 py-4">
+              <div class="flex justify-between items-center px-6 py-[20px]">
                 <div class="flex justify-end">
                 </div>
                 <div class="flex-1 text-center">
-                  <h1 class="font-[600] text-xl">Crear usuario</h1>
+                  <h1 class="font-medium text-xl">Crear usuario</h1>
                 </div>
                 <div class="flex justify-end">
                   <button class="" @click="closeModal">
-                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-5 h-5">
+                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
                   </button>
                 </div>
               </div>
@@ -66,7 +66,7 @@
                           id="workPositionInput"
                           @click.stop="toggleModalWorkPosition"
                           readonly
-                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal "
+                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
                           :class="{
                             'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
                             'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
@@ -97,7 +97,7 @@
                             <input
                                 v-model="form.name"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
                                 placeholder="Nombre"
                                 :class="
                                 {
@@ -113,7 +113,7 @@
                             <input
                                 v-model="form.lastname"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
                                 :class="
                                   {
                                     'hborder-black-100 htext-black-100 font-medium': form.lastname,
@@ -123,12 +123,9 @@
                             />
                         </div>
                     </div>
-                    <div class="mt-4">
+                    <!-- <div class="mt-4">
                       <label class="text-sm font-medium">Teléfono móvil</label>
                         <div class="flex rounded">
-                            <!-- <select v-model="form.prefix" :class="{'border-red-600': errorPrefix, '': !errorPrefix}" class="bg-white w-1/5 rounded-l-lg border border-r-[1px]   border-gray-300 text-gray-700  font-medium text-sm px-4 py-2.5">
-                                <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
-                            </select> -->
                             <select v-model="form.prefix"
                               :class="{
                                 'hborder-alert-negative': errorPrefix, '': !errorPrefix,
@@ -139,22 +136,6 @@
                               style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
                               <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
                             </select>
-
-
-
-                            <!-- <div class="relative w-1/5">
-                              <input
-                                  type="text"
-                                  id="workPositionInput"
-                                  @click.stop="toggleModalWorkPosition"
-                                  readonly
-                                  class="bg-white w-full rounded-md  border border-gray-300 text-black font-medium text-sm px-4 py-2.5 cursor-pointer"
-                                  placeholder="+34"
-                                />
-                              <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                              </div>
-                            </div> -->
                             <input type="text"
                                 placeholder="Teléfono de contacto"
                                 class="p-2.5 block border flex-grow h-10 text-sm text-gray-900 bg-white rounded-r-lg border-l-none"
@@ -167,27 +148,47 @@
                                 @input="validatePhone"
                             >
                         </div>
+                        
+                    </div> -->
+                    <div class="mt-4">
+                      <!-- {{ String(PhoneFieldError)}} -->
+                      <label class="text-sm font-medium">Teléfono móvil </label>
+                      <BasePhoneField
+                            v-model="form.phone"
+                            name="phone"
+                            @handlePhoneError="errorPhone = $event"
+                        />
                         <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
                         </div>
+                        <!-- :errors="errors"
+                            @blur:validate="validate('phone')" -->
                     </div>
                     <div class="mt-4">
                         <label class="text-sm font-medium">Correo electrónico *</label>
                         <div class="relative">
-                            <input
+                            <!-- <input
                                 v-model="form.email"
                                 type="email"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
                                 :class="
                                 {
-                                  'hborder-black-100 htext-black-100 font-medium': form.email && !errorEmail,
-                                  'hborder-gray-400 htext-gray-500': !form.email || errorEmail,
+                                  'hborder-black-100 htext-black-100 font-medium ': form.email && !errorEmail,
+                                  'hborder-gray-400 htext-gray-500 hinput-green': !form.email || errorEmail,
                                   'hborder-negative placeholder:text-[#FF6666]' : errorEmail
                                 }"
                                 placeholder="Correo con el que iniciará sesión"
+                                autocomplete="nope"
+                            /> -->
+                            <BaseEmailFieldLive
+                                placeholder="Correo con el que iniciará sesión"
+                                v-model="form.email"
+                                :enableLiveCheck="true"
+                                @errorMessage="errorEmailText = $event"
+                                @handleError="errorEmail = $event"    
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -203,13 +204,15 @@
                             <input
                                 v-model="form.password"
                                 type="password"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                                  'hborder-gray-400 htext-gray-500': !form.password || errorPassword,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword
+                                  'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
+                                  'hinput-green' : !errorPassword
                                 }"
                                 placeholder="Clave de acceso al sistema"
+                                autocomplete="nope"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -229,9 +232,11 @@
                                 :class="{
                                   'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
                                   'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch
+                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
+                                  'hinput-green' : !errorPasswordMatch
                                 }"
                                 placeholder="Repite la clave"
+                                autocomplete="nope"
                             />
                             <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -247,17 +252,35 @@
                         <strong class="text-[18px] font-medium">Alojamientos</strong>
                     </div>
                     <div class="space-y-2">
-                        <!-- Checkbox para "Todos los hoteles" -->
-                        <div class="flex items-center justify-between mb-4 rounded-lg">
-                            <span class="text-sm font-bold">Todos los alojamientos</span>
-                            <input type="checkbox" v-model="selectAllHotels" @change="handleSelectAll(true)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        </div>
-                        <!-- Checkboxes para los hoteles individuales -->
-                        <div v-for="hotel in userStore.$getHotels(['id','name'])" :key="hotel.id" class="flex items-center justify-between mb-4 rounded-lg">
-                            <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                            <input type="checkbox" :value="hotel.id" v-model="form.hotels" :checked="handleChecked" @change="handleSelection(hotel.id)" class="hcheckbox h-5 w-5 rounded disabled:opacity-50" :disabled="isRoleAdmin">
-                        </div>
-                    </div>
+                  <!-- Checkbox para "Todos los hoteles" -->
+                  <div class="flex items-center justify-between mb-4 rounded-lg">
+                    <span class="text-sm font-semibold">Todos los hoteles</span>
+                    <input
+                      type="checkbox"
+                      v-model="selectAllHotels"
+                      @change="handleSelectAll(selectAllHotels)"
+                      class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
+                      :disabled="isRoleAdmin"
+                    />
+                  </div>
+
+                  <!-- Checkboxes para los hoteles individuales -->
+                  <div
+                    v-for="hotel in userStore.$getHotels(['id', 'name'])"
+                    :key="hotel.id"
+                    class="flex items-center justify-between mb-4 rounded-lg"
+                  >
+                    <span class="text-sm font-[500]">{{ hotel.name }}</span>
+                    <input
+                      type="checkbox"
+                      :value="hotel.id"
+                      v-model="form.hotels" 
+                      @change="handleSelection(hotel.id)"
+                      class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
+                      :disabled="isRoleAdmin"
+                    />
+                  </div>
+              </div>
                     <!-- <pre>{{ jsonHotel }}</pre> -->
                 </div>
 
@@ -329,7 +352,7 @@
               </div>
             </div>
     
-            <div class="py-4 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 72px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
+            <div class="py-6 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 88px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
               <button  
                 class="hbtn-tertiary text-sm font-medium underline my-auto"
                 @click.prevent="prevStep()"
@@ -376,6 +399,8 @@
   import Notifications from './Notifications.vue';
   import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
+  import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -385,6 +410,7 @@
   const intendedRoute = ref(null);
   const userStore = useUserStore();
   const selectAll = ref(false);
+  const PhoneFieldError = ref(false);
   //const authStore = useAuthStore();
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
@@ -498,7 +524,7 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
 const operationAccess = ref([
     { name: 'Estancias', selected: false , value : 'estancias' },
     { name: 'Reseñas', selected: false, value: 'resenas' },
-    { name: 'Análisis', selected: false , value: 'analisis' },
+    /* { name: 'Análisis', selected: false , value: 'analisis' }, */
 ]);
 
 const adminAccess = ref([
@@ -558,27 +584,28 @@ const adminAccess = ref([
 
 
 const isFormIncomplete = computed(() => {
-      //email
-      const isValidEmail = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.email);
+    // Email
+    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
 
-      //contrase;a
-      const isValidPassword = form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
+    // Contraseña
+    const isValidPassword = form.value.password && form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
 
     if (currentStep.value === 1) {
-        return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
-            !form.value.password_confirmation  || !isValidPassword;
-      } else if (currentStep.value === 2) {
-          return !form.value.hotels.length;
-      } else if (currentStep.value === 3) {
-          return !form.value.access.length;
+      return !form.value.name || !form.value.lastname || !form.value.email || !form.value.password ||
+        !form.value.password_confirmation || !isValidPassword || !isValidEmail || errorEmail.value;
+    } else if (currentStep.value === 2) {
+      return !form.value.hotels.length;
+    } else if (currentStep.value === 3) {
+      return !form.value.access.length;
     }
-
 });
+
+
   const errorPhone = ref(false);
 
   const errorPrefix = ref(false);
 
-  const validatePhone = (event) => {
+/*   const validatePhone = (event) => {
     const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
     form.value.phone = newValue;
     errorPhone.value = newValue.length === 0;
@@ -589,9 +616,9 @@ const isFormIncomplete = computed(() => {
     } else {
       errorPrefix.value = false;
     }
-  };
+  }; */
 
-  // Watch para validar el prefijo cuando cambia el teléfono
+ /*  // Watch para validar el prefijo cuando cambia el teléfono
   watch(() => form.value.phone, (newVal) => {
     if (newVal.length > 0 && !form.value.prefix) {
       errorPrefix.value = true;
@@ -605,7 +632,7 @@ const isFormIncomplete = computed(() => {
     if (newVal) {
       errorPrefix.value = false;
     }
-  });
+  }); */
 
   watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword, newPasswordConfirmation]) => {
       errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
@@ -651,7 +678,7 @@ const isFormIncomplete = computed(() => {
       
 }, { immediate: true });
 
-const handleSelectAll = (initial = false) => {
+/* const handleSelectAll = (initial = false) => {
     //const allSelected = selectAllHotels.value;
   //alert('handleSelectAll')
     handleChecked.value = initial;
@@ -714,6 +741,73 @@ const handleSelection = (hotelId, add = null) => {
 
     //console.log(`Hotel seleccionado: ${hotelId}`);
     //console.log('jsonHotelhandleSelection', jsonHotel.value);
+}; */
+
+const handleSelectAll = (initial = false) => {
+    handleChecked.value = initial;
+
+    if (handleChecked.value) {
+        // Seleccionar todos los hoteles
+        const hotels = userStore.$getHotels(['id','name']);
+        form.value.hotels = hotels.map(hotel => hotel.id); // Actualizar el estado de hoteles seleccionados
+        hotels.forEach(hotel => {
+            handleSelection(hotel.id, true);
+        });
+    } else {
+        // Deseleccionar todos los hoteles
+        form.value.hotels = []; // Vaciar el estado de hoteles seleccionados
+        jsonHotel.value = [];
+        operationAccess.value.forEach(access => {
+            access.selected = false;
+        });
+        adminAccess.value.forEach(access => {
+            access.selected = false;
+        });
+    }
+};
+
+// Método de selección individual
+const handleSelection = (hotelId, add = null) => {
+    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
+
+    // Si add es null, verificamos si el hotel está seleccionado
+    if (add === null) {
+        add = form.value.hotels.includes(hotelId);
+    }
+
+    // Agregar el hotel seleccionado
+    if (add && index === -1) {
+        const newHotel = { [hotelId]: {} };
+        operationAccess.value.forEach(access => {
+            if (access.selected) {
+                newHotel[hotelId][access.value] = {
+                    status: true,
+                    can: {}
+                };
+            }
+        });
+        adminAccess.value.forEach(access => {
+            if (access.selected) {
+                newHotel[hotelId][access.value] = {
+                    status: true,
+                    can: {}
+                };
+            }
+        });
+        jsonHotel.value.push(newHotel);
+    } 
+    // Eliminar el hotel si está deseleccionado
+    else if (!add && index !== -1) {
+        jsonHotel.value.splice(index, 1);
+    }
+
+    // Lógica para desmarcar "Todos los alojamientos" si no están seleccionados todos
+    const totalHotels = userStore.$getHotels(['id', 'name']).length;
+    if (form.value.hotels.length < totalHotels) {
+        selectAllHotels.value = false;  // Desmarcar el checkbox de "Todos los alojamientos"
+    } else if (form.value.hotels.length === totalHotels) {
+        selectAllHotels.value = true;  // Marcar "Todos los alojamientos" si están seleccionados todos
+    }
 };
 
 const handleCheckPermission = (permissionName, isSelected) => {
@@ -848,13 +942,11 @@ const prevStep = () => {
     currentStep.value--;
   }
 
-  console.log('currentStep22',currentStep.value)
 };
 
 
 const handleStoreUser = async () => {
 
-  console.log('formCreateUSer',form.value)
   let store = await userStore.$storeUser(form.value);
 
   if (store.ok) {

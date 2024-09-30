@@ -1,7 +1,7 @@
 <template>
     <aside class="w-full h-full flex flex-col bg-white shadow-custom">
-        <div class="py-3 px-3 block">
-            <h5 class="text-base font-semibold leading-[120%] text-left">{{ title }}</h5>
+        <div class="py-3 px-6 block">
+            <h5 class="text-base font-semibold leading-[120%] py-[10.5px]">Hoster</h5>
         </div>
 
         <nav class="">
@@ -12,7 +12,7 @@
                     :to="item?.url || '#'" 
                     class="menu-item relative flex flex-col" 
                     @click.native="toggleSubmenu(item.text)"
-                    :class="{ 'active': isActive(item.url) }"
+                    :class="{ 'active': isActive(item.url), 'hover-hbg-gray-200': !isActive(item.url) }"
                 >
                     <div class="flex items-center justify-between w-full">
                         <div class="flex items-center">
@@ -37,7 +37,6 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-const title = 'Hoster';
 const menuItems = [
     { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' },
     /* { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  }, */
@@ -90,10 +89,6 @@ nav ul {
     padding: 10px 12px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-.menu-item:hover {
-    background-color: #ECF9F5;
-    /* border-radius: 0.5rem; */
 }
 .menu-item.active {
     background-color: #ECF9F5;

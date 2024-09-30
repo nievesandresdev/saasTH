@@ -33,8 +33,8 @@
       </div>
     </template>
     <template #footer>
-      <div class="border-t border-[#BFBFBF] px-8 w-full py-[18px]">
-        <button class="flex items-center" @click.stop="logout">
+      <div class="border-t border-[#BFBFBF] w-full">
+        <button class="flex items-center px-8 hover-hbg-gray-200 py-[18px] w-full rounded-b-[10px]" @click.stop="logout">
           <img src="/assets/icons/1.TH.EXIT.svg" alt="Cerrar sesión" class="h-5 w-5 mr-2" />
           <span class="font-medium text-sm leading-[140%] text-[#333]">Cerrar sesión</span>
         </button>

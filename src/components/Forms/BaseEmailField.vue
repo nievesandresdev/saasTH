@@ -50,6 +50,7 @@ export default {
             default: 'Campo requerido'
         },
         iconLeft: String,
+        activeError: Boolean,
     },
     data() {
         return {
@@ -62,7 +63,7 @@ export default {
         },
         computeClasses() {
             let classes = 'hinput-green rounded-[6px] border w-full ' + this.customClasses;
-            if (this.hasError) {
+            if (this.hasError || this.activeError) {
                 classes += ' hborder-alert-negative htext-alert-negative placeholder-negative';
             } else {
                 classes += '';

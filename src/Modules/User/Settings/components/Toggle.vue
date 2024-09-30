@@ -15,13 +15,13 @@
       </svg>
       <div
         v-if="visible"
-        class="absolute w-48 bg-white rounded-md shadow-md py-1 z-50 right-3"
+        class="absolute w-[148px] bg-white rounded-md shadow-md left-[-124px]"
         style="z-index: 1000000;"
       >
         <a
           href="#"
           @click="editUser(user)"
-          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+          class="px-4 flex items-center justify-left py-2 text-sm text-[#333333] hover:bg-[#F1F1F1]"
         >
           <img
             src="/assets/icons/1.TH.EDIT.OUTLINED.svg"
@@ -33,7 +33,7 @@
         <div
         v-if="user.status == 1"
           @click="disabled"
-          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+          class="px-4 flex items-center justify-left py-2 text-sm text-[#333333] hover:bg-[#F1F1F1] cursor-pointer"
         >
         <img
             src="/assets/icons/1.TH.PAUSE.svg"
@@ -45,7 +45,7 @@
         <div
           v-else
           @click="enabled"
-          class="px-4 flex items-center justify-left py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+          class="px-4 flex items-center justify-left py-2 text-sm text-[#333333] hover:bg-[#F1F1F1] cursor-pointer"
         >
         <img
             src="/assets/icons/octicon_play-16.svg"
@@ -54,7 +54,6 @@
           />
           <span class="font-normal text-sm">Activar</span>
         </div>
-        <hr class="my-1" />
         <a
           href="#"
           @click="openModalDelete(user)"
@@ -72,13 +71,15 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick,computed } from 'vue';
+  import { ref, onMounted, onBeforeUnmount, nextTick,computed, watch } from 'vue';
   import { defineProps, defineEmits } from 'vue';
   import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
   import { useToastAlert } from '@/composables/useToastAlert'
+  import { useAuthStore } from '@/stores/modules/auth/login'
 
   const toast = useToastAlert();
-  
+  const authStore = useAuthStore();
+
   const emits = defineEmits(['editUser', 'openModalDelete', 'close' , 'updateStatus']);
   const props = defineProps({
     user: Object,
@@ -87,6 +88,7 @@
     isAdmin: Boolean,
     isOperator: Boolean,
   });
+
 
   const enabled = async() => {
       visible.value = false;
@@ -130,7 +132,7 @@
   });
   
   const toggleDropdown = () => {
-  if (props.user.role?.name === 'Associate') {
+  if (props.user.id === authStore.user.id) {
     return; // No abrir el dropdown si el rol es "Associate"
   }
 

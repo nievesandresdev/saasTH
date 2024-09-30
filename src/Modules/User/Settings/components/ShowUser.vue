@@ -2,53 +2,53 @@
     <transition>
       <div
         v-if="modalShow"
-        class="absolute bg-white shadow-xl add flex-column"
-        :style="`top: ${containerTop}px; right: 0; min-height: calc(100vh - ${containerTop}px); height: calc(100vh - ${containerTop}px); z-index: 601;`"
+        class="absolute bg-white shadow-xl add flex flex-col"
+        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5 mt-2">
+          <div class="flex justify-between items-center px-6 py-5">
             <div class=" text-center">
               <h1 class="font-[500] text-[22px]">Perfil del usuario</h1>
             </div>
             <div class="flex justify-end">
               <button class="" @click="closeModal">
-                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-6 h-6">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
               </button>
             </div>
           </div>
-          <hr class="mb-4">
-          <div class="p-6">
-            <div class="flex flex-col mb-5">
-                <span class="text-sm font-semibold">Tipo de usuario</span>
-                <span class="text-base font-normal">{{ $getRoleName(dataUser?.role?.name) }}</span>
-            </div>
-            <div class="flex flex-col mb-5">
-                <span class="text-sm font-semibold">Puesto</span>
-                <span class="text-base font-normal">{{ dataUser?.work_position }}</span>
-            </div>
-            <div class="flex flex-col mb-5">
+          <hr>
+          <div class="px-6 py-8">
+            <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Usuario</span>
                 <span class="text-base font-normal">{{ dataUser?.name }} {{ dataUser?.lastname }}</span>
             </div>
-            <div class="flex flex-col mb-5">
-                <span class="text-sm font-semibold">Teléfono</span>
-                <span class="text-base font-normal">{{ dataUser?.prefix }} {{ dataUser?.phone }}</span>
+            <div class="flex flex-col mb-6">
+                <span class="text-sm font-semibold">Puesto</span>
+                <span class="text-base font-normal">{{ dataUser?.work_position }}</span>
             </div>
-            <div class="flex flex-col mb-5">
+            <div class="flex flex-col mb-6">
+                <span class="text-sm font-semibold">Correo electrónico</span>
+                <span class="text-base font-normal">{{ dataUser?.email }}</span>
+            </div>
+            <div class="flex flex-col mb-6">
+                <span class="text-sm font-semibold">Teléfono</span>
+                <span class="text-base font-normal">{{ dataUser?.prefix ?? '' }} {{ dataUser?.phone }}</span>
+            </div>
+            <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Antigüedad</span>
                 <span class="text-base font-normal">{{ dataUser?.time }}</span>
             </div>
-            <div class="flex flex-col mb-5">
+            <div class="flex flex-col mb-8">
                 <span class="text-sm font-semibold">Estado del usuario</span>
                 <div class="flex justify-between mt-[10px]">
-                  <span v-if="dataUser.status == 1" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                  <span v-if="dataUser.status == 1" class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-[100px]">
                     Activo
                   </span>
-                  <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                  <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-[100px]">
                     Inactivo
                   </span>
-                  <div>
+                  <div v-show="authStore.user.id != dataUser.id">
                     <div v-if="dataUser.status == 1" @click="disabled" class="group flex items-center px-2 py-3 text-black border border-[#333333] rounded-[6px] hover:border-[#2A8873] cursor-pointer h-8">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="mr-2" fill="none">
                         <circle 
@@ -80,9 +80,9 @@
                   </div>
                 </div>
             </div>
-            <hr class="mb-4">
+            <hr class="mb-[19px]">
             <div class="flex justify-start mb-5">
-                <span class="text-base font-semibold mr-2">Hoteles asociados</span>
+                <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
                 <Tooltip
                         size="s"
                         :top="25"
@@ -100,33 +100,33 @@
             </div>
             <div class="flex flex-col items-left mb-4">
               <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
-                <span class="mr-2 text-[#0B6357]">•</span> <!-- Punto antes del nombre del hotel -->
+                <span class="mr-2 text-[#0B6357]">•</span> <!-- Punto hotel -->
                 <span class="font-normal text-base">{{ hotel }}</span>
               </div>
             </div>
-            
           </div>
         </div>
-        <!-- <div 
-            class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
-            style="height: 72px;" 
-            v-if="dataUser.role.name != 'Associate' && ($isAdmin() || $isOperator())"
-        > -->
         <div 
-            class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full" 
-            style="height: 72px;" 
+            class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
+            style="height: 88px;" 
+            :class="
+                {
+                    'justify-end': authStore.user.id === dataUser.id,
+                    'justify-between': authStore.user.id != dataUser.id
+                }"
         >
             <button
-                class="underline font-medium"
+                v-show="authStore.user.id != dataUser.id"
+                class="underline font-medium text-sm"
                 @click="deleteUser(dataUser)"
             >
-               Eliminar usuario
+               Eliminar
             </button>
             <button
-                class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
+                class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
                 @click="updateUser(dataUser)"
             >
-                Editar usuario
+                Editar
             </button>
         </div>
       </div>
@@ -138,8 +138,10 @@
     import Tooltip from '@/components/Tooltip.vue'
     import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
     import { useToastAlert } from '@/composables/useToastAlert'
+    import { useAuthStore } from '@/stores/modules/auth/login'
 
     const toast = useToastAlert();
+    const authStore = useAuthStore();
     
     const emits = defineEmits(['close','update','delete','updateStatus']);
     
