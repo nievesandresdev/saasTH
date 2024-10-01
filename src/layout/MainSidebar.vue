@@ -37,37 +37,59 @@
           </p>
         </div>
         <div 
-          class="rounded-[10px] hbg-green-200"
-        >
-          <!-- <router-link
-            v-for="(link, indexLink) in section.group" :key="indexLink"
-            :to="link.url"
-            @mousemove="handleMouseMove(link.title)"
-            @click="handleMenuItemClick(link.title)"
-            class="rounded-[10px] flex items-center p-2 relative"
-            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
-          > -->
-          <router-link
-            v-for="(link, indexLink) in section.group" :key="indexLink"
-            :to="link.url"
-            @click="handleMenuItemClick(link.title)"
-            class="rounded-[10px] flex items-center p-2 relative"
-            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
-          >
-            <!-- notification icon -->
-            <img 
-              class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
-              src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
-              alt="notification icon"
-              v-if="(link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)) || (link.title == 'Reseñas' && conuntReviewsPending > 0)"
-            >
+  v-for="(link, indexLink) in section.group" 
+  :key="indexLink"
+  :class="[
+    'bg-[#E2F8F2] ',
+    (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'pointer-events-none bg-opacity-50' : '',
+    indexLink === 0 ? 'rounded-t-[10px]' : '',
+    indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
+  ]"
+>
+  <router-link
+    :to="link.url"
+    @click="handleMenuItemClick(link.title)"
+    class="flex items-center p-2 relative rounded-[10px]"
+    :class="[
+      link.include.includes($route.name) ? 
+        [
+          'hbg-green-600 shadow-lg',
+          indexLink === 0 ? 'rounded-t-[10px]' : '',
+          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+        ] 
+        : 
+        [
+          'hover:bg-gray-100',
+          indexLink === 0 ? 'rounded-t-[10px]' : '',
+          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+        ],
+    ]"
+  >
+    <!-- Icono -->
+    <img 
+      class="w-6 h-6" 
+      :src="`/assets/icons/${link.icon}.svg`" 
+      :class="{
+        'icon-white': link.include.includes($route.name),
+        'opacity-50': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+      }"
+    >
+    
+    <!-- Texto -->
+    <div :class="widthMenu">
+      <p 
+        class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]"
+        :class="{
+          'text-white': link.include.includes($route.name),
+          'opacity-25': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+        }"
+      >
+        {{ link.title }}
+      </p>
+    </div>
+  </router-link>
+</div>
 
-            <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
-            <div :class="widthMenu">
-              <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white': link.include.includes($route.name)}">{{link.title}}</p>
-            </div>
-          </router-link>
-        </div>
       </template>
 
       <!-- help, user and news -->
@@ -109,6 +131,7 @@
             >{{ authStore.fullName }}</p>
           </div>
         </button> -->
+        <!-- <pre>{{ permissions }}</pre> -->
         <button 
           @mousemove="handleMouseMove('User Profile')"
           @click="modalProfile = true"
@@ -160,6 +183,11 @@ const chatStore = useChatStore()
 const reviewStore = useReviewStore()
 
 const userAvatar = computed(() => userStore.$userAvatar);
+const permissions = computed(() => authStore.$getPermissions || {});
+
+
+
+
 
 provide('hotelStore', hotelStore);
 const isNotifyPanelVisible = inject('isNotifyPanelVisible');
@@ -252,12 +280,14 @@ const menu_links = ref([
         icon: '1.TH.ESTANCIAS.MM',
         include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
         url: '/estancias',
+        permissionName: 'estancias'
       },
       {
         title: 'Reseñas',
         icon: '1.TH.REVIEW.MM',
         include: ['Reviews'],
         url: '/resenas',
+        permissionName: 'resenas'
       },
     ],
   },
@@ -298,6 +328,7 @@ const menu_links = ref([
           'PolicyCookiesLegal',
         ],
         url: '/webapp',
+        permissionName: 'webapp'
       },
       /* {
         title: 'Comunicaciones',
@@ -310,6 +341,7 @@ const menu_links = ref([
         icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
         url: '/equipo/configuracion/plataformas-externas',
+        permissionName: 'hoster'
       },
     ],
   },

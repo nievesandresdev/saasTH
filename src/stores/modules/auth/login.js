@@ -107,6 +107,13 @@ export const useAuthStore = defineStore('auth', () => {
         return current_hotel?.value?.name;
     })
 
+
+    //computed format  user.value.permissions
+    const $getPermissions = computed(() => {
+        //return json parse
+        return JSON.parse(user.value.permissions);
+    });
+
     
 
     return {
@@ -121,6 +128,7 @@ export const useAuthStore = defineStore('auth', () => {
         $setUser,
         fullName,
         $currentHotelName,
-        loginAdmin
+        loginAdmin,
+        $getPermissions
     };
 });
