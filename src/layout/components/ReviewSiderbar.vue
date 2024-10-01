@@ -38,7 +38,8 @@
             </button>
         </div>
         <div class="px-4 flex justify-between items-center mt-4 mb-2">
-            <p class="text-xs font-semibold">{{ reviewsData.length }} {{ reviewsData.length === 1 ? 'Reseña' : 'Reseñas' }}</p>
+            <p class="text-xs font-semibold">{{ dataPagination.total }} {{ dataPagination.total === 1 ? 'Reseña' : 'Reseñas' }}</p>
+            
             <button
                 v-if="!emptyFilters"
                 class="underline text-xs font-semibold"
@@ -47,15 +48,18 @@
                 Quitar filtros
             </button>
         </div>
+        {{ numberOfskeletonCards }}
+        {{ reviews.length }}
+        {{ reviewsEmptyLoaded }}
     </div>
     <div
+        id="container-list"
         ref="containerListRef"
         class="list-reviews flex-1 border-t hborder-top-gray-400 overflow-auto"
-         @scroll="onScroll"
     >
-        <template v-if="!loadingList">
+        <template v-if="!(loadingList && currentPage === 1)">
             <template v-if="otasWithUrls.length > 0">
-                <template v-if="reviewsData.length > 0">
+                <template v-if="paginatedItems.length > 0">
                     <div
                         v-for="(review, index) in reviews"
                         :key="index"
@@ -75,24 +79,16 @@
                             <div class="space-x-2 flex">
                                 <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
                                 <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
-                                <!-- <div
-                                    class="rounded-full h-[20px] px-[8px] text-[10px] font-semibold w-[91px] text-white flex justify-between items-center"
-                                    :class="review.increasesAverageRating ? 'bg-[#16a34a]' : 'bg-[#FF6666]'"
-                                >
-                                    Nota media
-                                    <img class="w-[12px] h-[12px]" :src="`/assets/icons/1.TH.ARROW.${review.increasesAverageRating ? 'TOP' : 'BOTTOM'}.svg`" alt="1.TH.ARROW.TOP">
-                                </div> -->
                             </div>
                             <img class="w-[20px] h-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
                         </div>
                     </div>
-                    <div class="h-[72px] w-full flex justify-center items-center text-center">
-                        <template v-if="loadingPagination">
-                            <BaseLoadingScroll />
-                        </template>
-                        <template v-else-if="reviews.length >= reviewsData.length">
-                            <p class="htext-gray-500 text-sm font-medium">No hay más reseñas</p>
-                        </template>
+                    <!-- loading skeleton -->
+                    <template v-if="numberOfskeletonCards > 0 && !reviewsEmptyLoaded">
+                        <CardSkeleton v-for="item in numberOfskeletonCards" />
+                    </template>
+                    <div v-else-if="dataPagination.total == paginatedItems.length" class="h-[72px] w-full flex justify-center items-center text-center">
+                        <p class="htext-gray-500 text-sm font-medium">No hay más reseñas</p>
                     </div>
                 </template>
                 <p v-else-if="!emptyFilters || !!formFilter.search?.length" class="text-sm font-medium text-center mt-6 px-4">No se han encontrado reseñas que coincidan con tus criterios de búsqueda. Prueba a modificar la búsqueda.</p>
@@ -109,9 +105,7 @@
             </div>
         </template>
         <template v-else>
-            <div class="h-[72px] w-full flex justify-center items-center text-center">
-                <BaseLoadingScroll />
-            </div>
+            <CardSkeleton v-for="item in numberOfskeletonCards" />
         </template>
     </div>
   </nav>
@@ -139,6 +133,7 @@ const { onEvent } = useEventBus();
 import BaseTextField from '@/components/Forms/BaseTextField';
 import ReviewSiderbarModalFilter from './ReviewSiderbarModalFilter';
 import BaseLoadingScroll from '@/components/BaseLoadingScroll';
+import CardSkeleton from '@/Modules/Review/components/CardSkeleton';
 
 import { useReviewStore } from '@/stores/modules/review';
 const reviewStore = useReviewStore();
@@ -150,6 +145,17 @@ const baseFilters = {
     scoreRange: null,
     language: null,
 };
+const LIMIT_ITEMS = 10;
+const dataPaginationDefault = reactive({
+    page: 0,
+    total: 0,
+    limit: 0,
+    skip: 0,
+    from: 0,
+    to: 0,
+    totalPages: 0
+})
+const dataPagination = reactive({...dataPaginationDefault.value})
 
 // DATA
 const searchFilter = ref(null);
@@ -162,12 +168,28 @@ const otasWithUrls = ref([]);
 const summaryReviewOtas = ref([]);
 const containerListRef = ref(null);
 
-const currentPage = ref(1);
+const currentPage = ref(0);
 const paginatedItems = ref([]);
 const loadingPagination = ref(false);
 const loadingList = ref(false);
+const currentPositionScroll = ref(null);
+const reviewsEmptyLoaded = ref(false);
+const debounce = ref(null);
 
 // COMPUTED
+const numberOfskeletonCards = computed(() => {
+    if (loadingList.value && paginatedItems.value?.length <= 0) return LIMIT_ITEMS;
+    if(paginatedItems.value.length > 0){//si ya hay reviews cargadas
+        let remainingCards = dataPagination.total - paginatedItems.value.length;//obtener reviews que faltan por cargar
+        //si el restante es mayor al limite entonces solo mostrara el limite de reviews a cargar
+        remainingCards >= LIMIT_ITEMS ? remainingCards = LIMIT_ITEMS : 0;
+        if (remainingCards < 0) return 0;
+        //sino entonces mostrara mostrara la cantidad de cards que faltan por cargar
+        return remainingCards;
+    }
+    return LIMIT_ITEMS;
+});
+
 const itemsPerPage = computed(() => {
     const containerElement = containerListRef.value;
     const { clientHeight } = containerElement;
@@ -182,7 +204,8 @@ const idOtaParamRoute = computed(() => {
     	return route?.currentRoute?.value?.params?.id;
 });
 
-const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage.value));
+// const totalPages = computed(() => Math.ceil(reviewsData.value.length / itemsPerPage.value));
+const totalPages = computed(() => dataPagination.total);
 
 const numbersFiltersApplied = computed(() => {
     let filters = [];
@@ -209,6 +232,7 @@ const reviews = computed(() => {
 // WATCH
 
 onMounted(async () => {
+    initScrollListener();
     await getByOtas(true);
 });
 
@@ -221,21 +245,75 @@ provide('reviewStore', reviewStore);
 
 // FUNCTIONS
 
+function initScrollListener() {
+    const container = document.querySelector('#container-list');
+    container.addEventListener('scroll', throttle(checkLoadMore, 300), true);
+}
+async function checkLoadMore() {
+    const skeletons = document.querySelectorAll('.skeleton-review-card');
+    for (let skeleton of skeletons) {
+        if (isElementVisible(skeleton) && !loadingList.value && paginatedItems.value.length < dataPagination.total) {
+            await nextTick();
+            getByOtas();
+        }
+    }
+    
+}
+
+
+function isElementVisible(el) {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom > 0 // Al menos parte del elemento está dentro del viewport
+    );
+}
+
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    }
+}
+
+function scrollToPosition() {
+    const container = document.getElementById('container-list');
+    if (container) {
+        container.scrollTop = currentPositionScroll.value
+    }
+}
+
 function paginate () {
-    const start = (currentPage.value - 1) * itemsPerPage.value;
-    const end = start + itemsPerPage.value;
-    let items = reviewsData.value.slice(start, end);
-    items.forEach(item => {
+    // const start = (currentPage.value - 1) * itemsPerPage.value;
+    // const end = start + itemsPerPage.value;
+    reviewsData.value.forEach(item => {
         if (!paginatedItems.value.includes(item)) {
+        // if (!paginatedItems.value.find(itemfind => itemfind._id ==  item._id)) {
             paginatedItems.value.push(item);
         }
     });
-    // console.log(paginatedItems.value, paginatedItems.value?.length, 'paginatedItems.value');
+    // console.log(paginatedItems.value.length, 'paginatedItems');
 }
 
 async function nextPage() {
     if (currentPage.value < totalPages.value) {
         currentPage.value++;
+        await getByOtas();
         await paginate();
     }
 }
@@ -281,22 +359,45 @@ function resetFilter () {
     reloadReviews();
 }
 function reloadReviews () {
-    reviewsData.value = [];
-    paginatedItems.value = [];
-    currentPage.value = 1;
-    getByOtas();
+    clearTimeout(debounce.value);
+    debounce.value = setTimeout(() => {
+        reviewsData.value = [];
+        paginatedItems.value = [];
+        currentPage.value = 0;
+        reviewsEmptyLoaded.value = false;
+        Object.assign(dataPagination, dataPaginationDefault);
+        getByOtas();
+    }, 500);
 }
 
 async function getByOtas (loadOtas = false) {
-    loadingList.value = true; 
+
+    const containerScroll = document.getElementById('container-list');
+    currentPositionScroll.value = containerScroll.scrollTop;
+
+    loadingList.value = true;
+    reviewsEmptyLoaded.value = false;
     let params = formFilter;
+    currentPage.value++;
+    // console.log(currentPage.value);
+    Object.assign(params, { page: currentPage.value, limit: LIMIT_ITEMS });
+    // console.log(params, 'params');
     const response = await reviewStore.$getByOtas(params);
     const { ok, data } = response;
     if (ok) {
-        paginatedItems.value = [];
+        // paginatedItems.value = [];
         reviewsData.value = data.reviews;
+        // console.log(reviewsData.value.length, 'reviewsData.value');
+
         // console.log(reviewsData.value, reviewsData.value.length, 'reviewsData.value')
-        paginate(); 
+        paginate();
+        loadingList.value = false;
+        Object.assign(dataPagination, data.dataPagination);
+        
+        if (reviewsData.value.length == 0 && paginatedItems.value.length == dataPagination.total)  {
+            reviewsEmptyLoaded.value = true;
+        }
+
         if ((reviewStore.otasWithUrls?.length <= 0 && reviewStore.otasWithUrls?.length != data.otasWithUrls.length) || loadOtas) {
             otasWithUrls.value = data.otasWithUrls;
             reviewStore.setOtasWithUrls(data?.otasWithUrls || []);
@@ -305,6 +406,23 @@ async function getByOtas (loadOtas = false) {
             filtersDefault.otas = data.otasWithUrls;
         }
         summaryReviewOtas.value = data.summaryReviewOtas;
+
+
+        // setTimeout(() => {
+        //     // await nextTick();
+        //     const skeletons = document.querySelectorAll('.skeleton-review-card');
+        //         console.log(skeletons.length)
+        //     for (let skeleton of skeletons) {
+        //         console.log(isElementVisible(skeleton));
+        //         if (isElementVisible(skeleton) && paginatedItems.value.length >= 10) {
+        //             console.log('entro');
+        //             scrollToPosition();
+        //             break;
+        //         }
+        //     }
+        //     checkLoadMore();
+        // }, 700);
+
     } else {
 
     }
