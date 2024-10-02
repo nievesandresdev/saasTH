@@ -409,8 +409,9 @@ async function updateVisible (experience) {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-    mockupStore.$reloadIframe();
     emits('reloadExperiences');
+    await nextTick();
+    mockupStore.$reloadIframe();
 }
 
 async function updateRecommendation (event, experience) {
@@ -431,8 +432,9 @@ async function updateRecommendation (event, experience) {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-    mockupStore.$reloadIframe();
     emits('reloadExperiences');
+    await nextTick();
+    mockupStore.$reloadIframe();
 }
 
 function editExperience (experience) {

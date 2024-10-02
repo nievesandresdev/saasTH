@@ -107,6 +107,15 @@ export const useAuthStore = defineStore('auth', () => {
         return current_hotel?.value?.name;
     })
 
+
+    const $getPermissions = computed(() => {
+        if (user.value && user.value.permissions) {
+            return JSON.parse(user.value.permissions);
+        }
+        return []; // Devuelve un array vacío o el valor por defecto que prefieras cuando user no exista o no tenga permisos
+    });
+    
+
     
 
     return {
@@ -121,6 +130,7 @@ export const useAuthStore = defineStore('auth', () => {
         $setUser,
         fullName,
         $currentHotelName,
-        loginAdmin
+        loginAdmin,
+        $getPermissions
     };
 });
