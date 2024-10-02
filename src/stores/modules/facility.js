@@ -23,8 +23,8 @@ export const useFacilityStore = defineStore('facility', () => {
         // return url
     }
 
-    async function $getAll () {
-        const response = await facilityServices.getAllApi()
+    async function $getAll (params) {
+        const response = await facilityServices.getAllApi(params)
         return response;
         if(response.ok) return response.data
         return []

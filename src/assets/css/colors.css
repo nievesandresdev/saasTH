@@ -125,6 +125,9 @@
     .htext-gray-300 {
         color: var(--h-gray-300);
     }
+    .hbg-gray-300 {
+        background-color: var(--h-gray-300);
+    }
     /*
         ***
         alert colors
