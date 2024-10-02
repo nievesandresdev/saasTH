@@ -75,6 +75,7 @@ router.beforeEach((to, from, next) => {
     localStorage.setItem('redirectTo', to.fullPath);
     return next('/login');
   }
+  
 
   if (isAuth && to.path === '/login' && !to.query.token) { //esto es para que el middleware no afecte el login desde admin
     const redirectTo = localStorage.getItem('redirectTo') || '/dashboard';
