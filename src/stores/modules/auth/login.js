@@ -108,11 +108,13 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
 
-    //computed format  user.value.permissions
     const $getPermissions = computed(() => {
-        //return json parse
-        return JSON.parse(user.value.permissions);
+        if (user.value && user.value.permissions) {
+            return JSON.parse(user.value.permissions);
+        }
+        return []; // Devuelve un array vacío o el valor por defecto que prefieras cuando user no exista o no tenga permisos
     });
+    
 
     
 

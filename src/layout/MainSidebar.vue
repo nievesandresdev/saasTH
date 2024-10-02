@@ -8,7 +8,7 @@
   >
     <!-- select hotel -->
     <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu" />
-    <div class="overflow-y-auto bg-white no-scrollbar">
+    <div class=" bg-white no-scrollbar">
       <!-- links -->
       <router-link
         @mousemove="handleMouseMove('Dashboard')"
@@ -40,16 +40,18 @@
   v-for="(link, indexLink) in section.group" 
   :key="indexLink"
   :class="[
-    'bg-[#E2F8F2] ',
-    (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'pointer-events-none bg-opacity-50' : '',
+    'bg-[#E2F8F2]',
+    (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'bg-opacity-50' : '',
     indexLink === 0 ? 'rounded-t-[10px]' : '',
     indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
   ]"
 >
   <router-link
-    :to="link.url"
-    @click="handleMenuItemClick(link.title)"
+    :to="(!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '#' : link.url"
+    @click="handleMenuItemClick($event, link, indexLink)"
     class="flex items-center p-2 relative rounded-[10px]"
+    @mouseover="handleMouseOverTooltip(link, indexLink)"
+    @mouseleave="handleMouseLeaveTooltip(link, indexLink)"
     :class="[
       link.include.includes($route.name) ? 
         [
@@ -59,10 +61,11 @@
         ] 
         : 
         [
-          'hover:bg-gray-100',
+          (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '' : 'hover:bg-gray-100',
           indexLink === 0 ? 'rounded-t-[10px]' : '',
           indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
         ],
+      (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'cursor-not-allowed' : 'cursor-pointer',
     ]"
   >
     <!-- Icono -->
@@ -87,8 +90,24 @@
         {{ link.title }}
       </p>
     </div>
+    
+    <!-- Tooltip manual -->
+    <div
+      v-if="!permissions[link.permissionName] && showTooltip[link.permissionName]"
+      class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
+      :style="{
+        top: '70%',
+        left: '70%',
+        transform: 'translate(-50%, 8px)'
+      }"
+    >
+      <p class="text-sm font-normal">
+        Necesitas permisos para acceder a esta sección. Solicita acceso a tu responsable o superior para poder entrar.
+      </p>
+    </div>
   </router-link>
 </div>
+
 
       </template>
 
@@ -159,7 +178,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, provide, inject } from 'vue'
+import { ref, computed, onMounted, onUnmounted, provide, inject,reactive } from 'vue'
 import { getPusherInstance, isChannelSubscribed, setChannelSubscribed } from '@/utils/pusherSingleton'
 import { useRoute, useRouter } from 'vue-router'
 //components
@@ -171,6 +190,7 @@ import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query'
 import { useChatStore } from '@/stores/modules/chat/chat'
 import { useReviewStore } from '@/stores/modules/review'
+import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
 const emit = defineEmits(['openmodalHelp'])
 const route = useRoute()
@@ -185,7 +205,21 @@ const reviewStore = useReviewStore()
 const userAvatar = computed(() => userStore.$userAvatar);
 const permissions = computed(() => authStore.$getPermissions || {});
 
+const showTooltip = reactive({});
 
+function handleMouseOverTooltip(link, indexLink) {
+  console.log('permissions[link.permissionName]',Object.keys(permissions.value).length)
+  if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
+    showTooltip[link.permissionName] = true;
+  }
+}
+
+function handleMouseLeaveTooltip(link, indexLink) {
+  
+  if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
+    showTooltip[link.permissionName] = false;
+  }
+}
 
 
 
@@ -270,6 +304,7 @@ const handleMenuItemClick = (nameButtom) => {
     isNotifyPanelVisible.value = true;   
   }
 }
+
 
 const menu_links = ref([
   {
@@ -453,6 +488,10 @@ function handleMouseLeave () {
 }
 .hbg-green-600 {
   background-color: #34A98F;
+}
+
+.shadow-tooltip {
+  box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
 }
 
 </style>
