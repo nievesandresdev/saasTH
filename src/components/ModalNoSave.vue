@@ -75,6 +75,9 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useUtilStore } from '@/stores/modules/util';
+
+const utilStore = useUtilStore();
 
 const props = defineProps({
   id: String,
@@ -95,6 +98,7 @@ const intendedRoute = ref(null);
 
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
+  utilStore.$setHasUnsavedChanges(newVal)
   if (!props.forceOpen) {
     if (props.type === 'exit_save' || props.type === 'alone_exit' || props.type === 'alone_exit_save' || props.type === 'alone_save') {
       visitNow.value = newVal;

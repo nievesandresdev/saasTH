@@ -385,8 +385,9 @@ async function updateVisible (place) {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-    mockupStore.$reloadIframe();
     emits('reloadPlaces');
+    await nextTick();
+    mockupStore.$reloadIframe();
 }
 
 async function updateRecommendation (event, place) {
@@ -409,8 +410,9 @@ async function updateRecommendation (event, place) {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-    mockupStore.$reloadIframe();
     emits('reloadPlaces');
+    await nextTick();
+    mockupStore.$reloadIframe();
 }
 
 function editPlace (place) {
