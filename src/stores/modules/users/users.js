@@ -81,8 +81,8 @@ export const useUserStore = defineStore('user', () => {
   /**
    * get user data with id
    */
-  async function $getUser(){
-    const response = await getUser();
+  async function $getUserById(id){
+    const response = await getUser(id);
     return response;
   }
 
@@ -136,7 +136,7 @@ export const useUserStore = defineStore('user', () => {
     $updateUser,
     $updateProfile,
     $userAvatar,
-    $getUser,
+    $getUserById,
     $deleteUser,
     $getDataHotel,
     $getSubscriptionStatus,

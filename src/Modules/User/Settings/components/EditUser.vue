@@ -299,6 +299,8 @@
   const router = useRouter();
   const route = useRoute();
 
+  const nParam = route.query.n;
+
 
   const initPermissions = ref([])
   const PhoneFieldError = ref(false)
@@ -1068,6 +1070,10 @@ const closeModalEditUser = () => {
 
   onMounted(() => {
     initialForm.value = JSON.stringify(form);
+
+   /*  if(nParam){
+      currentStep.value = 4
+    } */
   });
   
 

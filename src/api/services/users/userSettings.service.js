@@ -13,7 +13,7 @@ export const deleteWPosition = (data) => apiHttp('POST', `${userPath}/work-posit
 //getUserData
 export const getUserData = (params) => apiHttp('GET', `${userPath}/getUserData`,params)
 export const getUsers = (params) => apiHttp('GET', `${userPath}/getUsers`,params , { showPreloader: false })
-export const getUser = () => apiHttp('GET', `${userPath}/getUser`)
+export const getUser = (params) => apiHttp('GET', `${userPath}/getUser/${params}`)
 export const createUser = (data) => apiHttp('POST', `${userPath}/store`, data)
 export const updateUser = (data) => apiHttp('POST', `${userPath}/update`, data)
 export const updateProfile = (data) => apiHttp('POST', `${userPath}/update-profile`, data)

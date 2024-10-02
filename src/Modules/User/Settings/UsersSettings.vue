@@ -190,6 +190,7 @@
   import { useUserStore } from '@/stores/modules/users/users';
   import ModalWindow from '@/components/ModalWindow.vue';
   import { useToastAlert } from '@/composables/useToastAlert';
+  import { useRoute } from 'vue-router';
   
   const modalAdd = ref(false);
   const workPositionsData = ref([]);
@@ -198,6 +199,8 @@
   const modalShow = ref(false);
   const deleteUser = ref(false);
   const visibleDropdown = ref(null);
+
+  const route = useRoute()
   
   const selectedUser = ref(null);
   const userData = ref({});
@@ -231,7 +234,20 @@
     handleTestMail();
     adjustBodyPadding(); // Ajustar el padding al cargar la página
     window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
+
+
+    const nParam = route.query.n
+    if (nParam) {
+      console.log(`El valor de n es: ${nParam}`)
+      handleGetuserById(nParam)
+    }
   });
+
+  const  handleGetuserById = async (id) => {
+    const response = await userStore.$getUserById(id);
+    console.log('responsegetuserbyid', response);
+    editUser(response.data.user);
+  };
   
   const handleConfirmCreateUser = () => {
     handleGetUsers();
@@ -297,6 +313,7 @@
   };
   
   const editUser = (data) => {
+    console.log('editUserDATA', data);
     dataEdit.value = data;
     modalEdit.value = true;
     visibleDropdown.value = null;
