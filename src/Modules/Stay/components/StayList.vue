@@ -134,6 +134,7 @@
 </template>
 <script setup>
 import { onMounted, ref, provide, computed, onUnmounted, nextTick } from 'vue'
+import { $throttle, $isElementVisible } from '@/utils/helpers'
 import CardtayList from './CardtayList.vue'
 import CardSkeleton from './CardStayListSkeleton.vue'
 import FiltersModal from './FiltersModal.vue'
@@ -212,13 +213,13 @@ onUnmounted(() => {
 
 function initScrollListener() {
     const container = document.querySelector('#container-list');
-    container.addEventListener('scroll', throttle(checkLoadMore, 300), true);
+    container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
 }
 
 function checkLoadMore() {
     const skeletons = document.querySelectorAll('.skeleton-stay-card');
     for (let skeleton of skeletons) {
-        if (isElementVisible(skeleton) && !loading.value && list.value.length < totalCounts.value) {
+        if ($isElementVisible(skeleton) && !loading.value && list.value.length < totalCounts.value) {
             loadMore();
             // loadMore(null, 10);
             break; // Carga datos y detiene la iteración
@@ -227,26 +228,6 @@ function checkLoadMore() {
     
 }
 
-function throttle(func, limit) {
-    let lastFunc;
-    let lastRan;
-    return function() {
-        const context = this;
-        const args = arguments;
-        if (!lastRan) {
-            func.apply(context, args);
-            lastRan = Date.now();
-        } else {
-            clearTimeout(lastFunc);
-            lastFunc = setTimeout(function() {
-                if ((Date.now() - lastRan) >= limit) {
-                    func.apply(context, args);
-                    lastRan = Date.now();
-                }
-            }, limit - (Date.now() - lastRan));
-        }
-    }
-}
 
 function scrollToPosition() {
     const container = document.getElementById('container-list');
@@ -255,16 +236,7 @@ function scrollToPosition() {
     }
 }
 
-function isElementVisible(el) {
-    if (!el) return false;
-    const rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
+
 
 
 async function submit(data){
@@ -315,7 +287,7 @@ async function loadMore(){
         loading.value = false;
         const skeletons = document.querySelectorAll('.skeleton-stay-card');
         for (let skeleton of skeletons) {
-            if (isElementVisible(skeleton) && list.value.length >= 10) {
+            if ($isElementVisible(skeleton) && list.value.length >= 10) {
                 scrollToPosition();
                 break;
             }
@@ -363,7 +335,7 @@ async function updateList(){
         loading.value = false;
         const skeletons = document.querySelectorAll('.skeleton-stay-card');
         for (let skeleton of skeletons) {
-            if (isElementVisible(skeleton) && list.value.length >= 10) {
+            if ($isElementVisible(skeleton) && list.value.length >= 10) {
                 scrollToPosition();
                 break;
             }

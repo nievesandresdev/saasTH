@@ -107,7 +107,7 @@ const unSuscribePusher = () => {
     }
 }
 const handleBeforeUnload = (event) => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
     staySessionsStore.$deleteSessionWithApiKey(route.params.stayId, user.email)
     delete event['returnValue']; // Evitar la alerta del navegador
 }
@@ -193,7 +193,7 @@ const adjustTextareaHeight = () => {
 };
 
 const deleteSession = async () => {
-    let user = JSON.parse(sessionStorage.getItem('user'));
+    let user = JSON.parse(localStorage.getItem('user'));
     if(user){
         await staySessionsStore.$deleteSession(route.params.stayId ,'sessions', user.email);
     }

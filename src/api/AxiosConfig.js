@@ -34,7 +34,7 @@ axios.interceptors.request.use(config => {
     const preloader = getPreloaderStore();
     preloader.requestStarted();
   } */
-  const token = sessionStorage.getItem('token')
+  const token = localStorage.getItem('token')
 
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
@@ -114,7 +114,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
 
   const api_url_backend = url_backend()
   //console.log('api_url_backend', `${api_url_backend}/${endpoint}`,data)
-  const subdomain = sessionStorage.getItem('current_subdomain') || null
+  const subdomain = localStorage.getItem('current_subdomain') || null
   /* if(SLUG_API === 'API_REVIEW') {
     console.log('subdomainSCS',{
       'URL_BASE_BACKEND_GENERAL' : URL_BASE_BACKEND_GENERAL,

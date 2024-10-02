@@ -225,6 +225,8 @@ onMounted(() => {
   if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
   }
+
+  
 });
 
 onMounted(async() => {
@@ -233,14 +235,19 @@ onMounted(async() => {
 
 
   if (token) {
-    // Almacenar en sessionStorage
-    sessionStorage.setItem('token', token);
+    // Primero, cerrar cualquier sesión existente
+    await authStore.logout();
+    // Almacenar en localStorage
+    localStorage.setItem('token', token);
+
+    
 
     const params = {
-      token: sessionStorage.setItem('token', token)
+      token: token
     }
     
      await authStore.loginAdmin(params);
+
 
     
     setTimeout(() => {
@@ -301,13 +308,13 @@ const handleLogin = async () => {
   });
 
   if (form.value.remember) {
-    sessionStorage.setItem("user_email_form", form.value.email);
-    sessionStorage.setItem("pass_email_form", form.value.password);
-    sessionStorage.setItem("remember_form", form.value.remember);
+    localStorage.setItem("user_email_form", form.value.email);
+    localStorage.setItem("pass_email_form", form.value.password);
+    localStorage.setItem("remember_form", form.value.remember);
   } else {
-    sessionStorage.removeItem("user_email_form");
-    sessionStorage.removeItem("pass_email_form");
-    sessionStorage.removeItem("remember_form");
+    localStorage.removeItem("user_email_form");
+    localStorage.removeItem("pass_email_form");
+    localStorage.removeItem("remember_form");
   }
 }
 </script>
