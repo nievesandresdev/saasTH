@@ -9,7 +9,7 @@ import * as hotelService from '@/api/services/hotel.service'
 export const useHotelStore = defineStore('hotel', () => {
     
     const hotelSession = computed(() => {
-        let hotel = sessionStorage.getItem('current_hotel') ?? null;
+        let hotel = localStorage.getItem('current_hotel') ?? null;
         if (hotel) {
             hotel = JSON.parse(hotel);
             if (hotel?.images) {
@@ -23,7 +23,7 @@ export const useHotelStore = defineStore('hotel', () => {
     // STATE
     const hotelData = ref({...hotelSession.value});
     const hotelsAvailables = ref([]);
-    const subdomain = ref(sessionStorage.getItem('current_subdomain') ?? null);
+    const subdomain = ref(localStorage.getItem('current_subdomain') ?? null);
     const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
     
 
@@ -42,8 +42,8 @@ export const useHotelStore = defineStore('hotel', () => {
         if (hotel?.images) {
             delete hotel.images;
         }
-        sessionStorage.setItem('current_hotel', JSON.stringify(hotel));
-        sessionStorage.setItem('current_subdomain', hotel.subdomain);
+        localStorage.setItem('current_hotel', JSON.stringify(hotel));
+        localStorage.setItem('current_subdomain', hotel.subdomain);
     }
 
     function formatImage ({image = null, url = null}) {

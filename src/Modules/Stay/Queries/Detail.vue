@@ -66,7 +66,7 @@ watch(() => route.query.g, async (newId) => {
 
 
 const deleteSession = async () => {
-    let user = JSON.parse(sessionStorage.getItem('user'));
+    let user = JSON.parse(localStorage.getItem('user'));
     await staySessionsStore.$deleteSession(route.params.stayId ,'sessions', user.email);
 }
 

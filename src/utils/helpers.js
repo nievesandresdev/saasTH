@@ -115,7 +115,7 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
 
 const $urlBaseWebapp = () => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
-  let subdomain = sessionStorage.getItem('current_subdomain');
+  let subdomain = localStorage.getItem('current_subdomain');
   let urlBase = GUEST_URL.replace('subdomain', subdomain);
   return urlBase;
 }

@@ -13,7 +13,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
-      let subdomain = sessionStorage.getItem('current_subdomain');
+      let subdomain = localStorage.getItem('current_subdomain');
       let urlBase = $urlBaseWebapp();
       // console.log(subdomain)
       // if(ENVIROMENT == 'test'){

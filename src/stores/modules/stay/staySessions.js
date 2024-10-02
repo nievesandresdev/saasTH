@@ -25,7 +25,7 @@ export const useStaySessionsStore = defineStore('staySessions', () => {
 
     function $getUserDataSession (stayId) {
         //data para crear o actualizar sesion
-        let user = JSON.parse(sessionStorage.getItem('user'));
+        let user = JSON.parse(localStorage.getItem('user'));
         let userEmail = user.email;
         let userName = user.name;
         let userColor = user.color;

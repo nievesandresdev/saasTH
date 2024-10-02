@@ -416,7 +416,7 @@ async function getTypePlaces(){
       let type = dataTypePlaces.find(t => t.name == item.name);
       if (type) {
         type.id = item.id;
-        //sessionStorage.setItem('selected_place', item.id);
+        //localStorage.setItem('selected_place', item.id);
       }
     });
     console.log(dataTypePlaces, 'dataTypePlaces');
@@ -479,13 +479,13 @@ watch(
       (newUrl) => {
         if (!newUrl.startsWith('/places')) {
           // Si la URL no comienza con "/places", elimina el selected_place
-          sessionStorage.removeItem('selected_place');
+          localStorage.removeItem('selected_place');
         }
       }
     );  
 
 function goLinkPlace(r,d) {
-  sessionStorage.setItem('selected_place', d); //guardar ese item para que cargue el active apenas inicie el componente 
+  localStorage.setItem('selected_place', d); //guardar ese item para que cargue el active apenas inicie el componente 
 
   router.replace(r);
   const newUrl = `${window.location.origin}/places?selected_place=${r?.query?.selected_place}`;
@@ -493,12 +493,12 @@ function goLinkPlace(r,d) {
 }
 
 const isActive = (sub_menu, index_sub_menu) => {
-  const savedPlaceId = sessionStorage.getItem('selected_place');
+  const savedPlaceId = localStorage.getItem('selected_place');
   return savedPlaceId == index_sub_menu || fullUrl.value == '/places';
 };
 
 /* onMounted(() => {
-  const savedPlaceId = sessionStorage.getItem('selected_place');
+  const savedPlaceId = localStorage.getItem('selected_place');
 
   console.log('savedPlaceId', savedPlaceId);
 }); */
