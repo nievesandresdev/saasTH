@@ -48,9 +48,9 @@
                 Quitar filtros
             </button>
         </div>
-        {{ numberOfskeletonCards }}
+        <!-- {{ numberOfskeletonCards }}
         {{ reviews.length }}
-        {{ reviewsEmptyLoaded }}
+        {{ reviewsEmptyLoaded }} -->
     </div>
     <div
         id="container-list"
