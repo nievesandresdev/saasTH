@@ -320,7 +320,7 @@ const menu_links = ref([
       {
         title: 'Reseñas',
         icon: '1.TH.REVIEW.MM',
-        include: ['Reviews'],
+        include: ['Reviews','ReviewDetail'],
         url: '/resenas',
         permissionName: 'resenas'
       },

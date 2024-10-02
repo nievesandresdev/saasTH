@@ -48,7 +48,9 @@ import HoveredIcon from '@/components/Buttons/HoveredIcon.vue';
 import ModalWindow from '@/components/ModalWindow.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/modules/auth/login'
+import { useUtilStore } from '@/stores/modules/util';
 
+const utilStore = useUtilStore();
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -60,8 +62,12 @@ const closeModalProfile = () => {
 
 const logout = async () => {
   closeModalProfile()
-  await authStore.logout()
-  router.push('/login')
+  if(!utilStore.hasUnsavedChanges){
+    await authStore.logout()
+    router.push('/login')
+  }else{
+    router.push('/simulateLogout')
+  }
 }
 
 function redirectToUserPanel() {
