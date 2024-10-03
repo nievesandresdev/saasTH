@@ -37,76 +37,83 @@
           </p>
         </div>
         <div 
-  v-for="(link, indexLink) in section.group" 
-  :key="indexLink"
-  :class="[
-    'bg-[#E2F8F2]',
-    (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'bg-opacity-50' : '',
-    indexLink === 0 ? 'rounded-t-[10px]' : '',
-    indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
-  ]"
->
-  <router-link
-    :to="(!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '#' : link.url"
-    @click="handleMenuItemClick($event, link, indexLink)"
-    class="flex items-center p-2 relative rounded-[10px]"
-    @mouseover="handleMouseOverTooltip(link, indexLink)"
-    @mouseleave="handleMouseLeaveTooltip(link, indexLink)"
-    :class="[
-      link.include.includes($route.name) ? 
-        [
-          'hbg-green-600 shadow-lg',
-          indexLink === 0 ? 'rounded-t-[10px]' : '',
-          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
-        ] 
-        : 
-        [
-          (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '' : 'hover:bg-gray-100',
-          indexLink === 0 ? 'rounded-t-[10px]' : '',
-          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
-        ],
-      (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'cursor-not-allowed' : 'cursor-pointer',
-    ]"
-  >
-    <!-- Icono -->
-    <img 
-      class="w-6 h-6" 
-      :src="`/assets/icons/${link.icon}.svg`" 
-      :class="{
-        'icon-white': link.include.includes($route.name),
-        'opacity-50': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
-      }"
-    >
-    
-    <!-- Texto -->
-    <div :class="widthMenu">
-      <p 
-        class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]"
-        :class="{
-          'text-white': link.include.includes($route.name),
-          'opacity-25': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
-        }"
-      >
-        {{ link.title }}
-      </p>
-    </div>
-    
-    <!-- Tooltip manual -->
-    <div
-      v-if="!permissions[link.permissionName] && showTooltip[link.permissionName]"
-      class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
-      :style="{
-        top: '70%',
-        left: '70%',
-        transform: 'translate(-50%, 8px)'
-      }"
-    >
-      <p class="text-sm font-normal">
-        Necesitas permisos para acceder a esta sección. Solicita acceso a tu responsable o superior para poder entrar.
-      </p>
-    </div>
-  </router-link>
-</div>
+          v-for="(link, indexLink) in section.group" 
+          :key="indexLink"
+          :class="[
+            'bg-[#E2F8F2]',
+            (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'bg-opacity-50' : '',
+            indexLink === 0 ? 'rounded-t-[10px]' : '',
+            indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
+          ]"
+        >
+          <router-link
+            :to="(!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '#' : link.url"
+            @click="handleMenuItemClick($event, link, indexLink)"
+            class="flex items-center p-2 relative rounded-[10px]"
+            @mouseover="handleMouseOverTooltip(link, indexLink)"
+            @mouseleave="handleMouseLeaveTooltip(link, indexLink)"
+            :class="[
+              link.include.includes($route.name) ? 
+                [
+                  'hbg-green-600 shadow-lg',
+                  indexLink === 0 ? 'rounded-t-[10px]' : '',
+                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+                ] 
+                : 
+                [
+                  (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '' : 'hover:bg-gray-100',
+                  indexLink === 0 ? 'rounded-t-[10px]' : '',
+                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+                ],
+              (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'cursor-not-allowed' : 'cursor-pointer',
+            ]"
+          >
+          <!-- notification icon -->
+          <img 
+              class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
+              src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
+              alt="notification icon"
+              v-if="(link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)) || (link.title == 'Reseñas' && conuntReviewsPending > 0)"
+            >
+            <!-- Icono -->
+            <img 
+              class="w-6 h-6" 
+              :src="`/assets/icons/${link.icon}.svg`" 
+              :class="{
+                'icon-white': link.include.includes($route.name),
+                'opacity-50': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+              }"
+            >
+            
+            <!-- Texto -->
+            <div :class="widthMenu">
+              <p 
+                class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]"
+                :class="{
+                  'text-white': link.include.includes($route.name),
+                  'opacity-25': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+                }"
+              >
+                {{ link.title }}
+              </p>
+            </div>
+            
+            <!-- Tooltip manual -->
+            <div
+              v-if="!permissions[link.permissionName] && showTooltip[link.permissionName]"
+              class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
+              :style="{
+                top: '70%',
+                left: '70%',
+                transform: 'translate(-50%, 8px)'
+              }"
+            >
+              <p class="text-sm font-normal">
+                Necesitas permisos para acceder a esta sección. Solicita acceso a tu responsable o superior para poder entrar.
+              </p>
+            </div>
+          </router-link>
+        </div>
 
 
       </template>

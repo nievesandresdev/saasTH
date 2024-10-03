@@ -10,7 +10,7 @@
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-[20px] mt-4">
+          <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
             <div class="flex-1 text-left">
               <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
@@ -20,6 +20,18 @@
               </button>
             </div>
           </div>
+          <!-- <div class="flex justify-between items-center px-6 py-[20px]">
+                <div class="flex justify-end">
+                </div>
+                <div class="flex-1 text-center">
+                  <h1 class="font-medium text-xl">Crear usuario</h1>
+                </div>
+                <div class="flex justify-end">
+                  <button class="" @click="closeModal">
+                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
+                  </button>
+                </div>
+              </div> -->
   
           <div class="pb-6 pr-6 pl-6">
             <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
@@ -243,7 +255,7 @@
         </div>
   
         <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
-          <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+          <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto px-4">
               Cancelar
           </button>
           <button

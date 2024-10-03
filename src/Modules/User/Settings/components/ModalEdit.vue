@@ -83,7 +83,7 @@
 
     <template #footer>
       <div class="border-t hborder-gray-400 py-6 px-6 flex items-center justify-between h-[88px]">
-        <button @click="cancel" class="text-sm font-medium leading-[110%] underline">
+        <button @click="cancel" class="text-sm font-medium leading-[110%] underline px-4">
           Cancelar
         </button>
 
