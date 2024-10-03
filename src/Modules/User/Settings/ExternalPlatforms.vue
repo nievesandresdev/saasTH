@@ -313,7 +313,7 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    //console.log('current_hotel en el componente:', authStore.$getCodeHotel);
+    console.log('current_hotel en el componente:', authStore.$getCodeHotel);
      // Verifica si el current_hotel ya está disponible
      if (authStore.current_hotel && authStore.current_hotel.code) {
         await getSettings();
