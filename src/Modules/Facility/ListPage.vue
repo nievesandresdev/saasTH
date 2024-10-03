@@ -271,9 +271,7 @@
         changePendingInForm.value = false;
         //mockupStore.$reloadIframe();
         loadMockup();
-        loadFacilities(true);
-        filter.value = null;
-
+        loadFacilities(true, true);
     }
 
 
