@@ -313,7 +313,7 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    console.log('current_hotel en el componente:', authStore.getCodeHotel);
+    console.log('current_hotel en el componente:', authStore.$getCodeHotel);
      // Verifica si el current_hotel ya está disponible
      if (authStore.current_hotel && authStore.current_hotel.code) {
         await getSettings();
@@ -342,10 +342,10 @@ const getSettings = async () => {
     }; */
 
     const params = {
-        googleMapCid: authStore.current_hotel.code,
+        googleMapCid: authStore.$getCodeHotel,
     };
 
-    console.log('Params External:', params,authStore.current_hotel.code);
+    console.log('Params External:', params,authStore.$getCodeHotel);
 
     try {
         const response = await platformsStore.$getDataOTAS(params);
