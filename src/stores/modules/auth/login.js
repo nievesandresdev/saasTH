@@ -141,6 +141,13 @@ export const useAuthStore = defineStore('auth', () => {
         return [];
     });
 
+    const $getCodeHotel = computed(() => {
+        if (current_hotel.value && current_hotel.value.code) {
+            return current_hotel.value.code;
+        }
+        return '';
+    });
+
     // Verificamos la expiración de la sesión al iniciar
     if (!checkSessionExpiration()) {
         logout(); // Si ha expirado, cerramos sesión
@@ -159,6 +166,7 @@ export const useAuthStore = defineStore('auth', () => {
         fullName,
         $currentHotelName,
         loginAdmin,
-        $getPermissions
+        $getPermissions,
+        $getCodeHotel
     };
 });
