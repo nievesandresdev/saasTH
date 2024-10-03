@@ -349,7 +349,7 @@ async function reloadExperiences () {
     // console.log(query, 'query');
     route.push({ name: 'Experiences', query });
     loadMockup();
-    await Promise.all([loadDataUtil(), listPageListRef.value.loadExperiences(true)]);
+    await Promise.all([loadDataUtil(), listPageListRef.value.loadExperiences(false)]);
 }
 
 async function loadExperiences () {
@@ -359,7 +359,7 @@ async function loadExperiences () {
     isOpenModelFilter.value = false;
     experiencesData.value = [];
     loadMockup();
-    await Promise.all([loadDataUtil(), listPageListRef.value.loadExperiences(true)]);
+    await Promise.all([loadDataUtil(), listPageListRef.value.loadExperiences(false)]);
 }
 
 function openModalChangeInForm () {

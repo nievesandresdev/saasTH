@@ -25,8 +25,8 @@ export const useExperienceStore = defineStore('experience', () => {
 
     }
 
-    async function $getAll (params, config = {}) {
-        const response = await experienceService.getAllApi(params, config);
+    async function $getAll (params) {
+        const response = await experienceService.getAllApi(params);
         return response;
     }
 

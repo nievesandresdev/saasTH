@@ -75,7 +75,7 @@ async function submitSearch () {
     data.featured = false;
     data.visibility = 'visible';
     data.points = [];
-    const response = await experienceStore.$getAll(data, { showPreloader: false });
+    const response = await experienceStore.$getAll(data);
     if (response.ok) {
         searchList.value = response.data.experiences.data;
     }

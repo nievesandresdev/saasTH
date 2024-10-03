@@ -5,6 +5,7 @@
     <!-- {{ idsToggleExperienciesVisibles }} -->
     <template v-if="experiencesData.length > 0">
         <div id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
+            
             <template v-for="(experience, index) in experiencesData">
                 <!-- experiencesData[index-1]?.experience" -->
                 <div
@@ -353,7 +354,8 @@ async function loadExperiences ({ showPageLoading, showLoadingMore }) {
     if (showLoadingMore) {
         isloadingForm.value=true;
     }
-    const response = await experienceStore.$getAll({page: page.value,...formFilter}, { showPreloader: showPageLoading });
+    
+    const response = await experienceStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
         let paginate = {
             total: response.data.experiences.paginate.total,
