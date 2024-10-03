@@ -311,6 +311,7 @@ const disabledInput = ref({
 const additionalLinks = ref([]);
 const initialForm = ref(null);
 const linkToDelete = ref(null);
+const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
 
 onMounted(async () => {
     await getSettings();
@@ -320,8 +321,14 @@ onMounted(async () => {
 const getSettings = async () => {
     additionalLinks.value = []; // Limpiar las URLs adicionales antes de cargar las nuevas.
 
+    /* const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.code, 'cid'),
+    }; */
+
+    
+
     const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        googleMapCid: current_hotel.value.code,
     };
 
     try {
@@ -386,7 +393,7 @@ const validateUrl = (url, type) => {
 
     // Si el campo está vacío, no hay errores
     if (!url) {
-        return null;
+        return 'El enlace no puede estar vacío';
     }
 
     let urlParts;
@@ -563,17 +570,16 @@ const submit = async () => {
                 ota: otaName.toUpperCase(),
                 url: data.url,
                 _id: data._id || "",
-                delete: 1
             });
-        } else if (!data.url && initialData.url) {
+        } /* else if (!data.url && initialData.url) {
             // URL eliminada
             payload.push({
                 ota: otaName.toUpperCase(),
                 url: '',
                 _id: data._id || "",
-                delete: 0
+                delete: 1
             });
-        }
+        } */
     };
 
     const initialData = JSON.parse(initialForm.value);
@@ -617,9 +623,13 @@ const submit = async () => {
     });
 
     const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        googleMapCid: current_hotel.value.code,
         urls: payload
     };
+
+    /* const params = {
+        googleMapCid: current_hotel.code,
+    }; */
 
     console.log('paramsTESTEXTERNAL', params);
 

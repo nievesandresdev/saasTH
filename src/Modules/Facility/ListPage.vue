@@ -1,10 +1,11 @@
 <template>
     <div class="h-screen bg-[#FAFAFA]">
+        <!-- <h1 class="bg-red-100 p-4 fixed z-[33000] top-10 left-10">{{ String(filter) }}</h1> -->
         <div class="pb-[104px]">
             <ListPageHeader />
             <ListPageBannerShowToGuest v-if="!hotelData.show_facilities" />
             <div class="mt-[24px] px-[24px]">
-                <ListPageTabs class="mb-4"/>
+                <ListPageTabs class="mb-4" @update:reloadItems="loadFacilities(true, true)"/>
                 <p 
                     class="text-sm font-medium"
                     :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoading, 'hidden':!firstLoading && facilitiesEmpty}"
@@ -12,11 +13,11 @@
                 <div class="space-y-[24px]">
                     <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
                         <CardListVisible
-                            v-if="filter !== 'hidden'"
+                            v-if="filter !== 0"
                             @update:reloadItems="loadFacilities(true)"
                             @click:editFacility="editFacility"
                         />
-                        <div v-if="totalHiddenCount && !filter" class="flex items-center mt-6 w-full">
+                        <div v-if="hiddenFacilities.length && filter == null" class="flex items-center mt-6 w-full">
                             <div class="border-b border-gray-300 flex-grow"></div>
                             <p class="text-sm font-medium mx-6">
                                     {{ totalHiddenCount }}
@@ -25,7 +26,7 @@
                             <div class="border-b border-gray-300 flex-grow"></div>
                         </div>
                         <CardListHidden
-                            v-if="filter !== 'visible'"
+                            v-if="filter !== 1"
                             @update:reloadItems="loadFacilities(true)"
                             @click:editFacility="editFacility"
                         />
@@ -82,6 +83,7 @@
     const changePendingInForm = ref(false);
     const selectedCard = ref(null);
     const filter = ref(null);
+    const numberCardsDefault = ref(10);
     const newItem = ref({});
     const itemSelected = ref({});
     const modelActive = ref(null);
@@ -110,6 +112,10 @@
 
     // ONMOUNTED
     onMounted(() => {
+        if(window.screen.width > 1919){
+            numberCardsDefault.value = 14
+        }
+        
         loadFacilities();
         loadMockup();
         initScrollListener();
@@ -122,11 +128,11 @@
 
     const skeletonCountByLoad = computed(() => {
         
-        let numberDef = 10;
+        let numberDef = numberCardsDefault.value;
         if(!firstLoading.value && totalFacilitiesCount.value == 0) return 0;
         let totalLoad = visibleFacilities.value.length + hiddenFacilities.value.length;
         let remaining = totalFacilitiesCount.value - totalLoad;
-        if(remaining < 10 && totalFacilitiesCount.value > 0){
+        if(remaining < numberCardsDefault.value && totalFacilitiesCount.value > 0){
             return remaining;
         } 
         return numberDef;
@@ -143,15 +149,15 @@
         totalHiddenCount.value == 1 ? textHiddens = 'instalación oculta': '';
         totalHiddenCount.value == 1 ? singleHidden = 'oculta': '';
 
-        if(filter.value !== 'hidden'){
+        if(filter.value !== 0){
             text += `${totalVisibleCount.value} ${textVisibles}`;
         }
 
-        if(!filter.value && filter.value !== 'visible'){
+        if(filter.value == null){
             text += ` y ${totalHiddenCount.value} ${singleHidden}`;
         }
 
-        if(filter.value && filter.value !== 'visible'){
+        if(filter.value == 0){
             text += `${totalHiddenCount.value} ${textHiddens}`;
         }
 
@@ -195,21 +201,29 @@
         mockupStore.$setIframeUrl(`/instalaciones/${facilityId}`);
     }
 
-    async function loadFacilities (reload = false) {
+    async function loadFacilities (reload = false,resetList = false) {
         loadingData.value = true;
         let totalLoad = visibleFacilities.value.length + hiddenFacilities.value.length;
         let offset = totalLoad;
-        let limit = 10;
+        let limit = numberCardsDefault.value;
         if(reload){
             offset = 0;
             limit = totalLoad;
         }
-        
-        const response = await facilityStore.$getAll({ offset, limit });
+        if(resetList){
+            // firstLoading.value = true;
+            visibleFacilities.value = [];
+            hiddenFacilities.value = [];
+            limit = numberCardsDefault.value;
+        }
+        let visible = filter.value;
+        let params = { offset, limit, visible };
+        // console.log('test params',params)
+        const response = await facilityStore.$getAll(params);
         const { ok, data } = response;
         loadingData.value = false;
         firstLoading.value = false;
-        console.log('test data',data);
+        // console.log('test data',data);
         if(!reload){
             visibleFacilities.value = [...visibleFacilities.value,...data.facilities.filter(filtervisibleFacility)];
             hiddenFacilities.value = [...hiddenFacilities.value,...data.facilities.filter(filterhiddenFacility)];
@@ -257,9 +271,7 @@
         changePendingInForm.value = false;
         //mockupStore.$reloadIframe();
         loadMockup();
-        loadFacilities(true);
-        filter.value = null;
-
+        loadFacilities(true, true);
     }
 
 
