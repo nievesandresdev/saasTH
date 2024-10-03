@@ -313,22 +313,22 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    console.log('current_hotel en el componente:', authStore.$getCodeHotel);
-     // Verifica si el current_hotel ya está disponible
-     if (authStore.current_hotel && authStore.current_hotel.code) {
-        await getSettings();
-    } else {
-        // Si current_hotel aún no está disponible, espera a que se cargue
-        watch(
-            () => authStore.current_hotel, // Observa el current_hotel
-            async (newHotel) => {
-                if (newHotel && newHotel.code) {
-                    await getSettings();
-                }
-            },
-            { immediate: true } // Esto dispara el watch inmediatamente si current_hotel ya está disponible
-        );
-    }
+    
+    const checkCurrentHotel = () => {
+        let storedHotel = JSON.parse(localStorage.getItem('current_hotel'));
+        console.log('current_hotel en el componente:', authStore.$getCodeHotel);
+        
+        if (storedHotel && storedHotel.code) {
+            console.log('Cargando current_hotel desde localStorage:', storedHotel);
+            authStore.current_hotel = storedHotel;  // Asignar manualmente
+            getSettings(); // Llamar a la función para cargar los datos
+        } else {
+            console.log('Esperando que current_hotel esté disponible...');
+            setTimeout(checkCurrentHotel, 100); // Reintenta después de 100ms
+        }
+    };
+
+    checkCurrentHotel(); // Llama a la función para comenzar la verificación
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 });
 
