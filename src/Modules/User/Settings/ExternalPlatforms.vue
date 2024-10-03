@@ -320,9 +320,15 @@ onMounted(async () => {
 const getSettings = async () => {
     additionalLinks.value = []; // Limpiar las URLs adicionales antes de cargar las nuevas.
 
+    /* const params = {
+        googleMapCid: $getPropertyInUrl(authStore.current_hotel.code, 'cid'),
+    }; */
+
     const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        googleMapCid: authStore.current_hotel.code,
     };
+
+    console.log('Params External:', params,authStore.current_hotel.code);
 
     try {
         const response = await platformsStore.$getDataOTAS(params);

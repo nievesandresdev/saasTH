@@ -67,7 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Función para iniciar sesión como administrador
     async function loginAdmin(token) {
-        console.log('tokenAdmin', token);
+        //console.log('tokenAdmin', token);
         loading.value = true;
         errorLogin.value = null;
         
