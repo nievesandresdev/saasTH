@@ -325,7 +325,7 @@ const handleDataFeedback = async () => {
 
 const handleDataOta = async () => {
     const response = await dataReviewOTA();
-    console.log('test response', response);
+    //console.log('test response', response);
 
     if (response.ok) {
         let totalRating = 0;
