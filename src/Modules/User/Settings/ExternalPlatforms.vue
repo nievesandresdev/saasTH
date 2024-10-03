@@ -311,6 +311,7 @@ const disabledInput = ref({
 const additionalLinks = ref([]);
 const initialForm = ref(null);
 const linkToDelete = ref(null);
+const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
 
 onMounted(async () => {
     await getSettings();
@@ -324,10 +325,10 @@ const getSettings = async () => {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.code, 'cid'),
     }; */
 
-    const current_hotel = JSON.parse(localStorage.getItem('current_hotel'));
+    
 
     const params = {
-        googleMapCid: current_hotel.code,
+        googleMapCid: current_hotel.value.code,
     };
 
     try {
@@ -623,11 +624,14 @@ const submit = async () => {
     });
 
     const params = {
-        googleMapCid: $getPropertyInUrl(authStore.current_hotel.url_google, 'cid'),
+        googleMapCid: current_hotel.value.code,
         urls: payload
     };
+    /* const params = {
+        googleMapCid: current_hotel.code,
+    }; */
 
-    console.log('paramsTESTEXTERNAL', params);
+    //console.log('paramsTESTEXTERNAL', params);
 
      const response = await platformsStore.$bulkUpdateOTAS(params);
 
