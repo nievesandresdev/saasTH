@@ -313,26 +313,9 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    
-    const checkCurrentHotel = () => {
-        let storedHotel = JSON.parse(localStorage.getItem('current_hotel'));
-        console.log('current_hotel en el componente:', authStore.$getCodeHotel);
-        
-        if (storedHotel && storedHotel.code) {
-            console.log('Cargando current_hotel desde localStorage:', storedHotel);
-            authStore.current_hotel = storedHotel;  // Asignar manualmente
-            getSettings(); // Llamar a la función para cargar los datos
-        } else {
-            console.log('Esperando que current_hotel esté disponible...');
-            setTimeout(checkCurrentHotel, 100); // Reintenta después de 100ms
-        }
-    };
-
-    checkCurrentHotel(); // Llama a la función para comenzar la verificación
+    await getSettings();
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 });
-
-
 
 const getSettings = async () => {
     additionalLinks.value = []; // Limpiar las URLs adicionales antes de cargar las nuevas.
@@ -341,11 +324,11 @@ const getSettings = async () => {
         googleMapCid: $getPropertyInUrl(authStore.current_hotel.code, 'cid'),
     }; */
 
-    const params = {
-        googleMapCid: authStore.$getCodeHotel,
-    };
+    const current_hotel = JSON.parse(localStorage.getItem('current_hotel'));
 
-    //console.log('Params External:', params,authStore.$getCodeHotel);
+    const params = {
+        googleMapCid: current_hotel.code,
+    };
 
     try {
         const response = await platformsStore.$getDataOTAS(params);
