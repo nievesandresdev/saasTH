@@ -313,9 +313,25 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    await getSettings();
+    // Verifica si el current_hotel está disponible de inmediato
+    if (authStore.current_hotel && authStore.current_hotel.code) {
+        await getSettings();
+    } else {
+        // Si current_hotel aún no está disponible, espera a que se cargue
+        watch(
+            () => authStore.current_hotel,
+            async (newHotel) => {
+                if (newHotel && newHotel.code) {
+                    await getSettings();
+                }
+            },
+            { immediate: true } 
+        );
+    }
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 });
+
+
 
 const getSettings = async () => {
     additionalLinks.value = []; // Limpiar las URLs adicionales antes de cargar las nuevas.
