@@ -639,9 +639,9 @@ const submit = async () => {
         toast.warningToast('Cambios aplicados con éxito', 'top-right');
         //await getSettings();
 
-        setTimeout(() => {
+        /* setTimeout(() => {
             location.reload();
-        }, 1000);
+        }, 1000); */
     } else {
         toast.errorToast(response.data.message, 'top-right');
     }
