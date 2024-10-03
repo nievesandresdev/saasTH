@@ -9,9 +9,8 @@
         @mouseleave="handleMouseLeave"
       >
             <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex justify-between items-center px-6 py-[20px]">
-                <div class="flex justify-end">
-                </div>
+              <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
+                
                 <div class="flex-1 text-center">
                   <h1 class="font-medium text-xl">Crear usuario</h1>
                 </div>
@@ -354,7 +353,7 @@
     
             <div class="py-6 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 88px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
               <button  
-                class="hbtn-tertiary text-sm font-medium underline my-auto"
+                class="hbtn-tertiary text-sm font-medium underline my-auto px-4"
                 @click.prevent="prevStep()"
                 v-if="currentStep > 1"
               >
