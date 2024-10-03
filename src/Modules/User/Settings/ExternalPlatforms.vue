@@ -313,9 +313,9 @@ const initialForm = ref(null);
 const linkToDelete = ref(null);
 
 onMounted(async () => {
-    console.log('current_hotel en el componente:', authStore.$getCodeHotel);
+    //console.log('current_hotel en el componente:', authStore.$getCodeHotel);
      // Verifica si el current_hotel ya está disponible
-     if (authStore.current_hotel && authStore.current_hotel.code) {
+     /* if (authStore.current_hotel && authStore.current_hotel.code) {
         await getSettings();
     } else {
         // Si current_hotel aún no está disponible, espera a que se cargue
@@ -328,7 +328,8 @@ onMounted(async () => {
             },
             { immediate: true } // Esto dispara el watch inmediatamente si current_hotel ya está disponible
         );
-    }
+    } */
+    await getSettings();
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });
 });
 
@@ -345,7 +346,7 @@ const getSettings = async () => {
         googleMapCid: authStore.$getCodeHotel,
     };
 
-    console.log('Params External:', params,authStore.$getCodeHotel);
+    //console.log('Params External:', params,authStore.$getCodeHotel);
 
     try {
         const response = await platformsStore.$getDataOTAS(params);
