@@ -257,7 +257,8 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-      //  console.log('NotifySendQueryEvent',data)
+       console.log('test NotifySendQueryEvent',data)
+       let currentUserid = authStore.user?.id;
        let routeData = {
             name : 'StayQueryDetail',
             params : { stayId : data.stayId },
@@ -273,7 +274,7 @@ const connectPusher = async () => {
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
-        // console.log('NotifyUnreadMsg',data)
+        console.log('test NotifyUnreadMsg',data)
         if(!Number(data.automatic) && data.guest){
             let room_text =  'Estancia: nº habitación ';
             data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';

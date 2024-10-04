@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[224px] hbg-white-100 rounded-[10px] shadow-card relative overflow-hidden">
+    <div class="skeleton-exp-card w-[224px] hbg-white-100 rounded-[10px] shadow-card relative overflow-hidden">
         <div class="w-full h-[148px] hbg-gray-500 animate-pulse"></div>
         <div class="p-2">
             <div class="flex h-[33px]">  

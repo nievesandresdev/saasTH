@@ -153,7 +153,7 @@ const listPageListRef = ref(null);
 const isOpenModelFilter = ref(false);
 const changePendingInForm = ref(false);
 const modalChangePendinginForm = ref(false);
-
+const firstLoad = ref(true);
 const emptyExperiences = ref(false);
 
 const modelActive = ref(null);
@@ -179,7 +179,7 @@ provide('filtersSelected', filtersSelected);
 provide('filtersSelectedDefault', filtersSelectedDefault);
 provide('changePendingInForm', changePendingInForm);
 provide('modalChangePendinginForm', modalChangePendinginForm);
-
+provide('firstLoad', firstLoad);
 
 watch(modelActive, (valNew, valOld) => {
     if (!valNew && !!valOld) {
@@ -341,6 +341,7 @@ function resetDataAndReload () {
 }
 
 async function reloadExperiences () {
+    firstLoad.value = true;
     loadDataFormFilter();
     page.value = 1;
     isOpenModelFilter.value = false;

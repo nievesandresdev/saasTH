@@ -1,136 +1,11 @@
 <template>
-    <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms">
+    <div class="fixed top-10 left-10 bg-red-100 text-red-400 text-xl z-[10000] p-1">{{numberCardsToLoad}}</div>
+    <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms" :class="{'hbg-gray-500 htext-gray-500 rounded-[6px] animate-pulse w-[400px]':firstLoad}">
         {{ textNumbersExperiencesVisiblesAndHidden }}
     </p>
     <!-- {{ idsToggleExperienciesVisibles }} -->
-    <template v-if="experiencesData.length > 0">
-        <div id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
-            
-            <template v-for="(experience, index) in experiencesData">
-                <!-- experiencesData[index-1]?.experience" -->
-                <div
-                    v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !experience?.is_visible && experiencesData[index-1]?.is_visible"
-                    class="w-[789px] 3xl:w-[1216px] relative"
-                >
-                    <div
-                        class="z-50 flex items-center divider"
-                        style="margin:0 !important; padding:0 !important; "
-                    >
-                        <div class="flex-grow bg-gray-300 border-t"></div>
-                        <p class="mx-6 w-[198px] text-center text-sm font-medium">
-                            {{numberExperiencesHidden}}
-                            {{numberExperiencesHidden > 1 ? 'experiencias ocultas':'experiencia oculta'}}
-
-                        </p>
-                        <div class="flex-grow bg-gray-300 border-t"></div>
-                    </div>
-                </div>
-                <div
-                    class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
-                    @dragover="handlerDragOver"
-                    @drop="handlerDrop(index, experience)"
-                    :draggable="true"
-                    @dragstart="handlerDragStart(index, $event)"
-                    @dragend="handlerDragEnd"
-                    ref="draggableCard"
-                    :class="{'shadow-draginng border border-gray-300' : experience.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
-                    @mouseover="hoverItem = index"
-                    @mouseleave="hoverItem = null"
-                    @click="editExperience(experience)"
-                >
-                    <div class="w-[224px] rounded-t-[10px] relative">
-                        <img
-                            class="w-[224px] h-[148px] rounded-t-[10px]"
-                            loading="lazy"
-                            :src="experienceStore.formatImage(experience?.image)"
-                        >
-                        <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
-                            <span class="text-[10px] font-semibold">{{experience.is_visible ? 'Visible' : 'Oculto'}}</span>
-                            <BaseSwichInput
-                                v-model="experience.is_visible"
-                                :id="`swich-visible-facility-${index}`"
-                                @change:value="updateVisible(experience)"
-                                @click="handlerClickSwichVisibility"
-                            />
-                        </div>
-                        <div
-                            v-if="experience.featured || ((hoverItem == index) && experience.is_visible)"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
-                            :class="experience.featured ? 'hbg-green-600' : 'hbg-white-100'"
-                            @click="updateRecommendation($event, experience)"
-                        >
-                            <img
-                                class=""
-                                :src="`/assets/icons/1.TH.REVIEW.${experience.featured ? 'WHITE' : 'OUTLINE'}.svg`"
-                                alt="1.TH.WHITE"
-                            >
-                            <span
-                                class="text-[10px] font-semibold"
-                                :class="experience.featured ? 'htext-white-100' : 'htext-black-100'"
-                            >
-                                {{ experience.featured ? 'Recomendado' : 'Recomendar' }}
-                            </span>
-                        </div>
-                    </div>
-                    <div
-                        v-if="experience.is_visible == 0"
-                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
-                    />
-                    <div class="p-2 truncate-2">
-                        <div class="flex items-center space-x-[4px] h-[33px]">
-                            <span class="text-[22px] font-medium htext-black-100">{{ experience.reviews?.combined_average_rating.toFixed(1) }}</span>
-                            <div>
-                                <div class="flex flec-col">
-                                    <img 
-                                        v-for="star in Math.ceil(experience?.reviews?.combined_average_rating)"
-                                        :key="star"
-                                        class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
-                                    >
-                                </div>
-                                <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reseñas</p>
-                            </div>
-                        </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px] mt-[8px]">{{ experience.title }}</h6>
-                        <!-- {{ experience.toggle_product_id }} -->
-                        <span class="text-sm htext-black-100 font-semibold truncate-2 mt-[12px]">Desde {{ experience.from_price }}€</span>
-                        <div class="flex space-x-1 mt-[12px]">
-                            <img class="" src="/assets/icons/1.TH.CLOCK.svg" alt="1.TH.LOCATION">
-                            <p class="text-[10px] font-semibold htext-black-100">
-                                <template v-if="formatDuration(experience.duration)?.minutes <= 0">
-                                    {{ `${formatDuration(experience.duration)?.hours}H APROX` }}
-                                </template>
-                                <template v-else>
-                                    {{ `${formatDuration(experience.duration)?.hours}HS Y ${formatDuration(experience.duration)?.minutes}MIN APROX` }}
-                                </template>
-                            </p>
-                        </div>
-                        <div class="flex space-x-1 mt-[8px]">
-                            <template v-if="experience.cancellation_policy == 'STANDARD'">
-                                <img class="" src="/assets/icons/1.TH.CHECK.OUTLINED.svg" alt="1.TH.CHECK.OUTLINED">
-                                <p class="text-[10px] font-semibold htext-black-100">CANCELACIÓN GRATUITA</p>
-                            </template>
-                            <template v-else>
-
-                            </template>
-                        </div>
-                        <button
-                            v-if="hoverItem == index && experience.is_visible"
-                            class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
-                            :class="{'cursor-grabbing ': dragStartIndex == index}"
-                            @mousedown="setDragStart(index)"
-                        >
-                            <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
-                        </button>
-                    </div>
-                </div>
-            </template>
-            <!-- <PanelEdit
-                ref="panelEditRef"
-                @load:resetPageData="resetPageData()"
-            /> -->
-        </div>
-    </template>
-    <template v-else>
+    
+    <template v-if="!firstLoad && !experiencesData.length">
         <div class="flex flex-col justify-center items-center space-y-4 mt-[85px]">
             <div>
                 <img src="/assets/img/1.TH.NO.RECORDS.EXPERIENCES.png" alt="1.TH.NO.RECORDS">
@@ -140,7 +15,129 @@
             </div>
         </div>
     </template>
-    <div v-if="(experiencesData.length > 0) && (experiencesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
+    <div v-else id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
+        
+        <template v-for="(experience, index) in experiencesData">
+            <!-- experiencesData[index-1]?.experience" -->
+            <div
+                v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !experience?.is_visible && experiencesData[index-1]?.is_visible && !isloadingForm"
+                class="w-[789px] 3xl:w-[1216px] relative"
+            >
+                <div
+                    class="z-50 flex items-center divider"
+                    style="margin:0 !important; padding:0 !important; "
+                >
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                    <p class="mx-6 w-[198px] text-center text-sm font-medium">
+                        {{numberExperiencesHidden}}
+                        {{numberExperiencesHidden > 1 ? 'experiencias ocultas':'experiencia oculta'}}
+
+                    </p>
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                </div>
+            </div>
+            <div
+                class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
+                @dragover="handlerDragOver"
+                @drop="handlerDrop(index, experience)"
+                :draggable="true"
+                @dragstart="handlerDragStart(index, $event)"
+                @dragend="handlerDragEnd"
+                ref="draggableCard"
+                :class="{'shadow-draginng border border-gray-300' : experience.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
+                @mouseover="hoverItem = index"
+                @mouseleave="hoverItem = null"
+                @click="editExperience(experience)"
+            >
+                <div class="w-[224px] rounded-t-[10px] relative">
+                    <img
+                        class="w-[224px] h-[148px] rounded-t-[10px]"
+                        loading="lazy"
+                        :src="experienceStore.formatImage(experience?.image)"
+                    >
+                    <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
+                        <span class="text-[10px] font-semibold">{{experience.is_visible ? 'Visible' : 'Oculto'}}</span>
+                        <BaseSwichInput
+                            v-model="experience.is_visible"
+                            :id="`swich-visible-facility-${index}`"
+                            @change:value="updateVisible(experience)"
+                            @click="handlerClickSwichVisibility"
+                        />
+                    </div>
+                    <div
+                        v-if="experience.featured || ((hoverItem == index) && experience.is_visible)"
+                        class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
+                        :class="experience.featured ? 'hbg-green-600' : 'hbg-white-100'"
+                        @click="updateRecommendation($event, experience)"
+                    >
+                        <img
+                            class=""
+                            :src="`/assets/icons/1.TH.REVIEW.${experience.featured ? 'WHITE' : 'OUTLINE'}.svg`"
+                            alt="1.TH.WHITE"
+                        >
+                        <span
+                            class="text-[10px] font-semibold"
+                            :class="experience.featured ? 'htext-white-100' : 'htext-black-100'"
+                        >
+                            {{ experience.featured ? 'Recomendado' : 'Recomendar' }}
+                        </span>
+                    </div>
+                </div>
+                <div
+                    v-if="experience.is_visible == 0"
+                    class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
+                />
+                <div class="p-2 truncate-2">
+                    <div class="flex items-center space-x-[4px] h-[33px]">
+                        <span class="text-[22px] font-medium htext-black-100">{{ experience.reviews?.combined_average_rating.toFixed(1) }}</span>
+                        <div>
+                            <div class="flex flec-col">
+                                <img 
+                                    v-for="star in Math.ceil(experience?.reviews?.combined_average_rating)"
+                                    :key="star"
+                                    class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
+                                >
+                            </div>
+                            <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reseñas</p>
+                        </div>
+                    </div>
+                    <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px] mt-[8px]">{{ experience.title }}</h6>
+                    <!-- {{ experience.toggle_product_id }} -->
+                    <span class="text-sm htext-black-100 font-semibold truncate-2 mt-[12px]">Desde {{ experience.from_price }}€</span>
+                    <div class="flex space-x-1 mt-[12px]">
+                        <img class="" src="/assets/icons/1.TH.CLOCK.svg" alt="1.TH.LOCATION">
+                        <p class="text-[10px] font-semibold htext-black-100">
+                            <template v-if="formatDuration(experience.duration)?.minutes <= 0">
+                                {{ `${formatDuration(experience.duration)?.hours}H APROX` }}
+                            </template>
+                            <template v-else>
+                                {{ `${formatDuration(experience.duration)?.hours}HS Y ${formatDuration(experience.duration)?.minutes}MIN APROX` }}
+                            </template>
+                        </p>
+                    </div>
+                    <div class="flex space-x-1 mt-[8px]">
+                        <template v-if="experience.cancellation_policy == 'STANDARD'">
+                            <img class="" src="/assets/icons/1.TH.CHECK.OUTLINED.svg" alt="1.TH.CHECK.OUTLINED">
+                            <p class="text-[10px] font-semibold htext-black-100">CANCELACIÓN GRATUITA</p>
+                        </template>
+                        <template v-else>
+
+                        </template>
+                    </div>
+                    <button
+                        v-if="hoverItem == index && experience.is_visible"
+                        class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
+                        :class="{'cursor-grabbing ': dragStartIndex == index}"
+                        @mousedown="setDragStart(index)"
+                    >
+                        <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
+                    </button>
+                </div>
+            </div>
+        </template>
+        <SkeletonCard v-for="card in numberCardsToLoad" />
+    </div>
+    <!-- <div v-if="(experiencesData.length > 0) && (experiencesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
         <button
             v-if="!isloadingForm"
             class="text-sm font-medium text-center rounded-lg py-[13px] px-[16px] border border-black htext-black-100"
@@ -167,14 +164,15 @@
                 <img class="spinner-icon  w-[40px] h-[40px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
 
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
-// import PanelEdit from "./components/PanelEdit.vue";
+import SkeletonCard from './components/SkeletonCard.vue'
+import { $throttle, $isElementVisible } from '@/utils/helpers'
 
 const emits = defineEmits(['reloadExperiences', 'edit']);
 
@@ -192,7 +190,7 @@ const modalChangePendinginForm = inject('modalChangePendinginForm');
 
 const toast = inject('toast');
 const mockupStore = inject('mockupStore');
-
+const firstLoad = inject('firstLoad');
 // DATA
 const selectedCard = ref(null);
 const dragStartIndex = ref(null);
@@ -200,8 +198,15 @@ const draggedItem = ref(null);
 const hoverItem = ref(null);
 const isloadingForm = ref(false);
 
+
+const defNumberCardsToLoad = ref(20);
+
 // REFS
 const draggableCard = ref(null);
+
+onMounted(() => {
+    initScrollListener();  
+})
 
 const textNumbersExperiencesVisiblesAndHidden = computed(() => {
     let text = null;
@@ -237,8 +242,37 @@ const idsToggleExperienciesVisibles = computed(() => {
     return idsExperiences;
 });
 
+const totalExperiences = computed(() => {
+    return numberExperiencesVisible.value + numberExperiencesHidden.value;
+});
+
+const numberCardsToLoad = computed(() => {
+    
+    if(firstLoad.value) return defNumberCardsToLoad.value;
+    if(!firstLoad.value && totalExperiences.value == 0) return 0;
+    let remaining = totalExperiences.value - experiencesData.value.length;
+    if(remaining < defNumberCardsToLoad.value && totalExperiences.value > 0){
+        return remaining;
+    } 
+    return defNumberCardsToLoad.value;
+});
 
 // FUNCTIONS
+function initScrollListener() {
+    const container = document.querySelector('#main-content');
+    container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
+}
+
+function checkLoadMore() {
+    const skeletons = document.querySelectorAll('.skeleton-exp-card');
+    for (let skeleton of skeletons) {
+        if ($isElementVisible(skeleton) && !isloadingForm.value) {
+            loadMore();
+            break;
+        }
+    }
+    
+}
 
 const formatDuration = (duration) => {
     if (!duration) null
@@ -345,15 +379,14 @@ function converStar(value){
     return parseFloat(value.replace(",", "."));
 }
 
-function loadMore ({showLoadingMore}) {
+function loadMore () {
+    // console.log('test loadMore')
     page.value += 1;
-    loadExperiences({ showPageLoading: false, showLoadingMore  });
+    loadExperiences();
 }
 
-async function loadExperiences ({ showPageLoading, showLoadingMore }) {
-    if (showLoadingMore) {
-        isloadingForm.value=true;
-    }
+async function loadExperiences () {
+    isloadingForm.value=true;
     
     const response = await experienceStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
@@ -371,6 +404,7 @@ async function loadExperiences ({ showPageLoading, showLoadingMore }) {
         numberExperiencesVisible.value = response.data.visibleNumbers;
         numberExperiencesHidden.value = response.data.hiddenNumbers;
     }
+    firstLoad.value=false;
     isloadingForm.value=false;
 }
 defineExpose({ loadExperiences });
@@ -394,6 +428,7 @@ function handlerClickSwichVisibility (event) {
     event.stopPropagation();
 }
 async function updateVisible (experience) {
+    isloadingForm.value=true;
     if (changePendingInForm.value) {
         openModalChangeInForm();
         experience.is_visible = !experience.is_visible;
