@@ -215,7 +215,7 @@ const permissions = computed(() => authStore.$getPermissions || {});
 const showTooltip = reactive({});
 
 function handleMouseOverTooltip(link, indexLink) {
-  console.log('permissions[link.permissionName]',Object.keys(permissions.value).length)
+  // console.log('permissions[link.permissionName]',Object.keys(permissions.value).length)
   if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
     showTooltip[link.permissionName] = true;
   }
@@ -257,39 +257,23 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-       console.log('test NotifySendQueryEvent',data)
-       let currentUserid = authStore.user?.id;
-       let routeData = {
-            name : 'StayQueryDetail',
-            params : { stayId : data.stayId },
-            query : { g : data.guestId }
-          };
-        showNotification(data.title,data.text,routeData,10000);
-        if(data.countPendingQueries){
-          countPendingQueries.value = data.countPendingQueries;
-        }
-        // countPendingQueries.value = await queryStore.$countPendingByHotel();
-        //loadExistsPending();
+      //
+      // console.log('test NotifySendQueryEvent',data)
+      if(data.countPendingQueries){
+        countPendingQueries.value = data.countPendingQueries;
+      }
+      //notify the hoster
+      notifyFeedback(data)
+      //
     });
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
-        console.log('test NotifyUnreadMsg',data)
-        if(!Number(data.automatic) && data.guest){
-            let room_text =  'Estancia: nº habitación ';
-            data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-            let routeData = {
-              name : 'StayChatRoom',
-              params : { stayId : data.stay_id },
-              query : { g : data.guest_id }
-            };
-            showNotification(room_text, data.text, routeData, 10000);
-        }
+        notifyChat(data)
     });
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-        // console.log('NotifyStayHotelEvent',data)
         if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
@@ -301,7 +285,44 @@ const handleMouseMove = () => {
   isMouseMoving.value = true
 }
 
+const notifyFeedback = (data) => {
+  
+  let currentUserid = authStore.user?.id;
+  let routeData = {
+    name : 'StayQueryDetail',
+    params : { stayId : data.stayId },
+    query : { g : data.guestId }
+  };
 
+  if(data.concept == "pending" && data.userId && data.userId == currentUserid){
+    showNotification(data.title,data.text,routeData,10000);   
+  }
+  if(data.concept == "new"){
+    showNotification(data.title,data.text,routeData,10000);   
+  }
+}
+
+
+const notifyChat = (data) =>{
+  let currentUserid = authStore.user?.id;
+  if(!Number(data.automatic) && data.guest){
+      let room_text =  'Estancia: nº habitación ';
+      data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
+      let routeData = {
+        name : 'StayChatRoom',
+        params : { stayId : data.stay_id },
+        query : { g : data.guest_id }
+      };
+
+      if(data.concept == "pending" && data.user_id && data.user_id == currentUserid){
+        showNotification(room_text, data.text, routeData, 10000);
+      }
+      if(data.concept == "new"){
+        showNotification(room_text, data.text, routeData, 10000);
+      }
+      
+  }
+}
 
 const handleMenuItemClick = (nameButtom) => {
   isMouseMoving.value = false;
