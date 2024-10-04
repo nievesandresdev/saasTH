@@ -23,7 +23,7 @@
                             <span class="font-semibold text-sm">Booking</span>
                         </div>
                         <div v-show="disabledInput.booking" :class="['flex cursor-pointer items-center group', errors.booking ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('booking', form.booking.url)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon mr-2">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
@@ -55,7 +55,7 @@
                             <span class="font-semibold text-sm">Expedia</span>
                         </div>
                         <div v-show="disabledInput.expedia" :class="['flex cursor-pointer items-center group', errors.expedia ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('expedia', form.expedia.url)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon mr-2">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
@@ -87,7 +87,7 @@
                             <span class="font-semibold text-sm">Tripadvisor</span>
                         </div>
                         <div v-show="disabledInput.tripadvisor" :class="['flex cursor-pointer items-center group', errors.tripadvisor ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('tripadvisor', form.tripadvisor.url)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon mr-2">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
@@ -119,7 +119,7 @@
                             <span class="font-semibold text-sm">Google</span>
                         </div>
                         <div v-show="disabledInput.google" :class="['flex cursor-pointer items-center group', errors.google ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('google', form.google.url)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon mr-2">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div v-show="disabledInput.airbnb" :class="['flex cursor-pointer items-center group', errors.airbnb ? 'text-red-500' : 'hover:text-[#34A98F]']" @click="changeUrlModal('airbnb', form.airbnb.url)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon mr-2">
                                 <path d="M8.00001 14.6666C11.6819 14.6666 14.6667 11.6819 14.6667 7.99998C14.6667 4.31808 11.6819 1.33331 8.00001 1.33331C4.31811 1.33331 1.33334 4.31808 1.33334 7.99998C1.33334 11.6819 4.31811 14.6666 8.00001 14.6666Z" stroke="currentColor" stroke-width="0.8"/>
                                 <path d="M6.75 5.91663C6.75 5.22627 7.30967 4.66663 8 4.66663C8.69033 4.66663 9.25 5.22627 9.25 5.91663C9.25 6.37493 9.00333 6.77563 8.6356 6.99323C8.31867 7.18069 8 7.46509 8 7.83329V8.66663" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
                                 <path d="M8.45557 10.7778C8.45557 11.0294 8.25161 11.2333 8.00001 11.2333C7.74842 11.2333 7.54446 11.0294 7.54446 10.7778C7.54446 10.5262 7.74842 10.3222 8.00001 10.3222C8.25161 10.3222 8.45557 10.5262 8.45557 10.7778Z" fill="currentColor" stroke="currentColor" stroke-width="0.2"/>
