@@ -302,6 +302,7 @@
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
+  import { useAuthStore } from '@/stores/modules/auth/login';
   
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
@@ -310,6 +311,8 @@
 
   const router = useRouter();
   const route = useRoute();
+
+  const authStore = useAuthStore();
 
   const nParam = route.query.n;
 
@@ -323,9 +326,14 @@
     dataUser : Object
   });
 
-  const getWorkPositions = () => {
+  const getWorkPositions = (workPosition = false) => {
     emits('workPositionGet');
     emits('handleDeleteWP');
+
+    if(workPosition === form.value.work_position_id){
+      form.value.work_position_id = null
+      selectedWorkPositionName.value = 'Elige el puesto de trabajo';
+    }
   };
 
   const isDeleteWorkPositions = ref(false);
@@ -335,6 +343,10 @@
     //emits('deleteWP',option);
     isDeleteWorkPositions.value = true;
     IdDeleteWP.value = option;
+
+    
+
+    //console.log('deleteWorkPosition',selectedWorkPositionName.value,option,form.value.work_position_id)
   }
 
   const closeDeleteWorkPositions = () => {
@@ -973,9 +985,13 @@ const scrollToStep = (index) => {
   let store = await userStore.$updateUser(form.value);
 
   if (store.ok) {
-    clearForm()
+    //clearForm()
+    closeModal(true)
     toast.warningToast('Usuario editado correctamente','top-right')
     emits('update');
+    if(authStore?.user?.id === store.data.user.id){
+      authStore.$setUser(store.data.user);
+    }
 
     setTimeout(() => {
         location.reload();
@@ -1110,6 +1126,8 @@ function closeModal(complete = false) {
         emits('close');
         currentStep.value = 1;
     }
+
+    isModalCrudOpen.value = false;
 
 
     /* emits('close');

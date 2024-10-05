@@ -49,7 +49,7 @@
                 @mouseover="hoverTable(index)"
                 @mouseleave="hoverTable(index)"
                 :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 "
+                class="border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-[#F1F1F1]"
                 :class="{
                   'bg-[#ECF9F5]': selectedShow == user.id,
                   'hover:bg-[#F1F1F1]': selectedUser?.id != user.id,
@@ -57,7 +57,7 @@
                 }"
               >
                 <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-normal break-words w-1/4">
-                  {{ user.name }}
+                  {{ user.name }} {{ user.profile?.lastname }}
                 </th>
                 <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
                   {{ user.work_position }}
@@ -73,7 +73,8 @@
                     Inactivo
                   </span>
                 </td>
-                <td class="pl-10 py-4 whitespace-normal break-words w-1/4">
+                <td class="pl-10 py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
+                  
                   <Toggle
                     :user="user"
                     :index="index"
@@ -191,9 +192,12 @@
   import ModalWindow from '@/components/ModalWindow.vue';
   import { useToastAlert } from '@/composables/useToastAlert';
   import { useRoute } from 'vue-router';
+  import { useAuthStore } from '@/stores/modules/auth/login';
   
   const modalAdd = ref(false);
   const workPositionsData = ref([]);
+
+  const authStore = useAuthStore();
   
   const modalEdit = ref(false);
   const modalShow = ref(false);
@@ -231,7 +235,7 @@
   
   onMounted(() => {
     handleGetUsers();
-    //handleTestMail();
+    handleTestMail();
     adjustBodyPadding(); // Ajustar el padding al cargar la página
     window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
@@ -313,7 +317,6 @@
   };
   
   const editUser = (data) => {
-    console.log('editUserDATA', data);
     dataEdit.value = data;
     modalEdit.value = true;
     visibleDropdown.value = null;
