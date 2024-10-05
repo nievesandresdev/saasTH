@@ -977,6 +977,10 @@ const scrollToStep = (index) => {
     toast.warningToast('Usuario editado correctamente','top-right')
     emits('update');
 
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+
 
   } else {
     toast.errorToast(store.data.methodException,'top-right')

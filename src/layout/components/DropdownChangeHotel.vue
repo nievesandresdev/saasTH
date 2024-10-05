@@ -78,7 +78,7 @@
                     </p>
                     <div class="flex w-full gap-1">
                         <div
-                            v-if="hotelData.pivot.is_default" 
+                            v-if="hotelData?.pivot?.is_default" 
                             class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block border-[#34A98F] text-[#0B6357]"
                         >Predeterminado</div>
                         <div
@@ -146,7 +146,7 @@
                                 </p>
                                 <div class="flex w-full gap-1">
                                     <div
-                                        v-if="hotel.is_default" 
+                                        v-if="hotel?.is_default" 
                                         class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block border-[#34A98F] text-[#0B6357]"
                                     >Predeterminado</div>
                                     <div
@@ -243,7 +243,7 @@
                                         
                                         <div class="flex w-full gap-1">
                                             <div
-                                                v-if="hotel.is_default" 
+                                                v-if="hotel?.is_default" 
                                                 class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block border-[#34A98F] text-[#0B6357]"
                                             >Predeterminado</div>
                                             <div
@@ -412,9 +412,9 @@ const handlehHotelDefault = async (hotel, event) => {
 
     toast.warningToast(hotel.name + ' marcado como predeterminado', 'top-right');
 
-     setTimeout(() => {
-            location.reload();
-        }, 1100);
+    setTimeout(() => {
+        location.reload();
+    }, 1100);
 
     // tooltipVisible debe ocultarse después de que el cambio se haya aplicado
     tooltipVisible.value = null;
