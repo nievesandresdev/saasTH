@@ -19,8 +19,8 @@
             class=" w-[284px] pt-4 hbg-white-100 absolute top-[64px] left-[12px] z-[100] shadow-dorpdown bg-white rounded-[6px]"
         >
         <!-- @mouseleave="dropdownOpenn = false" -->
-            <div class="flex flex-col items-center" :class="{'mb-4': hotelStore.hotelsAvailables?.length  <= 1}">
-                <div class="w-[64px] h-[64px] rounded-[3px]">
+            <div class="flex items-center py-3 px-4" :class="{'mb-4': hotelStore.hotelsAvailables?.length  <= 1}">
+                <!-- <div class="w-[64px] h-[64px] rounded-[3px]">
                     <img
                         v-if="hotelData?.image"
                         :src="hotelStore.formatImage({url: hotelData?.image})"
@@ -44,6 +44,48 @@
                             - {{ hotelData.zone }}
                         </template>
                     </p>
+                </div> -->
+                <div class="w-[64px] h-[64px] rounded-[3px] mr-2 flex-shrink-0">
+                    <img v-if="hotelData?.image" class="rounded-[3px] w-[64px] h-[64px] object-cover" :src="hotelStore.formatImage({url: hotelData?.image})" alt="photo perfil ">
+                    <img
+                        v-else
+                        :src="hotelStore.formatImage({url: '/storage/gallery/general-1.jpg'})"
+                        class="rounded-[3px] w-[64px] h-[64px] object-cover"
+                        alt="photo default "
+                    >
+                </div>
+                
+                <div class="">
+                    <div class="flex justify-between">
+                        <div class="flex w-auto max-w-[178px]">
+                            <p class="text-sm font-medium htext-black-100 relative truncate">
+                                <!-- {{ truncateNameHotelLong(hotel.name, 25) }} -->
+                                {{ hotelData.name }}
+                            </p>
+                            <!-- <div class="relative w-[8px] h-full flex-shrink-0">
+                                <div
+                                    v-if="hotelData.with_notificartion"
+                                    class="w-[10px] h-[10px] hbg-yellow-cta rounded-full absolute top-[-2px] right-0 z-10"
+                                />
+                            </div> -->
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">{{ hotelData.type }}
+                        <template v-if="hotelData.zone">
+                            - {{ hotelData.zone }}
+                        </template>
+                    </p>
+                    <div class="flex w-full gap-1">
+                        <div
+                            v-if="hotelData.pivot.is_default" 
+                            class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block border-[#34A98F] text-[#0B6357]"
+                        >Predeterminado</div>
+                        <div
+                            v-if="!hotelData.subscribed" 
+                            class="bg-white border text-[10px] p-[2px] leading-[90%] rounded-[3px] inline-block hborder-alert-negative htext-alert-negative"
+                        >No Suscrito</div>
+                    </div>
                 </div>
             </div>
             <div v-if="hotelStore.hotelsAvailables?.length" class="px-4 relative mt-4" v-click-away="handleClickOutsideDropDownSearch">
@@ -135,17 +177,20 @@
                     <li
                             v-for="(hotel, index) in hotelStore.hotelsAvailables"
                             :key="index"
-                            class="px-4 py-[12px] flex justify-between  h-[77px] hover-gray-100 w-full"
+                            class="px-4 py-[12px] flex justify-between  h-[77px] w-full"
                             @click="changeHotel(hotel)"
                             :class="{
                                 'opacity-100': isHotelInUser(hotel),
                                 'opacity-25': !isHotelInUser(hotel),
                                 'cursor-pointer': isHotelInUser(hotel),
-                                'cursor-not-allowed': !isHotelInUser(hotel)
+                                'cursor-not-allowed': !isHotelInUser(hotel),
+                                'hover:bg-[#F3F3F3]': !isSvgHovered[index] && isContainerHovered[index], // Hover solo en el contenedor
+
                             }"
-                            @mouseenter="!isHotelInUser(hotel) ? showPermissionTooltip(index, $event) : null"
+                            @mouseenter="handleContainerHover(true, index); !isHotelInUser(hotel) ? showPermissionTooltip(index, $event) : null"
                             @mousemove="!isHotelInUser(hotel) ? updateTooltipPosition($event) : null"
-                            @mouseleave="hidePermissionTooltip"
+                            @mouseleave="handleContainerHover(false, index); hidePermissionTooltip()"
+                            
                         >
                                 <section class="flex">
                                     <div class="w-[34px] h-[34px] rounded-[3px] flex-shrink-0 mr-2">
@@ -211,8 +256,14 @@
                             
                             <svg
                                 @click="toggleTooltip(index,$event)"
-                                v-show="isHotelInUser(hotel)"
-                                class="h-5 w-5 flex-shrink-0 rounded-full hover:bg-[#F3F3F3] cursor-pointer "
+                                @mouseenter="handleSvgHover(true, index)"
+                                @mouseleave="handleSvgHover(false, index)"
+                                v-show="isHotelInUser(hotel) || !hotel.is_default"
+                                class="h-5 w-5 flex-shrink-0  cursor-pointer z-[800]"
+                                :class="{
+                                    'hover:bg-[#F3F3F3] rounded-full': isSvgHovered[index], // Hover en el ícono
+                                    'cursor-pointer': true
+                                }"
                                 width="24"
                                 height="24"
                                 viewBox="0 0 24 24"
@@ -228,6 +279,8 @@
                                 v-if="tooltipVisible === index"
                                 class="fixed bg-white p-4 text-sm text-black rounded-[10px] shadow-tooltip z-[1000] hover:bg-[#F1F1F1] flex items-center cursor-pointer"
                                 :style="tooltipStyle"
+                                @mouseenter="handleSvgHover(true, index)"
+                                @mouseleave="handleSvgHover(false, index)"
                                 @click="handlehHotelDefault(hotel,$event)"
                             >
                                 <!-- Image -->
@@ -355,11 +408,13 @@ const handlehHotelDefault = async (hotel, event) => {
       }
     });
 
+    hotelStore.hotelData.pivot.is_default = false; // Marca el hotel actual como predeterminado
+
     toast.warningToast(hotel.name + ' marcado como predeterminado', 'top-right');
 
      setTimeout(() => {
             location.reload();
-        }, 1000);
+        }, 1100);
 
     // tooltipVisible debe ocultarse después de que el cambio se haya aplicado
     tooltipVisible.value = null;
@@ -389,6 +444,28 @@ const updateTooltipPosition = (event) => {
 
 const hidePermissionTooltip = () => {
   permissionTooltipVisible.value = null;
+};
+
+// Variables para gestionar el hover independiente de contenedor y el ícono
+const isContainerHovered = ref([]); // Estado para hover del contenedor
+const isSvgHovered = ref([]); // Estado para hover del ícono
+
+// Función para manejar el hover del contenedor
+const handleContainerHover = (hoverState, index) => {
+  isContainerHovered.value[index] = hoverState;
+  if (hoverState) {
+    isSvgHovered.value[index] = false; // Si el contenedor está en hover, quitamos el hover del ícono
+  }
+};
+
+// Función para manejar el hover del ícono SVG
+const handleSvgHover = (hoverState, index) => {
+  isSvgHovered.value[index] = hoverState;
+  if (hoverState) {
+    isContainerHovered.value[index] = false; // Si el ícono está en hover, quitamos el hover del contenedor
+  }else{
+    isContainerHovered.value[index] = true;
+  }
 };
 
 

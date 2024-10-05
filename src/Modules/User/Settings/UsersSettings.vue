@@ -1,5 +1,5 @@
 <template>
-    <div class="px-6 bg-[#FAFAFA] flex flex-col min-h-screen">
+    <div class="px-6 bg-[#FAFAFA] flex flex-col min-h-screen overflow-hidden">
       <h1 class="text-[22px] font-medium leading-[110%] py-5 z-[600]">Equipo - Usuarios</h1>
       <hr class="bg-[#BFBFBF] z-[600]">
       <div class="flex justify-between items-center mt-6 z-[600]">
