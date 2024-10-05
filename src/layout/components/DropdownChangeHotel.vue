@@ -408,13 +408,13 @@ const handlehHotelDefault = async (hotel, event) => {
       }
     });
 
-    hotelStore.hotelData.pivot.is_default = false; // Marca el hotel actual como predeterminado
+    //hotelStore.hotelData.is_default = false; // Marca el hotel actual como predeterminado
 
     toast.warningToast(hotel.name + ' marcado como predeterminado', 'top-right');
 
     setTimeout(() => {
         location.reload();
-    }, 1100);
+    }, 900);
 
     // tooltipVisible debe ocultarse después de que el cambio se haya aplicado
     tooltipVisible.value = null;
