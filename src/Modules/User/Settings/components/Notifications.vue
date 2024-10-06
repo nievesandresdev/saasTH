@@ -125,7 +125,7 @@
     },
     maxHeight: {
       type: Number,
-      default: 400, // Altura máxima predeterminada
+      default: 270, // Altura máxima predeterminada
     },
     workPositionId: {
       type: [Number, String],

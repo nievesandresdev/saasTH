@@ -17,26 +17,61 @@ export const useHotelStore = defineStore('hotel', () => {
             }
             return hotel;
         }
-        return;
+        //return;
+        return false;
     })
+
+    const hotelsUser = computed(() => {
+        // Obtener el objeto 'user' del localStorage
+        let user = localStorage.getItem('user') ?? null;
+        
+        if (user) {
+            // Convertir la cadena JSON a un objeto JavaScript
+            user = JSON.parse(user);
+            
+            // Retornar la propiedad 'parent_hotels' si existe
+            return user.hotels ?? [];
+        }
+        
+        // Retornar un array vacío o false si no se encuentra el usuario
+        return [];
+    });
+
+
+    const hotelsParent = computed(() => {
+        // Obtener el objeto 'user' del localStorage
+        let user = localStorage.getItem('user') ?? null;
+        
+        if (user) {
+            // Convertir la cadena JSON a un objeto JavaScript
+            user = JSON.parse(user);
+            
+            // Retornar la propiedad 'parent_hotels' si existe
+            return user.parent_hotels ?? [];
+        }
+        
+        // Retornar un array vacío o false si no se encuentra el usuario
+        return [];
+    });
+    
 
     // STATE
     const hotelData = ref({...hotelSession.value});
     const hotelsAvailables = ref([]);
+    const hotelsByUserAvailables = ref([]);
     const subdomain = ref(localStorage.getItem('current_subdomain') ?? null);
     const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
     
 
     // ACTIONS
 
-    async function loadHotelsAvailables (withoutCurrent = false) {
-        if (hotelsAvailables.value?.length <= 0) {
-            const response = await $getAll(withoutCurrent);
-            const { ok } = response;
-            hotelsAvailables.value = ok ? response.data : null;
-            // console.log('test hotelsAvailables.value',hotelsAvailables.value)
-        }
+    async function $handleDefaultHotel (hotel){
+         const response = await hotelService.updateDefaultHotel(hotel);
+        return response;
+
     }
+
+    
 
     function updateHoteInSession (hotel) {
         if (hotel?.images) {
@@ -76,6 +111,31 @@ export const useHotelStore = defineStore('hotel', () => {
         const { ok } = response
         hotelData.value = ok ? response.data : null
         return response.data
+    }
+
+    async function loadHotelsAvailables (withoutCurrent = false) {
+        if (hotelsAvailables.value?.length <= 0) {
+            const response = await $getAll(withoutCurrent);
+            const { ok } = response;
+            hotelsAvailables.value = ok ? response.data : null;
+            // console.log('test hotelsAvailables.value',hotelsAvailables.value)
+        }
+    }
+
+    //getAvailables
+    async function $getHotelsByUser () {
+        const response = await hotelService.getHotelsByUser();
+        return response;
+    }
+
+    async function loadHotelsByUser () {
+        //if (hotelsByUserAvailables.value?.length <= 0) {
+            const response = await $getHotelsByUser();
+            const { ok } = response;
+            
+            hotelsByUserAvailables.value = ok ? response.data : null
+            console.log('loadHotelsByUser',hotelsByUserAvailables.value)
+        //}
     }
 
     async function $findByParams (params = null) {
@@ -194,6 +254,7 @@ export const useHotelStore = defineStore('hotel', () => {
     return {
         hotelData,
         hotelsAvailables,
+        hotelsByUserAvailables,
         subdomain,
         formatImage,
         reloadHotel,
@@ -202,6 +263,8 @@ export const useHotelStore = defineStore('hotel', () => {
         $findByParams,
         $updateProfile,
         $getAll,
+        $getHotelsByUser,
+        loadHotelsByUser,
         $updateVisivilityFacilities,
         $updateVisivilityExperiences,
         $updateVisivilityPlaces,
@@ -209,7 +272,10 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateVisivilityTypePlace,
         $verifySubdomainExistPerHotel,
         $updateCustomization,
-        $updateSenderMailMask
+        $updateSenderMailMask,
+        hotelsUser,
+        hotelsParent,
+        $handleDefaultHotel
     }
 
 })

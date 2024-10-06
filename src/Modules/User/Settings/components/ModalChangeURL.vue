@@ -21,7 +21,7 @@
                 <button @click="closeModal" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
                     Cancelar
                 </button>
-                <button  @click="submit" class="bg-[#EBC44C] px-4 py-3 text-sm leading-[110%] font-medium rounded-md">
+                <button  @click="submit" class="hbtn-cta px-4 py-3 text-sm leading-[110%] font-medium rounded-md">
                     Solicitar Cambio
                 </button>
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="relative" ref="ref_section_toggle">
+    <div class="relative" ref="ref_section_toggle" v-show="authStore?.user?.id != props.user.id">
       <svg
         @click="toggleDropdown"
         class="cursor-pointer"
