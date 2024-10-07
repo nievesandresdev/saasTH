@@ -1,5 +1,5 @@
 <template>
-    <!-- <div class="fixed top-10 left-10 bg-red-100 text-red-400 text-xl z-[10000] p-1">{{numberCardsToLoad}}</div> -->
+    
     <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms" :class="{'hbg-gray-500 htext-gray-500 rounded-[6px] animate-pulse w-[400px]':firstLoad}">
         {{ textNumbersExperiencesVisiblesAndHidden }}
     </p>
