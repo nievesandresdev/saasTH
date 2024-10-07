@@ -58,7 +58,7 @@ const submitDelete = async() => {
     if(response.ok){
         toast.warningToast('Cambios guardados con éxito','top-right')
         emit('close');
-        emit('delete');
+        emit('delete',props.id);
     }else{
         toast.errorToast('Error al eliminar el puesto','top-right')
     }

@@ -123,7 +123,7 @@ const props = defineProps({
 const form = reactive({
   id: props.data.id,
   name: props.data.name,
-  permissions: JSON.parse(props.data.permissions),
+  permissions: JSON.parse(props.data.permissions) ?? {},
   periodicityChat: props.data.periodicity_chat ?? 5,
   periodicityStay: props.data.periodicity_stay ?? 5,
   notifications: {

@@ -472,6 +472,7 @@ const displayNotification = (title, text, route, timeout) => {
 }
 onMounted(async() => {
     hotelStore.loadHotelsAvailables(true);
+    hotelStore.loadHotelsByUser();
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
     conuntReviewsPending.value = await reviewStore.$countReviewsPending();
