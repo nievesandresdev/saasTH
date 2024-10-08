@@ -239,6 +239,7 @@ onMounted(async() => {
     await authStore.logout();
     // Almacenar en localStorage
     localStorage.setItem('token', token);
+    localStorage.setItem('login_from', 'admin');
 
     
 

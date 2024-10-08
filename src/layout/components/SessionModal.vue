@@ -61,10 +61,15 @@ const closeModalProfile = () => {
 }
 
 const logout = async () => {
+  const login_from = localStorage.getItem('login_from');
   closeModalProfile()
   if(!utilStore.hasUnsavedChanges){
     await authStore.logout()
+    if(login_from === 'admin'){
+      window.location.href = 'https://www.google.com';
+    }else{
     router.push('/login')
+    }
   }else{
     router.push('/simulateLogout')
   }
