@@ -41,17 +41,17 @@
           :key="indexLink"
           :class="[
             'bg-[#E2F8F2]',
-            (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'bg-opacity-50' : '',
+            checkPermission(link) || checkSubscriptionStatus(link) ? 'bg-opacity-50' : '',
             indexLink === 0 ? 'rounded-t-[10px]' : '',
             indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
           ]"
         >
           <router-link
-            :to="(!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '#' : link.url"
+            :to="checkPermission(link) || checkSubscriptionStatus(link) ? '#' : link.url"
             @click="handleMenuItemClick($event, link, indexLink)"
             class="flex items-center p-2 relative rounded-[10px]"
-            @mouseover="handleMouseOverTooltip(link, indexLink)"
-            @mouseleave="handleMouseLeaveTooltip(link, indexLink)"
+            @mouseover="handleMouseOverTooltip(link, indexLink,props.subscription.status)"
+            @mouseleave="handleMouseLeaveTooltip(link, indexLink,props.subscription.status)"
             :class="[
               link.include.includes($route.name) ? 
                 [
@@ -61,11 +61,11 @@
                 ] 
                 : 
                 [
-                  (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? '' : 'hover:bg-gray-100',
+                  checkPermission(link) || checkSubscriptionStatus(link) ? '' : 'hover:bg-gray-100',
                   indexLink === 0 ? 'rounded-t-[10px]' : '',
                   indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
                 ],
-              (!permissions[link.permissionName] && Object.keys(permissions).length > 0) ? 'cursor-not-allowed' : 'cursor-pointer',
+              checkPermission(link) || checkSubscriptionStatus(link) ? 'cursor-not-allowed' : 'cursor-pointer',
             ]"
           >
           <!-- notification icon -->
@@ -81,7 +81,7 @@
               :src="`/assets/icons/${link.icon}.svg`" 
               :class="{
                 'icon-white': link.include.includes($route.name),
-                'opacity-50': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+                'opacity-50': checkPermission(link) || checkSubscriptionStatus(link)
               }"
             >
             
@@ -91,7 +91,7 @@
                 class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]"
                 :class="{
                   'text-white': link.include.includes($route.name),
-                  'opacity-25': (!permissions[link.permissionName] && Object.keys(permissions).length > 0)
+                  'opacity-25': checkPermission(link) || checkSubscriptionStatus(link)
                 }"
               >
                 {{ link.title }}
@@ -111,6 +111,27 @@
               <p class="text-sm font-normal">
                 Necesitas permisos para acceder a esta sección. Solicita acceso a tu responsable o superior para poder entrar.
               </p>
+            </div>
+
+            <!-- Tooltip manual -->
+            <div
+              v-if="showSubscriptionTooltip[link.permissionName]"
+              class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
+              :style="{
+                top: '70%',
+                left: '70%',
+                transform: 'translate(-50%, 8px)'
+              }"
+            >
+            <h5 class="text-sm font-medium mb-4">
+              No estás suscrito
+                </h5>
+                <p class="text-sm mb-4">
+                  Tú periodo de free trial ha concluido. Para tener acceso a la operación de tu alojamiento y poder seguir disfrutando de la experiencia TheHoster al completo contacta con nosotros y gestiona tu suscripción con nuestro comercial,
+                </p>
+                <p class="text-sm">
+                  Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte
+                </p>
             </div>
           </router-link>
         </div>
@@ -199,6 +220,13 @@ import { useChatStore } from '@/stores/modules/chat/chat'
 import { useReviewStore } from '@/stores/modules/review'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
+const props = defineProps({
+  subscription: {
+      type: Object,
+      default: () => ({}),
+  },
+})
+
 const emit = defineEmits(['openmodalHelp'])
 const route = useRoute()
 const router = useRouter()
@@ -213,20 +241,37 @@ const userAvatar = computed(() => userStore.$userAvatar);
 const permissions = computed(() => authStore.$getPermissions || {});
 
 const showTooltip = reactive({});
+const showSubscriptionTooltip = reactive({});
 
-function handleMouseOverTooltip(link, indexLink) {
+function handleMouseOverTooltip(link, indexLink, status = null) {
   // console.log('permissions[link.permissionName]',Object.keys(permissions.value).length)
   if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
     showTooltip[link.permissionName] = true;
   }
+
+  if (checkSubscriptionStatus(link)) {
+    showSubscriptionTooltip[link.permissionName] = true;
+  }
 }
 
-function handleMouseLeaveTooltip(link, indexLink) {
+function handleMouseLeaveTooltip(link, indexLink,status = null) {
+
+  if (checkSubscriptionStatus(link)) {
+    showSubscriptionTooltip[link.permissionName] = false;
+  }
   
   if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
     showTooltip[link.permissionName] = false;
   }
 }
+
+const checkSubscriptionStatus = (link) => {
+    return (props.subscription.status == 2 || props.subscription.status == 3) && link?.subscription == true;
+};
+
+const checkPermission = (link) => {
+    return !permissions.value[link.permissionName] && Object.keys(permissions.value).length > 0;
+};
 
 
 
@@ -344,14 +389,16 @@ const menu_links = ref([
         icon: '1.TH.ESTANCIAS.MM',
         include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
         url: '/estancias',
-        permissionName: 'estancias'
+        permissionName: 'estancias',
+        subscription: true
       },
       {
         title: 'Reseñas',
         icon: '1.TH.REVIEW.MM',
         include: ['Reviews','ReviewDetail'],
         url: '/resenas',
-        permissionName: 'resenas'
+        permissionName: 'resenas',
+        subscription: true
       },
     ],
   },
@@ -392,7 +439,8 @@ const menu_links = ref([
           'PolicyCookiesLegal',
         ],
         url: '/webapp',
-        permissionName: 'webapp'
+        permissionName: 'webapp',
+        subscription : false
       },
       /* {
         title: 'Comunicaciones',
@@ -473,6 +521,7 @@ const displayNotification = (title, text, route, timeout) => {
 onMounted(async() => {
     hotelStore.loadHotelsAvailables(true);
     hotelStore.loadHotelsByUser();
+    
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
     conuntReviewsPending.value = await reviewStore.$countReviewsPending();

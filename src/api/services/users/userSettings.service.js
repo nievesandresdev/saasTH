@@ -9,6 +9,11 @@ export const createWorkPosition = (data) => apiHttp('POST', `${userPath}/work-po
 export const updateWorkPosition = (data) => apiHttp('POST', `${userPath}/work-position/update`, data)
 export const deleteWPosition = (data) => apiHttp('POST', `${userPath}/work-position/delete`, data)
 
+//getTrial
+export const getTrial = () => apiHttp('GET', `${userPath}/getTrial`,[], { showPreloader: false })
+//getStatusSubscription
+export const getStatusSubscription = () => apiHttp('GET', `${userPath}/getStatusSubscription`,[], { showPreloader: false })
+
 //users
 //getUserData
 export const getUserData = (params) => apiHttp('GET', `${userPath}/getUserData`,params)
