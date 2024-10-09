@@ -494,7 +494,7 @@ function goLinkPlace(r,d) {
 
 const isActive = (sub_menu, index_sub_menu) => {
   const savedPlaceId = localStorage.getItem('selected_place');
-  return savedPlaceId == index_sub_menu || fullUrl.value == '/places';
+  return savedPlaceId == index_sub_menu && fullUrl.value.includes('/places');
 };
 
 /* onMounted(() => {
