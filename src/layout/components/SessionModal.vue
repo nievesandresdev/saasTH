@@ -61,19 +61,15 @@ const closeModalProfile = () => {
 }
 
 const logout = async () => {
-  const ADMIN = process.env.VUE_APP_ADMIN_URL;
+  //const ADMIN = process.env.VUE_APP_ADMIN_URL;
 
-  const login_from = localStorage.getItem('login_from');
+  //const login_from = localStorage.getItem('login_from');
 
   //console.log('logout', login_from, ADMIN)
   closeModalProfile()
   if(!utilStore.hasUnsavedChanges){
     await authStore.logout()
-    if(login_from === 'admin'){
-      window.location.href = ADMIN;
-    }else{
     router.push('/login')
-    }
   }else{
     router.push('/simulateLogout')
   }
