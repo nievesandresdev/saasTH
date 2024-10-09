@@ -113,7 +113,7 @@
               </p>
             </div>
 
-            <!-- Tooltip manual -->
+            <!-- Tooltip subscripcion -->
             <div
               v-if="showSubscriptionTooltip[link.permissionName]"
               class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
