@@ -51,6 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
                 localStorage.setItem('current_hotel', JSON.stringify(response.data.user.current_hotel));
                 localStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
                 localStorage.setItem('loginTime', currentTime); // Guardamos la hora actual
+                localStorage.setItem('login_from', 'hoster');
 
                 this.$router.push('/dashboard');
             } else {

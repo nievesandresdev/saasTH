@@ -159,6 +159,7 @@ const visibilityTypePlace = ref(false);
 const isOpenModelFilter = ref(false);
 const changePendingInForm = ref(false);
 const modalChangePendinginForm = ref(false);
+const firstLoad = ref(true);
 
 const modelActive = ref(null);
 const panelEditRef = ref(null);
@@ -184,7 +185,7 @@ provide('filtersSelected', filtersSelected);
 provide('filtersSelectedDefault', filtersSelectedDefault);
 provide('changePendingInForm', changePendingInForm);
 provide('modalChangePendinginForm', modalChangePendinginForm);
-
+provide('firstLoad', firstLoad);
 //
 provide('mockupStore', mockupStore);
 provide('toast', toast);
@@ -274,7 +275,7 @@ async function loadTypePlaces () {
 }
 async function loadDataUtil () {
     let body = {...formFilter}
-    const response = await placeStore.$getDataUtil(body,  { showPreloader: false });
+    const response = await placeStore.$getDataUtil(body);
     if (response.ok) {
         numbersByFilters.scores = response.data.numbersPlacesByScore;
         numbersByFilters.distances = response.data.numbersPlacesBydistance;
@@ -349,6 +350,7 @@ function validValueQuery (field, value) {
     return value;
 }
 async function reloadPlaces () {
+    firstLoad.value=true;
     loadDataFormFilter();
     page.value = 1;
     isOpenModelFilter.value = false;

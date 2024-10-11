@@ -346,13 +346,13 @@ const search = ref(null);
 const hotels = ref([]);
 
 
-console.log({
+/* console.log({
     'parentsHotels' : hotelStore.hotelsParent,
     'userHotels': hotelStore.hotelsUser,
     'hotelData' : hotelStore.hotelData,
     'hotelsAvaliableT' : hotelStore.hotelsAvailables,
     'awaitHotelUser' : hotelStore.hotelsByUserAvailables
-})
+}) */
 
 // Función para verificar si el hotel está en hotelsUser
 function isHotelInUser(hotel) {

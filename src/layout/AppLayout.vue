@@ -1,5 +1,5 @@
 <template>
-    <SuscriptionBanner v-if="showSuscriptionBanner" />
+    <SuscriptionBanner v-if="showSuscriptionBanner" :data="dataSubscriptionBanner" />
     <!-- <div class="px-3.5 md:px-6 h-10 w-full hbg-green-600 flex justify-between items-center">
 d    dd
     </div> -->
@@ -17,7 +17,7 @@ d    dd
         <aside 
             :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[2000] flex ${showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
         >
-            <MainSidebar @openmodalHelp="openModalHelp" />
+            <MainSidebar @openmodalHelp="openModalHelp" :subscription="dataSubscriptionBanner" />
             <!-- container dinamic side left -->
             <div v-if="currentLeftSidebar" class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`">
                 <DinamicLeftSidebar :sidebarName="currentLeftSidebar"/>
@@ -42,7 +42,7 @@ d    dd
     <ModalInfoNewHotel />
 </template>
 <script setup>
-import { computed, ref, provide } from 'vue';
+import { computed, ref, provide, onMounted } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 
 import ModalHelp from '../layout/components/ModalHelp.vue'
@@ -57,13 +57,19 @@ import NotifyPanel from './Notifications/NotifyPanel.vue'
 import LoadPage from '@/shared/LoadPage.vue'; // Asegúrate de que la ruta sea correcta
 import { usePreloaderStore } from '@/stores/modules/preloader';
 import { useMockupStore } from '@/stores/modules/mockup';
+import { useHotelStore } from '@/stores/modules/hotel'
+import { useUserStore } from '@/stores/modules/users/users'
 
 const mockupStore = useMockupStore();
 const preloaderStore = usePreloaderStore();
+const hotelStore = useHotelStore();
+const userStore = useUserStore();
+
 const activeRequests = computed(() => preloaderStore.activeRequests);
 const route = useRoute();
 
-const showSuscriptionBanner = false;
+const showSuscriptionBanner = ref(false);
+const dataSubscriptionBanner = ref({});
 const isNotifyPanelVisible = ref(false)
 const modalHelpRef = ref(false)
 const modalProfile = ref(false)
@@ -83,6 +89,26 @@ onBeforeRouteLeave((to, from, next) => {
 const openModalHelp = () => {
   modalHelpRef.value.open();
 }
+
+onMounted(() => {
+    getDataTrial();
+    //userStore.$getSubscriptionStatus();
+})
+
+const { hotelData, hotelsAvailables,hotelsUser,hotelsByUserAvailables,$handleDefaultHotel,loadHotelsAvailables,loadHotelsByUser } = hotelStore;
+
+const getDataTrial = async () => {
+   const response  = await userStore.$getSubscriptionStatus();
+
+   if(response.ok){
+    dataSubscriptionBanner.value = response.data.subscription
+     if(response.data.subscription.status != 0){
+        showSuscriptionBanner.value = true
+     }
+   }
+   
+}
+
 
 provide('isNotifyPanelVisible',isNotifyPanelVisible)
 provide('modalProfile',modalProfile)

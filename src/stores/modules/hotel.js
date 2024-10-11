@@ -134,7 +134,6 @@ export const useHotelStore = defineStore('hotel', () => {
             const { ok } = response;
             
             hotelsByUserAvailables.value = ok ? response.data : null
-            console.log('loadHotelsByUser',hotelsByUserAvailables.value)
         //}
     }
 

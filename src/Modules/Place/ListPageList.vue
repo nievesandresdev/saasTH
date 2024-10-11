@@ -1,120 +1,12 @@
 <template>
-    <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms">
+    <!-- <div class="fixed top-10 left-10 bg-red-100 text-red-400 text-xl z-[10000] p-1">{{numberCardsToLoad}}</div> -->
+    <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms" :class="{'hbg-gray-500 htext-gray-500 rounded-[6px] animate-pulse w-[400px]':firstLoad}">
         {{ textNumbersPlacesVisiblesAndHidden }}
     </p>
     <template v-if="placesData.length > 0">
-        <div id="list-places" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
-            <template v-for="(place, index) in placesData">
-                <div
-                    v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !place?.is_visible && placesData[index-1]?.is_visible"
-                    class="w-[789px] 3xl:w-[1216px] relative"
-                >
-                    <div
-                        class="z-50 flex items-center divider"
-                        style="margin:0 !important; padding:0 !important; "
-                    >
-                        <div class="flex-grow bg-gray-300 border-t"></div>
-                        <p class="mx-6 w-[198px] text-center text-sm font-medium">
-                            {{numberPlacesHidden}}
-                            {{numberPlacesHidden > 1 ? 'lugares ocultos':'lugar oculto'}}
-
-                        </p>
-                        <div class="flex-grow bg-gray-300 border-t"></div>
-                    </div>
-                </div>
-                <div
-                    class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
-                    @dragover="handlerDragOver"
-                    @drop="handlerDrop(index, item)"
-                    :draggable="true"
-                    @dragstart="handlerDragStart(index, $event)"
-                    @dragend="handlerDragEnd"
-                    ref="draggableCard"
-                    :class="{'shadow-draginng border border-gray-300' : place.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
-                    @mouseover="hoverItem = index"
-                    @mouseleave="hoverItem = null"
-                    @click="editPlace(place)"
-                >
-                    <div class="w-[224px] h-[148px] rounded-t-[10px] relative">
-                        <img
-                            class="w-[224px] h-[148px] rounded-t-[10px]"
-                            loading="lazy"
-                            :src="placeStore.formatImage(place.place_images?.[0])"
-                        >
-                        <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
-                            <span class="text-[10px] font-semibold">{{place.is_visible ? 'Visible' : 'Oculto'}}</span>
-                            <BaseSwichInput
-                                v-model="place.is_visible"
-                                :id="`swich-visible-facility-${index}`"
-                                @change:value="updateVisible(place)"
-                                @click="handlerClickSwichVisibility"
-                            />
-                        </div>
-                        <div
-                            v-if="place.featured || ((hoverItem == index) && place.is_visible)"
-                            class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
-                            :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
-                            @click.prevent="updateRecommendation($event, place)"
-                        >
-                            <img
-                                class=""
-                                :src="`/assets/icons/1.TH.REVIEW.${place.featured ? 'WHITE' : 'OUTLINE'}.svg`"
-                                alt="1.TH.WHITE"
-                            >
-                            <span
-                                class="text-[10px] font-semibold"
-                                :class="place.featured ? 'htext-white-100' : 'htext-black-100'"
-                            >
-                                 {{ place.featured ? 'Recomendado' : 'Recomendar' }}
-                            </span>
-                        </div>
-                    </div>
-                    <div
-                        v-if="place.is_visible == 0"
-                        class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
-                    />
-                    <div class="pt-2 px-2 pb-4 truncate-2 space-y-[8px]">
-                        <div class="flex items-center space-x-[4px] pb-[7px]">
-                            <span class="text-[22px] font-medium htext-black-100">{{converStar(place.num_stars).toFixed(1)}}</span>
-                            <div>
-                                <div class="flex flec-col">
-                                    <img 
-                                        v-for="star in Math.round(converStar(place.num_stars))"
-                                        :key="star"
-                                        class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
-                                    >
-                                </div>
-                                <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reseñas</p>
-                            </div>
-                        </div>
-                        <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
-                        <!-- {{ place.id }} -->
-                        <div class="flex space-x-1">
-                            <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ place.city }}</p>
-                        </div>
-                        <div v-if="place.distance" class="flex space-x-1">
-                            <img class="" src="/assets/icons/1.TH.FOOTSTEP.svg" alt="1.TH.FOOTSTEP">
-                            <p class="text-[10px] font-semibold htext-black-100">{{ `a ${place.distance}Km`}}</p>
-                        </div>
-                        <button
-                            v-if="hoverItem == index && place.is_visible"
-                            class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
-                            :class="{'cursor-grabbing ': dragStartIndex == index}"
-                            @mousedown="setDragStart(index)"
-                        >
-                            <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
-                        </button>
-                    </div>
-                </div>
-            </template>
-            <!-- <PanelEdit
-                ref="panelEditRef"
-                @load:resetPageData="resetPageData()"
-            /> -->
-        </div>
+        
     </template>
-    <template v-else>
+    <template v-if="!firstLoad && !placesData.length">
         <div class="flex flex-col justify-center items-center space-y-4 mt-[85px]">
             <div>
                 <img src="/assets/img/1.TH.NO.RECORDS.png" alt="1.TH.NO.RECORDS">
@@ -124,7 +16,114 @@
             </div>
         </div>
     </template>
-    <div v-if="(placesData.length > 0) && (placesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
+    <div v-else id="list-places" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
+        <template v-for="(place, index) in placesData">
+            <div
+                v-if="(!formFilter.visibility || formFilter.visibility == 'recommendated') && !place?.is_visible && placesData[index-1]?.is_visible && !isloadingForm"
+                class="w-[789px] 3xl:w-[1216px] relative"
+            >
+                <div
+                    class="z-50 flex items-center divider"
+                    style="margin:0 !important; padding:0 !important; "
+                >
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                    <p class="mx-6 w-[198px] text-center text-sm font-medium">
+                        {{numberPlacesHidden}}
+                        {{numberPlacesHidden > 1 ? 'lugares ocultos':'lugar oculto'}}
+
+                    </p>
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                </div>
+            </div>
+            <div
+                class="w-[224px] hbg-white-100 rounded-[10px] shadow-card cursor-pointer relative"
+                @dragover="handlerDragOver"
+                @drop="handlerDrop(index, item)"
+                :draggable="true"
+                @dragstart="handlerDragStart(index, $event)"
+                @dragend="handlerDragEnd"
+                ref="draggableCard"
+                :class="{'shadow-draginng border border-gray-300' : place.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
+                @mouseover="hoverItem = index"
+                @mouseleave="hoverItem = null"
+                @click="editPlace(place)"
+            >
+                <div class="w-[224px] h-[148px] rounded-t-[10px] relative">
+                    <img
+                        class="w-[224px] h-[148px] rounded-t-[10px]"
+                        loading="lazy"
+                        :src="placeStore.formatImage(place.place_images?.[0])"
+                    >
+                    <div v-if="hoverItem == index" class="hover-swich hbg-gray-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-40">
+                        <span class="text-[10px] font-semibold">{{place.is_visible ? 'Visible' : 'Oculto'}}</span>
+                        <BaseSwichInput
+                            v-model="place.is_visible"
+                            :id="`swich-visible-facility-${index}`"
+                            @change:value="updateVisible(place)"
+                            @click="handlerClickSwichVisibility"
+                        />
+                    </div>
+                    <div
+                        v-if="place.featured || ((hoverItem == index) && place.is_visible)"
+                        class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
+                        :class="place.featured ? 'hbg-green-600' : 'hbg-white-100'"
+                        @click.prevent="updateRecommendation($event, place)"
+                    >
+                        <img
+                            class=""
+                            :src="`/assets/icons/1.TH.REVIEW.${place.featured ? 'WHITE' : 'OUTLINE'}.svg`"
+                            alt="1.TH.WHITE"
+                        >
+                        <span
+                            class="text-[10px] font-semibold"
+                            :class="place.featured ? 'htext-white-100' : 'htext-black-100'"
+                        >
+                                {{ place.featured ? 'Recomendado' : 'Recomendar' }}
+                        </span>
+                    </div>
+                </div>
+                <div
+                    v-if="place.is_visible == 0"
+                    class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
+                />
+                <div class="pt-2 px-2 pb-4 truncate-2 space-y-[8px]">
+                    <div class="flex items-center space-x-[4px] pb-[7px]">
+                        <span class="text-[22px] font-medium htext-black-100">{{converStar(place.num_stars).toFixed(1)}}</span>
+                        <div>
+                            <div class="flex flec-col">
+                                <img 
+                                    v-for="star in Math.round(converStar(place.num_stars))"
+                                    :key="star"
+                                    class="w-[12px] h-[12px]" src="/assets/icons/1.TH.REVIEW.svg"
+                                >
+                            </div>
+                            <p class="text-[10px] font-semibold htext-black-100">{{ place.num_reviews }} reseñas</p>
+                        </div>
+                    </div>
+                    <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ place.title }}</h6>
+                    <!-- {{ place.id }} -->
+                    <div class="flex space-x-1">
+                        <img class="" src="/assets/icons/1.TH.LOCATION.svg" alt="1.TH.LOCATION">
+                        <p class="text-[10px] font-semibold htext-black-100">{{ place.city }}</p>
+                    </div>
+                    <div v-if="place.distance" class="flex space-x-1">
+                        <img class="" src="/assets/icons/1.TH.FOOTSTEP.svg" alt="1.TH.FOOTSTEP">
+                        <p class="text-[10px] font-semibold htext-black-100">{{ `a ${place.distance}Km`}}</p>
+                    </div>
+                    <button
+                        v-if="hoverItem == index && place.is_visible"
+                        class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
+                        :class="{'cursor-grabbing ': dragStartIndex == index}"
+                        @mousedown="setDragStart(index)"
+                    >
+                        <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
+                    </button>
+                </div>
+            </div>
+        </template>
+        <SkeletonCardPlace v-for="card in numberCardsToLoad" />
+    </div>
+    <!-- <div v-if="(placesData.length > 0) && (placesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
         <button
             v-if="!isloadingForm"
             class="text-sm font-medium text-center rounded-lg py-[13px] px-[16px] border border-black htext-black-100"
@@ -151,14 +150,16 @@
                 <img class="spinner-icon  w-[40px] h-[40px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
+import { $throttle, $isElementVisible } from '@/utils/helpers'
 
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import PanelEdit from "./components/PanelEdit.vue";
+import SkeletonCardPlace from "./components/SkeletonCardPlace.vue";
 
 const emits = defineEmits(['reloadPlaces', 'edit']);
 
@@ -175,6 +176,7 @@ const numberPlacesVisible = inject('numberPlacesVisible');
 const numberPlacesHidden = inject('numberPlacesHidden');
 const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
+const firstLoad = inject('firstLoad');
 
 const toast = inject('toast');
 const mockupStore = inject('mockupStore');
@@ -185,7 +187,7 @@ const dragStartIndex = ref(null);
 const draggedItem = ref(null);
 const hoverItem = ref(null);
 const isloadingForm = ref(false);
-
+const defNumberCardsToLoad = ref(10);
 // REFS
 const draggableCard = ref(null);
 
@@ -218,8 +220,39 @@ const textNumbersPlacesVisiblesAndHidden = computed(() => {
     return text;
 });
 
+const totalPlaces = computed(() => {
+    return numberPlacesVisible.value + numberPlacesHidden.value;
+});
 
+const numberCardsToLoad = computed(() => {
+    if(firstLoad.value) return defNumberCardsToLoad.value;
+    if(!firstLoad.value && totalPlaces.value == 0) return 0;
+    let remaining = totalPlaces.value - placesData.value.length;
+    if(remaining < defNumberCardsToLoad.value && totalPlaces.value > 0){
+        return remaining;
+    } 
+    return defNumberCardsToLoad.value;
+});
+
+onMounted(() => {
+    initScrollListener();
+})
 // FUNCTIONS
+function initScrollListener() {
+    const container = document.querySelector('#main-content');
+    container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
+}
+
+function checkLoadMore() {
+    const skeletons = document.querySelectorAll('.skeleton-place-card');
+    for (let skeleton of skeletons) {
+        if ($isElementVisible(skeleton) && !isloadingForm.value) {
+            loadMore();
+            break;
+        }
+    }
+    
+}
 
 const setDragStart = (index) => {
   dragStartIndex.value = index;
@@ -315,18 +348,15 @@ function converStar(value){
     return parseFloat(value.replace(",", "."));
 }
 
-function loadMore ({showLoadingMore}) {
+function loadMore () {
     page.value += 1;
-    
-    loadPlaces({ showPageLoading: false, showLoadingMore  });
+    loadPlaces();
 }
 
-async function loadPlaces ({ showPageLoading, showLoadingMore }) {
-    if (showLoadingMore) {
-        isloadingForm.value=true;
-    }
-    // console.log(formFilter, 'form')
-    const response = await placeStore.$getAll({page: page.value,...formFilter}, { showPreloader: showPageLoading });
+async function loadPlaces () {
+    // console.log('loadPlaces')
+    isloadingForm.value=true;
+    const response = await placeStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
         let paginate = {
             total: response.data.places.meta.total,
@@ -343,6 +373,7 @@ async function loadPlaces ({ showPageLoading, showLoadingMore }) {
         numberPlacesHidden.value = paginate.total - numberPlacesVisible.value;
     }
     isloadingForm.value=false;
+    firstLoad.value=false;
 }
 defineExpose({ loadPlaces });
 
@@ -367,6 +398,7 @@ function handlerClickSwichVisibility (event) {
     event.stopPropagation();
 }
 async function updateVisible (place) {
+    isloadingForm.value = true;
     if (changePendingInForm.value) {
         openModalChangeInForm();
         place.select = !facility.select;
