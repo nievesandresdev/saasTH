@@ -87,7 +87,7 @@ async function submitSearch () {
     // .catch((error)=>{
     //     console.log(error, 'error')
     // })
-    const response = await placeStore.$getAll(data, { showPreloader: false });
+    const response = await placeStore.$getAll(data);
     if (response.ok) {
         console.log(response.data.places, 'response.data.places.data');
         searchList.value = response.data.places.data;

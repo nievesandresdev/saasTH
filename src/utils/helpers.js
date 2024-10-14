@@ -115,7 +115,7 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
 
 const $urlBaseWebapp = () => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
-  let subdomain = sessionStorage.getItem('current_subdomain');
+  let subdomain = localStorage.getItem('current_subdomain');
   let urlBase = GUEST_URL.replace('subdomain', subdomain);
   return urlBase;
 }
@@ -144,6 +144,38 @@ const $formatTypeLodging = (valueType) => {
   return typeLodging?.[valueType] ?? null;
 }
 
+function $throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function() {
+      const context = this;
+      const args = arguments;
+      if (!lastRan) {
+          func.apply(context, args);
+          lastRan = Date.now();
+      } else {
+          clearTimeout(lastFunc);
+          lastFunc = setTimeout(function() {
+              if ((Date.now() - lastRan) >= limit) {
+                  func.apply(context, args);
+                  lastRan = Date.now();
+              }
+          }, limit - (Date.now() - lastRan));
+      }
+  }
+}
+
+function $isElementVisible(el) {
+  if (!el) return false;
+  const rect = el.getBoundingClientRect();
+  return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
 export {
     $getRoleName,
     $isAssociate,
@@ -155,5 +187,7 @@ export {
     $getPropertyInUrl,
     $urlBaseWebapp,
     $formatImage,
-    $formatTypeLodging 
+    $formatTypeLodging,
+    $throttle,
+    $isElementVisible
 };

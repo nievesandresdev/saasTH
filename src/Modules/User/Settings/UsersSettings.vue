@@ -1,5 +1,5 @@
 <template>
-    <div class="px-6 bg-[#FAFAFA] flex flex-col min-h-screen">
+    <div class="px-6 bg-[#FAFAFA] flex flex-col min-h-screen overflow-hidden">
       <h1 class="text-[22px] font-medium leading-[110%] py-5 z-[600]">Equipo - Usuarios</h1>
       <hr class="bg-[#BFBFBF] z-[600]">
       <div class="flex justify-between items-center mt-6 z-[600]">
@@ -49,7 +49,7 @@
                 @mouseover="hoverTable(index)"
                 @mouseleave="hoverTable(index)"
                 :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 "
+                class="border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-[#F1F1F1]"
                 :class="{
                   'bg-[#ECF9F5]': selectedShow == user.id,
                   'hover:bg-[#F1F1F1]': selectedUser?.id != user.id,
@@ -57,7 +57,7 @@
                 }"
               >
                 <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-normal break-words w-1/4">
-                  {{ user.name }}
+                  {{ user.name }} {{ user.profile?.lastname }}
                 </th>
                 <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
                   {{ user.work_position }}
@@ -73,7 +73,8 @@
                     Inactivo
                   </span>
                 </td>
-                <td class="pl-10 py-4 whitespace-normal break-words w-1/4">
+                <td class="pl-10 py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
+                  
                   <Toggle
                     :user="user"
                     :index="index"
@@ -190,14 +191,20 @@
   import { useUserStore } from '@/stores/modules/users/users';
   import ModalWindow from '@/components/ModalWindow.vue';
   import { useToastAlert } from '@/composables/useToastAlert';
+  import { useRoute } from 'vue-router';
+  import { useAuthStore } from '@/stores/modules/auth/login';
   
   const modalAdd = ref(false);
   const workPositionsData = ref([]);
+
+  const authStore = useAuthStore();
   
   const modalEdit = ref(false);
   const modalShow = ref(false);
   const deleteUser = ref(false);
   const visibleDropdown = ref(null);
+
+  const route = useRoute()
   
   const selectedUser = ref(null);
   const userData = ref({});
@@ -228,10 +235,23 @@
   
   onMounted(() => {
     handleGetUsers();
-    handleTestMail();
+    //handleTestMail();
     adjustBodyPadding(); // Ajustar el padding al cargar la página
     window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
+
+
+    const nParam = route.query.n
+    if (nParam) {
+      console.log(`El valor de n es: ${nParam}`)
+      handleGetuserById(nParam)
+    }
   });
+
+  const  handleGetuserById = async (id) => {
+    const response = await userStore.$getUserById(id);
+    console.log('responsegetuserbyid', response);
+    editUser(response.data.user);
+  };
   
   const handleConfirmCreateUser = () => {
     handleGetUsers();

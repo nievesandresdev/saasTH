@@ -25,8 +25,8 @@ export const useExperienceStore = defineStore('experience', () => {
 
     }
 
-    async function $getAll (params, config = {}) {
-        const response = await experienceService.getAllApi(params, config);
+    async function $getAll (params) {
+        const response = await experienceService.getAllApi(params);
         return response;
     }
 
@@ -38,8 +38,8 @@ export const useExperienceStore = defineStore('experience', () => {
         return response.data
     }
 
-    async function $updateVisibility (params, config = {}) {
-        const response = await experienceService.updateVisibilityApi(params, config);
+    async function $updateVisibility (params) {
+        const response = await experienceService.updateVisibilityApi(params);
         return response;
         const { ok } = response
         hotelData.value = ok ? response.data : null

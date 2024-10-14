@@ -9,11 +9,16 @@ export const createWorkPosition = (data) => apiHttp('POST', `${userPath}/work-po
 export const updateWorkPosition = (data) => apiHttp('POST', `${userPath}/work-position/update`, data)
 export const deleteWPosition = (data) => apiHttp('POST', `${userPath}/work-position/delete`, data)
 
+//getTrial
+export const getTrial = () => apiHttp('GET', `${userPath}/getTrial`,[], { showPreloader: false })
+//getStatusSubscription
+export const getStatusSubscription = () => apiHttp('GET', `${userPath}/getStatusSubscription`,[], { showPreloader: false })
+
 //users
 //getUserData
 export const getUserData = (params) => apiHttp('GET', `${userPath}/getUserData`,params)
 export const getUsers = (params) => apiHttp('GET', `${userPath}/getUsers`,params , { showPreloader: false })
-export const getUser = () => apiHttp('GET', `${userPath}/getUser`)
+export const getUser = (params) => apiHttp('GET', `${userPath}/getUser/${params}`)
 export const createUser = (data) => apiHttp('POST', `${userPath}/store`, data)
 export const updateUser = (data) => apiHttp('POST', `${userPath}/update`, data)
 export const updateProfile = (data) => apiHttp('POST', `${userPath}/update-profile`, data)

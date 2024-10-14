@@ -10,7 +10,7 @@
       >
      
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-[20px] mt-4">
+          <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
             <div class="flex-1 text-left">
               <h1 class="font-medium text-[22px]">Editar usuario</h1>
             </div>
@@ -20,6 +20,18 @@
               </button>
             </div>
           </div>
+          <!-- <div class="flex justify-between items-center px-6 py-[20px]">
+                <div class="flex justify-end">
+                </div>
+                <div class="flex-1 text-center">
+                  <h1 class="font-medium text-xl">Crear usuario</h1>
+                </div>
+                <div class="flex justify-end">
+                  <button class="" @click="closeModal">
+                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
+                  </button>
+                </div>
+              </div> -->
   
           <div class="pb-6 pr-6 pl-6">
             <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
@@ -243,12 +255,12 @@
         </div>
   
         <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
-          <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+          <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto px-4">
               Cancelar
           </button>
           <button
             class="px-4 py-2 font-medium rounded text-black"
-            @click="currentStep === 4 ? handleUpdateUser() : nextStep()"
+            @click.stop.prevent="currentStep === 4 ? handleUpdateUser() : nextStep()"
             :disabled="isFormIncomplete"
             :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
           >
@@ -290,6 +302,7 @@
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
+  import { useAuthStore } from '@/stores/modules/auth/login';
   
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
@@ -298,6 +311,10 @@
 
   const router = useRouter();
   const route = useRoute();
+
+  const authStore = useAuthStore();
+
+  const nParam = route.query.n;
 
 
   const initPermissions = ref([])
@@ -309,9 +326,14 @@
     dataUser : Object
   });
 
-  const getWorkPositions = () => {
+  const getWorkPositions = (workPosition = false) => {
     emits('workPositionGet');
     emits('handleDeleteWP');
+
+    if(workPosition === form.value.work_position_id){
+      form.value.work_position_id = null
+      selectedWorkPositionName.value = 'Elige el puesto de trabajo';
+    }
   };
 
   const isDeleteWorkPositions = ref(false);
@@ -321,6 +343,10 @@
     //emits('deleteWP',option);
     isDeleteWorkPositions.value = true;
     IdDeleteWP.value = option;
+
+    
+
+    //console.log('deleteWorkPosition',selectedWorkPositionName.value,option,form.value.work_position_id)
   }
 
   const closeDeleteWorkPositions = () => {
@@ -959,9 +985,17 @@ const scrollToStep = (index) => {
   let store = await userStore.$updateUser(form.value);
 
   if (store.ok) {
-    clearForm()
+    //clearForm()
+    closeModal(true)
     toast.warningToast('Usuario editado correctamente','top-right')
     emits('update');
+    if(authStore?.user?.id === store.data.user.id){
+      authStore.$setUser(store.data.user);
+    }
+
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
 
 
   } else {
@@ -1068,6 +1102,10 @@ const closeModalEditUser = () => {
 
   onMounted(() => {
     initialForm.value = JSON.stringify(form);
+
+   /*  if(nParam){
+      currentStep.value = 4
+    } */
   });
   
 
@@ -1088,6 +1126,8 @@ function closeModal(complete = false) {
         emits('close');
         currentStep.value = 1;
     }
+
+    isModalCrudOpen.value = false;
 
 
     /* emits('close');

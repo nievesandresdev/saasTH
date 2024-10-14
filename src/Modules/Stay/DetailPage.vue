@@ -46,7 +46,7 @@ onBeforeRouteLeave((to, from, next) => {
 });
 
 const deleteSession = async () => {
-    let user = JSON.parse(sessionStorage.getItem('user'));
+    let user = JSON.parse(localStorage.getItem('user'));
     if(user){
         await staySessionsStore.$deleteSession(route.params.stayId ,'sessions', user.email);
     }

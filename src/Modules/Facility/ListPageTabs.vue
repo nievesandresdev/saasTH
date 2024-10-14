@@ -1,18 +1,27 @@
 <template>
     <div class="flex mt-4">
         <div
-         
             class="px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] cursor-pointer"
-            :class="{'htext-gray-500':facilitiesEmpty, 'border hborder-green-700 hbg-green-200 htext-green-600' : filter === 'visible', 'border htext-black-100 hborder-gray-400 htext-gray-500' : filter !== 'visible'}"
-            @click="changeVisibility('visible')"
+            :class="{
+                'htext-gray-500':facilitiesEmpty && !firstLoading, 
+                'border hborder-green-700 hbg-green-200 htext-green-600' : filter === 1 && !firstLoading, 
+                'border htext-black-100 hborder-gray-400 htext-gray-500' : filter !== 1 && !firstLoading,
+                'hbg-gray-500 htext-gray-500 animate-pulse' : firstLoading,
+            }"
+            @click="changeVisibility(1)"
             :disabled="facilitiesEmpty"
         >
             Visibles
         </div>
         <div 
             class=" px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] ml-4 cursor-pointer"
-            :class="{'htext-gray-500':facilitiesEmpty, 'border hborder-green-700 hbg-green-200 htext-green-600' : filter === 'hidden', 'border htext-black-100 hborder-gray-400 htext-gray-500' : filter !== 'hidden'}"
-            @click="changeVisibility('hidden')"
+            :class="{
+                'htext-gray-500':facilitiesEmpty, 
+                'border hborder-green-700 hbg-green-200 htext-green-600' : filter === 0 && !firstLoading, 
+                'border htext-black-100 hborder-gray-400 htext-gray-500' : filter !== 0 && !firstLoading,
+                'hbg-gray-500 htext-gray-500 animate-pulse' : firstLoading,
+            }"
+            @click="changeVisibility(0)"
             :disabled="facilitiesEmpty"
         >
             Ocultas
@@ -23,8 +32,7 @@
 <script setup>
     import { ref, reactive, onMounted, provide, computed, inject, nextTick } from 'vue';
 
-    // DATA
-    
+    const emit = defineEmits(['update:reloadItems']);
 
     // INJECT
     const filter = inject('filter');
@@ -36,6 +44,7 @@
     const changePendingInForm = inject('changePendingInForm');
     //
     const hotelStore = inject('hotelStore');
+    const firstLoading = inject('firstLoading');
 
     // FUNCTIONS
 
@@ -51,6 +60,7 @@
         }else{
             filter.value = visibility;    
         }
+        emit('update:reloadItems')
     }
 
     function openModalChangeInForm () {

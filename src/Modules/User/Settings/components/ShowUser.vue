@@ -7,7 +7,7 @@
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-          <div class="flex justify-between items-center px-6 py-5">
+          <div class="flex justify-between items-center px-6 py-5 h-[64px]">
             <div class=" text-center">
               <h1 class="font-[500] text-[22px]">Perfil del usuario</h1>
             </div>
@@ -117,7 +117,7 @@
         >
             <button
                 v-show="authStore.user.id != dataUser.id"
-                class="underline font-medium text-sm"
+                class="underline font-medium text-sm px-4"
                 @click="deleteUser(dataUser)"
             >
                Eliminar

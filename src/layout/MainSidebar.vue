@@ -8,7 +8,7 @@
   >
     <!-- select hotel -->
     <DropdownChangeHotel :width-menu="widthMenu" :displayed-menu="displayedMenu" />
-    <div class="overflow-y-auto bg-white no-scrollbar">
+    <div class=" bg-white no-scrollbar">
       <!-- links -->
       <router-link
         @mousemove="handleMouseMove('Dashboard')"
@@ -37,37 +37,106 @@
           </p>
         </div>
         <div 
-          class="rounded-[10px] hbg-green-200"
+          v-for="(link, indexLink) in section.group" 
+          :key="indexLink"
+          :class="[
+            'bg-[#E2F8F2]',
+            checkPermission(link) || checkSubscriptionStatus(link) ? 'bg-opacity-50' : '',
+            indexLink === 0 ? 'rounded-t-[10px]' : '',
+            indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
+          ]"
         >
-          <!-- <router-link
-            v-for="(link, indexLink) in section.group" :key="indexLink"
-            :to="link.url"
-            @mousemove="handleMouseMove(link.title)"
-            @click="handleMenuItemClick(link.title)"
-            class="rounded-[10px] flex items-center p-2 relative"
-            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
-          > -->
           <router-link
-            v-for="(link, indexLink) in section.group" :key="indexLink"
-            :to="link.url"
-            @click="handleMenuItemClick(link.title)"
-            class="rounded-[10px] flex items-center p-2 relative"
-            :class="{'hbg-green-600 shadow-lg': link.include.includes($route.name), 'hover-gray-100': !link.include.includes($route.name)}"
+            :to="checkPermission(link) || checkSubscriptionStatus(link) ? '#' : link.url"
+            @click="handleMenuItemClick($event, link, indexLink)"
+            class="flex items-center p-2 relative rounded-[10px]"
+            @mouseover="handleMouseOverTooltip(link, indexLink,props.subscription.status)"
+            @mouseleave="handleMouseLeaveTooltip(link, indexLink,props.subscription.status)"
+            :class="[
+              link.include.includes($route.name) ? 
+                [
+                  'hbg-green-600 shadow-lg',
+                  indexLink === 0 ? 'rounded-t-[10px]' : '',
+                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+                ] 
+                : 
+                [
+                  checkPermission(link) || checkSubscriptionStatus(link) ? '' : 'hover:bg-gray-100',
+                  indexLink === 0 ? 'rounded-t-[10px]' : '',
+                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+                ],
+              checkPermission(link) || checkSubscriptionStatus(link) ? 'cursor-not-allowed' : 'cursor-pointer',
+            ]"
           >
-            <!-- notification icon -->
-            <img 
+          <!-- notification icon -->
+          <img 
               class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
               src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
               alt="notification icon"
               v-if="(link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)) || (link.title == 'Reseñas' && conuntReviewsPending > 0)"
             >
-
-            <img class="w-6 h-6" :src="`/assets/icons/${link.icon}.svg`" :class="{'icon-white': link.include.includes($route.name)}">
+            <!-- Icono -->
+            <img 
+              class="w-6 h-6" 
+              :src="`/assets/icons/${link.icon}.svg`" 
+              :class="{
+                'icon-white': link.include.includes($route.name),
+                'opacity-50': checkPermission(link) || checkSubscriptionStatus(link)
+              }"
+            >
+            
+            <!-- Texto -->
             <div :class="widthMenu">
-              <p class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]" :class="{'text-white': link.include.includes($route.name)}">{{link.title}}</p>
+              <p 
+                class="text-sm font-semibold ml-2 whitespace-nowrap text-left leading-[120%]"
+                :class="{
+                  'text-white': link.include.includes($route.name),
+                  'opacity-25': checkPermission(link) || checkSubscriptionStatus(link)
+                }"
+              >
+                {{ link.title }}
+              </p>
+            </div>
+            
+            <!-- Tooltip manual -->
+            <div
+              v-if="!permissions[link.permissionName] && showTooltip[link.permissionName]"
+              class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
+              :style="{
+                top: '70%',
+                left: '70%',
+                transform: 'translate(-50%, 8px)'
+              }"
+            >
+              <p class="text-sm font-normal">
+                Necesitas permisos para acceder a esta sección. Solicita acceso a tu responsable o superior para poder entrar.
+              </p>
+            </div>
+
+            <!-- Tooltip subscripcion -->
+            <div
+              v-if="showSubscriptionTooltip[link.permissionName]"
+              class="absolute z-[90000] p-4 bg-white rounded-[10px] shadow-tooltip w-[290px]"
+              :style="{
+                top: '70%',
+                left: '70%',
+                transform: 'translate(-50%, 8px)'
+              }"
+            >
+            <h5 class="text-sm font-medium mb-4">
+              No estás suscrito
+                </h5>
+                <p class="text-sm mb-4">
+                  Tú periodo de free trial ha concluido. Para tener acceso a la operación de tu alojamiento y poder seguir disfrutando de la experiencia TheHoster al completo contacta con nosotros y gestiona tu suscripción con nuestro comercial,
+                </p>
+                <p class="text-sm">
+                  Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte
+                </p>
             </div>
           </router-link>
         </div>
+
+
       </template>
 
       <!-- help, user and news -->
@@ -109,6 +178,7 @@
             >{{ authStore.fullName }}</p>
           </div>
         </button> -->
+        <!-- <pre>{{ permissions }}</pre> -->
         <button 
           @mousemove="handleMouseMove('User Profile')"
           @click="modalProfile = true"
@@ -136,7 +206,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, provide, inject } from 'vue'
+import { ref, computed, onMounted, onUnmounted, provide, inject,reactive } from 'vue'
 import { getPusherInstance, isChannelSubscribed, setChannelSubscribed } from '@/utils/pusherSingleton'
 import { useRoute, useRouter } from 'vue-router'
 //components
@@ -148,6 +218,14 @@ import { useHotelStore } from '@/stores/modules/hotel'
 import { useQueryStore } from '@/stores/modules/queries/query'
 import { useChatStore } from '@/stores/modules/chat/chat'
 import { useReviewStore } from '@/stores/modules/review'
+import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+
+const props = defineProps({
+  subscription: {
+      type: Object,
+      default: () => ({}),
+  },
+})
 
 const emit = defineEmits(['openmodalHelp'])
 const route = useRoute()
@@ -160,6 +238,42 @@ const chatStore = useChatStore()
 const reviewStore = useReviewStore()
 
 const userAvatar = computed(() => userStore.$userAvatar);
+const permissions = computed(() => authStore.$getPermissions || {});
+
+const showTooltip = reactive({});
+const showSubscriptionTooltip = reactive({});
+
+function handleMouseOverTooltip(link, indexLink, status = null) {
+  // console.log('permissions[link.permissionName]',Object.keys(permissions.value).length)
+  if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
+    showTooltip[link.permissionName] = true;
+  }
+
+  if (checkSubscriptionStatus(link)) {
+    showSubscriptionTooltip[link.permissionName] = true;
+  }
+}
+
+function handleMouseLeaveTooltip(link, indexLink,status = null) {
+
+  if (checkSubscriptionStatus(link)) {
+    showSubscriptionTooltip[link.permissionName] = false;
+  }
+  
+  if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
+    showTooltip[link.permissionName] = false;
+  }
+}
+
+const checkSubscriptionStatus = (link) => {
+    return (props.subscription.status == 2 || props.subscription.status == 3) && link?.subscription == true;
+};
+
+const checkPermission = (link) => {
+    return !permissions.value[link.permissionName] && Object.keys(permissions.value).length > 0;
+};
+
+
 
 provide('hotelStore', hotelStore);
 const isNotifyPanelVisible = inject('isNotifyPanelVisible');
@@ -188,38 +302,23 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-      //  console.log('NotifySendQueryEvent',data)
-       let routeData = {
-            name : 'StayQueryDetail',
-            params : { stayId : data.stayId },
-            query : { g : data.guestId }
-          };
-        showNotification(data.title,data.text,routeData,10000);
-        if(data.countPendingQueries){
-          countPendingQueries.value = data.countPendingQueries;
-        }
-        // countPendingQueries.value = await queryStore.$countPendingByHotel();
-        //loadExistsPending();
+      //
+      // console.log('test NotifySendQueryEvent',data)
+      if(data.countPendingQueries){
+        countPendingQueries.value = data.countPendingQueries;
+      }
+      //notify the hoster
+      notifyFeedback(data)
+      //
     });
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
-        // console.log('NotifyUnreadMsg',data)
-        if(!Number(data.automatic) && data.guest){
-            let room_text =  'Estancia: nº habitación ';
-            data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
-            let routeData = {
-              name : 'StayChatRoom',
-              params : { stayId : data.stay_id },
-              query : { g : data.guest_id }
-            };
-            showNotification(room_text, data.text, routeData, 10000);
-        }
+        notifyChat(data)
     });
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
-        // console.log('NotifyStayHotelEvent',data)
         if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
@@ -231,7 +330,44 @@ const handleMouseMove = () => {
   isMouseMoving.value = true
 }
 
+const notifyFeedback = (data) => {
+  
+  let currentUserid = authStore.user?.id;
+  let routeData = {
+    name : 'StayQueryDetail',
+    params : { stayId : data.stayId },
+    query : { g : data.guestId }
+  };
 
+  if(data.concept == "pending" && data.userId && data.userId == currentUserid){
+    showNotification(data.title,data.text,routeData,10000);   
+  }
+  if(data.concept == "new"){
+    showNotification(data.title,data.text,routeData,10000);   
+  }
+}
+
+
+const notifyChat = (data) =>{
+  let currentUserid = authStore.user?.id;
+  if(!Number(data.automatic) && data.guest){
+      let room_text =  'Estancia: nº habitación ';
+      data.room ? room_text=room_text+data.room : room_text=room_text+'no asignado';
+      let routeData = {
+        name : 'StayChatRoom',
+        params : { stayId : data.stay_id },
+        query : { g : data.guest_id }
+      };
+
+      if(data.concept == "pending" && data.user_id && data.user_id == currentUserid){
+        showNotification(room_text, data.text, routeData, 10000);
+      }
+      if(data.concept == "new"){
+        showNotification(room_text, data.text, routeData, 10000);
+      }
+      
+  }
+}
 
 const handleMenuItemClick = (nameButtom) => {
   isMouseMoving.value = false;
@@ -243,6 +379,7 @@ const handleMenuItemClick = (nameButtom) => {
   }
 }
 
+
 const menu_links = ref([
   {
     title: 'Operación',
@@ -252,12 +389,16 @@ const menu_links = ref([
         icon: '1.TH.ESTANCIAS.MM',
         include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
         url: '/estancias',
+        permissionName: 'estancias',
+        subscription: true
       },
       {
         title: 'Reseñas',
         icon: '1.TH.REVIEW.MM',
         include: ['Reviews','ReviewDetail'],
         url: '/resenas',
+        permissionName: 'resenas',
+        subscription: true
       },
     ],
   },
@@ -298,6 +439,8 @@ const menu_links = ref([
           'PolicyCookiesLegal',
         ],
         url: '/webapp',
+        permissionName: 'webapp',
+        subscription : false
       },
       /* {
         title: 'Comunicaciones',
@@ -310,6 +453,7 @@ const menu_links = ref([
         icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
         url: '/equipo/configuracion/plataformas-externas',
+        permissionName: 'hoster'
       },
     ],
   },
@@ -376,6 +520,8 @@ const displayNotification = (title, text, route, timeout) => {
 }
 onMounted(async() => {
     hotelStore.loadHotelsAvailables(true);
+    hotelStore.loadHotelsByUser();
+    
     countPendingQueries.value = await queryStore.$countPendingByHotel();
     countPendingChats.value = await chatStore.$pendingCountByHotel();
     conuntReviewsPending.value = await reviewStore.$countReviewsPending();
@@ -421,6 +567,10 @@ function handleMouseLeave () {
 }
 .hbg-green-600 {
   background-color: #34A98F;
+}
+
+.shadow-tooltip {
+  box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
 }
 
 </style>

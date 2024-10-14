@@ -22,12 +22,12 @@ import comunicationRoutes from './comunication'
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
 
-// Función para verificar si los datos críticos existen en sessionStorage
+// Función para verificar si los datos críticos existen en localStorage
 function isAuthenticated() {
-  const token = sessionStorage.getItem('token');
-  const current_subdomain = sessionStorage.getItem('current_subdomain');
-  const user = sessionStorage.getItem('user');
-  const current_hotel = sessionStorage.getItem('current_hotel');
+  const token = localStorage.getItem('token');
+  const current_subdomain = localStorage.getItem('current_subdomain');
+  const user = localStorage.getItem('user');
+  const current_hotel = localStorage.getItem('current_hotel');
 
   return !!token && !!current_subdomain && !!user && !!current_hotel;
 }
@@ -72,25 +72,30 @@ router.beforeEach((to, from, next) => {
   const isAuth = isAuthenticated();
 
   if (!isAuth && to.path !== '/login') {
-    sessionStorage.setItem('redirectTo', to.fullPath); // Guardar la URL original
-    //sessionStorage.clear();
+    localStorage.setItem('redirectTo', to.fullPath);
     return next('/login');
   }
+  
 
-  if (isAuth && to.path === '/login') {
-    const redirectTo = sessionStorage.getItem('redirectTo') || '/dashboard';
-    sessionStorage.removeItem('redirectTo'); 
+  if (isAuth && to.path === '/login' && !to.query.token) { //esto es para que el middleware no afecte el login desde admin
+    const redirectTo = localStorage.getItem('redirectTo') || '/dashboard';
+    localStorage.removeItem('redirectTo'); 
     return next(redirectTo);
   }
 
-  if(isAuth && sessionStorage.getItem('redirectTo') && to.path === '/dashboard') {
-    const redirectTo = sessionStorage.getItem('redirectTo') || '/dashboard';
-    sessionStorage.removeItem('redirectTo'); 
+  if (to.path === '/login' && to.query.token) {
+    return next();
+  }
+
+  if (isAuth && localStorage.getItem('redirectTo') && to.path === '/dashboard') {
+    const redirectTo = localStorage.getItem('redirectTo') || '/dashboard';
+    localStorage.removeItem('redirectTo'); 
     return next(redirectTo);
   }
 
   next();
 });
+
 
 
 

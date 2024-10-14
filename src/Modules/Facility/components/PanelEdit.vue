@@ -54,7 +54,7 @@
                     </template>
                 </div>    
             </div>
-            <div class="py-4 px-6 w-full flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
+            <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
                         class="py-3"
@@ -421,8 +421,16 @@ function closeModalForce () {
 }
 function resetData () {
     Object.assign(form, {...formDefault});
+    
+    // Vaciar el array de imágenes usando splice para mantener la reactividad
+    form.images.splice(0, form.images.length);
+    
     Object.assign(itemSelected, {...formDefault});
+    itemSelected.images.splice(0, itemSelected.images.length); // Hacer lo mismo para itemSelected
+
 }
+
+
 function resetPageData () {
     emit('load:resetPageData');
 }
