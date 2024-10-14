@@ -1,15 +1,15 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[40]"
+        class="w-full fixed top-0 left-0 z-[40]"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
-    >
-    </div>
+    ></div>
     <transition name="slide">
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
-            :class="true ? 'top-with-banner h-with-banner' : 'h-without-banner'"
+            :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             :style="`right: 353.5px;`"
             
             ref="refPanelEdit"
@@ -143,6 +143,9 @@ import ModalGallery from "@/components/ModalGallery.vue";
 
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
+
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore();
 
 const emit = defineEmits(['load:resetPageData']);
 

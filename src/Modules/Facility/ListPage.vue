@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[#FAFAFA]" :class="true ? 'h-with-banner' : 'h-without-banner'">
+    <div class="bg-[#FAFAFA]" :class="userStore.showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'">
         <!-- <h1 class="bg-red-100 p-4 fixed z-[33000] top-10 left-10">{{ String(filter) }}</h1> -->
         <div class="pb-[104px]">
             <ListPageHeader />
@@ -71,6 +71,8 @@
     provide('hotelStore', hotelStore);
     import { useMockupStore } from '@/stores/modules/mockup';
     const mockupStore = useMockupStore();
+    import { useUserStore } from '@/stores/modules/users/users'
+    const userStore = useUserStore();
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
