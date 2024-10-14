@@ -1,5 +1,8 @@
 <template>
-    <aside class="w-[354px] flex-shrink-0 h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
+    <aside 
+        class="w-[354px] flex-shrink-0 sticky left-0 z-40 hbg-gray-100 shadow-hoster"
+        :class="true ? 'top-with-banner h-with-banner' : 'h-without-banner'"
+    >
         <div class="flex flex-col h-full" :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
             <!-- guest data -->
             <div 

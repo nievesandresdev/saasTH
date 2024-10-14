@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen bg-[#FAFAFA]">
+    <div class="bg-[#FAFAFA]" :class="true ? 'h-with-banner' : 'h-without-banner'">
         <!-- <h1 class="bg-red-100 p-4 fixed z-[33000] top-10 left-10">{{ String(filter) }}</h1> -->
         <div class="pb-[104px]">
             <ListPageHeader />

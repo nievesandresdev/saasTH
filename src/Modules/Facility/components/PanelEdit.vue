@@ -9,7 +9,8 @@
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
-            :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
+            :class="true ? 'top-with-banner h-with-banner' : 'h-without-banner'"
+            :style="`right: 353.5px;`"
             
             ref="refPanelEdit"
         >

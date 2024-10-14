@@ -115,11 +115,6 @@ provide('modalProfile',modalProfile)
 provide('modalInfoNewHotel',modalInfoNewHotel)
 </script>
 <style scoped>
-.h-without-banner{
-    height: 100vh;
-}
-.h-with-banner{
-    height: calc(100vh - 40px);
-}
+
 </style>
   
