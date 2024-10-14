@@ -32,7 +32,7 @@ d    dd
         </div>
 
         <!-- side right -->
-        <aside v-if="currentRightSidebar" class="h-screen">
+        <aside v-if="currentRightSidebar" :class="showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'">
             <DinamicRightSidebar :sidebarName="currentRightSidebar"/>
         </aside>
     </div>

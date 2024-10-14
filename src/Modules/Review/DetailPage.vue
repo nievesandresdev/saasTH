@@ -32,6 +32,7 @@
                                 disabledColor="#FFC506"
                                 disabledColorHover="#EBC44C"
                                 :id="`toggle-${reviewData?.id}`"
+                                :disabled="loadingChangeStatusAttended"
                             />
                             <span class="font-semibold text-sm text-[#858181]">Atendida</span>
                         </div>
@@ -173,6 +174,7 @@ const maximumResponsesGenerated = ref(10);
 const hoteIdExpedia = ref(null);
 const hotelOtaData = ref(null);
 const pageCurrent = ref(1);
+const loadingChangeStatusAttended = ref(false);
 
 // COMPUTED
 const otaParamRoute = computed(() => {
@@ -303,6 +305,7 @@ async function loadData () {
 }
 
 async function changeStatusAttended () {
+    loadingChangeStatusAttended.value = true;
     let params = {
         reviewId: idOtaParamRoute.value,
         ota: otaParamRoute.value,
@@ -316,6 +319,7 @@ async function changeStatusAttended () {
         reviewData.value.isAttended = !reviewData.value.isAttended;
         toast.warningToast(response?.message,'top-right');
     }
+    loadingChangeStatusAttended.value = false;
 }
 
 function loadLanguageResponseDefault () {
