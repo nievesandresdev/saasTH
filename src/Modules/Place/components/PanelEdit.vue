@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[100]"
+        class="w-full fixed top-0 left-0 z-[100]"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
     >
     </div>
@@ -136,6 +137,8 @@ import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalGallery from '@/components/ModalGallery.vue';
 
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore();
 
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
