@@ -57,9 +57,6 @@ function calcSummaryByOta (ota){
     let summary = summaryByOta.value?.find(item => item.ota == ota);
     let noteNumeric = summary?.summary?.sumAndAvgRatings;
     let note = noteNumeric > 0 ? noteNumeric?.toFixed(1) : 0;
-    if (ota === 'BOOKING') {
-        note = '10.0';
-    }
     let scaleRating = reviewStore?.scaleRating[ota];
     let totalReviews = summary?.summary?.totalReviews || 0;
     return {

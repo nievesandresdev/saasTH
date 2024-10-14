@@ -57,9 +57,15 @@
             </div>
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
-                    <button
+                    <!-- <button
                         class="py-3"
                         @click="changesform ? openModalCancel() : openModalDeleteFacility()"
+                    >
+                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
+                    </button> -->
+                    <button
+                        class="py-3"
+                        @click="changesform ? openModalChangeInForm() : openModalDeleteFacility()"
                     >
                         <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
                     </button>
@@ -106,11 +112,12 @@
         ref="modalDeleteFacilityRef"
         @submit:delete="submitDeleteFacility()"
     />
-    <ModalCancelChangeFacility
+    <!-- quite esto por que se repetia al eliminar foto de galeria y darle cancelar
+     <ModalCancelChangeFacility  
         ref="modalCancelChangeFacilityRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
-    />
+    /> -->
     <template v-if="modelActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -320,13 +327,14 @@ function deepEqual(obj1, obj2) {
 
 // FUNCTION
 function prevTab () {
+    alert('prevTab')
     if(tabSelected.value == GALLERY){
         tabSelected.value = SCHEDULE;
     }else if (tabSelected.value == SCHEDULE){
         tabSelected.value = INFORMATION;
-    } else {
+    } /*else {
         openModalCancel();
-    }
+    }*/
 }
 
 function nextTab () {

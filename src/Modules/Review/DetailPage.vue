@@ -1,8 +1,8 @@
 <template>
- <div class="bg-[#FAFAFA z-[100]  w-full">
+ <div class="bg-[#FAFAFA] z-[100]  w-full h-full">
      
-     <div class="flex justify-between">
-        <div class="content flex-1 mx-[24px] pb-[70px]">
+     <div class="flex justify-between h-full">
+        <div class="content flex-1 mx-[24px] pb-[70px] h-full">
             <div class="header flex justify-between py-[20px] border-b border-[#BFBFBF] mb-6">
                 <div class="space-x-2 flex justify-between w-full">
                     <h1 class="font-medium text-[22px]">Reseña</h1>
@@ -20,7 +20,7 @@
                             <h5 class="text-base font-medium">{{ reviewData?.name }}</h5>
                         </div>
                         <div class="flex items-center space-x-[4px]">
-                            <span class="font-semibold text-sm">Pendiente</span>
+                            <span class="font-semibold text-sm" :class="reviewData.isAttended ? 'text-[#858181]' : 'text-[#00000]'">Pendiente</span>
                             <!-- <BaseSwichInput
                                 v-model="reviewData.isAttended"
                                 @change:value="changeStatusAttended()"
@@ -34,7 +34,7 @@
                                 :id="`toggle-${reviewData?.id}`"
                                 :disabled="loadingChangeStatusAttended"
                             />
-                            <span class="font-semibold text-sm text-[#858181]">Atendida</span>
+                            <span class="font-semibold text-sm" :class="!reviewData.isAttended ? 'text-[#858181]' : 'text-[#00000]'">Atendida</span>
                         </div>
                     </div>
                     <p class="text-sm mb-[8px]">{{ $formatTimestampDate(reviewData?.publishedAtDate, 'dd/MM/yy') }}</p>
@@ -352,6 +352,7 @@ async function loadTranslateAndResponse () {
         reviewId: idOtaParamRoute.value,
     }
     const response = await translateAndResponseStore.$findByReviewId(params);
+    console.log(response.data)
     const { ok, data } = response;
     if (ok) {
         translateAndResponseId.value =  data.transAndResDocument?._id;

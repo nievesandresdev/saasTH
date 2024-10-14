@@ -6,7 +6,7 @@
             <img class="w-[42px] h-[42px]" src="/assets/img/hosty.png" alt="hosty">
             <div class="flex items-center space-x-[4px] ml-4">
                 <span class="text-[24px] font-semibold">{{ summaryDataReview?.numbersResponseLastThirtyDays || 0 }}</span>
-                <p class="text-sm font-medium">reseñas generadas por Hosty</p>
+                <p class="text-sm font-medium">respuestas generadas por Hosty</p>
             </div>
         </div>
     </div>
