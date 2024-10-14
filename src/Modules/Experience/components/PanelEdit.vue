@@ -10,7 +10,8 @@
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[100] w-[500px] fixed"
-            :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
+            :style="`right: 353.5px;`"
+            :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             ref="refPanelEdit"
         >
             <div class="overflow-y-auto scrolling-sticky flex-1">
