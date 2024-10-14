@@ -1,11 +1,11 @@
 <template>
-    <SuscriptionBanner v-if="showSuscriptionBanner" :data="dataSubscriptionBanner" />
+    <SuscriptionBanner v-if="userStore.showSuscriptionBanner" :data="userStore.dataSubscriptionBanner" />
     <!-- <div class="px-3.5 md:px-6 h-10 w-full hbg-green-600 flex justify-between items-center">
 d    dd
     </div> -->
     <div 
         class="flex" id="main-container"
-        :class="showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'"
+        :class="userStore.showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'"
     >
         <!-- hole for collapse main sidebar -->
         <div v-if="!displayedMenu" class="w-16 flex-shrink-0 h-full"></div>
@@ -15,9 +15,9 @@ d    dd
         <!-- container side left -->
         <!-- para el menu estado desplayed se posicion sticky -->
         <aside 
-            :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[2000] flex ${showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
+            :class="`flex-shrink-0 ${displayedMenu ? 'sticky' : 'fixed'} left-0 z-[2000] flex ${userStore.showSuscriptionBanner ? 'top-10 h-with-banner' : 'top-0 h-without-banner'}`"
         >
-            <MainSidebar @openmodalHelp="openModalHelp" :subscription="dataSubscriptionBanner" />
+            <MainSidebar @openmodalHelp="openModalHelp" :subscription="userStore.dataSubscriptionBanner" />
             <!-- container dinamic side left -->
             <div v-if="currentLeftSidebar" class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`">
                 <DinamicLeftSidebar :sidebarName="currentLeftSidebar"/>
@@ -68,8 +68,8 @@ const userStore = useUserStore();
 const activeRequests = computed(() => preloaderStore.activeRequests);
 const route = useRoute();
 
-const showSuscriptionBanner = ref(false);
-const dataSubscriptionBanner = ref({});
+/* const showSuscriptionBanner = ref(false);
+const dataSubscriptionBanner = ref({}); */
 const isNotifyPanelVisible = ref(false)
 const modalHelpRef = ref(false)
 const modalProfile = ref(false)
@@ -90,24 +90,13 @@ const openModalHelp = () => {
   modalHelpRef.value.open();
 }
 
-onMounted(() => {
-    getDataTrial();
+onMounted(async() => {
+    await userStore.$getSubscriptionStatus();
     //userStore.$getSubscriptionStatus();
 })
 
 const { hotelData, hotelsAvailables,hotelsUser,hotelsByUserAvailables,$handleDefaultHotel,loadHotelsAvailables,loadHotelsByUser } = hotelStore;
 
-const getDataTrial = async () => {
-   const response  = await userStore.$getSubscriptionStatus();
-
-   if(response.ok){
-    dataSubscriptionBanner.value = response.data.subscription
-     if(response.data.subscription.status != 0){
-        showSuscriptionBanner.value = true
-     }
-   }
-   
-}
 
 
 provide('isNotifyPanelVisible',isNotifyPanelVisible)
