@@ -3,7 +3,8 @@
       <div
         v-if="modalShow"
         class="absolute bg-white shadow-xl add flex flex-col"
-        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
+        :style="`right: 0; z-index: 600`"
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
@@ -139,9 +140,11 @@
     import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
     import { useToastAlert } from '@/composables/useToastAlert'
     import { useAuthStore } from '@/stores/modules/auth/login'
+    import { useUserStore } from '@/stores/modules/users/users'
 
     const toast = useToastAlert();
     const authStore = useAuthStore();
+    const userStore = useUserStore();
     
     const emits = defineEmits(['close','update','delete','updateStatus']);
     
