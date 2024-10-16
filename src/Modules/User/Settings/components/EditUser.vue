@@ -3,7 +3,8 @@
       <div
         v-if="modalEdit"
         class="absolute bg-white shadow-xl add flex flex-col"
-        :style="`top: 0; right: 0; height: 100vh; z-index: 3000;`"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
+        :style="`right: 0; z-index: 2000`"
         ref="ref_section_edit"
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"

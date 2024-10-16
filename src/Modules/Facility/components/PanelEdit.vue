@@ -327,7 +327,6 @@ function deepEqual(obj1, obj2) {
 
 // FUNCTION
 function prevTab () {
-    alert('prevTab')
     if(tabSelected.value == GALLERY){
         tabSelected.value = SCHEDULE;
     }else if (tabSelected.value == SCHEDULE){
