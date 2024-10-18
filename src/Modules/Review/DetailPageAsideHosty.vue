@@ -1,5 +1,5 @@
 <template>
-    <div class="aside h-[100%] fixed w-[354px] bg-white top-0 overflow-y-auto">
+    <div class="aside h-[100%] w-[354px] bg-white  overflow-y-auto">
         <div class="px-[24px] py-[18px] border-b-[2px] border-[#BFBFBF] flex space-x-4">
             <img class="w-[52px] h-[52px]" src="/assets/img/hosty.png" alt="hosty">
             <div class="">

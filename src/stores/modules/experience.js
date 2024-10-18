@@ -17,21 +17,25 @@ export const useExperienceStore = defineStore('experience', () => {
     function formatImage (item) {
         let { image: path, type, url } = item ?? {};
             return url;
-        // let model = 'places';
-        // if(type == "gallery" || url?.includes('storage')) model = 'gallery'; 
+    }
 
-        // let urlFull = `${URL_STORAGE}/storage/${model}/${path}`
-        // return urlFull;
-
+    function getHotelParams(params = {}) {
+        const { id: idHotel, name: nameHotel, zone: zoneHotel } = hotelStore.hotelData;
+        return {
+            hotel: { id: idHotel, name: nameHotel, zone: zoneHotel },
+            ...params
+        };
     }
 
     async function $getAll (params) {
-        const response = await experienceService.getAllApi(params);
+        let newParams = getHotelParams(params);
+        const response = await experienceService.getAllApi(newParams);
         return response;
     }
 
     async function $getNumbersByFilters (params, config = {}) {
-        const response = await experienceService.getNumbersByFiltersApi(params, config);
+        let newParams = getHotelParams(params);
+        const response = await experienceService.getNumbersByFiltersApi(newParams, config);
         return response;
         const { ok } = response
         hotelData.value = ok ? response.data : null
@@ -39,7 +43,8 @@ export const useExperienceStore = defineStore('experience', () => {
     }
 
     async function $updateVisibility (params) {
-        const response = await experienceService.updateVisibilityApi(params);
+        let newParams = getHotelParams(params);
+        const response = await experienceService.updateVisibilityApi(newParams);
         return response;
         const { ok } = response
         hotelData.value = ok ? response.data : null
@@ -47,7 +52,8 @@ export const useExperienceStore = defineStore('experience', () => {
     }
 
     async function $updateRecommendation (params, config = {}) {
-        const response = await experienceService.updateRecommendationApi(params, config);
+        let newParams = getHotelParams(params);
+        const response = await experienceService.updateRecommendationApi(newParams, config);
         return response;
         const { ok } = response
         hotelData.value = ok ? response.data : null
@@ -55,14 +61,16 @@ export const useExperienceStore = defineStore('experience', () => {
     }
     
     async function $updatePosition (body) {
-        const response = await experienceService.updatePositionApi(body, {showPreloader: false});
+        let newBody = getHotelParams(body);
+        const response = await experienceService.updatePositionApi(newBody, {showPreloader: false});
         return response;
         if(response.ok) return response.data;
         return []
     }
 
     async function $update (body) {
-        const response = await experienceService.updateApi(body, {showPreloader: true});
+        let newBody = getHotelParams(body);
+        const response = await experienceService.updateApi(newBody, {showPreloader: true});
         return response;
         if(response.ok) return response.data;
         return []

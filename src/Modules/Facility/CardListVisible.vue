@@ -39,8 +39,14 @@
         />
         <div class="w-full h-32 relative">
             <img
+                v-if="item.image"
                 class="w-full object-cover rounded-t-lg h-full"
                 :src="facilityStore.formatImage(item.image)"
+            />
+            <img
+                v-else
+                class="w-full object-cover rounded-t-lg h-full"
+                :src="facilityStore.formatImage({url: '/storage/gallery/general-1.jpg'})"
             />
             <div v-if="item.ad_tag" class="absolute bottom-[-12px] right-[8px] h-6 flex items-center text-enter z-10 hbg-yellow-cta p-2 rounded-full py-[4px] px-[8px] text-[10px] font-semibold">{{ item.ad_tag }}</div>
         </div>

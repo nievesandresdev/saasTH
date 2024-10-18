@@ -1,6 +1,8 @@
 <template>
-    <aside class="w-[354px] flex-shrink-0 h-full sticky top-0 left-0 z-40 hbg-gray-100 shadow-hoster">
-        <div class="flex flex-col h-full" :class="['sidebar', showSideBar ? 'sidebar-open' : '']">
+    <aside 
+        class="w-[354px] flex-shrink-0 sticky left-0 z-40 hbg-gray-100 shadow-hoster"
+    >
+        <div class="flex flex-col h-full" :class="['sidebar', showSideBar ? 'sidebar-open' : '',userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner']">
             <!-- guest data -->
             <div 
                 v-if="data?.guest" 
@@ -136,7 +138,9 @@ import TimeLineQueries from '../Queries/TimeLineQueries.vue'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue'
 //store
 import { useQueryStore } from '@/stores/modules/queries/query';
+import { useUserStore } from '@/stores/modules/users/users'
 
+const userStore = useUserStore();
 const queryStore = useQueryStore();
 
 const data = ref(null)
@@ -190,7 +194,6 @@ const middle_icons = {
     transform: translateX(100%); /* Empieza oculto a la derecha */
     width: 354px; /* Asegúrate de establecer un ancho fijo */
     position: fixed; /* Opcional: Asegura que el sidebar sea flotante y no desplace otros elementos */
-    top: 0; /* Desde la parte superior de la vista */
     right: 0; /* Alineado a la derecha de la vista */
     height: 100%; /* Ajusta según necesidad */
 }

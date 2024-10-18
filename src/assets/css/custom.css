@@ -195,3 +195,15 @@ background-color: #EBF9F0;
 }
 
 /*FIN clase para vue-quill editor */
+
+/* alto del layout*/
+.h-without-banner{
+  height: 100vh;
+}
+.h-with-banner{
+  height: calc(100vh - 40px);
+}
+.top-with-banner{
+  top:40px;
+}
+/* alto del layout*/

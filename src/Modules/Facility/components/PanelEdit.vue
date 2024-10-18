@@ -1,15 +1,16 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[40]"
+        class="w-full fixed top-0 left-0 z-[40]"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
-    >
-    </div>
+    ></div>
     <transition name="slide">
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
-            :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
+            :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
+            :style="`right: 353.5px;`"
             
             ref="refPanelEdit"
         >
@@ -56,9 +57,15 @@
             </div>
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
-                    <button
+                    <!-- <button
                         class="py-3"
                         @click="changesform ? openModalCancel() : openModalDeleteFacility()"
+                    >
+                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
+                    </button> -->
+                    <button
+                        class="py-3"
+                        @click="changesform ? openModalChangeInForm() : openModalDeleteFacility()"
                     >
                         <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
                     </button>
@@ -105,11 +112,12 @@
         ref="modalDeleteFacilityRef"
         @submit:delete="submitDeleteFacility()"
     />
-    <ModalCancelChangeFacility
+    <!-- quite esto por que se repetia al eliminar foto de galeria y darle cancelar
+     <ModalCancelChangeFacility  
         ref="modalCancelChangeFacilityRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModal"
-    />
+    /> -->
     <template v-if="modelActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -142,6 +150,9 @@ import ModalGallery from "@/components/ModalGallery.vue";
 
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
+
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore();
 
 const emit = defineEmits(['load:resetPageData']);
 
@@ -320,9 +331,9 @@ function prevTab () {
         tabSelected.value = SCHEDULE;
     }else if (tabSelected.value == SCHEDULE){
         tabSelected.value = INFORMATION;
-    } else {
+    } /*else {
         openModalCancel();
-    }
+    }*/
 }
 
 function nextTab () {

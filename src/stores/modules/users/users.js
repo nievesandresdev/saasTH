@@ -7,6 +7,9 @@ export const useUserStore = defineStore('user', () => {
   const authStore = useAuthStore();
   const user = ref(authStore.user);
 
+  const dataSubscriptionBanner = ref({});
+  const showSuscriptionBanner = ref(false);
+
   // Watch for changes in authStore.user
   watch(() => authStore.user, (newUser) => {
     user.value = newUser;
@@ -107,7 +110,13 @@ export const useUserStore = defineStore('user', () => {
    */
   async function $getSubscriptionStatus() {
     const response = await getSubscriptionStatus();
-    return response;
+
+    if(response.ok){
+      dataSubscriptionBanner.value = response.data.subscription
+       if(response.data.subscription.status != 0){
+          showSuscriptionBanner.value = true
+       }
+     }
   }
 
   /*
@@ -151,6 +160,8 @@ export const useUserStore = defineStore('user', () => {
     $deleteUser,
     $getDataHotel,
     $getSubscriptionStatus,
+    dataSubscriptionBanner,
+    showSuscriptionBanner,
     $getTrial,
     //$getDataOTAS,
     $testMail,

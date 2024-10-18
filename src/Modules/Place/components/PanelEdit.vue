@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="modelActive"
-        class="h-full w-full fixed top-0 left-0 z-[100]"
+        class="w-full fixed left-0 z-[100]"
+        :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
     >
     </div>
@@ -9,7 +10,8 @@
         <div
             v-if="modelActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[100] w-[500px] fixed"
-            :style="`top: 0px; right: 353.5px; min-height: 100vh; height: 100vh;`"
+            :style="`right: 353.5px;`"
+            :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             ref="refPanelEdit"
         >
             <div class="overflow-y-auto scrolling-sticky">
@@ -136,6 +138,8 @@ import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalGallery from '@/components/ModalGallery.vue';
 
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore();
 
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
