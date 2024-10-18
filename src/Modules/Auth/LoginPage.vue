@@ -41,7 +41,6 @@
                   <img class="w-4 h-4 cursor-pointer" src="/assets/icons/1.TH.WARNING.RED.svg" alt="">
                   <span class="text-[#FF6666] text-xs font-normal "> {{ authStore.errorLogin }}</span>
                 </div>
-                
               </div>
               <div class="mb-2">
                 <label class="font-medium text-lg mb-1">Contraseña</label>
@@ -59,7 +58,8 @@
                   >
                 </div>
               </div>
-              <div class="flex justify-between">
+
+              <div class="flex justify-between mt-4">
                 <div class="form-remember col-10 col-lg-4 text-left">
                   <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-1 h-6 w-5 rounded">
                   <p class="inline text-sm">Recuérdame</p>
@@ -68,6 +68,7 @@
                   <a href="javascript:void(0)" class="text-sm font-medium" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
                 </div>
               </div>
+
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
@@ -78,6 +79,14 @@
                 </button>
               </div>
             </form>
+          </div>
+          
+          <!-- Enlace a políticas y términos -->
+          <div class="mt-6 text-center">
+            <p class="text-xs">
+              <a href="https://thehoster.io/privacidad" target="_blank" class="text-blue-600 hover:underline">Políticas de Privacidad</a> -
+              <a href="https://thehoster.io/terminos-y-condiciones" target="_blank" class="text-blue-600 hover:underline">Términos y Condiciones</a>.
+            </p>
           </div>
         </div>
       </div>
@@ -99,16 +108,6 @@
             </p>
             <div class="flex flex-col">
               <label for="correo" class="font-medium text-sm">Correo electrónico</label>
-              <!-- <input
-                v-model="forgot.email"
-                type="email"
-                class="rounded border-1 w-100 py-2 text-sm"
-                :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
-                placeholder="Correo Electrónico"
-                required
-                autofocus
-                autocomplete="username"
-              >     -->
               <BaseTextField
                 v-model="forgot.email"
                 type="email"
@@ -181,6 +180,7 @@
     </ModalWindow>
   </section>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
