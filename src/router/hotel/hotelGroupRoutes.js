@@ -1,5 +1,6 @@
 import hotelProfileRoutes from './hotelProfileRoutes';
 import hotelFacilityRoutes from './hotelFacilityRoutes';
+import hotelConfigurationGroupRoutes from './hotelConfigurationGroupRoutes';
 
 
 const AppLayout = () => import('@/layout/AppLayout');
@@ -13,6 +14,7 @@ const hotelGroupRoutes = [
     children: [
       ...hotelProfileRoutes,
       ...hotelFacilityRoutes,
+      ...hotelConfigurationGroupRoutes,
     ]
   }
 ];

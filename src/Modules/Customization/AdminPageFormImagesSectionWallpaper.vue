@@ -19,7 +19,7 @@
                         <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
                     </button>
                     <button
-                        class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px] p-[2px]"
+                        class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
                         @click="openGallery"
                     >
                         <img src="/assets/icons/1.TH.EDIT.OUTLINED.svg" class=" w-[20px] h-[20px]">
