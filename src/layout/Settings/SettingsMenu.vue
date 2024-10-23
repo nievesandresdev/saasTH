@@ -215,6 +215,14 @@ const menu_section = reactive([
       title: '',
       group: [
           {
+              title: 'Home',
+              to: 'Configuracion',
+              icon: '/assets/icons/1.TH.MM.WEBAPP.svg',
+              include: '/alojamiento/configuracion',
+              selectedArr: ['Configuration'],
+            
+          },
+          {
               title: 'Alojamiento',
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
               expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
@@ -231,12 +239,12 @@ const menu_section = reactive([
                       to: 'Facilities',
                       selectedArr: ['Facilities']
                   },
-                  {
+                  /* {
                       title: 'Configuración',
                       icon: '/assets/icons/1.TH.icon.instalaciones.svg',
                       to: 'Configuracion',
                       selectedArr: ['Configuracion']
-                  },
+                  }, */
 
               ],
               selectedArr: ['Perfil','Facilities','Configuration']

@@ -16,3 +16,4 @@ export const updateVisivilityCategoryApi = (data) => apiHttp('POST', `${hotelPat
 export const updateVisivilityTypePlaceApi = (data) => apiHttp('POST', `${hotelPath}/typePlaceVisivility`, data, {showPreloader: false });
 export const verifySubdomainExistPerHotel = (params, config) => apiHttp('GET', `${hotelPath}/verifySubdomainExistPerHotel`, params, config);
 export const updateCustomization = (data, config={}) => apiHttp('POST', `${hotelPath}/customization`, data, config);
+export const updateShowButtons = (data) => apiHttp('POST', `${hotelPath}/updateShowButtons`, data);

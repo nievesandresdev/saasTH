@@ -176,6 +176,7 @@
     const modalGaleryRef = ref(null);
     const isloadingForm = ref(false);
     const formInvalid = false;
+    const initialState = reactive({});
 
     const isChanged = computed(() => {
         return (
@@ -194,12 +195,7 @@
         return type
     }
 
-    const initialState = {
-        show_wifi: false,
-        show_call: false,
-        show_legal_text: false,
-        show_all: false
-    };
+    
 
     const initialImage = ref(null);
 
@@ -208,7 +204,7 @@
         form.show_call = false;
         form.show_legal_text = true;
         form.show_all = false;
-        imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; // Imagen simulada inicial
+        imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
         initialImage.value = { ...imgSelected.value };
         Object.assign(initialState, form);
         loadHotel()
@@ -235,11 +231,10 @@
             show_legal_text: form.show_legal_text,
             show_all: form.show_all
             },
-            images_hotel: imgSelected.value 
+            image: imgSelected.value.url ?? null
         };
 
-        console.log('Datos a enviar:', body);
-        const response  = await hotelStorage.$updateProfile(body);
+        const response  = await hotelStorage.$updateShowButtons(body);
             // console.log(response, 'response')
             const  {ok, data} = response ?? {}
             await loadHotel()
@@ -251,28 +246,24 @@
             }
             //mockupStore.$reloadIframe()
 
-        /* const response = await axios.post('/api/hotel-buttons', body);
-
-        if (response.status === 200) {
-            console.log('Cambios guardados con éxito:', response.data);
-        } else {
-            console.log('Error al guardar los cambios:', response.data);
-        }
-        } catch (error) {
-        console.error('Ocurrió un error:', error);
-        } */
+        
     };
     async function loadHotel () {
         const hotel = await hotelStorage.$findByParams()
+
         Object.assign(hotelData, hotel)
         loadForm(hotel)
+
+          // Guardar los valores iniciales una vez que los datos del hotel se han cargado
+          Object.assign(initialState, { ...form });
+          initialImage.value = { ...imgSelected.value };
     }
 
     const loadForm = (hotel) => {
-        form.show_wifi = hotel.show_wifi || false;
-        form.show_call = hotel.show_call || false;
-        form.show_legal_text = hotel.show_legal_text || false;
-        form.show_all = hotel.show_all || false;
+        form.show_wifi = hotel.buttons_home.show_wifi || false;
+        form.show_call = hotel.buttons_home.show_call || false;
+        form.show_legal_text = hotel.buttons_home.show_legal_text || false;
+        form.show_all = hotel.buttons_home.show_all || false;
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
     };
 
