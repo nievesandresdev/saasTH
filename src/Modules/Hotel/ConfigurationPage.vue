@@ -69,7 +69,7 @@
             <div class="flex justify-between">
               <span class="font-medium text-base">Botonera</span>
               <div class="flex items-center">
-                <div class="mr-2 text-gray-700 font-semibold text-[10px]">Visible</div>
+                <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div>
                 <!-- Toggle para mostrar todos -->
                 <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
               </div>
@@ -81,39 +81,43 @@
           <template #content>
             <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full">
               <!-- Toggle para WIFI -->
-              <div class="bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between">
+              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
-                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
+                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
+                  <Toggle :toggleDisabled="!form.show_all" v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
-                  <img src="/assets/icons/Wifi.svg" alt="Wifi" class="h-6 w-6" />
-                  <h3 class="text-base font-medium leading-3 mt-1">Información de WiFi</h3>
+                  <img src="/assets/icons/Wifi.svg" alt="Wifi" class="h-6 w-6 " :class="{
+                    'opacity-50': !form.show_wifi
+                  }" />
+                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_wifi, 'text-[#A0A0A0]': !form.show_wifi }]">Información de WiFi</h3>
                 </div>
               </div>
   
               <!-- Toggle para Llamar al hotel -->
-              <div class="bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between">
+              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
-                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
+                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
+                  <Toggle :toggleDisabled="!form.show_all" v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
-                  <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" />
-                  <h3 class="text-base font-medium leading-3 mt-1">Llamar al hotel</h3>
+                  <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" :class="{
+                    'opacity-50': !form.show_call
+                  }" />
+                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_call, 'text-[#A0A0A0]': !form.show_call }]">Llamar al hotel</h3>
                 </div>
               </div>
   
               <!-- Toggle para Normas del hotel -->
-              <div :class="['bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
+              <div :class="['bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
                 <div class="flex justify-end">
-                  <div :class="['mr-2 font-semibold text-[10px]', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
+                  <div :class="['mr-2 font-semibold text-[10px]', { 'text-[#333]': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
+                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled || !form.show_all" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
-                  <img :class="['h-6 w-6', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
+                  <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
                   <div class="flex flex-col gap-[1px] mt-1">
-                    <h3 :class="['text-base font-medium leading-3', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">Normas del hotel</h3>
+                    <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
                     <div class="flex" v-if="isDisabled">
                       <img
                           src="/assets/icons/1.TH.WARNING.RED.svg"
@@ -160,7 +164,7 @@
   </template>
   
 <script setup>
-    import { reactive, ref, onMounted, computed } from 'vue';
+    import { reactive, ref, onMounted, computed,watch } from 'vue';
     import Toggle from '@/components/Toggle.vue';
     import SectionConfig from '@/components/SectionConfig.vue';
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
@@ -179,6 +183,27 @@
         show_legal_text: false,
         show_all: false
     });
+
+    const checkAllHidden = () => {
+        if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
+            form.show_all = false;
+        }
+    };
+
+  watch([() => form.show_wifi, () => form.show_call, () => form.show_legal_text], () => {
+      checkAllHidden();
+  });
+
+  watch(() => form.show_all, (newVal) => {
+    if (!newVal) {
+        form.show_wifi = false;
+        form.show_call = false;
+        form.show_legal_text = false;
+    }
+});
+
+
+
 
     const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
     const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
