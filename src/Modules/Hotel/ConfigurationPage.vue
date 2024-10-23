@@ -74,7 +74,7 @@
                 <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
               </div>
             </div>
-            <p class="pt-2 pb-4 font-normal text-sm">
+            <p class="font-normal text-sm mb-6">
               Elige y controla la visibilidad de los botones para la botonera de la Home de tu WebApp.
             </p>
           </template>
