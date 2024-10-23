@@ -83,36 +83,46 @@
               <!-- Toggle para WIFI -->
               <div class="bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
-                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">Visible</div>
+                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
                   <Toggle v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
                   <img src="/assets/icons/Wifi.svg" alt="Wifi" class="h-6 w-6" />
-                  <h3 class="text-base font-medium">Información de WiFi</h3>
+                  <h3 class="text-base font-medium leading-3 mt-1">Información de WiFi</h3>
                 </div>
               </div>
   
               <!-- Toggle para Llamar al hotel -->
               <div class="bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
-                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">Visible</div>
+                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
                   <Toggle v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
                   <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" />
-                  <h3 class="text-base font-medium">Llamar al hotel</h3>
+                  <h3 class="text-base font-medium leading-3 mt-1">Llamar al hotel</h3>
                 </div>
               </div>
   
               <!-- Toggle para Normas del hotel -->
-              <div class="bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between">
+              <div :class="['bg-white rounded-lg shadow-md py-2 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
                 <div class="flex justify-end">
-                  <div class="mr-2 text-gray-700 font-semibold text-[10px]">Visible</div>
-                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" />
+                  <div :class="['mr-2 font-semibold text-[10px]', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
+                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
                 </div>
-                <div class="flex flex-col justify-start mt-auto">
-                  <img src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" class="h-6 w-6" />
-                  <h3 class="text-base font-medium">Normas del hotel</h3>
+                <div class="flex flex-col justify-start mt-auto gap-1">
+                  <img :class="['h-6 w-6', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
+                  <div class="flex flex-col gap-[1px] mt-1">
+                    <h3 :class="['text-base font-medium leading-3', { 'text-gray-700': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">Normas del hotel</h3>
+                    <div class="flex" v-if="isDisabled">
+                      <img
+                          src="/assets/icons/1.TH.WARNING.RED.svg"
+                          alt="icon alert red"
+                          class="inline w-4 h-4 mr-1"
+                      />
+                      <span  class="text-[10px] font-medium text-[#FF6666]">Carga las normas del hotel</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -177,6 +187,7 @@
     const isloadingForm = ref(false);
     const formInvalid = false;
     const initialState = reactive({});
+    const isDisabled = ref(false);
 
     const isChanged = computed(() => {
         return (
@@ -254,9 +265,11 @@
         Object.assign(hotelData, hotel)
         loadForm(hotel)
 
-          // Guardar los valores iniciales una vez que los datos del hotel se han cargado
-          Object.assign(initialState, { ...form });
-          initialImage.value = { ...imgSelected.value };
+        
+
+        // Guardar los valores iniciales una vez que los datos del hotel se han cargado
+        Object.assign(initialState, { ...form });
+        initialImage.value = { ...imgSelected.value };
     }
 
     const loadForm = (hotel) => {
@@ -265,6 +278,10 @@
         form.show_legal_text = hotel.buttons_home.show_legal_text || false;
         form.show_all = hotel.buttons_home.show_all || false;
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
+
+        isDisabled.value = !hotel.legal;
+
+        //console.log(hotel.legal, 'hotel')
     };
 
     // Formato de la URL de la imagen

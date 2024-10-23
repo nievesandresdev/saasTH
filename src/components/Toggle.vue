@@ -43,7 +43,12 @@
     marginRight: {
       type: String,
       default: 'mr-4'
+    },
+    toggleDisabled: {
+      type: Boolean,
+      default: false
     }
+    
   });
   
   // Emitir evento para actualizar el valor de modelValue
