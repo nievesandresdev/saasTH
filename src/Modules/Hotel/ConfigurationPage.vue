@@ -124,7 +124,7 @@
                           alt="icon alert red"
                           class="inline w-4 h-4 mr-1"
                       />
-                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
+                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel {{isDisabled}}</span>
                     </div>
                   </div>
                 </div>
