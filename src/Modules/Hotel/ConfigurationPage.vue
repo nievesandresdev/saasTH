@@ -118,13 +118,13 @@
                   <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
                   <div class="flex flex-col">
                     <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
-                    <div class="flex mt-2" >
+                    <div class="flex mt-2" v-show="isDisabled">
                       <img
                           src="/assets/icons/1.TH.WARNING.RED.svg"
                           alt="icon alert red"
                           class="inline w-4 h-4 mr-1"
                       />
-                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel {{ isDisabled }}</span>
+                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
                     </div>
                   </div>
                 </div>
@@ -304,7 +304,7 @@
         form.show_all = hotel.buttons_home.show_all || false;
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
-        isDisabled.value = hotel.legal;
+        isDisabled.value = !hotel.legal;
 
         //console.log(hotel.legal, 'hotel')
     };
