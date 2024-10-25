@@ -6,7 +6,7 @@ import {
 export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
 export const getHotelsByUser = () => apiHttp('GET', `${hotelPath}/getHotelsByUser`);
 export const updateDefaultHotel = (data) => apiHttp('POST', `${hotelPath}/updateDefaultHotel`, data);
-export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: false });
+export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: true });
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data);
 export const updateSenderMailMaskApi = (data) => apiHttp('POST', `${hotelPath}/updateSenderMailMask`, data, {showPreloader: false });
 export const updateVisivilityFacilitiesApi = () => apiHttp('POST', `${hotelPath}/facilityVisivility`, [], {showPreloader: false });

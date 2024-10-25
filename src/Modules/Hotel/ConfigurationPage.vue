@@ -84,10 +84,10 @@
               <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
                   <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle :toggleDisabled="!form.show_all" v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
+                  <Toggle  v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
-                  <img src="/assets/icons/Wifi.svg" alt="Wifi" class="h-6 w-6 " :class="{
+                  <img src="/assets/icons/1.TH.WiFi.png" alt="Wifi" class="h-6 w-6 " :class="{
                     'opacity-50': !form.show_wifi
                   }" />
                   <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_wifi, 'text-[#A0A0A0]': !form.show_wifi }]">Información de WiFi</h3>
@@ -98,7 +98,7 @@
               <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
                   <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle :toggleDisabled="!form.show_all" v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
+                  <Toggle  v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
                   <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" :class="{
@@ -112,19 +112,19 @@
               <div :class="['bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
                 <div class="flex justify-end">
                   <div :class="['mr-2 font-semibold text-[10px]', { 'text-[#333]': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled || !form.show_all" />
+                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
                 </div>
                 <div class="flex flex-col justify-start mt-auto gap-1">
                   <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
-                  <div class="flex flex-col gap-[1px] mt-1">
+                  <div class="flex flex-col">
                     <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
-                    <div class="flex" v-if="isDisabled">
+                    <div class="flex mt-2" v-if="isDisabled">
                       <img
                           src="/assets/icons/1.TH.WARNING.RED.svg"
                           alt="icon alert red"
                           class="inline w-4 h-4 mr-1"
                       />
-                      <span  class="text-[10px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
+                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
                     </div>
                   </div>
                 </div>
@@ -134,7 +134,6 @@
         </SectionConfig>
       </div>
   
-      <!-- Footer con botones de acción -->
       <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 mx-[-24px]">
             <button 
                 class="text-base leading-[110%] font-medium underline"
@@ -161,7 +160,7 @@
       :name-image-new="hotelData.name"
       @update:img="addNewsImages($event)"
     />
-  </template>
+</template>
   
 <script setup>
     import { reactive, ref, onMounted, computed,watch } from 'vue';
@@ -186,24 +185,29 @@
 
     const checkAllHidden = () => {
         if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
-            form.show_all = false;
+            form.show_all = false; // Ocultar si todos los botones están ocultos
+        } else {
+            form.show_all = true; // Marcar Visible si al menos un botón está activo
         }
     };
 
-  watch([() => form.show_wifi, () => form.show_call, () => form.show_legal_text], () => {
-      checkAllHidden();
-  });
+    watch([() => form.show_wifi, () => form.show_call, () => form.show_legal_text], () => {
+        checkAllHidden();
+    });
 
-  watch(() => form.show_all, (newVal) => {
-    if (!newVal) {
-        form.show_wifi = false;
-        form.show_call = false;
-        form.show_legal_text = false;
-    }
-});
-
-
-
+    watch(() => form.show_all, (newVal) => {
+        if (newVal) {
+            if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
+                form.show_wifi = true;
+                form.show_call = true;
+                form.show_legal_text = isDisabled.value ? false : true;
+            }
+        } else {
+            form.show_wifi = false;
+            form.show_call = false;
+            form.show_legal_text = false;
+        }
+    });
 
     const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
     const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
@@ -236,10 +240,7 @@
     const initialImage = ref(null);
 
     onMounted(() => {
-        form.show_wifi = true;
-        form.show_call = false;
-        form.show_legal_text = true;
-        form.show_all = false;
+        
         imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
         initialImage.value = { ...imgSelected.value };
         Object.assign(initialState, form);
@@ -258,7 +259,6 @@
         window.location.reload();
     };
 
-    // Función para enviar los datos actualizados al backend
     const submit = async () => {
         const body = {
             buttons: {
@@ -309,7 +309,6 @@
         //console.log(hotel.legal, 'hotel')
     };
 
-    // Formato de la URL de la imagen
     const $formatImage = (payload) => {
         const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
         let { url, type, urlDefault } = payload;
@@ -320,7 +319,6 @@
         return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
     };
 
-    // Función para eliminar la imagen seleccionada
     const removeLogo = () => {
         imgSelected.value = {...bgDefault};
     };
