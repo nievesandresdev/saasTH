@@ -245,6 +245,11 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData.value = ok ? response.data : null
         return response.data
     }
+
+    async function $updateShowButtons (data) {
+        const response = await hotelService.updateShowButtons(data);
+        return response;
+    }
     
 
 
@@ -262,6 +267,7 @@ export const useHotelStore = defineStore('hotel', () => {
         $findByParams,
         $updateProfile,
         $getAll,
+        $updateShowButtons,
         $getHotelsByUser,
         loadHotelsByUser,
         $updateVisivilityFacilities,

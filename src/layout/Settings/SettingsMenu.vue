@@ -90,7 +90,7 @@
                 <a
                   href="javascript:void(0)"
                   class="w-full py-[8px] px-[24px] block"
-                  @click="goLink(menu.to)"
+                  @click="goLink(menu.to,menu)"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
@@ -215,9 +215,17 @@ const menu_section = reactive([
       title: '',
       group: [
           {
+              title: 'Home',
+              to: 'Configuracion',
+              icon: '/assets/icons/1.TH.MM.WEBAPP.svg',
+              include: '/alojamiento/configuracion',
+              selectedArr: ['Configuration'],
+            
+          },
+          {
               title: 'Alojamiento',
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-              expanded: ['Perfil','Facilities'].includes(route.name),
+              expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
               group: [
                   {
                       title: 'Perfil',
@@ -231,8 +239,15 @@ const menu_section = reactive([
                       to: 'Facilities',
                       selectedArr: ['Facilities']
                   },
+                  /* {
+                      title: 'Configuración',
+                      icon: '/assets/icons/1.TH.icon.instalaciones.svg',
+                      to: 'Configuracion',
+                      selectedArr: ['Configuracion']
+                  }, */
+
               ],
-              selectedArr: ['Perfil','Facilities']
+              selectedArr: ['Perfil','Facilities','Configuration']
           },
           {
               title: 'Destino',
@@ -470,8 +485,15 @@ watch(route, (to, from) => {
     focusMenu();
 });
 
-function goLink(viewName) {
+function goLink(viewName,menu = false) {
   router.push({ name: viewName});
+
+  /* if (menu.title == 'Home') {
+    window.location.replace(menu.include);
+  }else{
+    router.push({ name: viewName});
+  } */
+  
 }
 
 watch(

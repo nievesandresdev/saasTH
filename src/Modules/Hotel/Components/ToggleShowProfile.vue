@@ -1,5 +1,5 @@
 <template>
-    <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0 mr-4">
+    <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0" :class="props.marginRight">
         <input
             :checked="showProfileRef"
             type="checkbox"
@@ -19,6 +19,7 @@
         size="l"
         :top="35"
         :right="0"
+        v-if="props.showTooltip"
     >
         <template #button>
             <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
@@ -38,6 +39,17 @@ import { ref, computed, onMounted,watch, inject } from 'vue';
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 const emit = defineEmits(['updateShowHotel'])
 //DATA PROPS
+
+const props = defineProps({
+    showTooltip: {
+        type: Boolean,
+        default: true
+    },
+    marginRight: {
+        type: String,
+        default: 'mr-4'
+    }
+})
 
 // onMounted(()=>{
 //     console.log('mounted toggle')
