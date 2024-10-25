@@ -118,7 +118,7 @@
                   <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
                   <div class="flex flex-col">
                     <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
-                    <div class="flex mt-2" v-show="isDisabled">
+                    <div class="flex mt-2" v-if="isDisabled">
                       <img
                           src="/assets/icons/1.TH.WARNING.RED.svg"
                           alt="icon alert red"
