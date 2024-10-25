@@ -304,7 +304,7 @@
         form.show_all = hotel.buttons_home.show_all || false;
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
-        isDisabled.value = !hotel.legal;
+        isDisabled.value = hotel.legal;
 
         //console.log(hotel.legal, 'hotel')
     };
