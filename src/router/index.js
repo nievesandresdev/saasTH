@@ -15,6 +15,7 @@ import experienceGroupRoutes from './experienceRoutes';
 import galleryGroupRoutes from './galleryRoutes';
 import webAppRoutes from './webAppRoutes';
 import customizationRoutes from './customizationRoutes';
+import appearenceRoutes from './appearenceRoutes';
 import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 import reviewRoutes from './reviewRoutes'
 import comunicationRoutes from './comunication'
@@ -50,6 +51,7 @@ const routes = [
   ...galleryGroupRoutes,
   ...webAppRoutes,
   ...customizationRoutes,
+  ...appearenceRoutes,
   ...reviewRoutes,
   ...legalTextGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
