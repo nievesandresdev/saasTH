@@ -35,7 +35,7 @@
           <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
           <!-- <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0"> -->
           <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0">
-            <thead class="text-xs font-semibold text-gray-700 text-left dark:bg-gray-700 bg-gray-100 h-3">
+            <thead class="text-xs font-semibold text-gray-700 text-left bg-gray-100 h-3">
               <tr>
                 <th scope="col" class="px-5 py-3 w-1/4">Nombre y Apellidos</th>
                 <th scope="col" class="px-5 py-3 w-1/4">Puesto de Trabajo</th>
@@ -49,7 +49,7 @@
                 @mouseover="hoverTable(index)"
                 @mouseleave="hoverTable(index)"
                 :key="user.id"
-                class="border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-[#F1F1F1]"
+                class="border-b hover:bg-[#F1F1F1]"
                 :class="{
                   'bg-[#ECF9F5]': selectedShow == user.id,
                   'hover:bg-[#F1F1F1]': selectedUser?.id != user.id,
