@@ -1,5 +1,8 @@
 <template>
-<div class="h-screen bg-[#FAFAFA] flex flex-col ">
+<div v-if="!hotelData?.chain">
+
+</div>
+<div v-else class="h-screen bg-[#FAFAFA] flex flex-col ">
     <div class="px-[24px]">
         <div class="py-[20px] border-b border-[#BFBFBF]">
             <h1 class="text-[22px] font-medium">
@@ -63,6 +66,7 @@
                 </div>
             </div>
             <div
+                 v-if="typeChain.CHAIN === hotelData.chain.type"
                 class="space-y-1"
             >
                 <h6 class="text-sm font-semibold">Alojamiento</h6>
@@ -227,7 +231,6 @@ function loadMockup () {
 
 async function reloadHotel () {
     const hotel = await hotelStore.reloadHotel();
-    console.log('hotel', hotel);
     Object.assign(hotelData.value, hotel);
     initializeForm(hotel);
 }
@@ -273,7 +276,6 @@ async function verifySlugExistInHotel () {
      }
     const response = await chainStore.$verifySubdomainExistPerChain(queryRequest);
     const  { ok, data } = response;
-    console.log(data, 'data');
     if (ok) {
         if (data.exist === true && (typeof errors.value?.subdomain_chain != 'string')) {
             errors.value['subdomain_chain'] = 'Este subdominio ya está siendo usado'
@@ -298,8 +300,9 @@ async function submit () {
     }
     const response = await chainStore.$updateConfigGeneral(bodyRequest);
     const { ok, data } = response;
-    await reloadHotel();
     if (ok) {
+
+        await hotelStore.changeHotel(data);
         toast.warningToast('Cambios guardados con éxito','top-right');
     } else {
         toast.warningToast(data?.message,'top-right');
