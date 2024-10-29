@@ -3,7 +3,11 @@ import { ref, computed } from 'vue';
 
 import { $urlBaseWebapp } from '@/utils/helpers';
 
+import { useHotelStore } from '@/stores/modules/hotel';
+
 export const useMockupStore = defineStore('mockupStore', () => {
+
+  const hotelStore = useHotelStore();
 
   const GUEST_URL = process.env.VUE_APP_GUEST_URL
   const ENVIROMENT = process.env.VUE_APP_ENVIROMENT
@@ -13,8 +17,9 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
-      let subdomain = localStorage.getItem('current_subdomain');
+      let subdomain = hotelStore?.hotelData?.chain?.subdomain;
       let urlBase = $urlBaseWebapp();
+      console.log(urlBase, 'urlBase');
       // console.log(subdomain)
       // if(ENVIROMENT == 'test'){
       //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
