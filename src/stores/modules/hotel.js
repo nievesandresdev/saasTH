@@ -78,7 +78,7 @@ export const useHotelStore = defineStore('hotel', () => {
             delete hotel.images;
         }
         localStorage.setItem('current_hotel', JSON.stringify(hotel));
-        localStorage.setItem('current_subdomain', hotel.subdomain);
+        localStorage.setItem('current_subdomain', hotel.chain.subdomain);
     }
 
     function formatImage ({image = null, url = null}) {
@@ -92,7 +92,7 @@ export const useHotelStore = defineStore('hotel', () => {
     }
 
     async function changeHotel (hotel) {
-        let params = {subdomain: hotel.subdomain}
+        let params = {subdomain: hotel.chain.subdomain}
         let hotelResponse = await $findByParams(params, { showPreloader: false });
         updateHoteInSession(hotelResponse);
     }
