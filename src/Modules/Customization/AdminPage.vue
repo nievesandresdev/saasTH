@@ -131,6 +131,16 @@
         </button>
     </div>
 </div>
+
+<ModalNoSave
+    :id="'not-saved'"
+    :open="isChanged"
+    text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+    textbtn="Guardar"
+    @saveChanges="submit"
+    type="save_changes"
+/>
+
 </template>
 
 <script setup>
@@ -269,28 +279,28 @@ async function verifySubdomainExistInChain () {
  }
 
 async function verifySlugExistInHotel () {
-     loadingVerifySubdomain.value = true;
-     if (!form.subdomain_chain || (typeof errors.value?.['subdomain_chain'] === 'string')) return;
+     loadingVerifySlugHotel.value = true;
+     if (!form.slug_hotel || (typeof errors.value?.['slug_hotel'] === 'string')) return;
      let queryRequest = {
-        subdomain: form.subdomain_chain,
+        subdomain: form.slug_hotel,
      }
-    const response = await chainStore.$verifySubdomainExistPerChain(queryRequest);
+    const response = await hotelStore.$verifySubdomainExistPerHotel(queryRequest);
     const  { ok, data } = response;
     if (ok) {
-        if (data.exist === true && (typeof errors.value?.subdomain_chain != 'string')) {
-            errors.value['subdomain_chain'] = 'Este subdominio ya está siendo usado'
+        if (data.exist === true && (typeof errors.value?.slug_hotel != 'string')) {
+            errors.value['slug_hotel'] = 'Este subdominio ya está siendo usado'
             return;
             // console.log(errors.value, 'errors.value')
         }
-        if (!data?.exist || (typeof errors.value?.subdomain_chain != 'string')) {
-            errors.value['subdomain_chain'] = true
+        if (!data?.exist || (typeof errors.value?.slug_hotel != 'string')) {
+            errors.value['slug_hotel'] = true
         }
     }
-    loadingVerifySubdomain.value = false;
+    loadingVerifySlugHotel.value = false;
  }
 
 function cancelChanges () {
-
+    Object.assign(form, formDefault);
 }
 
 async function submit () {

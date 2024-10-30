@@ -360,6 +360,13 @@ const menu_section = reactive([
             selectedArr: ['ComunicationHome'],
         },
         {
+            title: 'Diseño',
+            icon: '/assets/icons/1.TH.PERSONALIZAR.svg',
+            to: 'Appearence',
+            include: '/apariencia',
+            selectedArr: ['Appearence'],
+        },
+        {
             title: 'Galería de imágenes',
             icon: '/assets/icons/1.TH.IMAGES.svg',
             to: 'Gallery',

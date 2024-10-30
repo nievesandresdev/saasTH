@@ -14,17 +14,15 @@
                     </template>
                     <template #content>
                     <p class="text-sm leading-[150%] font-normal">
-                        <template>
-                            Aquí podrás gestionar las instalaciones que forman parte de tu alojamiento y ofrecer su información esencial. Ésta será la información que verán tus huéspedes en tu WebApp.
-                        </template>
-                        <template>
-                            Aquí podrás gestionar las instalaciones que forman parte de tu alojamiento y ofrecer su información esencial. Ésta será la información que verán tus huéspedes en tu WebApp.
-                        </template>
+                        En esta vista podrás configurar todos los aspectos visuales.
                     </p>
                 </template>
             </BaseTooltipResponsive>
         </div>
-        <div class="h-[48px] w-full bg-[#D9E8F2] text-center flex items-center justify-center py-[14px]">
+        <div
+            v-if="typeChain.CHAIN === hotelData.chain.type"
+            class="h-[48px] w-full bg-[#D9E8F2] text-center flex items-center justify-center py-[14px]"
+        >
             <p class="text-sm font-medium mx-2">Los aspectos configurados en esta sección se aplicarán a la WebApp de todos los alojamientos de la cadena asociados a la cuenta.</p>
         </div>
         <div class="p-[24px] space-y-[24px] mb-[33px] flex-1">
@@ -58,11 +56,11 @@
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
                         <div class="mt-4 flex space-x-[32px]">
                             <div class="flex space-x-2">
-                                <RadioButton :value="'0'" v-model="colorsForm[1].contrast"/>
+                                <RadioButton id="color-2" :value="'0'" v-model="colorsForm[1].contrast"/>
                                 <span class="text-base">Negro</span>
                             </div>
                             <div class="flex space-x-2">
-                                <RadioButton :value="'1'" v-model="colorsForm[1].contrast"/>
+                                <RadioButton id="color-2" :value="'1'" v-model="colorsForm[1].contrast"/>
                                 <span class="text-base">Negro</span>
                             </div>
                         </div>
@@ -143,7 +141,7 @@
                 <h5 class="text-base font-semibold mb-2">Header</h5>
                 <p class="mb-[24px]">Elige si quieres mostrar el header de tu WebApp en tonalidad oscura o clara. Si utilizas una imagen de logo, asegúrate de que contraste correctamente.</p>
                 <div class="flex 3xl:justify-start">
-                    <div class="w-[341px] 3xl:w-[381px] space-y-[24px] mr-[24px] 3xl:mr-[114px]">
+                    <div class="w-[341px] 3xl:w-[380px] space-y-[24px] mr-[24px]">
                         <div class="rounded-[10px] py-[24px] px-4 border border-[#BFBFBF] hbg-black-100 w-full flex items-start justify-between">
                                 <span class="text-[30px] font-medium text-white leading-[32px]">Nombre Hotel</span>
                                 <div class="w-[48px] h-[48px]">
@@ -159,7 +157,7 @@
                             <span class="text-base font-medium">Tono oscuro</span>
                         </div>
                     </div>
-                    <div class="w-[341px] 3xl:w-[381px] space-y-[24px]">
+                    <div class="w-[341px] 3xl:w-[380px] space-y-[24px]">
                         <div class="rounded-[10px] py-[24px] px-4 border border-[#BFBFBF] hbg-gray-100 w-full flex items-start justify-between">
                                 <span class="text-[30px] font-medium htext-black-100 leading-[32px]">Nombre Hotel</span>
                                 <div class="w-[48px] h-[48px]">
@@ -197,6 +195,15 @@
         </div>
     </div>
 
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="isChanged"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
+
     <ModalGallery
         ref="modalGaleryRef"
         :id="'modal-gallery'"
@@ -216,6 +223,7 @@ import { cloneDeep } from 'lodash';
 const color = ref(null);
 
 import { $formatImage } from '@/utils/helpers';
+import { typeChain } from '@/utils/enums';
 
 // COMPONENTS
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
@@ -223,6 +231,7 @@ import RadioButton from '@/components/Forms/RadioButton.vue';
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import PickColor from './components/PickColor.vue';
 import ModalGallery from '@/components/ModalGallery';
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 import { useCustomizationStore } from '@/stores/modules/customization';
 const customizationStore = useCustomizationStore();
@@ -273,6 +282,8 @@ const isChanged = computed(()=>{
     let c =
         form.colors?.[0]?.cod_hex !== formDefault.colors?.[0]?.cod_hex ||
         form.colors?.[1]?.cod_hex !== formDefault.colors?.[1]?.cod_hex ||
+        form.colors?.[0]?.contrast !== formDefault.colors?.[0]?.contrast ||
+        form.colors?.[1]?.contrast !== formDefault.colors?.[1]?.contrast ||
         form.name !== formDefault.name ||
         form.logo !== formDefault.logo  ||
         form.type_header !== formDefault.type_header ||
