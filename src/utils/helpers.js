@@ -113,11 +113,9 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
   }
 };
 
-const $urlBaseWebapp = () => {
+const $urlBaseWebapp = (subdomainChain, slugHotel) => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
-  let hotel = localStorage.getItem('current_hotel');
-  hotel = JSON.parse(hotel);
-  let urlBase = GUEST_URL.replace('subdomain', hotel?.chain?.subdomain);
+  let urlBase = GUEST_URL.replace('subdomain', subdomainChain).replace('webapp', slugHotel);
   return urlBase;
 }
 

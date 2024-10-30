@@ -17,14 +17,15 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
-      let subdomain = hotelStore?.hotelData?.chain?.subdomain;
-      let urlBase = $urlBaseWebapp();
+      let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+      let slugHotel = hotelStore?.hotelData?.subdomain;
+      let urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
       console.log(urlBase, 'urlBase');
       // console.log(subdomain)
       // if(ENVIROMENT == 'test'){
       //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       // }
-      let completeURL =urlBase+`${uri}?subdomain=${subdomain}&lang=${lang}&mockup=true&${params}`;
+      let completeURL =urlBase+`${uri}?chainsubdomain=${subdomainChain}&subdomain=${slugHotel}&lang=${lang}&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
   }
 
