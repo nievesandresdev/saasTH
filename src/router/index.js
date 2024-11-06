@@ -73,6 +73,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuth = isAuthenticated();
 
+  // Evita que el middleware afecte la ruta de restablecimiento de contraseña
+  if (to.name === 'ResetPassword') {
+    return next();
+  }
+
   if (!isAuth && to.path !== '/login') {
     localStorage.setItem('redirectTo', to.fullPath);
     return next('/login');
