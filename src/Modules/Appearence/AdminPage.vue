@@ -61,7 +61,7 @@
                             </div>
                             <div class="flex space-x-2">
                                 <RadioButton id="color-2" :value="'1'" v-model="colorsForm[1].contrast"/>
-                                <span class="text-base">Negro</span>
+                                <span class="text-base">Blanco</span>
                             </div>
                         </div>
                     </div>
@@ -254,11 +254,11 @@ const colorsDedault = ([
     {
         cod_hex: '#333333',
         cod_rbg: 'rgb(51, 51, 51)',
-        contrast: '0',
+        contrast: '1',
     },
     {
-        cod_hex: '#333333',
-        cod_rbg: 'rgb(51, 51, 51)',
+        cod_hex: '#FAFAFA',
+        cod_rbg: 'rgb(250, 250, 250)',
         contrast: '0',
     }
 ]);

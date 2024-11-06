@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div
-                 v-if="typeChain.CHAIN === hotelData.chain.type"
+                v-if="typeChain.CHAIN === hotelData.chain.type"
                 class="space-y-1"
             >
                 <h6 class="text-sm font-semibold">Alojamiento</h6>

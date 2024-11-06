@@ -247,7 +247,6 @@ const totalExperiences = computed(() => {
 });
 
 const numberCardsToLoad = computed(() => {
-    
     if(firstLoad.value) return defNumberCardsToLoad.value;
     if(!firstLoad.value && totalExperiences.value == 0) return 0;
     let remaining = totalExperiences.value - experiencesData.value.length;
