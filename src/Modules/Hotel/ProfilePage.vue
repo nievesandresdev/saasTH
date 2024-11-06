@@ -28,8 +28,8 @@
                 </div>
             </section>
             <div 
-                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
                 v-if="hotelData.show_profile !== undefined && !hotelData.show_profile"
+                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
             >
                 <h1 class="text-center text-sm font-medium leading-[140%]">Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.</h1>
             </div>

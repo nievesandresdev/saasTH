@@ -360,17 +360,11 @@ const menu_section = reactive([
             selectedArr: ['ComunicationHome'],
         },
         {
-            title: 'Personalización',
+            title: 'Diseño',
             icon: '/assets/icons/1.TH.PERSONALIZAR.svg',
-            to: 'Customization',
-            include: '/personalizacion',
-            selectedArr: ['Customization'],
-        },
-        {
-            title: 'Textos legales',
-            to: 'GeneralLegal',
-            icon: '/assets/icons/1.TH.TEXTOS.LEGALES.svg',
-            include: '/legal'
+            to: 'Appearence',
+            include: '/apariencia',
+            selectedArr: ['Appearence'],
         },
         {
             title: 'Galería de imágenes',
@@ -378,6 +372,26 @@ const menu_section = reactive([
             to: 'Gallery',
             include: '/galeria',
             selectedArr: ['Gallery'],
+        },
+        {
+            title: 'Ajustes',
+            icon: '/assets/icons/1.TH.Settings.svg',
+            expanded: false,
+             selectedArr: [],
+            group: [
+                {
+                    title: 'General',
+                    icon: '/vendor_asset/img/hoster/icons/TH.CONSULTAS.svg',
+                    to: 'Customization',
+                    selectedArr: ['Customization'],
+                },
+                {
+                    title: 'Textos legales',
+                    icon: '/vendor_asset/img/hoster/icons/TH.SOLICITUDES.svg',
+                    to: 'GeneralLegal',
+                    selectedArr: ['GeneralLegal'],
+                },
+            ],
         },
       ],
   },
