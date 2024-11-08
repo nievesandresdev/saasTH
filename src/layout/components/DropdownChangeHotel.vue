@@ -54,7 +54,7 @@
                         alt="photo default "
                     >
                 </div>
-                
+                <!-- hotel selected -->
                 <div class="">
                     <div class="flex justify-between">
                         <div class="flex w-auto max-w-[178px]">
@@ -70,8 +70,7 @@
                             </div> -->
                         </div>
                     </div>
-                    
-                    <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">{{ hotelData.type }}
+                    <p class="text-xs font-semibold htext-gray-500 capitalize">{{ hotelData.type }}
                         <template v-if="hotelData.zone">
                             - {{ hotelData.zone }}
                         </template>
@@ -207,6 +206,7 @@
                                             alt="photo default"
                                         >
                                     </div>
+                                    <!-- hotels list -->
                                     <div class="flex flex-col">
                                         <div class="flex justify-between w-full items-center">
                                             <div class="flex items-center flex-grow">
@@ -234,7 +234,7 @@
                                             </svg> -->
                                         </div>
                                         
-                                        <p class="text-xs font-semibold htext-gray-500 truncate-1 capitalize">
+                                        <p class="text-xs font-semibold htext-gray-500 capitalize">
                                             {{ hotel.type }}
                                             <template v-if="hotel.zone">
                                                 - {{ hotel.zone }} 

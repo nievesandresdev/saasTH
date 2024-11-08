@@ -136,9 +136,8 @@ onMounted(() => {
 })
 
 const ata = async () => {
-    console.log('ata')
     const response = await chatSettingsStore.$getAllSettingsChat();
-
+    console.log('test ata',response)
     form.languages = JSON.parse(JSON.stringify(response.settings.languages))
     response.settings.languages.forEach(lang => {
         notSearchLang.value.push(lang.id)
