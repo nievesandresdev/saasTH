@@ -390,6 +390,8 @@ async function submitSave () {
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
         resetCompoent();
+        
+        location.reload();
     } else {
         toast.warningToast(data?.message,'top-right');
     }
@@ -400,6 +402,7 @@ async function submitDeleteFacility () {
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
         resetCompoent();
+        location.reload();
     } else {
         toast.warningToast(data?.message,'top-right');
     }
