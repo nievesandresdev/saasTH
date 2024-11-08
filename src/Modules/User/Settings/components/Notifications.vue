@@ -4,7 +4,7 @@
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
           <strong class="text-[18px] font-medium">Estancias - Chat</strong>
-          <BaseTooltipResponsive size="s" :top="25" :right="-55">
+          <BaseTooltipResponsive size="s" :top="25" :right="-155">
             <template v-slot:button>
               <img src="/assets/icons/info.blue.svg" class="w-5 h-5 ml-1" alt="icon_info">
             </template>
