@@ -35,11 +35,7 @@
           <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
           <!-- <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0"> -->
           <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0">
-<<<<<<< HEAD
-            <thead class="text-xs font-semibold text-gray-700 text-left  bg-gray-100 h-3">
-=======
             <thead class="text-xs font-semibold text-gray-700 text-left bg-gray-100 h-3">
->>>>>>> origin/main
               <tr>
                 <th scope="col" class="px-5 py-3 w-1/4">Nombre y Apellidos</th>
                 <th scope="col" class="px-5 py-3 w-1/4">Puesto de Trabajo</th>
