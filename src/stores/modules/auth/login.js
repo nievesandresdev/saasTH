@@ -140,6 +140,7 @@ export const useAuthStore = defineStore('auth', () => {
         if (user.value && user.value.permissions) {
             return user.value.permissions;
         }
+        
         return [];
     });
 

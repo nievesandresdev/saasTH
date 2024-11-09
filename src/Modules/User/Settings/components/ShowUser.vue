@@ -117,7 +117,7 @@
                 }"
         >
             <button
-                v-show="authStore.user.id != dataUser.id"
+                v-show="authStore.user.id != dataUser.id && authStore.user.owner == 1"
                 class="underline font-medium text-sm px-4"
                 @click="deleteUser(dataUser)"
             >
@@ -126,6 +126,7 @@
             <button
                 class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
                 @click="updateUser(dataUser)"
+                v-if="authStore.user.id === dataUser.id || authStore.user.owner == 1"
             >
                 Editar
             </button>
