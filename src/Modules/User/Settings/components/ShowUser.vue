@@ -112,12 +112,12 @@
             style="height: 88px;" 
             :class="
                 {
-                    'justify-end': authStore.user.id === dataUser.id,
+                    'justify-end': authStore.user.id === dataUser.id ,
                     'justify-between': authStore.user.id != dataUser.id
                 }"
         >
             <button
-                v-show="authStore.user.id != dataUser.id && authStore.user.owner == 1"
+                v-show="authStore.user.id != dataUser.id && dataUser.owner == 0"
                 class="underline font-medium text-sm px-4"
                 @click="deleteUser(dataUser)"
             >
@@ -126,7 +126,7 @@
             <button
                 class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
                 @click="updateUser(dataUser)"
-                v-if="authStore.user.id === dataUser.id || authStore.user.owner == 1"
+                v-if="dataUser.owner != 1"
             >
                 Editar
             </button>
@@ -147,7 +147,7 @@
     const authStore = useAuthStore();
     const userStore = useUserStore();
     
-    const emits = defineEmits(['close','update','delete','updateStatus']);
+    const emits = defineEmits(['close','updateUser','delete','updateStatus']);
     
     const props = defineProps({
         modalShow: Boolean,
@@ -161,7 +161,7 @@
 
     const updateUser = (dataUser) => {
         closeModal();
-        emits('update',dataUser);
+        emits('updateUser',dataUser);
     };
 
     const deleteUser = (dataUser) => {
