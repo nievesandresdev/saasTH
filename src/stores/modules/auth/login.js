@@ -137,7 +137,7 @@ export const useAuthStore = defineStore('auth', () => {
     // Computed para obtener los permisos del usuario
     const $getPermissions = computed(() => {
         if (user.value && user.value.permissions) {
-            return JSON.parse(user.value.permissions);
+            return user.value.permissions;
         }
         return [];
     });

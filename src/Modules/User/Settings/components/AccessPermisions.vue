@@ -83,12 +83,10 @@ const isDisabled = computed(() => props.workPositionId !== null);
 const operationAccess = ref([
   { name: 'Estancias', selected: false, value: 'estancias', disabled: false },
   { name: 'Reseñas', selected: false, value: 'resenas', disabled: false },
-  /* { name: 'Análisis', selected: false, value: 'analisis', disabled: false }, */
 ]);
 
 const adminAccess = ref([
   { name: 'WebApp', selected: false, value: 'webapp', disabled: false },
-  /* { name: 'Comunicaciones', selected: false, value: 'comunicaciones', disabled: false }, */
   { name: 'Hoster', selected: false, value: 'hoster', disabled: false },
 ]);
 
@@ -152,6 +150,3 @@ const togglePermission = (item) => {
 };
 </script>
 
-<style scoped>
-/* Añade estilos personalizados aquí si es necesario */
-</style>
