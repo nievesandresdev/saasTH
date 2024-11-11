@@ -33,19 +33,19 @@
                         @mouseenter="hoverCardLogo = true"
                         @mouseleave="hoverCardLogo = null"
                     >
-                    <div v-if="hoverCardWallpaper === index" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
+                    <div v-if="hoverCardLogo === true" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
+                      <button
+                            class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                            @click="openPreview($formatImage({url: imgSelected.url, type: imgSelected.type}))"
+                        >
+                            <img src="/assets/icons/1.TH.SEARCH.svg" class=" w-[20px] h-[20px]">
+                        </button>
                         <button
                             v-if="imgSelected.url"
                             class="absolute left-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
                             @click="removeLogo"
                         >
                             <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
-                        </button>
-                        <button
-                            class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
-                            @click="openModelGallery"
-                        >
-                            <img src="/assets/icons/1.TH.EDIT.OUTLINED.svg" class=" w-[20px] h-[20px]">
                         </button>
                     </div>
                     <img
@@ -160,6 +160,12 @@
       :name-image-new="hotelData.name"
       @update:img="addNewsImages($event)"
     />
+
+    <BasePreviewImage 
+      :url-image="previewUrl"
+      :is-open="isPreviewOpen"
+      @click:close="closePreviewImage"
+  />
 </template>
   
 <script setup>
@@ -170,6 +176,7 @@
     import ModalGallery from '@/components/ModalGallery.vue';
     import { useHotelStore } from '@/stores/modules/hotel';
     import { useToastAlert } from '@/composables/useToastAlert'
+    import BasePreviewImage from '@/components/BasePreviewImage.vue';
 
 
     const toast = useToastAlert();
@@ -211,12 +218,15 @@
 
     const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
     const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
-    const hoverCardLogo = ref(false);
+    const hoverCardLogo = ref(null);
     const modalGaleryRef = ref(null);
     const isloadingForm = ref(false);
     const formInvalid = false;
     const initialState = reactive({});
     const isDisabled = ref(false);
+
+    const previewUrl = ref('');
+    const isPreviewOpen = ref(false);
 
     const isChanged = computed(() => {
         return (
@@ -233,6 +243,18 @@
         if (!url) return;
         let type = url?.includes('https://') ? 'CDN' : 'STORAGE'
         return type
+    }
+
+
+    function openPreview(url) {
+        // console.log(url,'url');
+        previewUrl.value = url;
+        isPreviewOpen.value = true;
+    }
+
+    function closePreviewImage () {
+        previewUrl.value = null;
+        isPreviewOpen.value = false;
     }
 
     
