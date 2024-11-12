@@ -86,7 +86,7 @@
                   <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
                   <Toggle  v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
-                <div class="flex flex-col justify-start mt-auto gap-1">
+                <div class="flex flex-col justify-start mt-auto gap-2">
                   <img src="/assets/icons/1.TH.WiFi.png" alt="Wifi" class="h-6 w-6 " :class="{
                     'opacity-50': !form.show_wifi
                   }" />
@@ -100,7 +100,7 @@
                   <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
                   <Toggle  v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
                 </div>
-                <div class="flex flex-col justify-start mt-auto gap-1">
+                <div class="flex flex-col justify-start mt-auto gap-2">
                   <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" :class="{
                     'opacity-50': !form.show_call
                   }" />
@@ -114,7 +114,7 @@
                   <div :class="['mr-2 font-semibold text-[10px]', { 'text-[#333]': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
                   <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
                 </div>
-                <div class="flex flex-col justify-start mt-auto gap-1">
+                <div class="flex flex-col justify-start mt-auto gap-2">
                   <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
                   <div class="flex flex-col">
                     <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
@@ -352,8 +352,8 @@
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
     }
     .card-logo{
-        width:140px; 
-        height: 93px;
+        width:224px; 
+        height: 149px;
         .box-img{
             width: 78px;
             height: 78px;
