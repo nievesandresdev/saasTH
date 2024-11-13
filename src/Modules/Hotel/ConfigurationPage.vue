@@ -33,31 +33,31 @@
                         @mouseenter="hoverCardLogo = true"
                         @mouseleave="hoverCardLogo = null"
                     >
-                    <div v-if="hoverCardLogo === true" class="bg-black bg-opacity-25 w-full h-full absolute inset-0  p-2 flex justify-between">
-                      <button
-                            class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
-                            @click="openPreview($formatImage({url: imgSelected.url, type: imgSelected.type}))"
-                        >
-                            <img src="/assets/icons/1.TH.SEARCH.svg" class=" w-[20px] h-[20px]">
-                        </button>
-                        <button
-                            v-if="imgSelected.url"
-                            class="absolute left-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
-                            @click="removeLogo"
-                        >
-                            <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class=" w-[20px] h-[20px]">
-                        </button>
-                    </div>
-                    <img
-                        v-if="imgSelected.url"
-                        class="object-cover h-full w-full rounded-[6px]" :src="$formatImage({url: imgSelected.url, type: imgSelected.type})" alt="image-wallpaper"
-                    >
-                    <img
-                        v-else
-                        class="object-cover h-full w-full rounded-[6px]"
-                        :src="$formatImage({url: bgDefault.url, type: bgDefault.type})"
-                        alt="image-default"
-                    >
+                      <div v-if="hoverCardLogo === true" class="bg-black bg-opacity-25 w-full h-full absolute inset-0 p-2 flex justify-between">
+                          <button
+                              class="absolute left-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                              @click="openPreview($formatImage({url: imgSelected.url, type: imgSelected.type}))"
+                          >
+                              <img src="/assets/icons/1.TH.SEARCH.svg" class="w-[20px] h-[20px]">
+                          </button>
+                          <button
+                              class="absolute right-2 top-2 bg-white p-[2px] rounded-[3px] w-[24px] h-[24px]"
+                              @click="openModelGallery"
+                          >
+                              <img src="/assets/icons/1.TH.EDIT.OUTLINED.svg" class="w-[20px] h-[20px]">
+                          </button>
+                      </div>
+
+                      <img
+                          v-if="imgSelected.url"
+                          class="object-cover h-full w-full rounded-[6px]" :src="$formatImage({url: imgSelected.url, type: imgSelected.type})" alt="image-wallpaper"
+                      >
+                      <img
+                          v-else
+                          class="object-cover h-full w-full rounded-[6px]"
+                          :src="$formatImage({url: bgDefault.url, type: bgDefault.type})"
+                          alt="image-default"
+                      >
                 </div>
               </div>
             </div>
@@ -79,7 +79,7 @@
             </p>
           </template>
           <template #content>
-            <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full">
+            <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4">
               <!-- Toggle para WIFI -->
               <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
                 <div class="flex justify-end">
@@ -135,23 +135,23 @@
       </div>
   
       <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 mx-[-24px]">
-            <button 
-                class="text-base leading-[110%] font-medium underline"
-                :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
-                :disabled="!isChanged"
-                @click="cancelChanges"
-            >
-                Cancelar
-            </button>
-            <button
-                class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium h-11"
-                :disabled="isloadingForm || formInvalid || !isChanged"
-                :class="{'cta-disabled':isloadingForm || formInvalid || !isChanged}"
-                @click="submit"
-            >
-                Guardar
-            </button>
-        </div>
+          <button 
+              class="text-base leading-[110%] font-medium underline"
+              :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
+              :disabled="!isChanged"
+              @click="cancelChanges"
+          >
+              Cancelar
+          </button>
+          <button
+              class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium h-11"
+              :disabled="isloadingForm || formInvalid || !isChanged"
+              :class="{'cta-disabled':isloadingForm || formInvalid || !isChanged}"
+              @click="submit"
+          >
+              Guardar
+          </button>
+      </div>
     </div>
   
     <ModalGallery
@@ -341,9 +341,9 @@
         return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
     };
 
-    const removeLogo = () => {
+    /* const removeLogo = () => {
         imgSelected.value = {...bgDefault};
-    };
+    }; */
 </script>
   
 <style lang="scss" scoped>
