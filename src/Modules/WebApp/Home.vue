@@ -59,7 +59,7 @@
                             <router-link :to="{ path: '/alojamiento/configuracion' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/1.TH.Home.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Home</h3>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                             <router-link :to="{ path: '/alojamiento/perfil' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.icon.instalaciones.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Alojamiento</h3>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                             <router-link :to="{ path: '/places',query: {selected_place: 5} }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.GUÍA CIUDAD.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Destino</h3>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                             <router-link :to="{ path: '/experiencias' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.CAMERA.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Experiencias</h3>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@
                             <router-link :to="{ path: '/chat/webapp/general' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Chat.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Chat</h3>
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@
                             <router-link :to="{ path: '/feedback/webapp/pre-stay' }" class="block p-3 ">
                                 <div class="flex items-center group">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Seguimiento.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Seguimiento</h3>
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
                             <router-link :to="{ path: '' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/1.TH.PROMOCIONA.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Promocionar WebApp</h3>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                             <router-link :to="{ path: '/comunicaciones' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/Comunicaciones.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Comunicaciones</h3>
                                     </div>
                                 </div>
@@ -183,10 +183,10 @@
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/personalizacion' }" class="block p-3">
+                            <router-link :to="{ path: '/apariencia' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/Personalización.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Diseño</h3>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@
                             <router-link :to="{ path: '/legal/general' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/1.TH.TextosLegales.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Textos legales</h3>
                                     </div>
                                 </div>
@@ -210,10 +210,10 @@
                             </router-link>
                         </div>
                         <div class="fixed-card-gallery hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
-                            <router-link :to="{ path: '/galeria-imagenes' }" class="block p-3">
+                            <router-link :to="{ path: '/galeria' }" class="block p-3">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Galeria de imagenes.png" alt="icon" class="w-8 h-8">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Galería de imágenes</h3>
                                     </div>
                                 </div>

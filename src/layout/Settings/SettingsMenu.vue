@@ -357,7 +357,7 @@ const menu_section = reactive([
             icon: '/assets/icons/1.TH.PROMOCIONA-black.svg',
             to: '',
             include: '/comunicaciones',
-            selectedArr: ['ComunicationHome'],
+            selectedArr: [''],
         },
         {
             title: 'Comunicaciones',
