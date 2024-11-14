@@ -57,7 +57,7 @@
                 <div class="flex flex-col">
                     <p class="text-sm leading-[150%]">
                         Configura los medios a través de los cuales tus huéspedes acceden a la WebApp de tu hotel desde
-                        <u class="italic font-medium">aquí</u>.
+                        <router-link :to="{name:'ComunicationHome'}" class="italic font-medium underline hover:underline">aquí</router-link>.
                     </p>
                     <p class="text-sm leading-[150%]">
                         O puedes invitar a tus huéspedes desde el botón:
