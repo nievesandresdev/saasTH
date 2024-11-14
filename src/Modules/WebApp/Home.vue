@@ -46,15 +46,28 @@
             </div>
             <!-- section -->
             <div class="w-full p-2 ml-4 flex-1 fixed-size-content">
-                <div class="flex justify-start items-center m-4 pt-2">
+                <!-- <div class="flex justify-start items-center m-4 pt-2">
                     <span class="text-[18px] font-medium mb-4">
                         Customer Experience + Reputación Online
                         <div class="h-1 z-10" style="width: 150%; margin-left: -50%; background: linear-gradient(to right, white 18%, rgb(52, 169, 143));"></div>
                     </span>
-                </div>
+                </div> -->
 
-                <div class="mb-4 grid-container">
+                <div class="mb-4">
                     <div class="grid fixed-grid w-3/5">
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
+                            <router-link :to="{ path: '/alojamiento/configuracion' }" class="block p-3">
+                                <div class="flex items-center">
+                                    <img src="/assets/icons/1.TH.Home.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Home</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-2 group-hover:text-red-200">
+                                    <p class="text-sm">Configura el contenido que tus huéspedes verán en la Home de tu WebApp.</p>
+                                </div>
+                            </router-link>
+                        </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
                             <router-link :to="{ path: '/alojamiento/perfil' }" class="block p-3">
                                 <div class="flex items-center">
@@ -126,14 +139,35 @@
                 </div>
                 <!-- General Configuration Section -->
                 <div class="">
-                    <div class="flex justify-start items-center m-4 pt-2">
+                    <!-- <div class="flex justify-start items-center m-4 pt-2">
                         <span class="text-[18px] font-medium mb-4">
-                            Administración general
+                            General
                             <div class="h-1 z-10" style="width: 150%; margin-left: -50%; background: linear-gradient(to right, white 18%, rgb(52, 169, 143));"></div>
                         </span>
+                    </div> -->
+                    <div class="flex items-center m-4 pt-2">
+                        <span class="text-[18px] font-medium uppercase">
+                            General
+                        </span>
+                        <div class="flex-grow border-t border-[#BFBFBF] ml-2"></div>
                     </div>
+
+
                     
                     <div class="grid fixed-grid w-1/2">
+                        <div class="fixed-card-large hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
+                            <router-link :to="{ path: '' }" class="block p-3">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/1.TH.PROMOCIONA.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
+                                    <div class="ml-4">
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Promocionar WebApp</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA] w-[230px]">
+                                    <p class="text-sm">Aquí encontrarás las herramientas y medios para promocionar tu WebApp</p>
+                                </div>
+                            </router-link>
+                        </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
                             <router-link :to="{ path: '/comunicaciones' }" class="block p-3">
                                 <div class="flex items-center ">
@@ -143,7 +177,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
-                                    <p class="text-sm">Configura los medios y mensajes para comunicarte con tus huéspedes.</p>
+                                    <p class="text-sm">Configura los medios y mensajes para comunicarte con tus huéspedes</p>
                                 </div>
                             </router-link>
                         </div>
@@ -153,11 +187,11 @@
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/Personalización.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-4">
-                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Personalización</h3>
+                                        <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Diseño</h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
-                                    <p class="text-sm">Elige el estilo visual que mejor aplique a la identidad de marca de tu alojamiento.</p>
+                                    <p class="text-sm">Elige el estilo visual que mejor refleje la identidad de marca de tu alojamiento</p>
                                 </div>
                             </router-link>
                         </div>
@@ -165,13 +199,13 @@
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
                             <router-link :to="{ path: '/legal/general' }" class="block p-3">
                                 <div class="flex items-center ">
-                                    <img src="/assets/icons/webapp/1.TH.Icon.Textos legales.png" alt="icon" class="w-8 h-8">
+                                    <img src="/assets/icons/1.TH.TextosLegales.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
                                     <div class="ml-4">
                                         <h3 class="text-[18px] font-medium group-hover:text-[#34A98F]">Textos legales</h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
-                                    <p class="text-sm">Consulta y configura los textos necesarios para cubrir los aspectos legales.</p>
+                                    <p class="text-sm">Consulta y configura los textos necesarios para cubrir los aspectos legales</p>
                                 </div>
                             </router-link>
                         </div>
@@ -184,7 +218,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center mt-2">
-                                    <p class="text-sm">Gestiona la colección de imágenes que utilizarás en tu WebApp.</p>
+                                    <p class="text-sm">Gestiona la colección de imágenes que utilizarás en tu WebApp</p>
                                 </div>
                             </router-link>
                         </div>
@@ -256,12 +290,24 @@ onMounted(()=>{
 
 .fixed-grid {
     display: grid;
-    grid-template-columns: repeat(3, 230px); /* Tres columnas fijas de 230px */
-    gap: 16px; /* Espacio entre los elementos */
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas por defecto */
+    gap: 16px; /* Espacio entre las tarjetas */
 }
+
+@media (max-width: 1440px) {
+    .fixed-grid {
+        grid-template-columns: repeat(3, 1fr); /* Cambia a 3 columnas en pantallas de 1440px o menos */
+    }
+}
+
 
 .fixed-card {
     width: 230px;
+    height: 136px;
+}
+
+.fixed-card-large {
+    width: 300px;
     height: 136px;
 }
 

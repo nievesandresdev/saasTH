@@ -217,7 +217,7 @@ const menu_section = reactive([
           {
               title: 'Home',
               to: 'Configuracion',
-              icon: '/assets/icons/1.TH.MM.WEBAPP.svg',
+              icon: '/assets/icons/1.TH.HOME-black.svg',
               include: '/alojamiento/configuracion',
               selectedArr: ['Configuration'],
             
@@ -352,6 +352,13 @@ const menu_section = reactive([
   {
       title: 'General',
       group: [
+      {
+            title: 'Promociona tu WebApp',
+            icon: '/assets/icons/1.TH.PROMOCIONA-black.svg',
+            to: '',
+            include: '/comunicaciones',
+            selectedArr: ['ComunicationHome'],
+        },
         {
             title: 'Comunicaciones',
             icon: '/assets/icons/1.TH.COMUNICACIONES.svg',
