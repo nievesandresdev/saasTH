@@ -64,7 +64,7 @@
           </template>
         </SectionConfig>
   
-        <SectionConfig>
+        <SectionConfig class="hidden">
           <template #title>
             <div class="flex justify-between">
               <span class="font-medium text-base">Botonera</span>
