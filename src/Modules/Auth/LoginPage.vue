@@ -98,33 +98,38 @@
         <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
       </div>
     </div>  
-    <ModalWindow :isVisible="showModal" @close="closeModalPass" size="sm">
+    <ModalWindow :isVisible="showModal" @close="closeModalPass" :width="'500px'">
       <template #content>
+        <div class="flex justify-end mb-4">
+            <button @click="closeModalPass">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
+            </button>
+        </div>
         <form @submit.prevent="forgotPass">
           <div class="mb-4 flex flex-col">
-            <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
+            <h1 class="text-[22px] font-medium text-center mb-2">Reestablece tu contraseña</h1>
             <p class="text-center text-sm mb-4">
-              ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
+              Introduce tu correo electrónico asociado a tu cuenta, y te enviaremos un enlace para restablecer tu contraseña. Si no recibes el correo en unos minutos, revisa tu carpeta de spam o inténtalo nuevamente.
             </p>
             <div class="flex flex-col">
-              <label for="correo" class="font-medium text-sm">Correo electrónico</label>
+              <label for="correo" class="font-medium text-sm mb-2">Correo electrónico</label>
               <BaseTextField
                 v-model="forgot.email"
                 type="email"
                 :error="forgot.errors?.email"
-                placeholder="Correo Electrónico"
+                placeholder="Correo electrónico asociado a la cuenta"
                 required
                 autofocus
-                autocomplete="username"
+                autocomplete="forgot"
               />            
             </div>
             <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
           </div>
-          <div class="px-8 flex justify-center">
+          <div class=" flex w-full">
             <button 
               type="submit" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              :disabled="forgot.processing"
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium disabled:bg-[#DADADA]" 
+              :disabled="!isEmailValid"
               :class="{ 'opacity-25': forgot.processing }"
             >
               Enviar
@@ -183,7 +188,7 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,computed } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import { useUserStore } from '@/stores/modules/users/users'
@@ -203,13 +208,19 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(false);
+const showModal = ref(true);
 
 const showAlertModal = ref(false);
 const route = useRoute();
 const router = useRouter();
 
 const user = useUserStore();
+
+// Computed property to check if the email is valid
+const isEmailValid = computed(() => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailPattern.test(forgot.value.email)
+})
 
 const forgot = ref({
   email: '',
