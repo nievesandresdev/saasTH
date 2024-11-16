@@ -17,7 +17,7 @@
             </div>
             <div class="w-full text-center">
               <a target="_blank" href="https://www.linkedin.com/company/hicitty/">
-                <img class="h-8 w-8 inline-block" src="/assets/img/hoster/linkedin_black.svg" alt="">
+                <img class="h-10 w-10 inline-block" src="/assets/img/hoster/linkedin_black.svg" alt="">
               </a>
             </div>
           </div>
