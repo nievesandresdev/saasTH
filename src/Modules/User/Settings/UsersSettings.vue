@@ -18,9 +18,9 @@
         </div>
       </div>
       <div class="group flex items-center px-4 py-2 text-black border border-[#333333] rounded bg-white cursor-pointer hover:border-[#2A8873]" @click="createUser">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
           <path d="M11.9898 4V12M11.9898 20V12M11.9898 12H20M11.9898 12H4" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#2A8873]"/>
-        </svg>
+        </svg> -->
         <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
     </div>
 
@@ -35,13 +35,13 @@
         <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
         <!-- <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0"> -->
         <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0">
-          <thead class="text-xs font-semibold text-gray-700 text-left bg-gray-100 h-3">
+          <thead class="text-sm font-semibold text-[#333] text-left border-b-2 h-1">
             <tr>
-              <th scope="col" class="px-5 py-3 w-1/4">Nombre y Apellidos</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Puesto de Trabajo</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Antiguedad</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Estado</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Opciones</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Nombre y Apellidos</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Puesto de Trabajo</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Antigüedad</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Estado</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Opciones</th>
             </tr>
           </thead>
           <tbody>
@@ -56,13 +56,13 @@
                 'shadow-sm': hoverSelected == index
               }"
             >
-              <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-normal break-words w-1/4">
+              <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.name }} {{ user.profile?.lastname }} 
               </th>
-              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
+              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.work_position }}
               </td>
-              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
+              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.time }}
               </td>
               <td @click="showUser(user)" class="py-4 whitespace-normal break-words w-1/4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
@@ -73,7 +73,7 @@
                   Inactivo
                 </span>
               </td>
-              <td class="pl-10 py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
+              <td class="pl-[80px] py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
                 
                 <Toggle
                   :user="user"

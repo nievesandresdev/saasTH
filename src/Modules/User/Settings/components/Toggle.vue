@@ -2,7 +2,7 @@
     <div class="relative" ref="ref_section_toggle" v-show="authStore?.user?.id != props.user.id && user.owner == 0">
       <svg
         @click="toggleDropdown"
-        class="cursor-pointer"
+        class="cursor-pointer text-[#333333]"
         width="24"
         height="24"
         viewBox="0 0 24 24"
