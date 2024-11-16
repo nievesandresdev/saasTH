@@ -90,13 +90,6 @@
           </div>
         </div>
       </div>
-  
-      <!-- mobile msg -->
-      <div class="my-auto w-full lg:hidden">
-        <img class="w-[13.5rem] h-10 mx-auto" src="/assets/img/hoster/1.TH.logo.full.svg" alt="logo the hoster">
-        <p class="text-lg font-medium mt-8 text-center">La visualización en dispositivos móviles no es posible.</p>
-        <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
-      </div>
     </div>  
     <ModalWindow :isVisible="showModal" @close="closeModalPass" :width="'500px'">
       <template #content>
