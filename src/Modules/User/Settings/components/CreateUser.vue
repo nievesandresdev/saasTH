@@ -12,8 +12,8 @@
             <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
               <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
                 
-                <div class="flex-1 text-center">
-                  <h1 class="font-medium text-xl">Crear usuario</h1>
+                <div class="flex-1 text-left">
+                  <h1 class="font-medium text-[22px]">Crear usuario</h1>
                 </div>
                 <div class="flex justify-end">
                   <button class="" @click="closeModal">
@@ -22,25 +22,35 @@
                 </div>
               </div>
       
-              <div class="p-6">
+              <div class="p-4">
                 <div class="flex items-center justify-between mb-5">
                   <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
-                    <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
+                    <div :class="[
+                      'w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10',
+                      currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black'
+                    ]">
                       {{ step.number }}
                     </div>
-                    <div :class="['text-sm mt-2 text-center break-words', currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]']" class="font-semibold">
+                    <div :class="[
+                      'text-sm mt-2 text-center break-words font-semibold',
+                      currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]'
+                    ]" 
+                        class="min-h-[3rem] flex items-center justify-center">
                       {{ step.label }}
                     </div>
-                    <!-- border -->
-                    <div v-if="index !== steps.length - 1" :class="['absolute h-0 border top-5', currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300']" 
-                        :style="{ width: `calc(100% - 40px)`, left: 'calc(50% + 20px)' }"></div>
+                    <!-- Línea de conexión entre pasos -->
+                    <div v-if="index !== steps.length - 1" 
+                        :class="[
+                          'absolute h-0 border top-5',
+                          currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
+                        ]" 
+                        :style="{ width: '150px', left: '80px' }">
+                    </div>
                   </div>
                 </div>
-
-
-                <hr class="mb-5">
+                <hr class="mb-[22px]">
                 <div v-if="currentStep === 1">
-                  <div class="relative mt-4">
+                  <!-- <div class="relative mt-4">
                     <div class="flex justify-between text-black">
                       <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                       <BaseTooltipResponsive
@@ -89,15 +99,16 @@
                         />
                       </div>
                     </transition>
-                  </div>
+                  </div> -->
 
-                  <div class="mt-4">
+                  <span class="text-[18px] font-medium">Datos del usuario</span>
+                  <div class="mt-[10px]">
                         <label class="text-sm font-medium">Nombre *</label>
                         <div class="relative">
                             <input
                                 v-model="form.name"
                                 type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
+                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
                                 placeholder="Nombre"
                                 :class="
                                 {
@@ -106,121 +117,117 @@
                                 }"
                             />
                         </div>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-sm font-medium">Apellidos *</label>
-                        <div class="relative">
-                            <input
-                                v-model="form.lastname"
-                                type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green"
-                                :class="
-                                  {
-                                    'hborder-black-100 htext-black-100 font-medium': form.lastname,
-                                    'hborder-gray-400 htext-gray-500': !form.lastname
-                                  }"
-                                placeholder="Apellidos"
-                            />
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                      <label class="text-sm font-medium">Teléfono móvil </label>
-                      <BasePhoneField
-                            v-model="form.phone"
-                            name="phone"
-                            @handlePhoneError="errorPhone = $event"
-                        />
-                        <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-sm font-medium">Correo electrónico *</label>
-                        <div class="relative">
-                            <BaseEmailFieldLive
-                                placeholder="Correo con el que iniciará sesión"
-                                v-model="form.email"
-                                :enableLiveCheck="true"
-                                @errorMessage="errorEmailText = $event"
-                                @handleError="errorEmail = $event"    
-                            />
-                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                </svg>
-                                <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-sm font-medium">Contraseña *</label>
-                        <div class="relative">
-                            <input
-                                v-model="form.password"
-                                type="password"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
-                                :class="{
-                                  'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                                  'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
-                                  'hinput-green' : !errorPassword
+                  </div>
+                  <div class="mt-4">
+                      <label class="text-sm font-medium">Apellidos *</label>
+                      <div class="relative">
+                          <input
+                              v-model="form.lastname"
+                              type="text"
+                              class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
+                              :class="
+                                {
+                                  'hborder-black-100 htext-black-100 font-medium': form.lastname,
+                                  'hborder-gray-400 htext-gray-500': !form.lastname
                                 }"
-                                placeholder="Clave de acceso al sistema"
-                                autocomplete="nope"
-                            />
-                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                </svg>
-                                <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-sm font-medium">Confirmar contraseña *</label>
-                        <div class="relative">
-                            <input
-                                v-model="form.password_confirmation"
-                                type="password"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
-                                :class="{
-                                  'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                                  'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
-                                  'hinput-green' : !errorPasswordMatch
-                                }"
-                                placeholder="Repite la clave"
-                                autocomplete="nope"
-                            />
-                            <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                              placeholder="Apellidos"
+                          />
+                      </div>
+                  </div>
+                  <div class="mt-4 flex flex-col gap-[7px]">
+                    <label class="text-sm font-medium">Teléfono móvil </label>
+                    <BasePhoneField
+                          v-model="form.phone"
+                          name="phone"
+                          @handlePhoneError="errorPhone = $event"
+                      />
+                      <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                          </svg>
+                          <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
+                      </div>
+                  </div>
+                  <div class="mt-4 flex flex-col gap-[7px]">
+                      <label class="text-sm font-medium">Correo electrónico *</label>
+                      <div class="relative">
+                          <BaseEmailFieldLive
+                              placeholder="Correo con el que iniciará sesión"
+                              v-model="form.email"
+                              :enableLiveCheck="true"
+                              @errorMessage="errorEmailText = $event"
+                              @handleError="errorEmail = $event"    
+                          />
+                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                </svg>
-                                <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
-                            </div>
-                        </div>
-                    </div>
+                              </svg>
+                              <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="mt-4">
+                      <label class="text-sm font-medium">Contraseña *</label>
+                      <div class="relative">
+                          <input
+                              v-model="form.password"
+                              type="password"
+                              class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
+                              :class="{
+                                'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
+                                'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
+                                'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
+                                'hinput-green' : !errorPassword
+                              }"
+                              placeholder="Clave de acceso al sistema"
+                              autocomplete="nope"
+                          />
+                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                              </svg>
+                              <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="mt-4">
+                      <label class="text-sm font-medium">Confirmar contraseña *</label>
+                      <div class="relative">
+                          <input
+                              v-model="form.password_confirmation"
+                              type="password"
+                              class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                              :class="{
+                                'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
+                                'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
+                                'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
+                                'hinput-green' : !errorPasswordMatch
+                              }"
+                              placeholder="Repite la clave"
+                              autocomplete="nope"
+                          />
+                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                              </svg>
+                              <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
+                          </div>
+                      </div>
+                  </div>
                 </div> <!-- fin step 1-->
                 <div v-if="currentStep === 2">
-                    <div class="flex flex-col mb-6 text-left">
+                    <div class="flex justify-between items-center mb-4 text-left">
                         <strong class="text-[18px] font-medium">Alojamientos</strong>
+                        <div class="flex items-center gap-1">
+                          <span class="text-sm font-semibold">Todos</span>
+                          <BaseSwichInput
+                              v-model="selectAllHotels"
+                              id="swich-visible-experience"
+                              @change:value="handleSelectAll(selectAllHotels)"
+                          />
+                        </div>
                     </div>
-                    <div class="space-y-2">
-                      <!-- Checkbox para "Todos los hoteles" -->
-                      <div class="flex items-center justify-between mb-4 rounded-lg">
-                        <span class="text-sm font-semibold">Todos los hoteles</span>
-                        <input
-                          type="checkbox"
-                          v-model="selectAllHotels"
-                          @change="handleSelectAll(selectAllHotels)"
-                          class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
-                          :disabled="isRoleAdmin"
-                        />
-                      </div>
-
+                    <div>
                       <!-- Checkboxes para los hoteles individuales -->
                       <div
                         v-for="hotel in userStore.$getHotels(['id', 'name'])"
@@ -234,75 +241,49 @@
                           v-model="form.hotels" 
                           @change="handleSelection(hotel.id)"
                           class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
-                          :disabled="isRoleAdmin"
+                          :disabled="handleChecked"
                         />
                       </div>
                   </div>
                 </div>
 
                 <div v-if="currentStep === 3">
-                    <div class="flex justify-start items-center mb-6 text-left">
-                        <strong class="text-[18px] font-medium">Accesos a la plataforma</strong>
-                        <BaseTooltipResponsive
-                                size="s"
-                                :top="25"
-                                :right="-55"
-                            >
-                                <template v-slot:button>
-                                    <img
-                                        src="/assets/icons/info.blue.svg"
-                                        class="w-5 h-5 ml-1"
-                                        alt="icon_info"
-                                    >
-                                </template>
-                                <template v-slot:content>
-                                    <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
-                                </template>
-                            </BaseTooltipResponsive>
-                        
+                    <div class="relative mt-4">
+                    <div class="flex justify-between text-black">
+                      <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                     </div>
-                    <div class="space-y-6">
-                      <!-- Sección de Operación -->
-                      <div>
-                          <div class="flex items-center justify-between mb-4">
-                              <span class="text-sm font-semibold">Todos los accesos</span>
-                              <input type="checkbox" v-model="selectAll"  @change="toggleAllPermissions" :disabled="form.work_position_id" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                          </div>
-                          <span class="block mb-2 font-semibold text-sm">Operación</span>
-                          <div class="space-y-2 ml-2">
-                              <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
-                                  <span class="text-sm font-[500]">{{ item.name }}</span>
-                                  <input type="checkbox" v-model="item.selected" 
-                                      :disabled="item.disabled || form.work_position_id"
-                                      class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
-                                      @change="handleCheckPermission(item.value, item.selected)">
-                              </div>
-                          </div>
+                    <div class="relative w-full">
+                      <input
+                          type="text"
+                          id="workPositionInput"
+                          @click.stop="toggleModalWorkPosition"
+                          readonly
+                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
+                          :class="{
+                            'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                            'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
+                          }"
+                          :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
+                        />
+                      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                        <img src="/assets/icons/1.TH.I.dropdownBig.svg">
                       </div>
-                      <!-- Sección de Administración -->
-                      <div>
-                          <span class="block mb-2 font-semibold text-sm">Administración</span>
-                          <div class="space-y-2 ml-2">
-                              <div v-for="item in adminAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
-                                  <span class="text-sm font-[500]">{{ item.name }}</span>
-                                  <input type="checkbox" v-model="item.selected" 
-                                      :disabled="item.disabled || form.work_position_id"
-                                      class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50" 
-                                      @change="handleCheckPermission(item.value, item.selected)">
-                              </div>
-                          </div>
+                    </div>
+                    <transition name="modal-fade">
+                      <div id="modalWorkPosition">
+                        <ModalCrud
+                          ref="ref_modal_crud"
+                          :data="workPositions"
+                          :open="isModalCrudOpen"
+                          @close="closeModalWorkPosition"
+                          @select="selectWorkPosition"
+                          @deleteWP="deleteWorkPosition"
+                        />
                       </div>
+                    </transition>
                   </div>
                 </div>
-                <div v-if="currentStep === 4">
-                  <Notifications 
-                    v-model:periodicityChat="form.periodicityChat"
-                    v-model:periodicityStay="form.periodicityStay"
-                    v-model:notifications="form.notifications"
-                    :maxHeight="900"
-                    :workPositionId="form.work_position_id"
-                  />
-                </div>
+                
               </div>
             </div>
     
@@ -355,6 +336,7 @@
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
+  import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -445,7 +427,7 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
   const isRoleAdmin = ref(false);
 
   const form = ref({
-    work_position_id: null,
+    /* work_position_id: null, */
     role : null,
     name: '',
     lastname: '',
@@ -574,7 +556,7 @@ const isFormIncomplete = computed(() => {
 
   const selectAllHotels = ref(false);
   
-  watch(() => form.value.role, (newRole) => { 
+  /* watch(() => form.value.role, (newRole) => { 
     if (newRole === 1 || newRole === 2) {
         selectAllHotels.value = true;
         handleSelectAll(true);
@@ -598,7 +580,7 @@ const isFormIncomplete = computed(() => {
         handleSelectAll();
     }
       
-}, { immediate: true });
+}, { immediate: true }); */
 
 
 const handleSelectAll = (initial = false) => {
@@ -728,63 +710,22 @@ const toggleAllPermissions = () => {
     });
 };
 
-
-
-
-
-
-const handleUpdateAllPermissions = (add) => {
-    const permissions = [...operationAccess.value, ...adminAccess.value].map(access => access.value);
-
-    permissions.forEach(permissionName => {
-        form.value.hotels.forEach(hotelId => {
-            const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
-
-            if (index !== -1) { // Si existe el hotel
-                if (!add) {
-                    // eliminar de jsonhotel
-                    delete jsonHotel.value[index][hotelId][permissionName];
-                } else {
-                    // actualizar el objeto
-                    if (!jsonHotel.value[index][hotelId]) {
-                        jsonHotel.value[index][hotelId] = {};
-                    }
-                    jsonHotel.value[index][hotelId][permissionName] = {
-                        status: true,
-                        can: {}
-                    };
-                }
-            } else { // Si no existe el hotel
-                const newHotel = { [hotelId]: {} };
-                newHotel[hotelId][permissionName] = {
-                    status: true,
-                    can: {}
-                };
-                jsonHotel.value.push(newHotel);
-            }
-        });
-    });
-
-    form.value.access = jsonHotel.value;
-};
-
   
-  const currentStep = ref(1);
+  const currentStep = ref(3);
   const steps = [
     { number: 1, label: 'Usuario' },
-    { number: 2, label: 'Alojamientos' },
-    { number: 3, label: 'Accesos' },
-    { number: 4, label: 'Notificaciones'}
+    /* { number: 2, label: 'Alojamientos' }, */
+    { number: 2, label: 'Accesos' },
+    { number: 3, label: 'Permisos y notificaciones'}
   ];
   
   const nextStep = () => {
-  if (currentStep.value < steps.length) {
-    currentStep.value++;
-  }
-};
+    if (currentStep.value < steps.length) {
+      currentStep.value++;
+    }
+  };
 
 const prevStep = () => {
-  
   if (currentStep.value > 1) {
     currentStep.value--;
   }
@@ -864,11 +805,10 @@ const ref_modal_crud = ref(null);
 // Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
   const addSection = ref_section_add.value;
-  const modalCrud = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
+  //const modalCrud = ref_modal_crud.value ? ref_modal_crud.value.$el : null;
 
   if (
-    addSection && !addSection.contains(event.target) && 
-    modalCrud && !modalCrud.contains(event.target) &&
+    addSection && !addSection.contains(event.target) &&
     !event.target.closest('.hbtn-tertiary') && // Asegúrate de no cerrar cuando el clic es en el botón "Atras"
     !event.target.closest('.modalContainerRef') // Asegúrate de no cerrar cuando el clic es en el botón "Siguiente"
   ) {
@@ -924,6 +864,7 @@ function closeModal() {
       showModalNoSave.value = false;
     }
   } else if(!mouseDownInside.value) { // Si no hay cambios y el click fue fuera, cerrar el modal
+    console.log('closeModal')
     emits('close');
     isModalCrudOpen.value = false;
   }
