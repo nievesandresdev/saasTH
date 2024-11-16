@@ -133,7 +133,7 @@
     </ModalWindow>
 
     <!-- modal alert -->
-    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" :width="'344px'" :paddingContent="'p-4'">
+    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" :width="'330px'" :paddingContent="'p-4'">
       <template #content>
         <div class="flex flex-col items-center justify-center" v-if="route.query.tokenExpired">
           <h2 class="text-[22px] font-medium flex justify-center">Oh, lo siento</h2>
