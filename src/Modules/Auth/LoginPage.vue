@@ -162,10 +162,10 @@
             </div>
           </div>
 
-        <div class="" v-else-if="forgot.success">
+        <div class="flex flex-col items-center justify-center" v-else-if="forgot.success">
           <h2 class="text-[22px] font-medium flex justify-center w-full mb-2">{{ forgot.title }}</h2>
-          <p class="flex w-full justify-center">{{ forgot.msg }}</p>
-          <div class="flex justify-center mt-4">
+          <p class="text-center text-sm mt-2">{{ forgot.msg }}</p>
+          <div class="flex justify-center mt-4 w-full">
             <button 
               type="button" 
               class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
