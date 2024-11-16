@@ -27,7 +27,7 @@
             <form @submit.prevent="handleLogin">
               <h1 class="text-xl lg:text-22xl hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
               <div class="hmb-4 lg:mb-6 flex flex-col">
-                <label class="font-medium text-lg mb-1">Correo electrónico</label>
+                <label class="font-medium text-sm mb-1">Correo electrónico</label>
                 <input 
                   type="email"
                   class="w-100 rounded h-11 lg:h-14 p-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
@@ -43,11 +43,11 @@
                 </div>
               </div>
               <div class="mb-2">
-                <label class="font-medium text-lg mb-1">Contraseña</label>
+                <label class="font-medium text-sm mb-1">Contraseña</label>
                 <div class="relative w-100 collaborator-box">
-                  <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                  <!-- <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
                   <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
-                  <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)">
+                  <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
                   <input 
                     :type="visible_pass ? 'text' : 'password'"
                     class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
@@ -59,13 +59,13 @@
                 </div>
               </div>
 
-              <div class="flex justify-between mt-4">
-                <div class="form-remember col-10 col-lg-4 text-left">
-                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-1 h-6 w-5 rounded">
-                  <p class="inline text-sm">Recuérdame</p>
+              <div class="flex justify-between mt-[6px]">
+                <div class="flex items-center">
+                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-2 h-6 w-5 rounded">
+                  <p class="text-sm font-normal">Recordar contraseña</p>
                 </div>
-                <div class="forgot-password text-left text-lg-right col-10 col-lg-6 pt-1">
-                  <a href="javascript:void(0)" class="text-sm font-medium" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
+                <div class="pt-1">
+                  <a class="text-sm font-medium cursor-pointer underline" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
                 </div>
               </div>
 
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>  
-    <ModalWindow :isVisible="showModal" @close="closeModalPass" :width="'500px'">
+    <ModalWindow :isVisible="showModal" @close="closeModalPass" :width="'500px'" :paddingContent="'p-4'">
       <template #content>
         <div class="flex justify-end mb-4">
             <button @click="closeModalPass">
@@ -133,34 +133,35 @@
     </ModalWindow>
 
     <!-- modal alert -->
-    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="xs">
+    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" :width="'344px'" :paddingContent="'p-4'">
       <template #content>
-        <div class="p-4" v-if="route.query.tokenExpired">
-          <h2 class="text-lg font-medium">Oh lo siento</h2>
-          <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
-          <div class="px-8 flex justify-center mt-7">
-            <button 
-              type="button" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              @click="closeAlertModal()"
-            >
-              Cerrar
-            </button>
-          </div>
+        <div class="flex flex-col items-center justify-center" v-if="route.query.tokenExpired">
+          <h2 class="text-[22px] font-medium flex justify-center">Oh, lo siento</h2>
+          <p class="text-center text-sm mt-2">Este enlace ha expirado, vuelva a solicitar otro.</p>
+          <div class="flex justify-center mt-4 w-full">
+              <button 
+                type="button" 
+                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+                @click="closeAlertModal()"
+              >
+                Cerrar
+              </button>
+            </div>
         </div>
-        <div class="p-4" v-else-if="route.query.changePassword">
-          <h2 class="text-lg font-medium">¡Contraseña cambiada!</h2>
-          <p>Se ha cambiado la contraseña exitosamente</p>
-          <div class="px-8 flex justify-center mt-7">
-            <button 
-              type="button" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              @click="closeAlertModal()"
-            >
-              Cerrar
-            </button>
+        <div class="flex flex-col items-center justify-center" v-else-if="route.query.changePassword">
+            <h2 class="text-[22px] font-medium flex justify-center">¡Contraseña actualizada!</h2>
+            <p class="text-center text-sm mt-2">Se ha cambiado la contraseña exitosamente</p>
+            <div class="flex justify-center mt-4 w-full">
+              <button 
+                type="button" 
+                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+                @click="closeAlertModal()"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
-        </div>
+
         <div class="" v-else-if="forgot.success">
           <h2 class="text-[22px] font-medium flex justify-center w-full mb-2">{{ forgot.title }}</h2>
           <p class="flex w-full justify-center">{{ forgot.msg }}</p>
@@ -197,8 +198,8 @@ const form = ref({
   remember: localStorage.getItem("remember_form") ? (localStorage.getItem("remember_form") === 'true') : false
 });
 
-const placeholderEmail = ref('Introduce tu email');
-const placeholderPassword = ref('********');
+const placeholderEmail = ref('Escribe texto');
+const placeholderPassword = ref('Contraseña');
 
 const visiblePass = ref(false);
 const showModal = ref(false);
