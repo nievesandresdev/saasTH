@@ -161,10 +161,10 @@
             </button>
           </div>
         </div>
-        <div class="p-4" v-else-if="forgot.success">
-          <h2 class="text-lg font-medium mt-3">{{ forgot.title }}</h2>
-          <p>{{ forgot.msg }}</p>
-          <div class="px-8 flex justify-center mt-7">
+        <div class="" v-else-if="forgot.success">
+          <h2 class="text-[22px] font-medium flex justify-center w-full mb-2">{{ forgot.title }}</h2>
+          <p class="flex w-full justify-center">{{ forgot.msg }}</p>
+          <div class="flex justify-center mt-4">
             <button 
               type="button" 
               class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
@@ -201,7 +201,7 @@ const placeholderEmail = ref('Introduce tu email');
 const placeholderPassword = ref('********');
 
 const visiblePass = ref(false);
-const showModal = ref(true);
+const showModal = ref(false);
 
 const showAlertModal = ref(false);
 const route = useRoute();
