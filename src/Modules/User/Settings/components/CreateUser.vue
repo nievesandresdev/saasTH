@@ -28,7 +28,7 @@
                     <div :class="['w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10', currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black']">
                       {{ step.number }}
                     </div>
-                    <div :class="['text-sm mt-2 text-center break-words', currentStep >= step.number ? 'text-black' : 'text-gray-500']" class="font-semibold">
+                    <div :class="['text-sm mt-2 text-center break-words', currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]']" class="font-semibold">
                       {{ step.label }}
                     </div>
                     <!-- border -->
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <label class="text-sm font-medium">Apellido *</label>
+                        <label class="text-sm font-medium">Apellidos *</label>
                         <div class="relative">
                             <input
                                 v-model="form.lastname"
@@ -123,35 +123,7 @@
                             />
                         </div>
                     </div>
-                    <!-- <div class="mt-4">
-                      <label class="text-sm font-medium">Teléfono móvil</label>
-                        <div class="flex rounded">
-                            <select v-model="form.prefix"
-                              :class="{
-                                'hborder-alert-negative': errorPrefix, '': !errorPrefix,
-                                'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
-                                'hborder-gray-400 htext-gray-500': !form.phone
-                              }" 
-                              class="bg-white w-[92px] rounded-l-lg h-10 border pr-1 font-medium text-sm px-4 py-2.5 appearance-none bg-no-repeat bg-right"
-                              style="background-image: url('/assets/icons/1.TH.I.dropdownBig.svg'); background-size: 24px 24px; background-position: right 8px center; padding-right: 4px;">
-                              <option v-for="prefix in prefixes" :key="prefix" :value="prefix">{{ prefix ?? 'Prefijo' }}</option>
-                            </select>
-                            <input type="text"
-                                placeholder="Teléfono de contacto"
-                                class="p-2.5 block border flex-grow h-10 text-sm text-gray-900 bg-white rounded-r-lg border-l-none"
-                                :class="{
-                                  'hborder-black-100 htext-black-100 font-medium': form.prefix && form.phone,
-                                  'hborder-gray-400 htext-gray-500': !form.phone,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorPhone
-                                }"
-                                v-model="form.phone"
-                                @input="validatePhone"
-                            >
-                        </div>
-                        
-                    </div> -->
                     <div class="mt-4">
-                      <!-- {{ String(PhoneFieldError)}} -->
                       <label class="text-sm font-medium">Teléfono móvil </label>
                       <BasePhoneField
                             v-model="form.phone"
@@ -164,25 +136,10 @@
                             </svg>
                             <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
                         </div>
-                        <!-- :errors="errors"
-                            @blur:validate="validate('phone')" -->
                     </div>
                     <div class="mt-4">
                         <label class="text-sm font-medium">Correo electrónico *</label>
                         <div class="relative">
-                            <!-- <input
-                                v-model="form.email"
-                                type="email"
-                                class="w-full h-10 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md "
-                                :class="
-                                {
-                                  'hborder-black-100 htext-black-100 font-medium ': form.email && !errorEmail,
-                                  'hborder-gray-400 htext-gray-500 hinput-green': !form.email || errorEmail,
-                                  'hborder-negative placeholder:text-[#FF6666]' : errorEmail
-                                }"
-                                placeholder="Correo con el que iniciará sesión"
-                                autocomplete="nope"
-                            /> -->
                             <BaseEmailFieldLive
                                 placeholder="Correo con el que iniciará sesión"
                                 v-model="form.email"
@@ -252,36 +209,35 @@
                         <strong class="text-[18px] font-medium">Alojamientos</strong>
                     </div>
                     <div class="space-y-2">
-                  <!-- Checkbox para "Todos los hoteles" -->
-                  <div class="flex items-center justify-between mb-4 rounded-lg">
-                    <span class="text-sm font-semibold">Todos los hoteles</span>
-                    <input
-                      type="checkbox"
-                      v-model="selectAllHotels"
-                      @change="handleSelectAll(selectAllHotels)"
-                      class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
-                      :disabled="isRoleAdmin"
-                    />
-                  </div>
+                      <!-- Checkbox para "Todos los hoteles" -->
+                      <div class="flex items-center justify-between mb-4 rounded-lg">
+                        <span class="text-sm font-semibold">Todos los hoteles</span>
+                        <input
+                          type="checkbox"
+                          v-model="selectAllHotels"
+                          @change="handleSelectAll(selectAllHotels)"
+                          class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
+                          :disabled="isRoleAdmin"
+                        />
+                      </div>
 
-                  <!-- Checkboxes para los hoteles individuales -->
-                  <div
-                    v-for="hotel in userStore.$getHotels(['id', 'name'])"
-                    :key="hotel.id"
-                    class="flex items-center justify-between mb-4 rounded-lg"
-                  >
-                    <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                    <input
-                      type="checkbox"
-                      :value="hotel.id"
-                      v-model="form.hotels" 
-                      @change="handleSelection(hotel.id)"
-                      class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
-                      :disabled="isRoleAdmin"
-                    />
+                      <!-- Checkboxes para los hoteles individuales -->
+                      <div
+                        v-for="hotel in userStore.$getHotels(['id', 'name'])"
+                        :key="hotel.id"
+                        class="flex items-center justify-between mb-4 rounded-lg"
+                      >
+                        <span class="text-sm font-[500]">{{ hotel.name }}</span>
+                        <input
+                          type="checkbox"
+                          :value="hotel.id"
+                          v-model="form.hotels" 
+                          @change="handleSelection(hotel.id)"
+                          class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
+                          :disabled="isRoleAdmin"
+                        />
+                      </div>
                   </div>
-              </div>
-                    <!-- <pre>{{ jsonHotel }}</pre> -->
                 </div>
 
                 <div v-if="currentStep === 3">
@@ -303,9 +259,7 @@
                                     <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
                                 </template>
                             </BaseTooltipResponsive>
-                        <!-- <span class="font-normal">
-                            Este usuario cuenta con permiso a todos los accesos del SAS en los hoteles designados.
-                        </span> -->
+                        
                     </div>
                     <div class="space-y-6">
                       <!-- Sección de Operación -->
@@ -514,8 +468,6 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
     },
   });
 
-  const prefixes = ref([null,'+1', '+34', '+91'])
-  
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
   const selectedWorkPositionName = ref('Elige el puesto de trabajo');
   const isModalCrudOpen = ref(false);
@@ -524,12 +476,10 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
 const operationAccess = ref([
     { name: 'Estancias', selected: false , value : 'estancias' },
     { name: 'Reseñas', selected: false, value: 'resenas' },
-    /* { name: 'Análisis', selected: false , value: 'analisis' }, */
 ]);
 
 const adminAccess = ref([
     { name: 'WebApp', selected: false , value: 'webapp' },
-    /* { name: 'Comunicaciones', selected: false , value: 'comunicaciones' }, */
     { name: 'Hoster', selected: false , value: 'hoster' },
 ]);
   
@@ -605,34 +555,6 @@ const isFormIncomplete = computed(() => {
 
   const errorPrefix = ref(false);
 
-/*   const validatePhone = (event) => {
-    const newValue = event.target.value.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
-    form.value.phone = newValue;
-    errorPhone.value = newValue.length === 0;
-
-    // Verifica el valor del prefijo
-    if (newValue.length > 0 && !form.value.prefix) {
-      errorPrefix.value = true;
-    } else {
-      errorPrefix.value = false;
-    }
-  }; */
-
- /*  // Watch para validar el prefijo cuando cambia el teléfono
-  watch(() => form.value.phone, (newVal) => {
-    if (newVal.length > 0 && !form.value.prefix) {
-      errorPrefix.value = true;
-    } else {
-      errorPrefix.value = false;
-    }
-  });
-
-  // Watch para verificar si se seleccionó un prefijo
-  watch(() => form.value.prefix, (newVal) => {
-    if (newVal) {
-      errorPrefix.value = false;
-    }
-  }); */
 
   watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword, newPasswordConfirmation]) => {
       errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
@@ -678,70 +600,6 @@ const isFormIncomplete = computed(() => {
       
 }, { immediate: true });
 
-/* const handleSelectAll = (initial = false) => {
-    //const allSelected = selectAllHotels.value;
-  //alert('handleSelectAll')
-    handleChecked.value = initial;
-
-    //if (allSelected || initial) {
-    if (handleChecked.value) {
-        // Seleccionar todos los hoteles
-        const hotels = userStore.$getHotels(['id','name']);
-        form.value.hotels = hotels.map(hotel => hotel.id);
-        hotels.forEach(hotel => {
-            handleSelection(hotel.id, true);
-        });
-    } else {
-        // Deseleccionar todos los hoteles
-        form.value.hotels = [];
-        jsonHotel.value = [];
-        operationAccess.value.forEach(access => {
-            access.selected = false;
-        });
-        adminAccess.value.forEach(access => {
-            access.selected = false;
-        });
-    }
-};
-
-const handleSelection = (hotelId, add = null) => {
-    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
-
-    //console.log('index', index,form.value.hotels,hotelId);
-
-    if (add === null) {
-        add = form.value.hotels.includes(hotelId);
-    }
-
-    if (add && index === -1) {
-        const newHotel = { [hotelId]: {} };
-       //void access newhotel
-       newHotel[hotelId] = {};
-        // Agregar permisos ya seleccionados
-        operationAccess.value.forEach(access => {
-            if (access.selected) {
-                newHotel[hotelId][access.value] = {
-                    status: true,
-                    can: {}
-                };
-            }
-        });
-        adminAccess.value.forEach(access => {
-            if (access.selected) {
-                newHotel[hotelId][access.value] = {
-                    status: true,
-                    can: {}
-                };
-            }
-        });
-        jsonHotel.value.push(newHotel);
-    } else if (!add && index !== -1) {
-        jsonHotel.value.splice(index, 1);
-    }
-
-    //console.log(`Hotel seleccionado: ${hotelId}`);
-    //console.log('jsonHotelhandleSelection', jsonHotel.value);
-}; */
 
 const handleSelectAll = (initial = false) => {
     handleChecked.value = initial;
@@ -910,17 +768,6 @@ const handleUpdateAllPermissions = (add) => {
     form.value.access = jsonHotel.value;
 };
 
-/* if (form.value.role === 1) {
-    // Seleccionar todos los hoteles y permisos inicialmente
-    handleSelectAll(true);
-    operationAccess.value.forEach(access => {
-        access.selected = true;
-    });
-    adminAccess.value.forEach(access => {
-        access.selected = true;
-    });
-    handleUpdateAllPermissions(true);
-} */
   
   const currentStep = ref(1);
   const steps = [
@@ -1068,10 +915,6 @@ onMounted(async () => {
   initialForm.value = JSON.stringify(form);
 });
 
- /* watch(form, (newVal) => {
-  showModalNoSave.value = changes.value;
-  emits('showModalNoSave', showModalNoSave.value);
-}, { deep: true }); */
 
 function closeModal() {
   if (changes.value) {
