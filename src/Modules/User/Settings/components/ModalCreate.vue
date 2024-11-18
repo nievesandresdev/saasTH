@@ -76,9 +76,6 @@
           <AccessPermissions v-model:permissions="form.permissions" />
           <Notifications
             v-model:periodicityChat="form.periodicityChat"
-            v-model:periodicityChat30="form.periodicityChat30"
-            v-model:periodicityFeedback30="form.periodicityFeedback30"
-            v-model:periodicityFeedback60="form.periodicityFeedback60"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
           />
@@ -101,7 +98,7 @@
 
         <button
           @click="submitForm"
-          
+          :disabled="isSubmitDisabled"
           :class="[
             'px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta h-10',
             { 'opacity-50 cursor-not-allowed': isSubmitDisabled },
@@ -131,15 +128,18 @@ const emit = defineEmits(['storeWorkPosition', 'close']);
 const form = reactive({
   name: '',
   permissions: {},
-  periodicityChat: 10,
-  periodicityChat30: 30,
-  periodicityFeedback30: 30,
-  periodicityFeedback60: 60,
-  periodicityStay: 5,
+  periodicityStay: {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
   notifications: {
     push : {
       newChat: true,
-      PendingChat10: true,
+      pendingChat10: true,
       pendingChat30: true,
       newFeedback: true,
       pendingFeedback30: true,
@@ -148,7 +148,7 @@ const form = reactive({
     },
     platform: {
       newChat: true,
-      PendingChat10: true,
+      pendingChat10: true,
       pendingChat30: true,
       newFeedback: true,
       pendingFeedback30: true,
@@ -157,7 +157,7 @@ const form = reactive({
     },
     email : {
       newChat: false,
-      PendingChat10: false,
+      pendingChat10: false,
       pendingChat30: true,
       newFeedback: false,
       pendingFeedback30: false,
@@ -204,7 +204,7 @@ const submitForm = async () => {
 
   console.log(form);
 
-  /* const response = await createWorkPosition(form);
+  const response = await createWorkPosition(form);
 
   if (response.ok) {
     toast.warningToast('Puesto creado con éxito', 'top-right');
@@ -213,20 +213,23 @@ const submitForm = async () => {
     emit('storeWorkPosition', response.data.wPosition);
   } else {
     toast.errorToast('Error al crear el puesto', 'top-right');
-  } */
+  }
 };
 
 const resetForm = () => {
   form.name = '';
   form.permissions = {};
-  form.periodicityChat = 5;
-  form.periodicityChat30 = 30;
-  form.periodicityFeedback30 = 30;
-  form.periodicityFeedback60 = 60;
-  form.periodicityStay = 5;
+  form.periodicityChat = {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  };
+  form.periodicityStay = {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  };
   form.notifications = {
     newChat: false,
-    PendingChat10: false,
+    pendingChat10: false,
     pendingChat30: false,
     newFeedback: false,
     pendingFeedback10: false,
@@ -234,7 +237,7 @@ const resetForm = () => {
     new_reviews: false,
     platform: {
       newChat: false,
-      PendingChat10: false,
+      pendingChat10: false,
       pendingChat30: false,
       newFeedback: false,
       pendingFeedback10: false,
@@ -243,7 +246,7 @@ const resetForm = () => {
     },
     email: {
       newChat: false,
-      PendingChat10: false,
+      pendingChat10: false,
       pendingChat30: false,
       newFeedback: false,
       pendingFeedback10: false,
@@ -252,7 +255,7 @@ const resetForm = () => {
     },
     push : {
       newChat: false,
-      PendingChat10: false,
+      pendingChat10: false,
       pendingChat30: false,
       newFeedback: false,
       pendingFeedback10: false,

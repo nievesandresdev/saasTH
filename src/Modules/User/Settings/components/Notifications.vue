@@ -37,7 +37,7 @@
             <div class="flex flex-col justify-end">
               <div class="flex justify-end gap-4">
                 <span class="text-[10px] font-semibold">Push</span>
-                <span class="text-[10px] font-semibold">Plat</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
                 <span class="text-[10px] font-semibold">Email</span>
               </div>
               
@@ -57,7 +57,7 @@
               <p class="text-sm leading-[150%]">Chat pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityChat"
+                  v-model="periodicityChat.pendingChat10"
                   classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
@@ -69,9 +69,9 @@
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.PendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.platform.PendingChat10" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.PendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.push.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingChat10" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.email.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             <!--chat poendiente 30-->
@@ -80,7 +80,7 @@
               <p class="text-sm leading-[150%]">Chat pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityChat30"
+                  v-model="periodicityChat.pendingChat30"
                   classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
@@ -107,7 +107,7 @@
             <div class="flex flex-col justify-end">
               <div class="flex justify-end gap-4">
                 <span class="text-[10px] font-semibold">Push</span>
-                <span class="text-[10px] font-semibold">Plat</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
                 <span class="text-[10px] font-semibold">Email</span>
               </div>
               
@@ -127,7 +127,7 @@
               <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityFeedback30"
+                  v-model="periodicityStay.pendingFeedback30"
                   classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
@@ -150,7 +150,7 @@
               <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityFeedback60"
+                  v-model="periodicityStay.pendingFeedback60"
                   classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
@@ -177,7 +177,7 @@
             <div class="flex flex-col justify-end">
               <div class="flex justify-end gap-4">
                 <span class="text-[10px] font-semibold">Push</span>
-                <span class="text-[10px] font-semibold">Plat</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
                 <span class="text-[10px] font-semibold">Email</span>
               </div>
               
@@ -206,11 +206,20 @@
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
   
   const props = defineProps({
-    periodicityChat: String,
-    periodicityChat30: String,
-    periodicityFeedback30: String,
-    periodicityFeedback60: String,
-    periodicityStay: String,
+    periodicityChat: {
+      type: Object,
+      default: () => ({
+        periodicityChat: 10,
+        periodicityChat30: 30,
+      }),
+    },
+    periodicityStay: {
+      type: Object,
+      default: () => ({
+        periodicityFeedback30: 30,
+        periodicityFeedback60: 60,
+      }),
+    },
     notifications: {
       type: Object,
       default: () => ({
@@ -239,23 +248,14 @@ const emits = defineEmits([
 
 const isDisabled = computed(() => props.workPositionId !== null);
   
-  const periodicityChat = ref(props.periodicityChat);
-  const periodicityChat30 = ref(props.periodicityChat30);
-  const periodicityFeedback30 = ref(props.periodicityFeedback30);
-  const periodicityFeedback60 = ref(props.periodicityFeedback60);
-  const periodicityStay = ref(props.periodicityStay);
+  const periodicityChat = ref({...props.periodicityChat});
+  const periodicityStay = ref({...props.periodicityStay});
   const notifications = ref({ ...props.notifications });
   
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
-
-    /* console.log('Emit changes:', {
-      periodicityChat: periodicityChat.value,
-      periodicityStay: periodicityStay.value,
-      notifications: notifications.value,
-    }); */
 };
 
   </script>
