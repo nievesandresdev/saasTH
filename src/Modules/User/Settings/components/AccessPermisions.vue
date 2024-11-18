@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="space-y-6">
+    <div class="space-y-2">
       <!-- Sección de Operación -->
+      
       <div class="flex gap-2 justify-start items-center">
-        <strong class="text-[18px] font-medium">Accesos a la plataforma</strong>
+        <!-- <strong class="text-[18px] font-medium">Accesos a la plataforma</strong>
         <BaseTooltipResponsive
           size="s"
           :top="25"
@@ -19,14 +20,22 @@
           <template v-slot:content>
             <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
           </template>
-        </BaseTooltipResponsive>
+        </BaseTooltipResponsive> -->
+        
       </div>
       <div>
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-sm font-semibold">Todos los accesos</span> 
-          <input type="checkbox" v-model="selectAll" @change="toggleAllPermissions" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+        <div class="flex justify-between items-center text-left">
+            <strong class="text-[18px] font-medium">Permisos de la plataforma</strong>
+            <div class="flex items-center gap-1">
+              <span class="text-sm font-semibold">Todos</span>
+              <BaseSwichInput
+                  v-model="selectAll"
+                  id="swich-visible-experience"
+                  @change:value="toggleAllPermissions"
+              />
+            </div>
         </div>
-        <span class="block mb-2 font-semibold text-sm">Operación</span>
+        <span class="block mb-2 font-semibold text-sm mt-4">Operación</span>
         <div class="space-y-2 ml-2">
           <div v-for="item in operationAccess" :key="item.name" class="flex items-center justify-between rounded-lg">
             <span class="text-sm font-[500]">{{ item.name }}</span>
@@ -59,6 +68,7 @@
 <script setup>
 import { ref, defineProps, defineEmits, computed } from 'vue';
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 const props = defineProps({
   permissions: {

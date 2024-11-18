@@ -43,7 +43,7 @@
     :isVisible="isCreating"
     @close="closeCreateModal"
     @storeWorkPosition="pushData"
-    :width="'400px'"
+    :width="'500px'"
   />
 
   <!-- ModalEdit component -->
@@ -53,7 +53,7 @@
     @close="closeEditModal"
     :data="dataEdit"
     @storeWorkPosition="getWorkPositions"
-    :width="'400px'"
+    :width="'500px'"
   />
 </template>
 

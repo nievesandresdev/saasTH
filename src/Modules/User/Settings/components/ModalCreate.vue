@@ -1,7 +1,6 @@
 <template>
   <ModalWindow
     :isVisible="isVisible"
-    width="341px"
     footer
     :paddingTop="4"
     :paddingBottom="4"
@@ -22,7 +21,7 @@
       <hr />
     </template>
     <template #content>
-      <div class="max-h-[410px]">
+      <div class="max-h-[410px] overflow-y-auto scrollbar-none">
         <label class="text-sm font-semibold">Nombre del puesto de trabajo*</label>
         <BaseTextField
           v-model="form.name"
@@ -57,7 +56,7 @@
           </p>
         </div>
 
-        <div class="flex justify-start w-full mt-4">
+       <!--  <div class="flex justify-start w-full mt-4">
           <h3
             class="flex-1 text-center py-2 text-base font-semibold cursor-pointer relative"
             v-for="(step, index) in steps"
@@ -71,18 +70,26 @@
           >
             {{ step.label }}
           </h3>
-        </div>
-        <hr class="mb-5 px-4" />
+        </div> -->
+        <hr class="mb-[15px] px-4" />
         <div v-if="currentStep === 1" class="mb-6">
           <AccessPermissions v-model:permissions="form.permissions" />
+          <Notifications
+            v-model:periodicityChat="form.periodicityChat"
+            v-model:periodicityChat30="form.periodicityChat30"
+            v-model:periodicityFeedback30="form.periodicityFeedback30"
+            v-model:periodicityFeedback60="form.periodicityFeedback60"
+            v-model:periodicityStay="form.periodicityStay"
+            v-model:notifications="form.notifications"
+          />
         </div>
-        <div v-if="currentStep === 2">
+        <!-- <div v-if="currentStep === 2">
           <Notifications
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
           />
-        </div>
+        </div> -->
       </div>
     </template>
 
@@ -94,7 +101,7 @@
 
         <button
           @click="submitForm"
-          :disabled="isSubmitDisabled"
+          
           :class="[
             'px-4 py-3 text-sm font-medium leading-[110%] hbtn-cta h-10',
             { 'opacity-50 cursor-not-allowed': isSubmitDisabled },
@@ -116,6 +123,7 @@ import Notifications from './Notifications.vue';
 import { createWorkPosition } from '@/api/services/users/userSettings.service';
 import { useToastAlert } from '@/composables/useToastAlert';
 
+
 const toast = useToastAlert();
 
 const emit = defineEmits(['storeWorkPosition', 'close']);
@@ -123,14 +131,39 @@ const emit = defineEmits(['storeWorkPosition', 'close']);
 const form = reactive({
   name: '',
   permissions: {},
-  periodicityChat: 5,
+  periodicityChat: 10,
+  periodicityChat30: 30,
+  periodicityFeedback30: 30,
+  periodicityFeedback60: 60,
   periodicityStay: 5,
   notifications: {
-    newChat: false,
-    PendingChat10: false,
-    pendingChat30: false,
-    newFeedback: false,
-    pendingFeedback10: false,
+    push : {
+      newChat: true,
+      PendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    platform: {
+      newChat: true,
+      PendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    email : {
+      newChat: false,
+      PendingChat10: false,
+      pendingChat30: true,
+      newFeedback: false,
+      pendingFeedback30: false,
+      pendingFeedback60: false,
+      new_reviews: false,
+    },
 
   },
 });
@@ -138,7 +171,7 @@ const form = reactive({
 const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Accesos' },
-  { number: 2, label: 'Notificaciones' },
+  /* { number: 2, label: 'Notificaciones' }, */
 ];
 
 const nameError = ref(false);
@@ -169,7 +202,9 @@ const submitForm = async () => {
     return;
   }
 
-  const response = await createWorkPosition(form);
+  console.log(form);
+
+  /* const response = await createWorkPosition(form);
 
   if (response.ok) {
     toast.warningToast('Puesto creado con éxito', 'top-right');
@@ -178,13 +213,16 @@ const submitForm = async () => {
     emit('storeWorkPosition', response.data.wPosition);
   } else {
     toast.errorToast('Error al crear el puesto', 'top-right');
-  }
+  } */
 };
 
 const resetForm = () => {
   form.name = '';
   form.permissions = {};
   form.periodicityChat = 5;
+  form.periodicityChat30 = 30;
+  form.periodicityFeedback30 = 30;
+  form.periodicityFeedback60 = 60;
   form.periodicityStay = 5;
   form.notifications = {
     newChat: false,
@@ -192,6 +230,35 @@ const resetForm = () => {
     pendingChat30: false,
     newFeedback: false,
     pendingFeedback10: false,
+    pendingFeedback30: false,
+    new_reviews: false,
+    platform: {
+      newChat: false,
+      PendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
+    email: {
+      newChat: false,
+      PendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
+    push : {
+      newChat: false,
+      PendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
   };
   currentStep.value = 1;
   nameError.value = false;
@@ -215,5 +282,16 @@ const closeModal = () => {
   font-weight: 500; /* font-medium */
   line-height: 110%; /* Ajusta line-height */
 }
+
+/* Ocultar el scrollbar para navegadores compatibles */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 
 </style>
