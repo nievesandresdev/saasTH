@@ -227,6 +227,7 @@ const resetForm = () => {
     pendingFeedback30: 30,
     pendingFeedback60: 60,
   };
+  
   form.notifications = {
     newChat: false,
     pendingChat10: false,
