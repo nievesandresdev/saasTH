@@ -160,7 +160,7 @@ const selectOption = (value) => {
 
 const validPhone = (phone, code) => {
   const pattern = /^\+?\d{9,13}$/;
-  console.log('test valid',phone)
+  // console.log('test valid',phone)
   if (phone && !pattern.test(phone) || !code && phone) {
     error_phone.value = true;
   } else {
@@ -179,7 +179,7 @@ watch(phone, (newVal, oldVal) => {
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, code.value);
-  console.log('test phone error',error_phone.value )
+  // console.log('test phone error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   if (!code.value) return;
@@ -191,7 +191,7 @@ watch(code, (newVal, oldVal) => {
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, newVal);
-  console.log('test code error',error_phone.value )
+  // console.log('test code error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   // if (!phone.value && newVal.length < 2) return;
