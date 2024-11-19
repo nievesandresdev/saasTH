@@ -283,6 +283,15 @@
                     </transition>
                   </div>
                 </div>
+                <section v-show="form.work_position_id">
+                  <AccessPermissions v-model:permissions="form.permissions" :workPositionId="form.work_position_id" :disabledGeneral="form.work_position_id" />
+                  <Notifications
+                    v-model:periodicityChat="form.periodicityChat"
+                    v-model:periodicityStay="form.periodicityStay"
+                    v-model:notifications="form.notifications"
+                    :disabledGeneral="form.work_position_id"
+                  />
+              </section>
                 
               </div>
             </div>
@@ -337,7 +346,7 @@
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
   import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
-
+  import AccessPermissions from './AccessPermisions.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
   import { useRoute, useRouter } from 'vue-router';
@@ -346,7 +355,6 @@
   const intendedRoute = ref(null);
   const userStore = useUserStore();
   const selectAll = ref(false);
-  const PhoneFieldError = ref(false);
   //const authStore = useAuthStore();
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
@@ -439,15 +447,44 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
     hotels: [],
     access: [],
     permissions: {},
-    periodicityChat: 5, 
-    periodicityStay: 5,
-    notifications: {
-      newChat: false,
-      PendingChat10: false,
-      pendingChat30: false,
-      newFeedback: false,
-      pendingFeedback10 : false,
+    periodicityStay: {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
+  notifications: {
+    push : {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
     },
+    platform: {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    email : {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: true,
+      newFeedback: false,
+      pendingFeedback30: false,
+      pendingFeedback60: false,
+      new_reviews: false,
+    },
+
+  },
   });
 
   const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
@@ -478,6 +515,7 @@ const adminAccess = ref([
   const selectWorkPosition = (position) => {
     selectedWorkPositionName.value = position.name;
     form.value.work_position_id = position.id;
+    form.value.permissions = JSON.parse(position.permissions);
     isModalCrudOpen.value = false;
 
     // Parseamos el JSON de permisos
@@ -485,6 +523,7 @@ const adminAccess = ref([
     let notifications = JSON.parse(position.notifications);
     let periodicity_chat = position.periodicity_chat;
     let periodicity_stay = position.periodicity_stay;
+
 
     form.value.notifications = notifications;
     form.value.periodicityChat = periodicity_chat;
@@ -556,32 +595,6 @@ const isFormIncomplete = computed(() => {
 
   const selectAllHotels = ref(false);
   
-  /* watch(() => form.value.role, (newRole) => { 
-    if (newRole === 1 || newRole === 2) {
-        selectAllHotels.value = true;
-        handleSelectAll(true);
-
-        //operation access
-        operationAccess.value.forEach(access => {
-            access.selected = true;
-            handleCheckPermission(access.value, true);
-        });
-
-        //admin access
-        adminAccess.value.forEach(access => {
-            access.selected = true;
-            handleCheckPermission(access.value, true);
-        });
-        
-    }else if(newRole === 3){
-        selectAllHotels.value = false;
-        jsonHotel.value = [];
-        handleChecked.value = false;
-        handleSelectAll();
-    }
-      
-}, { immediate: true }); */
-
 
 const handleSelectAll = (initial = false) => {
     handleChecked.value = initial;
@@ -691,26 +704,6 @@ const handleCheckPermission = (permissionName, isSelected) => {
     form.value.access = jsonHotel.value;
 };
 
-
-const toggleAllPermissions = () => {
-    const isSelected = selectAll.value;
-
-    // Actualizar todos los permisos de operación
-    operationAccess.value.forEach(item => {
-        item.selected = isSelected;
-        item.disabled = isSelected;
-        handleCheckPermission(item.value, isSelected);
-    });
-
-    // Actualizar todos los permisos de administración
-    adminAccess.value.forEach(item => {
-        item.selected = isSelected;
-        item.disabled = isSelected;
-        handleCheckPermission(item.value, isSelected);
-    });
-};
-
-  
   const currentStep = ref(3);
   const steps = [
     { number: 1, label: 'Usuario' },

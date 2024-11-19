@@ -539,37 +539,37 @@ const selectRole = (rol) => {
 };
 
 const selectWorkPosition = (position) => {
-selectedWorkPositionName.value = position.name;
-form.value.work_position_id = position.id;
-isModalCrudOpen.value = false;
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
+  isModalCrudOpen.value = false;
 
-let permissions = JSON.parse(position.permissions);
-let notifications = JSON.parse(position.notifications);
-let periodicity_chat = position.periodicity_chat;
-let periodicity_stay = position.periodicity_stay;
+  let permissions = JSON.parse(position.permissions);
+  let notifications = JSON.parse(position.notifications);
+  let periodicity_chat = position.periodicity_chat;
+  let periodicity_stay = position.periodicity_stay;
 
-form.value.notifications = notifications;
-form.value.periodicityChat = periodicity_chat;
-form.value.periodicityStay = periodicity_stay;
+  form.value.notifications = notifications;
+  form.value.periodicityChat = periodicity_chat;
+  form.value.periodicityStay = periodicity_stay;
 
-const updateCheckboxesAndPermissions = (accessList, permissions) => {
-  accessList.forEach((accessItem) => {
-    /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
-    const permissionKey = accessItem.value;
-    
-    const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
-    
-    accessItem.selected = isSelected;
-    accessItem.disabled = isSelected;
+  const updateCheckboxesAndPermissions = (accessList, permissions) => {
+    accessList.forEach((accessItem) => {
+      /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
+      const permissionKey = accessItem.value;
+      
+      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
+      
+      accessItem.selected = isSelected;
+      accessItem.disabled = isSelected;
 
-    handleCheckPermission(permissionKey, isSelected);
-  });
-};
+      handleCheckPermission(permissionKey, isSelected);
+    });
+  };
 
-updateCheckboxesAndPermissions(operationAccess.value, permissions);
-updateCheckboxesAndPermissions(adminAccess.value, permissions);
+  updateCheckboxesAndPermissions(operationAccess.value, permissions);
+  updateCheckboxesAndPermissions(adminAccess.value, permissions);
 
-form.value.permissions = permissions;
+  form.value.permissions = permissions;
 };
 
 

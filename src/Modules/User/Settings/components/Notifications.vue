@@ -1,5 +1,5 @@
 <template>
-    <div class="notifications-container mt-6" :style="{ maxHeight: maxHeight + 'px' }">
+    <div class="notifications-container mt-6" :style="{ maxHeight: maxHeight + 'px', opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
       <div class="space-y-6">
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
@@ -201,7 +201,7 @@
   </template>
   
   <script setup>
-  import { ref, defineProps, defineEmits,computed } from 'vue';
+  import { ref, defineProps, defineEmits,computed, watch } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
   
@@ -238,25 +238,38 @@
       type: [Number, String],
       default: null,
     },
+    disabledGeneral: {
+      type: Boolean,
+      default: false,
+    },
   });
 
-const emits = defineEmits([
-  'update:periodicityChat',
-  'update:periodicityStay',
-  'update:notifications'
-]);
+  const emits = defineEmits([
+    'update:periodicityChat',
+    'update:periodicityStay',
+    'update:notifications'
+  ]);
 
-const isDisabled = computed(() => props.workPositionId !== null);
+  const isDisabled = computed(() => props.workPositionId !== null);
   
   const periodicityChat = ref({...props.periodicityChat});
   const periodicityStay = ref({...props.periodicityStay});
   const notifications = ref({ ...props.notifications });
   
+  
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
-};
+  };
+
+  watch(
+  () => props.notifications,
+  () => {
+    notifications.value = { ...props.notifications };
+  },
+  { immediate: true }
+);
 
   </script>
   
