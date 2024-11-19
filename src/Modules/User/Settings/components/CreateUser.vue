@@ -448,41 +448,41 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
     access: [],
     permissions: {},
     periodicityStay: {
-    pendingFeedback30: 30,
-    pendingFeedback60: 60,
-  },
-  periodicityChat : {
-    pendingChat10: 10,
-    pendingChat30: 30,
-  },
-  notifications: {
-    push : {
-      newChat: true,
-      pendingChat10: true,
-      pendingChat30: true,
-      newFeedback: true,
-      pendingFeedback30: true,
-      pendingFeedback60: true,
-      new_reviews: true,
+      pendingFeedback30: 30,
+      pendingFeedback60: 60,
     },
-    platform: {
-      newChat: true,
-      pendingChat10: true,
-      pendingChat30: true,
-      newFeedback: true,
-      pendingFeedback30: true,
-      pendingFeedback60: true,
-      new_reviews: true,
+    periodicityChat : {
+      pendingChat10: 10,
+      pendingChat30: 30,
     },
-    email : {
-      newChat: false,
-      pendingChat10: false,
-      pendingChat30: true,
-      newFeedback: false,
-      pendingFeedback30: false,
-      pendingFeedback60: false,
-      new_reviews: false,
-    },
+    notifications: {
+      push : {
+        newChat: true,
+        pendingChat10: true,
+        pendingChat30: true,
+        newFeedback: true,
+        pendingFeedback30: true,
+        pendingFeedback60: true,
+        new_reviews: true,
+      },
+      platform: {
+        newChat: true,
+        pendingChat10: true,
+        pendingChat30: true,
+        newFeedback: true,
+        pendingFeedback30: true,
+        pendingFeedback60: true,
+        new_reviews: true,
+      },
+      email : {
+        newChat: false,
+        pendingChat10: false,
+        pendingChat30: true,
+        newFeedback: false,
+        pendingFeedback30: false,
+        pendingFeedback60: false,
+        new_reviews: false,
+      },
 
   },
   });
@@ -521,13 +521,14 @@ const adminAccess = ref([
     // Parseamos el JSON de permisos
     let permissions = JSON.parse(position.permissions);
     let notifications = JSON.parse(position.notifications);
-    let periodicity_chat = position.periodicity_chat;
-    let periodicity_stay = position.periodicity_stay;
+    let periodicity_chat = JSON.parse(position.periodicity_chat);
+    let periodicity_stay = JSON.parse(position.periodicity_stay);
 
 
     form.value.notifications = notifications;
     form.value.periodicityChat = periodicity_chat;
     form.value.periodicityStay = periodicity_stay;
+
 
     // Función para actualizar los checkboxes y el objeto permissions
     const updateCheckboxesAndPermissions = (accessList, permissions) => {

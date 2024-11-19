@@ -26,6 +26,8 @@
             </template>
           </BaseTooltipResponsive>
         </div>
+
+       
   
         <!-- Notificaciones en plataforma Hoster -->
         <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
@@ -267,6 +269,8 @@
   () => props.notifications,
   () => {
     notifications.value = { ...props.notifications };
+    periodicityChat.value = { ...props.periodicityChat };
+    periodicityStay.value = { ...props.periodicityStay };
   },
   { immediate: true }
 );
