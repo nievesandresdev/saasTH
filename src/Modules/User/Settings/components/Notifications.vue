@@ -1,5 +1,5 @@
 <template>
-    <div class="notifications-container mt-6" :style="{ maxHeight: maxHeight + 'px', opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
+    <div class="notifications-container mt-6" :style="{ maxHeight: maxHeight + 'px'  }">
       <div class="space-y-6">
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
@@ -28,7 +28,7 @@
         </div>
   
         <!-- Notificaciones en plataforma Hoster -->
-        <div>
+        <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
           <!-- estancias chat -->
           <div class="flex flex-col">
             <div class="flex items-center justify-between">

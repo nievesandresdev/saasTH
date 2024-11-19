@@ -1,13 +1,12 @@
 <template>
-  <div :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
+  <div>
     <div class="space-y-2">
       <!-- Sección de Operación -->
       <div class="flex gap-2 justify-start items-center">
       </div>
-      <div>
         <div class="flex justify-between items-center text-left">
           <strong class="text-[18px] font-medium">Permisos de la plataforma</strong>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1" :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
             <span class="text-sm font-semibold">Todos</span>
             <BaseSwichInput
               v-model="selectAll"
@@ -17,26 +16,27 @@
             />
           </div>
         </div>
-        <span class="block mb-2 font-semibold text-sm mt-4">Operación</span>
-        <div class="space-y-2 ml-2">
-          <div
-            v-for="item in operationAccess"
-            :key="item.name"
-            class="flex items-center justify-between rounded-lg"
-          >
-            <span class="text-sm font-[500]">{{ item.name }}</span>
-            <input
-              type="checkbox"
-              :checked="item.selected"
-              @change="togglePermission(item)"
-              class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"
-              :disabled="disabledGeneral || isDisabled || item.disabled"
+        <div :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
+          <span class="block mb-2 font-semibold text-sm mt-4">Operación</span>
+          <div class="space-y-2 ml-2">
+            <div
+              v-for="item in operationAccess"
+              :key="item.name"
+              class="flex items-center justify-between rounded-lg"
             >
+              <span class="text-sm font-[500]">{{ item.name }}</span>
+              <input
+                type="checkbox"
+                :checked="item.selected"
+                @change="togglePermission(item)"
+                class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"
+                :disabled="disabledGeneral || isDisabled || item.disabled"
+              >
+            </div>
           </div>
         </div>
-      </div>
       <!-- Sección de Administración -->
-      <div>
+      <div :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
         <span class="block mb-2 font-semibold text-sm">Administración</span>
         <div class="space-y-2 ml-2">
           <div
