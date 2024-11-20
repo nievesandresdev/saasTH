@@ -26,7 +26,7 @@
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Puesto</span>
-                <span class="text-base font-normal">{{ dataUser?.work_position }}</span>
+                <span class="text-base font-normal">{{ dataUser?.work_position ?? '-' }}</span>
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Correo electrónico</span>
@@ -34,7 +34,7 @@
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Teléfono</span>
-                <span class="text-base font-normal">{{ dataUser?.prefix ?? '' }} {{ dataUser?.phone }}</span>
+                <span class="text-base font-normal">{{ dataUser?.prefix ?? '-' }} {{ dataUser?.phone ?? '-' }}</span>
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Antigüedad</span>
@@ -83,21 +83,21 @@
             </div>
             <hr class="mb-[19px]">
             <div class="flex justify-start mb-5">
-                <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
-                <Tooltip
-                        size="s"
-                        :top="25"
-                        :left="-55"
-                    >
-                        <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
-                        </template>
-                        <template v-slot:content>
-                            <p class="text-sm">
-                                Si un usuario se encuentra <strong>inactivo</strong> en un hotel, no podrá realizar ninguna acción en dicho establecimiento. Para activarlo, puedes hacerlo desde la opción 'Editar usuario'.
-                            </p>
-                        </template>
-                    </Tooltip>
+              <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
+              <Tooltip
+                  size="s"
+                  :top="25"
+                  :left="-55"
+              >
+                  <template v-slot:button>
+                      <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
+                  </template>
+                  <template v-slot:content>
+                      <p class="text-sm">
+                          Si un usuario se encuentra <strong>inactivo</strong> en un hotel, no podrá realizar ninguna acción en dicho establecimiento. Para activarlo, puedes hacerlo desde la opción 'Editar usuario'.
+                      </p>
+                  </template>
+              </Tooltip>
             </div>
             <div class="flex flex-col items-left mb-4">
               <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
@@ -108,28 +108,28 @@
           </div>
         </div>
         <div 
-            class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
-            style="height: 88px;" 
-            :class="
-                {
-                    'justify-end': authStore.user.id === dataUser.id ,
-                    'justify-between': authStore.user.id != dataUser.id
-                }"
+          class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
+          style="height: 88px;" 
+          :class="
+              {
+                  'justify-end': authStore.user.id === dataUser.id ,
+                  'justify-between': authStore.user.id != dataUser.id
+              }"
         >
-            <button
-                v-show="authStore.user.id != dataUser.id && dataUser.owner == 0"
-                class="underline font-medium text-sm px-4"
-                @click="deleteUser(dataUser)"
-            >
-               Eliminar
-            </button>
-            <button
-                class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
-                @click="updateUser(dataUser)"
-                v-if="dataUser.owner != 1"
-            >
-                Editar
-            </button>
+          <button
+              v-show="authStore.user.id != dataUser.id && dataUser.owner == 0"
+              class="underline font-medium text-sm px-4"
+              @click="deleteUser(dataUser)"
+          >
+              Eliminar
+          </button>
+          <button
+              class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
+              @click="updateUser(dataUser)"
+              v-if="dataUser.owner != 1"
+          >
+              Editar
+          </button>
         </div>
       </div>
     </transition>
