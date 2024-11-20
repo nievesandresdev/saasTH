@@ -26,7 +26,7 @@
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Puesto</span>
-                <span class="text-base font-normal">{{ dataUser?.work_position ?? '-' }}</span>
+                <span class="text-base font-normal">{{ dataUser?.work_position?.name ?? '-' }}</span>
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Correo electrónico</span>
@@ -41,12 +41,29 @@
                 <span class="text-base font-normal">{{ dataUser?.time }}</span>
             </div>
             <div class="flex flex-col mb-8">
+              <div class="flex items-center gap-1">
                 <span class="text-sm font-semibold">Estado del usuario</span>
+                <Tooltip
+                  size="s"
+                  :top="25"
+                  :left="-55"
+              >
+                  <template v-slot:button>
+                      <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
+                  </template>
+                  <template v-slot:content>
+                      <p class="text-sm">
+                          Si un usuario se encuentra <strong>inactivo</strong>, no podrá realizar ninguna acción en los alojamientos.
+                      </p>
+                  </template>
+              </Tooltip>
+              </div>
+                
                 <div class="flex justify-between mt-[10px]">
-                  <span v-if="dataUser.status == 1" class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-[100px]">
+                  <span v-if="dataUser.status == 1" class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#333] bg-[#ECF9F5] rounded-[100px] h-6">
                     Activo
                   </span>
-                  <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-[100px]">
+                  <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#333] bg-red-100 rounded-[100px] h-6">
                     Inactivo
                   </span>
                   <div v-show="authStore.user.id != dataUser.id">
@@ -84,20 +101,6 @@
             <hr class="mb-[19px]">
             <div class="flex justify-start mb-5">
               <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
-              <Tooltip
-                  size="s"
-                  :top="25"
-                  :left="-55"
-              >
-                  <template v-slot:button>
-                      <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
-                  </template>
-                  <template v-slot:content>
-                      <p class="text-sm">
-                          Si un usuario se encuentra <strong>inactivo</strong> en un hotel, no podrá realizar ninguna acción en dicho establecimiento. Para activarlo, puedes hacerlo desde la opción 'Editar usuario'.
-                      </p>
-                  </template>
-              </Tooltip>
             </div>
             <div class="flex flex-col items-left mb-4">
               <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
@@ -186,7 +189,7 @@
     const handleClickOutside = (event) => {
       const addSection = ref_section_show.value;
       if (addSection && !addSection.contains(event.target)) {
-        console.log('handleClickOutside',event.target)
+        //console.log('handleClickOutside',event.target)
         closeModal();
       }
     };
