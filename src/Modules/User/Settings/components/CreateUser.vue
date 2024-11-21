@@ -22,7 +22,7 @@
                 </div>
               </div>
       
-              <div class="p-4">
+              <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
                 <div class="flex items-center justify-between mb-5">
                   <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
                     <div :class="[
@@ -50,73 +50,22 @@
                 </div>
                 <hr class="mb-[22px]">
                 <div v-if="currentStep === 1">
-                  <!-- <div class="relative mt-4">
-                    <div class="flex justify-between text-black">
-                      <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
-                      <BaseTooltipResponsive
-                            size="s"
-                            :top="25"
-                            :right="0"
-                        >
-                            <template v-slot:button>
-                                <img
-                                    src="/assets/icons/info.blue.svg"
-                                    class="w-5 h-5 ml-1"
-                                    alt="icon_info"
-                                >
-                            </template>
-                            <template v-slot:content>
-                                <p class="text-sm font-normal">Los puestos tienen una configuración prestablecida de accesos y notificaciones.</p>
-                            </template>
-                        </BaseTooltipResponsive>
-                    </div>
-                    <div class="relative w-full">
-                      <input
-                          type="text"
-                          id="workPositionInput"
-                          @click.stop="toggleModalWorkPosition"
-                          readonly
-                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
-                          :class="{
-                            'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                            'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
-                          }"
-                          :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
-                        />
-                      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                      </div>
-                    </div>
-                    <transition name="modal-fade">
-                      <div id="modalWorkPosition">
-                        <ModalCrud
-                          ref="ref_modal_crud"
-                          :data="workPositions"
-                          :open="isModalCrudOpen"
-                          @close="closeModalWorkPosition"
-                          @select="selectWorkPosition"
-                          @deleteWP="deleteWorkPosition"
-                        />
-                      </div>
-                    </transition>
-                  </div> -->
-
                   <span class="text-[18px] font-medium">Datos del usuario</span>
                   <div class="mt-[10px]">
-                        <label class="text-sm font-medium">Nombre *</label>
-                        <div class="relative">
-                            <input
-                                v-model="form.name"
-                                type="text"
-                                class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
-                                placeholder="Nombre"
-                                :class="
-                                {
-                                  'hborder-black-100 htext-black-100 font-medium': form.name,
-                                  'hborder-gray-400 htext-gray-500': !form.name
-                                }"
-                            />
-                        </div>
+                    <label class="text-sm font-medium">Nombre *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.name"
+                            type="text"
+                            class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
+                            placeholder="Nombre"
+                            :class="
+                            {
+                              'hborder-black-100 htext-black-100 font-medium': form.name,
+                              'hborder-gray-400 htext-gray-500': !form.name
+                            }"
+                        />
+                    </div>
                   </div>
                   <div class="mt-4">
                       <label class="text-sm font-medium">Apellidos *</label>
@@ -249,50 +198,49 @@
 
                 <div v-if="currentStep === 3">
                     <div class="relative mt-4">
-                    <div class="flex justify-between text-black">
-                      <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
-                    </div>
-                    <div class="relative w-full">
-                      <input
-                          type="text"
-                          id="workPositionInput"
-                          @click.stop="toggleModalWorkPosition"
-                          readonly
-                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
-                          :class="{
-                            'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                            'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
-                          }"
-                          :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
-                        />
-                      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <img src="/assets/icons/1.TH.I.dropdownBig.svg">
+                      <div class="flex justify-between text-black">
+                        <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                       </div>
-                    </div>
-                    <transition name="modal-fade">
-                      <div id="modalWorkPosition">
-                        <ModalCrud
-                          ref="ref_modal_crud"
-                          :data="workPositions"
-                          :open="isModalCrudOpen"
-                          @close="closeModalWorkPosition"
-                          @select="selectWorkPosition"
-                          @deleteWP="deleteWorkPosition"
-                        />
+                      <div class="relative w-full">
+                        <input
+                            type="text"
+                            id="workPositionInput"
+                            @click.stop="toggleModalWorkPosition"
+                            readonly
+                            class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
+                            :class="{
+                              'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                              'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
+                            }"
+                            :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
+                          />
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                          <img src="/assets/icons/1.TH.I.dropdownBig.svg">
+                        </div>
                       </div>
-                    </transition>
-                  </div>
+                      <transition name="modal-fade">
+                        <div id="modalWorkPosition">
+                          <ModalCrud
+                            ref="ref_modal_crud"
+                            :data="workPositions"
+                            :open="isModalCrudOpen"
+                            @close="closeModalWorkPosition"
+                            @select="selectWorkPosition"
+                            @deleteWP="deleteWorkPosition"
+                          />
+                        </div>
+                      </transition>
+                    </div>
+                    <section v-show="form.work_position_id">
+                      <AccessPermissions v-model:permissions="form.permissions" :workPositionId="form.work_position_id" :disabledGeneral="form.work_position_id" />
+                      <Notifications
+                        v-model:periodicityChat="form.periodicityChat"
+                        v-model:periodicityStay="form.periodicityStay"
+                        v-model:notifications="form.notifications"
+                        :disabledGeneral="form.work_position_id"
+                      />
+                  </section>
                 </div>
-                <section v-show="form.work_position_id">
-                  <AccessPermissions v-model:permissions="form.permissions" :workPositionId="form.work_position_id" :disabledGeneral="form.work_position_id" />
-                  <Notifications
-                    v-model:periodicityChat="form.periodicityChat"
-                    v-model:periodicityStay="form.periodicityStay"
-                    v-model:notifications="form.notifications"
-                    :disabledGeneral="form.work_position_id"
-                  />
-              </section>
-                
               </div>
             </div>
     
@@ -324,7 +272,6 @@
               :url="intendedRoute"
               @hidden="handleCloseModal"
             />
-
             <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
       </div>
     </transition>

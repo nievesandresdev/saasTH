@@ -21,80 +21,35 @@
             </button>
           </div>
         </div>
-        <!-- <div class="flex justify-between items-center px-6 py-[20px]">
-              <div class="flex justify-end">
-              </div>
-              <div class="flex-1 text-center">
-                <h1 class="font-medium text-xl">Crear usuario</h1>
-              </div>
-              <div class="flex justify-end">
-                <button class="" @click="closeModal">
-                  <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
-                </button>
-              </div>
-            </div> -->
-
-        <div class="pb-6 pr-6 pl-6">
-          <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
-              <div
-                class="flex w-full"
-                style="scroll-snap-type: x mandatory; scroll-padding-right: 16px;"
+        <div class="pb-6 pr-6 pl-6 overflow-y-auto scrolling-sticky" style="height: calc(100% - 52px)" >
+          <div class="flex items-center w-full">
+            <div
+              class="flex w-full"
+            >
+              <h3
+                v-for="(step, index) in steps"
+                :key="step.number"
+                :class="[ 
+                  'text-center py-2 text-[16px] font-semibold cursor-pointer relative px-4',
+                  currentStep === step.number
+                    ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border'
+                    : 'text-gray-300',
+                ]"
+                :style="{
+                  flexGrow: step.number === 3 ? 2 : 1, 
+                  flexShrink: 1,
+                  flexBasis: step.number === 3 ? 'auto' : '0',
+                  whiteSpace: 'nowrap',
+                }"
+                @click="scrollToStep(index)"
+                :ref="el => stepRefs[index] = el"
               >
-                <h3
-                  v-for="(step, index) in steps"
-                  :key="step.number"
-                  :class="[
-                    'flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative px-4',
-                    currentStep === step.number
-                      ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step'
-                      : 'text-gray-300',
-                  ]"
-                  @click="scrollToStep(index)"
-                  style="scroll-snap-align: start;"
-                  :ref="el => stepRefs[index] = el"
-                >
-                  {{ step.label }}
-                </h3>
-              </div>
+                {{ step.label }}
+              </h3>
             </div>
+          </div>
           <hr class="mb-5 px-4">
           <div v-if="currentStep === 1">
-            <div class="relative mt-4">
-              <div class="flex flex-col text-black">
-                <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
-              </div>
-              <div class="relative w-full">
-                <input
-                    type="text"
-                    id="workPositionInput"
-                    @click.stop="toggleModalWorkPosition"
-                    :value="selectedWorkPositionName"
-                    readonly
-                    class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
-                    :class="{
-                      'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                    'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
-                    }"
-                    :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
-                  />
-                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                </div>
-              </div>
-              <transition name="modal-fade">
-                <div id="modalWorkPosition">
-                  <ModalCrud
-                    :data="workPositions"
-                    :open="isModalCrudOpen"
-                    @close="closeModalWorkPosition"
-                    @select="selectWorkPosition"
-                    @getWorkPositions="getWorkPositions"
-                    @deleteWP="deleteWorkPosition"
-                  />
-                </div>
-              </transition>
-            </div>
-
             <div class="mt-4">
                   <label class="text-sm font-medium">Nombre *</label>
                   <div class="relative">
@@ -164,25 +119,18 @@
               </div>
           </div> <!-- fin step 1-->
           <div v-if="currentStep === 2">
-              <div class="flex flex-col mb-8 text-left">
-                  <strong class="mb-5 text-xl">Hoteles</strong>
-                  <span class="font-normal">
-                      Selecciona los alojamientos en donde se encontrará activo este usuario.
-                  </span>
-              </div>
-              <div class="space-y-2">
-                <!-- Checkbox para "Todos los hoteles" -->
-                <div class="flex items-center justify-between mb-4 rounded-lg">
-                  <span class="text-sm font-semibold">Todos los hoteles</span>
-                  <input
-                    type="checkbox"
-                    v-model="selectAllHotels"
-                    @change="handleSelectAll(selectAllHotels)"
-                    class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
-                    :disabled="isRoleAdmin"
+            <div class="flex justify-between items-center mb-4 text-left">
+                <strong class="text-[18px] font-medium">Alojamientos</strong>
+                <div class="flex items-center gap-1">
+                  <span class="text-sm font-semibold">Todos</span>
+                  <BaseSwichInput
+                      v-model="selectAllHotels"
+                      id="swich-visible-experience"
+                      @change:value="handleSelectAll(selectAllHotels)"
                   />
                 </div>
-
+            </div>
+            <div>
                 <!-- Checkboxes para los hoteles individuales -->
                 <div
                   v-for="hotel in userStore.$getHotels(['id', 'name'])"
@@ -196,21 +144,64 @@
                     v-model="form.hotels" 
                     @change="handleSelection(hotel.id)"
                     class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
-                    :disabled="isRoleAdmin"
+                    :disabled="handleChecked"
                   />
                 </div>
             </div>
           </div>
 
-          <div v-if="currentStep === 3">
+          <div v-if="currentStep === 3" class="overflow-y-auto scrolling-sticky hide-scrollbar" style="height: calc(100% - 72px)">
+            <div class="relative mt-4">
+              <div class="flex flex-col text-black">
+                <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
+              </div>
+              <div class="relative w-full mb-6">
+                <input
+                    type="text"
+                    id="workPositionInput"
+                    @click.stop="toggleModalWorkPosition"
+                    :value="selectedWorkPositionName.name"
+                    readonly
+                    class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
+                    :class="{
+                      'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                    'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
+                    }"
+                    :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
+                  />
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <img src="/assets/icons/1.TH.I.dropdownBig.svg">
+                </div>
+              </div>
+              <transition name="modal-fade">
+                <div id="modalWorkPosition">
+                  <ModalCrud
+                    :data="workPositions"
+                    :open="isModalCrudOpen"
+                    @close="closeModalWorkPosition"
+                    @select="selectWorkPosition"
+                    @getWorkPositions="getWorkPositions"
+                    @deleteWP="deleteWorkPosition"
+                  />
+                </div>
+              </transition>
+            </div>
             <AccessPermissions
               v-model:permissions="form.permissions"
-              :isRoleAdmin="isRoleAdmin"
               :workPositionId="form.work_position_id"
-          />
+              :disabledGeneral="true"
+            />
+
+            <Notifications 
+              v-model:periodicityChat="form.periodicityChat"
+              v-model:periodicityStay="form.periodicityStay"
+              v-model:notifications="form.notifications"
+              :workPositionId="form.work_position_id"
+              :disabledGeneral="true"
+            />
 
           </div>
-          <div v-if="currentStep === 4">
+          <!-- <div v-if="currentStep === 4">
             <Notifications 
               v-model:periodicityChat="form.periodicityChat"
               v-model:periodicityStay="form.periodicityStay"
@@ -218,7 +209,7 @@
               :maxHeight="900"
               :workPositionId="form.work_position_id"
             />
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -271,6 +262,7 @@ import ModalDeleteWork from './ModalDeleteWork.vue';
 import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
 import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
+import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
@@ -379,28 +371,57 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
 
 
 const form = ref({
-user_id: null,
-work_position_id: null,
-role: null,
-name: '',
-lastname: '',
-prefix: null,
-phone: '',
-email: '',
-/*  password: '',
-password_confirmation: '', */
-hotels: [],
-access: [],
-permissions: {},
-periodicityChat: 5, 
-periodicityStay: 5,
-notifications: {
-  newChat: false,
-  PendingChat10: false,
-  pendingChat30: false,
-  newFeedback: false,
-  pendingFeedback10: false,
-},
+  user_id: null,
+  work_position_id: null,
+  role: null,
+  name: '',
+  lastname: '',
+  prefix: null,
+  phone: '',
+  email: '',
+  /*  password: '',
+  password_confirmation: '', */
+  hotels: [],
+  access: [],
+  permissions: {},
+  periodicityStay: {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
+  notifications: {
+    push : {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    platform: {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    email : {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: true,
+      newFeedback: false,
+      pendingFeedback30: false,
+      pendingFeedback60: false,
+      new_reviews: false,
+    },
+
+  },
 });
 
 
@@ -432,9 +453,11 @@ const initializeForm = () => {
       form.value.hotels = props.dataUser.hotels || [];
       form.value.access = props.dataUser.permissions || [];
       form.value.permissions = props.dataUser.permissions || [];
-      form.value.notifications = props.dataUser.notifications || [];
-      form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
-      form.value.periodicityStay = props.dataUser.periodicity_stay || 5;
+      form.value.notifications = JSON.parse(props.dataUser.notifications) || [];
+      form.value.periodicity_chat = JSON.parse(props.dataUser.periodicity_chat) || [];
+      form.value.periodicity_stay = JSON.parse(props.dataUser.periodicity_stay) || [];
+      /* form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
+      form.value.periodicityStay = props.dataUser.periodicity_stay || 5; */
 
 
      
@@ -541,12 +564,14 @@ const selectRole = (rol) => {
 const selectWorkPosition = (position) => {
   selectedWorkPositionName.value = position.name;
   form.value.work_position_id = position.id;
+  form.value.permissions = JSON.parse(position.permissions);
   isModalCrudOpen.value = false;
 
+  // Parseamos el JSON de permisos
   let permissions = JSON.parse(position.permissions);
   let notifications = JSON.parse(position.notifications);
-  let periodicity_chat = position.periodicity_chat;
-  let periodicity_stay = position.periodicity_stay;
+  let periodicity_chat = JSON.parse(position.periodicity_chat);
+  let periodicity_stay = JSON.parse(position.periodicity_stay);
 
   form.value.notifications = notifications;
   form.value.periodicityChat = periodicity_chat;
@@ -765,28 +790,28 @@ const handleCheckPermission = (permissionName, isSelected) => {
 };
 
 
-const currentStep = ref(1);
+const currentStep = ref(3);
 const steps = [
   { number: 1, label: 'Usuario' },
-  { number: 2, label: 'Hoteles' },
-  { number: 3, label: 'Accesos' },
-  { number: 4, label: 'Notificaciones'}
+  { number: 2, label: 'Accesos' },
+  { number: 3, label: 'Permisos y notificaciones' },
+  /* { number: 4, label: 'Notificaciones'} */
 ];
 
 const stepRefs = ref([]);
 
 
 const scrollToStep = (index) => {
-  const stepElement = stepRefs.value[index];
+  //const stepElement = stepRefs.value[index];
 
-  const options = { behavior: 'smooth', inline: 'start' };
+  /* const options = { behavior: 'smooth', inline: 'start' };
 
   if (index === steps.length - 1) {
     // Si es la última pestaña
     options.inline = 'end';
-  }
+  } */
 
-  stepElement.scrollIntoView(options);
+  //stepElement.scrollIntoView(options);
   currentStep.value = steps[index].number;
 };
 
@@ -966,25 +991,22 @@ onBeforeUnmount(() => {
 }
 
 .rounded-bottom-border {
-position: relative;
+  position: relative;
 }
 
 .rounded-bottom-border::after {
-content: '';
-position: absolute;
-bottom: 0;
-left: 50%;
-transform: translateX(-50%);
-width: 105px;
-height: 3px;
-background-color: #0B6357;
-border-radius: 10px 10px 0 0;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 3px;
+  background-color: #0B6357;
+  border-radius: 10px 10px 0 0;
 }
-/* 
-.active-step {
-margin-left: -0.5rem; 
-padding-right: 0.5rem; 
-} */
+
+
 
 /* Ocultar scrollbar en Chrome, Safari y Opera */
 .hide-scrollbar::-webkit-scrollbar {

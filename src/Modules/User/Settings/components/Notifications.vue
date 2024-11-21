@@ -26,9 +26,6 @@
             </template>
           </BaseTooltipResponsive>
         </div>
-
-       
-  
         <!-- Notificaciones en plataforma Hoster -->
         <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
           <!-- estancias chat -->
@@ -193,10 +190,7 @@
                 <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
-            
-            
           </div>
-          
         </div>
       </div>
     </div>
@@ -279,7 +273,7 @@
   
   <style scoped>
   .notifications-container {
-    max-height: 400px; /* Ajusta la altura máxima del contenedor */
+    max-height: 800px;
     
   }
   
