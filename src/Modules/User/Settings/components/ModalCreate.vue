@@ -56,21 +56,7 @@
           </p>
         </div>
 
-       <!--  <div class="flex justify-start w-full mt-4">
-          <h3
-            class="flex-1 text-center py-2 text-base font-semibold cursor-pointer relative"
-            v-for="(step, index) in steps"
-            :key="step.number"
-            :class="{
-              'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step':
-                currentStep === step.number,
-              'text-[#333333]': currentStep !== step.number,
-            }"
-            @click="currentStep = step.number"
-          >
-            {{ step.label }}
-          </h3>
-        </div> -->
+       
         <hr class="mb-[15px] px-4" />
         <div v-if="currentStep === 1" class="mb-6">
           <AccessPermissions v-model:permissions="form.permissions" />
@@ -80,13 +66,7 @@
             v-model:notifications="form.notifications"
           />
         </div>
-        <!-- <div v-if="currentStep === 2">
-          <Notifications
-            v-model:periodicityChat="form.periodicityChat"
-            v-model:periodicityStay="form.periodicityStay"
-            v-model:notifications="form.notifications"
-          />
-        </div> -->
+       
       </div>
     </template>
 
@@ -202,8 +182,6 @@ const submitForm = async () => {
     return;
   }
 
-  console.log(form);
-
   const response = await createWorkPosition(form);
 
   if (response.ok) {
@@ -280,22 +258,20 @@ const closeModal = () => {
 </script>
 
 <style scoped>
-/* Asegura que los estilos del título sean consistentes */
-.fixed-title {
-  font-size: 1.125rem; /* Text-lg */
-  font-weight: 500; /* font-medium */
-  line-height: 110%; /* Ajusta line-height */
-}
+  /* Asegura que los estilos del título sean consistentes */
+  .fixed-title {
+    font-size: 1.125rem; /* Text-lg */
+    font-weight: 500; /* font-medium */
+    line-height: 110%; /* Ajusta line-height */
+  }
 
-/* Ocultar el scrollbar para navegadores compatibles */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
+  /* Ocultar el scrollbar para navegadores compatibles */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 
-.scrollbar-none {
-  -ms-overflow-style: none; /* IE y Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE y Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 </style>

@@ -219,11 +219,11 @@
         </button>
         <button
           class="px-4 py-2 font-medium rounded text-black"
-          @click.stop.prevent="currentStep === 4 ? handleUpdateUser() : nextStep()"
+          @click.stop.prevent="currentStep === 3 ? handleUpdateUser() : nextStep()"
           :disabled="isFormIncomplete"
           :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
-          {{ currentStep === 4 ? 'Guardar' : 'Guardar' }}
+          {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
         </button>
       </div>
       <ModalNoSave

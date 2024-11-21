@@ -227,6 +227,7 @@
                             @close="closeModalWorkPosition"
                             @select="selectWorkPosition"
                             @deleteWP="deleteWorkPosition"
+                            @getWorkPositions="getWorkPositions"
                           />
                         </div>
                       </transition>
@@ -254,11 +255,11 @@
               </button>
               <button
                 class="px-4 py-2 font-medium rounded text-black"
-                @click="currentStep === 4 ? handleStoreUser() : nextStep()"
+                @click="currentStep === 3 ? handleStoreUser() : nextStep()"
                 :disabled="isFormIncomplete"
                 :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
               >
-                {{ currentStep === 4 ? 'Crear Usuario' : 'Siguiente' }}
+                {{ currentStep === 3 ? 'Crear' : 'Siguiente' }}
               </button>
             </div>
             <ModalNoSave
@@ -652,7 +653,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
     form.value.access = jsonHotel.value;
 };
 
-  const currentStep = ref(3);
+  const currentStep = ref(1);
   const steps = [
     { number: 1, label: 'Usuario' },
     /* { number: 2, label: 'Alojamientos' }, */
@@ -680,7 +681,7 @@ const handleStoreUser = async () => {
 
   if (store.ok) {
     clearForm()
-    toast.warningToast('Usuario creado correctamente','top-right')
+    toast.warningToast('Usuario creado','top-right')
     emits('store');
     emits('alert');
 
