@@ -340,13 +340,13 @@
   import { useToastAlert } from '@/composables/useToastAlert'
   import { useMouseHandle } from '@/composables/useMouseHandle';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
-  import Notifications from './Notifications.vue';
   import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
   import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
   import AccessPermissions from './AccessPermisions.vue';
+  import Notifications from './Notifications.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
   import { useRoute, useRouter } from 'vue-router';

@@ -60,7 +60,7 @@
                 {{ user.name }} {{ user.profile?.lastname }} 
               </th>
               <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
-                {{ user.work_position }}
+                {{ user.work_position?.name ?? '-' }}
               </td>
               <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.time }}

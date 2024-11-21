@@ -294,7 +294,7 @@ onMounted(()=>{
     gap: 16px; /* Espacio entre las tarjetas */
 }
 
-@media (max-width: 1443px) {
+@media (max-width: 1440px) {
     .fixed-grid {
         grid-template-columns: repeat(3, 1fr); /* Cambia a 3 columnas en pantallas de 1440px o menos */
     }

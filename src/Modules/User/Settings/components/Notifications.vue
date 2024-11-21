@@ -48,9 +48,9 @@
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-normal">Nuevo Chat</span>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.newChat" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             <!-- Chat pendiente 10 -->
@@ -64,16 +64,16 @@
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
-                  :disabled="isDisabled"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.pendingChat10" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             <!--chat poendiente 30-->
@@ -87,16 +87,16 @@
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
-                  :disabled="isDisabled"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.pendingChat30" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
           </div>
@@ -118,9 +118,9 @@
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-normal">Nuevo Feedback</span>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.newFeedback" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             <!-- Chat pendiente 10 -->
@@ -134,16 +134,16 @@
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
-                  :disabled="isDisabled"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.pendingFeedback30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.pendingFeedback30" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.pendingFeedback30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             <!--chat poendiente 30-->
@@ -157,16 +157,16 @@
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
-                  :disabled="isDisabled"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
           </div>
@@ -188,9 +188,9 @@
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-normal">Nuevas reseñas no respondidas</span>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" v-model="notifications.push.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
                 <input type="checkbox" v-model="notifications.platform.new_reviews" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.email.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
             

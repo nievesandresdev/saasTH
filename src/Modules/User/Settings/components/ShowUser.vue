@@ -108,6 +108,14 @@
                 <span class="font-normal text-base">{{ hotel }}</span>
               </div>
             </div>
+            <hr>
+            <AccessPermissions v-model:permissions="dataUser.permissions" :workPositionId="dataUser.work_position_id" :disabledGeneral="true" />
+            <Notifications
+              v-model:periodicityChat="periodicityChat"
+              v-model:periodicityStay="periodicityStay"
+              v-model:notifications="notificationsUser"
+              :disabledGeneral="true"
+            />
           </div>
         </div>
         <div 
@@ -139,8 +147,10 @@
   </template>
   
   <script setup>
-    import { ref, onMounted, nextTick, defineEmits,defineProps,watch } from 'vue';
+    import { ref, onMounted, nextTick, defineEmits,defineProps,watch,computed } from 'vue';
     import Tooltip from '@/components/Tooltip.vue'
+    import AccessPermissions from './AccessPermisions.vue';
+    import Notifications from './Notifications.vue';
     import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
     import { useToastAlert } from '@/composables/useToastAlert'
     import { useAuthStore } from '@/stores/modules/auth/login'
@@ -156,6 +166,19 @@
         modalShow: Boolean,
         workPositions: Array,
         dataUser : Object
+    });
+
+    //computed json parse dataUser.notifications
+    const notificationsUser = computed(() => {
+        return JSON.parse(props.dataUser.notifications);
+    });
+
+    const periodicityChat = computed(() => {
+        return JSON.parse(props.dataUser.periodicity_chat);
+    });
+
+    const periodicityStay = computed(() => {
+        return JSON.parse(props.dataUser.periodicity_stay);
     });
 
     const closeModal = () => {
