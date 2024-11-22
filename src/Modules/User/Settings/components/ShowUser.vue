@@ -60,10 +60,10 @@
               </div>
                 
                 <div class="flex justify-between mt-[10px]">
-                  <span v-if="dataUser.status == 1" class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#333] bg-[#ECF9F5] rounded-[100px] h-6">
+                  <span v-if="dataUser.status == 1" class="px-2 py-2 flex items-center justify-center font-semibold text-[10px] text-[#333] bg-[#D9F2E9] rounded-[100px] h-6">
                     Activo
                   </span>
-                  <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#333] bg-red-100 rounded-[100px] h-6">
+                  <span v-else class="px-2 py-1 flex items-center justify-center font-semibold text-[10px] text-[#333] bg-[#FEE2E2] rounded-[100px] h-6">
                     Inactivo
                   </span>
                   <div v-show="authStore.user.id != dataUser.id">

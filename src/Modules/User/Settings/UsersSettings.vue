@@ -63,10 +63,10 @@
                 {{ user.time }}
               </td>
               <td @click="showUser(user)" class="py-4 whitespace-normal break-words w-1/4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
-                <span v-if="user.status == 1" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                <span v-if="user.status == 1" class="px-2 py-2 font-semibold text-[10px] text-[#333] bg-[#D9F2E9] rounded-full">
                   Activo
                 </span>
-                <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                <span v-else class="px-2 py-2 font-semibold text-[10px] text-[#333] bg-[#FEE2E2] rounded-full">
                   Inactivo
                 </span>
               </td>
