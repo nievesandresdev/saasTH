@@ -1,7 +1,7 @@
 <template>
     <input
         ref="colorInputRef"
-        v-model="codesColor.codHex"
+        v-model="codesColorForm.codHex"
         type="color"
         id="colorPicker"
         class="color-input invisible"
@@ -10,17 +10,17 @@
     <div class="flex">
         <div 
             class="color-display" 
-            :style="{ backgroundColor: codesColor.codHex }" 
+            :style="{ backgroundColor: codesColorForm.codHex }" 
             @click="openColorPicker"
         />
         <div class="px-4 py-2 flex space-x-4">
             <div class="space-y-2">
                 <h6 class="text-sm font-medium">Código Hexadecimal</h6>
                 <input
-                    v-model="codesColor.codHex"
+                    v-model="codesColorForm.codHex"
                     type="text"
                     @click="openColorPicker"
-                    class="border-[#333] rounded-[6px] h-[40px] border px-[12px] py-[16px] text-sm font-medium leading-[19.6px]"
+                    class="border-[#333] rounded-[6px] h-[40px] border px-[12px] py-[16px] text-sm font-medium leading-[19.6px] htext-black-100"
                 >
             </div>
             <div class="">
@@ -30,19 +30,19 @@
                         v-model="rgbValue.r"
                         type="text"
                         @click="openColorPicker"
-                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px]"
+                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px] htext-black-100"
                     >
                     <input
                         v-model="rgbValue.g"
                         type="text"
                         @click="openColorPicker"
-                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px]"
+                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px] htext-black-100"
                     >
                     <input
                         v-model="rgbValue.b"
                         type="text"
                         @click="openColorPicker"
-                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px]"
+                        class="border-[#333] rounded-[6px] w-[38px] h-[40px] border text-center text-sm font-semibold leading-[19.6px] htext-black-100"
                     >
                 </div>
             </div>
@@ -59,6 +59,7 @@
 
     const props = defineProps({
        codesColor: {
+           type: Object,
            default: () => ({
                 codHex: '#333333',
                 codRbg: 'rgb(51, 51, 51)',
@@ -66,21 +67,25 @@
        }
     });
 
-    const codesColor = reactive({
+    const codesColorForm = reactive({
         codHex: '#333333',
         codRbg: 'rgb(51, 51, 51)',
     });
     const colorInputRef = ref(null);
 
     const hexValue = computed(() => {
-      return codesColor.codHex;
+      return codesColorForm.codHex;
     });
     const rgbValue = computed(() => {
-      return convertHexToRgb(codesColor.codHex);
+      return convertHexToRgb(codesColorForm.codHex);
+    });
+
+    onMounted(() => {
+        loadColor();
     });
 
     watch(()=> props.codesColor, function(value) {
-        Object.assign(codesColor,value);
+        Object.assign(codesColorForm,value);
     });
 
     function  convertHexToRgb(hex) {
@@ -93,7 +98,7 @@
     }
 
     function loadColor () {
-        Object.assign(codesColor, props.codesColor);
+        Object.assign(codesColorForm, props.codesColor);
     }
 
     function openColorPicker() {
@@ -101,8 +106,8 @@
     }
 
     function handleColor () {
-        codesColor.codRbg = `rgb(${rgbValue.value.r},${rgbValue.value.g},${rgbValue.value.b})`;
-        emits('change:color', codesColor);
+        codesColorForm.codRbg = `rgb(${rgbValue.value.r},${rgbValue.value.g},${rgbValue.value.b})`;
+        emits('change:color', codesColorForm);
     }
 
 </script>
@@ -117,5 +122,6 @@
         cursor: pointer;
     }
     .color-input {
+        position: absolute;
     }
 </style>

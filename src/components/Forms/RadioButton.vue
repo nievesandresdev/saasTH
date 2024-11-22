@@ -30,7 +30,7 @@
       default: 'default',
     },
     modelValue: [String, Number],
-    value: [String, Number]
+    value: [String, Number],
   });
   
   const emit = defineEmits(['update:modelValue']);

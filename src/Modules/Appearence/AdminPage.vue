@@ -31,36 +31,68 @@
                 <h5 class="text-base font-semibold mb-2">Colores</h5>
                 <p class="mb-[24px]">Elige los colores para los elementos de navegación en tu WebApp. Puedes previsualizarlos aplicados en la vista del panel de la derecha.</p>
                 <div class="3xl:flex">
-                    <div class="w-[449px] mr-[116px]">
+                    <div class=" mr-[116px] relative">
                         <h5 class="text-base font-semibold mb-2">Color 1</h5>
-                        <p class="w-[449px] mb-2">Este color se aplicará a barra de navegación, botones principales e indicador del alojamiento en el mapa  </p>
+                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181]">Este color se aplicará a barra de navegación, botones principales e indicador del alojamiento en el mapa  </p>
                         <PickColor :codes-color="{codHex: colorsForm?.[0]?.cod_hex, codRbg: colorsForm?.[0]?.cod_rbg}" @change:color="handleColor($event, 0)" />
                         <h5 class="text-base font-semibold mt-4">Color de contraste 1</h5>
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
                         <div class="mt-4 flex space-x-[32px]">
                             <div class="flex space-x-2">
-                                <RadioButton id="color-1" :value="'0'" v-model="colorsForm[0].contrast"/>
+                                <!-- <RadioButton id="color-1" :value="'0'" v-model="colorsForm[0].contrast"/> -->
+                                <input
+                                    v-model="colorsForm[0].contrast"
+                                    :value="'0'"
+                                    :checked="colorsForm[0].contrast === '0'"
+                                    name="color-1"
+                                    type="radio"
+                                    class="size-[24px] hradio"
+                                >
                                 <span class="text-base">Negro</span>
                             </div>
                             <div class="flex space-x-2">
-                                <RadioButton id="color-1" :value="'1'" v-model="colorsForm[0].contrast"/>
+                                <!-- <RadioButton id="color-1" :value="'1'" v-model="colorsForm[0].contrast"/> -->
+                                 <input
+                                    v-model="colorsForm[0].contrast"
+                                    :value="'1'"
+                                    :checked="colorsForm[0].contrast === '1'"
+                                    name="color-1"
+                                    type="radio"
+                                    class="size-[24px] hradio"
+                                >
                                 <span class="text-base">Blanco</span>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-[33px] 3xl:mt-0">
+                    <div class="mt-[33px] 3xl:mt-0 relative">
                         <h5 class="text-base font-semibold mb-2">Color 2</h5>
-                        <p class="w-[449px] mb-2">Este color se aplicará a banners e indicadores de destinos en el mapa</p>
+                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181]">Este color se aplicará a banners y elementos de notificación</p>
                         <PickColor :codes-color="{codHex: colorsForm?.[1]?.cod_hex, codRbg: colorsForm?.[1]?.cod_rbg}"  @change:color="handleColor($event, 1)" />
                         <h5 class="text-base font-semibold mt-4">Color de contraste 1</h5>
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
                         <div class="mt-4 flex space-x-[32px]">
                             <div class="flex space-x-2">
-                                <RadioButton id="color-2" :value="'0'" v-model="colorsForm[1].contrast"/>
+                                <!-- <RadioButton id="color-2" :value="'0'" v-model="colorsForm[1].contrast"/> -->
+                                <input
+                                    v-model="colorsForm[1].contrast"
+                                    :value="'0'"
+                                    :checked="colorsForm[1].contrast === '0'"
+                                    name="color-2"
+                                    type="radio"
+                                    class="size-[24px] hradio"
+                                >
                                 <span class="text-base">Negro</span>
                             </div>
                             <div class="flex space-x-2">
-                                <RadioButton id="color-2" :value="'1'" v-model="colorsForm[1].contrast"/>
+                                <!-- <RadioButton id="color-2" class-content="size-[24px]" :value="'1'" v-model="colorsForm[1].contrast"/> -->
+                                <input
+                                    v-model="colorsForm[1].contrast"
+                                    :value="'1'"
+                                    :checked="colorsForm[1].contrast === '1'"
+                                    name="color-2"
+                                    type="radio"
+                                    class="size-[24px] hradio"
+                                >
                                 <span class="text-base">Blanco</span>
                             </div>
                         </div>
@@ -257,8 +289,8 @@ const colorsDedault = ([
         contrast: '1',
     },
     {
-        cod_hex: '#FAFAFA',
-        cod_rbg: 'rgb(250, 250, 250)',
+        cod_hex: '#FFD700',
+        cod_rbg: 'rgb(250, 215, 0)',
         contrast: '0',
     }
 ]);
