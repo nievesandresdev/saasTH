@@ -18,9 +18,6 @@
         </div>
       </div>
       <div class="group flex items-center px-4 py-2 text-black border border-[#333333] rounded bg-white cursor-pointer hover:border-[#2A8873]" @click="createUser">
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
-          <path d="M11.9898 4V12M11.9898 20V12M11.9898 12H20M11.9898 12H4" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#2A8873]"/>
-        </svg> -->
         <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
     </div>
 
@@ -324,9 +321,8 @@ const editUser = (data) => {
 };
 
 let selectedShow = ref(null);
-const showUser = (data) => {
 
-  console.log('dataSHOWUSER', data);
+const showUser = (data) => {
   if(modalAdd.value || modalEdit.value) return;
   setTimeout(() => {
     selectedUser.value = data;

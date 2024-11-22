@@ -22,7 +22,7 @@
             src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
             class="w-4 h-4 mr-2"
             alt="icon_trash"
-            @click.stop="openEditDelete(option.id)"
+            @click.stop="openEditDelete(option)"
           />
         </div>
       </div>

@@ -238,7 +238,7 @@
         :url="intendedRoute"
         @hidden="handleCloseModal"
       />
-      <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
+      <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :data="dataDeleteWP" @delete="getWorkPositions"  />
     </div>
     
   </transition>
@@ -247,16 +247,13 @@
 
 <script setup>
 import { ref, onMounted, nextTick, defineEmits,computed,watch,defineProps, onBeforeUnmount } from 'vue';
-import ModalSelect from './ModalSelect.vue';
 import ModalCrud from './ModalCrud.vue';
 import { useUserStore } from '@/stores/modules/users/users'
-import Checkbox from '@/components/Forms/Checkbox.vue';
 import { useToastAlert } from '@/composables/useToastAlert'
-import { useRoute, useRouter } from 'vue-router';
+import {  useRouter } from 'vue-router';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import { useMouseHandle } from '@/composables/useMouseHandle';
 import AccessPermissions from './AccessPermisions.vue';
-import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import Notifications from './Notifications.vue';
 import ModalDeleteWork from './ModalDeleteWork.vue';
 import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
@@ -266,19 +263,13 @@ import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
-
 const emits = defineEmits(['close','update','workPositionGet','handleDeleteWP']);
 
 const router = useRouter();
-const route = useRoute();
 
 const authStore = useAuthStore();
 
-const nParam = route.query.n;
-
-
 const initPermissions = ref([])
-const PhoneFieldError = ref(false)
 
 const props = defineProps({
   modalEdit: Boolean,
@@ -297,23 +288,18 @@ const getWorkPositions = (workPosition = false) => {
 };
 
 const isDeleteWorkPositions = ref(false);
-const IdDeleteWP = ref({});
+const dataDeleteWP = ref({});
 
 const deleteWorkPosition = (option) => {
   //emits('deleteWP',option);
   isDeleteWorkPositions.value = true;
-  IdDeleteWP.value = option;
+  dataDeleteWP.value = option;
 
-  
-
-  //console.log('deleteWorkPosition',selectedWorkPositionName.value,option,form.value.work_position_id)
 }
 
 const closeDeleteWorkPositions = () => {
   isDeleteWorkPositions.value = false;
 }
-
-
 
 watch(() => props.modalEdit, (newVal) => {
 if (newVal) {
@@ -473,11 +459,6 @@ const initializeForm = () => {
       // Función para actualizar accesos
       const updateAccess = () => {
           const permissions = form.value.permissions;
-
-          //console.log('permissiosssns',permissions)
-
-          /* console.log('permissions',permissions,firstHotel.value) */
-
           // Validar y actualizar operationAccess
           operationAccess.value.forEach(item => {
               if (permissions[item.value] && permissions[item.value].status) {
@@ -517,7 +498,6 @@ const rolAlert = ref(0);
   const operationAccess = ref([
       { name: 'Estancias', selected: false , value : 'estancias' },
       { name: 'Reseñas', selected: false, value: 'resenas' },
-      /* { name: 'Análisis', selected: false , value: 'analisis' }, */
   ]);
 
   const adminAccess = ref([
@@ -528,10 +508,6 @@ const rolAlert = ref(0);
       { name: 'Equipo', selected: false , value: 'equipo' },
   ]);
 
-const toggleModalSelect = () => {
-  isModalOpen.value = !isModalOpen.value;
-};
-
 const toggleModalWorkPosition = () => {
   isModalCrudOpen.value = !isModalCrudOpen.value;
 };
@@ -540,26 +516,6 @@ const closeModalWorkPosition = () => {
   isModalCrudOpen.value = false;
 }
 
-
-
-const selectRole = (rol) => {
-  selectedRoleName.value = rol.name;
-  form.value.role = rol.id;
-  rolAlert.value = rol.id;
-  if (rol.id === 1 || rol.id === 2) {
-      isRoleAdmin.value = true;
-      
-      //handleChecked.value = true;
-  } else {
-    //console.log('rol',rol.id);
-      isRoleAdmin.value = false;
-      handleChecked.value = false;
-      selectAllHotels.value = false;
-      //handleSelectAll(true)
-  }
-  isModalOpen.value = false;
-
-};
 
 const selectWorkPosition = (position) => {
   selectedWorkPositionName.value = position.name;
@@ -579,7 +535,6 @@ const selectWorkPosition = (position) => {
 
   const updateCheckboxesAndPermissions = (accessList, permissions) => {
     accessList.forEach((accessItem) => {
-      /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
       const permissionKey = accessItem.value;
       
       const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
@@ -608,13 +563,6 @@ const isFormIncomplete = computed(() => {
     //return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
     return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value || !form.value.hotels.length;
 
-  /* if (currentStep.value === 1) {
-      return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
-    } else if (currentStep.value === 2) {
-        return !form.value.hotels.length;
-    } else if (currentStep.value === 3) {
-        return !form.value.access.length;
-  } */
 
 });
 
@@ -721,7 +669,6 @@ const handleSelectAll = (initial = false) => {
 
 // Método de selección individual
 const handleSelection = (hotelId, add = null) => {
-  //console.log('hotelId',jsonHotel.value)
     //const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
 
     const index = 0
@@ -878,9 +825,6 @@ const closeModalEditUser = () => {
   //redirect
 
 };
-
-
-
 
 onMounted(() => {
   initialForm.value = JSON.stringify(form);

@@ -273,7 +273,7 @@
               :url="intendedRoute"
               @hidden="handleCloseModal"
             />
-            <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
+            <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :data="dataDeleteWP" @delete="getWorkPositions"  />
       </div>
     </transition>
 
@@ -325,12 +325,11 @@ router.beforeEach((to, from, next) => {
 });
 
 const isDeleteWorkPositions = ref(false);
-const IdDeleteWP = ref({});
+const dataDeleteWP = ref({});
 
 const deleteWorkPosition = (option) => {
-  //emits('deleteWP',option);
   isDeleteWorkPositions.value = true;
-  IdDeleteWP.value = option;
+  dataDeleteWP.value = option;
 }
 
 const getWorkPositions = (option) => {
