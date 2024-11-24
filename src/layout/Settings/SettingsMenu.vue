@@ -455,7 +455,6 @@ async function getTypePlaces(){
         //localStorage.setItem('selected_place', item.id);
       }
     });
-    console.log(dataTypePlaces, 'dataTypePlaces');
   }
 }
 

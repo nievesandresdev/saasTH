@@ -426,14 +426,13 @@ function mergeDataFormInUrlMockup (stringQuery, dataForm) {
 function loadMockup (placeId = null) {
     let query = null;
     if (placeId) {
-        mockupStore.$setIframeUrl(`/places/${placeId}`);
+        mockupStore.$setIframeUrl(`/lugares/${placeId}`);
     } else {
         let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
         // query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
         query = `mobile=1&typeplace=${formFilter.selected_place}&categoriplace=${formFilter.selected_subplace}`;
         query = mergeDataFormInUrlMockup(query, dataForm);
-        console.log(query, 'loadMockup');
-        mockupStore.$setIframeUrl(`/places`, query);
+        mockupStore.$setIframeUrl(`/lugares`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true)
