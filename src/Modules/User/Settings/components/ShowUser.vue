@@ -110,7 +110,6 @@
             </div>
             <hr>
             <AccessPermissions v-model:permissions="dataUser.permissions" :workPositionId="dataUser.work_position_id" :disabledGeneral="true" />
-            <pre>{{ periodicityChat }}</pre>
             <Notifications
               v-model:periodicityChat="periodicityChat"
               v-model:periodicityStay="periodicityStay"
