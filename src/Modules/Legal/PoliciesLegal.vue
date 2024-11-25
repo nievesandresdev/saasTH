@@ -3,7 +3,7 @@
     <div class="px-6 flex-grow">
       <HeadLegal />
       <TabLegal />
-      <span class="font-normal text-sm">{{ totalPolicies }} normas</span>
+      <span class="font-normal text-sm">{{ totalPolicies }} {{ totalPolicies <= 1 ? 'norma' : 'normas' }}</span>
       <div class="grid grid-cols-4 1xl:grid-cols-3 1xl:w-5/6 3xl:grid-cols-5 3xl:w-full 3xl:gap-4 1xl:gap-4 mt-2">
         <!-- Botón para añadir política -->
         <div
