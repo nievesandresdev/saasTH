@@ -3,9 +3,7 @@
     <section class="px-6">
         <TitleAndActivate 
             status="Stay"
-            :defaultToggle="form.in_stay_activate"
-            @onchange="(value) => form.in_stay_activate = value"
-            tooltipText="La desactivación del feedback en Stay se aplicará a las estancias que se creen a partir de este momento. Las estancias que ya están creadas recibirán el flujo de feedback que estaba programado."
+            hideToggleButton
         />
         <p class="text-sm mt-2">
             Tendrá como objetivo conocer el sentimiento del huésped en el tiempo transcurrido desde que comenzó su estancia, para poder identificar posibles problemas y evitar que deriven en una reseña negativa.
@@ -22,10 +20,10 @@
 
     <section class="px-6 mt-6">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
-            <h1 class="text-base font-medium">Mensaje de agradecimiento</h1>
-            <p class="text-sm mt-2">Configura el mensaje de agradecimiento que aparecerá cuando el huésped proporcione su feedback. Puedes personalizarlo según la respuesta obtenida. </p>
+            <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
+            <p class="text-sm mt-2">Configura el mensaje de respuesta del hotel, que aparecerá cuando el huésped proporcione su feedback. Puedes personalizarlo según la respuesta obtenida. </p>
 
-            <p class="text-sm font-medium leading-[110%] mt-4">Cuando el huésped responda muy bueno o bueno</p>
+            <p class="text-sm font-semibold leading-[120%] mt-4">Cuando el huésped responda muy buena o buena</p>
             <div class="mt-2" v-if="form.in_stay_thanks_good">
                 <AutoTextArea 
                     :key="forceUpdate"
@@ -36,7 +34,34 @@
                     mandatory
                 />
             </div>
-            <p class="text-sm font-medium leading-[110%] mt-2">Cuando el huésped responda normal, malo o muy malo</p>
+            <div class="mt-4">
+                <div class="flex items-center gap-2">
+                    <p class="text-sm font-medium leading-[140%] flex-grow">Solicitar valoración del personal</p>
+                    <p class="text-sm font-semibold leading-[120%] mr-1">Activo</p>
+                    <div class="">
+                        <ToggleButton
+                            v-model="form.in_stay_assessment_good_activate"
+                            @change="toggleAttended"
+                            :id="`toggle-1`"
+                        />
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <AutoTextArea 
+                        v-if="form.in_stay_assessment_good"
+                        :key="forceUpdate"
+                        @empty="event => handleEmpty(event,'thanksGOOD')"
+                        id="AutoTextArea2"
+                        v-model="form.in_stay_assessment_good.es" 
+                        :wordLimit="300"
+                        mandatory
+                    />
+                </div>
+            </div>
+
+            <div class="w-full border-b hborder-gray-400 my-4"></div>
+
+            <p class="text-sm font-semibold leading-[120%]">Cuando el huésped responda normal, malo o muy malo</p>
             <div class="mt-2" v-if="form.in_stay_thanks_normal">
                 <AutoTextArea 
                     :key="forceUpdate"
@@ -47,11 +72,34 @@
                     mandatory
                 />
             </div>
-            
+            <div class="mt-4">
+                <div class="flex items-center gap-2">
+                    <p class="text-sm font-medium leading-[140%] flex-grow">Solicitar valoración del personal</p>
+                    <p class="text-sm font-semibold leading-[120%] mr-1">Activo</p>
+                    <div class="">
+                        <ToggleButton
+                            v-model="form.in_stay_assessment_normal_activate"
+                            @change="toggleAttended"
+                            :id="`toggle-2`"
+                        />
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <AutoTextArea 
+                        v-if="form.in_stay_assessment_normal"
+                        :key="forceUpdate"
+                        @empty="event => handleEmpty(event,'thanksGOOD')"
+                        id="AutoTextArea4"
+                        v-model="form.in_stay_assessment_normal.es" 
+                        :wordLimit="300"
+                        mandatory
+                    />
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="px-6 mt-6 mb-10">
+    <!-- <section class="px-6 mt-6 mb-10">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
             <h1 class="text-base font-medium">Comentarios adicionales</h1>
             <p class="text-sm mt-2">Establece el mensaje de petición de comentarios adicionales.</p>
@@ -67,7 +115,7 @@
                 />
             </div>
         </div>
-    </section>
+    </section> -->
 
     <ChangesBar 
         :existingChanges="changes"
@@ -93,6 +141,7 @@ import AutoTextArea from '@/components/Forms/AutoTextArea.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import TitleAndActivate from './components/TitleAndActivate.vue'
 import ModalNoSave from '@/components/ModalNoSave.vue'
+import ToggleButton from '@/components/Buttons/ToggleButton.vue'
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
 //store
@@ -109,16 +158,18 @@ const queriesTexts = ref(null);
 const anyEmpty = ref([]);
 const copyTexts = ref(null);
 const form = reactive({
-    in_stay_activate:null,
     in_stay_thanks_good:null,
+    in_stay_assessment_good_activate:true,
+    in_stay_assessment_good:null,
     in_stay_thanks_normal:null,
-    in_stay_comment:null,
+    in_stay_assessment_normal_activate:true,
+    in_stay_assessment_normal:null,
 })
 const forceUpdate = ref(0);
 
 onMounted(async() => {
     queriesTexts.value = await querySettingsStore.$getStaySettings();
-    // console.log('queriesTexts.value',queriesTexts.value)
+    console.log('test queriesTexts.value',queriesTexts.value)
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
     defineMockup(queriesTexts.value.in_stay_activate)
@@ -127,10 +178,12 @@ onMounted(async() => {
 //functions
 function assignValuesToForm(){
     if (queriesTexts.value) {
-        form.in_stay_activate = queriesTexts.value.in_stay_activate;
         form.in_stay_thanks_good = queriesTexts.value.in_stay_thanks_good;
+        form.in_stay_assessment_good_activate = queriesTexts.value.in_stay_assessment_good_activate;
+        form.in_stay_assessment_good = queriesTexts.value.in_stay_assessment_good;
         form.in_stay_thanks_normal = queriesTexts.value.in_stay_thanks_normal;
-        form.in_stay_comment = queriesTexts.value.in_stay_comment;
+        form.in_stay_assessment_normal_activate = queriesTexts.value.in_stay_assessment_normal_activate;
+        form.in_stay_assessment_normal = queriesTexts.value.in_stay_assessment_normal;
     }
 }
 
@@ -154,10 +207,14 @@ function handleEmpty(event,input) {
 
 function cancelChanges(){
     const oldValues = JSON.parse(copyTexts.value);
-    form.in_stay_activate = oldValues.in_stay_activate;
     form.in_stay_thanks_good = { ...oldValues.in_stay_thanks_good };
+    form.in_stay_assessment_good = { ...oldValues.in_stay_assessment_good };
+    form.in_stay_assessment_good_activate = oldValues.in_stay_assessment_good_activate;
+
     form.in_stay_thanks_normal = { ...oldValues.in_stay_thanks_normal };
-    form.in_stay_comment = { ...oldValues.in_stay_comment };
+    form.in_stay_assessment_normal = { ...oldValues.in_stay_assessment_normal };
+    form.in_stay_assessment_normal_activate = oldValues.in_stay_assessment_normal_activate;
+
     forceUpdate.value++;
 }
 
