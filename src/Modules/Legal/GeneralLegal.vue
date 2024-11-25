@@ -134,16 +134,18 @@ const form = reactive({
 });
 
 const initialForm = ref(null);
-const submitted = ref(false); // Nueva bandera para controlar cuándo mostrar las validaciones
+const submitted = ref(false); 
 const isEmailProtectionValid = ref(false);
 const isEmailValid = ref(false);
-const changes = ref(false); // Inicialmente en false
-const valid = ref(false); // Inicialmente en false
+const changes = ref(false); 
+const valid = ref(false); 
 
 onMounted(async () => {
+    isEmailProtectionValid.value = true;
+    isEmailValid.value = true;
     await getData();
     initialForm.value = JSON.stringify(form);
-    validateForm(); // Valida el formulario, pero no muestra errores hasta que se intente enviar
+    validateForm(); 
     loadGoogleMapsScript();
 });
 
@@ -164,9 +166,7 @@ watch([() => form.name, () => form.address, () => form.nif, () => form.email, ()
 
 function validateForm() {
     submitted.value = false;
-    console.log('test validateForm')
-    // if (!submitted.value) return; // Si no se ha intentado enviar, no mostrar errores
-    console.log('test validateForm 2')
+    
     // Validación independiente para el email principal
     isEmailValid.value = validateEmail(form.email);
     form.emailError = !form.email.trim() || !isEmailValid.value;
@@ -189,7 +189,7 @@ function validateForm() {
 }
 
 function validateEmail(email) {
-    if (email === '') return true; // Permite campo vacío en la validación (lo manejas por separado)
+    if (email === '') return true; 
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
@@ -206,7 +206,7 @@ async function submit() {
     }else{
         submitted.value = false;
     }
-    validateForm();  // Validar el formulario
+    validateForm();  
 
     // if (!valid.value) {
     //     /* toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right'); */
@@ -218,7 +218,7 @@ async function submit() {
     if (response.ok) {
         toast.warningToast('Guardado con éxito', 'top-right');
         initialForm.value = JSON.stringify(form);
-        changes.value = false; // Restablecer cambios
+        changes.value = false;
         submitted.value = false; // Reiniciar la bandera de submit después de guardar
     } else {
         toast.errorToast('Ha ocurrido un error al guardar los cambios', 'top-right');
