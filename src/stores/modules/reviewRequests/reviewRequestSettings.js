@@ -4,7 +4,8 @@ import { ref } from 'vue'
 import {
     getAllApi,
     getPostStayRequestDataApi,
-    updateDataApi
+    updateDataApi,
+    updateDataInStayApi
 } from '@/api/services/reviewRequests/requestSettings.services'
 
 export const useRequestSettingStore = defineStore('requestSettings', () => {
@@ -36,11 +37,18 @@ export const useRequestSettingStore = defineStore('requestSettings', () => {
         return ok;
     }
 
+    async function $updateDataInStay(data) {
+        const response = await updateDataInStayApi(data)
+        const { ok } = response;
+        return ok;
+    }
+
     //
     return {
         $getAll,
         $getPostStayRequestData,
-        $updateData
+        $updateData,
+        $updateDataInStay
     }
 
 })
