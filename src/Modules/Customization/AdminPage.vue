@@ -179,12 +179,12 @@ const dataFormDefault ={
 
 
 const OPTIONS_LANGUAGES = [
-    { value: 'es', label: 'Español', img: '/assets/icons/flags/es.svg' },
-    { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
-    { value: 'fr', label: 'Francés', img: '/assets/icons/flags/fr.svg' },
-    { value: 'pt', label: 'Portugués', img: '/assets/icons/flags/pt.svg' },
-    { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
     { value: 'de', label: 'Alemán', img: '/assets/icons/flags/de.svg' },
+    { value: 'es', label: 'Español', img: '/assets/icons/flags/es.svg' },
+    { value: 'fr', label: 'Francés', img: '/assets/icons/flags/fr.svg' },
+    { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
+    { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
+    { value: 'pt', label: 'Portugués', img: '/assets/icons/flags/pt.svg' },
     // { value: 'd', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
 ]
 
@@ -237,6 +237,7 @@ onMounted(() => {
 function loadMockup () {
     mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp)
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    mockupStore.$setLanguageTooltip(true)
 }
 
 async function reloadHotel () {

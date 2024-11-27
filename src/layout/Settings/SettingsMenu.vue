@@ -396,7 +396,7 @@ const menu_section = reactive([
                     title: 'Textos legales',
                     icon: '/vendor_asset/img/hoster/icons/TH.SOLICITUDES.svg',
                     to: 'GeneralLegal',
-                    selectedArr: ['GeneralLegal'],
+                    selectedArr: ['GeneralLegal', 'PoliciesLegal', 'PolicyCookiesLegal', 'PolicyPrivacyLegal'],
                 },
             ],
         },
