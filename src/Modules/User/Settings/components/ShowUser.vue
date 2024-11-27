@@ -170,15 +170,15 @@
 
     //computed json parse dataUser.notifications
     const notificationsUser = computed(() => {
-        return JSON.parse(props.dataUser.notifications);
+        return props.dataUser.notifications;
     });
 
     const periodicityChat = computed(() => {
-        return JSON.parse(props.dataUser.periodicity_chat);
+        return props.dataUser.periodicity_chat;
     });
 
     const periodicityStay = computed(() => {
-        return JSON.parse(props.dataUser.periodicity_stay);
+        return props.dataUser.periodicity_stay;
     });
 
     const closeModal = () => {

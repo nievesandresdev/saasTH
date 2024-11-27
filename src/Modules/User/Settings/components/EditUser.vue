@@ -439,9 +439,9 @@ const initializeForm = () => {
       form.value.hotels = props.dataUser.hotels || [];
       form.value.access = props.dataUser.permissions || [];
       form.value.permissions = props.dataUser.permissions || [];
-      form.value.notifications = JSON.parse(props.dataUser.notifications) || [];
-      form.value.periodicity_chat = JSON.parse(props.dataUser.periodicity_chat) || [];
-      form.value.periodicity_stay = JSON.parse(props.dataUser.periodicity_stay) || [];
+      form.value.notifications = props.dataUser.notifications || [];
+      form.value.periodicity_chat = props.dataUser.periodicity_chat || [];
+      form.value.periodicity_stay = props.dataUser.periodicity_stay || [];
       /* form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
       form.value.periodicityStay = props.dataUser.periodicity_stay || 5; */
 
