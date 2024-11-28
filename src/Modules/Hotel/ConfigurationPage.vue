@@ -1,7 +1,7 @@
 <template>
-    <div class="min-h-screen flex flex-col justify-between px-[24px] bg-[#FAFAFA]">
+    <div class="min-h-screen flex flex-col justify-between px-[24px] bg-[#FAFAFA] ">
       <div>
-        <section class="flex justify-between py-[20px]">
+        <section class="flex justify-between py-[19px] border-b border-[#BFBFBF] mb-6">
           <div class="space-x-2 flex">
             <h1 class="font-medium text-[22px]">Home</h1>
             <BaseTooltipResponsive size="l" :top="35" :left="-0">
@@ -15,6 +15,7 @@
               </template>
             </BaseTooltipResponsive>
           </div>
+          <hr>
         </section>
   
         <SectionConfig :margin-bottom="'24px'">
