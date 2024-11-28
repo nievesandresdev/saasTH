@@ -1,7 +1,7 @@
 <template>
     <section class="px-6 mt-6">
         <div class="bg-white py-6 px-4 rounded-[10px]">
-            <h1 class="text-base font-medium">Feedback del huésped en {{ status }}</h1>
+            <h1 class="text-base font-semibold leading-[120%]">Sentimiento del huésped en {{ status }}</h1>
             <div class="flex mt-4">
                 <p class="text-sm font-medium mr-2">Pregunta</p>
                 <p class="text-sm">{{ question }}</p>

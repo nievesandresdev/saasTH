@@ -30,7 +30,7 @@
                         {{ store.infoText1 }}
                     </p>
                 </div>
-                <template v-if="$route.name === 'Customization'">
+                <!-- <template v-if="$route.name === 'Customization'">
                     <div 
                         class="flex gap-2 items-center mt-4"
                     >
@@ -47,7 +47,7 @@
                             Abre tu webapp para visualizar el favicond
                         </p>
                     </div>
-                </template>
+                </template> -->
             </div>
         </div>
     </div>

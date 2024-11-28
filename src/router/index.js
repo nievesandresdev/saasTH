@@ -5,7 +5,7 @@ import dashboardRoutes from './dashboardRoutes';
 // Grupos de rutas
 import chatGroupRoutes from './chat/chatGroupRoutes';
 import userGroupRoutes from './user/userGroupRoutes';
-import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes';
+import ReviewRequestsSettingsRoutes from './reviewRequestsSettingsRoutes';
 import queriesGroupRoutes from './queries/queriesGroupRoutes';
 import stayRoutes from './stayRoutes';
 // Routes config webapp
@@ -42,7 +42,7 @@ const routes = [
   // Grupos de rutas por módulo
   ...chatGroupRoutes,
   ...userGroupRoutes,
-  ...reviewsRequestsGroupRoutes,
+  ...ReviewRequestsSettingsRoutes,
   ...queriesGroupRoutes,
   ...stayRoutes,
   ...hotelGroupRoutes,

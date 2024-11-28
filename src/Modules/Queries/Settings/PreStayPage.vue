@@ -12,11 +12,12 @@
 
     <QueryTerms />
 
-    <section class="px-6 mt-6">
+    <section class="px-6 my-6">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
-            <h1 class="text-base font-medium">Mensaje de agradecimiento</h1>
-            <p class="text-sm mt-2">Configura el mensaje de agradecimiento que aparecerá cuando el huésped proporcione su feedback. </p>
+            <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
+            <p class="text-sm mt-2">Configura el mensaje de respuesta del hotel, que aparecerá cuando el huésped proporcione su feedback.</p>
             <div class="mt-4" v-if="form.pre_stay_thanks">
+                <p class="text-sm font-semibold leading-[120%] mb-2">Mensaje de respuesta cuando el huésped proporcione el feedback</p>
                 <AutoTextArea 
                     :key="forceUpdate"
                     @empty="event => handleEmpty(event,'thanksEmpty')"
@@ -29,7 +30,7 @@
         </div>
     </section>
 
-    <section class="px-6 mt-6 mb-10">
+    <!-- <section class="px-6 mt-6 mb-10">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
             <h1 class="text-base font-medium">Comentarios adicionales</h1>
             <p class="text-sm mt-2">Establece el mensaje de petición de comentarios adicionales.</p>
@@ -45,7 +46,7 @@
                 />
             </div>
         </div>
-    </section>
+    </section> -->
 
     <ChangesBar 
         :existingChanges="changes"
@@ -88,8 +89,7 @@ const anyEmpty = ref([]);
 const copyTexts = ref(null);
 const form = reactive({
     pre_stay_activate:null,
-    pre_stay_thanks:null,
-    pre_stay_comment:null,
+    pre_stay_thanks:null
 })
 const forceUpdate = ref(0);
 
@@ -106,7 +106,6 @@ function assignValuesToForm(){
     if (queriesTexts.value) {
         form.pre_stay_activate = queriesTexts.value.pre_stay_activate;
         form.pre_stay_thanks = queriesTexts.value.pre_stay_thanks;
-        form.pre_stay_comment = queriesTexts.value.pre_stay_comment;
     }
 }
 
@@ -132,7 +131,6 @@ function cancelChanges(){
     const oldValues = JSON.parse(copyTexts.value);
     form.pre_stay_activate = oldValues.pre_stay_activate;
     form.pre_stay_thanks = { ...oldValues.pre_stay_thanks };
-    form.pre_stay_comment = { ...oldValues.pre_stay_comment };
     forceUpdate.value++;
 }
 
