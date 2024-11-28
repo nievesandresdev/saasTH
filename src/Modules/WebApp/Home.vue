@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen bg-[#FAFAFA] overflow">
+    <div class="h-screen px-[24px] bg-[#FAFAFA] overflow">
         <div class="pb-1">
             <section class="flex justify-between items-center py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
@@ -45,7 +45,7 @@
                 <!-- <img class=" left-0 top-0 h-full z-50 w-[520px] fixed-size" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt=""> -->
             </div>
             <!-- section -->
-            <div class="w-full p-2 ml-4 flex-1 fixed-size-content">
+            <div class="w-full p-2 ml-[15px] flex-1 fixed-size-content">
                 <!-- <div class="flex justify-start items-center m-4 pt-2">
                     <span class="text-[18px] font-medium mb-4">
                         Customer Experience + Reputación Online
