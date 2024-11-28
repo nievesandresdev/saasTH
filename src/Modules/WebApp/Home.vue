@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-[24px] bg-[#FAFAFA]">
+    <div class="h-screen bg-[#FAFAFA] overflow">
         <div class="pb-1">
             <section class="flex justify-between items-center py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
