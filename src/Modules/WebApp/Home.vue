@@ -159,8 +159,11 @@
                             <router-link :to="{ path: '' }" class="block p-3">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/1.TH.PROMOCIONA.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
-                                    <div class="ml-2 h-[32px] items-center flex">
-                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Promocionar WebApp</h3>
+                                    <div class="ml-2 h-[2px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F] flex flex-col leading-4">
+                                            <span>Promocionar</span>
+                                            <span>WebApp</span>    
+                                        </h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA] w-[230px]">
