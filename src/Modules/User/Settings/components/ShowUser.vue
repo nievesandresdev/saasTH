@@ -34,7 +34,7 @@
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Teléfono</span>
-                <span class="text-base font-normal">{{ dataUser?.prefix ?? '-' }} {{ dataUser?.phone ?? '-' }}</span>
+                <span class="text-base font-normal">{{ dataUser?.phone ?? '-' }}</span>
             </div>
             <div class="flex flex-col mb-6">
                 <span class="text-sm font-semibold">Antigüedad</span>

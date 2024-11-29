@@ -1,10 +1,10 @@
 <template>
-    <div class="notifications-container mt-6" :style="{ maxHeight: maxHeight + 'px'  }">
+    <div class="notifications-container mt-6 mb-[160px]" :style="{ maxHeight: maxHeight + 'px'  }">
       <div class="space-y-6">
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
           <strong class="text-[18px] font-medium">Notificaciones de la plataforma</strong>
-          <BaseTooltipResponsive size="s" :top="25" :right="-95">
+          <BaseTooltipResponsive size="s" :top="25" :right="0">
             <template v-slot:button>
               <img src="/assets/icons/info.blue.svg" class="w-5 h-5 ml-1" alt="icon_info">
             </template>
@@ -274,6 +274,7 @@
   <style scoped>
   .notifications-container {
     max-height: 800px;
+   /*  margin-bottom: 150px; */
     
   }
   

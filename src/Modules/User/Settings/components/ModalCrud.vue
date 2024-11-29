@@ -1,5 +1,5 @@
 <template>
-  <div ref="modalContainerRef" :class="`absolute modalContainerRef left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open" @click.stop>
+  <div ref="modalContainerRef" :class="`absolute modalContainerRef left-[2px] w-[464px] ${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open" @click.stop>
     <div v-if="!isEditing && !isCreating">
       
       <!-- Display message if no work positions exist -->
@@ -67,7 +67,7 @@ const props = defineProps({
   data: Array,
   mt: {
     type: String,
-    default: '0',
+    default: 'mt-0',
   },
   width: {
     type: String,
@@ -76,7 +76,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP']);
+const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP','printNameWP']);
 
 const isEditing = ref(false);
 const isCreating = ref(false);
@@ -92,8 +92,9 @@ const selectOption = (option) => {
   emit('select', option);
 };
 
-const getWorkPositions = () => {
+const getWorkPositions = (wPosition) => {
   emit('getWorkPositions');
+  emit('printNameWP', wPosition.name);
 };
 
 const openCreateModal = () => {

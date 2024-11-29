@@ -16,7 +16,7 @@
             </div>
             <p class="text-xl font-semibold mt-4 text-center mb-2">Este puesto está asignado</p>
             <p class="text-sm font-normal text-center leading-6">
-                Este puesto de trabajo está siendo utilizado. Para poder eliminarlo, no puede estar asignado a ningún usuario.
+                Ten en cuenta que si eliminas el puesto de trabajo deberás volver a crearlo para visualizarlo en la plataforma.
             </p>
             <div class="flex justify-center w-full mt-4">
                 <div 
@@ -46,7 +46,7 @@
             </div>
             <p class="text-xl font-semibold mt-4 text-center mb-2">¿Estás seguro?</p>
             <p class="text-sm font-normal text-center leading-6">
-                Este puesto de trabajo está siendo utilizado. Para poder eliminarlo, no puede estar asignado a ningún usuario.
+                Ten en cuenta que si eliminas el puesto de trabajo deberás volver a crearlo para visualizarlo en la plataforma.
             </p>
             <div class="flex justify-between w-full mt-4">
                 <button  @click.prevent="closeDeleteWorkPositions" class="hbtn-tertiary text-sm font-medium underline my-auto">

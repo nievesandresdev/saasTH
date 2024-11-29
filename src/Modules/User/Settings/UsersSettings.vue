@@ -145,7 +145,7 @@
       </div>
     </template>
   </ModalWindow>
-  <ModalWindow  :isVisible="deleteUser" @close="closeDeleteUser">
+  <ModalWindow  :isVisible="deleteUser" @close="closeDeleteUser" :width="'344px'" :paddingContent="'p-4'">
     <template #content>
       <div class="flex justify-end">
           <img
@@ -160,14 +160,14 @@
           class="w-8 h-8"
         >
       </div>
-      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Desea eliminar al usuario<br> {{userData.name }} {{ userData.profile?.lastname }}?</p>
-      <p class="text-sm font-normal text-left">Estás a punto de eliminar un usuario. Este proceso es irreversible y eliminará todos los datos asociados con el usuario. Si solo necesitas bloquear su acceso a un hotel, considera desvincularlo del mismo desde el menú editar usuario.</p>
+      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Estás seguro?</p>
+      <p class="text-sm font-normal text-center leading-6">Recuerda que puedes inactivar al usuario desde la edición del perfil. En caso de eliminarlo, tendrás que volver a crearlo para visualizarlo en la plataforma.</p>
       <div class="flex justify-between mt-4">
         <div @click="closeDeleteUser" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
           Cancelar
         </div>
-        <div @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer">
-          Eliminar usuario
+        <div @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer flex justify-center items-center text-[#333] text-sm">
+          Sí, eliminar
         </div>
       </div>
     </template>

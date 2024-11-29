@@ -21,7 +21,7 @@
             </button>
           </div>
         </div>
-        <div class="pb-6 pr-6 pl-6 overflow-y-auto scrolling-sticky" style="height: calc(100% - 52px)" >
+        <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)" >
           <div class="flex items-center w-full">
             <div
               class="flex w-full"
@@ -100,7 +100,6 @@
               <div class="mt-4">
                   <label class="text-sm font-medium">Correo electrónico *</label>
                   <div class="relative">
-                     
                       <BaseEmailFieldLive
                           placeholder="Correo con el que iniciará sesión"
                           v-model="form.email"
@@ -162,7 +161,7 @@
                     @click.stop="toggleModalWorkPosition"
                     :value="selectedWorkPositionName.name"
                     readonly
-                    class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
+                    class="bg-white w-full rounded-md border text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
                     :class="{
                       'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
                     'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
@@ -176,12 +175,14 @@
               <transition name="modal-fade">
                 <div id="modalWorkPosition">
                   <ModalCrud
+                    :mt="'-mt-6'"
                     :data="workPositions"
                     :open="isModalCrudOpen"
                     @close="closeModalWorkPosition"
                     @select="selectWorkPosition"
                     @getWorkPositions="getWorkPositions"
                     @deleteWP="deleteWorkPosition"
+                    @printNameWP="handlePrintNameWP"
                   />
                 </div>
               </transition>
@@ -201,15 +202,6 @@
             />
 
           </div>
-          <!-- <div v-if="currentStep === 4">
-            <Notifications 
-              v-model:periodicityChat="form.periodicityChat"
-              v-model:periodicityStay="form.periodicityStay"
-              v-model:notifications="form.notifications"
-              :maxHeight="900"
-              :workPositionId="form.work_position_id"
-            />
-          </div> -->
         </div>
       </div>
 
@@ -285,6 +277,10 @@ const getWorkPositions = (workPosition = false) => {
     form.value.work_position_id = null
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
   }
+};
+
+const handlePrintNameWP = (name) => {
+  selectedWorkPositionName.value = name;
 };
 
 const isDeleteWorkPositions = ref(false);

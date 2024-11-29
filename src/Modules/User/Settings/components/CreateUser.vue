@@ -9,271 +9,271 @@
         @mousedown="handleMouseDown"
         @mouseleave="handleMouseLeave"
       >
-            <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
-                
-                <div class="flex-1 text-left">
-                  <h1 class="font-medium text-[22px]">Crear usuario</h1>
-                </div>
-                <div class="flex justify-end">
-                  <button class="" @click="closeModal">
-                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
-                  </button>
-                </div>
+          <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
+            <div class="flex justify-between items-center px-6 py-[20px] h-[64px]">
+              
+              <div class="flex-1 text-left">
+                <h1 class="font-medium text-[22px]">Crear usuario</h1>
               </div>
-      
-              <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-                <div class="flex items-center justify-between mb-5">
-                  <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
-                    <div :class="[
-                      'w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10',
-                      currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black'
-                    ]">
-                      {{ step.number }}
-                    </div>
-                    <div :class="[
-                      'text-sm mt-2 text-center break-words font-semibold',
-                      currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]'
-                    ]" 
-                        class="min-h-[3rem] flex items-center justify-center">
-                      {{ step.label }}
-                    </div>
-                    <!-- Línea de conexión entre pasos -->
-                    <div v-if="index !== steps.length - 1" 
-                        :class="[
-                          'absolute h-0 border top-5',
-                          currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
-                        ]" 
-                        :style="{ width: '150px', left: '80px' }">
-                    </div>
-                  </div>
-                </div>
-                <hr class="mb-[22px]">
-                <div v-if="currentStep === 1">
-                  <span class="text-[18px] font-medium">Datos del usuario</span>
-                  <div class="mt-[10px]">
-                    <label class="text-sm font-medium">Nombre *</label>
-                    <div class="relative">
-                        <input
-                            v-model="form.name"
-                            type="text"
-                            class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
-                            placeholder="Nombre"
-                            :class="
-                            {
-                              'hborder-black-100 htext-black-100 font-medium': form.name,
-                              'hborder-gray-400 htext-gray-500': !form.name
-                            }"
-                        />
-                    </div>
-                  </div>
-                  <div class="mt-4">
-                      <label class="text-sm font-medium">Apellidos *</label>
-                      <div class="relative">
-                          <input
-                              v-model="form.lastname"
-                              type="text"
-                              class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
-                              :class="
-                                {
-                                  'hborder-black-100 htext-black-100 font-medium': form.lastname,
-                                  'hborder-gray-400 htext-gray-500': !form.lastname
-                                }"
-                              placeholder="Apellidos"
-                          />
-                      </div>
-                  </div>
-                  <div class="mt-4 flex flex-col gap-[7px]">
-                    <label class="text-sm font-medium">Teléfono móvil </label>
-                    <BasePhoneField
-                          v-model="form.phone"
-                          name="phone"
-                          @handlePhoneError="errorPhone = $event"
-                      />
-                      <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                          </svg>
-                          <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
-                      </div>
-                  </div>
-                  <div class="mt-4 flex flex-col gap-[7px]">
-                      <label class="text-sm font-medium">Correo electrónico *</label>
-                      <div class="relative">
-                          <BaseEmailFieldLive
-                              placeholder="Correo con el que iniciará sesión"
-                              v-model="form.email"
-                              :enableLiveCheck="true"
-                              @errorMessage="errorEmailText = $event"
-                              @handleError="errorEmail = $event"    
-                          />
-                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                              </svg>
-                              <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="mt-4">
-                      <label class="text-sm font-medium">Contraseña *</label>
-                      <div class="relative">
-                          <input
-                              v-model="form.password"
-                              type="password"
-                              class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
-                              :class="{
-                                'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                                'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
-                                'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
-                                'hinput-green' : !errorPassword
-                              }"
-                              placeholder="Clave de acceso al sistema"
-                              autocomplete="nope"
-                          />
-                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                              </svg>
-                              <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="mt-4">
-                      <label class="text-sm font-medium">Confirmar contraseña *</label>
-                      <div class="relative">
-                          <input
-                              v-model="form.password_confirmation"
-                              type="password"
-                              class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
-                              :class="{
-                                'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                                'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                                'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
-                                'hinput-green' : !errorPasswordMatch
-                              }"
-                              placeholder="Repite la clave"
-                              autocomplete="nope"
-                          />
-                          <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                              </svg>
-                              <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
-                          </div>
-                      </div>
-                  </div>
-                </div> <!-- fin step 1-->
-                <div v-if="currentStep === 2">
-                    <div class="flex justify-between items-center mb-4 text-left">
-                        <strong class="text-[18px] font-medium">Alojamientos</strong>
-                        <div class="flex items-center gap-1">
-                          <span class="text-sm font-semibold">Todos</span>
-                          <BaseSwichInput
-                              v-model="selectAllHotels"
-                              id="swich-visible-experience"
-                              @change:value="handleSelectAll(selectAllHotels)"
-                          />
-                        </div>
-                    </div>
-                    <div>
-                      <!-- Checkboxes para los hoteles individuales -->
-                      <div
-                        v-for="hotel in userStore.$getHotels(['id', 'name'])"
-                        :key="hotel.id"
-                        class="flex items-center justify-between mb-4 rounded-lg"
-                      >
-                        <span class="text-sm font-[500]">{{ hotel.name }}</span>
-                        <input
-                          type="checkbox"
-                          :value="hotel.id"
-                          v-model="form.hotels" 
-                          @change="handleSelection(hotel.id)"
-                          class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
-                          :disabled="handleChecked"
-                        />
-                      </div>
-                  </div>
-                </div>
-
-                <div v-if="currentStep === 3">
-                    <div class="relative mt-4">
-                      <div class="flex justify-between text-black">
-                        <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
-                      </div>
-                      <div class="relative w-full">
-                        <input
-                            type="text"
-                            id="workPositionInput"
-                            @click.stop="toggleModalWorkPosition"
-                            readonly
-                            class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
-                            :class="{
-                              'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                              'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
-                            }"
-                            :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
-                          />
-                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                          <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                        </div>
-                      </div>
-                      <transition name="modal-fade">
-                        <div id="modalWorkPosition">
-                          <ModalCrud
-                            ref="ref_modal_crud"
-                            :data="workPositions"
-                            :open="isModalCrudOpen"
-                            @close="closeModalWorkPosition"
-                            @select="selectWorkPosition"
-                            @deleteWP="deleteWorkPosition"
-                            @getWorkPositions="getWorkPositions"
-                          />
-                        </div>
-                      </transition>
-                    </div>
-                    <section v-show="form.work_position_id">
-                      <AccessPermissions v-model:permissions="form.permissions" :workPositionId="form.work_position_id" :disabledGeneral="form.work_position_id" />
-                      <Notifications
-                        v-model:periodicityChat="form.periodicityChat"
-                        v-model:periodicityStay="form.periodicityStay"
-                        v-model:notifications="form.notifications"
-                        :disabledGeneral="form.work_position_id"
-                      />
-                  </section>
-                </div>
+              <div class="flex justify-end">
+                <button class="" @click="closeModal">
+                  <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
+                </button>
               </div>
             </div>
     
-            <div class="py-6 px-6 w-full flex  border-t border-gray z-[1000] bg-white" style="height: 88px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
-              <button  
-                class="hbtn-tertiary text-sm font-medium underline my-auto px-4"
-                @click.prevent="prevStep()"
-                v-if="currentStep > 1"
-              >
-                  Atras
-              </button>
-              <button
-                class="px-4 py-2 font-medium rounded text-black"
-                @click="currentStep === 3 ? handleStoreUser() : nextStep()"
-                :disabled="isFormIncomplete"
-                :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
-              >
-                {{ currentStep === 3 ? 'Crear' : 'Siguiente' }}
-              </button>
+            <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
+              <div class="flex items-center justify-between mb-5">
+                <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
+                  <div :class="[
+                    'w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10',
+                    currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black'
+                  ]">
+                    {{ step.number }}
+                  </div>
+                  <div :class="[
+                    'text-sm mt-1 text-center break-words font-semibold',
+                    currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]'
+                  ]" 
+                      class=" flex items-center justify-center">
+                    {{ step.label }}
+                  </div>
+                  <!-- Línea de conexión entre pasos -->
+                  <div v-if="index !== steps.length - 1" 
+                      :class="[
+                        'absolute h-0 border top-5',
+                        currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
+                      ]" 
+                      :style="{ width: '150px', left: '80px' }">
+                  </div>
+                </div>
+              </div>
+              <hr class="mb-[22px]">
+              <div v-if="currentStep === 1">
+                <span class="text-[18px] font-medium">Datos del usuario</span>
+                <div class="mt-[10px]">
+                  <label class="text-sm font-medium">Nombre *</label>
+                  <div class="relative">
+                      <input
+                          v-model="form.name"
+                          type="text"
+                          class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
+                          placeholder="Nombre"
+                          :class="
+                          {
+                            'hborder-black-100 htext-black-100 font-medium': form.name,
+                            'hborder-gray-400 htext-gray-500': !form.name
+                          }"
+                      />
+                  </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Apellidos *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.lastname"
+                            type="text"
+                            class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
+                            :class="
+                              {
+                                'hborder-black-100 htext-black-100 font-medium': form.lastname,
+                                'hborder-gray-400 htext-gray-500': !form.lastname
+                              }"
+                            placeholder="Apellidos"
+                        />
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-col gap-[7px]">
+                  <label class="text-sm font-medium">Teléfono móvil </label>
+                  <BasePhoneField
+                        v-model="form.phone"
+                        name="phone"
+                        @handlePhoneError="errorPhone = $event"
+                    />
+                    <div class="flex justify-start w-full mt-1 htext-alert-negative" v-if="errorPhone">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                          <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                        <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-col gap-[7px]">
+                    <label class="text-sm font-medium">Correo electrónico *</label>
+                    <div class="relative">
+                        <BaseEmailFieldLive
+                            placeholder="Correo con el que iniciará sesión"
+                            v-model="form.email"
+                            :enableLiveCheck="true"
+                            @errorMessage="errorEmailText = $event"
+                            @handleError="errorEmail = $event"    
+                        />
+                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Contraseña *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.password"
+                            type="password"
+                            class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
+                            :class="{
+                              'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
+                              'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
+                              'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
+                              'hinput-green' : !errorPassword
+                            }"
+                            placeholder="Contraseña de acceso al sistema"
+                            autocomplete="nope"
+                        />
+                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-sm font-medium">Confirmar contraseña *</label>
+                    <div class="relative">
+                        <input
+                            v-model="form.password_confirmation"
+                            type="password"
+                            class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
+                            :class="{
+                              'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
+                              'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
+                              'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
+                              'hinput-green' : !errorPasswordMatch
+                            }"
+                            placeholder="Confirmar Contraseña"
+                            autocomplete="nope"
+                        />
+                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
+                        </div>
+                    </div>
+                </div>
+              </div> <!-- fin step 1-->
+              <div v-if="currentStep === 2">
+                  <div class="flex justify-between items-center mb-4 text-left">
+                      <strong class="text-[18px] font-medium">Alojamientos</strong>
+                      <div class="flex items-center gap-1">
+                        <span class="text-sm font-semibold">Todos</span>
+                        <BaseSwichInput
+                            v-model="selectAllHotels"
+                            id="swich-visible-experience"
+                            @change:value="handleSelectAll(selectAllHotels)"
+                        />
+                      </div>
+                  </div>
+                  <div>
+                    <!-- Checkboxes para los hoteles individuales -->
+                    <div
+                      v-for="hotel in userStore.$getHotels(['id', 'name'])"
+                      :key="hotel.id"
+                      class="flex items-center justify-between mb-4 rounded-lg"
+                    >
+                      <span class="text-sm font-[500]">{{ hotel.name }}</span>
+                      <input
+                        type="checkbox"
+                        :value="hotel.id"
+                        v-model="form.hotels" 
+                        @change="handleSelection(hotel.id)"
+                        class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
+                        :disabled="handleChecked"
+                      />
+                    </div>
+                </div>
+              </div>
+
+              <div v-if="currentStep === 3">
+                  <div class="relative mt-4">
+                    <div class="flex justify-between text-black">
+                      <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
+                    </div>
+                    <div class="relative w-full">
+                      <input
+                          type="text"
+                          id="workPositionInput"
+                          @click.stop="toggleModalWorkPosition"
+                          readonly
+                          class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal hinput-green"
+                          :class="{
+                            'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                            'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
+                          }"
+                          :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
+                        />
+                      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                        <img src="/assets/icons/1.TH.I.dropdownBig.svg">
+                      </div>
+                    </div>
+                    <transition name="modal-fade">
+                      <div id="modalWorkPosition">
+                        <ModalCrud
+                          ref="ref_modal_crud"
+                          :data="workPositions"
+                          :open="isModalCrudOpen"
+                          @close="closeModalWorkPosition"
+                          @select="selectWorkPosition"
+                          @deleteWP="deleteWorkPosition"
+                          @getWorkPositions="getWorkPositions"
+                          @printNameWP="handlePrintNameWP"
+                        />
+                      </div>
+                    </transition>
+                  </div>
+                  <section v-show="form.work_position_id">
+                    <AccessPermissions v-model:permissions="form.permissions" :workPositionId="form.work_position_id" :disabledGeneral="form.work_position_id" />
+                    <Notifications
+                      v-model:periodicityChat="form.periodicityChat"
+                      v-model:periodicityStay="form.periodicityStay"
+                      v-model:notifications="form.notifications"
+                      :disabledGeneral="form.work_position_id"
+                    />
+                </section>
+              </div>
             </div>
-            <ModalNoSave
-              :id="'not-saved'"
-              :open="showModalNoSave"
-              text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
-              textbtn="Guardar"
-              @close="closeModalSaveCreate"
-              @saveChanges="handleStoreUser"
-              :type="'alone_exit'"
-              :url="intendedRoute"
-              @hidden="handleCloseModal"
-            />
-            <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :data="dataDeleteWP" @delete="getWorkPositions"  />
+          </div>
+  
+          <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;" :class="{'justify-between' : currentStep > 1 , 'justify-end' : currentStep <= 1}">
+            <button  
+              class="hbtn-tertiary text-sm font-medium underline my-auto px-4"
+              @click.prevent="currentStep === 1 ? closeModal() : prevStep()"
+            >
+                {{ currentStep === 1 ? 'Cancelar' : 'Atrás' }}
+            </button>
+            <button
+              class="px-4 py-2 font-medium rounded text-black"
+              @click="currentStep === 3 ? handleStoreUser() : nextStep()"
+              :disabled="isFormIncomplete"
+              :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
+            >
+              {{ currentStep === 3 ? 'Crear' : 'Siguiente' }}
+            </button>
+          </div>
+          <ModalNoSave
+            :id="'not-saved'"
+            :open="showModalNoSave"
+            text="Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?"
+            textbtn="Guardar"
+            @close="closeModalSaveCreate"
+            @saveChanges="handleStoreUser"
+            :type="'alone_exit'"
+            :url="intendedRoute"
+            @hidden="handleCloseModal"
+          />
+          <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :data="dataDeleteWP" @delete="getWorkPositions"  />
       </div>
     </transition>
 
@@ -340,8 +340,9 @@ const closeDeleteWorkPositions = () => {
   isDeleteWorkPositions.value = false;
 }
 
-  
-  
+const handlePrintNameWP = (name) => {
+  selectedWorkPositionName.value = name;
+};
 
 const handleCloseModal = () => {
   showModalNoSave.value = false;
@@ -664,6 +665,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
     if (currentStep.value < steps.length) {
       currentStep.value++;
     }
+    
   };
 
 const prevStep = () => {
