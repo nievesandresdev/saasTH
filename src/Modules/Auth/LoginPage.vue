@@ -61,7 +61,7 @@
 
               <div class="flex justify-between mt-[6px]">
                 <div class="flex items-center">
-                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-2 h-6 w-5 rounded">
+                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-2 h-5 w-5 rounded">
                   <p class="text-sm font-normal">Recordar contraseña</p>
                 </div>
                 <div class="pt-1">
@@ -72,8 +72,8 @@
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
-                  class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium disabled:opacity-50" 
-                  :disabled="authStore.loading || form.email === 'admin@email.com' "
+                  class="hbtn-cta w-full lg:w-8/12 h-[44px] rounded-lg text-base font-medium disabled:opacity-50" 
+                  :disabled="authStore.loading || form.email === 'admin@email.com'  || form.email === '' || form.password === ''"
                 >
                   Iniciar sesión
                 </button>
@@ -100,7 +100,7 @@
         </div>
         <form @submit.prevent="forgotPass">
           <div class="mb-4 flex flex-col">
-            <h1 class="text-[22px] font-medium text-center mb-2">Reestablece tu contraseña</h1>
+            <h1 class="text-[22px] font-medium text-center mb-2">Restablece tu contraseña</h1>
             <p class="text-center text-sm mb-4">
               Introduce tu correo electrónico asociado a tu cuenta, y te enviaremos un enlace para restablecer tu contraseña. Si no recibes el correo en unos minutos, revisa tu carpeta de spam o inténtalo nuevamente.
             </p>

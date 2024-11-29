@@ -24,11 +24,11 @@
                 <div class="form-card bg-white shadow rounded-2xl hp-4 lg:px-6 lg:pt-6 lg:pb-8 mx-auto">
                   <form @submit.prevent="resetPassword">
                     <h1 class="text-xl lg:text-22xl  hmb-4 lg:mb-6 font-medium text-center">Restablecer contraseña</h1>
-                    <div class="hmb-4 lg:mb-6 flex flex-col">
-                      <label class="font-medium text-[14px] mb-2">Correo electrónico</label>
+                    <div class="mb-[13px] flex flex-col gap-2">
+                      <label class="font-medium text-[14px]">Correo electrónico</label>
                       <input 
                         type="text"
-                        class="w-100 rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                        class="w-100 rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                         :placeholder="placeholderEmail" 
                         autocomplete="on" 
                         v-model="email"
@@ -36,30 +36,30 @@
                         required
                       >
                     </div>
-                    <div class="mb-2">
-                      <label class="font-medium text-[14px] mb-2">Contraseña</label>
+                    <div class="mb-[13px] flex flex-col gap-2">
+                      <label class="font-medium text-[14px]">Contraseña</label>
                       <div class="relative w-100 collaborator-box">
                         <!-- <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
                         <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
                         <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
                         <input 
                           :type="visible_pass ? 'text' : 'password'"
-                          class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                          class="w-full rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                           id="password" 
                           placeholder="Contraseña"
                           v-model="form.password" required
                         >
                       </div>
                     </div>
-                    <div class="mb-2">
-                      <label class="font-medium text-[14px] mb-2">Repetir Contraseña</label>
+                    <div class="mb-2 flex flex-col gap-2">
+                      <label class="font-medium text-[14px]">Confirmar contraseña</label>
                       <div class="relative w-100 collaborator-box">
                         <!-- <img v-if="form.password_confirmation == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
                         <img v-if="form.password_confirmation !== '' && visible_pass_confirm" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password_confirmation')">
                         <img v-if="form.password_confirmation !== '' && !visible_pass_confirm" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password_confirmation')"> -->
                         <input 
                           :type="visible_pass_confirm ? 'text' : 'password'"
-                          class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
+                          class="w-full rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
                           id="password_confirmation" 
                           placeholder="Confirma tu contraseña"
                           v-model="form.password_confirmation" required
@@ -70,7 +70,7 @@
                     <div class="mt-6 lg:mt-8 text-center">
                       <button 
                         type="submit" 
-                        class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium disabled:bg-[#DADADA] disabled:cursor-not-allowed" 
+                        class="hbtn-cta w-full lg:w-8/12 h-[44px] rounded-lg text-base font-medium disabled:bg-[#DADADA] disabled:cursor-not-allowed" 
                         :disabled="!isValidForm"
                       >
                         Restablecer contraseña
