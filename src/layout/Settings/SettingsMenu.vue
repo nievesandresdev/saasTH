@@ -356,7 +356,7 @@ const menu_section = reactive([
             title: 'Promociona tu WebApp',
             icon: '/assets/icons/1.TH.PROMOCIONA-black.svg',
             to: '',
-            include: '/comunicaciones',
+            include: '/promocion',
             selectedArr: [''],
         },
         {

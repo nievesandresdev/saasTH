@@ -199,19 +199,6 @@
                             </router-link>
                         </div>
 
-                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/legal/general' }" class="block p-3">
-                                <div class="flex items-center ">
-                                    <img src="/assets/icons/1.TH.TextosLegales.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
-                                    <div class="ml-2 h-[32px] items-center flex">
-                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Textos legales</h3>
-                                    </div>
-                                </div>
-                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
-                                    <p class="text-sm">Consulta y configura los textos necesarios para cubrir los aspectos legales</p>
-                                </div>
-                            </router-link>
-                        </div>
                         <div class="fixed-card-gallery hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
                             <router-link :to="{ path: '/galeria' }" class="block p-3">
                                 <div class="flex items-center">
@@ -225,6 +212,21 @@
                                 </div>
                             </router-link>
                         </div>
+
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
+                            <router-link :to="{ path: '/personalizacion' }" class="block p-3">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/1.TH.Settings-white.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
+                                    <div class="ml-2 h-[32px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Ajustes</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
+                                    <p class="text-sm">Configura el idioma, URL y los textos legales necesarios para tu WebApp.</p>
+                                </div>
+                            </router-link>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -315,7 +317,7 @@ onMounted(()=>{
 }
 
 .fixed-card-gallery {
-    width: 260px;
+    width: 246px;
     height: 136px;
 }
 </style>
