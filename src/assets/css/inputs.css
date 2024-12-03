@@ -90,7 +90,7 @@ input[type=radio]:hover {
 
   .hradio {
     appearance: none;
-    width: 20px;
+    width: 20px; /* Cambia este valor para ajustar el tamaño del input */
     height: 20px;
     border-radius: 50%;
     border: 1px solid #000;
@@ -102,17 +102,16 @@ input[type=radio]:hover {
   
   .hradio::before {
     content: "";
-    width: 12px;
-    height: 12px;
+    width: 60%; 
+    height: 60%;
     border-radius: 50%;
     background-color: transparent;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* transition: background-color 0.2s; */
   }
   
   .hradio:checked::before {
-    background-color: #34A98F; /* Cambia este color por el que desees */
+    background-color: #34A98F;
   }

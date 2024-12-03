@@ -2,7 +2,7 @@
   <div>
     <textarea
       :id="id"
-      class="auto-height p-2 text-sm leading-[120%] w-full border rounded-[6px] block overflow-y-hidden"
+      class="auto-height p-3 text-sm leading-[140%] w-full border rounded-[6px] block overflow-y-hidden"
       :class="{
           'hborder-black-100 hover-htext-green-600 hover-hborder-green-600': text.length > 0,
           'placeholder-negative htext-alert-negative hborder-negative': isEmpty || text.length == 0

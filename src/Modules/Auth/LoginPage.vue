@@ -17,7 +17,7 @@
             </div>
             <div class="w-full text-center">
               <a target="_blank" href="https://www.linkedin.com/company/hicitty/">
-                <img class="h-8 w-8 inline-block" src="/assets/img/hoster/linkedin_black.svg" alt="">
+                <img class="h-10 w-10 inline-block" src="/assets/img/hoster/linkedin_black.svg" alt="">
               </a>
             </div>
           </div>
@@ -27,7 +27,7 @@
             <form @submit.prevent="handleLogin">
               <h1 class="text-xl lg:text-22xl hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
               <div class="hmb-4 lg:mb-6 flex flex-col">
-                <label class="font-medium text-lg mb-1">Correo electrónico</label>
+                <label class="font-medium text-sm mb-1">Correo electrónico</label>
                 <input 
                   type="email"
                   class="w-100 rounded h-11 lg:h-14 p-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
@@ -41,14 +41,13 @@
                   <img class="w-4 h-4 cursor-pointer" src="/assets/icons/1.TH.WARNING.RED.svg" alt="">
                   <span class="text-[#FF6666] text-xs font-normal "> {{ authStore.errorLogin }}</span>
                 </div>
-                
               </div>
               <div class="mb-2">
-                <label class="font-medium text-lg mb-1">Contraseña</label>
+                <label class="font-medium text-sm mb-1">Contraseña</label>
                 <div class="relative w-100 collaborator-box">
-                  <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
+                  <!-- <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
                   <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
-                  <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)">
+                  <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
                   <input 
                     :type="visible_pass ? 'text' : 'password'"
                     class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
@@ -59,73 +58,71 @@
                   >
                 </div>
               </div>
-              <div class="flex justify-between">
-                <div class="form-remember col-10 col-lg-4 text-left">
-                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-1 h-6 w-5 rounded">
-                  <p class="inline text-sm">Recuérdame</p>
+
+              <div class="flex justify-between mt-[6px]">
+                <div class="flex items-center">
+                  <input type="checkbox" v-model="form.remember" class="border hcheckbox mr-2 h-5 w-5 rounded">
+                  <p class="text-sm font-normal">Recordar contraseña</p>
                 </div>
-                <div class="forgot-password text-left text-lg-right col-10 col-lg-6 pt-1">
-                  <a href="javascript:void(0)" class="text-sm font-medium" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
+                <div class="pt-1">
+                  <a class="text-sm font-medium cursor-pointer underline" @click="openForgotPasswordModal">He olvidado mi contraseña</a>
                 </div>
               </div>
+
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
-                  class="hbtn-cta w-full lg:w-8/12 h-14 rounded-lg text-base font-medium disabled:opacity-50" 
-                  :disabled="authStore.loading || form.email === 'admin@email.com' "
+                  class="hbtn-cta w-full lg:w-8/12 h-[44px] rounded-lg text-base font-medium disabled:opacity-50" 
+                  :disabled="authStore.loading || form.email === 'admin@email.com'  || form.email === '' || form.password === ''"
                 >
                   Iniciar sesión
                 </button>
               </div>
             </form>
           </div>
+          
+          <!-- Enlace a políticas y términos -->
+          <div class="mt-6 text-center">
+            <p class="text-xs">
+              <a href="https://thehoster.io/privacidad" target="_blank" class="text-blue-600 hover:underline">Políticas de Privacidad</a> -
+              <a href="https://thehoster.io/terminos-y-condiciones" target="_blank" class="text-blue-600 hover:underline">Términos y Condiciones</a>.
+            </p>
+          </div>
         </div>
       </div>
-  
-      <!-- mobile msg -->
-      <div class="my-auto w-full lg:hidden">
-        <img class="w-[13.5rem] h-10 mx-auto" src="/assets/img/hoster/1.TH.logo.full.svg" alt="logo the hoster">
-        <p class="text-lg font-medium mt-8 text-center">La visualización en dispositivos móviles no es posible.</p>
-        <p class="text-lg font-medium mt-8 text-center">Abre esta página en el ordenador y disfruta la experiencia.</p>
-      </div>
     </div>  
-    <ModalWindow :isVisible="showModal" @close="closeModalPass" size="sm">
+    <ModalWindow :isVisible="showModal" @close="closeModalPass" :width="'500px'" :paddingContent="'p-4'">
       <template #content>
+        <div class="flex justify-end mb-4">
+            <button @click="closeModalPass">
+                <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
+            </button>
+        </div>
         <form @submit.prevent="forgotPass">
           <div class="mb-4 flex flex-col">
-            <h1 class="text-lg font-medium text-center mb-4">Reestablece tu contraseña</h1>
+            <h1 class="text-[22px] font-medium text-center mb-2">Restablece tu contraseña</h1>
             <p class="text-center text-sm mb-4">
-              ¿Ha olvidado su contraseña? No hay problema. Solo háganos saber su dirección de correo electrónico y le enviaremos un enlace para reestablecer su contraseña.
+              Introduce tu correo electrónico asociado a tu cuenta, y te enviaremos un enlace para restablecer tu contraseña. Si no recibes el correo en unos minutos, revisa tu carpeta de spam o inténtalo nuevamente.
             </p>
             <div class="flex flex-col">
-              <label for="correo" class="font-medium text-sm">Correo electrónico</label>
-              <!-- <input
-                v-model="forgot.email"
-                type="email"
-                class="rounded border-1 w-100 py-2 text-sm"
-                :class="forgot.errors?.email ? 'border-red-400 text-red-400 placeholder-red-400' : 'border-green-600 text-green-600 placeholder-green-600'"
-                placeholder="Correo Electrónico"
-                required
-                autofocus
-                autocomplete="username"
-              >     -->
+              <label for="correo" class="font-medium text-sm mb-2">Correo electrónico</label>
               <BaseTextField
                 v-model="forgot.email"
                 type="email"
                 :error="forgot.errors?.email"
-                placeholder="Correo Electrónico"
+                placeholder="Correo electrónico asociado a la cuenta"
                 required
                 autofocus
-                autocomplete="username"
+                autocomplete="forgot"
               />            
             </div>
             <div v-if="forgot.error" class="text-center text-red-600 mt-2">{{ forgot.error }}</div>
           </div>
-          <div class="px-8 flex justify-center">
+          <div class=" flex w-full">
             <button 
               type="submit" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              :disabled="forgot.processing"
+              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium disabled:bg-[#DADADA]" 
+              :disabled="!isEmailValid"
               :class="{ 'opacity-25': forgot.processing }"
             >
               Enviar
@@ -136,38 +133,39 @@
     </ModalWindow>
 
     <!-- modal alert -->
-    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" size="xs">
+    <ModalWindow v-if="showAlertModal" :isVisible="showAlertModal" @close="closeAlertModal()" :width="'330px'" :paddingContent="'p-4'">
       <template #content>
-        <div class="p-4" v-if="route.query.tokenExpired">
-          <h2 class="text-lg font-medium">Oh lo siento</h2>
-          <p>Este enlace ha expirado, vuelva a solicitar otro.</p>
-          <div class="px-8 flex justify-center mt-7">
-            <button 
-              type="button" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              @click="closeAlertModal()"
-            >
-              Cerrar
-            </button>
-          </div>
+        <div class="flex flex-col items-center justify-center" v-if="route.query.tokenExpired">
+          <h2 class="text-[22px] font-medium flex justify-center">Oh, lo siento</h2>
+          <p class="text-center text-sm mt-2">Este enlace ha expirado, vuelva a solicitar otro.</p>
+          <div class="flex justify-center mt-4 w-full">
+              <button 
+                type="button" 
+                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+                @click="closeAlertModal()"
+              >
+                Cerrar
+              </button>
+            </div>
         </div>
-        <div class="p-4" v-else-if="route.query.changePassword">
-          <h2 class="text-lg font-medium">¡Contraseña cambiada!</h2>
-          <p>Se ha cambiado la contraseña exitosamente</p>
-          <div class="px-8 flex justify-center mt-7">
-            <button 
-              type="button" 
-              class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
-              @click="closeAlertModal()"
-            >
-              Cerrar
-            </button>
+        <div class="flex flex-col items-center justify-center" v-else-if="route.query.changePassword">
+            <h2 class="text-[22px] font-medium flex justify-center">¡Contraseña actualizada!</h2>
+            <p class="text-center text-sm mt-2">Se ha cambiado la contraseña exitosamente</p>
+            <div class="flex justify-center mt-4 w-full">
+              <button 
+                type="button" 
+                class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
+                @click="closeAlertModal()"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="p-4" v-else-if="forgot.success">
-          <h2 class="text-lg font-medium mt-3">{{ forgot.title }}</h2>
-          <p>{{ forgot.msg }}</p>
-          <div class="px-8 flex justify-center mt-7">
+
+        <div class="flex flex-col items-center justify-center" v-else-if="forgot.success">
+          <h2 class="text-[22px] font-medium flex justify-center w-full mb-2">{{ forgot.title }}</h2>
+          <p class="text-center text-sm mt-2">{{ forgot.msg }}</p>
+          <div class="flex justify-center mt-4 w-full">
             <button 
               type="button" 
               class="hbtn-cta w-full h-10 rounded-lg text-base font-medium" 
@@ -182,8 +180,9 @@
   </section>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,computed } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import LoadingAuth from './Components/LoadingAuth.vue';
 import { useUserStore } from '@/stores/modules/users/users'
@@ -199,8 +198,8 @@ const form = ref({
   remember: localStorage.getItem("remember_form") ? (localStorage.getItem("remember_form") === 'true') : false
 });
 
-const placeholderEmail = ref('Introduce tu email');
-const placeholderPassword = ref('********');
+const placeholderEmail = ref('Escribe texto');
+const placeholderPassword = ref('Contraseña');
 
 const visiblePass = ref(false);
 const showModal = ref(false);
@@ -210,6 +209,12 @@ const route = useRoute();
 const router = useRouter();
 
 const user = useUserStore();
+
+// Computed property to check if the email is valid
+const isEmailValid = computed(() => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailPattern.test(forgot.value.email)
+})
 
 const forgot = ref({
   email: '',

@@ -39,9 +39,9 @@
     </section>
 
     <!-- promotion section -->
-    <section class="px-6 mt-6">
+   <!--  <section class="px-6 mt-6">
+    
         <h2 class="text-lg font-medium leading-[120%]">Promociona tu WebApp</h2>
-        <!-- cards -->
         <div class="flex justify-start">
             <div class="mt-6 grid grid-cols-3 3xl:grid-cols-5 gap-6">
                 <CardSectionHome title="Desde la OTA" period="pre-stay">
@@ -147,12 +147,49 @@
                 </CardSectionHome>
             </div>
         </div>
+    </section> -->
+
+    <section class="px-6 mt-[48px] mb-20">
+        <div class="flex justify-start gap-6 mt-6">
+            <CardSectionHome title="Bienvenida">
+                <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('welcomeMsg')"
+                    >
+                        Configurar
+                    </a>
+                </template>
+            </CardSectionHome>
+            <CardSectionHome title="Recordatorio: Chat" period="stay" special>
+                <template #msg>Podrás recordarles a tus huéspedes sobre mensajes no respondidos en la WebApp.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('reminderChatMsg')"
+                    >
+                        Configurar
+                    </a>
+                </template>
+            </CardSectionHome>
+        </div>
     </section>
 
-    <!-- promotion section -->
     <section class="px-6 mt-[48px] mb-20">
-        <h2 class="text-lg font-medium leading-[120%]">Mensajes desde el acceso a la WebApp</h2>
-        <!-- cards -->
+        <h2 class="text-lg font-medium leading-[120%]">Mensajes eventuales</h2>
         <div class="flex justify-start gap-6 mt-6">
             <CardSectionHome title="Bienvenida">
                 <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>

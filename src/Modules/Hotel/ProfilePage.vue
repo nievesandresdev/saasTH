@@ -28,8 +28,8 @@
                 </div>
             </section>
             <div 
-                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
                 v-if="hotelData.show_profile !== undefined && !hotelData.show_profile"
+                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
             >
                 <h1 class="text-center text-sm font-medium leading-[140%]">Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.</h1>
             </div>
@@ -474,9 +474,10 @@
     }
 
     function loadForm(hotel) {
+        console.log('hotelINIT', hotel.type)
         form.hotel_id = hotel.id || null;
         form.name = hotel.name || null;
-        form.type = hotel.type || null;
+        form.type = hotel.type.toLowerCase() || null;
         form.category = hotel.category || null;
         form.email = hotel.email || null;
         form.phone = hotel.phone || null;
@@ -524,8 +525,8 @@
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
         const body = {...form}
+
         const response  = await hotelStorage.$updateProfile(body);
-        // console.log(response, 'response')
         const  {ok, data} = response ?? {}
         await loadHotel()
         isloadingForm.value = false

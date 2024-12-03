@@ -28,7 +28,7 @@ const toast = useToastAlert();
 const current_hotel = computed(() => authStore.current_hotel?.name)
 
 onMounted(()=>{
-    mockupStore.$setIframeUrl('')
+    mockupStore.$setIframeUrl('/')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
 })

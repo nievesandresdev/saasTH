@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-6 w-full flex justify-end  hborder-top-gray-400 z-[1000] hbg-white-100 w-full rounded-b-[10px]">
+        <div class="p-6 flex justify-end  hborder-top-gray-400 z-[1000] hbg-white-100 w-full rounded-b-[10px]">
             <button
                 class="hbtn-cta px-4 py-3 font-medium rounded-[6px] text-sm"
                 :disabled="!imageSelected?.length"

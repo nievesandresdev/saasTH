@@ -1,104 +1,195 @@
 <template>
-    <div class="notifications-container" :style="{ maxHeight: maxHeight + 'px' }">
+    <div class="notifications-container mt-6 mb-[160px]" :style="{ maxHeight: maxHeight + 'px'  }">
       <div class="space-y-6">
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
-          <strong class="text-[18px] font-medium">Estancias - Chat</strong>
-          <BaseTooltipResponsive size="s" :top="25" :right="-55">
+          <strong class="text-[18px] font-medium">Notificaciones de la plataforma</strong>
+          <BaseTooltipResponsive size="s" :top="25" :right="0">
             <template v-slot:button>
               <img src="/assets/icons/info.blue.svg" class="w-5 h-5 ml-1" alt="icon_info">
             </template>
             <template v-slot:content>
-              <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
+             <div class="flex justify-between items-center">
+              <div class="flex flex-col gap-1 items-center">
+                <img src="/assets/icons/push.png" class="w-10 h-10" alt="icon_info">
+                <span class="text-sm font-medium">Push</span>
+              </div>
+              <div class="flex flex-col gap-1 items-center">
+                <img src="/assets/icons/1.TH.CHAT.png" class="w-11 h-11" alt="icon_info">
+                <span class="text-sm font-medium">Plataforma</span>
+              </div>
+              <div class="flex flex-col gap-1 items-center">
+                <img src="/assets/icons/1.TH.EMAIL.svg" class="w-12 h-12" alt="icon_info">
+                <span class="text-sm font-medium">Email</span>
+              </div>
+             </div>
             </template>
           </BaseTooltipResponsive>
         </div>
-  
         <!-- Notificaciones en plataforma Hoster -->
-        <div>
-          <div class="flex items-center justify-start mb-2 w-3/4">
-            <span class="text-sm font-[600]">Notificaciones en plataforma Hoster</span>
-            <BaseTooltipResponsive size="s" :top="25" :right="-55">
-              <template v-slot:button>
-                <img src="/assets/icons/info.blue.svg" class="w-6 h-6 ml-1 mb-2" alt="icon_info">
-              </template>
-              <template v-slot:content>
-                <p class="text-sm font-normal">Puedes permitir o bloquear accesos a la plataforma eligiendo un puesto de trabajo con accesos predeterminados o desde esta sección.</p>
-              </template>
-            </BaseTooltipResponsive>
-          </div>
-          <div class="flex flex-col w-full mb-6">
-            <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un chat pendiente.</span>
-            <div class="flex gap-2 items-center justify-start mt-2">
-              <p class="text-sm leading-[150%]">Periocidad:</p>
+        <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
+          <!-- estancias chat -->
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Estancias - Chat</span>
+            </div>
+            <div class="flex flex-col justify-end">
+              <div class="flex justify-end gap-4">
+                <span class="text-[10px] font-semibold">Push</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
+                <span class="text-[10px] font-semibold">Email</span>
+              </div>
+              
+            </div>
+            <!-- nuevo chat -->
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-normal">Nuevo Chat</span>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.newChat" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.newChat" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+            <!-- Chat pendiente 10 -->
+            <div class="flex items-center justify-between mb-[6px]">
+              <div class="flex gap-2 items-center justify-start">
+              <p class="text-sm leading-[150%]">Chat pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityChat"
-                  classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  v-model="periodicityChat.pendingChat10"
+                  classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
-                  :disabled="isDisabled"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
-          </div>
-  
-          <!-- Emails de Recordatorio -->
-          <div class="flex items-center justify-start mb-4 w-3/4">
-            <span class="text-sm font-[600]">Emails de recordatorio</span>
-          </div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-[400]">1. Nuevo chat</span>
-            <input type="checkbox" v-model="notifications.newChat" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-          </div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-[400]">2. Chat pendiente hace 10 minutos</span>
-            <input type="checkbox" v-model="notifications.PendingChat10" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-          </div>
-          <div class="flex justify-between items-center mb-8">
-            <span class="text-sm font-[400]">3. Chat pendiente hace 30 minutos</span>
-            <input type="checkbox" v-model="notifications.pendingChat30" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-          </div>
-  
-          <!-- Sección de Estancias - Seguimiento -->
-          <div class="flex gap-2 justify-start items-center mb-4">
-            <strong class="text-[18px] font-medium">Estancias - Seguimiento</strong>
-          </div>
-          <div class="flex flex-col w-full mb-6">
-            <div class="flex items-center justify-start mb-2 w-3/4">
-              <span class="text-sm font-[600]">Notificaciones en plataforma Hoster</span>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingChat10" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
             </div>
-            <span class="text-sm font-[400]">Notificación emergente del navegador para el aviso de un feedback pendiente.</span>
-            <div class="flex gap-2 items-center justify-start mt-2">
-              <p class="text-sm leading-[150%]">Periocidad:</p>
+            <!--chat poendiente 30-->
+            <div class="flex items-center justify-between">
+              <div class="flex gap-2 items-center justify-start">
+              <p class="text-sm leading-[150%]">Chat pendiente tras</p>
               <div class="w-[38px]">
                 <BaseTextField
-                  v-model="periodicityStay"
-                  classInput="h-[32px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  v-model="periodicityChat.pendingChat30"
+                  classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
                   :type="'number'"
                   :errors="errors"
-                  :disabled="isDisabled"
                   name="notifications"
+                  :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
             </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingChat30" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingChat30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
           </div>
-          <!-- Emails de Recordatorio -->
-          <div class="flex items-center justify-start mb-4 w-3/4">
-            <span class="text-sm font-[600]">Emails</span>
+
+          <!-- estancias seguimeinto-->
+          <div class="flex flex-col mt-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Estancias - Seguimiento</span>
+            </div>
+            <div class="flex flex-col justify-end">
+              <div class="flex justify-end gap-4">
+                <span class="text-[10px] font-semibold">Push</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
+                <span class="text-[10px] font-semibold">Email</span>
+              </div>
+              
+            </div>
+            <!-- nuevo feedback -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-normal">Nuevo Feedback</span>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.newFeedback" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.newFeedback" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+            <!-- Chat pendiente 10 -->
+            <div class="flex items-center justify-between mb-[10px]">
+              <div class="flex gap-2 items-center justify-start">
+              <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
+              <div class="w-[38px]">
+                <BaseTextField
+                  v-model="periodicityStay.pendingFeedback30"
+                  classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  :type="'number'"
+                  :errors="errors"
+                  name="notifications"
+                  :disabled="isDisabled || disabledGeneral"
+                  @input="emitChanges"
+                />
+              </div>
+              <p class="text-sm leading-[150%]">min</p>
+            </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingFeedback30" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback30" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+            <!--chat poendiente 30-->
+            <div class="flex items-center justify-between">
+              <div class="flex gap-2 items-center justify-start">
+              <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
+              <div class="w-[38px]">
+                <BaseTextField
+                  v-model="periodicityStay.pendingFeedback60"
+                  classInput="h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center"
+                  :type="'number'"
+                  :errors="errors"
+                  name="notifications"
+                  :disabled="isDisabled || disabledGeneral"
+                  @input="emitChanges"
+                />
+              </div>
+              <p class="text-sm leading-[150%]">min</p>
+            </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
           </div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-[400]">1. Nuevo feedback</span>
-            <input type="checkbox" v-model="notifications.newFeedback" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-          </div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-[400]">2. Feedback pendiente hace 10 min</span>
-            <input type="checkbox" v-model="notifications.pendingFeedback10" @change="emitChanges" :disabled="isDisabled" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+
+          <!--resenas-->
+          <div class="flex flex-col mt-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Reseñas</span>
+            </div>
+            <div class="flex flex-col justify-end">
+              <div class="flex justify-end gap-4">
+                <span class="text-[10px] font-semibold">Push</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
+                <span class="text-[10px] font-semibold">Email</span>
+              </div>
+              
+            </div>
+            <!-- nuevo resenas -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-normal">Nuevas reseñas no respondidas</span>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.new_reviews" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.new_reviews" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -106,13 +197,25 @@
   </template>
   
   <script setup>
-  import { ref, defineProps, defineEmits,computed } from 'vue';
+  import { ref, defineProps, defineEmits,computed, watch } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
   
   const props = defineProps({
-    periodicityChat: String,
-    periodicityStay: String,
+    periodicityChat: {
+      type: Object,
+      default: () => ({
+        periodicityChat: 10,
+        periodicityChat30: 30,
+      }),
+    },
+    periodicityStay: {
+      type: Object,
+      default: () => ({
+        periodicityFeedback30: 30,
+        periodicityFeedback60: 60,
+      }),
+    },
     notifications: {
       type: Object,
       default: () => ({
@@ -131,40 +234,48 @@
       type: [Number, String],
       default: null,
     },
+    disabledGeneral: {
+      type: Boolean,
+      default: false,
+    },
   });
 
-const emits = defineEmits([
-  'update:periodicityChat',
-  'update:periodicityStay',
-  'update:notifications'
-]);
+  const emits = defineEmits([
+    'update:periodicityChat',
+    'update:periodicityStay',
+    'update:notifications'
+  ]);
 
-const isDisabled = computed(() => props.workPositionId !== null);
+  const isDisabled = computed(() => props.workPositionId !== null);
   
-  const periodicityChat = ref(props.periodicityChat);
-  const periodicityStay = ref(props.periodicityStay);
+  const periodicityChat = ref({...props.periodicityChat});
+  const periodicityStay = ref({...props.periodicityStay});
   const notifications = ref({ ...props.notifications });
+  
   
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
+  };
 
-    /* console.log('Emit changes:', {
-      periodicityChat: periodicityChat.value,
-      periodicityStay: periodicityStay.value,
-      notifications: notifications.value,
-    }); */
-};
+  watch(
+  () => props.notifications,
+  () => {
+    notifications.value = { ...props.notifications };
+    periodicityChat.value = { ...props.periodicityChat };
+    periodicityStay.value = { ...props.periodicityStay };
+  },
+  { immediate: true }
+);
 
   </script>
   
   <style scoped>
   .notifications-container {
-    max-height: 400px; /* Ajusta la altura máxima del contenedor */
-    overflow-y: auto; /* Permite el desplazamiento vertical */
-    scrollbar-width: none; /* Oculta el scroll en Firefox */
-    -ms-overflow-style: none; /* Oculta el scroll en IE y Edge */
+    max-height: 800px;
+   /*  margin-bottom: 150px; */
+    
   }
   
   .notifications-container::-webkit-scrollbar {

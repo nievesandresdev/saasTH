@@ -136,16 +136,15 @@ onMounted(() => {
 })
 
 const ata = async () => {
-    console.log('ata')
-    const response = await chatSettingsStore.$getAllSettingsChat();
-
-    form.languages = JSON.parse(JSON.stringify(response.settings.languages))
-    response.settings.languages.forEach(lang => {
+    const response = await chatSettingsStore.$getAll();
+    console.log('test ata',response)
+    form.languages = JSON.parse(JSON.stringify(response.languages))
+    response.languages.forEach(lang => {
         notSearchLang.value.push(lang.id)
     })
 
-    form.name = response.settings.name
-    form.show_guest = response.settings.show_guest == 1 ? true : false
+    form.name = response.name
+    form.show_guest = response.show_guest == 1 ? true : false
     initialForm.value = JSON.stringify(form) 
     mockupStore.$setIframeUrl('/mobile-chat/fake')
 
