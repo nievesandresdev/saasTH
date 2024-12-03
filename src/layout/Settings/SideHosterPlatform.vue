@@ -38,9 +38,10 @@ import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const menuItems = [
-    { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' },
-    /* { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  }, */
     { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' , url: '/equipo/configuracion/usuarios' },
+    { text: 'Plataformas externas', icon: '/assets/icons/1.TH.PLATAFORMAS.EXTERNAS.svg' , url: '/equipo/configuracion/plataformas-externas' }
+    /* { text: 'Datos de clientes', icon: '/assets/icons/1.TH.EQUIPO.svg'  }, */
+    
     /* { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' } */
 ];
 
