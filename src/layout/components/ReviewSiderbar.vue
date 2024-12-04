@@ -37,7 +37,7 @@
                 >
             </button>
         </div>
-        <div class="px-4 flex justify-between items-center mt-4 mb-2">
+        <div class="px-4 flex justify-between items-center mt-4">
             <p class="text-xs font-semibold">{{ dataPagination.total }} {{ dataPagination.total === 1 ? 'Reseña' : 'Reseñas' }}</p>
             
             <button
@@ -48,10 +48,25 @@
                 Quitar filtros
             </button>
         </div>
-        <!-- {{ numberOfskeletonCards }}
-        {{ reviews.length }}
-        {{ reviewsEmptyLoaded }} -->
+        <!-- {{summaryAveragReview}} -->
+        <div class="flex space-x-1 py-[8px] px-4">
+            <div class="space-x-1 flex items-center">
+                <span class="text-[12px] font-semibold leading-none">{{ summaryAveragReview.increment }}</span>
+                <div class="rounded-full px-[8px] py-[1.5px] space-x-[2px] bg-[#D9F2E9] flex">
+                    <span class="text-[10px] font-semibold">Nota media</span>
+                    <img class="size-[12px]" src="/assets/icons/1.TH.ARROW.UP.svg" alt="1.TH.ARROW.UP">
+                </div>
+            </div>
+            <div class="space-x-1 flex items-center">
+                <span class="text-[12px] font-semibold leading-none">{{ summaryAveragReview.decrement }}</span>
+                <div class="rounded-full px-[8px] py-[1.5px] space-x-[2px] bg-[#FEE2E2] flex">
+                    <span class="text-[10px] font-semibold">Nota media</span>
+                    <img class="size-[12px]" src="/assets/icons/1.TH.ARROW.DOWN.svg" alt="1.TH.ARROW.DOWN">
+                </div>
+            </div>
+        </div>
     </div>
+    
     <div
         id="container-list"
         ref="containerListRef"
@@ -175,6 +190,11 @@ const loadingList = ref(false);
 const currentPositionScroll = ref(null);
 const reviewsEmptyLoaded = ref(false);
 const debounce = ref(null);
+
+const summaryAveragReview = reactive({
+    decrement: 0,
+    increment: 0,
+});
 
 // COMPUTED
 const numberOfskeletonCards = computed(() => {
@@ -387,6 +407,8 @@ async function getByOtas (loadOtas = false) {
     if (ok) {
         // paginatedItems.value = [];
         reviewsData.value = data.reviews;
+        summaryAveragReview.decrement = data.otherData.decrementAverageRating;
+        summaryAveragReview.increment = data.otherData.incrementAverageRating;
         // console.log(reviewsData.value.length, 'reviewsData.value');
 
         // console.log(reviewsData.value, reviewsData.value.length, 'reviewsData.value')
