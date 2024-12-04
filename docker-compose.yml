@@ -1,0 +1,17 @@
+services:
+  #hoster
+  hoster:
+    container_name: thehoster-app-hoster-front
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8082:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    networks:
+      - frontend
+      
+networks:
+  frontend:
