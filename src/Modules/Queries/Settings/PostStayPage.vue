@@ -218,7 +218,7 @@ function cancelChanges(){
 }
 
 function defineMockup(){
-    mockupStore.$setIframeUrl('/consultas/fake','period=post-stay')
+    mockupStore.$setIframeUrl('/inbox/fake','period=post-stay')
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 }
 

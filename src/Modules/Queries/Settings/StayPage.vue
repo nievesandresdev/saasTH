@@ -172,7 +172,8 @@ onMounted(async() => {
     console.log('test queriesTexts.value',queriesTexts.value)
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
-    defineMockup(queriesTexts.value.in_stay_activate)
+    // defineMockup(queriesTexts.value.in_stay_activate)
+    defineMockup(true)
 })
 
 //functions
@@ -220,7 +221,7 @@ function cancelChanges(){
 
 function defineMockup(bool){
     if(bool){
-        mockupStore.$setIframeUrl('/consultas/fake','period=in-stay')
+        mockupStore.$setIframeUrl('/inbox/fake','period=in-stay')
         mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }else{
         mockupStore.$setIframeUrl('')
