@@ -232,7 +232,7 @@ const closeDeleteWorkPositions = () => {
 
 onMounted(() => {
   handleGetUsers();
-  //handleTestMail();
+  handleTestMail();
   adjustBodyPadding(); // Ajustar el padding al cargar la página
   window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
