@@ -136,7 +136,7 @@ function cancelChanges(){
 
 function defineMockup(bool){
     if(bool){
-        mockupStore.$setIframeUrl('/consultas/fake','period=pre-stay')
+        mockupStore.$setIframeUrl('/inbox/fake','period=pre-stay')
         mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }else{
         mockupStore.$setIframeUrl('')
