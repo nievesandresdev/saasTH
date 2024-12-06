@@ -328,7 +328,7 @@ async function changeStatusAttended () {
     const { ok, data } = response;
     if (ok) {
         toast.warningToast(reviewData.value.isAttended ? 'Reseña atendida':'Reseña pendiente','top-right');
-        emitEvent('get-reviews');
+        emitEvent('get-reviews', {reviewId: idOtaParamRoute.value});
     } else {
         reviewData.value.isAttended = !reviewData.value.isAttended;
         toast.warningToast(response?.message,'top-right');
@@ -366,7 +366,6 @@ async function loadTranslateAndResponse () {
         reviewId: idOtaParamRoute.value,
     }
     const response = await translateAndResponseStore.$findByReviewId(params);
-    console.log(response.data)
     const { ok, data } = response;
     if (ok) {
         translateAndResponseId.value =  data.transAndResDocument?._id;
