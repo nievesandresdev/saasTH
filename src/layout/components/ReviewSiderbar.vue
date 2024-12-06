@@ -72,36 +72,40 @@
         ref="containerListRef"
         class="list-reviews flex-1 border-t hborder-top-gray-400 overflow-auto"
     >
+    
+        <div
+            v-for="(review, index) in reviews"
+            :id="review.dataFull.id"
+            :ref="el => (reviewsListRefs[review.dataFull.id] = el)"
+            :key="index"
+            class="px-4 py-[12px] h-[72px] border-b hborder-bottom-gray-400 relative cursor-pointer"
+            :class="{'selected-hover': idOtaParamRoute === review.dataFull.id, 'hover:bg-[#F1F1F1]': idOtaParamRoute != review.dataFull.id}"
+            @click="goReviewDetail(review)"
+        >
+            <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
+            <div class="flex justify-between items-center mb-[4px]">
+                <div class="flex items-center truncate-1">
+                    <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" :alt="review.detail.otaOrigin">
+                    <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
+                </div>
+                <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="space-x-2 flex">
+                    <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
+                    <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
+                </div>
+                <img class="size-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
+            </div>
+        </div>
+        <!-- loading skeleton -->
+        <CardSkeleton v-for="(card, index) in ((numberCardsToLoad == 1 ? 2 : numberCardsToLoad) ?? 0)" />
+
         <template v-if="!(loadingList && currentPage === 1)">
             <template v-if="otasWithUrls.length > 0">
                 <template v-if="reviews.length > 0">
-                    <div
-                        v-for="(review, index) in reviews"
-                        :id="review.dataFull.id"
-                        :ref="el => (reviewsListRefs[review.dataFull.id] = el)"
-                        :key="index"
-                        class="px-4 py-[12px] h-[72px] border-b hborder-bottom-gray-400 relative cursor-pointer"
-                        :class="{'selected-hover': idOtaParamRoute === review.dataFull.id, 'hover:bg-[#F1F1F1]': idOtaParamRoute != review.dataFull.id}"
-                        @click="goReviewDetail(review)"
-                    >
-                        <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
-                        <div class="flex justify-between items-center mb-[4px]">
-                            <div class="flex items-center truncate-1">
-                                <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
-                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
-                            </div>
-                            <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="space-x-2 flex">
-                                <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
-                                <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
-                            </div>
-                            <img class="w-[20px] h-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
-                        </div>
-                    </div>
-                    <!-- loading skeleton -->
-                    <CardSkeleton v-for="(card, index) in ((numberCardsToLoad == 1 ? 2 : numberCardsToLoad) ?? 0)" />
+
+                    <!-- /////// -->
 
                     <div v-if="dataPagination.total == reviews.length" class="h-[72px] w-full flex justify-center items-center text-center">
                         <p class="htext-gray-500 text-sm font-medium">No hay más reseñas</p>
@@ -314,16 +318,16 @@ function verifyIncreasesAverageRating (review) {
 function getNameIconAnswer (review) {
     let { isAttended, isAnswered } = review.detail;
     if (!isAttended && isAnswered) {
-        return 'ANSWER.REVIEW.NOTIFICATION';
+        return 'REVIEW.ANSWERED.NOTIFICATION';
     }
     if (!isAttended && !isAnswered) {
-        return 'NOTANSWER.REVIEW.NOTIFICATION';
+        return 'REVIEW.NOT.ANSWERED.NOTIFICATION';
     }
     if (isAttended && isAnswered) {
-        return 'ANSWER.REVIEW';
+        return 'REVIEW.ANSWERED';
     }
     if (isAttended && !isAnswered) {
-        return 'NOTANSWER.REVIEW';
+        return 'REVIEW.NOT.ANSWERED';
     }
 }
 
@@ -410,4 +414,4 @@ function goReviewDetail (review) {
     .selected-hover{
         background: #ECF9F5;
     }
-</style>
+</style>6
