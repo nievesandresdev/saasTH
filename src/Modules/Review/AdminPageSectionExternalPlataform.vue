@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-[10px] border hborder-gray-400 bg-white px-4 py-6 space-y-4 w-full space-y-4">
-        <h5 class="text-base font-medium">Reseñas por plataformas externas en los últimos 30 días</h5>
+        <h5 class="text-[14px] font-semibold">Reseñas por plataformas externas en los últimos 30 días</h5>
         <div
             v-for="(ota, index) in reviewStore.otas"
             :key="index"
@@ -43,6 +43,7 @@
             </div>
         </div>
     </div>
+    <!-- <pre>{{ summaryByOtaUnique }}</pre> -->
 </template>
 
 <script setup>
@@ -53,9 +54,41 @@ import { $titleCase } from '@/utils/textWritingTypes';
 const summaryByOta = inject('summaryByOta');
 const reviewStore = inject('reviewStore');
 
+const summaryByOtaUnique = computed(() => {
+    let summaryByOtaValue = summaryByOta.value;
+    summaryByOtaValue = summaryByOtaValue.map(item => {
+        if (item?.reviews){
+            delete item.reviews;
+        }
+        return item;
+    });
+    // return summaryByOtaValue;
+    const result = summaryByOtaValue.reduce((acc, current) => {
+        // Buscar si ya existe la OTA en el acumulador
+        const existing = acc.find(item => item.ota === current.ota);
+        if (existing) {
+            // Si ya existe, sumar los valores correspondientes
+            existing.summary.totalReviews += current.summary.totalReviews;
+            
+            // Acumular los reviewsRating (promedio ponderado en este caso)
+            const totalReviews = existing.summary.totalReviews + current.summary.totalReviews;
+            existing.summary.sumAndAvgRatings = (
+                (existing.summary.sumAndAvgRatings * existing.summary.totalReviews + 
+                parseFloat(current.summary.sumAndAvgRatings) * current.summary.totalReviews) / totalReviews
+            ).toFixed(2); // Redondeo a dos decimales
+        } else {
+            // Si no existe, simplemente agregar el nuevo objeto
+            acc.push({ ota: current.ota, summary: { ...current.summary } });
+        }
+
+        return acc;
+    }, []);
+    return result;
+});
+
 function calcSummaryByOta (ota){
-    let summary = summaryByOta.value?.find(item => item.ota == ota);
-    let noteNumeric = summary?.summary?.sumAndAvgRatings;
+    let summary = summaryByOtaUnique.value?.find(item => item.ota == ota);
+    let noteNumeric = summary?.summary?.sumAndAvgRatings ? Number(summary?.summary?.sumAndAvgRatings) : 0;
     let note = noteNumeric > 0 ? noteNumeric?.toFixed(1) : 0;
     let scaleRating = reviewStore?.scaleRating[ota];
     let totalReviews = summary?.summary?.totalReviews || 0;

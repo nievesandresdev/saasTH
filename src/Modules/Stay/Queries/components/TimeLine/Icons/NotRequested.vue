@@ -15,7 +15,7 @@
                 </p>
             </template>
         </Tooltip>
-        <p class="absolute text-center text-xs leading-[90%] w-[130px] bottom-[-18px] left-[-45px]">No solicitado</p>
+        <p class="absolute text-center text-xs leading-[90%] w-[130px] bottom-[-18px] left-[-45px]">Reseña no solicitada</p>
     </div>
 </template>
 <script setup>

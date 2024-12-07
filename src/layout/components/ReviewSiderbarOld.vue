@@ -72,42 +72,37 @@
         ref="containerListRef"
         class="list-reviews flex-1 border-t hborder-top-gray-400 overflow-auto"
     >
-    
-        <div
-            v-for="(review, index) in reviews"
-            :id="review.dataFull.id"
-            :ref="el => (reviewsListRefs[review.dataFull.id] = el)"
-            :key="index"
-            class="px-4 py-[12px] h-[72px] border-b hborder-bottom-gray-400 relative cursor-pointer"
-            :class="{'selected-hover': idOtaParamRoute === review.dataFull.id, 'hover:bg-[#F1F1F1]': idOtaParamRoute != review.dataFull.id}"
-            @click="goReviewDetail(review)"
-        >
-            <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
-            <div class="flex justify-between items-center mb-[4px]">
-                <div class="flex items-center truncate-1">
-                    <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" :alt="review.detail.otaOrigin">
-                    <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
-                </div>
-                <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
-            </div>
-            <div class="flex items-center justify-between">
-                <div class="space-x-2 flex">
-                    <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
-                    <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
-                </div>
-                <img class="size-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
-            </div>
-        </div>
-        <!-- loading skeleton -->
-        <CardSkeleton v-for="(card, index) in ((numberCardsToLoad == 1 ? 2 : numberCardsToLoad) ?? 0)" />
-
         <template v-if="!(loadingList && currentPage === 1)">
             <template v-if="otasWithUrls.length > 0">
-                <template v-if="reviews.length > 0">
-
-                    <!-- /////// -->
-
-                    <div v-if="dataPagination.total == reviews.length" class="h-[72px] w-full flex justify-center items-center text-center">
+                <template v-if="paginatedItems.length > 0">
+                    <div
+                        v-for="(review, index) in reviews"
+                        :key="index"
+                        class="px-4 py-[12px] h-[72px] border-b hborder-bottom-gray-400 relative cursor-pointer"
+                        :class="{'selected-hover': idOtaParamRoute === review.dataFull.id, 'hover:bg-[#F1F1F1]': idOtaParamRoute != review.dataFull.id}"
+                        @click="goReviewDetail(review)"
+                    >
+                        <div v-if="!review.detail.isAttended" class="w-[4px] h-[68px] hbg-yellow-cta  absolute right-[4px] top-[2px]" />
+                        <div class="flex justify-between items-center mb-[4px]">
+                            <div class="flex items-center truncate-1">
+                                <img class="w-6 h-6" :src="`/assets/icons/otas/${$titleCase(review.detail.otaOrigin)}.svg`" alt="Booking">
+                                <h6 class="text-xs font-semibold truncate-1">{{ review.dataFull?.name }}</h6>
+                            </div>
+                            <span class="text-xs font-semibold">{{ $formatTimestampDate(review.dataFull?.publishedAtDate, 'dd/MM/yy') }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="space-x-2 flex">
+                                <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
+                                <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
+                            </div>
+                            <img class="w-[20px] h-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
+                        </div>
+                    </div>
+                    <!-- loading skeleton -->
+                    <template v-if="numberOfskeletonCards > 0 && !reviewsEmptyLoaded">
+                        <CardSkeleton v-for="item in numberOfskeletonCards" />
+                    </template>
+                    <div v-else-if="dataPagination.total == paginatedItems.length" class="h-[72px] w-full flex justify-center items-center text-center">
                         <p class="htext-gray-500 text-sm font-medium">No hay más reseñas</p>
                     </div>
                 </template>
@@ -142,8 +137,6 @@ import { ref, reactive, onMounted, provide, computed, nextTick, inject, watch } 
 
 import { $capitalize, $titleCase } from '@/utils/textWritingTypes';
 
-import { $throttle, $isElementVisible } from '@/utils/helpers';
-
 import { useRouter } from 'vue-router';
 const route = useRouter();
 
@@ -176,9 +169,8 @@ const dataPaginationDefault = reactive({
     from: 0,
     to: 0,
     totalPages: 0
-});
-const dataPagination = reactive({...dataPaginationDefault.value});
-
+})
+const dataPagination = reactive({...dataPaginationDefault.value})
 
 // DATA
 const searchFilter = ref(null);
@@ -189,8 +181,10 @@ const reviewsData = ref([]);
 const isOpenModelFilter = ref(false);
 const otasWithUrls = ref([]);
 const summaryReviewOtas = ref([]);
+const containerListRef = ref(null);
 
 const currentPage = ref(0);
+const paginatedItems = ref([]);
 const loadingPagination = ref(false);
 const loadingList = ref(false);
 const currentPositionScroll = ref(null);
@@ -202,15 +196,27 @@ const summaryAveragReview = reactive({
     increment: 0,
 });
 
-const reviewsListRefs = reactive({});
-const containerListRef = ref(null);
-
- const numberCardsToLoadDefault = ref(20);
- const firstLoad = ref(true);
- const limitItemsPerPage = ref(LIMIT_ITEMS);
-
 // COMPUTED
+const numberOfskeletonCards = computed(() => {
+    if (loadingList.value && paginatedItems.value?.length <= 0) return LIMIT_ITEMS;
+    if(paginatedItems.value.length > 0){//si ya hay reviews cargadas
+        let remainingCards = dataPagination.total - paginatedItems.value.length;//obtener reviews que faltan por cargar
+        //si el restante es mayor al limite entonces solo mostrara el limite de reviews a cargar
+        remainingCards >= LIMIT_ITEMS ? remainingCards = LIMIT_ITEMS : 0;
+        if (remainingCards < 0) return 0;
+        //sino entonces mostrara mostrara la cantidad de cards que faltan por cargar
+        return remainingCards;
+    }
+    return LIMIT_ITEMS;
+});
 
+const itemsPerPage = computed(() => {
+    const containerElement = containerListRef.value;
+    const { clientHeight } = containerElement;
+    let totalPage = Math.ceil(clientHeight / 72);
+    // console.log(totalPage);
+    return totalPage;
+});
 const otaParamRoute = computed(() => {
     	return route?.currentRoute?.value?.params?.ota?.toUpperCase();
 });
@@ -234,7 +240,7 @@ const emptyFilters = computed(() => {
     return numbersFiltersApplied.value.length == 0;
 });
 const reviews = computed(() => {
-    let r = reviewsData.value.map(review => {
+    let r = paginatedItems.value.map(review => {
         return {
             ...review,
             increasesAverageRating: verifyIncreasesAverageRating(review),
@@ -243,21 +249,10 @@ const reviews = computed(() => {
     return r;
 });
 
-const numberCardsToLoad = computed(() => {
-    if(firstLoad.value) return numberCardsToLoadDefault.value;
-    if(!firstLoad.value && dataPagination.total == 0) return 0;
-    let remaining = dataPagination.total - reviews.value.length;
-    remaining = remaining < 0 ? 0 : remaining;
-    if(remaining < numberCardsToLoadDefault.value && dataPagination.total > 0){
-        return remaining ;
-    }
-    return numberCardsToLoadDefault.value;
-});
-
 // WATCH
 
 onMounted(async () => {
-    initScrollListener(); 
+    initScrollListener();
     await getByOtas(true);
 });
 
@@ -268,45 +263,79 @@ provide('emptyFilters', emptyFilters);
 provide('isOpenModelFilter', isOpenModelFilter);
 provide('reviewStore', reviewStore);
 
-onEvent('get-reviews', reloadReviewsAndUpdatedScroll);
-
 // FUNCTIONS
 
-async function reloadReviewsAndUpdatedScroll (payload) {
-    let { reviewId } = payload;
-    limitItemsPerPage.value = 20000;
-    await reloadReviews();
-    nextTick(() => {
-        focusCard(reviewId);
-    });
-}
-
-const focusCard = (id) => {
-    const card = reviewsListRefs[id]; // Obtener la referencia del card
-    if (card && containerListRef.value) {
-        // Hacer scroll al card
-        card.scrollIntoView({
-        behavior: 'smooth', // Movimiento suave
-        block: 'center',    // Alinear al centro del contenedor
-        });
-    }
-};
-
 function initScrollListener() {
-    const container = document?.querySelector('#container-list');
-    if (container) {
-        container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
-    }
+    const container = document.querySelector('#container-list');
+    container.addEventListener('scroll', throttle(checkLoadMore, 300), true);
 }
-
-function checkLoadMore () {
+async function checkLoadMore() {
     const skeletons = document.querySelectorAll('.skeleton-review-card');
     for (let skeleton of skeletons) {
-        if ($isElementVisible(skeleton) && !loadingList.value) {
+        if (isElementVisible(skeleton) && !loadingList.value && paginatedItems.value.length < dataPagination.total) {
+            await nextTick();
             getByOtas();
-            break;
         }
-    }   
+    }
+    
+}
+
+
+function isElementVisible(el) {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom > 0 // Al menos parte del elemento está dentro del viewport
+    );
+}
+
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    }
+}
+
+function scrollToPosition() {
+    const container = document.getElementById('container-list');
+    if (container) {
+        container.scrollTop = currentPositionScroll.value
+    }
+}
+
+function paginate () {
+    // const start = (currentPage.value - 1) * itemsPerPage.value;
+    // const end = start + itemsPerPage.value;
+    reviewsData.value.forEach(item => {
+        if (!paginatedItems.value.includes(item)) {
+        // if (!paginatedItems.value.find(itemfind => itemfind._id ==  item._id)) {
+            paginatedItems.value.push(item);
+        }
+    });
+    // console.log(paginatedItems.value.length, 'paginatedItems');
+}
+
+async function nextPage() {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+        await getByOtas();
+        await paginate();
+    }
 }
 
 
@@ -318,28 +347,29 @@ function verifyIncreasesAverageRating (review) {
 function getNameIconAnswer (review) {
     let { isAttended, isAnswered } = review.detail;
     if (!isAttended && isAnswered) {
-        return 'REVIEW.ANSWERED.NOTIFICATION';
+        return 'ANSWER.REVIEW.NOTIFICATION';
     }
     if (!isAttended && !isAnswered) {
-        return 'REVIEW.NOT.ANSWERED.NOTIFICATION';
+        return 'NOTANSWER.REVIEW.NOTIFICATION';
     }
     if (isAttended && isAnswered) {
-        return 'REVIEW.ANSWERED';
+        return 'ANSWER.REVIEW';
     }
     if (isAttended && !isAnswered) {
-        return 'REVIEW.NOT.ANSWERED';
+        return 'NOTANSWER.REVIEW';
     }
 }
 
 function handleSearchFilter (val) {
-
-    clearTimeout(debounce.value);
-    debounce.value = setTimeout(() => {
-
-            formFilter.search = val;
-            reloadReviews();
-
-    }, 500);
+    val = val ?? searchFilter;
+    if(val?.length == 0){
+        formFilter.search = null;
+        reloadReviews();
+    }
+    if(val?.length >= 3){
+        formFilter.search = val;
+        reloadReviews();
+    }
 }
 
 function resetFilter () {
@@ -348,39 +378,45 @@ function resetFilter () {
     searchFilter.value = null;
     reloadReviews();
 }
-async function reloadReviews () {
-    // clearTimeout(debounce.value);
-    // debounce.value = setTimeout(() => {
-        firstLoad.value = true;
+function reloadReviews () {
+    clearTimeout(debounce.value);
+    debounce.value = setTimeout(() => {
         reviewsData.value = [];
+        paginatedItems.value = [];
         currentPage.value = 0;
         reviewsEmptyLoaded.value = false;
         Object.assign(dataPagination, dataPaginationDefault);
-        await getByOtas();
-    // }, 500);
+        getByOtas();
+    }, 500);
 }
 
 async function getByOtas (loadOtas = false) {
+
+    const containerScroll = document.getElementById('container-list');
+    currentPositionScroll.value = containerScroll.scrollTop;
 
     loadingList.value = true;
     reviewsEmptyLoaded.value = false;
     let params = formFilter;
     currentPage.value++;
     // console.log(currentPage.value);
-    Object.assign(params, { page: currentPage.value, limit: limitItemsPerPage.value });
-    limitItemsPerPage.value = LIMIT_ITEMS;
+    Object.assign(params, { page: currentPage.value, limit: LIMIT_ITEMS });
     // console.log(params, 'params');
     const response = await reviewStore.$getByOtas(params);
     const { ok, data } = response;
     if (ok) {
-        reviewsData.value = [...reviewsData.value, ...data.reviews];
+        // paginatedItems.value = [];
+        reviewsData.value = data.reviews;
         summaryAveragReview.decrement = data.otherData.decrementAverageRating;
         summaryAveragReview.increment = data.otherData.incrementAverageRating;
+        // console.log(reviewsData.value.length, 'reviewsData.value');
 
+        // console.log(reviewsData.value, reviewsData.value.length, 'reviewsData.value')
+        paginate();
         loadingList.value = false;
         Object.assign(dataPagination, data.dataPagination);
         
-        if (data.reviews.length == 0 && reviewsData.value.length == dataPagination.total)  {
+        if (reviewsData.value.length == 0 && paginatedItems.value.length == dataPagination.total)  {
             reviewsEmptyLoaded.value = true;
         }
 
@@ -393,11 +429,47 @@ async function getByOtas (loadOtas = false) {
         }
         summaryReviewOtas.value = data.summaryReviewOtas;
 
+
+        // setTimeout(() => {
+        //     // await nextTick();
+        //     const skeletons = document.querySelectorAll('.skeleton-review-card');
+        //         console.log(skeletons.length)
+        //     for (let skeleton of skeletons) {
+        //         console.log(isElementVisible(skeleton));
+        //         if (isElementVisible(skeleton) && paginatedItems.value.length >= 10) {
+        //             console.log('entro');
+        //             scrollToPosition();
+        //             break;
+        //         }
+        //     }
+        //     checkLoadMore();
+        // }, 700);
+
     } else {
 
     }
-    firstLoad.value = false;
     loadingList.value = false; 
+}
+onEvent('get-reviews', reloadReviews);
+
+function onScroll () {
+    if (currentPage.value < totalPages.value) {
+        const containerElement = containerListRef.value;
+        const { scrollTop, scrollHeight, clientHeight } = containerElement;
+
+        if (scrollTop + clientHeight >= scrollHeight - 50 ) {
+            loadingPagination.value = true;
+            setTimeout(async () => {
+                const containerElement = containerListRef.value;
+                const { scrollTop, scrollHeight, clientHeight } = containerElement;
+
+                if (scrollTop + clientHeight >= scrollHeight - 50 ) {
+                        await nextPage();
+                        loadingPagination.value = false;
+                }
+            }, 2000);
+        }
+    }
 }
 
 function goReviewDetail (review) {
@@ -414,4 +486,4 @@ function goReviewDetail (review) {
     .selected-hover{
         background: #ECF9F5;
     }
-</style>6
+</style>
