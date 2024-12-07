@@ -1,6 +1,7 @@
 services:
   #hoster
   hoster:
+    image: hoster:latest
     container_name: thehoster-app-hoster-front
     restart: always
     build:
