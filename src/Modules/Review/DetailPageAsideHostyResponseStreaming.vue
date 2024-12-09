@@ -35,7 +35,7 @@
                 class="size-[16px] ml-2 inline-block"
             >
         </button>
-        <BaseTooltipResponsive v-if="numbersResponsesGenerated >= maximumResponsesGenerated" size="s" :top="35" :right="0" class="ml-1">
+        <BaseTooltipResponsive v-if="numbersResponsesGenerated >= maximumResponsesGenerated" size="s" :top="-118" :right="0" class="ml-1">
             <template #button>
                 <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg" />
             </template>

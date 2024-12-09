@@ -72,7 +72,7 @@
         ref="containerListRef"
         class="list-reviews flex-1 border-t hborder-top-gray-400 overflow-auto"
     >
-    
+
         <div
             v-for="(review, index) in reviews"
             :id="review.dataFull.id"
@@ -95,7 +95,7 @@
                     <img class="w-4 h-4" src="/assets/icons/1.TH.REVIEW.svg" alt="1.TH.REVIEW">
                     <p class="text-[10px] font-semibold w-[30px]"><span class="text-sm" :class="review.increasesAverageRating ? 'text-[#16a34a]' : 'text-[#FF6666]'">{{ Number(review.detail.rating) }}</span>/{{ reviewStore.scaleRating[review.detail.otaOrigin] }}</p>
                 </div>
-                <img class="size-[20px]" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
+                <img :class="review.detail.isAttended ? 'size-[20px]' : 'size-[24px]'" :src="`/assets/icons/1.TH.${getNameIconAnswer(review)}.svg`" alt="1.TH.ANSWER.REVIEW">
             </div>
         </div>
         <!-- loading skeleton -->
