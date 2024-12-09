@@ -66,23 +66,49 @@ const summaryByOtaUnique = computed(() => {
     const result = summaryByOtaValue.reduce((acc, current) => {
         // Buscar si ya existe la OTA en el acumulador
         const existing = acc.find(item => item.ota === current.ota);
+
         if (existing) {
-            // Si ya existe, sumar los valores correspondientes
-            existing.summary.totalReviews += current.summary.totalReviews;
-            
-            // Acumular los reviewsRating (promedio ponderado en este caso)
-            const totalReviews = existing.summary.totalReviews + current.summary.totalReviews;
+            if (!current.summary.totalReviews) return acc;
+
+            // Validar si existingSumAndAvgRatings o currentSumAndAvgRatings son 0
+            const existingSumAndAvgRatings =
+                existing.summary.totalReviews > 0
+                    ? existing.summary.sumAndAvgRatings * existing.summary.totalReviews
+                    : 0;
+            const currentSumAndAvgRatings =
+                current.summary.totalReviews > 0
+                    ? parseFloat(current.summary.sumAndAvgRatings) * current.summary.totalReviews
+                    : 0;
+
+            // Si ambos son 0, no hacer nada
+            if (existingSumAndAvgRatings === 0 && currentSumAndAvgRatings === 0) {
+                return acc;
+            }
+
+            // Sumar totalReviews excluyendo los casos con promedio 0
+            const validTotalReviews =
+                (existingSumAndAvgRatings > 0 ? existing.summary.totalReviews : 0) +
+                (currentSumAndAvgRatings > 0 ? current.summary.totalReviews : 0);
+
+            if (validTotalReviews === 0) {
+                return acc; // Si no hay reviews válidos, no procesar
+            }
+
+            // Calcular el promedio ponderado con los valores válidos
             existing.summary.sumAndAvgRatings = (
-                (existing.summary.sumAndAvgRatings * existing.summary.totalReviews + 
-                parseFloat(current.summary.sumAndAvgRatings) * current.summary.totalReviews) / totalReviews
-            ).toFixed(2); // Redondeo a dos decimales
+                (existingSumAndAvgRatings + currentSumAndAvgRatings) / validTotalReviews
+            ).toFixed(2);
+
+            // Actualizar el total de reviews
+            existing.summary.totalReviews = validTotalReviews;
         } else {
-            // Si no existe, simplemente agregar el nuevo objeto
+            // Si no existe, agregar al acumulador
             acc.push({ ota: current.ota, summary: { ...current.summary } });
         }
 
         return acc;
     }, []);
+
     return result;
 });
 
