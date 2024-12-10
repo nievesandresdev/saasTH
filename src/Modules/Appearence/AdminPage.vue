@@ -70,7 +70,7 @@
                         <h5 class="text-base font-semibold mb-2">Color 2</h5>
                         <p class="w-[449px] mb-4 text-xs font-medium text-[#858181] h-[32px]">Este color se aplicará a banners y elementos de notificación</p>
                         <PickColor :codes-color="{codHex: colorsForm?.[1]?.cod_hex, codRbg: colorsForm?.[1]?.cod_rbg}"  @change:color="handleColor($event, 1)" />
-                        <h5 class="text-base font-semibold mt-4">Color de contraste 1</h5>
+                        <h5 class="text-base font-semibold mt-4">Color de contraste 2</h5>
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
                         <div class="mt-4 flex space-x-[32px]">
                             <div class="flex space-x-2">

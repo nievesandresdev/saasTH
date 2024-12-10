@@ -39,7 +39,7 @@
                                 @blur:validate="validate('subdomain_chain')"
                             />
                             <div class="h-[40px] flex items-center">
-                                <span class="text-sm font-medium inline-block">.thehoster.io</span>
+                                <span class="text-sm font-medium inline-block">{{ VUE_APP_ENVIROMENT === 'pre' ? '.test' : ''  }}.thehoster.io</span>
                             </div>
                         </div>
                         <div class="h-[40px] flex items-center">
@@ -74,7 +74,7 @@
                     <div class="flex items-start w-full">
                         <div class="flex items-start w-full">
                             <div class="h-[40px] flex items-center">
-                                <span class="text-sm font-medium inline-block">{{ `https://${hotelData.chain.subdomain}.thehoster.io/` }}</span>
+                                <span class="text-sm font-medium inline-block">{{ `https://${hotelData.chain.subdomain}${VUE_APP_ENVIROMENT === 'pre' ? '.test' : ''}.thehoster.io/` }}</span>
                             </div>
                             <BaseTextField
                                 v-model="form.slug_hotel"
@@ -176,6 +176,8 @@ const dataFormDefault ={
     slug_hotel: '',
     language_default_webapp: null,
 };
+
+const { VUE_APP_ENVIROMENT } = process.env;
 
 
 const OPTIONS_LANGUAGES = [
