@@ -267,7 +267,6 @@ async function verifySubdomainExistInChain () {
      }
     const response = await chainStore.$verifySubdomainExistPerChain(queryRequest);
     const  { ok, data } = response;
-    console.log(data, 'data');
     if (ok) {
         if (data.exist === true && (typeof errors.value?.subdomain_chain != 'string')) {
             errors.value['subdomain_chain'] = 'Este subdominio ya está siendo usado'
