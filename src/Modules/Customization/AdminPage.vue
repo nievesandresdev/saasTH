@@ -32,8 +32,7 @@
                                 v-model="form.subdomain_chain"
                                 placeholder="Subdominio..."
                                 class-content="flex-1 mx-2"
-                                :max="'20'"
-                                :min="'12'"
+                                :max="hotelData.chain.length_subdomain_default"
                                 name="subdomain_chain"
                                 :errors="errors"
                                 @blur:validate="validate('subdomain_chain')"
@@ -81,7 +80,6 @@
                                 placeholder="Slug..."
                                 class-content="flex-1 mx-2"
                                 :max="'50'"
-                                :min="'12'"
                                 name="slug_hotel"
                                 :errors="errors"
                                 @blur:validate="validate('slug_hotel')"
@@ -198,10 +196,12 @@ const  loadingVerifySlugHotel = ref(null);
 const changesPending = ref(false);
 const isloadingForm = ref(false);
 
-const formRules = {
-    subdomain_chain: [rules.required, rules.subdomain, rules.maxLength(50), rules.minLength(12)],
-    slug_hotel: [rules.required, rules.subdomain, rules.maxLength(50), rules.minLength(12)],
-};
+const formRules = reactive({
+    subdomain_chain: [rules.required, rules.subdomain, rules.maxLength(hotelData.value.chain.length_subdomain_default)],
+    slug_hotel: [rules.required, rules.subdomain, rules.maxLength(50)],
+    // subdomain_chain: [rules.required, rules.subdomain, rules.maxLength(50), rules.minLength(12)],
+    // slug_hotel: [rules.required, rules.subdomain, rules.maxLength(50), rules.minLength(12)],
+});
 
 const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
