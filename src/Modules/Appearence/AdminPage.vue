@@ -1,23 +1,25 @@
 <template>
     <div class="h-full bg-[#FAFAFA] flex flex-col">
-        <div class="py-[20px] space-x-2 flex px-[24px]">
-            <h1 class="text-[22px] font-medium">
-                Diseño
-            </h1>
-            <BaseTooltipResponsive
-                size="l"
-                :top="35"
-                :left="-0"
-            >
-                <template #button>
-                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+        <div class="px-[24px]">
+            <div class="py-[20px] border-b border-[#BFBFBF] flex space-x-2">
+                <h1 class="text-[22px] font-medium">
+                    Diseño
+                </h1>
+                <BaseTooltipResponsive
+                    size="l"
+                    :top="35"
+                    :left="-0"
+                >
+                    <template #button>
+                        <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                        </template>
+                        <template #content>
+                        <p class="text-sm leading-[150%] font-normal">
+                            En esta vista podrás configurar todos los aspectos visuales.
+                        </p>
                     </template>
-                    <template #content>
-                    <p class="text-sm leading-[150%] font-normal">
-                        En esta vista podrás configurar todos los aspectos visuales.
-                    </p>
-                </template>
-            </BaseTooltipResponsive>
+                </BaseTooltipResponsive>
+            </div>
         </div>
         <div
             v-if="typeChain.CHAIN === hotelData.chain.type"
@@ -33,7 +35,7 @@
                 <div class="3xl:flex">
                     <div class=" mr-[116px] relative">
                         <h5 class="text-base font-semibold mb-2">Color 1</h5>
-                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181]">Este color se aplicará a barra de navegación, botones principales e indicador del alojamiento en el mapa  </p>
+                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181] h-[32px]">Este color se aplicará a barra de navegación, botones principales e indicador del alojamiento en el mapa  </p>
                         <PickColor :codes-color="{codHex: colorsForm?.[0]?.cod_hex, codRbg: colorsForm?.[0]?.cod_rbg}" @change:color="handleColor($event, 0)" />
                         <h5 class="text-base font-semibold mt-4">Color de contraste 1</h5>
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
@@ -66,7 +68,7 @@
                     </div>
                     <div class="mt-[33px] 3xl:mt-0 relative">
                         <h5 class="text-base font-semibold mb-2">Color 2</h5>
-                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181]">Este color se aplicará a banners y elementos de notificación</p>
+                        <p class="w-[449px] mb-4 text-xs font-medium text-[#858181] h-[32px]">Este color se aplicará a banners y elementos de notificación</p>
                         <PickColor :codes-color="{codHex: colorsForm?.[1]?.cod_hex, codRbg: colorsForm?.[1]?.cod_rbg}"  @change:color="handleColor($event, 1)" />
                         <h5 class="text-base font-semibold mt-4">Color de contraste 1</h5>
                         <p class="text-[12px] font-medium mt-2">Este color se aplicará a textos, iconos y bordes sobre el Color 1</p>
@@ -102,7 +104,7 @@
 
             <div class="px-4 py-6 rounded-[10px] hbg-white-100 card-form">
                 <h5 class="text-base font-semibold mb-2">Logo o Nombre del hotel</h5>
-                <p class="mb-[16px]">Añade el logo de tu alojamiento para que tus huéspedes lo visualicen en el banner principal de tu WebApp, o puedes optar por mostrar el nombre en formato texto.</p>
+                <p class="mb-[16px] ">Añade el logo de tu alojamiento para que tus huéspedes lo visualicen en el banner principal de tu WebApp, o puedes optar por mostrar el nombre en formato texto.</p>
                 <div class="flex 3xl:justify-start">
                     <div class="3xl:w-[380px] mr-[20px] flex flex-col flex-1  3xl:flex-none">
                         <div class="flex items-center">
@@ -147,7 +149,15 @@
                             </div>
                         </div>
                         <div class="flex space-x-2 mt-[20px]">
-                            <RadioButton :value="'0'" v-model="form.type_header"/>
+                            <!-- <RadioButton :value="'0'" v-model="form.type_header"/> -->
+                            <input
+                                v-model="form.type_header"
+                                :value="'0'"
+                                :checked="form.type_header === '0'"
+                                name="type_header-0"
+                                type="radio"
+                                class="size-[24px] hradio"
+                            >
                             <span class="text-base">Logo</span>
                         </div>
                     </div>
@@ -162,7 +172,15 @@
                             />
                         </div>
                         <div class="flex space-x-2">
-                             <RadioButton :value="'1'" v-model="form.type_header"/>
+                             <!-- <RadioButton :value="'1'" v-model="form.type_header"/> -->
+                            <input
+                                v-model="form.type_header"
+                                :value="'1'"
+                                :checked="form.type_header === '1'"
+                                name="type_header-1"
+                                type="radio"
+                                class="size-[24px] hradio"
+                            >
                             <span class="text-base">Nombre</span>
                         </div>
                     </div>
@@ -185,7 +203,15 @@
                                 </div>
                         </div>
                         <div class="flex space-x-2">
-                            <RadioButton :value="'0'" v-model="form.tonality_header"/>
+                            <!-- <RadioButton :value="'0'" v-model="form.tonality_header"/> -->
+                            <input
+                                v-model="form.tonality_header"
+                                :value="'0'"
+                                :checked="form.tonality_header === '0'"
+                                name="tonality_header-0"
+                                type="radio"
+                                class="size-[24px] hradio"
+                            >
                             <span class="text-base font-medium">Tono oscuro</span>
                         </div>
                     </div>
@@ -201,7 +227,15 @@
                                 </div>
                         </div>
                         <div class="flex space-x-2">
-                            <RadioButton :value="'1'" v-model="form.tonality_header"/>
+                            <!-- <RadioButton :value="'1'" v-model="form.tonality_header"/> -->
+                            <input
+                                v-model="form.tonality_header"
+                                :value="'1'"
+                                :checked="form.tonality_header === '1'"
+                                name="tonality_header-1"
+                                type="radio"
+                                class="size-[24px] hradio"
+                            >
                             <span class="text-base font-medium">Tono claro</span>
                         </div>
                     </div>
