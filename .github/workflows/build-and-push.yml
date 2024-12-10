@@ -56,7 +56,7 @@ jobs:
             echo "VUE_APP_API_URL_REVIEW=${{ secrets.VUE_APP_API_URL_REVIEW_TEST }}" >> .env
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_TEST }}" >> .env
           fi
-          echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL_MAIN }}" >> .env
+          echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
 
       - name: Build project
         run: npm run build
