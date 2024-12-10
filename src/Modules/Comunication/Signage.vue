@@ -3,7 +3,7 @@
         <!-- title section -->
         <section class="border-b hborder-gray-400 ">
             <div class="pt-5 pb-[18px] flex items-center gap-2">
-                <router-link to="/comunicaciones">
+                <router-link to="/webapp/promociona-webapp">
                     <img class="w-6 h-6" src="/assets/icons/1.TH.ARROW.LEFT.svg" alt="">
                 </router-link>
                 <h1 class="text-[24px] font-medium leading-[110%]">Señalética</h1>
