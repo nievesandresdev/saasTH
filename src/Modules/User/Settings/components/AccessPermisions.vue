@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, computed,watch } from 'vue';
+import { ref, onMounted, defineProps, defineEmits, computed,watch } from 'vue';
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
@@ -81,12 +81,18 @@ const props = defineProps({
 
 const emits = defineEmits(['update:permissions']);
 
-const selectAll = ref(false);
+const selectAll = ref(true);
 
 //const formPermissions = ref({ ...props.permissions });
 
 
 const isDisabled = computed(() => props.workPositionId !== null);
+
+onMounted(() => {
+  if (selectAll.value) {
+    toggleAllPermissions();
+  }
+});
 
 const operationAccess = ref([
   { name: 'Estancias', selected: false, value: 'estancias', disabled: false },
