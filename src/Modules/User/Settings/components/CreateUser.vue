@@ -357,6 +357,7 @@ const closeModalSaveCreate = () => {
 // Añadir los event listeners cuando el componente se monte
 onMounted(() => {
   window.addEventListener('mousedown', handleMouseDown);
+  handleSelectAll(selectAllHotels)
   //window.addEventListener('mouseup', handleMouseUp);
 });
 
