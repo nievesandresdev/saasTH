@@ -313,13 +313,12 @@ async function submit () {
     const response = await chainStore.$updateConfigGeneral(bodyRequest);
     const { ok, data } = response;
     if (ok) {
-
         await hotelStore.changeHotel(data);
         toast.warningToast('Cambios guardados con éxito','top-right');
     } else {
         toast.warningToast(data?.message,'top-right');
     }
-    mockupStore.$reloadIframe();
+    loadMockup();
     isloadingForm.value = false;
 }
 
