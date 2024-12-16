@@ -4,7 +4,13 @@
         <!-- Sección de Estancias - Chat -->
         <div class="flex gap-2 justify-start items-center">
           <strong class="text-[18px] font-medium">Notificaciones de la plataforma</strong>
-          <BaseTooltipResponsive size="s" :top="25" :right="0">
+          <BaseTooltipResponsive 
+            size="s" 
+            :key="dynamicTooltipTop"
+            :top="dynamicTooltipTop" 
+            :right="0" 
+            @mouseover="calculateTooltipPosition"
+          >
             <template v-slot:button>
               <img src="/assets/icons/info.blue.svg" class="w-5 h-5 ml-1" alt="icon_info">
             </template>
@@ -257,6 +263,24 @@
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
+  };
+
+  const tooltipHeight=104;
+  const footerHeight=88;
+  const dynamicTooltipTop = ref(25);
+
+  const calculateTooltipPosition = (event) => {
+    const tooltipElement = event.target.closest('.notifications-container');
+    const rect = tooltipElement?.getBoundingClientRect();
+
+    if (!rect) return;
+
+    const viewportHeight = window.innerHeight;
+    const tooltipBottomOffset = viewportHeight - rect.bottom;
+
+    const shouldAdjust = tooltipBottomOffset < footerHeight + tooltipHeight;
+  
+    dynamicTooltipTop.value = shouldAdjust ? -110 : 25;
   };
 
   watch(
