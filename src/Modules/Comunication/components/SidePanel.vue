@@ -8,15 +8,16 @@
     </Transition>
     
     <Transition name="slide">
-        <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[1001] right-[354px]">
+      <!-- right-[354px] -->
+        <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[1001] right-0">
             <Slide />
         </div>
     </Transition>
-    <Transition>
+    <!-- <Transition>
         <div v-if="showPanel" class="w-[354px] h-full bg-white fixed top-0 right-0 z-[1002]">
             <Panel />
         </div>
-    </Transition>
+    </Transition> -->
 </template>
 <script setup>
 import { ref, inject, watch } from 'vue';
