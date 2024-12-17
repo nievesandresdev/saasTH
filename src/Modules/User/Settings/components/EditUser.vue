@@ -733,7 +733,7 @@ const handleCheckPermission = (permissionName, isSelected) => {
 };
 
 
-const currentStep = ref(3);
+const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Usuario' },
   { number: 2, label: 'Accesos' },
