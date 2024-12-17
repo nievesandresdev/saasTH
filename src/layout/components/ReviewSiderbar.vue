@@ -318,7 +318,7 @@ function verifyIncreasesAverageRating (review) {
 function getNameIconAnswer (review) {
     let { isAttended, isAnswered } = review.detail;
     if (!isAttended && isAnswered) {
-        return 'REVIEW.ANSWERED.NOTIFICATION';
+        return 'ANSWER.REVIEW.NOTIFICATION';
     }
     if (!isAttended && !isAnswered) {
         return 'REVIEW.NOT.ANSWERED.NOTIFICATION';
