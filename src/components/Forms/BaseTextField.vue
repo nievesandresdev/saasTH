@@ -9,11 +9,11 @@
         <div class="relative">
             <input
                 ref="inputElement"
-                :id="inputId" 
+                :id="inputId"
                 :type="type"
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
-                class="w-full hinput border  rounded-[6px]"
+                class="w-full hinput border rounded-[6px]"
                 :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? '' : 'hinput-green'}`"
                 :placeholder="placeholder"
                 :minlength="min"
@@ -25,85 +25,71 @@
                 @blur="handleBlur"
                 :disabled="disabled"
             >
-            <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined) || max" class="flex justify-between">
-                <p class="text-[10px] font-medim text-left mt-[4px] text-red-600 flex items-center">
-                    <img :class="{'invisible':!(errors?.[name] !== true && errors?.[name] !== undefined)}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
-                    {{ errors?.[name] !== true  || (!inputValue && errors?.[name] !== true) ? errors?.[name] : '' }}
+            <div v-if="(safeErrors[name] && safeErrors[name] !== true) || max" class="flex justify-between">
+                <p class="text-[10px] font-medium text-left mt-[4px] text-red-600 flex items-center">
+                    <img :class="{'invisible': !safeErrors[name]}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                    {{ safeErrors[name] }}
                 </p>
-                <p class="text-[12px] htext-gray-500 text-right mt-[4px] ">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
+                <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
-        <button v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show" class="absolute right-3 top-2" @click="$emit('click:appendInner')">
+        <button
+            v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'BUTTON' && appendInnerIcon?.show"
+            class="absolute right-3 top-2"
+            @click="$emit('click:appendInner')"
+        >
             <img class="w-6 h-6" :src="appendInnerIcon.icon" alt="append inner icon">
         </button>
-        <img v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show" class="w-6 h-6 absolute right-3 top-3" :src="appendInnerIcon.icon" alt="append inner icon">
+        <img
+            v-if="appendInnerIcon?.icon && appendInnerIcon?.type === 'ICON' && appendInnerIcon?.show"
+            class="w-6 h-6 absolute right-3 top-3"
+            :src="appendInnerIcon.icon"
+            alt="append inner icon"
+        >
     </div>
 </template>
 
 <script setup>
-import { ref, computed, watch,onMounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 
-const emit = defineEmits(['click:appendInner', 'update:modelValue', 'blur:validate', 'enter:search', 'enter:key', 'input:typing', 'click', 'keyup:prevent', 'input:search']);
-
-const inputElement = ref(null);
+const emit = defineEmits([
+    'click:appendInner',
+    'update:modelValue',
+    'blur:validate',
+    'enter:search',
+    'enter:key',
+    'input:typing',
+    'click',
+    'keyup:prevent',
+    'input:search',
+]);
 
 const props = defineProps({
-    type: {
-        type: String,
-        default: 'text',
-    },
-    classContent: {
-        type: String,
-        default: ''
-    },
-    classInput: {
-        type: String,
-        default: 'p-3 h-10 text-sm'
-    },
-    prependInnerIcon: {
-        type: String,
-        default: '',
-    },
+    type: { type: String, default: 'text' },
+    classContent: { type: String, default: '' },
+    classInput: { type: String, default: 'p-3 h-10 text-sm' },
+    prependInnerIcon: { type: String, default: '' },
     appendInnerIcon: {
         type: Object,
-        default: () => ({
-            icon: null,
-            type: null, // (BUTTON, ICON)
-            show: false,
-        }),
+        default: () => ({ icon: null, type: null, show: false }),
     },
-    placeholder: {
-        type: String,
-        default: '',
-    },
-    modelValue: {
-        type: String,
-        default: ''
-    },
-    min: {
-        type: Number,
-        default: null,
-    },
-    max: {
-        type: Number,
-        default: null,
-    },
-    name: {
-        type: String,
-        default: '',
-    },
-    error: {
-        type: Boolean,
-        default: false,
-    },
+    placeholder: { type: String, default: '' },
+    modelValue: { type: [String, Number], default: '' },
+    min: { type: Number, default: null },
+    max: { type: Number, default: null },
+    name: { type: String, default: '' },
+    error: { type: Boolean, default: false },
     errors: {
         type: Object,
-        default: () => ({}),
+        default: () => ({}), // Valor seguro por defecto
     },
-    disabled: {
-        type: Boolean,
-        default: false,
-    },
+    disabled: { type: Boolean, default: false },
+    inputId: { type: String, default: 'InputData' },
+});
+
+// Crea una copia segura del prop `errors` para evitar warnings
+const safeErrors = computed(() => {
+    return props.errors || {};
 });
 
 const inputValue = ref(props.modelValue);
@@ -114,75 +100,38 @@ watch(inputValue, (newValue) => {
     emit('blur:validate');
 });
 
-watch(() => props.modelValue, (newValue) => {
-    inputValue.value = newValue;
-});
-
-const searchbyenter = () => {
-    emit('enter:search');
-};
-
-const searchbyKey = (event) => {
-    emit('enter:key', event);
-};
-
-const onClick = () => {
-    emit('click');
-};
-
-const handleBlur = () => {
-    // emit('blur:validate');
-};
-
-const updateValue = (value) => {
-    inputValue.value = value;
-    emit('input:search', event);
-    
-};
-
-const handleKeyup = (event) => {
-    emit('keyup:prevent', event);
-};
+watch(
+    () => props.modelValue,
+    (newValue) => {
+        inputValue.value = newValue;
+    }
+);
 
 const customInputClass = computed(() => {
     let c = props.classInput;
     if (props.prependInnerIcon) {
-        c = `${c} pl-11`;
+        c += ' pl-11';
     }
-    if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
-        c = `${c} hinput-error`;
+    if (safeErrors.value?.[props.name]) {
+        c += ' hinput-error';
     }
-
-    if(props.disabled) {
-        c = `${c} bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]`;
+    if (props.disabled) {
+        c += ' bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]';
     }
     return c;
 });
 
-onMounted(() => {
-    emit('input-ref', inputElement);
-});
-
-
-
-
+const updateValue = (value) => {
+    inputValue.value = value;
+};
 </script>
 
 <style lang="scss" scoped>
 .hinput-error {
     border-color: #DC2626;
 }
-input::placeholder{
+input::placeholder {
     font-weight: 500;
     color: var(--h-gray-500);
 }
-// .hinput-green {
-//     border-color: #10B981;
-// }
-// .hborder-black-100 {
-//     border-color: #1F2937;
-// }
-// .hborder-gray-400 {
-//     border-color: #D1D5DB;
-// }
 </style>

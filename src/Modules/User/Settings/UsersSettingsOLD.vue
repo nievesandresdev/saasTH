@@ -79,7 +79,10 @@
                   :isAdmin="$isAdmin"
                   :isOperator="$isOperator"
                   @close="closeToggleDropdown"
-                  @editUser="editUser"
+                  @edit-user="(data) => { 
+                    console.log('Recibido en el padre - editUser:', data); 
+                    editUser(data);
+                  }"
                   @openModalDelete="openModalDelete"
                 />
               </td>
@@ -282,9 +285,27 @@ const createUser = () => {
 };
 
 const editUser = (data) => {
-  dataEdit.value = data;
-  modalEdit.value = true;
+
+  console.log('Evento editUser recibido con datos:', data);
+
+  // Validar datos antes de usarlos
+  if (!data || !data.id) {
+    console.warn('Datos inválidos recibidos en editUser:', data);
+    return;
+  }
+  
+  modalEdit.value = false;
+  modalShow.value = false;
+  deleteUser.value = false;
+  openConfirmCreateUser.value = false;
+
   visibleDropdown.value = null;
+
+  nextTick(() => {
+    dataEdit.value = data;
+    modalEdit.value = true;
+  });
+
   workPositions('edit');
 };
 

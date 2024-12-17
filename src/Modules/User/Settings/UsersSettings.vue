@@ -77,7 +77,9 @@
                   :index="index"
                   :visibleDropdown="visibleDropdown"
                   @close="closeToggleDropdown"
-                  @editUser="editUser"
+                  @editUser="(data) => { 
+                    editUser(data);
+                  }"
                   @openModalDelete="openModalDelete"
                   @updateStatus="handleGetUsers"
                 />
@@ -176,7 +178,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import CreateUser from './components/CreateUser.vue';
 import Toggle from './components/Toggle.vue';
 import EditUser from './components/EditUser.vue';
@@ -314,9 +316,25 @@ const createUser = () => {
 };
 
 const editUser = (data) => {
-  dataEdit.value = data;
-  modalEdit.value = true;
+  if (!data || !data.id) {
+    return;
+  }
+
+  modalEdit.value = false;
+  modalShow.value = false;
+  deleteUser.value = false;
+  openConfirmCreateUser.value = false;
   visibleDropdown.value = null;
+
+  dataEdit.value = null; 
+  nextTick(() => {
+    dataEdit.value = data;
+
+    setTimeout(() => {
+      modalEdit.value = true;
+    }, 10); 
+  });
+
   workPositions('edit');
 };
 
