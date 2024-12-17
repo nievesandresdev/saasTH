@@ -237,9 +237,9 @@ onMounted(() => {
 });
 
 function loadMockup () {
-    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp)
-    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
-    mockupStore.$setLanguageTooltip(true)
+    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp);
+    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
+    mockupStore.$setLanguageTooltip(true);
 }
 
 async function reloadHotel () {

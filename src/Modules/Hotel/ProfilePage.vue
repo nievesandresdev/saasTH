@@ -510,7 +510,7 @@
     }
     
     function loadMockup () {
-        mockupStore.$setIframeUrl('/sobre-nosotros')
+        mockupStore.$setIframeUrl('/alojamiento');
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
         mockupStore.$setLanguageTooltip(true)
     }

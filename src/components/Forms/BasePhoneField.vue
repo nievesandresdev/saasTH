@@ -122,6 +122,7 @@ const isError = computed(() => {
 const defineFullPhone = async (stringPhone = null) => {
   utilStore.$getPhoneCodesApi()
   .then(res => {
+    console.log(res, 'res');
     codeList.value = res.data;
     if (stringPhone) {
       let phoneString = props.modelValue?.replace(/\s+/g, '');
@@ -135,7 +136,9 @@ const defineFullPhone = async (stringPhone = null) => {
       });
     }
     initialLoad.value = true;
-  })
+  }).catch(error => {
+    console.log(error);
+  });
 };
 
 const searchCodes = async () => {
