@@ -60,6 +60,7 @@ onBeforeRouteLeave((to, from, next) => {
 watch(() => data.value, async (newData) => {
     guestAccess.value = newData?.timeline?.guestAccess;
     timeLineData.value = newData?.timeline;
+    console.log('test timeLineData',timeLineData.value)
     currentQuery.value = newData?.queryByGuest.find(query => query.period == newData?.timeline?.currentPeriod);
 }, { immediate: true });  
 

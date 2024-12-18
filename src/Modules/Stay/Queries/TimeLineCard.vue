@@ -1,9 +1,14 @@
 <template>
     <section class="pt-6 px-6" v-if="timeLineData">
         <div class="rounded-[10px] bg-white pb-[33px]">
-            <p class="text-sm leading-[90%]" v-if="timeLineData[timeLineData.currentPeriod].feeling">
+            <p class="text-sm leading-[90%]">
                 <span class="font-bold">Sentimiento del huésped:</span>
-                {{queryQualificationText[timeLineData.currentPeriod][timeLineData[timeLineData.currentPeriod].feeling]}}
+                <template v-if="timeLineData[timeLineData.currentPeriod].feeling">
+                    {{queryQualificationText[timeLineData.currentPeriod][timeLineData[timeLineData.currentPeriod].feeling]}}    
+                </template>
+                <template v-else>
+                    Aún por determinar
+                </template>
             </p>
             <p class="text-xs leading-[90%] mt-2" v-if="guestAccess?.created_at">
                 <span class="font-semibold">Primer acceso WebApp:</span>
