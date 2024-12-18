@@ -304,7 +304,7 @@ const menu_section = reactive([
               expanded: ['ReviewRequestSettingsIndex','SettingsPreStayPage','StayPage','SettingsPostStayPage'].includes(route.name),
               group: [
                   {
-                      title: 'Feedback',
+                      title: 'Sentimiento',
                       to: 'SettingsPreStayPage',
                       selectedArr: ['SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
                   },
