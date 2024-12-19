@@ -24,8 +24,8 @@ jobs:
           echo "PUSHER_APP_KEY=${{ secrets.PUSHER_APP_KEY }}" >> .env
           echo "PUSHER_APP_SECRET=${{ secrets.PUSHER_APP_SECRET }}" >> .env
           echo "PUSHER_APP_CLUSTER=${{ secrets.PUSHER_APP_CLUSTER }}" >> .env
-          echo "VUE_APP_PUSHER_APP_KEY=${{ secrets.VUE_APP_PUSHER_APP_KEY }}" >> .env
-          echo "VUE_APP_PUSHER_APP_CLUSTER=${{ secrets.VUE_APP_PUSHER_APP_CLUSTER }}" >> .env
+          echo "VUE_APP_PUSHER_APP_KEY=${{ secrets.PUSHER_APP_KEY }}" >> .env
+          echo "VUE_APP_PUSHER_APP_CLUSTER=${{ secrets.PUSHER_APP_CLUSTER }}" >> .env
           echo "VUE_APP_KEY_GOOGE=${{ secrets.VUE_APP_KEY_GOOGE }}" >> .env
           if [ "${{ github.ref_name }}" == "main" ]; then
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_MAIN }}" >> .env
