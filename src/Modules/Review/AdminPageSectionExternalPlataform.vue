@@ -6,12 +6,17 @@
             :key="index"
             class="flex items-center justify-between"
         >
+            {{ota}}
             <div
                 class="w-[118px] space-x-[4px] flex items-center"
                 :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}"
             >
                 <img class="w-[24px] h-[24px]" :src="`/assets/icons/otas/${$titleCase(ota)}.svg`">
-                <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}</span>
+                <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}
+                    <template v-if="ota === 'AIRBNB'">
+                        ({{ calcSummaryByOta(ota)?.numbersUrls }})
+                    </template>
+                </span>
             </div>
 
             <div
@@ -43,7 +48,7 @@
             </div>
         </div>
     </div>
-    <!-- <pre>{{ summaryByOtaUnique }}</pre> -->
+
 </template>
 
 <script setup>
@@ -62,12 +67,12 @@ const summaryByOtaUnique = computed(() => {
         }
         return item;
     });
-    // return summaryByOtaValue;
     const result = summaryByOtaValue.reduce((acc, current) => {
         // Buscar si ya existe la OTA en el acumulador
         const existing = acc.find(item => item.ota === current.ota);
 
         if (existing) {
+            existing['numbersUrls'] += 1;
             if (!current.summary.totalReviews) return acc;
 
             // Validar si existingSumAndAvgRatings o currentSumAndAvgRatings son 0
@@ -103,7 +108,7 @@ const summaryByOtaUnique = computed(() => {
             existing.summary.totalReviews = validTotalReviews;
         } else {
             // Si no existe, agregar al acumulador
-            acc.push({ ota: current.ota, summary: { ...current.summary } });
+            acc.push({ ota: current.ota, numbersUrls: 1, summary: { ...current.summary } });
         }
 
         return acc;
@@ -118,10 +123,12 @@ function calcSummaryByOta (ota){
     let note = noteNumeric > 0 ? noteNumeric?.toFixed(1) : 0;
     let scaleRating = reviewStore?.scaleRating[ota];
     let totalReviews = summary?.summary?.totalReviews || 0;
+    let numbersUrls = summary?.numbersUrls || 0;
     return {
         note,
         scaleRating,
         totalReviews,
+        numbersUrls
     }
 }
 
