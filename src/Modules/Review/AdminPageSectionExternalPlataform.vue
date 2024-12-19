@@ -6,7 +6,6 @@
             :key="index"
             class="flex items-center justify-between"
         >
-            {{ota}}
             <div
                 class="w-[118px] space-x-[4px] flex items-center"
                 :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}"
@@ -14,7 +13,7 @@
                 <img class="w-[24px] h-[24px]" :src="`/assets/icons/otas/${$titleCase(ota)}.svg`">
                 <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}
                     <template v-if="ota === 'AIRBNB'">
-                        ({{ calcSummaryByOta(ota)?.numbersUrls }})
+                        ({{ calcSummaryByOta(ota)?.numbersUrls }} anuncios)
                     </template>
                 </span>
             </div>
