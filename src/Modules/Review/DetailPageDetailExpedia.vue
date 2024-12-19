@@ -45,11 +45,11 @@ const notEmptySubRating = computed(() => {
 
 const textRating = computed(() => {
     const STAR_DESCRIPTION = {
-        '10' : {name: 'Exelente'},
-        '8' : {name: 'Bueno'},
-        '6' : {name: 'Normal'},
-        '4' : {name: 'Mediocre'},
-        '2' : {name: 'Horrible'},
+        '10' : {name: 'Excellent'},
+        '8' : {name: 'Good'}, //Bueno
+        '6' : {name: 'Okay'}, //Normal
+        '4' : {name: 'Poor'}, //Mediocre
+        '2' : {name: 'Terrible'}, //HORRIBLE
     }
     let travelerStartDescription = STAR_DESCRIPTION?.[reviewData.value?.travelerStart]?.name;
     return travelerStartDescription;
