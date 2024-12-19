@@ -50,7 +50,7 @@
           </div>
           <hr class="mb-5 px-4">
           <div v-if="currentStep === 1">
-            <div class="mt-4">
+              <div class="mt-4">
                   <label class="text-sm font-medium">Nombre *</label>
                   <div class="relative">
                       <input
@@ -206,14 +206,15 @@
       </div>
 
       <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
+        
         <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto px-4">
             Cancelar
         </button>
         <button
           class="px-4 py-2 font-medium rounded text-black"
           @click.stop.prevent="currentStep === 3 ? handleUpdateUser() : nextStep()"
-          :disabled="isFormIncomplete"
-          :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
+          :disabled="isFormIncomplete || !changes"
+          :class="isFormIncomplete || !changes ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
           {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
         </button>
@@ -298,12 +299,12 @@ const closeDeleteWorkPositions = () => {
 }
 
 watch(() => props.modalEdit, (newVal) => {
-if (newVal) {
-  initializeForm();
-  initialForm.value = JSON.stringify(form);
-  initPermissions.value = JSON.stringify(jsonHotel.value);
+  if (newVal) {
+    initializeForm();
+    initialForm.value = JSON.stringify(form.value);
+    initPermissions.value = JSON.stringify(jsonHotel.value);
 
-}
+  }
 });
 
 const ref_section_edit = ref(null);  // Declarar la referencia
@@ -759,7 +760,10 @@ const scrollToStep = (index) => {
 };
 
 const nextStep = () => {
-  if (currentStep.value < steps.length) currentStep.value++;
+  if(!changes.value) {
+    if (currentStep.value < steps.length) currentStep.value++;
+  }
+  
 
 };
 
@@ -796,13 +800,16 @@ if (store.ok) {
 
 const containerTop = ref(0);
 
-const initialForm = ref(null);
+
 const showModalNoSave = ref(false);
 const intendedRoute = ref(null);
+const initialForm = ref({});
 
 const changes = computed(() => {
-return JSON.stringify(form) !== initialForm.value;
+  // Comparar objetos después de convertirlos a cadenas JSON
+  return JSON.stringify(form.value) !== initialForm.value;
 });
+
 
 
 router.beforeEach((to, from, next) => {
@@ -823,10 +830,9 @@ const closeModalEditUser = () => {
 };
 
 onMounted(() => {
-  initialForm.value = JSON.stringify(form);
-
-
+  initialForm.value = JSON.stringify({ ...form.value });
 });
+
 
 
 function closeModal(complete = false) {
