@@ -311,7 +311,7 @@ const menu_section = reactive([
                   {
                       title: 'Solicitudes',
                       to: 'ReviewRequestSettingsIndex',
-                      selectedArr: ['ReviewRequestSettingsIndex']
+                      selectedArr: ['ReviewRequestSettingsIndex','ReviewRequestSettingsPostStay']
                   },
               ],
               selectedArr: ['ReviewRequestSettingsIndex','SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']

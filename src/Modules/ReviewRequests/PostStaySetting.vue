@@ -146,6 +146,7 @@ onMounted(async ()=>{
     settings.value = await requestSettingStore.$getAll();
     const data = JSON.parse(JSON.stringify(settings.value));
     assignValuesToForm(data);
+    mockupStore.$setLanguageTooltip(true)
 })
 
 

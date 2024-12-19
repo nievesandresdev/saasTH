@@ -73,7 +73,7 @@
             </div>
             <div class="mt-4">
                 <div class="flex items-center gap-2">
-                    <p class="text-sm font-medium leading-[140%] flex-grow">Solicitar valoración del personal</p>
+                    <p class="text-sm font-medium leading-[140%] flex-grow">Solicitar comentarios adicionales</p>
                     <p class="text-sm font-semibold leading-[120%] mr-1">Activo</p>
                     <div class="">
                         <ToggleButton
@@ -172,6 +172,7 @@ onMounted(async() => {
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
     defineMockup()
+    mockupStore.$setLanguageTooltip(true)
 })
 
 //functions

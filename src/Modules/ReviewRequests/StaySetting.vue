@@ -194,9 +194,10 @@ onMounted(async ()=>{
     mockupStore.$setIframeUrl('/inbox/fakeLinkOtas','period=in-stay')
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
-    console.log('test settings',settings.value)
+    // console.log('test settings',settings.value)
     const data = JSON.parse(JSON.stringify(settings.value));
     assignValuesToForm(data);
+    mockupStore.$setLanguageTooltip(true)
 })
 
 
