@@ -7,21 +7,20 @@
             class="flex items-center justify-between"
         >
             <div
-                class="w-[118px] space-x-[4px] flex items-center"
+                class="w-[160px] space-x-[4px] flex items-center"
                 :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota)}"
             >
                 <img class="w-[24px] h-[24px]" :src="`/assets/icons/otas/${$titleCase(ota)}.svg`">
                 <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}
-                    <template v-if="ota === 'AIRBNB'">
+                    <span v-if="ota === 'AIRBNB'" class="text-xs">
                         ({{ calcSummaryByOta(ota)?.numbersUrls }} anuncios)
-                    </template>
+                    </span>
                 </span>
             </div>
 
             <div
                 :class="{'opacity-35': !!reviewStore.otasWithUrls?.length && !reviewStore.otasWithUrls?.includes(ota), 'pr-[6px]': calcSummaryByOta(ota)?.scaleRating == 5}"
                 class="w-[42px] text-right"
-
             >
                 <span
                     class="text-[14px] font-semibold"
