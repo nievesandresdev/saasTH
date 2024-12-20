@@ -5,7 +5,7 @@
     ></div>
     <div 
         v-else
-        :class="`${sizeClasses} cursor-pointer inline-block`"
+        :class="`${sizeClasses} inline-block ${!isDisabled ? 'cursor-pointer':''}`"
     >
         <img 
             v-if="isChecked" 
@@ -16,8 +16,8 @@
         >
         <div
             v-else
-            class="border rounded w-full h-full hborder-black-100 hover-green-200 bg-white"
-            :class="{'opacity-50': isDisabled}"
+            class="border rounded w-full h-full hborder-black-100 bg-white"
+            :class="{'opacity-50': isDisabled,'hover-green-200': !isDisabled}"
             @click="toggleCheck"
         ></div>
     </div>

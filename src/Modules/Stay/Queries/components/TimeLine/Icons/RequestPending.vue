@@ -6,7 +6,9 @@
             :right="0"
         >
             <template v-slot:button>
-                <img class="w-4 h-4" src="/assets/icons/Time-line-icons-check-PENDING.svg" alt="">            
+                <div class="w-6 h-6">
+                    <img class="w-4 h-4 mx-auto my-1" src="/assets/icons/Time-line-icons-check-PENDING.svg" alt="">            
+                </div>
             </template>
             <template v-slot:content>
                 <p class="text-xs font-medium">Solicitud de reseña</p>

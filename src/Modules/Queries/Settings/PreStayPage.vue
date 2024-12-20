@@ -99,6 +99,7 @@ onMounted(async() => {
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
     defineMockup(queriesTexts.value.pre_stay_activate)
+    mockupStore.$setLanguageTooltip(true)
 })
 
 //functions
