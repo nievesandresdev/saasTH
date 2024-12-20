@@ -159,7 +159,7 @@
                     type="text"
                     id="workPositionInput"
                     @click.stop="toggleModalWorkPosition"
-                    :value="selectedWorkPositionName.name"
+                    :value="selectedWorkPositionName"
                     readonly
                     class="bg-white w-full rounded-md border text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
                     :class="{
@@ -187,6 +187,7 @@
                 </div>
               </transition>
             </div>
+            <!-- <pre>{{ form.permissions }}</pre> -->
             <AccessPermissions
               v-model:permissions="form.permissions"
               :workPositionId="form.work_position_id"
@@ -304,6 +305,7 @@ watch(() => props.modalEdit, (newVal) => {
     initialForm.value = JSON.stringify(form.value);
     initPermissions.value = JSON.stringify(jsonHotel.value);
 
+
   }
 });
 
@@ -311,9 +313,9 @@ const ref_section_edit = ref(null);  // Declarar la referencia
 
 // Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
+  
 const addSection = ref_section_edit.value;
 if (addSection && !addSection.contains(event.target)) {
-  //console.log('handleClickOutside',event.target)
   closeModal();
 }
 };
@@ -366,7 +368,7 @@ const form = ref({
   password_confirmation: '', */
   hotels: [],
   access: [],
-  permissions: {},
+  permissions: [],
   periodicityStay: {
     pendingFeedback30: 30,
     pendingFeedback60: 60,
@@ -375,36 +377,7 @@ const form = ref({
     pendingChat10: 10,
     pendingChat30: 30,
   },
-  notifications: {
-    push : {
-      newChat: true,
-      pendingChat10: true,
-      pendingChat30: true,
-      newFeedback: true,
-      pendingFeedback30: true,
-      pendingFeedback60: true,
-      new_reviews: true,
-    },
-    platform: {
-      newChat: true,
-      pendingChat10: true,
-      pendingChat30: true,
-      newFeedback: true,
-      pendingFeedback30: true,
-      pendingFeedback60: true,
-      new_reviews: true,
-    },
-    email : {
-      newChat: false,
-      pendingChat10: false,
-      pendingChat30: true,
-      newFeedback: false,
-      pendingFeedback30: false,
-      pendingFeedback60: false,
-      new_reviews: false,
-    },
-
-  },
+  notifications: {},
 });
 
 
@@ -424,14 +397,13 @@ const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
 
 const initializeForm = () => {
   if (props.dataUser) {
+    
       form.value.user_id = props.dataUser.id || null;
       form.value.work_position_id = props.dataUser.work_position_id || null;
       form.value.role = props.dataUser.role?.id || null;
       form.value.name = props.dataUser.name || '';
       form.value.lastname = props.dataUser.lastname || '';
-      // form.value.prefix = props.dataUser.prefix || null;
       form.value.phone = props.dataUser.phone ?? '';
-      // console.log('test data prefix',props.dataUser.prefix)
       form.value.email = props.dataUser.email || '';
       form.value.hotels = props.dataUser.hotels || [];
       form.value.access = props.dataUser.permissions || [];
@@ -439,19 +411,10 @@ const initializeForm = () => {
       form.value.notifications = props.dataUser.notifications || [];
       form.value.periodicity_chat = props.dataUser.periodicity_chat || [];
       form.value.periodicity_stay = props.dataUser.periodicity_stay || [];
-      /* form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
-      form.value.periodicityStay = props.dataUser.periodicity_stay || 5; */
-
-
      
 
       selectedRoleName.value = 'Usuario '+props.dataUser.role?.name
-      selectedWorkPositionName.value = props.dataUser.work_position
-     
-      /* props.dataUser.hotels.forEach(hotel => {
-          handleSelection(hotel);
-          
-      }); */
+      selectedWorkPositionName.value = props.dataUser.work_position?.name
 
       // Función para actualizar accesos
       const updateAccess = () => {
@@ -478,6 +441,7 @@ const initializeForm = () => {
       // Llamar a la función para actualizar el acceso
       updateAccess();
       jsonHotel.value = props.dataUser.permissions;
+       console.log('dataUser',props.dataUser)
 
       
   }else{
@@ -488,9 +452,7 @@ const initializeForm = () => {
 
 const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
 const selectedWorkPositionName = ref('Elige el puesto de trabajo');
-const isModalOpen = ref(false);
 const isModalCrudOpen = ref(false);
-const rolAlert = ref(0);
 
   const operationAccess = ref([
       { name: 'Estancias', selected: false , value : 'estancias' },
@@ -556,10 +518,7 @@ const isFormIncomplete = computed(() => {
     //email
     const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
     
-
-    //return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
     return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value || !form.value.hotels.length;
-
 
 });
 
@@ -739,23 +698,12 @@ const steps = [
   { number: 1, label: 'Usuario' },
   { number: 2, label: 'Accesos' },
   { number: 3, label: 'Permisos y notificaciones' },
-  /* { number: 4, label: 'Notificaciones'} */
 ];
 
 const stepRefs = ref([]);
 
 
 const scrollToStep = (index) => {
-  //const stepElement = stepRefs.value[index];
-
-  /* const options = { behavior: 'smooth', inline: 'start' };
-
-  if (index === steps.length - 1) {
-    // Si es la última pestaña
-    options.inline = 'end';
-  } */
-
-  //stepElement.scrollIntoView(options);
   currentStep.value = steps[index].number;
 };
 
@@ -772,9 +720,7 @@ const prevStep = () => {
 };
 
 const handleUpdateUser = async () => {
- //form.value.access = jsonHotel.value;
 
- console.log('formsubmitupdate',form.value)
 let store = await userStore.$updateUser(form.value);
 
 if (store.ok) {
@@ -830,14 +776,18 @@ const closeModalEditUser = () => {
 };
 
 onMounted(() => {
-  initialForm.value = JSON.stringify({ ...form.value });
+  initialForm.value = form.value;
 });
 
 
 
 function closeModal(complete = false) {
     if(!complete){
-      //alert('complete')
+      console.log({
+        changes: changes.value,
+        initialForm: initialForm.value,
+        form: JSON.stringify(form.value)
+      })
         if (changes.value == true) {
             if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
               showModalNoSave.value = true;

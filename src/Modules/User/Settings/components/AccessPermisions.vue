@@ -89,7 +89,7 @@ const selectAll = ref(true);
 const isDisabled = computed(() => props.workPositionId !== null);
 
 onMounted(() => {
-  if (selectAll.value) {
+  if (selectAll.value && !isDisabled.value) {
     toggleAllPermissions();
   }
 });
