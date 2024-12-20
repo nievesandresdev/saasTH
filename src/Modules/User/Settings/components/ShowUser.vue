@@ -186,7 +186,7 @@
     });
 
     const closeModal = () => {
-        //emits('close');
+        emits('close');
     };
 
     const updateUser = (dataUser) => {
