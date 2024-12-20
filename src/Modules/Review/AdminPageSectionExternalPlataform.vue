@@ -12,7 +12,10 @@
             >
                 <img class="w-[24px] h-[24px]" :src="`/assets/icons/otas/${$titleCase(ota)}.svg`">
                 <span class="text-sm font-medium">{{ ota == 'TRIPADVISOR' ? 'TripAdvisor' : $titleCase(ota) }}
-                    <span v-if="ota === 'AIRBNB'" class="text-xs">
+                    <span
+                        v-if="ota === 'AIRBNB' && reviewStore.otasWithUrls?.includes(ota)"
+                        class="text-xs"
+                    >
                         ({{ calcSummaryByOta(ota)?.numbersUrls }} anuncios)
                     </span>
                 </span>

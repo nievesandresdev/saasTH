@@ -45,7 +45,7 @@
                 <div class="mt-[16px] 3xl:mt-0 flex-1">
                     <div class="flex justify-between 3xl:justify-start">
                         <div class="flex items-center">
-                            <img class="w-[24px] h-[24px] mr-[4px] 3xl:mr-[8px]" src="/assets/icons/1.TH.ANSWER.REVIEW.svg" alt="1.TH.ANSWER.REVIEW">
+                            <img class="w-[24px] h-[24px] mr-[4px] 3xl:mr-[8px]" src="/assets/icons/1.TH.REVIEW.ANSWERED.svg" alt="1.TH.ANSWER.REVIEW">
                             <p class="text-sm font-medium 3xl:w-[190px]">
                                 <template v-if="!reviewStore.otasWithUrls?.length">
                                     --
@@ -70,7 +70,7 @@
                     </div>
                     <div class="flex  justify-between 3xl:justify-start mt-[8px]">
                          <div class="flex items-center">
-                            <img class="w-[24px] h-[24px] mr-[4px]" src="/assets/icons/1.TH.NOTANSWER.REVIEW.svg" alt="1.TH.ANSWER.REVIEW">
+                            <img class="w-[24px] h-[24px] mr-[4px]" src="/assets/icons/1.TH.REVIEW.NOT.ANSWERED.svg" alt="1.TH.ANSWER.REVIEW">
                             <p class="text-sm font-medium 3xl:w-[190px]">
                                 <template v-if="!reviewStore.otasWithUrls?.length">
                                     --
