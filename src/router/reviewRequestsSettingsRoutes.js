@@ -10,7 +10,7 @@ const ReviewRequestSettings = [
     children: [
       {
         name: 'ReviewRequestSettingsIndex',
-        path: 'pre-stay',
+        path: 'in-stay',
         component: StaySetting
       },
       {

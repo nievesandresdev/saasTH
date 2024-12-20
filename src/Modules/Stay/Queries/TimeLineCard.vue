@@ -20,19 +20,27 @@
                 <CurrentFeeling />
                 <div class="mt-[30px] flex items-center relative px-[36px] flex-grow">
                     <PeriodNode period="pre-stay" />
-                        <LineInProccess v-if="timeLineData.currentPeriod == 'pre-stay'"/>
+                        <!-- <LineInProccess v-if="timeLineData.currentPeriod == 'pre-stay'"/>
+                        <LineComplete v-else /> -->
+                        <LinePending v-if="timeLineData.currentPeriod == 'pre-stay'"/>
                         <LineComplete v-else />
                     <PeriodNode period="in-stay" />
                         <LineComplete v-if="timeLineData.currentPeriod !== 'pre-stay'"/>
                         <LinePending v-else/>
                     <RequestNode period="in-stay" />
-                        <LineInProccess v-if="timeLineData.currentPeriod == 'in-stay'"/>
+                        <!-- <LineInProccess v-if="timeLineData.currentPeriod == 'in-stay'"/>
                         <LinePending v-else-if="timeLineData.currentPeriod == 'pre-stay'" />
-                        <LineComplete v-else/>
+                        <LineComplete v-else/> -->
+                        <LineComplete v-if="timeLineData.currentPeriod !== 'pre-stay' || currentQuery?.period == 'in-stay' && currentQuery?.answered"/>
+                        <LinePending v-else/>
                     <PeriodNode period="post-stay" />
-                        <LineComplete v-if="queryPostStay?.answered"/>
+                        <!-- <LineComplete v-if="queryPostStay?.answered"/>
                         <LineInProccess v-else-if="timeLineData.currentPeriod == 'post-stay' || timeLineData.currentPeriod == 'invalid-stay'"/>
-                        <LinePending v-else />
+                        <LinePending v-else /> -->
+                        <LineComplete v-if="
+                            timeLineData.currentPeriod == 'invalid-stay' ||
+                            currentQuery?.period == 'post-stay' && currentQuery?.answered"/>
+                        <LinePending v-else/>
                     <RequestNode period="post-stay" />
                 </div>
             </div>
@@ -52,6 +60,7 @@ const guestAccess = inject('guestAccess')
 const queryPostStay = inject('queryPostStay')
 const timeLineData = inject('timeLineData');
 const currentQuery = inject('currentQuery');
+
 
 const queryQualificationText = {
     "in-stay": {

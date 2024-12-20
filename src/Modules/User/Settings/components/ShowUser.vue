@@ -19,44 +19,48 @@
             </div>
           </div>
           <hr>
+          
           <div class="px-6 py-8">
-            <div class="flex flex-col mb-6">
+            <div class="flex justify-start mb-4">
+              <span class="text-[18px] font-medium mr-2">Datos del usuario</span>
+            </div>
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Usuario</span>
                 <span class="text-base font-normal">{{ dataUser?.name }} {{ dataUser?.lastname }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Puesto</span>
                 <span class="text-base font-normal">{{ dataUser?.work_position?.name ?? '-' }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Correo electrónico</span>
                 <span class="text-base font-normal">{{ dataUser?.email }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Teléfono</span>
                 <span class="text-base font-normal">{{ dataUser?.phone ?? '-' }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Antigüedad</span>
                 <span class="text-base font-normal">{{ dataUser?.time }}</span>
             </div>
-            <div class="flex flex-col mb-8">
+            <div class="flex flex-col mb-4">
               <div class="flex items-center gap-1">
                 <span class="text-sm font-semibold">Estado del usuario</span>
                 <Tooltip
-                  size="s"
-                  :top="25"
-                  :left="-55"
-              >
-                  <template v-slot:button>
-                      <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
-                  </template>
-                  <template v-slot:content>
-                      <p class="text-sm">
-                          Si un usuario se encuentra <strong>inactivo</strong>, no podrá realizar ninguna acción en los alojamientos.
-                      </p>
-                  </template>
-              </Tooltip>
+                    size="s"
+                    :top="25"
+                    :left="-55"
+                >
+                    <template v-slot:button>
+                        <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
+                    </template>
+                    <template v-slot:content>
+                        <p class="text-sm">
+                            Si un usuario se encuentra <strong>inactivo</strong>, no podrá realizar ninguna acción en los alojamientos.
+                        </p>
+                    </template>
+                </Tooltip>
               </div>
                 
                 <div class="flex justify-between mt-[10px]">
@@ -100,15 +104,15 @@
             </div>
             <hr class="mb-[19px]">
             <div class="flex justify-start mb-5">
-              <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
+              <span class="text-[18px] font-medium mr-2 text-[#333]">Alojamientos asociados</span>
             </div>
-            <div class="flex flex-col items-left mb-4">
+            <div class="flex flex-col items-left mb-2">
               <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
                 <span class="mr-2 text-[#0B6357]">•</span> <!-- Punto hotel -->
                 <span class="font-normal text-base">{{ hotel }}</span>
               </div>
             </div>
-            <hr>
+            <hr class="mb-2">
             <AccessPermissions v-model:permissions="dataUser.permissions" :workPositionId="dataUser.work_position_id" :disabledGeneral="true" />
             <Notifications
               v-model:periodicityChat="periodicityChat"

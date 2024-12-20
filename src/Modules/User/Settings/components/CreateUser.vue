@@ -23,29 +23,40 @@
             </div>
     
             <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
-              <div class="flex items-center justify-between mb-5">
-                <div v-for="(step, index) in steps" :key="step.number" class="relative flex flex-col items-center w-[25%]">
-                  <div :class="[
+              <div class="flex items-center justify-between mb-3">
+                <div 
+                  v-for="(step, index) in steps" 
+                  :key="step.number" 
+                  class="relative flex flex-col items-center w-[25%]"
+                >
+                  <!-- Número del paso -->
+                  <div :class="[ 
                     'w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold z-10',
                     currentStep >= step.number ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-black'
                   ]">
                     {{ step.number }}
                   </div>
-                  <div :class="[
-                    'text-sm mt-1 text-center break-words font-semibold',
-                    currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]'
-                  ]" 
-                      class=" flex items-center justify-center">
+
+                  <!-- Etiqueta del paso -->
+                  <div 
+                    :class="[
+                      'text-sm text-center font-semibold mt-1',
+                      currentStep >= step.number ? 'text-[#333333]' : 'text-[#333333]'
+                    ]"
+                    style="min-height: 40px;"
+                  >
                     {{ step.label }}
                   </div>
+
                   <!-- Línea de conexión entre pasos -->
-                  <div v-if="index !== steps.length - 1" 
-                      :class="[
-                        'absolute h-0 border top-5',
-                        currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
-                      ]" 
-                      :style="{ width: '150px', left: '80px' }">
-                  </div>
+                  <div 
+                    v-if="index !== steps.length - 1" 
+                    :class="[ 
+                      'absolute h-0 border top-5',
+                      currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
+                    ]" 
+                    :style="{ width: '150px', left: '80px' }"
+                  ></div>
                 </div>
               </div>
               <hr class="mb-[22px]">
@@ -657,7 +668,6 @@ const handleCheckPermission = (permissionName, isSelected) => {
   const currentStep = ref(1);
   const steps = [
     { number: 1, label: 'Usuario' },
-    /* { number: 2, label: 'Alojamientos' }, */
     { number: 2, label: 'Accesos' },
     { number: 3, label: 'Permisos y notificaciones'}
   ];

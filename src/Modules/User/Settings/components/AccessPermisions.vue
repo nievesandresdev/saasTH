@@ -5,7 +5,7 @@
       <div class="flex gap-2 justify-start items-center">
       </div>
         <div class="flex justify-between items-center text-left">
-          <strong class="text-[18px] font-medium">Permisos de la plataforma</strong>
+          <span class="text-[18px] font-medium text-[#333]">Permisos de la plataforma</span>
           <div class="flex items-center gap-1" :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
             <span class="text-sm font-semibold">Todos</span>
             <BaseSwichInput
@@ -89,7 +89,7 @@ const selectAll = ref(true);
 const isDisabled = computed(() => props.workPositionId !== null);
 
 onMounted(() => {
-  if (selectAll.value) {
+  if (selectAll.value && !isDisabled.value) {
     toggleAllPermissions();
   }
 });

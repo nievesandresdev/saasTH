@@ -234,7 +234,7 @@ const closeDeleteWorkPositions = () => {
 
 onMounted(() => {
   handleGetUsers();
-  handleTestMail();
+  //handleTestMail();
   adjustBodyPadding(); // Ajustar el padding al cargar la página
   window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
@@ -341,7 +341,6 @@ const editUser = (data) => {
 let selectedShow = ref(null);
 
 const showUser = (data) => {
-console.log('data', data);
   if(modalAdd.value || modalEdit.value) return;
   setTimeout(() => {
     selectedUser.value = data;
