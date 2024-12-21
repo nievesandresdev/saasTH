@@ -39,10 +39,10 @@
     </section>
 
     <!-- promotion section -->
-    <section class="px-6 mt-[48px] mb-20">
+    <section class="px-6 mt-[24px] mb-6">
         <div class="flex justify-start gap-6 mt-6">
-            <CardSectionHome title="Bienvenida">
-                <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>
+            <CardSectionHome title="Te damos la bienvenida">
+                <template #msg>Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -54,12 +54,12 @@
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
                         @click="openSidePanel('welcomeMsg')"
                     >
-                        Configurar
+                        Ver Detalles
                     </a>
                 </template>
             </CardSectionHome>
-            <CardSectionHome title="Recordatorio: Chat" period="stay" special>
-                <template #msg>Podrás recordarles a tus huéspedes sobre mensajes no respondidos en la WebApp.</template>
+            <CardSectionHome title="Prepara tu llegada">
+                <template #msg>Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -71,15 +71,70 @@
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
                         @click="openSidePanel('reminderChatMsg')"
                     >
-                        Configurar
+                        Ver Detalles
+                    </a>
+                </template>
+            </CardSectionHome>
+            <CardSectionHome title="¿Qué tal va todo?">
+                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('reminderChatMsg')"
+                    >
+                        Ver Detalles
+                    </a>
+                </template>
+            </CardSectionHome>
+            <CardSectionHome title="Gracias por elegirnos">
+                <template #msg>Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('reminderChatMsg')"
+                    >
+                        Ver Detalles
+                    </a>
+                </template>
+            </CardSectionHome>
+            <CardSectionHome title="Te esperamos de vuelta!">
+                <template #msg>Recuerda a tus huéspedes de su experiencia y motívalos a regresar.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('reminderChatMsg')"
+                    >
+                        Ver Detalles
                     </a>
                 </template>
             </CardSectionHome>
         </div>
     </section>
 
-    <section class="px-6 mt-[48px] mb-20">
-        <h2 class="text-lg font-medium leading-[120%]">Mensajes eventuales</h2>
+    <section class="px-6 mt-[24px] mb-20">
+        <div class="flex items-center gap-2">
+            <h2 class="text-lg font-medium leading-[120%] whitespace-nowrap">Mensajes eventuales</h2>
+            <div class="flex-1 border-b border-[#BFBFBF]"></div>
+        </div>
+
         <div class="flex justify-start gap-6 mt-6">
             <CardSectionHome title="Bienvenida">
                 <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>
