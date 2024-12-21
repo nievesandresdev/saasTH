@@ -115,9 +115,9 @@ const dataPanel = computed(()=>{
 
 
 const values = {
-    'betweenGuests':{
-        title: 'Invitación entre huéspedes',
-        description: 'Tus huéspedes podrán invitar a otros a tu WebApp de manera sencilla, enviando y recibiendo invitaciones directas a través de diversos canales de comunicación.',
+    'prepareYourArrival':{
+        title: 'Prepara tu llegada',
+        description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
         trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Compartir estancia".',
         issue: `¿Ya has visto la WebApp de ${hotelStorage.hotelData?.name}?`,
         descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
@@ -129,9 +129,9 @@ const values = {
             {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
-    'manualInvitation':{
-        title: 'Invitar huésped a WebApp',
-        description: 'Envía a tus huéspedes la invitación a tu WebApp a través de un correo electrónico.',
+    'howGoing':{
+        title: '¿Qué tal va todo?',
+        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.',
         trigger: 'Desde la sección "Estancias", envías manualmente una invitación a tu WebApp utilizando el botón "Invitar huésped".',
         issue: `¿Ya conoces la WebApp de ${hotelStorage.hotelData?.name}?`,
         descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
@@ -141,8 +141,8 @@ const values = {
         ]
     },
     'welcomeMsg':{
-        title: 'Mensaje de Bienvenida',
-        description: 'El mensaje que recibirán tus huéspedes cuando accedan por primera vez a tu WebApp.',
+        title: 'Te damos la bienvenida',
+        description: 'Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.',
         trigger: 'El huésped ingresa a la WebApp por primera vez',
         issue: 'Bienvenido a la WebApp',
         descriptionContent:'',
@@ -151,9 +151,9 @@ const values = {
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
     },
-    'reminderChatMsg':{
-        title: 'Mensaje de recordatorio chat',
-        description: 'Si tus huéspedes no han leído un mensaje de respuesta en el chat después de 30 minutos, recibirán un correo de recordatorio.',
+    'thankChoosing':{
+        title: 'Gracias por elegirnos',
+        description: 'Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.',
         trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
         issue: 'Tienes un chat pendiente en la WebApp',
         descriptionContent:'',
@@ -161,7 +161,41 @@ const values = {
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
-    }
+    },
+    'youBack':{
+        title: 'Te esperamos de vuelta!',
+        description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
+        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
+        issue: 'Tienes un chat pendiente en la WebApp',
+        descriptionContent:'',
+        itemsContent:[],
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+    },
+    'warningMsg':{
+        title: 'Aviso de mensaje en chat',
+        description: 'Se utiliza para avisarle al huésped que tiene un mensaje no leído.',
+        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
+        issue: 'Tienes un chat pendiente en la WebApp',
+        descriptionContent:'',
+        itemsContent:[],
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+    },
+    'checkInGuestGuest':{
+        title: 'Check-in Huésped - Huésped',
+        description: 'Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp',
+        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
+        issue: 'Tienes un chat pendiente en la WebApp',
+        descriptionContent:'',
+        itemsContent:[],
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+    },
+
 }
 
 </script>

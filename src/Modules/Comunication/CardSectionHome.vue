@@ -11,13 +11,18 @@
             </span>
         </div>
         <!-- Contenedor del Mensaje -->
-        <div class=" mt-2">
-            <p class="text-sm leading-[140%]"><slot name="msg"></slot></p>
+        <div class="mt-2 flex-1">
+            <p 
+                class="text-sm leading-[140%] overflow-hidden text-ellipsis" 
+                :class="{'line-clamp-3': special}"
+            >
+                <slot name="msg"></slot>
+            </p>
         </div>
         <!-- Botón y Canales -->
-        <div class="flex justify-between items-end mt-[14px] relative">
+        <div class="flex justify-between items-end mt-[14px]">
             <div>
-                <h3 class="text-xs font-medium leading-[110%] htext-gray-500">Canales</h3>
+                <h3 class="text-xs font-medium leading-[110%] text-gray-500">Canales</h3>
                 <div v-if="!multichannel.length" class="mt-1 rounded-full bg-[#f3f3f3] h-10 w-10">
                     <slot name="canal"></slot>
                 </div>
@@ -41,6 +46,7 @@
         </div>
     </div>
 </template>
+
 <script setup>
 defineProps({
     title: String,

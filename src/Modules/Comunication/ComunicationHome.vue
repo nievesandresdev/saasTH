@@ -69,7 +69,7 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('reminderChatMsg')"
+                        @click="openSidePanel('prepareYourArrival')"
                     >
                         Ver Detalles
                     </a>
@@ -86,7 +86,7 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('reminderChatMsg')"
+                        @click="openSidePanel('howGoing')"
                     >
                         Ver Detalles
                     </a>
@@ -103,7 +103,7 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('reminderChatMsg')"
+                        @click="openSidePanel('thankChoosing')"
                     >
                         Ver Detalles
                     </a>
@@ -120,7 +120,7 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('reminderChatMsg')"
+                        @click="openSidePanel('youBack')"
                     >
                         Ver Detalles
                     </a>
@@ -136,8 +136,8 @@
         </div>
 
         <div class="flex justify-start gap-6 mt-6">
-            <CardSectionHome title="Bienvenida">
-                <template #msg>El mensaje que recibirán tus huéspedes al acceder a tu WebApp por primera vez.</template>
+            <CardSectionHome title="Aviso de mensaje en chat">
+                <template #msg>Se utiliza para avisarle al huésped que tiene un mensaje no leído.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -147,14 +147,14 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('welcomeMsg')"
+                        @click="openSidePanel('warningMsg')"
                     >
-                        Configurar
+                        Ver Detalles
                     </a>
                 </template>
             </CardSectionHome>
-            <CardSectionHome title="Recordatorio: Chat" period="stay" special>
-                <template #msg>Podrás recordarles a tus huéspedes sobre mensajes no respondidos en la WebApp.</template>
+            <CardSectionHome title="Check-in Huésped - Huésped">
+                <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -164,9 +164,9 @@
                     <a 
                         href="javascript:void(0)" 
                         class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('reminderChatMsg')"
+                        @click="openSidePanel('checkInGuestGuest')"
                     >
-                        Configurar
+                        Ver Detalles
                     </a>
                 </template>
             </CardSectionHome>
