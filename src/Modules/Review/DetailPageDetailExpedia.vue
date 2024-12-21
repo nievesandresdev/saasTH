@@ -34,7 +34,7 @@ const { searchQuery, load } = useHighlightSearch();
 
 //INJECT
 const router = inject('router');
-const reviewData = inject('reviewData');
+const reviewData = inject('reviewData'); 
 const languagesObject = inject('languagesObject');
 const cribadoTranslateReview = inject('cribadoTranslateReview');
 
