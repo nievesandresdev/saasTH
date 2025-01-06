@@ -46,14 +46,6 @@
         </div>
         <div class="space-y-2">
             <label class="text-sm font-medium">Descripción</label>
-            <!-- <BaseTextField
-                v-model="form.description"
-                placeholder="Descripción del lugar"
-                class-content="flex-1"
-                class-input="text-sm h-[44px]"
-                name="description"
-                :max="'300'"
-            /> -->
             <BaseTextareaField
                 v-model="form.description"
                 placeholder="Descripción del lugar"
