@@ -2,14 +2,14 @@
     <Transition>
     <div 
         v-if="isOpenSidePanel" 
-        class="fixed z-[1000] bg-[#00000080] top-0 left-0 h-screen w-screen"
+        class="fixed z-[2000] bg-[#00000080] top-0 left-0 h-screen w-screen"
         @click="isOpenSidePanel = false"
     ></div>
     </Transition>
     
     <Transition name="slide">
       <!-- right-[354px] -->
-        <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[1001] right-0">
+        <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[5001] right-0">
             <Slide />
         </div>
     </Transition>
