@@ -52,7 +52,7 @@
                 </template>
             </CardSectionHome>
             <CardSectionHome title="Desde tu PMS"  period="pre-stay">
-                <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación reserva en tu PMS.</template>
+                <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva en tu PMS.</template>
                 <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">PMS</h1></template>
                 <template #button>
                     <router-link :to="{ name : 'ComunicationFromPMS'}"

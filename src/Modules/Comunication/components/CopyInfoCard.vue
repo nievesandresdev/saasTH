@@ -11,13 +11,17 @@
 
 <script>
 import { $urlBaseWebapp } from '@/utils/helpers';
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
 export default {
     props: {
         text: {
             type: String,
             default: () => {
-                const urlBase = $urlBaseWebapp();
+                let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+                let slugHotel = hotelStore?.hotelData?.subdomain;
+                const urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
                 return `
                     <p style="font-size:14px;font-weight: 500;line-height: 140%;">
                         Estimado huésped,<br/>
@@ -35,6 +39,10 @@ export default {
 
 <script setup>
 import { useToastAlert } from '@/composables/useToastAlert';
+
+
+
+
 
 const props = defineProps();
 const toast = useToastAlert();
