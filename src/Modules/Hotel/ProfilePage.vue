@@ -45,6 +45,7 @@
                             mandatory
                             :error="false"
                         />
+                        {{form.type}}
                     </div>
                     <div class="flex-1">
                         <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
@@ -474,10 +475,9 @@
     }
 
     function loadForm(hotel) {
-        console.log('hotelINIT', hotel.type)
         form.hotel_id = hotel.id || null;
         form.name = hotel.name || null;
-        form.type = hotel.type.toLowerCase() || null;
+        form.type = hotel.type || null;
         form.category = hotel.category || null;
         form.email = hotel.email || null;
         form.phone = hotel.phone || null;

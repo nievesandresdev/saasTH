@@ -25,9 +25,9 @@
                 @blur="handleBlur"
                 :disabled="disabled"
             >
-            <div v-if="(safeErrors[name] && safeErrors[name] !== true) || max" class="flex justify-between">
-                <p class="text-[10px] font-medium text-left mt-[4px] text-red-600 flex items-center">
-                    <img :class="{'invisible': !safeErrors[name]}" class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+            <div v-if="(safeErrors[name] && safeErrors[name] != true) || max" class="flex w-full" :class="!(safeErrors[name] && safeErrors[name] != true) && max ? 'justify-end' : 'justify-between'">
+                <p v-if="safeErrors[name] && safeErrors[name] != true" class="text-[10px] font-medium text-left mt-[4px] text-red-600 flex items-center">
+                    <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                     {{ safeErrors[name] }}
                 </p>
                 <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
@@ -112,7 +112,7 @@ const customInputClass = computed(() => {
     if (props.prependInnerIcon) {
         c += ' pl-11';
     }
-    if (safeErrors.value?.[props.name]) {
+    if (safeErrors.value?.[props.name] && safeErrors.value?.[props.name] != true) {
         c += ' hinput-error';
     }
     if (props.disabled) {
