@@ -452,7 +452,7 @@ const menu_links = ref([
         title: 'Hoster',
         icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
-        url: '/equipo/configuracion/plataformas-externas',
+        url: '/equipo/configuracion/usuarios',
         permissionName: 'hoster'
       },
     ],

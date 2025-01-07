@@ -54,6 +54,7 @@ export const useQuerySettingsStore = defineStore('querySettings', () => {
 
     async function $updateStaySettings (data) {
         const response = await updateStaySettingsApi(data)
+        console.log('test getStaySettings',response)
         const { ok } = response   
         if(ok){
             return response.data

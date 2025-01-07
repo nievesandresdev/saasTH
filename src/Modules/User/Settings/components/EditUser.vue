@@ -21,81 +21,36 @@
             </button>
           </div>
         </div>
-        <!-- <div class="flex justify-between items-center px-6 py-[20px]">
-              <div class="flex justify-end">
-              </div>
-              <div class="flex-1 text-center">
-                <h1 class="font-medium text-xl">Crear usuario</h1>
-              </div>
-              <div class="flex justify-end">
-                <button class="" @click="closeModal">
-                  <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
-                </button>
-              </div>
-            </div> -->
-
-        <div class="pb-6 pr-6 pl-6">
-          <div class="flex items-center w-full overflow-x-auto hide-scrollbar">
-              <div
-                class="flex w-full"
-                style="scroll-snap-type: x mandatory; scroll-padding-right: 16px;"
+        <div class="p-4 overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)" >
+          <div class="flex items-center w-full">
+            <div
+              class="flex w-full"
+            >
+              <h3
+                v-for="(step, index) in steps"
+                :key="step.number"
+                :class="[ 
+                  'text-center py-2 text-[16px] font-semibold cursor-pointer relative px-4',
+                  currentStep === step.number
+                    ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border'
+                    : 'text-gray-300',
+                ]"
+                :style="{
+                  flexGrow: step.number === 3 ? 2 : 1, 
+                  flexShrink: 1,
+                  flexBasis: step.number === 3 ? 'auto' : '0',
+                  whiteSpace: 'nowrap',
+                }"
+                @click="scrollToStep(index)"
+                :ref="el => stepRefs[index] = el"
               >
-                <h3
-                  v-for="(step, index) in steps"
-                  :key="step.number"
-                  :class="[
-                    'flex-1 text-center py-2 text-lg font-semibold cursor-pointer relative px-4',
-                    currentStep === step.number
-                      ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step'
-                      : 'text-gray-300',
-                  ]"
-                  @click="scrollToStep(index)"
-                  style="scroll-snap-align: start;"
-                  :ref="el => stepRefs[index] = el"
-                >
-                  {{ step.label }}
-                </h3>
-              </div>
+                {{ step.label }}
+              </h3>
             </div>
+          </div>
           <hr class="mb-5 px-4">
           <div v-if="currentStep === 1">
-            <div class="relative mt-4">
-              <div class="flex flex-col text-black">
-                <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
-              </div>
-              <div class="relative w-full">
-                <input
-                    type="text"
-                    id="workPositionInput"
-                    @click.stop="toggleModalWorkPosition"
-                    :value="selectedWorkPositionName"
-                    readonly
-                    class="bg-white w-full rounded-md  border  text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
-                    :class="{
-                      'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                    'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
-                    }"
-                    :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
-                  />
-                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <img src="/assets/icons/1.TH.I.dropdownBig.svg">
-                </div>
-              </div>
-              <transition name="modal-fade">
-                <div id="modalWorkPosition">
-                  <ModalCrud
-                    :data="workPositions"
-                    :open="isModalCrudOpen"
-                    @close="closeModalWorkPosition"
-                    @select="selectWorkPosition"
-                    @getWorkPositions="getWorkPositions"
-                    @deleteWP="deleteWorkPosition"
-                  />
-                </div>
-              </transition>
-            </div>
-
-            <div class="mt-4">
+              <div class="mt-4">
                   <label class="text-sm font-medium">Nombre *</label>
                   <div class="relative">
                       <input
@@ -145,7 +100,6 @@
               <div class="mt-4">
                   <label class="text-sm font-medium">Correo electrónico *</label>
                   <div class="relative">
-                     
                       <BaseEmailFieldLive
                           placeholder="Correo con el que iniciará sesión"
                           v-model="form.email"
@@ -164,25 +118,18 @@
               </div>
           </div> <!-- fin step 1-->
           <div v-if="currentStep === 2">
-              <div class="flex flex-col mb-8 text-left">
-                  <strong class="mb-5 text-xl">Hoteles</strong>
-                  <span class="font-normal">
-                      Selecciona los alojamientos en donde se encontrará activo este usuario.
-                  </span>
-              </div>
-              <div class="space-y-2">
-                <!-- Checkbox para "Todos los hoteles" -->
-                <div class="flex items-center justify-between mb-4 rounded-lg">
-                  <span class="text-sm font-semibold">Todos los hoteles</span>
-                  <input
-                    type="checkbox"
-                    v-model="selectAllHotels"
-                    @change="handleSelectAll(selectAllHotels)"
-                    class="hcheckbox w-[20px] h-[20px] rounded disabled:opacity-50"
-                    :disabled="isRoleAdmin"
+            <div class="flex justify-between items-center mb-4 text-left">
+                <strong class="text-[18px] font-medium">Alojamientos</strong>
+                <div class="flex items-center gap-1">
+                  <span class="text-sm font-semibold">Todos</span>
+                  <BaseSwichInput
+                      v-model="selectAllHotels"
+                      id="swich-visible-experience"
+                      @change:value="handleSelectAll(selectAllHotels)"
                   />
                 </div>
-
+            </div>
+            <div>
                 <!-- Checkboxes para los hoteles individuales -->
                 <div
                   v-for="hotel in userStore.$getHotels(['id', 'name'])"
@@ -196,43 +143,81 @@
                     v-model="form.hotels" 
                     @change="handleSelection(hotel.id)"
                     class="hcheckbox h-5 w-5 rounded disabled:opacity-50"
-                    :disabled="isRoleAdmin"
+                    :disabled="handleChecked"
                   />
                 </div>
             </div>
           </div>
 
-          <div v-if="currentStep === 3">
+          <div v-if="currentStep === 3" class="overflow-y-auto scrolling-sticky hide-scrollbar" style="height: calc(100% - 72px)">
+            <div class="relative mt-4">
+              <div class="flex flex-col text-black">
+                <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
+              </div>
+              <div class="relative w-full mb-6">
+                <input
+                    type="text"
+                    id="workPositionInput"
+                    @click.stop="toggleModalWorkPosition"
+                    :value="selectedWorkPositionName"
+                    readonly
+                    class="bg-white w-full rounded-md border text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
+                    :class="{
+                      'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
+                    'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
+                    }"
+                    :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
+                  />
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <img src="/assets/icons/1.TH.I.dropdownBig.svg">
+                </div>
+              </div>
+              <transition name="modal-fade">
+                <div id="modalWorkPosition">
+                  <ModalCrud
+                    :mt="'-mt-6'"
+                    :data="workPositions"
+                    :open="isModalCrudOpen"
+                    @close="closeModalWorkPosition"
+                    @select="selectWorkPosition"
+                    @getWorkPositions="getWorkPositions"
+                    @deleteWP="deleteWorkPosition"
+                    @printNameWP="handlePrintNameWP"
+                  />
+                </div>
+              </transition>
+            </div>
+            <!-- <pre>{{ form.permissions }}</pre> -->
             <AccessPermissions
               v-model:permissions="form.permissions"
-              :isRoleAdmin="isRoleAdmin"
               :workPositionId="form.work_position_id"
-          />
+              :disabledGeneral="true"
+            />
 
-          </div>
-          <div v-if="currentStep === 4">
             <Notifications 
               v-model:periodicityChat="form.periodicityChat"
               v-model:periodicityStay="form.periodicityStay"
               v-model:notifications="form.notifications"
-              :maxHeight="900"
               :workPositionId="form.work_position_id"
+              :disabledGeneral="true"
             />
+
           </div>
         </div>
       </div>
 
       <div class="py-6 px-6 w-full flex justify-between border-t border-gray z-[1000] bg-white" style="height: 88px;">
+        
         <button  @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto px-4">
             Cancelar
         </button>
         <button
           class="px-4 py-2 font-medium rounded text-black"
-          @click.stop.prevent="currentStep === 4 ? handleUpdateUser() : nextStep()"
-          :disabled="isFormIncomplete"
-          :class="isFormIncomplete ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
+          @click.stop.prevent="currentStep === 3 ? handleUpdateUser() : nextStep()"
+          :disabled="isFormIncomplete || !changes"
+          :class="isFormIncomplete || !changes ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
-          {{ currentStep === 4 ? 'Guardar' : 'Guardar' }}
+          {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
         </button>
       </div>
       <ModalNoSave
@@ -247,7 +232,7 @@
         :url="intendedRoute"
         @hidden="handleCloseModal"
       />
-      <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :id="IdDeleteWP" @delete="getWorkPositions"  />
+      <ModalDeleteWork :isDeleteWorkPositions="isDeleteWorkPositions" @close="closeDeleteWorkPositions" :data="dataDeleteWP" @delete="getWorkPositions"  />
     </div>
     
   </transition>
@@ -256,37 +241,29 @@
 
 <script setup>
 import { ref, onMounted, nextTick, defineEmits,computed,watch,defineProps, onBeforeUnmount } from 'vue';
-import ModalSelect from './ModalSelect.vue';
 import ModalCrud from './ModalCrud.vue';
 import { useUserStore } from '@/stores/modules/users/users'
-import Checkbox from '@/components/Forms/Checkbox.vue';
 import { useToastAlert } from '@/composables/useToastAlert'
-import { useRoute, useRouter } from 'vue-router';
+import {  useRouter } from 'vue-router';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import { useMouseHandle } from '@/composables/useMouseHandle';
 import AccessPermissions from './AccessPermisions.vue';
-import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import Notifications from './Notifications.vue';
 import ModalDeleteWork from './ModalDeleteWork.vue';
 import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
 import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
+import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
 const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
-
 
 const emits = defineEmits(['close','update','workPositionGet','handleDeleteWP']);
 
 const router = useRouter();
-const route = useRoute();
 
 const authStore = useAuthStore();
 
-const nParam = route.query.n;
-
-
 const initPermissions = ref([])
-const PhoneFieldError = ref(false)
 
 const props = defineProps({
   modalEdit: Boolean,
@@ -304,41 +281,41 @@ const getWorkPositions = (workPosition = false) => {
   }
 };
 
+const handlePrintNameWP = (name) => {
+  selectedWorkPositionName.value = name;
+};
+
 const isDeleteWorkPositions = ref(false);
-const IdDeleteWP = ref({});
+const dataDeleteWP = ref({});
 
 const deleteWorkPosition = (option) => {
   //emits('deleteWP',option);
   isDeleteWorkPositions.value = true;
-  IdDeleteWP.value = option;
+  dataDeleteWP.value = option;
 
-  
-
-  //console.log('deleteWorkPosition',selectedWorkPositionName.value,option,form.value.work_position_id)
 }
 
 const closeDeleteWorkPositions = () => {
   isDeleteWorkPositions.value = false;
 }
 
-
-
 watch(() => props.modalEdit, (newVal) => {
-if (newVal) {
-  initializeForm();
-  initialForm.value = JSON.stringify(form);
-  initPermissions.value = JSON.stringify(jsonHotel.value);
+  if (newVal) {
+    initializeForm();
+    initialForm.value = JSON.stringify(form.value);
+    initPermissions.value = JSON.stringify(jsonHotel.value);
 
-}
+
+  }
 });
 
 const ref_section_edit = ref(null);  // Declarar la referencia
 
 // Método para cerrar el modal si se hace clic fuera de él
 const handleClickOutside = (event) => {
+  
 const addSection = ref_section_edit.value;
 if (addSection && !addSection.contains(event.target)) {
-  //console.log('handleClickOutside',event.target)
   closeModal();
 }
 };
@@ -379,28 +356,28 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
 
 
 const form = ref({
-user_id: null,
-work_position_id: null,
-role: null,
-name: '',
-lastname: '',
-prefix: null,
-phone: '',
-email: '',
-/*  password: '',
-password_confirmation: '', */
-hotels: [],
-access: [],
-permissions: {},
-periodicityChat: 5, 
-periodicityStay: 5,
-notifications: {
-  newChat: false,
-  PendingChat10: false,
-  pendingChat30: false,
-  newFeedback: false,
-  pendingFeedback10: false,
-},
+  user_id: null,
+  work_position_id: null,
+  role: null,
+  name: '',
+  lastname: '',
+  prefix: null,
+  phone: '',
+  email: '',
+  /*  password: '',
+  password_confirmation: '', */
+  hotels: [],
+  access: [],
+  permissions: [],
+  periodicityStay: {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
+  notifications: {},
 });
 
 
@@ -420,41 +397,28 @@ const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
 
 const initializeForm = () => {
   if (props.dataUser) {
+    
       form.value.user_id = props.dataUser.id || null;
       form.value.work_position_id = props.dataUser.work_position_id || null;
       form.value.role = props.dataUser.role?.id || null;
       form.value.name = props.dataUser.name || '';
       form.value.lastname = props.dataUser.lastname || '';
-      // form.value.prefix = props.dataUser.prefix || null;
       form.value.phone = props.dataUser.phone ?? '';
-      // console.log('test data prefix',props.dataUser.prefix)
       form.value.email = props.dataUser.email || '';
       form.value.hotels = props.dataUser.hotels || [];
       form.value.access = props.dataUser.permissions || [];
       form.value.permissions = props.dataUser.permissions || [];
       form.value.notifications = props.dataUser.notifications || [];
-      form.value.periodicityChat = props.dataUser.periodicity_chat || 5;
-      form.value.periodicityStay = props.dataUser.periodicity_stay || 5;
-
-
+      form.value.periodicity_chat = props.dataUser.periodicity_chat || [];
+      form.value.periodicity_stay = props.dataUser.periodicity_stay || [];
      
 
       selectedRoleName.value = 'Usuario '+props.dataUser.role?.name
-      selectedWorkPositionName.value = props.dataUser.work_position
-     
-      /* props.dataUser.hotels.forEach(hotel => {
-          handleSelection(hotel);
-          
-      }); */
+      selectedWorkPositionName.value = props.dataUser.work_position?.name
 
       // Función para actualizar accesos
       const updateAccess = () => {
           const permissions = form.value.permissions;
-
-          //console.log('permissiosssns',permissions)
-
-          /* console.log('permissions',permissions,firstHotel.value) */
-
           // Validar y actualizar operationAccess
           operationAccess.value.forEach(item => {
               if (permissions[item.value] && permissions[item.value].status) {
@@ -477,6 +441,7 @@ const initializeForm = () => {
       // Llamar a la función para actualizar el acceso
       updateAccess();
       jsonHotel.value = props.dataUser.permissions;
+       console.log('dataUser',props.dataUser)
 
       
   }else{
@@ -487,14 +452,11 @@ const initializeForm = () => {
 
 const selectedRoleName = ref('Selecciona el tipo de usuario deseado');
 const selectedWorkPositionName = ref('Elige el puesto de trabajo');
-const isModalOpen = ref(false);
 const isModalCrudOpen = ref(false);
-const rolAlert = ref(0);
 
   const operationAccess = ref([
       { name: 'Estancias', selected: false , value : 'estancias' },
       { name: 'Reseñas', selected: false, value: 'resenas' },
-      /* { name: 'Análisis', selected: false , value: 'analisis' }, */
   ]);
 
   const adminAccess = ref([
@@ -505,10 +467,6 @@ const rolAlert = ref(0);
       { name: 'Equipo', selected: false , value: 'equipo' },
   ]);
 
-const toggleModalSelect = () => {
-  isModalOpen.value = !isModalOpen.value;
-};
-
 const toggleModalWorkPosition = () => {
   isModalCrudOpen.value = !isModalCrudOpen.value;
 };
@@ -518,58 +476,39 @@ const closeModalWorkPosition = () => {
 }
 
 
-
-const selectRole = (rol) => {
-  selectedRoleName.value = rol.name;
-  form.value.role = rol.id;
-  rolAlert.value = rol.id;
-  if (rol.id === 1 || rol.id === 2) {
-      isRoleAdmin.value = true;
-      
-      //handleChecked.value = true;
-  } else {
-    //console.log('rol',rol.id);
-      isRoleAdmin.value = false;
-      handleChecked.value = false;
-      selectAllHotels.value = false;
-      //handleSelectAll(true)
-  }
-  isModalOpen.value = false;
-
-};
-
 const selectWorkPosition = (position) => {
-selectedWorkPositionName.value = position.name;
-form.value.work_position_id = position.id;
-isModalCrudOpen.value = false;
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
+  form.value.permissions = JSON.parse(position.permissions);
+  isModalCrudOpen.value = false;
 
-let permissions = JSON.parse(position.permissions);
-let notifications = JSON.parse(position.notifications);
-let periodicity_chat = position.periodicity_chat;
-let periodicity_stay = position.periodicity_stay;
+  // Parseamos el JSON de permisos
+  let permissions = JSON.parse(position.permissions);
+  let notifications = JSON.parse(position.notifications);
+  let periodicity_chat = JSON.parse(position.periodicity_chat);
+  let periodicity_stay = JSON.parse(position.periodicity_stay);
 
-form.value.notifications = notifications;
-form.value.periodicityChat = periodicity_chat;
-form.value.periodicityStay = periodicity_stay;
+  form.value.notifications = notifications;
+  form.value.periodicityChat = periodicity_chat;
+  form.value.periodicityStay = periodicity_stay;
 
-const updateCheckboxesAndPermissions = (accessList, permissions) => {
-  accessList.forEach((accessItem) => {
-    /* console.log('permissionKeyStatus',permissionKey,permissions[permissionKey],permissions[permissionKey].status) */
-    const permissionKey = accessItem.value;
-    
-    const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
-    
-    accessItem.selected = isSelected;
-    accessItem.disabled = isSelected;
+  const updateCheckboxesAndPermissions = (accessList, permissions) => {
+    accessList.forEach((accessItem) => {
+      const permissionKey = accessItem.value;
+      
+      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
+      
+      accessItem.selected = isSelected;
+      accessItem.disabled = isSelected;
 
-    handleCheckPermission(permissionKey, isSelected);
-  });
-};
+      handleCheckPermission(permissionKey, isSelected);
+    });
+  };
 
-updateCheckboxesAndPermissions(operationAccess.value, permissions);
-updateCheckboxesAndPermissions(adminAccess.value, permissions);
+  updateCheckboxesAndPermissions(operationAccess.value, permissions);
+  updateCheckboxesAndPermissions(adminAccess.value, permissions);
 
-form.value.permissions = permissions;
+  form.value.permissions = permissions;
 };
 
 
@@ -579,17 +518,7 @@ const isFormIncomplete = computed(() => {
     //email
     const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
     
-
-    //return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
     return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value || !form.value.hotels.length;
-
-  /* if (currentStep.value === 1) {
-      return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value;
-    } else if (currentStep.value === 2) {
-        return !form.value.hotels.length;
-    } else if (currentStep.value === 3) {
-        return !form.value.access.length;
-  } */
 
 });
 
@@ -696,7 +625,6 @@ const handleSelectAll = (initial = false) => {
 
 // Método de selección individual
 const handleSelection = (hotelId, add = null) => {
-  //console.log('hotelId',jsonHotel.value)
     //const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
 
     const index = 0
@@ -768,30 +696,22 @@ const handleCheckPermission = (permissionName, isSelected) => {
 const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Usuario' },
-  { number: 2, label: 'Hoteles' },
-  { number: 3, label: 'Accesos' },
-  { number: 4, label: 'Notificaciones'}
+  { number: 2, label: 'Accesos' },
+  { number: 3, label: 'Permisos y notificaciones' },
 ];
 
 const stepRefs = ref([]);
 
 
 const scrollToStep = (index) => {
-  const stepElement = stepRefs.value[index];
-
-  const options = { behavior: 'smooth', inline: 'start' };
-
-  if (index === steps.length - 1) {
-    // Si es la última pestaña
-    options.inline = 'end';
-  }
-
-  stepElement.scrollIntoView(options);
   currentStep.value = steps[index].number;
 };
 
 const nextStep = () => {
-  if (currentStep.value < steps.length) currentStep.value++;
+  if(!changes.value) {
+    if (currentStep.value < steps.length) currentStep.value++;
+  }
+  
 
 };
 
@@ -800,9 +720,7 @@ const prevStep = () => {
 };
 
 const handleUpdateUser = async () => {
- //form.value.access = jsonHotel.value;
 
- console.log('formsubmitupdate',form.value)
 let store = await userStore.$updateUser(form.value);
 
 if (store.ok) {
@@ -828,13 +746,16 @@ if (store.ok) {
 
 const containerTop = ref(0);
 
-const initialForm = ref(null);
+
 const showModalNoSave = ref(false);
 const intendedRoute = ref(null);
+const initialForm = ref({});
 
 const changes = computed(() => {
-return JSON.stringify(form) !== initialForm.value;
+  // Comparar objetos después de convertirlos a cadenas JSON
+  return JSON.stringify(form.value) !== initialForm.value;
 });
+
 
 
 router.beforeEach((to, from, next) => {
@@ -854,19 +775,19 @@ const closeModalEditUser = () => {
 
 };
 
-
-
-
 onMounted(() => {
-  initialForm.value = JSON.stringify(form);
-
-
+  initialForm.value = form.value;
 });
+
 
 
 function closeModal(complete = false) {
     if(!complete){
-      //alert('complete')
+      console.log({
+        changes: changes.value,
+        initialForm: initialForm.value,
+        form: JSON.stringify(form.value)
+      })
         if (changes.value == true) {
             if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
               showModalNoSave.value = true;
@@ -966,25 +887,22 @@ onBeforeUnmount(() => {
 }
 
 .rounded-bottom-border {
-position: relative;
+  position: relative;
 }
 
 .rounded-bottom-border::after {
-content: '';
-position: absolute;
-bottom: 0;
-left: 50%;
-transform: translateX(-50%);
-width: 105px;
-height: 3px;
-background-color: #0B6357;
-border-radius: 10px 10px 0 0;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 3px;
+  background-color: #0B6357;
+  border-radius: 10px 10px 0 0;
 }
-/* 
-.active-step {
-margin-left: -0.5rem; 
-padding-right: 0.5rem; 
-} */
+
+
 
 /* Ocultar scrollbar en Chrome, Safari y Opera */
 .hide-scrollbar::-webkit-scrollbar {

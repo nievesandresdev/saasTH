@@ -1,7 +1,6 @@
 <template>
   <ModalWindow
     :isVisible="isVisible"
-    width="341px"
     footer
     :paddingTop="4"
     :paddingBottom="4"
@@ -19,65 +18,56 @@
       <hr />
     </template>
     <template #content>
-      <label class="text-sm font-semibold">Nombre del puesto de trabajo*</label>
-      <BaseTextField
-        v-model="form.name"
-        placeholder="Ejemplo: Manager"
-        classContent="mt-2"
-        :error="nameError"
-        name="name"
-        @input="validateName"
-      />
-
-      <!-- Mensaje de error debajo del campo de nombre -->
-      <div class="flex mt-2 htext-alert-negative justify-left" v-if="nameError">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165
-            13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0
-            1.438-.99.98-1.767zM8 5c.535 0
-            .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1
-            5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0
-            0 1 0-2"
-          />
-        </svg>
-        <p class="text-xs htext-alert-negative">
-          Es necesario otorgar un nombre a este puesto
-        </p>
-      </div>
-
-      <div class="flex justify-start w-full mt-4">
-        <h3
-          class="flex-1 text-center py-2 text-base font-semibold cursor-pointer relative"
-          v-for="(step, index) in steps"
-          :key="step.number"
-          :class="{
-            'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step':
-              currentStep === step.number,
-            'text-[#333333]': currentStep !== step.number,
-          }"
-          @click="currentStep = step.number"
-        >
-          {{ step.label }}
-        </h3>
-      </div>
-      <hr class="mb-5 px-4" />
-      <div v-if="currentStep === 1" class="mb-6">
-        <AccessPermissions v-model:permissions="form.permissions" />
-      </div>
-      <div v-if="currentStep === 2">
-        <Notifications
-          v-model:periodicityChat="form.periodicityChat"
-          v-model:periodicityStay="form.periodicityStay"
-          v-model:notifications="form.notifications"
+      <div class="max-h-[410px] overflow-y-auto scrollbar-none">
+        <label class="text-sm font-semibold">Nombre del puesto de trabajo*</label>
+        <BaseTextField
+          v-model="form.name"
+          placeholder="Ejemplo: Manager"
+          classContent="mt-2"
+          :error="nameError"
+          name="name"
+          @input="validateName"
         />
+
+        <!-- Mensaje de error debajo del campo de nombre -->
+        <div class="flex mt-2 mb-2 htext-alert-negative justify-left" v-if="nameError">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165
+              13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0
+              1.438-.99.98-1.767zM8 5c.535 0
+              .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1
+              5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0
+              0 1 0-2"
+            />
+          </svg>
+          <p class="text-xs htext-alert-negative">
+            Es necesario otorgar un nombre a este puesto
+          </p>
+        </div>
+        <hr class="mb-5 px-4" />
+        <div v-if="currentStep === 1" class="mb-6">
+          <AccessPermissions v-model:permissions="form.permissions" />
+          <Notifications
+            v-model:periodicityChat="form.periodicityChat"
+            v-model:periodicityStay="form.periodicityStay"
+            v-model:notifications="form.notifications"
+          />
+        </div>
+        <div v-if="currentStep === 2">
+          <Notifications
+            v-model:periodicityChat="form.periodicityChat"
+            v-model:periodicityStay="form.periodicityStay"
+            v-model:notifications="form.notifications"
+          />
+        </div>
       </div>
     </template>
 
@@ -119,27 +109,51 @@ const props = defineProps({
   data: Object,
 });
 
-// Reactive form with initial data
 const form = reactive({
-  id: props.data.id,
+  id : props.data.id,
   name: props.data.name,
   permissions: JSON.parse(props.data.permissions) ?? {},
-  periodicityChat: props.data.periodicity_chat ?? 5,
-  periodicityStay: props.data.periodicity_stay ?? 5,
-  notifications: {
-    newChat: JSON.parse(props.data.notifications || '{}').newChat ?? false,
-    PendingChat10: JSON.parse(props.data.notifications || '{}').PendingChat10 ?? false,
-    pendingChat30: JSON.parse(props.data.notifications || '{}').pendingChat30 ?? false,
-    newFeedback: JSON.parse(props.data.notifications || '{}').newFeedback ?? false,
-    pendingFeedback10: JSON.parse(props.data.notifications || '{}').pendingFeedback10 ?? false,
+  periodicityStay: JSON.parse(props.data.periodicity_stay) ?? {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : JSON.parse(props.data.periodicity_chat) ?? {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
+  notifications:JSON.parse(props.data.notifications) ?? {
+    push : {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    platform: {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    email : {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback30: false,
+      pendingFeedback60: false,
+      new_reviews: false,
+    },
   },
 });
 
 const currentStep = ref(1);
-const steps = [
-  { number: 1, label: 'Accesos' },
-  { number: 2, label: 'Notificaciones' },
-];
+
 
 const nameError = ref(false);
 
@@ -148,9 +162,20 @@ const isPermissionsEmpty = computed(() => {
   return Object.keys(form.permissions).length === 0;
 });
 
+// Computed property to check if the form has been modified
+const isFormModified = computed(() => {
+  return (
+    form.name !== props.data.name ||
+    JSON.stringify(form.permissions) !== JSON.stringify(JSON.parse(props.data.permissions)) ||
+    JSON.stringify(form.periodicityStay) !== JSON.stringify(JSON.parse(props.data.periodicity_stay)) ||
+    JSON.stringify(form.periodicityChat) !== JSON.stringify(JSON.parse(props.data.periodicity_chat)) ||
+    JSON.stringify(form.notifications) !== JSON.stringify(JSON.parse(props.data.notifications))
+  );
+});
+
 // Computed property to disable the submit button
 const isSubmitDisabled = computed(() => {
-  return form.name.trim() === '' || isPermissionsEmpty.value;
+  return !isFormModified.value || form.name.trim() === '' || isPermissionsEmpty.value;
 });
 
 const validateName = () => {
@@ -172,7 +197,7 @@ const submitForm = async () => {
   const response = await updateWorkPosition(form);
 
   if (response.ok) {
-    toast.warningToast('Cambios guardados con éxito', 'top-right');
+    toast.warningToast('Cambios guardados', 'top-right');
     resetForm();
     closeModal();
     emit('storeWorkPosition', response.data.wPosition);
@@ -205,3 +230,21 @@ const closeModal = () => {
   emit('close');
 };
 </script>
+<style scoped>
+  /* Asegura que los estilos del título sean consistentes */
+  .fixed-title {
+    font-size: 1.125rem; /* Text-lg */
+    font-weight: 500; /* font-medium */
+    line-height: 110%; /* Ajusta line-height */
+  }
+
+  /* Ocultar el scrollbar para navegadores compatibles */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE y Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>

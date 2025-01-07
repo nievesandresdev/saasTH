@@ -90,7 +90,7 @@
                 <a
                   href="javascript:void(0)"
                   class="w-full py-[8px] px-[24px] block"
-                  @click="goLink(menu.to)"
+                  @click="goLink(menu.to,menu)"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
@@ -215,9 +215,17 @@ const menu_section = reactive([
       title: '',
       group: [
           {
+              title: 'Home',
+              to: 'Configuracion',
+              icon: '/assets/icons/1.TH.HOME-black.svg',
+              include: '/alojamiento/configuracion',
+              selectedArr: ['Configuration'],
+            
+          },
+          {
               title: 'Alojamiento',
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
-              expanded: ['Perfil','Facilities'].includes(route.name),
+              expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
               group: [
                   {
                       title: 'Perfil',
@@ -231,8 +239,15 @@ const menu_section = reactive([
                       to: 'Facilities',
                       selectedArr: ['Facilities']
                   },
+                  /* {
+                      title: 'Configuración',
+                      icon: '/assets/icons/1.TH.icon.instalaciones.svg',
+                      to: 'Configuracion',
+                      selectedArr: ['Configuracion']
+                  }, */
+
               ],
-              selectedArr: ['Perfil','Facilities']
+              selectedArr: ['Perfil','Facilities','Configuration']
           },
           {
               title: 'Destino',
@@ -289,14 +304,14 @@ const menu_section = reactive([
               expanded: ['ReviewRequestSettingsIndex','SettingsPreStayPage','StayPage','SettingsPostStayPage'].includes(route.name),
               group: [
                   {
-                      title: 'Feedback',
+                      title: 'Sentimiento',
                       to: 'SettingsPreStayPage',
                       selectedArr: ['SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
                   },
                   {
                       title: 'Solicitudes',
                       to: 'ReviewRequestSettingsIndex',
-                      selectedArr: ['ReviewRequestSettingsIndex']
+                      selectedArr: ['ReviewRequestSettingsIndex','ReviewRequestSettingsPostStay']
                   },
               ],
               selectedArr: ['ReviewRequestSettingsIndex','SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
@@ -337,6 +352,13 @@ const menu_section = reactive([
   {
       title: 'General',
       group: [
+      {
+            title: 'Promociona tu WebApp',
+            icon: '/assets/icons/1.TH.PROMOCIONA-black.svg',
+            to: 'PromoteWebApp',
+            include: '/promociona-webapp',
+            selectedArr: ['PromoteWebApp'],
+        },
         {
             title: 'Comunicaciones',
             icon: '/assets/icons/1.TH.COMUNICACIONES.svg',
@@ -345,17 +367,11 @@ const menu_section = reactive([
             selectedArr: ['ComunicationHome'],
         },
         {
-            title: 'Personalización',
+            title: 'Diseño',
             icon: '/assets/icons/1.TH.PERSONALIZAR.svg',
-            to: 'Customization',
-            include: '/personalizacion',
-            selectedArr: ['Customization'],
-        },
-        {
-            title: 'Textos legales',
-            to: 'GeneralLegal',
-            icon: '/assets/icons/1.TH.TEXTOS.LEGALES.svg',
-            include: '/legal'
+            to: 'Appearence',
+            include: '/apariencia',
+            selectedArr: ['Appearence'],
         },
         {
             title: 'Galería de imágenes',
@@ -363,6 +379,26 @@ const menu_section = reactive([
             to: 'Gallery',
             include: '/galeria',
             selectedArr: ['Gallery'],
+        },
+        {
+            title: 'Ajustes',
+            icon: '/assets/icons/1.TH.Settings.svg',
+            expanded: false,
+             selectedArr: [],
+            group: [
+                {
+                    title: 'General',
+                    icon: '/vendor_asset/img/hoster/icons/TH.CONSULTAS.svg',
+                    to: 'Customization',
+                    selectedArr: ['Customization'],
+                },
+                {
+                    title: 'Textos legales',
+                    icon: '/vendor_asset/img/hoster/icons/TH.SOLICITUDES.svg',
+                    to: 'GeneralLegal',
+                    selectedArr: ['GeneralLegal', 'PoliciesLegal', 'PolicyCookiesLegal', 'PolicyPrivacyLegal'],
+                },
+            ],
         },
       ],
   },
@@ -419,7 +455,6 @@ async function getTypePlaces(){
         //localStorage.setItem('selected_place', item.id);
       }
     });
-    console.log(dataTypePlaces, 'dataTypePlaces');
   }
 }
 
@@ -470,8 +505,15 @@ watch(route, (to, from) => {
     focusMenu();
 });
 
-function goLink(viewName) {
+function goLink(viewName,menu = false) {
   router.push({ name: viewName});
+
+  /* if (menu.title == 'Home') {
+    window.location.replace(menu.include);
+  }else{
+    router.push({ name: viewName});
+  } */
+  
 }
 
 watch(

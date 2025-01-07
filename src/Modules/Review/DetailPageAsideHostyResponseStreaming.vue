@@ -1,29 +1,30 @@
 <template>
 <!-- max-h-[554px] -->
-    <div class="w-full h-min-[80%] rounded-[10px] p-4 flex flex-col justify-between" style="box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);">
+    <div class="w-full h-min-[80%] pb-4 flex flex-col  justify-between border-b border-[#BFBFBF]">
         <p class="text-[14px] leading-[150%]" v-html="textGenerateInSteaming" />
-        <div>
+
+        <div class="flex justify-between items-center mt-4">
             <DetailPageAsideHostyResponseStreamingGroupButtonLanguage @change-language="handleChangeLanguage" />
-            <div class="flex justify-end mt-2 w-full">
+            <!-- <div class="flex justify-end mt-2 w-full">
+            </div> -->
                 <PaginateResponse @change-page="handleChangePage" />
-            </div>
         </div>
     </div>
     <div class="mt-4 flex justify-end">
         <button
             :disabled="disabledButtons"
-            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] flex items-center h-[32px] p-[8px] h-[32px]"
+            class="text-[12px] font-medium hbtn-primary py-[12px] px-[8px] flex items-center h-[32px] p-[8px] h-[32px] leading-none"
             @click="copyText()"
         >
             <img
                 :class="{'opacity-35': disabledButtons}"
                 src="/assets/icons/1.TH.COPY.svg"
-                class="w-4 h-4 mR-1 inline-block"
+                class="size-4  mr-2 inline-block"
             >
             Copiar
         </button>
         <button
-            class="text-xs font-medium hbtn-primary py-[12px] px-[8px] ml-2 flex items-center h-[32px] p-[8px] h-[32px]"
+            class="text-[12px] font-medium hbtn-primary py-[12px] px-[8px] ml-4 flex items-center h-[32px] p-[8px] h-[32px] leading-none"
             :disabled="disabledButtons || numbersResponsesGenerated >= maximumResponsesGenerated"
             @click="generateNewResponse"
         >
@@ -31,9 +32,19 @@
             <img
                 :class="{'opacity-35': disabledButtons}"
                 src="/assets/icons/1.TH.IA.svg"
-                class="w-4 h-4 ml-1 inline-block"
+                class="size-[16px] ml-2 inline-block"
             >
         </button>
+        <BaseTooltipResponsive v-if="numbersResponsesGenerated >= maximumResponsesGenerated" size="s" :top="-118" :right="0" class="ml-1">
+            <template #button>
+                <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg" />
+            </template>
+            <template #content>
+                <p class="text-sm leading-[150%] font-normal">
+                    Has superado el máximo de respuestas generadas permitidas. Hosty puede generar hasta 10 respuestas por reseña.
+                </p>
+            </template>
+        </BaseTooltipResponsive>
     </div>
 </template>
 
@@ -43,6 +54,7 @@ import { ref, inject, computed, watch, provide } from 'vue';
 // COMPONENTS
 import PaginateResponse from './components/PaginateResponses';
 import DetailPageAsideHostyResponseStreamingGroupButtonLanguage from './DetailPageAsideHostyResponseStreamingGroupButtonLanguage';
+import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
 // EMITS
 const emits = defineEmits(['generateResponse', 'change-language']);

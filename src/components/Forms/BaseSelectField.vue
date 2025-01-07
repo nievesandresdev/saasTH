@@ -49,7 +49,7 @@
         @mouseleave="hoverOption = false"
         tabindex="-1" aria-disabled="true"
         :class="{
-          'active': option.value == modelValue && hoverOption === null,
+          'active': option.value == modelValue,
           'disabled': option.disabled
         }"
       >
@@ -282,12 +282,10 @@ export default {
   border-radius: 0px 0px 10px 10px;
 }
 .active {
-  background: #ECF9F5;
-  /* background: red; */
+  background: #ECF9F5 !important;
 }
 .option:hover {
   background: #F1F1F1;
-  /* background: yellow; */
 }
 .disabled:hover {
   background-color: #fff;

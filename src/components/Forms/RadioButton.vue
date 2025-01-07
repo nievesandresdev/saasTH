@@ -1,7 +1,8 @@
 <template>
     <div class="radio-container flex items-center">
       <label class="radio-label-button inline-flex items-center cursor-pointer relative mb-0">
-        <input type="radio" 
+        <input type="radio"
+              :id="id"
                :value="value"
                :checked="modelValue === value"
                @change="onChange"
@@ -24,8 +25,12 @@
   import { ref } from 'vue';
   
   const props = defineProps({
+    id: {
+      type: String,
+      default: 'default',
+    },
     modelValue: [String, Number],
-    value: [String, Number]
+    value: [String, Number],
   });
   
   const emit = defineEmits(['update:modelValue']);

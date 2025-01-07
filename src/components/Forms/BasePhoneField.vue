@@ -135,7 +135,9 @@ const defineFullPhone = async (stringPhone = null) => {
       });
     }
     initialLoad.value = true;
-  })
+  }).catch(error => {
+    console.log(error);
+  });
 };
 
 const searchCodes = async () => {
@@ -143,10 +145,7 @@ const searchCodes = async () => {
   for (let ph of codeList.value) {
     if (searchList.value.length >= 5) break;
     if (
-      ph.label.toLowerCase().includes(code.value.toLowerCase()) ||
-      ph.country.es.toLowerCase().includes(code.value.toLowerCase()) ||
-      ph.country.en.toLowerCase().includes(code.value.toLowerCase()) ||
-      ph.country.fr.toLowerCase().includes(code.value.toLowerCase())
+      ph.label.toLowerCase().includes(code.value.toLowerCase())
     ) {
       searchList.value.push(ph);
     }
@@ -160,7 +159,7 @@ const selectOption = (value) => {
 
 const validPhone = (phone, code) => {
   const pattern = /^\+?\d{9,13}$/;
-  console.log('test valid',phone)
+  // console.log('test valid',phone)
   if (phone && !pattern.test(phone) || !code && phone) {
     error_phone.value = true;
   } else {
@@ -179,7 +178,7 @@ watch(phone, (newVal, oldVal) => {
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, code.value);
-  console.log('test phone error',error_phone.value )
+  // console.log('test phone error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   if (!code.value) return;
@@ -191,7 +190,7 @@ watch(code, (newVal, oldVal) => {
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
   validPhone(phoneNumber, newVal);
-  console.log('test code error',error_phone.value )
+  // console.log('test code error',error_phone.value )
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   // if (!phone.value && newVal.length < 2) return;

@@ -18,9 +18,6 @@
         </div>
       </div>
       <div class="group flex items-center px-4 py-2 text-black border border-[#333333] rounded bg-white cursor-pointer hover:border-[#2A8873]" @click="createUser">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
-          <path d="M11.9898 4V12M11.9898 20V12M11.9898 12H20M11.9898 12H4" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#2A8873]"/>
-        </svg>
         <span class="font-medium text-sm group-hover:text-[#2A8873]">Crear usuario</span>
     </div>
 
@@ -35,13 +32,13 @@
         <span class="mb-4 text-sm font-normal">{{ totalUsers }} usuarios encontrados</span>
         <!-- <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0"> -->
         <table class="w-full text-sm text-gray-500 rtl:text-right shadow-md mt-4 rounded-lg z-10" v-if="totalUsers > 0">
-          <thead class="text-xs font-semibold text-gray-700 text-left bg-gray-100 h-3">
+          <thead class="text-sm font-semibold text-[#333] text-left border-b-2 h-1">
             <tr>
-              <th scope="col" class="px-5 py-3 w-1/4">Nombre y Apellidos</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Puesto de Trabajo</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Antiguedad</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Estado</th>
-              <th scope="col" class="px-5 py-3 w-1/4">Opciones</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Nombre y Apellidos</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Puesto de Trabajo</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Antigüedad</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Estado</th>
+              <th scope="col" class="px-5 py-4 w-1/4">Opciones</th>
             </tr>
           </thead>
           <tbody>
@@ -56,31 +53,33 @@
                 'shadow-sm': hoverSelected == index
               }"
             >
-              <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-normal break-words w-1/4">
+              <th @click="showUser(user)" scope="row" class="text-left px-6 py-4 font-medium text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.name }} {{ user.profile?.lastname }} 
               </th>
-              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
-                {{ user.work_position }}
+              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
+                {{ user.work_position?.name ?? '-' }}
               </td>
-              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-gray-900 whitespace-normal break-words w-1/4">
+              <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.time }}
               </td>
               <td @click="showUser(user)" class="py-4 whitespace-normal break-words w-1/4" :class="{'px-[24px]' : user.del == 0, 'px-[20px]': user.del == 1}">
-                <span v-if="user.status == 1" class="px-2 py-2 font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-full">
+                <span v-if="user.status == 1" class="px-2 py-2 font-semibold text-[10px] text-[#333] bg-[#D9F2E9] rounded-full">
                   Activo
                 </span>
-                <span v-else class="px-2 py-2 font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-full">
+                <span v-else class="px-2 py-2 font-semibold text-[10px] text-[#333] bg-[#FEE2E2] rounded-full">
                   Inactivo
                 </span>
               </td>
-              <td class="pl-10 py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
+              <td class="pl-[80px] py-4 whitespace-normal break-words w-1/4" @click="authStore.user.id == user.id ? showUser(user) : ''">
                 
                 <Toggle
                   :user="user"
                   :index="index"
                   :visibleDropdown="visibleDropdown"
                   @close="closeToggleDropdown"
-                  @editUser="editUser"
+                  @editUser="(data) => { 
+                    editUser(data);
+                  }"
                   @openModalDelete="openModalDelete"
                   @updateStatus="handleGetUsers"
                 />
@@ -148,7 +147,7 @@
       </div>
     </template>
   </ModalWindow>
-  <ModalWindow  :isVisible="deleteUser" @close="closeDeleteUser">
+  <ModalWindow  :isVisible="deleteUser" @close="closeDeleteUser" :width="'344px'" :paddingContent="'p-4'">
     <template #content>
       <div class="flex justify-end">
           <img
@@ -163,14 +162,14 @@
           class="w-8 h-8"
         >
       </div>
-      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Desea eliminar al usuario<br> {{userData.name }} {{ userData.profile?.lastname }}?</p>
-      <p class="text-sm font-normal text-left">Estás a punto de eliminar un usuario. Este proceso es irreversible y eliminará todos los datos asociados con el usuario. Si solo necesitas bloquear su acceso a un hotel, considera desvincularlo del mismo desde el menú editar usuario.</p>
+      <p class="text-xl font-semibold mt-4 text-center mb-2">¿Estás seguro?</p>
+      <p class="text-sm font-normal text-center leading-6">Recuerda que puedes inactivar al usuario desde la edición del perfil. En caso de eliminarlo, tendrás que volver a crearlo para visualizarlo en la plataforma.</p>
       <div class="flex justify-between mt-4">
         <div @click="closeDeleteUser" class="hbtn-tertiary text-sm font-medium underline my-auto cursor-pointer">
           Cancelar
         </div>
-        <div @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer">
-          Eliminar usuario
+        <div @click="submitDelete" class="hbtn-primary py-3 px-4 leading-4 cursor-pointer flex justify-center items-center text-[#333] text-sm">
+          Sí, eliminar
         </div>
       </div>
     </template>
@@ -179,7 +178,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import CreateUser from './components/CreateUser.vue';
 import Toggle from './components/Toggle.vue';
 import EditUser from './components/EditUser.vue';
@@ -235,7 +234,7 @@ const closeDeleteWorkPositions = () => {
 
 onMounted(() => {
   handleGetUsers();
-  //handleTestMail();
+  handleTestMail();
   adjustBodyPadding(); // Ajustar el padding al cargar la página
   window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
@@ -317,13 +316,30 @@ const createUser = () => {
 };
 
 const editUser = (data) => {
-  dataEdit.value = data;
-  modalEdit.value = true;
+  if (!data || !data.id) {
+    return;
+  }
+
+  modalEdit.value = false;
+  modalShow.value = false;
+  deleteUser.value = false;
+  openConfirmCreateUser.value = false;
   visibleDropdown.value = null;
+
+  dataEdit.value = null; 
+  nextTick(() => {
+    dataEdit.value = data;
+
+    setTimeout(() => {
+      modalEdit.value = true;
+    }, 10); 
+  });
+
   workPositions('edit');
 };
 
 let selectedShow = ref(null);
+
 const showUser = (data) => {
   if(modalAdd.value || modalEdit.value) return;
   setTimeout(() => {

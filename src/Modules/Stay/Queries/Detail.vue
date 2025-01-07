@@ -36,10 +36,12 @@ const guestId = ref(route.query.g);
 const data = ref(null);
 const guestAccess = ref(null);
 const timeLineData = ref(null)
+const currentQuery = ref(null)
 const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
+    console.log('test data',data.value)
 })
 
 
@@ -58,6 +60,8 @@ onBeforeRouteLeave((to, from, next) => {
 watch(() => data.value, async (newData) => {
     guestAccess.value = newData?.timeline?.guestAccess;
     timeLineData.value = newData?.timeline;
+    console.log('test newData',newData)
+    currentQuery.value = newData?.queryByGuest.find(query => query.period == newData?.timeline?.currentPeriod);
 }, { immediate: true });  
 
 watch(() => route.query.g, async (newId) => {
@@ -74,5 +78,6 @@ provide('data',data)
 provide('timeLineData',timeLineData);
 provide('guestAccess',guestAccess)
 provide('currentPeriod',timeLineData.value?.currentPeriod)
+provide('currentQuery',currentQuery)
 provide('session',session) // se define para porder ser usada en la cabecera
 </script>

@@ -16,7 +16,7 @@
                 <p class="text-sm font-medium mb-2 leading-[110%]">Nombre del huésped</p>
                 <div>
                     <BaseTextField
-                        classInput="h-[36px] text-sm px-3 py-2"
+                        :classInput="'h-[36px] text-sm px-3 py-2'"
                         :placeholder="'Introduce el nombre del huésped'"
                         v-model="form.name"
                         :error="alertNull && !form.name.trim()"
