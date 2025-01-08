@@ -20,7 +20,14 @@ import { ref } from 'vue'
 import BaseQrCode from '@/components/BaseQrCode.vue';
 import { $urlBaseWebapp } from '@/utils/helpers';
 
-const urlBaseWebapp = $urlBaseWebapp();
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
+
+
+let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+let slugHotel = hotelStore?.hotelData?.subdomain;
+
+const urlBaseWebapp = $urlBaseWebapp(subdomainChain, slugHotel);
 const qrCodeRef = ref(null)
 
 const downloadQR = () => {

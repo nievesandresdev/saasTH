@@ -110,6 +110,7 @@ const existingChanges = computed(()=>{
 })
 
 const dataPanel = computed(()=>{
+    console.log('conceptPanel',conceptPanel.value)
     return values[conceptPanel.value];
 })
 
@@ -195,6 +196,31 @@ const values = {
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
     },
+    "manualInvitation":{
+        title: 'Invitar huésped a WebApp',
+        description: 'Envía a tus huéspedes la invitación a tu WebApp a través de un correo electrónico.',
+        trigger: 'Desde la sección "Estancias", envías manualmente una invitación a tu WebApp utilizando el botón "Invitar huésped".',
+        issue: '¿Ya conoces la WebApp de [NombreHotel]?',
+        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
+        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento','Invitación al Chat'],
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+    },
+    "betweenGuests": {
+        title: 'Invitación entre huéspedes',
+        description: 'Tus huéspedes podrán invitar a otros a tu WebApp de manera sencilla, enviando y recibiendo invitaciones directas a través de diversos canales de comunicación.',
+        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Compartir estancia".',
+        issue: '¿Ya has visto la WebApp de [NombreHotel]?',
+        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
+        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento'],
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'},
+            {title:'WhatsApp',icon:'Frame 2613488'},
+            {title:'SMS',icon:'Frame 2613489'},
+            {title:'Telegram',icon:'Frame 2613557'},
+        ]
+    }
 
 }
 
