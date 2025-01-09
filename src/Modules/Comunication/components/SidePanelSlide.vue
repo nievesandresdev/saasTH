@@ -145,7 +145,7 @@ const values = {
         title: 'Te damos la bienvenida',
         description: 'Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.',
         trigger: 'El huésped ingresa a la WebApp por primera vez',
-        issue: 'Bienvenido a la WebApp',
+        issue: `Te damos la bienvenida a la WebApp de ${hotelStorage.hotelData?.name}`,
         descriptionContent:'',
         itemsContent:[],
         channels:[
