@@ -92,7 +92,7 @@
                                 </Tooltip>
                             </div>
                             <!-- Expedia -->
-                            <div class="flex items-center mt-2">
+                            <!-- <div class="flex items-center mt-2">
                                 <Checkbox  isDisabled/>
                                 <p class="text-xs font-medium leading-[130%] ml-2 opacity-50 mr-1">Expedia</p>
                                 <Tooltip
@@ -109,7 +109,7 @@
                                         </p>
                                     </template>
                                 </Tooltip>
-                            </div>
+                            </div> -->
                             <!-- Google -->
                             <div class="flex items-center mt-2">
                                 <Checkbox  v-model="form.otas_enabled_google"/>
@@ -121,7 +121,7 @@
                                 <p class="text-xs font-medium leading-[130%] ml-2">TripAdvisor</p>
                             </div>
                             <!-- AirBnb -->
-                            <div class="flex items-center mt-2">
+                            <!-- <div class="flex items-center mt-2">
                                 <Checkbox  isDisabled/>
                                 <p class="text-xs font-medium leading-[130%] ml-2 opacity-50 mr-1">AirBnb</p>
                                 <Tooltip
@@ -138,7 +138,7 @@
                                         </p>
                                     </template>
                                 </Tooltip>
-                            </div>
+                            </div> -->
                         </div>
                         <p 
                             class="text-xs font-medium htext-alert-negative mt-2 leading-[90%]"
