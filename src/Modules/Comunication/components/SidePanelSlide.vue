@@ -155,10 +155,10 @@ const values = {
     'thankChoosing':{
         title: 'Gracias por elegirnos',
         description: 'Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
+        trigger: 'Cuando la estancia de tus huéspedes cambie a Post-stay (según tu horario de check-out), les enviaremos este mensaje.',
         issue: 'Tienes un chat pendiente en la WebApp',
-        descriptionContent:'',
-        itemsContent:[],
+        descriptionContent:'Este mensaje contendrá el bloque de despedida y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Consulta de seguimiento','Destinos recomendados','Experiencias recomendadas'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
