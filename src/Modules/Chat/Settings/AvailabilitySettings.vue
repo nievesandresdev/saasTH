@@ -113,7 +113,7 @@
   
   onMounted(() => {
     getSettingsChatHours()
-    mockupStore.$setIframeUrl('/mobile-chat/fake','showAvailability=true') 
+    mockupStore.$setIframeUrl('/chat/fake','showAvailability=true') 
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
   })
@@ -124,7 +124,7 @@
     form.hours = JSON.parse(JSON.stringify(response.chatHours))
     initialForm.value = JSON.stringify(form) // Guardar el estado inicial del formulario
 
-    mockupStore.$setIframeUrl('/mobile-chat/fake','showAvailability=true') 
+    mockupStore.$setIframeUrl('/chat/fake','showAvailability=true') 
     mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
   }
   

@@ -146,7 +146,7 @@ const ata = async () => {
     form.name = response.name
     form.show_guest = response.show_guest == 1 ? true : false
     initialForm.value = JSON.stringify(form) 
-    mockupStore.$setIframeUrl('/mobile-chat/fake')
+    mockupStore.$setIframeUrl('/chat/fake')
 
     
 

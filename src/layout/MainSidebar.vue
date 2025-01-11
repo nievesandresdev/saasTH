@@ -437,6 +437,10 @@ const menu_links = ref([
           'PoliciesLegal',
           'PolicyPrivacyLegal',
           'PolicyCookiesLegal',
+          //others
+          'Configuracion',
+          'PromoteWebApp',
+          'Appearence'
         ],
         url: '/webapp',
         permissionName: 'webapp',

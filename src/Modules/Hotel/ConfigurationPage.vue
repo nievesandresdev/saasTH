@@ -179,6 +179,8 @@
     import { useToastAlert } from '@/composables/useToastAlert'
     import BasePreviewImage from '@/components/BasePreviewImage.vue';
 
+    import { useMockupStore } from '@/stores/modules/mockup'
+    const mockupStore = useMockupStore();
 
     const toast = useToastAlert();
     const hotelStorage = useHotelStore();
@@ -263,7 +265,7 @@
     const initialImage = ref(null);
 
     onMounted(() => {
-        
+        mockupStore.$setIframeUrl('')
         imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
         initialImage.value = { ...imgSelected.value };
         Object.assign(initialState, form);
@@ -303,7 +305,7 @@
             } else {
                 toast.warningToast(data?.message,'top-right');
             }
-            //mockupStore.$reloadIframe()
+            mockupStore.$reloadIframe();
 
         
     };
