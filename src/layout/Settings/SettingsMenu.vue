@@ -200,6 +200,7 @@
 <script setup>
 import { reactive, onMounted, computed, watch,watchEffect } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
+import { $formatTypeLodging } from '@/utils/helpers'
 
 const route = useRoute();
 const router = useRouter();
@@ -223,7 +224,7 @@ const menu_section = reactive([
             
           },
           {
-              title: 'Alojamiento',
+              title: $formatTypeLodging(true),
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
               expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
               group: [

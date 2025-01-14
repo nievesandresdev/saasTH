@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 import { useAuthStore } from '@/stores/modules/auth/login'
+import { useHotelStore } from '@/stores/modules/hotel'
+
 //import { createPinia, setActivePinia, getActivePinia } from 'pinia'
 
 /*
@@ -131,7 +133,8 @@ const $formatImage = (payload) => {
   return path
 }
 
-const $formatTypeLodging = (valueType) => {
+const $formatNameLodging = (valueType) => {
+  
   const typeLodging = {
     hotel: "Hotel",
     hostal: "Hostal",
@@ -141,6 +144,18 @@ const $formatTypeLodging = (valueType) => {
     vft: "Vivienda con fines turísticos",
   }
   return typeLodging?.[valueType] ?? null;
+}
+
+const $formatTypeLodging = (title = false) => { 
+  
+  const hotelStore = useHotelStore();
+  const typeLodging = {
+    hotel: !title ? "hotel" : "Hotel",
+    at: !title ? "apartamento" : "Apartamento",
+    vft: !title ? "apartamento" : "Apartamento",
+  }
+  let defaultLetter = !title ? "alojamiento" : "Alojamiento";
+  return typeLodging?.[hotelStore.hotelData?.type] ?? defaultLetter;
 }
 
 function $throttle(func, limit) {
@@ -175,6 +190,7 @@ function $isElementVisible(el) {
   );
 }
 
+
 export {
     $getRoleName,
     $isAssociate,
@@ -187,6 +203,7 @@ export {
     $urlBaseWebapp,
     $formatImage,
     $formatTypeLodging,
+    $formatNameLodging,
     $throttle,
     $isElementVisible
 };
