@@ -160,6 +160,7 @@ async function updateOrder () {
 }
 
 function addNewFacility () {
+    mockupStore.$reloadIframe();
     if (changePendingInForm.value) {
         openModalChangeInForm();
         return;
