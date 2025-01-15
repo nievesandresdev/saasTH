@@ -325,9 +325,9 @@ const menu_section = reactive([
           {
               title: 'Programa de referidos',
               icon: '/assets/icons/1.TH.Referidos.svg',
-              to: 'reservas',
-              include: '/reservas',
-              selectedArr: ['reservas'],
+              to: 'Referrals',
+              include: '/referidos',
+              selectedArr: ['Referrals'],
           },
       ],
   },
@@ -398,7 +398,7 @@ const menu_section = reactive([
             title: 'Ajustes',
             icon: '/assets/icons/1.TH.Settings.svg',
             expanded: false,
-             selectedArr: [],
+            selectedArr: [],
             group: [
                 {
                     title: 'General',
