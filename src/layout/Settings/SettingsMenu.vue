@@ -318,6 +318,20 @@ const menu_section = reactive([
           }
       ],
   },
+  //reservas
+  {
+      title: '',
+      group: [
+          {
+              title: 'Programa de referidos',
+              icon: '/assets/icons/1.TH.Referidos.svg',
+              to: 'reservas',
+              include: '/reservas',
+              selectedArr: ['reservas'],
+          },
+      ],
+  },
+  
   {
       title: 'reputación online',
       disabled: status_subscription?.product_name_current !== 'HostMaster',

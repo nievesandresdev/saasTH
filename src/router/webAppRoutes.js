@@ -2,6 +2,7 @@ const AppLayout = () => import('@/layout/AppLayout');
 
 import Home from '@/Modules/WebApp/Home.vue';
 import PromoteWebapp from '@/Modules/Comunication/PromoteWebapp';
+import Referals from '@/Modules/Comunication/Referals';
 
 const dashboardRoutes = [
   {
@@ -19,6 +20,12 @@ const dashboardRoutes = [
         path: 'promociona-webapp',
         component: PromoteWebapp
       },
+      {
+        name: 'Referals',
+        path: 'referidos',
+        component: Referals
+
+      }
     ],
   },
 ];
