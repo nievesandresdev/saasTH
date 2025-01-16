@@ -26,6 +26,7 @@
         <!-- Aquí va tu formulario -->
         <form>
           <div class="mb-4">
+             <RadioButton id="color-1" :value="'0'" v-model="isOpenSidePanel"/>
             <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
             <input id="name" type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           </div>
@@ -60,6 +61,7 @@
 
 <script setup>
 import { ref, inject, watch } from 'vue';
+import RadioButton from '@/components/Forms/RadioButton.vue';
 
 const showPanel = ref(false);
 const showSlidePanel = ref(false);
