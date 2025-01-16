@@ -19,6 +19,7 @@ import appearenceRoutes from './appearenceRoutes';
 import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 import reviewRoutes from './reviewRoutes'
 import comunicationRoutes from './comunication'
+import serviceRoutes from './serviceRoutes'
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
@@ -48,6 +49,7 @@ const routes = [
   ...hotelGroupRoutes,
   ...placeGroupRoutes,
   ...experienceGroupRoutes,
+  ...serviceRoutes,
   ...galleryGroupRoutes,
   ...webAppRoutes,
   ...customizationRoutes,

@@ -14,7 +14,7 @@
                 :value="inputValue"
                 @input="updateValue($event.target.value)"
                 class="w-full hinput border rounded-[6px]"
-                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? '' : 'hinput-green'}`"
+                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? 'cursor-not-allowed' : 'hinput-green'}`"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"

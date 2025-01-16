@@ -278,12 +278,31 @@ const menu_section = reactive([
               ],
               selectedArr: ['Places']
           },
+          // {
+          //     title: 'Experiencias',
+          //     to: 'Experiences',
+          //     icon: '/assets/icons/1.TH.CAMERA.svg',
+          //     include: '/experiencias',
+          //     selectedArr: ['Experiences'],
+          // },
           {
-              title: 'Experiencias',
-              to: 'Experiences',
-              icon: '/assets/icons/1.TH.CAMERA.svg',
-              include: '/experiencias',
-              selectedArr: ['Experiences'],
+            title: 'Servicios',
+            icon: '/assets/icons/1.TH.recepcion.svg',
+            expanded: ['Conforts'].includes(route.name),
+            group: [
+                {
+                    title: 'Confort',
+                    to: 'Conforts',
+                    selectedArr: ['Conforts']
+                },
+                {
+                    title: 'Transporte',
+                    to: 'Transports',
+                    selectedArr: ['Transports']
+                },
+
+            ],
+            selectedArr: ['Confort']
           },
           {
               title: 'Chat',
