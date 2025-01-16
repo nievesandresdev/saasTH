@@ -12,6 +12,23 @@
                 <p class="text-sm font-normal mb-4">
                     Ofrece a los referidos beneficios exclusivos para incitarlos a contratar. Refuerza el atractivo de tu oferta destacando las ventajas que solo los referidos pueden conseguir.
                 </p>
+                <SectionConfig :marginTop="'24px'" :width="'460px'">
+                    <template #title>
+                        <div class="flex justify-between">
+                            <h1 class="text-base font-semibold mb-2">Código: HOTELRIU25</h1>
+                            <img class="w-[24px] h-[24px] cursor-pointer" src="/assets/icons/1.TH.EDIT.OUTLINED.svg" @click="editGift">
+                            
+                        </div>
+                        <div class="flex justify-between">
+                            <h1 class="text-base font-semibold mb-2">Regalo: 20,00€</h1>
+                        </div>
+                    </template>
+                    <template #content>
+                        <p class="text-sm font-normal mb-4">
+                            Descuento aplicable para la contratación de cualquier servicio de la cadena Riu Hotels. Debe efectuarse el proceso de compra, y antes de finalizar, añadir el código promocional en la parte habilitada.
+                        </p>
+                    </template>
+                </SectionConfig>
                 <div class="flex gap-2">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
@@ -55,6 +72,7 @@
                 <p class="text-sm font-normal mb-4">
                     Recompensa a los referentes con beneficios únicos que maximicen su motivación para referir a nuevos huéspedes a contratar, fortaleciendo así el impulso del programa de referidos.
                 </p>
+                
                 <div class="flex gap-2">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
@@ -66,12 +84,15 @@
             </template>
         </SectionConfig>
     </div>
+
+   
     <ChangesBar 
         :existingChanges="changes"
         :validChanges="changes"
         @cancel="cancelChange" 
         @submit="submit"
     />
+    <Create :modal-add="isOpenSidePanel" @close="closeModalAdd"/>
 </template>
 <script setup>
 import { ref,provide,onMounted,watch } from 'vue';
@@ -81,6 +102,8 @@ import SectionConfig from '@/components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+
+import Create from './Components/Create.vue';
 
 
 import { useHotelStore } from '@/stores/modules/hotel';
@@ -93,8 +116,12 @@ const mockupStore = useMockupStore();
 
 const { hotelData } = hotelStore;
 
+const isOpenSidePanel = ref(false);
+
+
 // PROVIDE
 provide('hotelData', hotelData);
+provide('isOpenSidePanel', isOpenSidePanel);
 
 
 // Estado inicial
@@ -126,7 +153,15 @@ function loadMockup () {
 
 
 const openModal = () => {
-    alert('open modal')
+    isOpenSidePanel.value = true;
+}
+
+const closeModalAdd = () => {
+    isOpenSidePanel.value = false;
+}
+
+const editGift = () => {
+    alert('edit gift')
 }
 
 const updateVisivilityBenefits = () => {
