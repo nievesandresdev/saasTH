@@ -3,7 +3,7 @@
         <div class="pb-[104px]">
             <section class="flex justify-between py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
-                    <h1 class="font-medium text-[22px]">Perfil del Alojamiento</h1>
+                    <h1 class="font-medium text-[22px]">Perfil del {{ $formatTypeLodging(true) }}</h1>
                     <BaseTooltipResponsive
                         size="l"
                         :top="35"
@@ -45,7 +45,6 @@
                             mandatory
                             :error="false"
                         />
-                        {{form.type}}
                     </div>
                     <div class="flex-1">
                         <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
@@ -74,7 +73,7 @@
             </section>
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium inline-block">Descripción Alojamiento</label>
+                    <label class="text-sm font-medium inline-block">Descripción {{ $formatTypeLodging(true) }}</label>
                     <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
                     <BaseTextareaField
                         v-model="form.description"
@@ -127,7 +126,7 @@
                     <label class="text-sm font-medium inline-block">Email</label>
                     <BaseTextField
                         v-model="form.email"
-                        placeholder="Introduce email contacto del alojamiento"
+                        :placeholder="'Introduce email contacto del '+$formatTypeLodging()"
                         class-content="flex-1"
                         name="email"
                         :errors="errors"
@@ -148,7 +147,8 @@
                 <div class="max-w-profile">
                     <h2 class="font-medium text-lg">Horario Check-in / Check-out</h2>
                     <p class="text-sm htext-gray-500 text-justify mt-2">
-                        Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el horario de Check-in y Check-out para cada estancia en particular cuando lo necesites.
+                        Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el 
+                        horario de Check-in y Check-out para cada estancia en particular cuando lo necesites.
                     </p>
                     <div class="w-[411px] mt-[24px] space-y-4">
                         <div class="flex space-x-[24px]">
@@ -211,7 +211,7 @@
                     <h2 class="font-medium text-lg">Servicio de WiFi</h2>
                     <div class="flex justify-between mt-2">
                         <p class="text-sm htext-gray-500 text-justify">
-                            Comunica a tus huéspedes si tu alojamiento cuenta con servicio de WiFi gratuito
+                            Comunica a tus huéspedes si tu {{$formatTypeLodging()}} cuenta con servicio de WiFi gratuito
                         </p>
                         <div class="flex space-x-2">
                             <label class="text-sm font-medium leading-[110%]" :class="!form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">No</label>
@@ -393,26 +393,16 @@
 
     const typeLodging = [
         { value: "hotel", label: "Hotel", disabled: false },
-        { value: "hostal", label: "Hostal", disabled: false },
-        { value: "pensión", label: "Pensión", disabled: false },
-        {
-            value: "ca",
-            label: "Complejo de apartamentos",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
-        {
-            value: "at",
-            label: "Apartamento turístico",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
-        {
-            value: "vft",
-            label: "Vivienda con fines turísticos",
-            disabled: true,
-            tag: { text: "Próximamente", class: "success-tag" }
-        },
+        // { value: "hostal", label: "Hostal", disabled: false },
+        // { value: "pensión", label: "Pensión", disabled: false },
+        // {
+        //     value: "ca",
+        //     label: "Complejo de apartamentos",
+        //     disabled: true,
+        //     tag: { text: "Próximamente", class: "success-tag" }
+        // },
+        { value: "at", label: "Apartamento turístico", disabled: false },
+        { value: "vft", label: "Vivienda con fines turísticos", disabled: false },
     ]
 
 

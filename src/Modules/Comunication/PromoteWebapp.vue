@@ -78,7 +78,7 @@
                 </template>
             </CardSectionHome>
             <CardSectionHome title="Código QR en TV" period="stay">
-                    <template #msg>Ofrece acceso a tu WebApp desde las pantallas de los televisores de tu alojamiento.</template>
+                    <template #msg>Ofrece acceso a tu WebApp desde las pantallas de los televisores de tu {{$formatTypeLodging()}}.</template>
                     <template #canal>
                         <div class="h-full w-full py-2.5">
                             <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.PC.svg" alt="">

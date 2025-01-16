@@ -42,7 +42,7 @@
     <section class="px-6 mt-[24px] mb-6">
         <div class="flex justify-start gap-6 mt-6">
             <CardSectionHome title="Te damos la bienvenida">
-                <template #msg>Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.</template>
+                <template #msg>Cuando un huésped cree su estancia en un {{$formatTypeLodging()}} de tu cuenta, recibirá este mensaje.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -59,7 +59,7 @@
                 </template>
             </CardSectionHome>
             <CardSectionHome title="Prepara tu llegada">
-                <template #msg>Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.</template>
+                <template #msg>Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu {{$formatTypeLodging()}}.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
@@ -76,7 +76,7 @@
                 </template>
             </CardSectionHome>
             <CardSectionHome title="¿Qué tal va todo?">
-                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.</template>
+                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu {{$formatTypeLodging()}}.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
