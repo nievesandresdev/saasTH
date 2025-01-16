@@ -29,9 +29,9 @@
                     <div class="flex items-center">
                         <div class="mr-1 text-gray-700 font-semibold text-sm">Ofrecer beneficios</div>
                             <BaseSwichInput
-                                v-model="hotelData.show_facilities"
+                                v-model="hotelData.offer_benefits"
                                 class="mr-4"
-                                @change:value="updateVisivilityFacilities()"
+                                @change:value="updateVisivilityBenefits()"
                             />
                         <BaseTooltipResponsive
                             size="l"
@@ -66,11 +66,11 @@
         </SectionConfig>
     </div>
     <ChangesBar 
-            :existingChanges="changes"
-            :validChanges="changes && valid"
-            @cancel="cancelChange" 
-            @submit="submit"
-        />
+        :existingChanges="changes"
+        :validChanges="changes && valid"
+        @cancel="cancelChange" 
+        @submit="submit"
+    />
 </template>
 <script setup>
 import { ref,provide,onMounted } from 'vue';
@@ -105,6 +105,10 @@ function loadMockup () {
 
 const openModal = () => {
     alert('open modal')
+}
+
+const updateVisivilityBenefits = () => {
+    alert('update visibility benefits')
 }
 
 
