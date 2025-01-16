@@ -31,6 +31,7 @@
                             <BaseSwichInput
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
+                                :id="'offer_benefits'"
                                 @change:value="updateVisivilityBenefits()"
                             />
                         <BaseTooltipResponsive
@@ -67,13 +68,13 @@
     </div>
     <ChangesBar 
         :existingChanges="changes"
-        :validChanges="changes && valid"
+        :validChanges="changes"
         @cancel="cancelChange" 
         @submit="submit"
     />
 </template>
 <script setup>
-import { ref,provide,onMounted } from 'vue';
+import { ref,provide,onMounted,watch } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
@@ -96,6 +97,27 @@ const { hotelData } = hotelStore;
 provide('hotelData', hotelData);
 
 
+// Estado inicial
+const initialOfferBenefits = ref(hotelData.offer_benefits);
+
+// Cambios pendientes
+const changes = ref(false);
+
+// Comparar cambios
+const checkChanges = () => {
+    console.log(initialOfferBenefits.value, hotelData.offer_benefits)
+    changes.value = hotelData.offer_benefits !== initialOfferBenefits.value;
+};
+
+// Watcher para detectar cambios en `hotelData.offer_benefits`
+watch(
+    () => hotelData.offer_benefits,
+    () => {
+        checkChanges();
+    }
+);
+
+
 function loadMockup () {
     mockupStore.$setIframeUrl('/alojamiento');
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
@@ -108,7 +130,8 @@ const openModal = () => {
 }
 
 const updateVisivilityBenefits = () => {
-    alert('update visibility benefits')
+    console.log('update visibility benefits')
+    checkChanges();
 }
 
 

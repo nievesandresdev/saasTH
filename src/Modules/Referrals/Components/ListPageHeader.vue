@@ -20,7 +20,7 @@
         <div class="flex items-center">
             <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
                 <BaseSwichInput
-                    v-model="hotelData.show_facilities"
+                    v-model="hotelData.show_referrals"
                     class="mr-4"
                     @change:value="updateVisivilityFacilities()"
                 />
@@ -63,7 +63,8 @@
     // DATA
 
     async function updateVisivilityFacilities () {
-        const response = await hotelStore.$updateVisivilityFacilities();
+        alert("show referrals");
+        /* const response = await hotelStore.$updateVisivilityFacilities();
         const { ok, data } = response;
         await hotelStore.reloadHotel();
         if (ok) {
@@ -72,6 +73,6 @@
             toast.warningToast(data?.message,'top-right');
         }
         mockupStore.$setIframeUrl('/');
-        mockupStore.$reloadIframe();
+        mockupStore.$reloadIframe(); */
     }
 </script>
