@@ -12,24 +12,24 @@
                 <p class="text-sm font-normal mb-4">
                     Ofrece a los referidos beneficios exclusivos para incitarlos a contratar. Refuerza el atractivo de tu oferta destacando las ventajas que solo los referidos pueden conseguir.
                 </p>
-                <SectionConfig :marginTop="'24px'" :width="'460px'">
+                <SectionConfig :marginTop="'24px'" :width="'460px'" v-show="!isObjectEmpty(benefitSReferrals)">
                     <template #title>
                         <div class="flex justify-between">
-                            <h1 class="text-base font-semibold mb-2">Código: HOTELRIU25</h1>
+                            <h1 class="text-base font-semibold mb-2">Código: {{ benefitSReferrals.code }}</h1>
                             <img class="w-[24px] h-[24px] cursor-pointer" src="/assets/icons/1.TH.EDIT.OUTLINED.svg" @click="editGift">
                             
                         </div>
                         <div class="flex justify-between">
-                            <h1 class="text-base font-semibold mb-2">Regalo: 20,00€</h1>
+                            <h1 class="text-base font-semibold mb-2">Regalo: {{ valueReferrals }}</h1>
                         </div>
                     </template>
                     <template #content>
                         <p class="text-sm font-normal mb-4">
-                            Descuento aplicable para la contratación de cualquier servicio de la cadena Riu Hotels. Debe efectuarse el proceso de compra, y antes de finalizar, añadir el código promocional en la parte habilitada.
+                            {{ benefitSReferrals.how_redeem }}
                         </p>
                     </template>
                 </SectionConfig>
-                <div class="flex gap-2">
+                <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
@@ -85,23 +85,23 @@
         </SectionConfig>
     </div>
 
-   
     <ChangesBar 
         :existingChanges="changes"
         :validChanges="changes"
         @cancel="cancelChange" 
         @submit="submit"
     />
-    <Create :modal-add="isOpenSidePanel" @close="closeModalAdd"/>
+    <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals"/>
 </template>
 <script setup>
-import { ref,provide,onMounted,watch } from 'vue';
+import { ref,provide,onMounted,watch, computed } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import { isEqual } from 'lodash';
 
 import Create from './Components/Create.vue';
 
@@ -117,6 +117,8 @@ const mockupStore = useMockupStore();
 const { hotelData } = hotelStore;
 
 const isOpenSidePanel = ref(false);
+const benefitSReferrals = ref({});
+const initialBenefitSReferrals = ref({});
 
 
 // PROVIDE
@@ -131,9 +133,28 @@ const initialOfferBenefits = ref(hotelData.offer_benefits);
 const changes = ref(false);
 
 // Comparar cambios
+/* const checkChanges = () => {
+    //const hasOfferBenefitsChanged = !isEqual(hotelData.offer_benefits, initialOfferBenefits.value);
+    const hasBenefitSReferralsChanged = !isEqual(benefitSReferrals.value, initialBenefitSReferrals.value);
+    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+
+    console.log('hasOfferBenefitsChanged', hasOfferBenefitsChanged)
+    console.log('hasBenefitSReferralsChanged', hasBenefitSReferralsChanged)
+    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged;
+}; */
+
 const checkChanges = () => {
-    console.log(initialOfferBenefits.value, hotelData.offer_benefits)
-    changes.value = hotelData.offer_benefits !== initialOfferBenefits.value;
+    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    const hasBenefitSReferralsChanged = !isEqual(JSON.stringify(benefitSReferrals.value), JSON.stringify(initialBenefitSReferrals.value));
+
+    console.log({
+        'initialBenefitSReferrals': initialBenefitSReferrals,
+        'benefitSReferrals': JSON.stringify(benefitSReferrals.value),
+        'diffrent' : hasBenefitSReferralsChanged
+
+    })
+
+    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged;
 };
 
 // Watcher para detectar cambios en `hotelData.offer_benefits`
@@ -144,6 +165,28 @@ watch(
     }
 );
 
+const dataReferrals = (data) => {
+    
+    //console.log('data referrals',data)
+    setTimeout(()=>
+    {
+        benefitSReferrals.value = data;
+        checkChanges();
+    }, 900)
+    //checkChanges();
+}
+
+const isObjectEmpty = (obj) => {
+    return !obj || Object.keys(obj).length === 0;
+};
+
+const valueReferrals = computed(() => {
+    if(benefitSReferrals?.value.type === 'percentage') {
+        return benefitSReferrals?.value.value + '%'
+    } else {
+        return benefitSReferrals?.value.value + '€'
+    }
+});
 
 function loadMockup () {
     mockupStore.$setIframeUrl('/alojamiento');
