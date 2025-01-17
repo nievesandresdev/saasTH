@@ -9,11 +9,10 @@
       backgroundImage: iconBg ? `url(${srcBg})` : 'none',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
-      backgroundSize: 'contain',
+      backgroundSize: '25%',
     }"
   >
-    <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster" :class="[baseClass, xlClass, xl3Class]">
-      {{ srcBg }} {{ iconBg }}
+  <div :class="[bgClass, baseClass, xlClass, xl3Class, 'py-6 px-4 rounded-[10px] shadow-hoster']">
       <slot name="title"></slot>
       <slot name="content"></slot>
     </div>
@@ -51,6 +50,10 @@ const props = defineProps({
   srcBg: {
     type: String,
     default: ''
+  },
+  bgClass: {
+    type: String,
+    default: 'bg-white'
   }
 })
 

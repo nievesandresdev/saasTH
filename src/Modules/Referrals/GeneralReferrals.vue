@@ -12,7 +12,7 @@
                 <p class="text-sm font-normal mb-4">
                     Ofrece a los referidos beneficios exclusivos para incitarlos a contratar. Refuerza el atractivo de tu oferta destacando las ventajas que solo los referidos pueden conseguir.
                 </p>
-                <SectionConfig :marginTop="'24px'" :width="'460px'" icon-bg :src-bg="'/assets/icons/1.TH.EDIT.OUTLINED.svg'">
+                <SectionConfig :marginTop="'24px'" :width="'460px'" icon-bg :src-bg="'/assets/icons/TH.Gift.opacity.svg'" bg-class="''" v-show="!isObjectEmpty(benefitSReferrals)">
                     <template #title>
                         <div class="flex justify-between">
                             <h1 class="text-base font-semibold mb-2">Código: {{ benefitSReferrals.code }}</h1>
