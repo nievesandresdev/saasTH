@@ -11,3 +11,6 @@ export const updateVisibilityApi = (data, config = {}) => apiHttp('POST', `${saa
 export const updateRecommendationApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/recommendation`, data, config, 'API_HELPER');
 export const updatePositionApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/position`, data, config, 'API_HELPER');
 export const updateApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}`, data, config, 'API_HELPER');
+
+// HOSTER
+export const storeOrUpdateHosterApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/hoster/store`, data, config, 'API_HELPER');

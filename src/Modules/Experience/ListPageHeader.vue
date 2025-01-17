@@ -1,23 +1,8 @@
 <template>
-    <section class="sticky top-0 hbg-white-100 z-[100]  w-full hbg-gray-100">
+    <section class="sticky top-0 hbg-white-100 z-[40]  w-full hbg-gray-100">
         <div class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px]">
             <div class="space-x-2 flex">
-                <h1 class="font-medium text-[22px]">Experiencias</h1>
-                <BaseTooltipResponsive
-                    size="l"
-                    :top="35"
-                    color="#fff"
-                    :left="-0"
-                >
-                    <template #button>
-                        <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
-                        </template>
-                        <template #content>
-                        <p class="text-sm leading-[150%] font-normal">
-                            Aquí podrás gestionar, recomendar y ofrecer la información esencial de las Experiencias que mostrarás a tus huéspedes en tu WebApp.
-                        </p>
-                    </template>
-                </BaseTooltipResponsive>
+                <h1 class="font-medium text-[22px]">Servicios - Actividades turísticas</h1>
             </div>
             <SwichShowTypeExperience />
         </div>
