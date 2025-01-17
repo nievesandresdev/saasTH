@@ -1,9 +1,19 @@
 <template>
   <section
     :class="[baseClass, xlClass, xl3Class]"
-    :style="{ width: width, marginBottom: marginBottom, marginTop: marginTop }"
+   
+    :style="{
+      width: width,
+      marginBottom: marginBottom,
+      marginTop: marginTop,
+      backgroundImage: iconBg ? `url(${srcBg})` : 'none',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundSize: 'contain',
+    }"
   >
     <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster" :class="[baseClass, xlClass, xl3Class]">
+      {{ srcBg }} {{ iconBg }}
       <slot name="title"></slot>
       <slot name="content"></slot>
     </div>
@@ -33,6 +43,14 @@ const props = defineProps({
   xl3Class: {
     type: String,
     default: '3xl:w-full'
+  },
+  iconBg: {
+    type: Boolean,
+    default: false
+  },
+  srcBg: {
+    type: String,
+    default: ''
   }
 })
 
