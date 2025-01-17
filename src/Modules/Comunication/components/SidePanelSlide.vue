@@ -132,11 +132,11 @@ const values = {
     },
     'howGoing':{
         title: '¿Qué tal va todo?',
-        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.',
-        trigger: 'Desde la sección "Estancias", envías manualmente una invitación a tu WebApp utilizando el botón "Invitar huésped".',
-        issue: `¿Ya conoces la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento','Invitación al Chat'],
+        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.',
+        trigger: 'Tus huéspedes recibirán este mensaje pasadas las 24hs del comienzo de su estancia.',
+        issue: `¿Qué tal va todo?`,
+        descriptionContent:'Este mensaje contendrá el bloque de pregunta de Sentimiento y, dependiendo de tus configuraciones, las siguientes secciones: ',
+        itemsContent:['Instalaciones de tu alojamiento','Destinos recomendados','Experiencias recomendadas','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]

@@ -76,7 +76,7 @@
                 </template>
             </CardSectionHome>
             <CardSectionHome title="¿Qué tal va todo?">
-                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu {{$formatTypeLodging()}}.</template>
+                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
                         <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
