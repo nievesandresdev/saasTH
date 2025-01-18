@@ -77,6 +77,8 @@
                         Crear regalo
                     </span>
                 </div>
+                <hr class="my-4">
+                <Integration />
             </template>
         </SectionConfig>
     </div>
@@ -94,28 +96,33 @@
         @updateGift="updateGift"
         @close="closeEditModal"
     />
-        <ModalNoSave
-            :id="'not-saved'"
-            :open="changes"
-            text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
-            textbtn="Guardar"
-            @saveChanges="handlesubmitData"
-            type="save_changes"
-           
-        />
+
+    <!-- modal no save principal -->
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="handlesubmitData"
+        type="save_changes"
+        
+    />
 </template>
 <script setup>
 import { ref,provide,onMounted,watch } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
-import ModalNoSave from '@/components/ModalNoSave.vue';
+import Integration from './Components/Integration.vue';
+import SectionGift from './Components/SectionGift.vue';
 
+
+import ModalNoSave from '@/components/ModalNoSave.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import { isEqual } from 'lodash';
-import SectionGift from './Components/SectionGift.vue';
+
 
 import Create from './Components/Create.vue';
 import Edit from './Components/Edit.vue';
@@ -246,7 +253,13 @@ const updateVisivilityBenefits = () => {
 }
 
 const handlesubmitData = () => {
-    console.log('submit data')
+    let params = {
+        offer_benefits: hotelData.offer_benefits,
+        benefitSReferrals: benefitSReferrals.value,
+        benefitReferent: benefitReferent.value
+    }
+    console.log('submit data',params)
+    
 }
 
 
