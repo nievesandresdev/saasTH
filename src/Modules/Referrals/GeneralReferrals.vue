@@ -12,28 +12,17 @@
                 <p class="text-sm font-normal mb-4">
                     Ofrece a los referidos beneficios exclusivos para incitarlos a contratar. Refuerza el atractivo de tu oferta destacando las ventajas que solo los referidos pueden conseguir.
                 </p>
-                <SectionConfig :marginTop="'24px'" :width="'460px'" icon-bg :src-bg="'/assets/icons/TH.Gift.opacity.svg'" bg-class="''" v-show="!isObjectEmpty(benefitSReferrals)">
-                    <template #title>
-                        <div class="flex justify-between">
-                            <h1 class="text-base font-semibold mb-2">Código: {{ benefitSReferrals.code }}</h1>
-                            <img class="w-[24px] h-[24px] cursor-pointer" src="/assets/icons/1.TH.EDIT.OUTLINED.svg" @click="editGift">
-                            
-                        </div>
-                        <div class="flex justify-between">
-                            <h1 class="text-base font-semibold mb-2">Regalo: {{ valueReferrals }}</h1>
-                        </div>
-                    </template>
-                    <template #content>
-                        <p class="text-sm font-normal mb-4">
-                            {{ benefitSReferrals.how_redeem }}
-                        </p>
-                    </template>
-                </SectionConfig>
+                <SectionGift 
+                    :benefitSReferrals="benefitSReferrals"
+                    :valueReferrals="valueReferrals"
+                    @editGift="editGift"
+                    :type="'referred'"
+                />
                 <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
-                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal">
+                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal('referred')">
                         Crear regalo
                     </span>
                 </div>
@@ -72,12 +61,19 @@
                 <p class="text-sm font-normal mb-4">
                     Recompensa a los referentes con beneficios únicos que maximicen su motivación para referir a nuevos huéspedes a contratar, fortaleciendo así el impulso del programa de referidos.
                 </p>
+
+                <SectionGift 
+                    :benefitSReferrals="benefitReferent"
+                    :valueReferrals="valueReferent"
+                    :type="'referent'"
+                    @editGift="editGift"
+                />
                 
-                <div class="flex gap-2">
+                <div class="flex gap-2" v-show="isObjectEmpty(benefitReferent)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
-                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal">
+                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal('referent')" >
                         Crear regalo
                     </span>
                 </div>
@@ -91,19 +87,27 @@
         @cancel="cancelChange" 
         @submit="submit"
     />
-    <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals"/>
+    <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
+    <Edit
+        :modal-edit="isOpenEditPanel" 
+        :initial-data="selectedGiftData"
+        @close="closeEditModal"
+    />
 </template>
 <script setup>
-import { ref,provide,onMounted,watch, computed } from 'vue';
+import { ref,provide,onMounted,watch } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
+
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import { isEqual } from 'lodash';
+import SectionGift from './Components/SectionGift.vue';
 
 import Create from './Components/Create.vue';
+import Edit from './Components/Edit.vue';
 
 
 import { useHotelStore } from '@/stores/modules/hotel';
@@ -117,13 +121,23 @@ const mockupStore = useMockupStore();
 const { hotelData } = hotelStore;
 
 const isOpenSidePanel = ref(false);
+const isOpenEditPanel = ref(false);
+
 const benefitSReferrals = ref({});
+const benefitReferent = ref({});
 const initialBenefitSReferrals = ref({});
+const initialBenefitSReferent = ref({});
+const selectedGiftData = ref({});
+
+const typeModal = ref(null)
+const typePeople = ref(null)
 
 
 // PROVIDE
 provide('hotelData', hotelData);
 provide('isOpenSidePanel', isOpenSidePanel);
+provide('isOpenEditPanel', isOpenEditPanel);
+provide('typeModal', typeModal);
 
 
 // Estado inicial
@@ -132,32 +146,27 @@ const initialOfferBenefits = ref(hotelData.offer_benefits);
 // Cambios pendientes
 const changes = ref(false);
 
-// Comparar cambios
-/* const checkChanges = () => {
-    //const hasOfferBenefitsChanged = !isEqual(hotelData.offer_benefits, initialOfferBenefits.value);
-    const hasBenefitSReferralsChanged = !isEqual(benefitSReferrals.value, initialBenefitSReferrals.value);
-    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
-
-    console.log('hasOfferBenefitsChanged', hasOfferBenefitsChanged)
-    console.log('hasBenefitSReferralsChanged', hasBenefitSReferralsChanged)
-    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged;
-}; */
 
 const checkChanges = () => {
+    // Detecta cambios en el switch
     const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
-    const hasBenefitSReferralsChanged = !isEqual(JSON.stringify(benefitSReferrals.value), JSON.stringify(initialBenefitSReferrals.value));
 
-    console.log({
-        'initialBenefitSReferrals': initialBenefitSReferrals,
-        'benefitSReferrals': JSON.stringify(benefitSReferrals.value),
-        'diffrent' : hasBenefitSReferralsChanged
+    // Detecta cambios en los JSON
+    const hasBenefitSReferralsChanged = !isEqual(
+        JSON.parse(JSON.stringify(benefitSReferrals.value)),
+        JSON.parse(JSON.stringify(initialBenefitSReferrals.value))
+    );
 
-    })
+    const hasBenefitSReferentChanged = !isEqual(
+        JSON.parse(JSON.stringify(benefitReferent.value)),
+        JSON.parse(JSON.stringify(initialBenefitSReferent.value))
+    );
 
-    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged;
+    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged || hasBenefitSReferentChanged;
+
 };
 
-// Watcher para detectar cambios en `hotelData.offer_benefits`
+
 watch(
     () => hotelData.offer_benefits,
     () => {
@@ -167,44 +176,47 @@ watch(
 
 const dataReferrals = (data) => {
     
-    //console.log('data referrals',data)
     setTimeout(()=>
     {
-        benefitSReferrals.value = data;
+        if(typePeople.value === 'referred') {
+            benefitSReferrals.value = data;
+        } else {
+            benefitReferent.value = data;
+        }
         checkChanges();
     }, 900)
-    //checkChanges();
 }
 
 const isObjectEmpty = (obj) => {
     return !obj || Object.keys(obj).length === 0;
 };
 
-const valueReferrals = computed(() => {
-    if(benefitSReferrals?.value.type === 'percentage') {
-        return benefitSReferrals?.value.value + '%'
-    } else {
-        return benefitSReferrals?.value.value + '€'
-    }
-});
 
 function loadMockup () {
     mockupStore.$setIframeUrl('/alojamiento');
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    
     mockupStore.$setLanguageTooltip(true)
 }
 
+const checkTypePeople = (type) => {
+    typePeople.value = type;
+}
 
-const openModal = () => {
+
+const openModal = (type) => {
     isOpenSidePanel.value = true;
+    typeModal.value = type;
 }
 
 const closeModalAdd = () => {
     isOpenSidePanel.value = false;
 }
 
-const editGift = () => {
-    alert('edit gift')
+const editGift = (type,data) => {
+    console.log('edit gift',type,data)
+    isOpenEditPanel.value = true;
+    selectedGiftData.value = data;
 }
 
 const updateVisivilityBenefits = () => {

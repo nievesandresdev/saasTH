@@ -12,7 +12,7 @@
       <!-- Header -->
       <div class="flex justify-between items-center px-6 py-[20px] h-[64px] border-b border-[#BFBFBF]">
         <div class="flex-1 text-left">
-          <h1 class="font-medium text-[22px]">Nuevo regalo para el referente</h1>
+          <h1 class="font-medium text-[22px]">Nuevo regalo para el {{ typeModalTitle }}</h1>
         </div>
         <div class="flex justify-end">
           <button class="">
@@ -110,17 +110,18 @@ import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
 import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
 
-const emit = defineEmits(['handleReferrals']);
+const emit = defineEmits(['handleReferrals','typePeople']);
 
 const showPanel = ref(false);
 const showSlidePanel = ref(false);
 const isOpenSidePanel = inject('isOpenSidePanel');
+const typeModal = inject('typeModal');
 
 const form = ref({
-    value: '', // Valor numérico
+    value: '', 
     type: 'percentage', // Tipo (porcentaje o dinero)
-    code: '', // Código del cupón
-    how_redeem: '' // Instrucciones de canje
+    code: '', 
+    how_redeem: '',
 });
 
 const errors = ref({
@@ -139,6 +140,11 @@ const isFormIncomplete = computed(() => {
     errors.value.code ||
     errors.value.how_redeem
   );
+});
+
+
+const typeModalTitle = computed(() => {
+  return typeModal.value === 'referent' ? 'referente' : 'referido';
 });
 
 const validateValue = (event) => {
@@ -207,6 +213,7 @@ const submit = () => {
     //console.log('Formulario enviado:', form.value);
     toast.warningToast('Regalo añadido','top-right')
     emit('handleReferrals', form.value);
+    emit('typePeople', typeModal.value);
     isClosePanel();
 
   }
