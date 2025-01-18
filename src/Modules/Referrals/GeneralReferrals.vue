@@ -1,6 +1,6 @@
 <template>
     <ListPageHeader />
-    <BannerShow v-show="hotelData.show_referrals" />
+    <BannerShow :show="hotelData.show_referrals" />
 
     <!-- section  Beneficios para el referido -->
     <div class="p-6 min-h-screen">
@@ -136,6 +136,9 @@ provide('hotelStore', hotelStore);
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
 
+import { useToastAlert } from '@/composables/useToastAlert';
+const toast = useToastAlert();
+
 const { hotelData } = hotelStore;
 
 const isOpenSidePanel = ref(false);
@@ -259,6 +262,8 @@ const handlesubmitData = () => {
         benefitReferent: benefitReferent.value
     }
     console.log('submit data',params)
+    toast.warningToast('Cambios guardados con éxito','top-right')
+    changes.value = false;
     
 }
 
