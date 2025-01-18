@@ -132,6 +132,9 @@ import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
 provide('hotelStore', hotelStore);
 
+import { useRewardStore } from '@/stores/modules/rewards/rewards';
+const rewardStore = useRewardStore();
+
 
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
@@ -269,8 +272,13 @@ const handlesubmitData = () => {
 
 
 //mounted
-onMounted(() => {
+onMounted(async () => {
     loadMockup();
+    const response = await rewardStore.$getAllRewards();
+    const { ok, data } = response;
+
+    console.log('rewardsxXXxx',data)
+
 });
 
 </script>
