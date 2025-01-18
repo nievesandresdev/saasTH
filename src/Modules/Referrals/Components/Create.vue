@@ -15,7 +15,7 @@
           <h1 class="font-medium text-[22px]">Nuevo regalo para el {{ typeModalTitle }}</h1>
         </div>
         <div class="flex justify-end">
-          <button class="">
+          <button class="" @click="isClosePanel">
             <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
           </button>
         </div>
@@ -107,6 +107,7 @@ import { ref, computed, inject, watch } from 'vue';
 import RadioButton from '@/components/Forms/RadioButton.vue';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
@@ -226,17 +227,17 @@ watch(
     if (newVal) {
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
-      }, 200);
+      }, 120);
       setTimeout(() => {
         showSlidePanel.value = isOpenSidePanel.value;
-      }, 400);
+      }, 250);
     } else {
       setTimeout(() => {
         showSlidePanel.value = isOpenSidePanel.value;
-      }, 200);
+      }, 120);
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
-      }, 400);
+      }, 300);
     }
   }
 );

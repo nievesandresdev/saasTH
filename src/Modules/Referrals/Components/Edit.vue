@@ -14,7 +14,7 @@
           <div class="flex-1 text-left">
             <h1 class="font-medium text-[22px]">Editar regalo para el {{ typeModalTitle }}</h1>
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end" @click="isClosePanel">
             <button class="">
               <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
             </button>

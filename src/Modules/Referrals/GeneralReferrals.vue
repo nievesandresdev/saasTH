@@ -1,6 +1,6 @@
 <template>
     <ListPageHeader />
-    <BannerShow />
+    <BannerShow v-show="hotelData.show_referrals" />
 
     <!-- section  Beneficios para el referido -->
     <div class="p-6 min-h-screen">
@@ -85,7 +85,7 @@
         :existingChanges="changes"
         :validChanges="changes"
         @cancel="cancelChange" 
-        @submit="submit"
+        @submit="handlesubmitData"
     />
     <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
     <Edit
@@ -94,12 +94,22 @@
         @updateGift="updateGift"
         @close="closeEditModal"
     />
+        <ModalNoSave
+            :id="'not-saved'"
+            :open="changes"
+            text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+            textbtn="Guardar"
+            @saveChanges="handlesubmitData"
+            type="save_changes"
+           
+        />
 </template>
 <script setup>
 import { ref,provide,onMounted,watch } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
@@ -233,6 +243,10 @@ const editGift = (type,data) => {
 const updateVisivilityBenefits = () => {
     console.log('update visibility benefits')
     checkChanges();
+}
+
+const handlesubmitData = () => {
+    console.log('submit data')
 }
 
 
