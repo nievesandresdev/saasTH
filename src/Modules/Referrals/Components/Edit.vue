@@ -126,7 +126,12 @@
   const typeModal = inject('typeModal');
   
   // Datos del formulario inicializados con los datos precargados
-  const form = ref({ ...props?.initialData });
+  const form = ref({
+    value: props?.initialData?.value,
+    type: props?.initialData?.type,
+    code: props?.initialData?.code,
+    how_redeem: props?.initialData?.how_redeem,
+  });
   
   const errors = ref({
     value: false,
@@ -196,7 +201,7 @@
   
   const submit = () => {
     if (!isFormIncomplete.value) {
-      toast.successToast('Regalo actualizado', 'top-right');
+      toast.warningToast('Regalo modificado', 'top-right');
       emit('updateGift', form.value);
       isClosePanel();
     }
@@ -208,6 +213,12 @@
       if (newVal) {
         setTimeout(() => {
           showPanel.value = isOpenEditPanel.value;
+          form.value = {
+            value: props?.initialData?.value,
+            type: props?.initialData?.type,
+            code: props?.initialData?.code,
+            how_redeem: props?.initialData?.how_redeem,
+          };
         }, 200);
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;

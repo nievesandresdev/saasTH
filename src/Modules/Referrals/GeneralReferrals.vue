@@ -91,6 +91,7 @@
     <Edit
         :modal-edit="isOpenEditPanel" 
         :initial-data="selectedGiftData"
+        @updateGift="updateGift"
         @close="closeEditModal"
     />
 </template>
@@ -185,6 +186,16 @@ const dataReferrals = (data) => {
         }
         checkChanges();
     }, 900)
+}
+
+const updateGift = (data) => {
+    console.log('update gift',data)
+    if(typePeople.value === 'referred') {
+        benefitSReferrals.value = data;
+    } else {
+        benefitReferent.value = data;
+    }
+    checkChanges();
 }
 
 const isObjectEmpty = (obj) => {
