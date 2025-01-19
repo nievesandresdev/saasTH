@@ -273,9 +273,12 @@ const handlesubmitData = () => {
 onMounted(async () => {
     loadMockup();
     const response = await rewardStore.$getAllRewards();
-    const { ok, data } = response;
+    const {  data } = response;
 
-    console.log('rewardsxXXxx',data)
+    if(data) {
+        benefitSReferrals.value = data?.benefitSReferrals ?? {};
+        benefitReferent.value = data?.benefitReferent ?? {};
+    }
 
 });
 

@@ -13,7 +13,7 @@
         </template>
         <template #content>
             <p class="text-sm font-normal mb-4">
-                {{ benefitSReferrals.how_redeem }}
+                {{ benefitSReferrals.description }}
             </p>
         </template>
     </SectionConfig>
@@ -45,18 +45,18 @@ const editGift = (data) => {
 }
 
 const valueReferrals = computed(() => {
-    if(props.benefitSReferrals?.type === 'percentage') {
-        return props.benefitSReferrals?.value + '%'
+    if(props.benefitSReferrals?.type_discount === 'percentage') {
+        return props.benefitSReferrals?.amount + '%'
     } else {
-        return props.benefitSReferrals?.value + '€'
+        return props.benefitSReferrals?.amount + '€'
     }
 });
 
 const valueReferent = computed(() => {
-    if(props.benefitSReferrals?.type === 'percentage') {
-        return props.benefitSReferrals?.value + '%'
+    if(props.benefitSReferrals?.type_discount === 'percentage') {
+        return props.benefitSReferrals?.amount + '%'
     } else {
-        return props.benefitSReferrals?.value + '€'
+        return props.benefitSReferrals?.amount + '€'
     }
 });
 

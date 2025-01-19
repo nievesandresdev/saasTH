@@ -28,8 +28,8 @@
             <span class="text-sm font-medium">Edita el valor y la unidad</span>
             <div class="flex gap-4">
               <BaseTextField
-                v-model="form.value"
-                :error="errors.value"
+                v-model="form.amount"
+                :error="errors.amount"
                 type="text"
                 placeholder="Introduce el valor"
                 required
@@ -41,11 +41,11 @@
               /> 
               <div class="flex gap-4 items-center">
                 <div class="flex gap-2">
-                  <RadioButton id="color-1" :value="'percentage'" v-model="form.type" :iconSize="'w-6 h-6'" :spanSize="'w-3 h-3'" @change="onTypeChange" />
+                  <RadioButton id="color-1" :value="'percentage'" v-model="form.type_discount" :iconSize="'w-6 h-6'" :spanSize="'w-3 h-3'" @change="onTypeChange" />
                   <span class="text-base font-semibold">%</span>
                 </div>
                 <div class="flex gap-2">
-                  <RadioButton id="color-2" :value="'money'" v-model="form.type" :iconSize="'w-6 h-6'" :spanSize="'w-3 h-3'" @change="onTypeChange" />
+                  <RadioButton id="color-2" :value="'money'" v-model="form.type_discount" :iconSize="'w-6 h-6'" :spanSize="'w-3 h-3'" @change="onTypeChange" />
                   <span class="text-base font-semibold">€</span>
                 </div>
               </div>
@@ -70,11 +70,11 @@
           <div class="flex flex-col gap-2 mt-4">
             <span class="text-sm font-medium">Edita cómo canjearlo</span>
             <BaseTextareaField
-              v-model="form.how_redeem"
+              v-model="form.description"
               placeholder="Ej: Descuento aplicable para la contratación de cualquier servicio de nuestro hotel. Debe efectuarse la solicitud del servicio previamente en recepción. Mostrar este cupón para solicitar el beneficio."
               class-content="flex-1"
               class-input="text-sm h-[100px] min-h-[80px] p-3"
-              name="how_redeem"
+              name="description"
             />
           </div>
         </div>
@@ -127,26 +127,26 @@
   
   // Datos del formulario inicializados con los datos precargados
   const form = ref({
-    value: props?.initialData?.value,
-    type: props?.initialData?.type,
+    amount: props?.initialData?.amount,
+    type_discount: props?.initialData?.type_discount,
     code: props?.initialData?.code,
-    how_redeem: props?.initialData?.how_redeem,
+    description: props?.initialData?.description,
   });
   
   const errors = ref({
-    value: false,
+    amount: false,
     code: false,
-    how_redeem: false,
+    description: false,
   });
   
   const isFormIncomplete = computed(() => {
     return (
-      !form.value.value ||
+      !form.value.amount ||
       !form.value.code ||
-      !form.value.how_redeem ||
-      errors.value.value ||
+      !form.value.description ||
+      errors.value.amount ||
       errors.value.code ||
-      errors.value.how_redeem
+      errors.value.description
     );
   });
   
@@ -156,38 +156,38 @@
   
   const validateValue = (event) => {
     const inputValue = event.target.value.replace(/[^0-9.]/g, '').replace(',', '.');
-    form.value.value = inputValue;
+    form.value.amount = inputValue;
   
-    if (form.value.type === 'percentage' && parseFloat(inputValue) > 100) {
-      errors.value.value = true;
+    if (form.value.type_discount === 'percentage' && parseFloat(inputValue) > 100) {
+      errors.value.amount = true;
     } else {
-      errors.value.value = false;
+      errors.value.amount = false;
     }
   };
   
   const adjustValue = () => {
-    const numericValue = parseFloat(form.value.value.replace(',', '.'));
+    const numericValue = parseFloat(form.value.amount.replace(',', '.'));
   
-    if (isNaN(numericValue) || form.value.value === '') {
-      form.value.value = '';
+    if (isNaN(numericValue) || form.value.amount === '') {
+      form.value.amount = '';
       return;
     }
   
-    if (form.value.type === 'money') {
-      form.value.value = numericValue.toFixed(2).replace('.', ',');
-    } else if (form.value.type === 'percentage') {
-      form.value.value = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+    if (form.value.type_discount === 'money') {
+      form.value.amount = numericValue.toFixed(2).replace('.', ',');
+    } else if (form.value.type_discount === 'percentage') {
+      form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
     }
-    errors.value.value = false;
+    errors.value.amount = false;
   };
   
   const onTypeChange = () => {
-    const numericValue = parseFloat(form.value.value.replace(',', '.'));
+    const numericValue = parseFloat(form.value.amount.replace(',', '.'));
   
-    if (form.value.type === 'money') {
-      form.value.value = numericValue.toFixed(2).replace('.', ',');
-    } else if (form.value.type === 'percentage') {
-      form.value.value = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+    if (form.value.type_discount === 'money') {
+      form.value.amount = numericValue.toFixed(2).replace('.', ',');
+    } else if (form.value.type_discount === 'percentage') {
+      form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
     }
   };
   
@@ -214,10 +214,10 @@
         setTimeout(() => {
           showPanel.value = isOpenEditPanel.value;
           form.value = {
-            value: props?.initialData?.value,
-            type: props?.initialData?.type,
+            amount: props?.initialData?.amount,
+            type_discount: props?.initialData?.type_discount,
             code: props?.initialData?.code,
-            how_redeem: props?.initialData?.how_redeem,
+            description: props?.initialData?.description,
           };
         }, 200);
         setTimeout(() => {
