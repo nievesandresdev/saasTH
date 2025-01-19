@@ -164,7 +164,6 @@ provide('isOpenEditPanel', isOpenEditPanel);
 provide('typeModal', typeModal);
 
 
-// Estado inicial
 const initialOfferBenefits = ref(hotelData.offer_benefits);
 
 // Cambios pendientes
@@ -187,9 +186,7 @@ const checkChanges = () => {
     );
 
     changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged || hasBenefitSReferentChanged;
-
 };
-
 
 watch(
     () => hotelData.offer_benefits,
@@ -265,6 +262,7 @@ const handlesubmitData = () => {
         benefitReferent: benefitReferent.value
     }
     console.log('submit data',params)
+    rewardStore.$storeRewards(params);
     toast.warningToast('Cambios guardados con éxito','top-right')
     changes.value = false;
     

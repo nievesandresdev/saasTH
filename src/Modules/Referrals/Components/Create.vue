@@ -212,7 +212,7 @@ const cancel = () => {
 
 const submit = () => {
   if (!isFormIncomplete.value) {
-    //console.log('Formulario enviado:', form.value);
+    console.log('Formulario enviado:', form.value);
     toast.warningToast('Regalo añadido','top-right')
     emit('handleReferrals', form.value);
     emit('typePeople', typeModal.value);
