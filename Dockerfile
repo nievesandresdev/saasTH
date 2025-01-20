@@ -16,9 +16,6 @@ RUN npm run build
 # Etapa de producción
 FROM nginx:1.13.12-alpine as production-stage
 
-# Instalar bash para debug
-RUN apk add --no-cache bash
-
 # Copiar los archivos de la build
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
