@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 
 import * as experienceService from '@/api/services/experience.service';
 import { useHotelStore } from '@/stores/modules/hotel';
@@ -15,8 +15,12 @@ export const useExperienceStore = defineStore('experience', () => {
     // FUNCTIONS
 
     function formatImage (item) {
-        let { image: path, type, url } = item ?? {};
+        let { image: path, type, url, api } = item ?? {};
+        if (api) {
             return url;
+        }
+        if (type == 'gallery' || url?.includes('storage')) return `${URL_STORAGE}${url}`;
+        return `${URL_STORAGE}/storage/places/${item?.image}`;
     }
 
     function getHotelParams(params = {}) {
@@ -76,6 +80,17 @@ export const useExperienceStore = defineStore('experience', () => {
         return []
     }
 
+    // MANAGE EXPERIENCES BY HOSTER
+
+    async function $storeOrUpdateHoster (params, config = {}) {
+        let newParams = getHotelParams(params);
+        const response = await experienceService.storeOrUpdateHosterApi(newParams, config);
+        return response;
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+
     //
     return {
         formatImage,
@@ -85,6 +100,8 @@ export const useExperienceStore = defineStore('experience', () => {
         $updateRecommendation,
         $updatePosition,
         $update,
+        //
+        $storeOrUpdateHoster,
     }
 
 })

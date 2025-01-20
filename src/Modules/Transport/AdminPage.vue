@@ -1,0 +1,147 @@
+<template>
+     <div class="bg-[#FAFAFA]" :class="userStore.showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'">
+            <div class="pb-[104px]">
+                <AdminPageHeader />
+                <AdminPageBannerShowToGuest v-if="!hotelData.show_transport" />
+                <div class="mt-[24px] px-[24px]">
+                    <p
+                        class="text-sm font-medium mb-6"
+                        :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && transportsEmpty}"
+                    >{{ searchText }}</p>
+                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadTransports" />
+                </div>
+            </div>
+            <PanelEdit
+                ref="panelEditRef"
+                @load:resetPageData="resetPageData()"
+            />
+    </div>
+</template>
+
+<script setup>
+import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
+import { $throttle, $isElementVisible } from '@/utils/helpers';
+
+// COMPONENT
+ import AdminPageHeader from './AdminPageHeader.vue';
+ import AdminPageBannerShowToGuest from './AdminPageBannerShowToGuest.vue';
+ import AdminPageList from './AdminPageList.vue';
+ import PanelEdit from './components/PanelEdit.vue';
+
+// MODULE
+import { useMockupStore } from '@/stores/modules/mockup';
+const mockupStore = useMockupStore();
+
+// COMPOSABLES
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
+
+// STATE
+import { useUserStore } from '@/stores/modules/users/users';
+const userStore = useUserStore();
+import { useTransportStore } from '@/stores/modules/transport';
+const transportStore = useTransportStore();
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
+const { hotelData } = hotelStore; 
+
+// DATA
+const modelActive = ref(null);
+const numberCardsDefault = ref(10);
+const transportsEmpty = ref(false);
+const transportsData = ref([]);
+const page = ref(1);
+const firstLoad = ref(true);
+const isloadingForm = ref(false);
+const selectedCard = ref(null);
+const changePendingInForm = ref(false);
+const modalChangePendinginForm = ref(false);
+const panelEditRef = ref(null);
+const formFilter = reactive({
+
+});
+const paginateData = reactive({
+    total: 0,
+    current_page: 1,
+    per_page: 1,
+    last_page: 0,
+    from_page: 0,
+    to: 0,
+});
+
+// COMPUTED
+const searchText = computed(() => {
+   return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
+});
+
+onMounted(async() => {
+    if(window.screen.width > 1919){
+        numberCardsDefault.value = 14;
+    }
+    loadMockup();
+    loadTransports();
+});
+
+// FUNCTION
+function loadMockup (path = '/') {
+    mockupStore.$setIframeUrl(`/`);
+    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
+    mockupStore.$setLanguageTooltip(true);
+}
+async function loadTransports () {
+    isloadingForm.value=true;
+    const response = await transportStore.$getAll({page: page.value,...formFilter});
+    if (response.ok) {
+        let paginate = {
+            total: response.data.paginate.total,
+            current_page: response.data.paginate.current_page,
+            per_page: response.data.paginate.per_page,
+            last_page: response.data.paginate.last_page,
+            from_page: response.data.paginate.from,
+            to: response.data.paginate.to,
+        }
+        Object.assign(paginateData, paginate);
+        page.value = paginateData.current_page;
+        transportsData.value = [...transportsData.value, ...response.data.data];
+    }
+    isloadingForm.value = false;
+    firstLoad.value = false;
+}
+
+
+function openDrawer (payload) {
+    modelActive.value = payload.action;
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            // loadMockupEdit(`${payload.facility.id}`);
+        } else {
+            // loadMockup('/fakedetail');
+        }
+        panelEditRef.value.edit(payload);
+    });
+}
+
+function resetPageData () {
+    changePendingInForm.value = false;
+    //mockupStore.$reloadIframe();
+    loadMockup();
+    loadTransports();
+}
+
+provide('toast', toast);
+provide('mockupStore', mockupStore);
+provide('transportStore', transportStore);
+provide('transportsData', transportsData);
+provide('hotelStore', hotelStore);
+provide('hotelData', hotelData);
+provide('changePendingInForm', changePendingInForm);
+provide('modalChangePendinginForm', modalChangePendinginForm);
+provide('paginateData', paginateData);
+provide('selectedCard', selectedCard);
+provide('modelActive', modelActive);
+
+provide('isloadingForm', isloadingForm);
+provide('firstLoad', firstLoad);
+provide('page', page);
+
+</script>

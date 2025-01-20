@@ -3,7 +3,6 @@
     <p class="mt-4 text-sm font-medium mb-4"  v-if="!formFilter.search_terms" :class="{'hbg-gray-500 htext-gray-500 rounded-[6px] animate-pulse w-[400px]':firstLoad}">
         {{ textNumbersExperiencesVisiblesAndHidden }}
     </p>
-    <!-- {{ idsToggleExperienciesVisibles }} -->
     
     <template v-if="!firstLoad && !experiencesData.length">
         <div class="flex flex-col justify-center items-center space-y-4 mt-[85px]">
@@ -17,6 +16,8 @@
     </template>
     <div v-else id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
         
+        <BaseCardCreate v-if="!firstLoad" title="Crear servicio" @click="openEditHoster('ADD')" />
+
         <template v-for="(experience, index) in experiencesData">
             <!-- experiencesData[index-1]?.experience" -->
             <div
@@ -47,7 +48,7 @@
                 :class="{'shadow-draginng border border-gray-300' : experience.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
                 @mouseover="hoverItem = index"
                 @mouseleave="hoverItem = null"
-                @click="editExperience(experience)"
+                @click="experience.name_api == 'viator' ? openEditViator(experience) : openEditHoster('EDIT', experience)"
             >
                 <div class="w-[224px] rounded-t-[10px] relative">
                     <img
@@ -88,7 +89,7 @@
                     class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-10 rounded-[10px]"
                 />
                 <div class="p-2 truncate-2">
-                    <div class="flex items-center space-x-[4px] h-[33px]">
+                    <!-- <div class="flex items-center space-x-[4px] h-[33px]">
                         <span class="text-[22px] font-medium htext-black-100">{{ experience.reviews?.combined_average_rating.toFixed(1) }}</span>
                         <div>
                             <div class="flex flec-col">
@@ -100,30 +101,23 @@
                             </div>
                             <p class="text-[10px] font-semibold htext-black-100">{{ experience.reviews?.total_reviews }} reseñas</p>
                         </div>
-                    </div>
-                    <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px] mt-[8px]">{{ experience.title }}</h6>
-                    <!-- {{ experience.toggle_product_id }} -->
-                    <span class="text-sm htext-black-100 font-semibold truncate-2 mt-[12px]">Desde {{ experience.from_price }}€</span>
-                    <div class="flex space-x-1 mt-[12px]">
-                        <img class="" src="/assets/icons/1.TH.CLOCK.svg" alt="1.TH.LOCATION">
-                        <p class="text-[10px] font-semibold htext-black-100">
-                            <template v-if="formatDuration(experience.duration)?.minutes <= 0">
-                                {{ `${formatDuration(experience.duration)?.hours}H APROX` }}
+                    </div> -->
+                    <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ experience.title }}</h6>
+                    <div class="mt-[12px] flex items-center justify-between">
+                        <span class="text-sm htext-black-100 font-semibold truncate-2">
+                            <template v-if="experience.name_api == 'viator' || (experience.name_api == 'thehoster' && experience.type_price == 1)">
+                                Desde {{ experience.from_price }}€
                             </template>
-                            <template v-else>
-                                {{ `${formatDuration(experience.duration)?.hours}HS Y ${formatDuration(experience.duration)?.minutes}MIN APROX` }}
+                            <template v-else-if="experience.type_price == 2">
+                                {{ experience.from_price }}€
                             </template>
-                        </p>
+                            <template v-else="experience.type_price == 3">
+                                Servicio gratuito 
+                            </template>
+                        </span>
+                        <img v-if="experience.name_api === 'viator'" src="/assets/icons/TH.VIATOR.svg" alt="VIATOR">
                     </div>
-                    <div class="flex space-x-1 mt-[8px]">
-                        <template v-if="experience.cancellation_policy == 'STANDARD'">
-                            <img class="" src="/assets/icons/1.TH.CHECK.OUTLINED.svg" alt="1.TH.CHECK.OUTLINED">
-                            <p class="text-[10px] font-semibold htext-black-100">CANCELACIÓN GRATUITA</p>
-                        </template>
-                        <template v-else>
 
-                        </template>
-                    </div>
                     <button
                         v-if="hoverItem == index && experience.is_visible"
                         class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
@@ -137,44 +131,18 @@
         </template>
         <SkeletonCard v-for="card in numberCardsToLoad" />
     </div>
-    <!-- <div v-if="(experiencesData.length > 0) && (experiencesData.length < paginateData?.total)" class="w-[789px] 3xl:w-[1216px] text-center mt-[32px]">
-        <button
-            v-if="!isloadingForm"
-            class="text-sm font-medium text-center rounded-lg py-[13px] px-[16px] border border-black htext-black-100"
-            @click="loadMore({ showLoadingMore: true })"
-        >
-            Cargar más
-        </button>
-        <div
-            v-else
-            class="w-full flex justify-center"
-        >
-            <div
-                class="spinner-container mx-auto mt-auto"
-            >
-                <svg class="spinner" viewBox="0 0 50 50">
-                    <defs>
-                        <linearGradient id="spinnerGradient" x1="100%" y1="0%" x2="0%" y2="0%">
-                            <stop offset="60%" stop-color="#34A98F" stop-opacity="0.3" />
-                            <stop offset="100%" stop-color="#34A98F" stop-opacity="1" />
-                        </linearGradient>
-                    </defs>
-                    <circle ref="circle" cx="25" cy="25" r="20" fill="none" stroke="url(#spinnerGradient)" stroke-width="2.5" stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
-                </svg>
-                <img class="spinner-icon  w-[40px] h-[40px]" src="/assets/icons/hotel-bell-svgrepo-com.svg" alt="">
-            </div>
-        </div>
-    </div> -->
+
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
 
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
-import SkeletonCard from './components/SkeletonCard.vue'
-import { $throttle, $isElementVisible } from '@/utils/helpers'
+import SkeletonCard from './components/SkeletonCard.vue';
+import BaseCardCreate from '@/components/Card/BaseCardCreate.vue';
+import { $throttle, $isElementVisible } from '@/utils/helpers';
 
-const emits = defineEmits(['reloadExperiences', 'edit']);
+const emits = defineEmits(['reloadExperiences', 'edit-viator', 'edit-hoster']);
 
 const hotelStore = inject('hotelStore');
 const experienceStore = inject('experienceStore');
@@ -222,6 +190,9 @@ const textNumbersExperiencesVisiblesAndHidden = computed(() => {
         text = ` ${numberExperiencesVisible.value} ${visiblesText} y ${numberExperiencesHidden.value} ${hidden}`
     }
     if(formFilter.visibility){
+        if(formFilter.visibility.includes('viator')){
+            text =` ${numberExperiencesVisible.value} ${visiblesText}`
+        }
         if(formFilter.visibility.includes('visible')){
             text =` ${numberExperiencesVisible.value} ${visiblesText}`
         }
@@ -473,8 +444,12 @@ async function updateRecommendation (event, experience) {
     mockupStore.$reloadIframe();
 }
 
-function editExperience (experience) {
- emits('edit', { action: 'EDIT', experience});
+function openEditHoster (action, experience = null) {
+    emits('edit-hoster', { action, experience});
+}
+
+function openEditViator (experience = null) {
+    emits('edit-viator', { action: 'EDIT', experience});
 } 
 
 function openModalChangeInForm () {

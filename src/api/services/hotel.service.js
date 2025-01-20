@@ -9,6 +9,7 @@ export const updateDefaultHotel = (data) => apiHttp('POST', `${hotelPath}/update
 export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: true });
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data);
 export const updateSenderMailMaskApi = (data) => apiHttp('POST', `${hotelPath}/updateSenderMailMask`, data, {showPreloader: false });
+export const updateVisivilityServiceApi = (data) => apiHttp('POST', `${hotelPath}/serviceVisivility`, data, {showPreloader: false });
 export const updateVisivilityFacilitiesApi = () => apiHttp('POST', `${hotelPath}/facilityVisivility`, [], {showPreloader: false });
 export const updateVisivilityExperiencesApi = () => apiHttp('POST', `${hotelPath}/experienceVisivility`, [], {showPreloader: false });
 export const updateVisivilityPlacesApi = () => apiHttp('POST', `${hotelPath}/placeVisivility`);

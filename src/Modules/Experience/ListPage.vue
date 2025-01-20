@@ -33,8 +33,9 @@
                     <ListPageList
                         ref="listPageListRef"
                         class="px-6 mt-4"
-                        @reloadExperiences="reloadExperiences()"
-                        @edit="edit"
+                        @reload-experiences="reloadExperiences()"
+                        @edit-hoster="openEditByHoster"
+                        @edit-viator="openEditByViator"
                     />
                 </div>
             </div>
@@ -43,6 +44,10 @@
         
         <PanelEdit
             ref="panelEditRef"
+            @load:resetPageData="reloadExperiences()"
+        />
+        <PanelEditHoster
+            ref="panelEditHosterRef"
             @load:resetPageData="reloadExperiences()"
         />
     </div>
@@ -59,6 +64,7 @@ import ListPageFiltersSelected from './ListPageFiltersSelected.vue';
 import InputSearch from './components/InputSearch.vue';
 import ModalFilter from './components/ModalFilter.vue';
 import PanelEdit from './components/PanelEdit.vue';
+import PanelEditHoster from './components/PanelEditHoster.vue';
 
 import { useRouter } from 'vue-router';
 const route = useRouter();
@@ -157,7 +163,9 @@ const firstLoad = ref(true);
 const emptyExperiences = ref(false);
 
 const modelActive = ref(null);
+const panelEditHosterActive = ref(null);
 const panelEditRef = ref(null);
+const panelEditHosterRef = ref(null);
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -169,6 +177,7 @@ provide('hotelStore', hotelStore);
 provide('formFilter', formFilter);
 provide('experiencesData', experiencesData);
 provide('modelActive', modelActive);
+provide('panelEditHosterActive', panelEditHosterActive);
 provide('paginateData', paginateData);
 provide('page', page);
 provide('numberExperiencesVisible', numberExperiencesVisible);
@@ -182,6 +191,12 @@ provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('firstLoad', firstLoad);
 
 watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
+watch(panelEditHosterActive, (valNew, valOld) => {
     if (!valNew && !!valOld) {
         loadMockup();
     }
@@ -371,11 +386,7 @@ function openModalChangeInForm () {
 }
 
 
-function edit (payload) {
-    if (changePendingInForm.value) {
-        openModalChangeInForm();
-        return;
-    }
+function openEditByViator (payload) {
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
@@ -384,6 +395,11 @@ function edit (payload) {
         }
         panelEditRef.value.edit(payload);
     });
+}
+
+function openEditByHoster (payload) {
+    panelEditHosterActive.value = payload.action;
+    panelEditHosterRef.value.edit(payload);
 }
 
 

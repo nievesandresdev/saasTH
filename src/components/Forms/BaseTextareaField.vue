@@ -8,7 +8,8 @@
         >
         <div class="relative">
             <textarea
-                rows="5"
+                ref="textareaRef"
+                :rows="rows"
                 :value="modelValue"
                 @input="updateValue($event)"
                 class="w-full h-[108px] max-h-[225px] rounded-[6px] border"
@@ -30,11 +31,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const emit = defineEmits(['click:append_inner', 'update:modelValue', 'blur:validate', 'enter:search']);
 
 const props = defineProps({
+    rows: {
+        type: Number,
+        default: 5,
+    },
     classContent: {
         type: String,
         default: ''
@@ -76,14 +81,26 @@ const props = defineProps({
     },
 });
 
+const textareaRef = ref(null);
+
 const searchbyenter = () => {
     emit('enter:search');
 }
+onMounted(() => {
+     autoResize();
+});
 
 const updateValue = (event) => {
   emit('update:modelValue', event.target.value);
   emit('blur:validate');
+  autoResize();
 };
+function autoResize() {
+    if (textareaRef.value) {
+        textareaRef.value.style.height = 'auto'; // Resetea la altura
+        textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`; // Ajusta según el contenido
+    }
+}
 
 const customInputClass = computed(() => {
     let c = props.classInput;

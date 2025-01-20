@@ -2,7 +2,16 @@
     <div class="flex mt-4">
         <div
          
-            class="px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] cursor-pointer"
+            class="px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] cursor-pointer flex items-center"
+            :class="{'border hborder-green-700 hbg-green-200 htext-green-600' : formFilter.visibility === 'viator', 'border htext-black-100 hborder-black-100 htext-gray-500 bg-white' : formFilter.visibility !== 'viator'}"
+            @click="changeVisibility('viator')"
+        >
+            <img class="h-4 w-4 mr-2" src="/assets/icons/1.TH.VIATOR.LOGO.svg" alt="Warning">
+            Viator
+        </div>
+        <div
+         
+            class="px-4 py-2 text-sm font-medium leading-[110%] rounded-[6px] ml-4 cursor-pointer"
             :class="{'border hborder-green-700 hbg-green-200 htext-green-600' : formFilter.visibility === 'visible', 'border htext-black-100 hborder-black-100 htext-gray-500 bg-white' : formFilter.visibility !== 'visible'}"
             @click="changeVisibility('visible')"
         >
