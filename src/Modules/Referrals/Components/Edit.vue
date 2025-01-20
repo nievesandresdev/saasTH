@@ -12,7 +12,6 @@
         <!-- Header -->
         <div class="flex justify-between items-center px-6 py-[20px] h-[64px] border-b border-[#BFBFBF]">
           <div class="flex-1 text-left">
-            {{ typeModal ?? 'sss' }}
             <h1 class="font-medium text-[22px]">Editar regalo para el {{ typeModalTitle }}</h1>
           </div>
           <div class="flex justify-end" @click="isClosePanel">

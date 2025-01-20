@@ -17,6 +17,7 @@
                     :valueReferrals="valueReferrals"
                     @editGift="editGift"
                     :type="'referred'"
+                    v-show="!isObjectEmpty(benefitSReferrals)"
                 />
                 <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
@@ -67,6 +68,7 @@
                     :valueReferrals="valueReferent"
                     :type="'referent'"
                     @editGift="editGift"
+                     v-show="!isObjectEmpty(benefitReferent)"
                 />
                 
                 <div class="flex gap-2" v-show="isObjectEmpty(benefitReferent)">
