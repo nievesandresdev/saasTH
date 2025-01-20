@@ -25,9 +25,6 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 # Copiar la configuración de nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar el archivo .env para inspección
-COPY .env /usr/share/nginx/html/.env
-
 # Exponer el puerto 80
 EXPOSE 80
 
