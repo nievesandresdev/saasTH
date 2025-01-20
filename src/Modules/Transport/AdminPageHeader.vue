@@ -33,7 +33,10 @@
     // DATA
 
     async function updateVisivilityService () {
-        const response = await hotelStore.$updateVisivilityService();
+        let bodyRequest = {
+            service: "transport"
+        }
+        const response = await hotelStore.$updateVisivilityService(bodyRequest);
         const { ok, data } = response;
         await hotelStore.reloadHotel();
         if (ok) {

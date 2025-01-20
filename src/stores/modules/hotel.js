@@ -192,9 +192,9 @@ export const useHotelStore = defineStore('hotel', () => {
         return response.data
     }
 
-    async function $updateVisivilityService () {
+    async function $updateVisivilityService (data) {
         // console.log('findByParamsApi',localStorage.getItem('subdomain'))
-        const response = await hotelService.updateVisivilityServiceApi();
+        const response = await hotelService.updateVisivilityServiceApi(data);
         return response;
         const { ok } = response
 
