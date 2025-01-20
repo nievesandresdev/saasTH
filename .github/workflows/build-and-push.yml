@@ -51,9 +51,6 @@ jobs:
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
 
-      - name: Copy .env to project root
-        run: mv .env .env
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
