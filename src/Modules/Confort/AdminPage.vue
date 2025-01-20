@@ -4,18 +4,11 @@
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_confort" />
                 <div class="mt-[24px] px-[24px]">
-                    <p 
-                        class="text-sm font-medium"
-                        :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoading, 'hidden':!firstLoading && confortsEmpty}"
+                    <p
+                        class="text-sm font-medium mb-6"
+                        :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && confortsEmpty}"
                     >{{ searchText }}</p>
-                    <div class="space-y-[24px]">
-                        <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
-                            <AdminPageList  @click:editItem="openDrawer"/>
-                            <!-- <CardFacilityListSkeleton 
-                                v-for="skeletonCard in skeletonCountByLoad"
-                            /> -->
-                        </div>
-                    </div>
+                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadConforts" />
                 </div>
             </div>
             <PanelEdit
@@ -26,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
+import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
 import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 // COMPONENT
@@ -55,11 +48,13 @@ const { hotelData } = hotelStore;
 // DATA
 const modelActive = ref(null);
 const numberCardsDefault = ref(10);
-const firstLoading = ref(false);
 const confortsEmpty = ref(false);
 const confortsData = ref([]);
 const page = ref(1);
+const firstLoad = ref(true);
+const isloadingForm = ref(false);
 const selectedCard = ref(null);
+
 const changePendingInForm = ref(false);
 const modalChangePendinginForm = ref(false);
 const panelEditRef = ref(null);
@@ -82,7 +77,7 @@ const searchText = computed(() => {
 
 onMounted(async() => {
     if(window.screen.width > 1919){
-        numberCardsDefault.value = 14
+        numberCardsDefault.value = 14;
     }
     loadMockup();
     loadConforts();
@@ -97,6 +92,7 @@ function loadMockup (path = '/') {
 async function loadConforts () {
     // console.log('loadPlaces')
     // isloadingForm.value=true;
+    isloadingForm.value=true;
     const response = await confortStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
         let paginate = {
@@ -111,7 +107,8 @@ async function loadConforts () {
         page.value = paginateData.current_page;
         confortsData.value = [...confortsData.value, ...response.data.data];
     }
-    firstLoading.value = false;
+    firstLoad.value = false;
+    isloadingForm.value=false;
 }
 
 
@@ -145,5 +142,8 @@ provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('paginateData', paginateData);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
+provide('page', page);
+provide('firstLoad', firstLoad);
+provide('isloadingForm', isloadingForm);
 
 </script>

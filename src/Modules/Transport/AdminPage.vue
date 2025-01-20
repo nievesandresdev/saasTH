@@ -4,18 +4,11 @@
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_transport" />
                 <div class="mt-[24px] px-[24px]">
-                    <p 
-                        class="text-sm font-medium"
-                        :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoading, 'hidden':!firstLoading && transportsEmpty}"
+                    <p
+                        class="text-sm font-medium mb-6"
+                        :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && transportsEmpty}"
                     >{{ searchText }}</p>
-                    <div class="space-y-[24px]">
-                        <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
-                            <AdminPageList  @click:editItem="openDrawer"/>
-                            <!-- <CardFacilityListSkeleton 
-                                v-for="skeletonCard in skeletonCountByLoad"
-                            /> -->
-                        </div>
-                    </div>
+                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadTransports" />
                 </div>
             </div>
             <PanelEdit
@@ -55,10 +48,11 @@ const { hotelData } = hotelStore;
 // DATA
 const modelActive = ref(null);
 const numberCardsDefault = ref(10);
-const firstLoading = ref(false);
 const transportsEmpty = ref(false);
 const transportsData = ref([]);
 const page = ref(1);
+const firstLoad = ref(true);
+const isloadingForm = ref(false);
 const selectedCard = ref(null);
 const changePendingInForm = ref(false);
 const modalChangePendinginForm = ref(false);
@@ -82,7 +76,7 @@ const searchText = computed(() => {
 
 onMounted(async() => {
     if(window.screen.width > 1919){
-        numberCardsDefault.value = 14
+        numberCardsDefault.value = 14;
     }
     loadMockup();
     loadTransports();
@@ -95,7 +89,7 @@ function loadMockup (path = '/') {
     mockupStore.$setLanguageTooltip(true);
 }
 async function loadTransports () {
-    // isloadingForm.value=true;
+    isloadingForm.value=true;
     const response = await transportStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
         let paginate = {
@@ -110,7 +104,8 @@ async function loadTransports () {
         page.value = paginateData.current_page;
         transportsData.value = [...transportsData.value, ...response.data.data];
     }
-    firstLoading.value = false;
+    isloadingForm.value = false;
+    firstLoad.value = false;
 }
 
 
@@ -144,5 +139,9 @@ provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('paginateData', paginateData);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
+
+provide('isloadingForm', isloadingForm);
+provide('firstLoad', firstLoad);
+provide('page', page);
 
 </script>

@@ -11,7 +11,7 @@
                     @click="updateVisivilityService"
                 />
         </div>
-    </section>\
+    </section>
 </template>
 
 <script setup>
