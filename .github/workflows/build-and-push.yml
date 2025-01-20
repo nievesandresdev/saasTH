@@ -51,13 +51,8 @@ jobs:
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
 
-      - name: Allow unsecure commands (Debug only)
-        run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
-
-      - name: Debug environment variables
-        run: |
-          echo "Mostrando variables de entorno:"
-          cat .env
+      - name: Copy .env to project root
+        run: mv .env ./dist/.env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
