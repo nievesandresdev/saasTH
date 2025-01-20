@@ -16,7 +16,7 @@
     </template>
     <div v-else id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
         
-        <BaseCardCreate title="Crear servicio" @click="openEditHoster('ADD')" />
+        <BaseCardCreate v-if="!firstLoad" title="Crear servicio" @click="openEditHoster('ADD')" />
 
         <template v-for="(experience, index) in experiencesData">
             <!-- experiencesData[index-1]?.experience" -->
@@ -190,6 +190,9 @@ const textNumbersExperiencesVisiblesAndHidden = computed(() => {
         text = ` ${numberExperiencesVisible.value} ${visiblesText} y ${numberExperiencesHidden.value} ${hidden}`
     }
     if(formFilter.visibility){
+        if(formFilter.visibility.includes('viator')){
+            text =` ${numberExperiencesVisible.value} ${visiblesText}`
+        }
         if(formFilter.visibility.includes('visible')){
             text =` ${numberExperiencesVisible.value} ${visiblesText}`
         }

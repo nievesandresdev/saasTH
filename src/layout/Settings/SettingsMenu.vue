@@ -288,7 +288,7 @@ const menu_section = reactive([
           {
             title: 'Servicios',
             icon: '/assets/icons/1.TH.recepcion.svg',
-            expanded: ['Conforts'].includes(route.name),
+            expanded: ['Conforts', 'Transports', 'Experiences'].includes(route.name),
             group: [
                 {
                     title: 'Confort',
@@ -299,6 +299,11 @@ const menu_section = reactive([
                     title: 'Transporte',
                     to: 'Transports',
                     selectedArr: ['Transports']
+                },
+                {
+                    title: 'Actividades turísticas',
+                    to: 'Experiences',
+                    selectedArr: ['Experiences']
                 },
 
             ],
