@@ -74,6 +74,11 @@ jobs:
       - name: Push versioned image to GHCR
         run: docker push ghcr.io/th-the-hoster/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
+      - name: Debug environment variables
+        run: |
+          echo "Mostrando variables de entorno:"
+          env
+
       # 1. Login a Azure
       - name: Azure Login
         uses: azure/login@v1
