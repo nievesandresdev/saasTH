@@ -11,7 +11,7 @@ export const useRewardStore = defineStore('rewards', () => {
     }
 
     async function $storeRewards (data) {
-        const response = await rewardsServices.storeRewardsApi(data)
+        const response = await rewardsServices.storeOrUpdateRewardsApi(data)
         return response;
     }
 

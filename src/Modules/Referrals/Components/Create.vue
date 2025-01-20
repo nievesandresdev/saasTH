@@ -188,11 +188,16 @@ const onTypeChange = () => {
   const numericValue = parseFloat(form.value.amount.replace(',', '.'));
 
   if (form.value.type_discount === 'money') {
-    form.value.amount = numericValue.toFixed(2).replace('.', ',');
+    form.value.amount = numericValue ? numericValue.toFixed(2).replace('.', ',') : '';
   } else if (form.value.type_discount === 'percentage') {
-    form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+    if (!numericValue || isNaN(numericValue)) {
+      form.value.amount = '';
+    } else {
+      form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+    }
   }
 };
+
 
 const isClosePanel = () => {
   isOpenSidePanel.value = false;

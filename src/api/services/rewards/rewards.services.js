@@ -4,4 +4,4 @@ import {
 } from '../../config/apiRoute'
 
 export const getRewardsApi = () => apiHttp('GET', `${rewardsPath}/getRewards`, {}, {showPreloader: false });
-export const storeRewardsApi = (data) => apiHttp('POST', `${rewardsPath}/storeRewards`, data, {showPreloader: true });
+export const storeOrUpdateRewardsApi = (data) => apiHttp('POST', `${rewardsPath}/storeOrUpdateRewards`, data, {showPreloader: true });

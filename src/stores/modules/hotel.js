@@ -251,6 +251,11 @@ export const useHotelStore = defineStore('hotel', () => {
         const response = await hotelService.updateShowButtons(data);
         return response;
     }
+
+    async function $handleShowReferrals () {
+        const response = await hotelService.handleShowReferrals();
+        return response;
+    }
     
 
 
@@ -260,6 +265,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData,
         hotelsAvailables,
         hotelsByUserAvailables,
+        $handleShowReferrals,
         subdomain,
         formatImage,
         reloadHotel,

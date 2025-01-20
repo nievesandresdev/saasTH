@@ -52,9 +52,7 @@
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
     import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 
-    // STORE
     
-    //
     const hotelStore = inject('hotelStore');
     const mockupStore = inject('mockupStore');
     const toast = inject('toast');
@@ -63,8 +61,7 @@
     // DATA
 
     async function updateVisivilityFacilities () {
-        alert("show referrals");
-        /* const response = await hotelStore.$updateVisivilityFacilities();
+        const response = await hotelStore.$handleShowReferrals();
         const { ok, data } = response;
         await hotelStore.reloadHotel();
         if (ok) {
@@ -72,7 +69,7 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
-        mockupStore.$setIframeUrl('/');
-        mockupStore.$reloadIframe(); */
+        mockupStore.$setIframeUrl('/perfil');
+        mockupStore.$reloadIframe();
     }
 </script>

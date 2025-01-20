@@ -12,6 +12,7 @@
         <!-- Header -->
         <div class="flex justify-between items-center px-6 py-[20px] h-[64px] border-b border-[#BFBFBF]">
           <div class="flex-1 text-left">
+            {{ typeModal ?? 'sss' }}
             <h1 class="font-medium text-[22px]">Editar regalo para el {{ typeModalTitle }}</h1>
           </div>
           <div class="flex justify-end" @click="isClosePanel">
@@ -166,7 +167,7 @@
   };
   
   const adjustValue = () => {
-    const numericValue = parseFloat(form.value.amount.replace(',', '.'));
+    const numericValue = parseFloat(form?.value?.amount);
   
     if (isNaN(numericValue) || form.value.amount === '') {
       form.value.amount = '';
@@ -182,12 +183,17 @@
   };
   
   const onTypeChange = () => {
-    const numericValue = parseFloat(form.value.amount.replace(',', '.'));
+    const numericValue = parseFloat(form?.value?.amount);
   
     if (form.value.type_discount === 'money') {
-      form.value.amount = numericValue.toFixed(2).replace('.', ',');
+      form.value.amount = numericValue ? numericValue.toFixed(2).replace('.', ',') : '';
     } else if (form.value.type_discount === 'percentage') {
-      form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+      //form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+      if (!numericValue || isNaN(numericValue)) {
+        form.value.amount = '';
+      } else {
+        form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+      }
     }
   };
   
@@ -202,7 +208,7 @@
   const submit = () => {
     if (!isFormIncomplete.value) {
       toast.warningToast('Regalo modificado', 'top-right');
-      emit('updateGift', form.value);
+      emit('updateGift', form.value, typeModal.value);
       isClosePanel();
     }
   };

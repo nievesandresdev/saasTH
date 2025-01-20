@@ -138,9 +138,11 @@ const rewardStore = useRewardStore();
 
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
+provide('mockupStore', mockupStore);
 
 import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
+provide('toast', toast);
 
 const { hotelData } = hotelStore;
 
@@ -155,6 +157,8 @@ const selectedGiftData = ref({});
 
 const typeModal = ref(null)
 const typePeople = ref(null)
+
+const loadingSectionGift = ref(false);
 
 
 // PROVIDE
@@ -208,9 +212,9 @@ const dataReferrals = (data) => {
     }, 900)
 }
 
-const updateGift = (data) => {
-    console.log('update gift',data)
-    if(typePeople.value === 'referred') {
+const updateGift = (data,type) => {
+    console.log('update gift',data,type)
+    if(type === 'referred') {
         benefitSReferrals.value = data;
     } else {
         benefitReferent.value = data;
@@ -245,9 +249,9 @@ const closeModalAdd = () => {
 }
 
 const editGift = (type,data) => {
-    console.log('edit gift',type,data)
     isOpenEditPanel.value = true;
     selectedGiftData.value = data;
+    typeModal.value = type;
 }
 
 const updateVisivilityBenefits = () => {
@@ -255,7 +259,7 @@ const updateVisivilityBenefits = () => {
     checkChanges();
 }
 
-const handlesubmitData = () => {
+const handlesubmitData = async() => {
     let params = {
         offer_benefits: hotelData.offer_benefits,
         benefitSReferrals: benefitSReferrals.value,
@@ -265,6 +269,11 @@ const handlesubmitData = () => {
     rewardStore.$storeRewards(params);
     toast.warningToast('Cambios guardados con éxito','top-right')
     changes.value = false;
+    await hotelStore.reloadHotel();
+
+    setTimeout(() => {
+        location.reload();
+    }, 450);
     
 }
 
@@ -278,7 +287,19 @@ onMounted(async () => {
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
+        
     }
+
+    /* setTimeout(async () => {
+        const response = await rewardStore.$getAllRewards();
+        const {  data } = response;
+
+        if(data) {
+            benefitSReferrals.value = data?.benefitSReferrals ?? {};
+            benefitReferent.value = data?.benefitReferent ?? {};
+            loadingSectionGift.value = false;
+        }
+    }, 300); */
 
 });
 
