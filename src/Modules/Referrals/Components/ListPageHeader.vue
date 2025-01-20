@@ -69,7 +69,12 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
-        mockupStore.$setIframeUrl('/perfil');
+        if(hotelData.show_referrals){
+            mockupStore.$setIframeUrl('/perfil');
+        }else{
+            mockupStore.$setIframeUrl('/alojamiento')
+        }
+        
         mockupStore.$reloadIframe();
     }
 </script>

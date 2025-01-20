@@ -215,7 +215,6 @@ const dataReferrals = (data) => {
 }
 
 const updateGift = (data,type) => {
-    console.log('update gift',data,type)
     if(type === 'referred') {
         benefitSReferrals.value = data;
     } else {
@@ -230,7 +229,11 @@ const isObjectEmpty = (obj) => {
 
 
 function loadMockup () {
-    mockupStore.$setIframeUrl('/alojamiento');
+    if(hotelData.show_referrals == 0){
+        mockupStore.$setIframeUrl('/alojamiento');
+    }else{
+        mockupStore.$setIframeUrl('/perfil');
+    }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
     
     mockupStore.$setLanguageTooltip(true)
