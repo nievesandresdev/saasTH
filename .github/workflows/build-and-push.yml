@@ -51,6 +51,10 @@ jobs:
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
 
+      - name: Debug environment variables
+        run: |
+          echo "Mostrando variables de entorno:"
+          .env
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -74,10 +78,7 @@ jobs:
       - name: Push versioned image to GHCR
         run: docker push ghcr.io/th-the-hoster/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
-      - name: Debug environment variables
-        run: |
-          echo "Mostrando variables de entorno:"
-          env
+      
 
       # 1. Login a Azure
       - name: Azure Login
