@@ -2,7 +2,7 @@
  <div class="bg-[#FAFAFA] z-[100]  w-full h-full">
      
      <div class="flex justify-between h-full">
-        <div class="content flex-1 mx-[24px] pb-[70px] h-full">
+        <div class="content flex-1 mx-[24px] pb-[70px] h-[100%] overflow-y-auto">
             <div class="header flex justify-between py-[20px] border-b border-[#BFBFBF] mb-6">
                 <div class="space-x-2 flex justify-between w-full">
                     <h1 class="font-medium text-[22px]">Reseña</h1>
@@ -61,8 +61,12 @@
                         <h4 class="text-base font-medium">
                             Respuesta
                         </h4>
-                        <div class="text-[10px] font-semibold py-[4px] px-[8px] rounded-full htext-white-100" :class="reviewData.isAnswered ? 'hbg-green-600' : 'hbg-alert-negative'">
-                            {{ reviewData.isAnswered ? 'Respondido' : 'No respondido' }}
+                        <div class="text-[10px] font-semibold py-[4px] px-[8px] rounded-full" :class="reviewData.isAnswered ? '' : 'bg-[#FFF3CC]'">
+                            <img
+                                :src="`/assets/icons/${reviewData.isAnswered ? '1.TH.REVIEW.ANSWERED' : '1.TH.REVIEW.NOT.ANSWERED'}.svg`"
+                                class="size-4 mr-1 inline-block"
+                            >
+                            {{ reviewData.isAnswered ? 'Respondida' : 'No respondida' }}
                         </div>
                     </div>
                     <p v-if="reviewData.isAnswered && reviewData?.responseDate" class="text-sm font-medium mb-2">{{ $formatTimestampDate(reviewData?.responseDate, 'dd/MM/yyyy') }}</p>
@@ -94,7 +98,16 @@
                                 class="w-4 h-4 ml-1 inline-block"
                             >
                         </button>
-
+                        <BaseTooltipResponsive v-if="numbersResponsesGenerated >= maximumResponsesGenerated" size="s" :top="35" :right="0" class="ml-2">
+                            <template #button>
+                                <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg" />
+                            </template>
+                            <template #content>
+                                <p class="text-sm leading-[150%] font-normal">
+                                    Has superado el máximo de respuestas generadas permitidas. Hosty puede generar hasta 10 respuestas por reseña.
+                                </p>
+                            </template>
+                        </BaseTooltipResponsive>
                     </div>
                 </div>
             </template>
@@ -114,7 +127,8 @@
 <script setup>
 import { onMounted, computed, provide, ref, watch } from 'vue';
 import { $capitalize, $titleCase } from '@/utils/textWritingTypes';
-import ToggleButton from '@/components/Buttons/ToggleButton.vue'
+import ToggleButton from '@/components/Buttons/ToggleButton.vue';
+ import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
 import { useRoute } from 'vue-router';
 const router = useRoute();
@@ -314,7 +328,7 @@ async function changeStatusAttended () {
     const { ok, data } = response;
     if (ok) {
         toast.warningToast(reviewData.value.isAttended ? 'Reseña atendida':'Reseña pendiente','top-right');
-        emitEvent('get-reviews');
+        emitEvent('get-reviews', {reviewId: idOtaParamRoute.value});
     } else {
         reviewData.value.isAttended = !reviewData.value.isAttended;
         toast.warningToast(response?.message,'top-right');
@@ -352,7 +366,6 @@ async function loadTranslateAndResponse () {
         reviewId: idOtaParamRoute.value,
     }
     const response = await translateAndResponseStore.$findByReviewId(params);
-    console.log(response.data)
     const { ok, data } = response;
     if (ok) {
         translateAndResponseId.value =  data.transAndResDocument?._id;

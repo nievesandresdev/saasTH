@@ -83,6 +83,7 @@
         <div
             id="container-list"
             class="overflow-y-auto custom-scrollbar pb-4"
+            :key="listKey"
         >
             <template v-for="stay in list" :key="stay.id">
                 <CardtayList :stay="stay" :search="search"/>
@@ -164,6 +165,7 @@ const countsByPeriod = ref(null)
 const totalCounts = ref(0)
 const totalValidCount = ref(0)
 const countStayTest = ref(0)
+const listKey = ref(0);
 
 const countsGeneralByPeriod = ref(0)
 const pendingCountsByPeriod = ref(0)
@@ -331,6 +333,10 @@ async function updateList(){
     //restaurar valores
     allFilters.value.offset = list.value.length;
     allFilters.value.limit = 10;
+
+    // Incrementar la key para forzar el re-render:
+    listKey.value++;
+
     setTimeout(() => {
         loading.value = false;
         const skeletons = document.querySelectorAll('.skeleton-stay-card');

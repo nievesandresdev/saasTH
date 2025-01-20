@@ -175,7 +175,7 @@ const initialForm = ref(null) // Para mantener el estado inicial del formulario
 
 onMounted(() => {
   getSettingsChatHours()
-  mockupStore.$setIframeUrl('/mobile-chat/fake','responses=true')
+  mockupStore.$setIframeUrl('/chat/fake','responses=true')
   mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
   mockupStore.$setLanguageTooltip(true)
 })
@@ -198,7 +198,7 @@ const getSettingsChatHours = async () => {
 
   initialForm.value = JSON.stringify(form) // Guardar el estado inicial del formulario
 
-  mockupStore.$setIframeUrl('/mobile-chat/fake','responses=true') 
+  mockupStore.$setIframeUrl('/chat/fake','responses=true') 
   mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 }
 

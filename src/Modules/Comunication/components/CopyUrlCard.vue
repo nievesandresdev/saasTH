@@ -13,8 +13,14 @@
 <script setup>
 import { $urlBaseWebapp } from '@/utils/helpers';
 import { useToastAlert } from '@/composables/useToastAlert'
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
-const urlBaseWebapp = $urlBaseWebapp();
+
+let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+let slugHotel = hotelStore?.hotelData?.subdomain;
+
+const urlBaseWebapp = $urlBaseWebapp(subdomainChain, slugHotel);
 const toast = useToastAlert();
 
 const copyLinkToClipboard = async () => {

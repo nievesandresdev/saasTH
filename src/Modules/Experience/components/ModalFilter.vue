@@ -134,7 +134,7 @@
                             <BaseTextField
                                 v-model="formModalFilter.price_min"
                                 placeholder="€"
-                                classInput="p-2 h-9 text-sm "
+                                :classInput="'p-2 h-9 text-sm'"
                                 classContent="w-[64px]"
                             />
                         </div>
@@ -143,7 +143,7 @@
                             <BaseTextField
                                 v-model="formModalFilter.price_max"
                                 placeholder="€"
-                                classInput="p-2 h-9 text-sm w-[64px]"
+                                :classInput="'p-2 h-9 text-sm w-[64px]'"
                                 classContent="w-[64px]"
                             />
                         </div>

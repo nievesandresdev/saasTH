@@ -5,7 +5,7 @@ import dashboardRoutes from './dashboardRoutes';
 // Grupos de rutas
 import chatGroupRoutes from './chat/chatGroupRoutes';
 import userGroupRoutes from './user/userGroupRoutes';
-import reviewsRequestsGroupRoutes from './reviewRequests/reviewsRequestsGroupRoutes';
+import ReviewRequestsSettingsRoutes from './reviewRequestsSettingsRoutes';
 import queriesGroupRoutes from './queries/queriesGroupRoutes';
 import stayRoutes from './stayRoutes';
 // Routes config webapp
@@ -15,6 +15,7 @@ import experienceGroupRoutes from './experienceRoutes';
 import galleryGroupRoutes from './galleryRoutes';
 import webAppRoutes from './webAppRoutes';
 import customizationRoutes from './customizationRoutes';
+import appearenceRoutes from './appearenceRoutes';
 import legalTextGroupRoutes from './legalText/legalTextGroupRoutes';
 import reviewRoutes from './reviewRoutes'
 import comunicationRoutes from './comunication'
@@ -41,7 +42,7 @@ const routes = [
   // Grupos de rutas por módulo
   ...chatGroupRoutes,
   ...userGroupRoutes,
-  ...reviewsRequestsGroupRoutes,
+  ...ReviewRequestsSettingsRoutes,
   ...queriesGroupRoutes,
   ...stayRoutes,
   ...hotelGroupRoutes,
@@ -50,6 +51,7 @@ const routes = [
   ...galleryGroupRoutes,
   ...webAppRoutes,
   ...customizationRoutes,
+  ...appearenceRoutes,
   ...reviewRoutes,
   ...legalTextGroupRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
@@ -70,6 +72,11 @@ const router = createRouter({
 // Middleware de navegación auth
 router.beforeEach((to, from, next) => {
   const isAuth = isAuthenticated();
+
+  // Evita que el middleware afecte la ruta de restablecimiento de contraseña
+  if (to.name === 'ResetPassword') {
+    return next();
+  }
 
   if (!isAuth && to.path !== '/login') {
     localStorage.setItem('redirectTo', to.fullPath);

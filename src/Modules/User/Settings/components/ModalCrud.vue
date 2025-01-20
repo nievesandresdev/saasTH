@@ -1,42 +1,49 @@
 <template>
-  <div ref="modalContainerRef" :class="`absolute modalContainerRef left-0 w-${props.width} mt-${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open" @click.stop>
+  <div ref="modalContainerRef" :class="`absolute modalContainerRef left-[2px] w-[464px] ${props.mt} bg-white rounded-md shadow-md z-10`" v-show="props.open" @click.stop>
     <div v-if="!isEditing && !isCreating">
+      
+      <!-- Display message if no work positions exist -->
+      <div v-if="!props.data.length" class="px-3 py-3 text-sm font-semibold text-[#333333] text-left">
+        Aún no has creado puestos de trabajo
+      </div>
+      
+      <!-- List of work positions -->
       <div
+        v-else
         v-for="option in props.data"
         :key="option.id"
-        class="flex justify-between items-center px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+        class="flex justify-between items-center px-3 py-3 text-sm text-[#333333] hover:bg-gray-100 cursor-pointer"
         @click="selectOption(option)"
       >
-        <span class="m-2">{{ option.name }}</span>
+        <span class="font-semibold text-sm">{{ option.name }}</span>
         <div class="flex gap-2">
           <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-4 w-4 cursor-pointer" @click.stop="openEditModal(option)" />
           <img
             src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
             class="w-4 h-4 mr-2"
             alt="icon_trash"
-            @click.stop="openEditDelete(option.id)"
+            @click.stop="openEditDelete(option)"
           />
         </div>
-        <!-- <img src="/assets/icons/1.TH.EDIT.OUTLINEDbig.svg" class="h-4 w-4 cursor-pointer" @click.stop="openEditModal(option)" />
-        <img
-            src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
-            class="w-4 h-4 mr-2"
-            alt="icon_trash"
-          /> -->
       </div>
-      <div @click="openCreateModal" class="text-center px-4 py-2 mt-2 text-sm text-black border border-black m-3 rounded-md cursor-pointer hover:bg-gray-50">
-        Crear puesto de trabajo
+
+      <!-- 'Crear puesto de trabajo' item -->
+      <div @click="openCreateModal" class="flex justify-between items-center px-3 py-3 text-sm text-[#333333] border-t border-gray-200 cursor-pointer hover:bg-gray-50">
+        <span class="font-normal text-sm">Crear puesto de trabajo</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
+          <path d="M11.9898 4V12M11.9898 20V12M11.9898 12H20M11.9898 12H4" stroke="#333333" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#2A8873]"/>
+        </svg>
       </div>
     </div>
   </div>
-  
+
   <!-- ModalCreate component -->
   <ModalCreate
     v-if="isCreating"
     :isVisible="isCreating"
     @close="closeCreateModal"
     @storeWorkPosition="pushData"
-    :width="'400px'"
+    :width="'500px'"
   />
 
   <!-- ModalEdit component -->
@@ -46,7 +53,7 @@
     @close="closeEditModal"
     :data="dataEdit"
     @storeWorkPosition="getWorkPositions"
-    :width="'400px'"
+    :width="'500px'"
   />
 </template>
 
@@ -60,7 +67,7 @@ const props = defineProps({
   data: Array,
   mt: {
     type: String,
-    default: '0',
+    default: 'mt-0',
   },
   width: {
     type: String,
@@ -69,7 +76,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP']);
+const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP','printNameWP']);
 
 const isEditing = ref(false);
 const isCreating = ref(false);
@@ -85,8 +92,9 @@ const selectOption = (option) => {
   emit('select', option);
 };
 
-const getWorkPositions = () => {
+const getWorkPositions = (wPosition) => {
   emit('getWorkPositions');
+  emit('printNameWP', wPosition.name);
 };
 
 const openCreateModal = () => {
@@ -98,7 +106,6 @@ const openEditModal = (option) => {
   isCreating.value = false;
   isEditing.value = true;
   dataEdit.value = option;
-  
 };
 
 const openEditDelete = (option) => {

@@ -200,7 +200,7 @@
         mockupStore.$setLanguageTooltip(true)
     }
     function loadMockupEdit (facilityId) {
-        mockupStore.$setIframeUrl(`/instalaciones/${facilityId}`);
+        mockupStore.$setIframeUrl(`/ver-instalacion/${facilityId}`);
     }
 
     async function loadFacilities (reload = false,resetList = false) {
@@ -254,7 +254,7 @@
         modelActive.value = payload.action;
         nextTick(() => {
             if (payload.action === 'EDIT') {
-                loadMockup(`/${payload.facility.id}`);
+                loadMockupEdit(`${payload.facility.id}`);
             } else {
                 loadMockup('/fakedetail');
             }

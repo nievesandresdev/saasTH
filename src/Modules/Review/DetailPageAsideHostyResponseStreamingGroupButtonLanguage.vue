@@ -1,21 +1,19 @@
 <template>
 <transition>
-    <div v-if="!disabledButtons" class="mt-4">
-        <p class="text-sm font-medium mb-2">Idioma original:</p>
-        <div
-            v-if="languageOrigin"
-            class="inline-block w-max chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer mb-4 h-[24px]"
-            :class="{'chip-primary-active': languageActiveResponse === 'originalLanguage' , 'opacity-30': loadingTranslation}"
-            @click="selectLanguage('originalLanguage')"
-        >
-            <img
-                class="w-4 h-4 mr-2"
-                :src="`/assets/icons/flags/${languageOrigin}.svg`"
+    <div v-if="!disabledButtons">
+        <div class="flex space-x-2">
+            <div
+                v-if="languageOrigin"
+                class="inline-block w-max chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer h-[24px]"
+                :class="{'chip-primary-active': languageActiveResponse === 'originalLanguage' , 'opacity-30': loadingTranslation}"
+                @click="selectLanguage('originalLanguage')"
             >
-            {{ languagesObject[languageOrigin] }}
-        </div>
-        <p class="text-sm font-medium mb-2">Traducir a:</p>
-        <div class="flex space-x-4">
+                <img
+                    class="w-4 h-4 mr-2"
+                    :src="`/assets/icons/flags/${languageOrigin}.svg`"
+                >
+                {{ languageOrigin.toUpperCase()  }}
+            </div>
             <div
                 v-for="(language, index) in languagesButtonsAvailable"
                 class=" inline-block chip-primary py-2 px-[12px] rounded-[6px] text-sm font-medium leading-[110%] flex items-center cursor-pointer h-[24px]"
@@ -26,7 +24,7 @@
                     class="w-4 h-4 mr-2"
                     :src="`/assets/icons/flags/${language}.svg`"
                 >
-                {{ languagesObject[language] }}
+                {{ language.toUpperCase() }}
             </div>
         </div>
     </div>

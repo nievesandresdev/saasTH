@@ -1,6 +1,7 @@
 const AppLayout = () => import('@/layout/AppLayout');
 
 import Home from '@/Modules/WebApp/Home.vue';
+import PromoteWebapp from '@/Modules/Comunication/PromoteWebapp';
 
 const dashboardRoutes = [
   {
@@ -12,6 +13,11 @@ const dashboardRoutes = [
         name: 'WebAppHome',
         path: '',
         component: Home
+      },
+      {
+        name: 'PromoteWebApp',
+        path: 'promociona-webapp',
+        component: PromoteWebapp
       },
     ],
   },

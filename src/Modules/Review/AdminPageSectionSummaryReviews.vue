@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-[10px] border hborder-gray-400 bg-white px-4 py-6 space-y-4 w-[full]">
-        <h5 class="text-base font-medium">Reseñas en los últimos 30 días</h5>
+        <h5 class="text-[14px] font-semibold">Reseñas en los últimos 30 días</h5>
         <div class="flex items-center">
             <p class="text-xs font-semibold htext-gray-500 mr-[4px]">TheHoster REVIEW INDEX™</p>
             <BaseTooltipResponsive
@@ -39,13 +39,13 @@
             </div>
             <div class="w-[265px] 3xl:w-[496px] 3xl:flex justify-center items-center">
                 <div class="flex items-center mr-[8px] 3xl:mr-6">
-                    <span class="text-[22px] font-medium leading-[0%]"><span class="text-[32px] font-medium">{{ !reviewStore.otasWithUrls?.length ? '--' : Number(summaryDataReview?.averageRatingBaseOneHundred || 0).toFixed(0) }}</span>/100</span>
+                    <span class="text-[22px] font-medium leading-[0%]"><span class="text-[22px] font-medium">{{ !reviewStore.otasWithUrls?.length ? '--' : Number(summaryDataReview?.averageRatingBaseOneHundred || 0).toFixed(0) }}/</span><span class="text-[16px] font-semibold">100</span></span>
                     <img class="w-[20px] h-[20px] ml-[8px]" src="/assets/icons/1.TH.STAR.GREEN.svg" alt="1.TH.STAR.GREEN">
                 </div>
                 <div class="mt-[16px] 3xl:mt-0 flex-1">
                     <div class="flex justify-between 3xl:justify-start">
                         <div class="flex items-center">
-                            <img class="w-[24px] h-[24px] mr-[4px] 3xl:mr-[8px]" src="/assets/icons/1.TH.ANSWER.REVIEW.svg" alt="1.TH.ANSWER.REVIEW">
+                            <img class="w-[24px] h-[24px] mr-[4px] 3xl:mr-[8px]" src="/assets/icons/1.TH.REVIEW.ANSWERED.svg" alt="1.TH.ANSWER.REVIEW">
                             <p class="text-sm font-medium 3xl:w-[190px]">
                                 <template v-if="!reviewStore.otasWithUrls?.length">
                                     --
@@ -70,7 +70,7 @@
                     </div>
                     <div class="flex  justify-between 3xl:justify-start mt-[8px]">
                          <div class="flex items-center">
-                            <img class="w-[24px] h-[24px] mr-[4px]" src="/assets/icons/1.TH.NOTANSWER.REVIEW.svg" alt="1.TH.ANSWER.REVIEW">
+                            <img class="w-[24px] h-[24px] mr-[4px]" src="/assets/icons/1.TH.REVIEW.NOT.ANSWERED.svg" alt="1.TH.ANSWER.REVIEW">
                             <p class="text-sm font-medium 3xl:w-[190px]">
                                 <template v-if="!reviewStore.otasWithUrls?.length">
                                     --

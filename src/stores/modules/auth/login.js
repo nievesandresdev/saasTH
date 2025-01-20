@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
     const errorLogin = ref(null);
     const loading = ref(false);
 
+
     // Función para verificar si la sesión ha expirado
     function checkSessionExpiration() {
         const currentTime = new Date().getTime();
@@ -43,7 +44,6 @@ export const useAuthStore = defineStore('auth', () => {
                 token.value = response.data.token;
                 user.value = response.data.user;
                 errorLogin.value = null;
-
                 // Guardamos la sesión en localStorage y el tiempo de inicio
                 const currentTime = new Date().getTime();
                 localStorage.setItem('token', token.value);
@@ -84,6 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
             localStorage.setItem('user', JSON.stringify(response.user));
             //token
             //localStorage.setItem('token', token);
+            console.log(response, 'response.user.current_hotel')
             localStorage.setItem('current_hotel', JSON.stringify(response.user.current_hotel));
             localStorage.setItem('current_subdomain', response.user.current_hotel.subdomain);
             localStorage.setItem('loginTime', currentTime); // Guardamos la hora actual
@@ -137,8 +138,9 @@ export const useAuthStore = defineStore('auth', () => {
     // Computed para obtener los permisos del usuario
     const $getPermissions = computed(() => {
         if (user.value && user.value.permissions) {
-            return JSON.parse(user.value.permissions);
+            return user.value.permissions;
         }
+        
         return [];
     });
 

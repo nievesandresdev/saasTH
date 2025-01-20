@@ -45,7 +45,6 @@ provide('percentageTimeResponseTwoMonthPrevious', percentageTimeResponseTwoMonth
 async function loadData (){
     const response = await reviewStore.$getSummaryGeneral();
     const {ok, data} = response;
-    console.log(response);
     if (ok) {
         summaryDataReview.value = data.summaryAllOtas;
         summaryByOta.value = data.summaryByOta;

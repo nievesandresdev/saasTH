@@ -1,8 +1,8 @@
 <template>
-    <div class="relative" ref="ref_section_toggle" v-show="authStore?.user?.id != props.user.id">
+    <div class="relative" ref="ref_section_toggle" v-show="authStore?.user?.id != props.user.id && user.owner == 0">
       <svg
         @click="toggleDropdown"
-        class="cursor-pointer"
+        class="cursor-pointer text-[#333333]"
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -148,9 +148,9 @@
   visible.value = !visible.value;
 };
   
-  const editUser = (user) => {
+  const editUser = () => {
     visible.value = false;
-    emits('editUser', user);
+    emits('editUser', props.user);
   };
   
   const openModalDelete = (user) => {
@@ -170,6 +170,7 @@
   const ref_section_toggle = ref(null);
   
   const handleClickOutside = (event) => {
+    if (!ref_section_toggle.value) return;
     const addSection = ref_section_toggle.value;
     if (addSection && !addSection.contains(event.target)) {
       visible.value = false;

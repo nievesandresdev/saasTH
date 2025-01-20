@@ -19,34 +19,55 @@
             </div>
           </div>
           <hr>
+          
           <div class="px-6 py-8">
-            <div class="flex flex-col mb-6">
+            <div class="flex justify-start mb-4">
+              <span class="text-[18px] font-medium mr-2">Datos del usuario</span>
+            </div>
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Usuario</span>
                 <span class="text-base font-normal">{{ dataUser?.name }} {{ dataUser?.lastname }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Puesto</span>
-                <span class="text-base font-normal">{{ dataUser?.work_position }}</span>
+                <span class="text-base font-normal">{{ dataUser?.work_position?.name ?? '-' }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Correo electrónico</span>
                 <span class="text-base font-normal">{{ dataUser?.email }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Teléfono</span>
-                <span class="text-base font-normal">{{ dataUser?.prefix ?? '' }} {{ dataUser?.phone }}</span>
+                <span class="text-base font-normal">{{ dataUser?.phone ?? '-' }}</span>
             </div>
-            <div class="flex flex-col mb-6">
+            <div class="flex flex-col mb-4">
                 <span class="text-sm font-semibold">Antigüedad</span>
                 <span class="text-base font-normal">{{ dataUser?.time }}</span>
             </div>
-            <div class="flex flex-col mb-8">
+            <div class="flex flex-col mb-4">
+              <div class="flex items-center gap-1">
                 <span class="text-sm font-semibold">Estado del usuario</span>
+                <Tooltip
+                    size="s"
+                    :top="25"
+                    :left="-55"
+                >
+                    <template v-slot:button>
+                        <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
+                    </template>
+                    <template v-slot:content>
+                        <p class="text-sm">
+                            Si un usuario se encuentra <strong>inactivo</strong>, no podrá realizar ninguna acción en los alojamientos.
+                        </p>
+                    </template>
+                </Tooltip>
+              </div>
+                
                 <div class="flex justify-between mt-[10px]">
-                  <span v-if="dataUser.status == 1" class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#0B6357] bg-[#ECF9F5] rounded-[100px]">
+                  <span v-if="dataUser.status == 1" class="px-2 py-2 flex items-center justify-center font-semibold text-[10px] text-[#333] bg-[#D9F2E9] rounded-[100px] h-6">
                     Activo
                   </span>
-                  <span v-else class="px-2 py-1 flex items-center justify-center font-[600] text-[10px] text-[#C53030] bg-red-100 rounded-[100px]">
+                  <span v-else class="px-2 py-1 flex items-center justify-center font-semibold text-[10px] text-[#333] bg-[#FEE2E2] rounded-[100px] h-6">
                     Inactivo
                   </span>
                   <div v-show="authStore.user.id != dataUser.id">
@@ -83,60 +104,57 @@
             </div>
             <hr class="mb-[19px]">
             <div class="flex justify-start mb-5">
-                <span class="text-base font-semibold mr-2">Alojamientos asociados</span>
-                <Tooltip
-                        size="s"
-                        :top="25"
-                        :left="-55"
-                    >
-                        <template v-slot:button>
-                            <img class="w-6 h-6" src="/assets/icons/info.blue.svg">
-                        </template>
-                        <template v-slot:content>
-                            <p class="text-sm">
-                                Si un usuario se encuentra <strong>inactivo</strong> en un hotel, no podrá realizar ninguna acción en dicho establecimiento. Para activarlo, puedes hacerlo desde la opción 'Editar usuario'.
-                            </p>
-                        </template>
-                    </Tooltip>
+              <span class="text-[18px] font-medium mr-2 text-[#333]">Alojamientos asociados</span>
             </div>
-            <div class="flex flex-col items-left mb-4">
+            <div class="flex flex-col items-left mb-2">
               <div class="ml-2 flex items-center mb-2" v-for="(hotel, index) in dataUser?.hotelsNameId" :key="index">
                 <span class="mr-2 text-[#0B6357]">•</span> <!-- Punto hotel -->
                 <span class="font-normal text-base">{{ hotel }}</span>
               </div>
             </div>
+            <hr class="mb-2">
+            <AccessPermissions v-model:permissions="dataUser.permissions" :workPositionId="dataUser.work_position_id" :disabledGeneral="true" />
+            <Notifications
+              v-model:periodicityChat="periodicityChat"
+              v-model:periodicityStay="periodicityStay"
+              v-model:notifications="notificationsUser"
+              :disabledGeneral="true"
+            />
           </div>
         </div>
         <div 
-            class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
-            style="height: 88px;" 
-            :class="
-                {
-                    'justify-end': authStore.user.id === dataUser.id,
-                    'justify-between': authStore.user.id != dataUser.id
-                }"
+          class="tertiary-black-200 py-6 px-6 flex items-center  border-t border-gray z-[1000] bg-white w-full" 
+          style="height: 88px;" 
+          :class="
+              {
+                  'justify-end': authStore.user.id === dataUser.id ,
+                  'justify-between': authStore.user.id != dataUser.id
+              }"
         >
-            <button
-                v-show="authStore.user.id != dataUser.id"
-                class="underline font-medium text-sm px-4"
-                @click="deleteUser(dataUser)"
-            >
-               Eliminar
-            </button>
-            <button
-                class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
-                @click="updateUser(dataUser)"
-            >
-                Editar
-            </button>
+          <button
+              v-show="authStore.user.id != dataUser.id && dataUser.owner == 0"
+              class="underline font-medium text-sm px-4"
+              @click="deleteUser(dataUser)"
+          >
+              Eliminar
+          </button>
+          <button
+              class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
+              @click="updateUser(dataUser)"
+              v-if="dataUser.owner != 1"
+          >
+              Editar
+          </button>
         </div>
       </div>
     </transition>
   </template>
   
   <script setup>
-    import { ref, onMounted, nextTick, defineEmits,defineProps,watch } from 'vue';
+    import { ref, onMounted, nextTick, defineEmits,defineProps,watch,computed } from 'vue';
     import Tooltip from '@/components/Tooltip.vue'
+    import AccessPermissions from './AccessPermisions.vue';
+    import Notifications from './Notifications.vue';
     import { disableUser,enableUser } from '@/api/services/users/userSettings.service';
     import { useToastAlert } from '@/composables/useToastAlert'
     import { useAuthStore } from '@/stores/modules/auth/login'
@@ -146,12 +164,25 @@
     const authStore = useAuthStore();
     const userStore = useUserStore();
     
-    const emits = defineEmits(['close','update','delete','updateStatus']);
+    const emits = defineEmits(['close','updateUser','delete','updateStatus']);
     
     const props = defineProps({
         modalShow: Boolean,
         workPositions: Array,
         dataUser : Object
+    });
+
+    //computed json parse dataUser.notifications
+    const notificationsUser = computed(() => {
+        return props.dataUser.notifications;
+    });
+
+    const periodicityChat = computed(() => {
+        return props.dataUser.periodicity_chat;
+    });
+
+    const periodicityStay = computed(() => {
+        return props.dataUser.periodicity_stay;
     });
 
     const closeModal = () => {
@@ -160,7 +191,7 @@
 
     const updateUser = (dataUser) => {
         closeModal();
-        emits('update',dataUser);
+        emits('updateUser',dataUser);
     };
 
     const deleteUser = (dataUser) => {
@@ -185,7 +216,7 @@
     const handleClickOutside = (event) => {
       const addSection = ref_section_show.value;
       if (addSection && !addSection.contains(event.target)) {
-        console.log('handleClickOutside',event.target)
+        //console.log('handleClickOutside',event.target)
         closeModal();
       }
     };

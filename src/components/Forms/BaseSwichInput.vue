@@ -3,7 +3,7 @@
         <input
             :checked="modelValue"
             type="checkbox"
-            class="sr-only"
+            class="sr-only w-10"
             :id="id"
             @change="updateValue($event)"
             :disabled="disabled"

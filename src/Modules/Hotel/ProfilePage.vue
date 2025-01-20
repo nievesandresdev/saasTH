@@ -28,8 +28,8 @@
                 </div>
             </section>
             <div 
-                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
                 v-if="hotelData.show_profile !== undefined && !hotelData.show_profile"
+                class="mx-[-24px] bg-[#FFF3CC] py-[14px]"
             >
                 <h1 class="text-center text-sm font-medium leading-[140%]">Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.</h1>
             </div>
@@ -45,6 +45,7 @@
                             mandatory
                             :error="false"
                         />
+                        {{form.type}}
                     </div>
                     <div class="flex-1">
                         <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
@@ -509,7 +510,7 @@
     }
     
     function loadMockup () {
-        mockupStore.$setIframeUrl('/sobre-nosotros')
+        mockupStore.$setIframeUrl('/alojamiento');
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
         mockupStore.$setLanguageTooltip(true)
     }
@@ -524,8 +525,8 @@
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
         const body = {...form}
+
         const response  = await hotelStorage.$updateProfile(body);
-        // console.log(response, 'response')
         const  {ok, data} = response ?? {}
         await loadHotel()
         isloadingForm.value = false

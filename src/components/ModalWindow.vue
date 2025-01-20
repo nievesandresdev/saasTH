@@ -7,7 +7,7 @@
     >
       <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all absolute">
         <slot name="header"></slot>
-        <div :class="computedPaddingContent" class="">
+        <div :class="computedPaddingContent">
           <slot name="content"></slot>
         </div>
         <slot v-if="footer" name="footer"></slot>

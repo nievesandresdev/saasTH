@@ -270,7 +270,6 @@ async function getNumbersDistributionByFilters () {
     const { ok, data } = response;
     if (ok) {
         numbersFilters.value = data.summaryAllOtas;
-        console.log(numbersFilters.value, 'numbersFilters.value')
     }
 }
 

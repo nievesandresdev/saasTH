@@ -1,7 +1,6 @@
 <template>
   <ModalWindow
     :isVisible="isVisible"
-    width="341px"
     footer
     :paddingTop="4"
     :paddingBottom="4"
@@ -22,7 +21,7 @@
       <hr />
     </template>
     <template #content>
-      <div class="max-h-[410px]">
+      <div class="max-h-[410px] overflow-y-auto scrollbar-none">
         <label class="text-sm font-semibold">Nombre del puesto de trabajo*</label>
         <BaseTextField
           v-model="form.name"
@@ -57,32 +56,17 @@
           </p>
         </div>
 
-        <div class="flex justify-start w-full mt-4">
-          <h3
-            class="flex-1 text-center py-2 text-base font-semibold cursor-pointer relative"
-            v-for="(step, index) in steps"
-            :key="step.number"
-            :class="{
-              'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border active-step':
-                currentStep === step.number,
-              'text-[#333333]': currentStep !== step.number,
-            }"
-            @click="currentStep = step.number"
-          >
-            {{ step.label }}
-          </h3>
-        </div>
-        <hr class="mb-5 px-4" />
+       
+        <hr class="mb-[15px] px-4" />
         <div v-if="currentStep === 1" class="mb-6">
           <AccessPermissions v-model:permissions="form.permissions" />
-        </div>
-        <div v-if="currentStep === 2">
           <Notifications
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
           />
         </div>
+       
       </div>
     </template>
 
@@ -116,6 +100,7 @@ import Notifications from './Notifications.vue';
 import { createWorkPosition } from '@/api/services/users/userSettings.service';
 import { useToastAlert } from '@/composables/useToastAlert';
 
+
 const toast = useToastAlert();
 
 const emit = defineEmits(['storeWorkPosition', 'close']);
@@ -123,14 +108,42 @@ const emit = defineEmits(['storeWorkPosition', 'close']);
 const form = reactive({
   name: '',
   permissions: {},
-  periodicityChat: 5,
-  periodicityStay: 5,
+  periodicityStay: {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  },
+  periodicityChat : {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  },
   notifications: {
-    newChat: false,
-    PendingChat10: false,
-    pendingChat30: false,
-    newFeedback: false,
-    pendingFeedback10: false,
+    push : {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    platform: {
+      newChat: true,
+      pendingChat10: true,
+      pendingChat30: true,
+      newFeedback: true,
+      pendingFeedback30: true,
+      pendingFeedback60: true,
+      new_reviews: true,
+    },
+    email : {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: true,
+      newFeedback: false,
+      pendingFeedback30: false,
+      pendingFeedback60: false,
+      new_reviews: false,
+    },
 
   },
 });
@@ -138,7 +151,7 @@ const form = reactive({
 const currentStep = ref(1);
 const steps = [
   { number: 1, label: 'Accesos' },
-  { number: 2, label: 'Notificaciones' },
+  /* { number: 2, label: 'Notificaciones' }, */
 ];
 
 const nameError = ref(false);
@@ -184,14 +197,50 @@ const submitForm = async () => {
 const resetForm = () => {
   form.name = '';
   form.permissions = {};
-  form.periodicityChat = 5;
-  form.periodicityStay = 5;
+  form.periodicityChat = {
+    pendingChat10: 10,
+    pendingChat30: 30,
+  };
+  form.periodicityStay = {
+    pendingFeedback30: 30,
+    pendingFeedback60: 60,
+  };
+  
   form.notifications = {
     newChat: false,
-    PendingChat10: false,
+    pendingChat10: false,
     pendingChat30: false,
     newFeedback: false,
     pendingFeedback10: false,
+    pendingFeedback30: false,
+    new_reviews: false,
+    platform: {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
+    email: {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
+    push : {
+      newChat: false,
+      pendingChat10: false,
+      pendingChat30: false,
+      newFeedback: false,
+      pendingFeedback10: false,
+      pendingFeedback30: false,
+      new_reviews: false,
+    },
   };
   currentStep.value = 1;
   nameError.value = false;
@@ -209,11 +258,20 @@ const closeModal = () => {
 </script>
 
 <style scoped>
-/* Asegura que los estilos del título sean consistentes */
-.fixed-title {
-  font-size: 1.125rem; /* Text-lg */
-  font-weight: 500; /* font-medium */
-  line-height: 110%; /* Ajusta line-height */
-}
+  /* Asegura que los estilos del título sean consistentes */
+  .fixed-title {
+    font-size: 1.125rem; /* Text-lg */
+    font-weight: 500; /* font-medium */
+    line-height: 110%; /* Ajusta line-height */
+  }
 
+  /* Ocultar el scrollbar para navegadores compatibles */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE y Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 </style>

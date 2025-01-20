@@ -1,12 +1,16 @@
 <template>
     <div class="rounded-[10px] border hborder-gray-400 bg-white px-4 py-6 w-full">
-        <h5 class="text-base font-medium">Tiempo de respuesta en el mes anterior</h5>
-        <p class="mt-[8px] text-sm">Aumenta tu posición en la OTA mejorando tu índice de respuesta.</p>
-        <div class="mt-4 flex items-center">
-            <img class="w-[48px] h-[48px]" src="/assets/icons/1.TH.CLOCK.BIG.svg">
+        <h5 class="text-[14px] font-semibold">Tiempo medio en atender reseñas en el mes pasado</h5>
+        <p class="mt-[8px] text-sm">Optimiza el tiempo de respuesta tras la publicación de una reseña.</p>
+        <div class="mt-4 flex items-stretch space-x-2">
+            <div class="flex items-start h-full">
+                <div class="w-[32px]">
+                    <img class="size-[32px]" src="/assets/icons/1.TH.CLOCK.BIG.svg">
+                </div>
+            </div>
             <div class="ml-[4px]">
-                <p class="text-[14px] font-medium"><span class="text-[24px] font-semibold leading-[0%]">{{ timeRespondedLastThirtyDays ?? '-' }}</span> horas en responder en {{ nameMonthPrev }}</p>
-                <p class="mt-[4px] text-[12px] font-medium" :class="!increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">Has {{ increasedResponseTime ? 'aumentado' : 'disminuido' }} un <span class="text-sm font-semibold" :class="!increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">{{ percentageTimeResponseTwoMonthPreviousComputed }}%</span> tu tiempo de respuesta</p>
+                <p class="text-[14px] font-medium"><span class="text-[22px]">{{ timeRespondedLastThirtyDays?.toFixed(0) || '-' }}</span> h de media en contestar a una reseña una vez publicada</p>
+                <p v-if="percentageTimeResponseTwoMonthPrevious" class="mt-[4px] text-[12px] font-medium" :class="increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">Has {{ increasedResponseTime ? 'aumentado' : 'disminuido' }} un <span class="text-sm font-semibold" :class="increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">{{ percentageTimeResponseTwoMonthPreviousComputed }}%</span> tu tiempo de respuesta en {{ nameMonthPrev }}</p>
             </div>
         </div>
     </div>
