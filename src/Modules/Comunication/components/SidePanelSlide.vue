@@ -132,11 +132,11 @@ const values = {
     },
     'howGoing':{
         title: '¿Qué tal va todo?',
-        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.',
-        trigger: 'Desde la sección "Estancias", envías manualmente una invitación a tu WebApp utilizando el botón "Invitar huésped".',
-        issue: `¿Ya conoces la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento','Invitación al Chat'],
+        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.',
+        trigger: 'Tus huéspedes recibirán este mensaje pasadas las 24hs del comienzo de su estancia.',
+        issue: `¿Qué tal va todo?`,
+        descriptionContent:'Este mensaje contendrá el bloque de pregunta de Sentimiento y, dependiendo de tus configuraciones, las siguientes secciones: ',
+        itemsContent:['Instalaciones de tu alojamiento','Destinos recomendados','Experiencias recomendadas','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
@@ -145,7 +145,7 @@ const values = {
         title: 'Te damos la bienvenida',
         description: 'Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.',
         trigger: 'El huésped ingresa a la WebApp por primera vez',
-        issue: 'Bienvenido a la WebApp',
+        issue: `Te damos la bienvenida a la WebApp de ${hotelStorage.hotelData?.name}`,
         descriptionContent:'',
         itemsContent:[],
         channels:[
@@ -155,10 +155,10 @@ const values = {
     'thankChoosing':{
         title: 'Gracias por elegirnos',
         description: 'Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
+        trigger: 'Cuando la estancia de tus huéspedes cambie a Post-stay (según tu horario de check-out), les enviaremos este mensaje.',
         issue: 'Tienes un chat pendiente en la WebApp',
-        descriptionContent:'',
-        itemsContent:[],
+        descriptionContent:'Este mensaje contendrá el bloque de despedida y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Consulta de seguimiento','Destinos recomendados','Experiencias recomendadas'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]

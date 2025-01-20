@@ -55,10 +55,10 @@
                                 <p class="text-xs font-medium leading-[130%] ml-2">Booking</p>
                             </div>
                             <!-- Expedia -->
-                            <div class="flex items-center mt-2">
+                            <!-- <div class="flex items-center mt-2">
                                 <Checkbox   v-model="form.otas_enabled_expedia"/>
                                 <p class="text-xs font-medium leading-[130%] ml-2">Expedia</p>
-                            </div>
+                            </div> -->
                             <!-- Google -->
                             <div class="flex items-center mt-2">
                                 <Checkbox  v-model="form.otas_enabled_google"/>
@@ -70,10 +70,10 @@
                                 <p class="text-xs font-medium leading-[130%] ml-2">TripAdvisor</p>
                             </div>
                             <!-- AirBnb -->
-                            <div class="flex items-center mt-2">
+                            <!-- <div class="flex items-center mt-2">
                                 <Checkbox   v-model="form.otas_enabled_airbnb"/>
                                 <p class="text-xs font-medium leading-[130%] ml-2">AirBnb</p>
-                            </div>
+                            </div> -->
                         </div>
                         <p 
                             class="text-xs font-medium htext-alert-negative mt-2 leading-[90%]"

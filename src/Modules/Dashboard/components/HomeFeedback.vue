@@ -21,7 +21,7 @@
             <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
                     <span class="font-semibold text-sm">
-                        Promedio de tu hotel
+                        Promedio de tu {{ $formatTypeLodging() }}
                     </span>
                 </div>
             </div>
@@ -174,7 +174,7 @@
                         class="transformCircle"
                     />
                     <div class="flex flex-col gap-3 w-[118px] 3xl:w-[164px]">
-                        <span class="text-xs leading-[normal]">Promedio de todas las OTAs vinculadas a tu hotel</span>
+                        <span class="text-xs leading-[normal]">Promedio de todas las OTAs vinculadas a tu {{ $formatTypeLodging() }}</span>
                         <div class="flex items-center">
                             <span class="text-[24px] font-semibold leading-[90%]">{{ subscribed && average != 0 ? average.toFixed(1) : '-.-' }}</span>
                             <span class="text-[24px] font-semibold leading-[90%]">/</span>

@@ -200,6 +200,7 @@
 <script setup>
 import { reactive, onMounted, computed, watch,watchEffect } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
+import { $formatTypeLodging } from '@/utils/helpers'
 
 const route = useRoute();
 const router = useRouter();
@@ -223,7 +224,7 @@ const menu_section = reactive([
             
           },
           {
-              title: 'Alojamiento',
+              title: $formatTypeLodging(true),
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
               expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
               group: [
@@ -342,6 +343,20 @@ const menu_section = reactive([
           }
       ],
   },
+  //reservas
+  {
+      title: '',
+      group: [
+          {
+              title: 'Programa de referidos',
+              icon: '/assets/icons/1.TH.Referidos.svg',
+              to: 'Referrals',
+              include: '/referidos',
+              selectedArr: ['Referrals'],
+          },
+      ],
+  },
+  
   {
       title: 'reputación online',
       disabled: status_subscription?.product_name_current !== 'HostMaster',
@@ -408,7 +423,7 @@ const menu_section = reactive([
             title: 'Ajustes',
             icon: '/assets/icons/1.TH.Settings.svg',
             expanded: false,
-             selectedArr: [],
+            selectedArr: [],
             group: [
                 {
                     title: 'General',

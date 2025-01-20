@@ -11,9 +11,9 @@
                @blur="focused = false"
                @mouseover="hovered = true" 
                @mouseleave="hovered = false"/>
-        <span class="radio-icon w-4 h-4 relative rounded-full flex justify-center items-center">
+        <span :class="`radio-icon ${iconSize} relative rounded-full flex justify-center items-center`">
           <span 
-            class="radio-inner-icon hbg-green-600 w-[7px] h-[7px] rounded-full" 
+            :class="`radio-inner-icon hbg-green-600 ${spanSize} rounded-full`" 
             v-show="modelValue === value"
         ></span>
         </span>
@@ -31,6 +31,14 @@
     },
     modelValue: [String, Number],
     value: [String, Number],
+    iconSize: {
+      type: String,
+      default: 'w-4 h-4', 
+    },
+    spanSize: {
+      type: String,
+      default: 'w-[7px] h-[7px]', 
+    },
   });
   
   const emit = defineEmits(['update:modelValue']);
