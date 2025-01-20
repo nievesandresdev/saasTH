@@ -37,6 +37,7 @@ jobs:
             echo "VUE_APP_GUEST_URL=${{ secrets.VUE_APP_GUEST_URL_MAIN }}" >> .env
             echo "VUE_APP_API_URL_REVIEW=${{ secrets.VUE_APP_API_URL_REVIEW_MAIN }}" >> .env
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_MAIN }}" >> .env
+            echo "VUE_APP_X_API=${{ secrets.VUE_APP_X_KEY_API_MAIN }}" >> .env
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
             echo "VUE_APP_API_URL_BACKEND_GENERAL=${{ secrets.VUE_APP_API_URL_BACKEND_GENERAL_TEST }}" >> .env
