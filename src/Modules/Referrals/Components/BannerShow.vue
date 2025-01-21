@@ -6,14 +6,17 @@
         <span>Los cambios en el programa de referidos <strong>afectarán a todos los alojamientos de la cuenta.</strong></span>
       </div>
     </div>
-    <div class="w-full h-[40px] bg-[#D9E8F2] flex flex-col items-center justify-center text-center text-sm font-medium py-[12px] px-6" v-else>
+    <div class="w-full h-[40px] bg-[#D9E8F2] flex flex-col items-center justify-center text-center text-sm font-medium py-[12px] px-6" v-if="show && props.chain.type === 'CHAIN'">
       <p>Los cambios en el programa de referidos <strong>afectarán a todos los alojamientos de la cuenta.</strong></p>
     </div>
 </template>
 <script setup>
+import { chain } from 'lodash';
+
 
 const props = defineProps({
-  show: Boolean
+  show: Boolean,
+  chain: Object
 })
 
 </script>

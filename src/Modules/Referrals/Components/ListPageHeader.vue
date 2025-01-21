@@ -1,7 +1,7 @@
 <template>
     <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px] z-[100]">
         <div class="space-x-2 flex">
-            <h1 class="font-medium text-[22px]">Programa de referidos</h1>
+            <h1 class="font-medium text-[22px]">Programa de referidos {{ dataReferralsApi }}</h1>
             <BaseTooltipResponsive
                 size="l"
                 :top="35"
@@ -18,10 +18,11 @@
             </BaseTooltipResponsive>
         </div>
         <div class="flex items-center">
-            <div class="mr-2 text-gray-700 font-semibold text-sm">Mostrar en la WebApp</div>
+            <div class="mr-2 text-gray-700 font-semibold text-sm" :class="{'opacity-25' : !dataReferralsApi}">Mostrar en la WebApp</div>
                 <BaseSwichInput
                     v-model="hotelData.show_referrals"
                     class="mr-4"
+                    :disabled="!dataReferralsApi"
                     @change:value="updateVisivilityFacilities()"
                 />
             <BaseTooltipResponsive
@@ -57,6 +58,8 @@
     const mockupStore = inject('mockupStore');
     const toast = inject('toast');
     const hotelData = inject('hotelData');
+    const dataReferralsApi = inject('dataReferralsApi');
+    
 
     // DATA
 
@@ -70,7 +73,7 @@
             toast.warningToast(data?.message,'top-right');
         }
         if(hotelData.show_referrals){
-            mockupStore.$setIframeUrl('/perfil');
+            mockupStore.$setIframeUrl('/perfil','referrals=true');
         }else{
             mockupStore.$setIframeUrl('/alojamiento')
         }

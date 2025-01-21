@@ -1,5 +1,5 @@
 <template>
-    <label :for="id" class="relative cursor-pointer">
+    <label :for="id" class="relative"  :class="['cursor-pointer', disabled ? 'cursor-not-allowed	 opacity-25' : '']">
         <input
             :checked="modelValue"
             type="checkbox"
@@ -9,6 +9,7 @@
             :disabled="disabled"
             @click="handleCLick"
         />
+        
         <div
         :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : `${colorDisabled}`]"
         ></div>
