@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-[10px] p-6 shadow-hoster w-[296px] flex flex-col justify-between">
+    <div class="rounded-[10px] p-6 shadow-hoster w-[296px] flex flex-col justify-between bg-[#FFFFFF]">
         <div class="flex justify-between items-center">
             <h1 v-if="title" class="text-base font-semibold leading-[120%]">{{ title }}</h1>
             <span 
