@@ -154,8 +154,9 @@ const $formatTypeLodging = (title = false) => {
     at: !title ? "apartamento" : "Apartamento",
     vft: !title ? "apartamento" : "Apartamento",
   }
-  let defaultLetter = !title ? "alojamiento" : "Alojamiento";
-  return typeLodging?.[hotelStore.hotelData?.type] ?? defaultLetter;
+  let defaultLetter = !title ? "hotel" : "Hotel";
+
+  return typeLodging?.[hotelStore.hotelData?.type.toLowerCase()] ?? defaultLetter;
 }
 
 function $throttle(func, limit) {
