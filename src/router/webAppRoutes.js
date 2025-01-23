@@ -26,7 +26,7 @@ const dashboardRoutes = [
         component: GeneralReferrals,
         meta: { sidebarRight: 'SidebarMockup' },
 
-      }
+      },
     ],
   },
 ];
