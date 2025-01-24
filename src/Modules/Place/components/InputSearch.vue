@@ -56,7 +56,7 @@ function handleClickOutsideDropDown () {
 function onClick () {
     
     dropdownSearch.value = true;
-    console.log(dropdownSearch.value);
+    // console.log(dropdownSearch.value);
 }
 
 function selectPlace (placeId) {
