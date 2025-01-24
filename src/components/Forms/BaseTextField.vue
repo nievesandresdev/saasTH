@@ -124,6 +124,10 @@ const customInputClass = computed(() => {
 const updateValue = (value) => {
     inputValue.value = value;
 };
+
+const onClick = () => {
+    emit('click');
+}
 </script>
 
 <style lang="scss" scoped>
