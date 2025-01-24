@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, defineEmits, defineProps } from 'vue';
+import { ref, reactive, computed, defineEmits, defineProps, watch, onMounted } from 'vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import AccessPermissions from './AccessPermisions.vue';
@@ -107,6 +107,7 @@ const emit = defineEmits(['storeWorkPosition', 'close']);
 
 const props = defineProps({
   data: Object,
+  isVisible: Boolean,
 });
 
 const form = reactive({
@@ -151,6 +152,20 @@ const form = reactive({
     },
   },
 });
+
+const initializeForm = () => {
+  if(props.data){
+    form.name = props.data.name;
+    form.permissions = JSON.parse(props.data.permissions);
+  }
+};
+
+
+onMounted(() => {
+  initializeForm();
+});
+
+
 
 const currentStep = ref(1);
 

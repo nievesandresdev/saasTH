@@ -187,7 +187,6 @@
                 </div>
               </transition>
             </div>
-            <!-- <pre>{{ form.permissions }}</pre> -->
             <AccessPermissions
               v-model:permissions="form.permissions"
               :workPositionId="form.work_position_id"
