@@ -20,7 +20,10 @@ d    dd
             <MainSidebar @openmodalHelp="openModalHelp" :subscription="userStore.dataSubscriptionBanner" />
             <!-- container dinamic side left -->
             <div v-if="currentLeftSidebar" class="flex-shrink-0 h-full" :style="`width :${sidebarWidthz}`">
-                <DinamicLeftSidebar :sidebarName="currentLeftSidebar"/>
+                <DinamicLeftSidebar 
+                    :sidebarName="currentLeftSidebar"
+                    :key="layoutStore.leftSidebarKey" 
+                />
             </div>
         </aside>
 
@@ -33,7 +36,10 @@ d    dd
 
         <!-- side right -->
         <aside v-if="currentRightSidebar" :class="userStore.showSuscriptionBanner ? 'h-with-banner' : 'h-without-banner'">
-            <DinamicRightSidebar :sidebarName="currentRightSidebar"/>
+            <DinamicRightSidebar 
+                :key="layoutStore.rightSidebarKey" 
+                :sidebarName="currentRightSidebar"
+            />
         </aside>
     </div>
     <NotifyPanel />
@@ -59,11 +65,13 @@ import { usePreloaderStore } from '@/stores/modules/preloader';
 import { useMockupStore } from '@/stores/modules/mockup';
 import { useHotelStore } from '@/stores/modules/hotel'
 import { useUserStore } from '@/stores/modules/users/users'
+import { useLayoutStore } from '@/stores/modules/layout'
 
 const mockupStore = useMockupStore();
 const preloaderStore = usePreloaderStore();
 const hotelStore = useHotelStore();
 const userStore = useUserStore();
+const layoutStore = useLayoutStore();
 
 const activeRequests = computed(() => preloaderStore.activeRequests);
 const route = useRoute();

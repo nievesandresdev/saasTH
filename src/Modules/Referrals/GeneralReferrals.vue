@@ -1,6 +1,7 @@
 <template>
     <ListPageHeader />
-    <BannerShow :show="hotelData.show_referrals" />
+    <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
+
 
     <!-- section  Beneficios para el referido -->
     <div class="p-6 min-h-screen">
@@ -17,12 +18,13 @@
                     :valueReferrals="valueReferrals"
                     @editGift="editGift"
                     :type="'referred'"
+                    v-show="!isObjectEmpty(benefitSReferrals)"
                 />
                 <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
-                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal('referred')">
+                    <span class="font-medium text-sm underline cursor-pointer" @click="openModal('referred')" >
                         Crear regalo
                     </span>
                 </div>
@@ -33,11 +35,12 @@
                 <div class="flex justify-between">
                     <h1 class="text-base font-semibold mb-2">Beneficios para el referente</h1>
                     <div class="flex items-center">
-                        <div class="mr-1 text-gray-700 font-semibold text-sm">Ofrecer beneficios</div>
+                        <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent)}">Ofrecer beneficios</div>
                             <BaseSwichInput
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
+                                :disabled="isObjectEmpty(benefitReferent)"
                                 @change:value="updateVisivilityBenefits()"
                             />
                         <BaseTooltipResponsive
@@ -67,6 +70,7 @@
                     :valueReferrals="valueReferent"
                     :type="'referent'"
                     @editGift="editGift"
+                     v-show="!isObjectEmpty(benefitReferent)"
                 />
                 
                 <div class="flex gap-2" v-show="isObjectEmpty(benefitReferent)">
@@ -161,11 +165,15 @@ const typePeople = ref(null)
 const loadingSectionGift = ref(false);
 
 
+const dataReferralsApi = ref(false);
+
+
 // PROVIDE
 provide('hotelData', hotelData);
 provide('isOpenSidePanel', isOpenSidePanel);
 provide('isOpenEditPanel', isOpenEditPanel);
 provide('typeModal', typeModal);
+provide('dataReferralsApi', dataReferralsApi);
 
 
 const initialOfferBenefits = ref(hotelData.offer_benefits);
@@ -213,7 +221,6 @@ const dataReferrals = (data) => {
 }
 
 const updateGift = (data,type) => {
-    console.log('update gift',data,type)
     if(type === 'referred') {
         benefitSReferrals.value = data;
     } else {
@@ -228,7 +235,13 @@ const isObjectEmpty = (obj) => {
 
 
 function loadMockup () {
-    mockupStore.$setIframeUrl('/alojamiento');
+    if(hotelData.show_referrals == 0){
+        mockupStore.$setIframeUrl('/alojamiento');
+    }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 0){
+        mockupStore.$setIframeUrl('/perfil','referrals=true');
+    }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 1){
+        mockupStore.$setIframeUrl('/perfil','referent=true');
+    }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
     
     mockupStore.$setLanguageTooltip(true)
@@ -288,6 +301,10 @@ onMounted(async () => {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
         
+    }
+
+    if(data?.benefitSReferrals) {
+        dataReferralsApi.value = true;
     }
 
     /* setTimeout(async () => {

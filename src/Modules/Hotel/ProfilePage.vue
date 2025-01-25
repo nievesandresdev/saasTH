@@ -59,8 +59,7 @@
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium inline-block">Nombre de alojamiento</label>
-                    <p class="text-sm">No introduzcas el tipo de alojamiento en el nombre</p>
+                    <label class="text-sm font-medium block mb-2">Nombre de {{ $formatTypeLodging() }}</label>
                     <BaseTextField
                         v-model="form.name"
                         placeholder="Nombre de alojamiento"
@@ -322,6 +321,8 @@
     // const { hotelData } = hotelStorage;
     import { useMockupStore } from '@/stores/modules/mockup';
     const mockupStore = useMockupStore();
+    import { useLayoutStore } from '@/stores/modules/layout'
+    const layoutStore = useLayoutStore();
 
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
@@ -453,6 +454,7 @@
 
     async function loadHotel () {
         const hotel = await hotelStorage.$findByParams()
+        
         Object.assign(hotelData, hotel)
         loadForm(hotel)
         loadMap()
@@ -526,6 +528,7 @@
             toast.warningToast(data?.message,'top-right');
         }
         mockupStore.$reloadIframe()
+        layoutStore.$forceLeftSidebarRerender()
     }
 
     function openModelGallery () {

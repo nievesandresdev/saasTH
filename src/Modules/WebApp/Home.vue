@@ -73,7 +73,7 @@
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.icon.instalaciones.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
-                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Alojamiento</h3>
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">{{ $formatTypeLodging(true) }}</h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center mt-2 group-hover:text-red-200">

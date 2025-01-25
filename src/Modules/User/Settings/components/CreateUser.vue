@@ -1,4 +1,10 @@
 <template>
+  <!-- fondo negro -->
+    <div 
+      v-if="modalAdd" 
+      class="fixed z-[2000] bg-[#00000080] top-0 left-0 h-screen w-screen"
+      @click="closeModal"
+    ></div>
     <transition>
       <div
         v-if="modalAdd"
