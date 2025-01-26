@@ -107,6 +107,7 @@ const adminAccess = ref([
 const formPermissions = computed(() => props.permissions);
 
 const initializePermissions = () => {
+  
   // Reinicia los valores `selected` y `disabled` para todos los accesos
   operationAccess.value.forEach((item) => {
     item.selected = false;
@@ -118,19 +119,27 @@ const initializePermissions = () => {
     item.disabled = false;
   });
   Object.keys(formPermissions.value).forEach((key) => {
-    if (formPermissions.value[key]?.status) {
-      const opItem = operationAccess.value.find((item) => item.value === key);
-      const adminItem = adminAccess.value.find((item) => item.value === key);
+  if (formPermissions.value[key]?.status) {
+    const opItem = operationAccess.value.find((item) => item.value === key);
+    const adminItem = adminAccess.value.find((item) => item.value === key);
 
-      if (opItem) {
-        opItem.selected = true;
-      }
-
-      if (adminItem) {
-        adminItem.selected = true;
-      }
+    if (opItem) {
+      opItem.selected = true;
     }
-  });
+
+    if (adminItem) {
+      adminItem.selected = true;
+    }
+  }
+});
+
+// Después de iterar, valida si todos los permisos están seleccionados
+const allSelected =
+  operationAccess.value.every((item) => item.selected) &&
+  adminAccess.value.every((item) => item.selected);
+
+selectAll.value = allSelected; // Actualiza el estado del switch "Todos"
+
 };
 
 initializePermissions(); // Llama a la función al cargar el componente

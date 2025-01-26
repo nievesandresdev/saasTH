@@ -248,7 +248,7 @@ function loadMockup (experienceSlug = null) {
         query = 'mobile=1';
 
         query = mergeDataFormInUrlMockup(query, dataForm);
-        mockupStore.$setIframeUrl(`/experiencias`, query);
+        mockupStore.$setIframeUrl(`/servicios/activity`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
 }
