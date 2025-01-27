@@ -166,10 +166,10 @@ const values = {
     'youBack':{
         title: 'Te esperamos de vuelta!',
         description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
-        issue: 'Tienes un chat pendiente en la WebApp',
-        descriptionContent:'',
-        itemsContent:[],
+        trigger: 'Pasadas 48hs de la finalización de su estancia, tus huéspedes recibirán este mensaje',
+        issue: 'Gracias por elegirnos.',
+        descriptionContent:'Este mensaje incluirá un bloque diseñado para persuadir a tus huéspedes a regresar y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Consulta de Seguimiento/Solicitud de reseña','Invitación a crear su próxima reserva','Destinos de su interés'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]

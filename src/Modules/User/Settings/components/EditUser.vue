@@ -713,10 +713,9 @@ const scrollToStep = (index) => {
 };
 
 const nextStep = () => {
-  if(!changes.value) {
+  if(changes.value) {
     if (currentStep.value < steps.length) currentStep.value++;
   }
-  
 
 };
 
@@ -726,25 +725,25 @@ const prevStep = () => {
 
 const handleUpdateUser = async () => {
 
-let store = await userStore.$updateUser(form.value);
+  let store = await userStore.$updateUser(form.value);
 
-if (store.ok) {
-  closeModal(true)
-  toast.warningToast('Usuario editado correctamente','top-right')
-  emits('update');
-  if(authStore?.user?.id === store.data.user.id){
-    authStore.$setUser(store.data.user);
+  if (store.ok) {
+    closeModal(true)
+    toast.warningToast('Usuario editado correctamente','top-right')
+    emits('update');
+    if(authStore?.user?.id === store.data.user.id){
+      authStore.$setUser(store.data.user);
+    }
+
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+
+
+  } else {
+    toast.errorToast(store.data.methodException,'top-right')
+    currentStep.value = 1;
   }
-
-  setTimeout(() => {
-      location.reload();
-  }, 1000);
-
-
-} else {
-  toast.errorToast(store.data.methodException,'top-right')
-  currentStep.value = 1;
-}
 
 };
 
