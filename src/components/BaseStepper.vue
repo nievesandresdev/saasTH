@@ -24,7 +24,7 @@
                 modelValue >= index ? 'text-[#333333]' : 'text-[#333333]'
             ]"
             >
-            {{ step }}
+            {{ step.name ?? step }}
             </span>
 
             <!-- Línea de conexión entre pasos -->

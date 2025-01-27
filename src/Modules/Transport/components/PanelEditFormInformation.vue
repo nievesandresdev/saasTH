@@ -14,7 +14,7 @@
         </div>
         <div class="space-y-2">
              <label class="text-sm font-medium">Descripción</label>
-            <BaseTextareaField
+            <Editor
                 v-model="form.description"
                 :placeholder="`Ej: Disfruta de nuestro salón de masajes. Ofrecemos una amplia gama de tratamientos personalizados.
 Opciones del servicio:
@@ -22,8 +22,10 @@ Opciones del servicio:
 2. Stone hot massage - 90 minutos - 80€
 3. Masaje con aromaterapia - 75 minutos - 70€
                 `"
-                class-content="flex-1"
-                name="description"
+                showCounter
+                mandatory
+                countType="static"
+                minHeight="180px"
             />
         </div>
         <div class="space-y-2">
@@ -107,6 +109,7 @@ import { ref, reactive, onMounted, provide, computed, inject } from 'vue';
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
 import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
+import Editor from "@/components/Forms/Editor.vue";
 
 const form = inject('form');
 const errors = inject('errors');

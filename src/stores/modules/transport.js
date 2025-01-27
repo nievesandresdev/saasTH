@@ -72,12 +72,16 @@ export const useTransportStore = defineStore('transport', () => {
         return [];
     }
 
-    // async function $delete(id) {
-    //     const response = await facilityServices.deleteApi(id);
-    //     return response;
-    //     if(response.ok) return response.data;
-    //     return [];
-    // }
+    async function $delete (id) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+        }
+        const response = await transportServices.deleteApi(id, newParams, {showPreloader: false});
+        return response;
+        if(response.ok) return response.data;
+        return [];
+    }
 
     //
     return {
@@ -87,7 +91,7 @@ export const useTransportStore = defineStore('transport', () => {
         // $updateVisible,
         $updateOrder,
         $storeOrUpdate,
-        // $delete,
+        $delete,
     }
 
 })

@@ -15,7 +15,10 @@
             ref="ref
             PanelEdit"
         >
-            <div class="border-b hborder-bottom-gray-400 pb-4 mx-6">
+            <div
+                class="border-b hborder-bottom-gray-400 pb-4"
+                :class="{'mx-6': modelActive === 'ADD'}"
+            >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
                         <h1 class="text-[22px] font-medium text-center">{{ modelActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
@@ -25,7 +28,12 @@
                     </div>
                 </div>
                 <!-- tabs -->
-                <BaseStepper v-model="stepCurrent"  :steps="steps" />
+                <template v-if="modelActive === 'ADD'">
+                    <BaseStepper v-model="stepCurrent"  :steps="steps" />
+                </template>
+                <template v-else>
+                    <BaseTab v-model="stepCurrent" class="px-[24px]" :items="steps" />
+                </template>
             </div>
             <div class="pb-6" style="height: calc(100% - 72px); overflow: auto;">
                 <div class="px-6 mt-[24px] mt-3">
@@ -43,7 +51,7 @@
                 <template v-if="modelActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalChangeInForm() : openModalDeleteFacility()"
+                        @click="changesform ? openModalChangeInForm() : openModalDelete()"
                     >
                         <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar servicio' }}</span>
                     </button>
@@ -91,6 +99,10 @@
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModalForce"
     />
+    <ModalDelete
+        ref="modalDeleteRef"
+        @submit:delete="submitDelete()"
+    />
     <template v-if="modelActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -120,7 +132,9 @@ import BaseStepper from '@/components/BaseStepper.vue';
 import PanelEditFormInformation from './PanelEditFormInformation.vue';
 import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
 import ModalCancelChange from './ModalCancelChange.vue';
+import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import BaseTab from '@/components/BaseTab.vue';
 
 const emit = defineEmits(['load:resetPageData']);
 
@@ -141,10 +155,11 @@ const modelActive = inject('modelActive');
 
 
 // DATA
-const steps = ['Información', 'Galería'];
+const steps = [{name: 'Información', value: 0}, {name: 'Galeria', value: 1}];
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
+const modalDeleteRef  = ref(null);
 
 const form = reactive({
     id: null,
@@ -214,8 +229,8 @@ const normalize = (value) => {
 function closePreviewImage () {
     isPreviewOpen.value = false;
 }
-function openModalDeleteFacility () {
-
+function openModalDelete () {
+    modalDeleteRef.value.openModal();
 }
 
 function prevTab () {
@@ -248,6 +263,17 @@ async function submitSave () {
         toast.warningToast(data?.message,'top-right');
     }
     isLoadingForm.value = false;
+}
+async function submitDelete () {
+    const response = await confortStore.$delete(form.id);
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+        location.reload();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
 }
 function resetCompoent () {
     closeModalForce();

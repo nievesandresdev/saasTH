@@ -91,6 +91,17 @@ export const useExperienceStore = defineStore('experience', () => {
         return response.data
     }
 
+    async function $deleteHoster (id) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+        }
+        const response = await experienceService.deleteHosterApi(id, newParams, {showPreloader: false});
+        return response;
+        if(response.ok) return response.data;
+        return [];
+    }
+
     //
     return {
         formatImage,
@@ -102,6 +113,7 @@ export const useExperienceStore = defineStore('experience', () => {
         $update,
         //
         $storeOrUpdateHoster,
+        $deleteHoster,
     }
 
 })
