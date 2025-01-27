@@ -119,15 +119,12 @@ const values = {
     'prepareYourArrival':{
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
-        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Compartir estancia".',
-        issue: `¿Ya has visto la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento'],
+        trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.".',
+        issue: `¿Todo listo  ${hotelStorage.hotelData?.name}?`,
+        descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'},
-            {title:'WhatsApp',icon:'Frame 2613488'},
-            {title:'SMS',icon:'Frame 2613489'},
-            {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
     'howGoing':{
