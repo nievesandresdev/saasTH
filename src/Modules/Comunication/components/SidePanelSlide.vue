@@ -119,7 +119,7 @@ const values = {
     'prepareYourArrival':{
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
-        trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.".',
+        trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
         issue: `¿Todo listo  ${hotelStorage.hotelData?.name}?`,
         descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
