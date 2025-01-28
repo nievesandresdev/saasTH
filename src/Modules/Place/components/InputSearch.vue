@@ -90,7 +90,6 @@ async function submitSearch () {
     // })
     const response = await placeStore.$getAll(data);
     if (response.ok) {
-        console.log(response.data.places, 'response.data.places.data');
         searchList.value = response.data.places.data;
     }
 }

@@ -15,7 +15,10 @@
             ref="ref
             PanelEdit"
         >
-            <div class="border-b hborder-bottom-gray-400 pb-4 mx-6">
+            <div
+                class="border-b hborder-bottom-gray-400 pb-4"
+                :class="{'mx-6': panelEditHosterActive === 'ADD'}"
+            >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
                         <h1 class="text-[22px] font-medium text-center">{{ panelEditHosterActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
@@ -25,7 +28,12 @@
                     </div>
                 </div>
                 <!-- tabs -->
-                <BaseStepper v-model="stepCurrent"  :steps="steps" />
+                <template v-if="panelEditHosterActive === 'ADD'">
+                    <BaseStepper v-model="stepCurrent"  :steps="steps" />
+                </template>
+                <template v-else>
+                    <BaseTab v-model="stepCurrent" class="px-[24px]" :items="steps" />
+                </template>
             </div>
             <div class="pb-6" style="height: calc(100% - 72px); overflow: auto;">
                 <div class="px-6 mt-[24px] mt-3">
@@ -43,7 +51,7 @@
                 <template v-if="panelEditHosterActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalChangeInForm() : openModalDeleteFacility()"
+                        @click="changesform ? openModalChangeInForm() : openModalDelete()"
                     >
                         <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar servicio' }}</span>
                     </button>
@@ -91,6 +99,10 @@
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModalForce"
     />
+    <PanelEditHosterModalDelete
+        ref="panelEditHosterModalDeleteRef"
+        @submit:delete="submitDelete()"
+    />
     <template v-if="panelEditHosterActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -117,6 +129,8 @@ import * as rules from '@/utils/rules';
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import ModalGallery from "@/components/ModalGallery.vue";
 import BaseStepper from '@/components/BaseStepper.vue';
+import BaseTab from '@/components/BaseTab.vue';
+import PanelEditHosterModalDelete from './PanelEditHosterModalDelete.vue';
 import PanelEditHosterFormInformation from './PanelEditHosterFormInformation.vue';
 import PanelEditHosterFormPhotos from './PanelEditHosterFormPhotos.vue';
 import PanelEditHosterModalCancelChange from './PanelEditHosterModalCancelChange.vue';
@@ -140,11 +154,13 @@ const modalChangePendinginForm = inject('modalChangePendinginForm');
 const panelEditHosterActive = inject('panelEditHosterActive');
 
 
+
 // DATA
-const steps = ['Información', 'Galería'];
+const steps = [{name: 'Información', value: 0}, {name: 'Galeria', value: 1}];
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
+const panelEditHosterModalDeleteRef  = ref(null);
 
 const form = reactive({
     id: null,
@@ -190,6 +206,7 @@ const { errors, validateField, formInvalid } = useFormValidation(form, formRules
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
 const modalDeleteFacilityRef = ref(null);
+const modalDeleteRef = ref(null);
 const modalCancelChangeFacilityRef = ref(null);
 
 const previewUrl = ref(null);
@@ -309,6 +326,23 @@ function openModalChangeInForm () {
         modalChangePendinginForm.value = false;
     });
 }
+
+function openModalDelete () {
+    panelEditHosterModalDeleteRef.value.openModal();
+}
+
+async function submitDelete () {
+    const response = await experienceStore.$deleteHoster(form.id);
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+        location.reload();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+
 
 function edit({ action, experience }) {
     if (action === 'EDIT' && experience) {

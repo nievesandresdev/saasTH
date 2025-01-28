@@ -14,3 +14,4 @@ export const updateApi = (data, config = {}) => apiHttp('POST', `${saasExperienc
 
 // HOSTER
 export const storeOrUpdateHosterApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/hoster/store`, data, config, 'API_HELPER');
+export const deleteHosterApi = (id, data, config = {}) => apiHttp('DELETE', `${saasExperiencePath}/hoster/${id}`, data, config, 'API_HELPER');
