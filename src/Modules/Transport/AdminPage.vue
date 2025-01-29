@@ -84,7 +84,7 @@ onMounted(async() => {
 
 // FUNCTION
 function loadMockup (path = '/') {
-    mockupStore.$setIframeUrl(`/`);
+    mockupStore.$setIframeUrl(`/servicios/transport`);
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }

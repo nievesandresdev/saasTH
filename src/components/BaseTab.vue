@@ -6,16 +6,16 @@
             v-for="(item ,index) in items"
             :key="index"
             class="cursor-pointer px-4 pt-4 rounded-t-[10px] flex flex-col"
-            :class="value === item.value ? 'hbg-green-200' : ''"
-            @click="changeTab(item.value)"
+            :class="value === (item?.value ?? item )? 'hbg-green-200' : ''"
+            @click="changeTab(item?.value ?? item)"
         >
                 <span
                 class="text-base font-semibold"
-                :class="value === item.value ? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
+                :class="value === (item?.value ?? item )? 'htext-green-800 pb-[8px]' : 'htext-black-100'"
             >
-                    {{ item.name }}
+                    {{ item?.name ?? item }}
             </span>
-            <span class="w-full h-[3px] rounded-full" :class="value === item.value ? 'hbg-green-800' : ''" />
+            <span class="w-full h-[3px] rounded-full" :class="value === (item?.value ?? item) ? 'hbg-green-800' : ''" />
         </li>
     </ul>
 </template>

@@ -119,15 +119,12 @@ const values = {
     'prepareYourArrival':{
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
-        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Compartir estancia".',
-        issue: `¿Ya has visto la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento'],
+        trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
+        issue: `¿Todo listo  ${hotelStorage.hotelData?.name}?`,
+        descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'},
-            {title:'WhatsApp',icon:'Frame 2613488'},
-            {title:'SMS',icon:'Frame 2613489'},
-            {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
     'howGoing':{
@@ -166,10 +163,10 @@ const values = {
     'youBack':{
         title: 'Te esperamos de vuelta!',
         description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
-        issue: 'Tienes un chat pendiente en la WebApp',
-        descriptionContent:'',
-        itemsContent:[],
+        trigger: 'Pasadas 48hs de la finalización de su estancia, tus huéspedes recibirán este mensaje',
+        issue: 'Gracias por elegirnos.',
+        descriptionContent:'Este mensaje incluirá un bloque diseñado para persuadir a tus huéspedes a regresar y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Consulta de Seguimiento/Solicitud de reseña','Invitación a crear su próxima reserva','Destinos de su interés'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]

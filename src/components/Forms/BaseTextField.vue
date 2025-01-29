@@ -67,7 +67,7 @@ const emit = defineEmits([
 const props = defineProps({
     type: { type: String, default: 'text' },
     classContent: { type: String, default: '' },
-    classInput: { type: String, default: 'p-3 h-10 text-sm' },
+    classInput: { type: String, default: '' },
     prependInnerIcon: { type: String, default: '' },
     appendInnerIcon: {
         type: Object,
@@ -108,7 +108,7 @@ watch(
 );
 
 const customInputClass = computed(() => {
-    let c = props.classInput;
+    let c = `${props.classInput} p-3 h-10 text-sm`;
     if (props.prependInnerIcon) {
         c += ' pl-11';
     }
@@ -124,6 +124,10 @@ const customInputClass = computed(() => {
 const updateValue = (value) => {
     inputValue.value = value;
 };
+
+const onClick = () => {
+    emit('click');
+}
 </script>
 
 <style lang="scss" scoped>

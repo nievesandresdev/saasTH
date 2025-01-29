@@ -55,7 +55,8 @@ function handleClickOutsideDropDown () {
 
 function onClick () {
     
-    dropdownSearch.value = true
+    dropdownSearch.value = true;
+    // console.log(dropdownSearch.value);
 }
 
 function selectPlace (placeId) {
@@ -89,7 +90,6 @@ async function submitSearch () {
     // })
     const response = await placeStore.$getAll(data);
     if (response.ok) {
-        console.log(response.data.places, 'response.data.places.data');
         searchList.value = response.data.places.data;
     }
 }
