@@ -18,23 +18,14 @@
                 </template>
             </Tooltip>
         </div>
-        <div class="flex items-center gap-2" v-if="!hideToggleButton">
+        <div class="flex items-center gap-2">
             <p class="text-sm font-semibold">Mostrar en la WebApp</p>
-            <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0">
-                <input
-                    :checked="defaultToggle"
-                    type="checkbox"
-                    class="sr-only"
-                    id="toggle"
-                    @change="toggle"
-                />
-                <div
-                :class="['block w-[1.875rem] h-[1.125rem] rounded-full', defaultToggle ? 'bg-[#34A98F]' : 'bg-gray-400']"
-                ></div>
-                <div
-                :class="['dot absolute top-[0.125rem] w-3.5 h-3.5 rounded-full transition bg-white', defaultToggle ? 'transform translate-x-full' : 'left-[0.125rem]']"
-                ></div>
-            </label>
+            <ToggleButton
+                v-model="showCheckin"
+                id="ToggleButton_showCheckin"
+                @change="toggle"
+                :disabled="updateCheckin"
+            />
             <Tooltip
                 size="l"
                 :top="25"
@@ -69,26 +60,34 @@
     </div>
 </template>
 <script setup>
-import { useRoute } from 'vue-router';
+import { onMounted, ref } from 'vue';
 import Tooltip from '@/components/Tooltip.vue'
+import ToggleButton from '@/components/Buttons/ToggleButton.vue'
 import TabMenuContainer from '@/components/TabMenuWSlot.vue'
 import TabLink from '@/components/TabMenuLink.vue'
-
+//
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
+//
+import { useRoute } from 'vue-router';
 const route = useRoute();
+//
+import { useCheckinStore } from '@/stores/modules/stay/checkin'
+const checkinStore = useCheckinStore();
 
-const props = defineProps({
-    defaultToggle:{
-        type:Boolean,
-        default:null
-    },
-    hideToggleButton:{
-        type:Boolean,
-        default:null
-    },
+const showCheckin = ref(true)
+const updateCheckin = ref(false)
+
+onMounted(async() => {
+    showCheckin.value = await checkinStore.$getToggleShowCheckinHotel();
 })
-const emit = defineEmits(['onchange'])
 
-function toggle(event){
-    emit('onchange',event.target.checked)
+
+async function toggle(){
+    updateCheckin.value = true;
+    await checkinStore.$updateToggleShowCheckinHotel(showCheckin.value);
+    updateCheckin.value = false;
+    toast.warningToast('Actualizado!','top-right');
 }
+
 </script>

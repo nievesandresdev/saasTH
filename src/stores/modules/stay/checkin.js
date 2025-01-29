@@ -5,7 +5,9 @@ import {
     getGeneralSettingsApi,
     updateGeneralSettingsApi,
     getFormSettingsApi,
-    updateFormSettingsApi
+    updateFormSettingsApi,
+    updateToggleShowCheckinHotelApi,
+    getToggleShowCheckinHotelApi
 } from '@/api/services/stay/checkin.services'
 
 export const useCheckinStore = defineStore('checkin', () => {
@@ -48,11 +50,30 @@ export const useCheckinStore = defineStore('checkin', () => {
         }
     }
 
+    async function $updateToggleShowCheckinHotel (value) {
+        const response = await updateToggleShowCheckinHotelApi({ value })
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+
+    async function $getToggleShowCheckinHotel () {
+        const response = await getToggleShowCheckinHotelApi()
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
+    
+    
     return {
         $getGeneralSettings,
         $updateGeneralSettings,
         $getFormSettings,
         $updateFormSettings,
+        $updateToggleShowCheckinHotel,
+        $getToggleShowCheckinHotel
     }
 
 })

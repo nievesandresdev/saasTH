@@ -10,3 +10,6 @@ export const updateGeneralSettingsApi = (data) => apiHttp('POST', `${stayPath}/$
 
 export const getFormSettingsApi = () => apiHttp('GET', `${stayPath}/${hosterPath}/${checkinPath}/getFormSettings`)
 export const updateFormSettingsApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/${checkinPath}/updateFormSettings`, data, { showPreloader: false })
+
+export const updateToggleShowCheckinHotelApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/${checkinPath}/updateToggleShowCheckinHotel`, data, { showPreloader: false })
+export const getToggleShowCheckinHotelApi = () => apiHttp('GET', `${stayPath}/${hosterPath}/${checkinPath}/getToggleShowCheckinHotel`)

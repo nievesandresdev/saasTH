@@ -128,14 +128,22 @@
                 />
                 <FieldVisibility
                     id="fieldSettings15"
-                    label="Código postal y Municipio"
-                    v-model:visible="secondStep.postalCodeMunicipality.visible"
-                    v-model:required="secondStep.postalCodeMunicipality.mandatory"
-                    :withDependency="secondStep.postalCodeMunicipality.dependence"
+                    label="Código postal"
+                    v-model:visible="secondStep.postalCode.visible"
+                    v-model:required="secondStep.postalCode.mandatory"
+                    :withDependency="secondStep.postalCode.dependence"
                     icon="1.TH.Pais"
                 />
                 <FieldVisibility
                     id="fieldSettings16"
+                    label="Municipio"
+                    v-model:visible="secondStep.municipality.visible"
+                    v-model:required="secondStep.municipality.mandatory"
+                    :withDependency="secondStep.municipality.dependence"
+                    icon="1.TH.Pais"
+                />
+                <FieldVisibility
+                    id="fieldSettings17"
                     label="Domicilio de residencia"
                     v-model:visible="secondStep.addressResidence.visible"
                     v-model:required="secondStep.addressResidence.mandatory"
