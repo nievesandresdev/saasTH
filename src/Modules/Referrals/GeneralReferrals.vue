@@ -1,10 +1,8 @@
 <template>
     <ListPageHeader />
     <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
-
-
     <!-- section  Beneficios para el referido -->
-    <div class="p-6 min-h-screen">
+    <div class="px-6 min-h-screen">
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <h1 class="text-base font-semibold mb-2">Beneficios para el referido</h1>
