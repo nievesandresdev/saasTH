@@ -1,6 +1,6 @@
 <template>
     <SectionConfig
-        :marginTop="'24px'"
+        :marginTop="'16px'"
         :width="'460px'"
         icon-bg
         :src-bg="'/assets/icons/TH.Gift.opacity.svg'"
@@ -33,10 +33,10 @@
                 <div class="w-full h-4 bg-gray-300 rounded-md mb-2"></div>
                 <div class="w-3/4 h-4 bg-gray-300 rounded-md"></div>
             </div> -->
-            <p class="text-sm font-normal mb-4">
+            <p class="text-sm font-normal">
                 {{ benefitSReferrals.description }}
             </p>
-            <div class="flex items-center gap-1" v-if="benefitSReferrals.url && benefitSReferrals.enabled_url">
+            <div class="flex items-center gap-1 mt-4" v-if="benefitSReferrals.url && benefitSReferrals.enabled_url">
                 <img src="/assets/icons/url.svg" class="w-[16.6px] h-[16.6px]">
                 <p class="text-[12px] font-medium">
                     {{ benefitSReferrals.url }}

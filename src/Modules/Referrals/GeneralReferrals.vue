@@ -41,7 +41,7 @@
                                 @change:value="updateVisivilityBenefits()"
                             />
                         <BaseTooltipResponsive
-                            size="l"
+                            size="m"
                             :top="35"
                             :right="0"
                         >
@@ -64,7 +64,6 @@
 
                 <SectionGift 
                     :benefitSReferrals="benefitReferent"
-                    
                     :type="'referent'"
                     @editGift="editGift"
                      v-show="!isObjectEmpty(benefitReferent)"

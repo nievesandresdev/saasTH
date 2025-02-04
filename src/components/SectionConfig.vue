@@ -12,7 +12,7 @@
       backgroundSize: '25%',
     }"
   >
-  <div :class="[bgClass, baseClass, xlClass, xl3Class, 'py-6 px-4 rounded-[10px] shadow-hoster']">
+  <div :class="[bgClass, baseClass, xlClass, xl3Class, 'py-4 px-4 rounded-[10px] shadow-hoster']">
       <slot name="title"></slot>
       <slot name="content"></slot>
     </div>
