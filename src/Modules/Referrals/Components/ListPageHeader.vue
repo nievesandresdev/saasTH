@@ -1,7 +1,7 @@
 <template>
     <section class="flex justify-between py-[20px] border-b border-[#BFBFBF] mx-[24px] z-[100]">
         <div class="space-x-2 flex">
-            <h1 class="font-medium text-[22px]">Programa de referidos {{ dataReferralsApi }}</h1>
+            <h1 class="font-medium text-[22px]">Programa de referidos</h1>
             <BaseTooltipResponsive
                 size="l"
                 :top="35"

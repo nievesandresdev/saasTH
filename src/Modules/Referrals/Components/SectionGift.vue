@@ -1,17 +1,17 @@
 <template>
     <SectionConfig
-        :marginTop="'24px'"
+        :marginTop="'16px'"
         :width="'460px'"
         icon-bg
         :src-bg="'/assets/icons/TH.Gift.opacity.svg'"
         bg-class="''"
     >
         <template #title>
-            <div v-if="loading" class="flex justify-between animate-pulse">
+           <!--  <div v-if="loading" class="flex justify-between animate-pulse">
                 <div class="w-1/3 h-5 bg-gray-300 rounded-md mb-2"></div>
                 <div class="w-6 h-6 bg-gray-300 rounded-md"></div>
-            </div>
-            <div v-else class="flex justify-between">
+            </div> -->
+            <div class="flex justify-between">
                 <h1 class="text-base font-semibold mb-2">Código: {{ benefitSReferrals.code }}</h1>
                 <img
                     class="w-[24px] h-[24px] cursor-pointer"
@@ -19,29 +19,37 @@
                     @click="editGift(benefitSReferrals)"
                 />
             </div>
-            <div v-if="loading" class="flex justify-between animate-pulse">
+            <!-- <div v-if="loading" class="flex justify-between animate-pulse">
                 <div class="w-1/2 h-5 bg-gray-300 rounded-md mb-2"></div>
-            </div>
-            <div v-else class="flex justify-between">
+            </div> -->
+            <div class="flex justify-between">
                 <h1 class="text-base font-semibold mb-2">
                     Regalo: {{ type === 'referred' ? valueReferrals : valueReferent }}
                 </h1>
             </div>
         </template>
         <template #content>
-            <div v-if="loading" class="animate-pulse">
+            <!-- <div v-if="loading" class="animate-pulse">
                 <div class="w-full h-4 bg-gray-300 rounded-md mb-2"></div>
                 <div class="w-3/4 h-4 bg-gray-300 rounded-md"></div>
-            </div>
-            <p v-else class="text-sm font-normal mb-4">
+            </div> -->
+            <p class="text-sm font-normal">
                 {{ benefitSReferrals.description }}
             </p>
+            <div class="flex items-center gap-1 mt-4" v-if="benefitSReferrals.url && benefitSReferrals.enabled_url">
+                <img src="/assets/icons/url.svg" class="w-[16.6px] h-[16.6px]">
+                <p class="text-[12px] font-medium">
+                    {{ benefitSReferrals.url }}
+                </p>
+            </div>
         </template>
     </SectionConfig>
+
+
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, defineEmits, defineProps } from 'vue';
 import SectionConfig from '@/components/SectionConfig.vue';
 
 const emit = defineEmits(['editGift']);
@@ -55,15 +63,15 @@ const props = defineProps({
         type: String,
         required: true
     },
-    loading: {
+    /* loading: {
         type: Boolean,
         required: true
-    }
+    } */
 });
 
-const isObjectEmpty = (obj) => {
+/* const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0;
-};
+}; */
 
 const editGift = (data) => {
     emit('editGift', props.type, data);

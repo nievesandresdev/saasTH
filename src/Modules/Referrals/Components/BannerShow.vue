@@ -11,8 +11,6 @@
     </div>
 </template>
 <script setup>
-import { chain } from 'lodash';
-
 
 const props = defineProps({
   show: Boolean,

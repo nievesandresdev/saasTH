@@ -1,10 +1,8 @@
 <template>
     <ListPageHeader />
     <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
-
-
     <!-- section  Beneficios para el referido -->
-    <div class="p-6 min-h-screen">
+    <div class="px-6 min-h-screen">
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <h1 class="text-base font-semibold mb-2">Beneficios para el referido</h1>
@@ -15,7 +13,6 @@
                 </p>
                 <SectionGift 
                     :benefitSReferrals="benefitSReferrals"
-                    :valueReferrals="valueReferrals"
                     @editGift="editGift"
                     :type="'referred'"
                     v-show="!isObjectEmpty(benefitSReferrals)"
@@ -44,7 +41,7 @@
                                 @change:value="updateVisivilityBenefits()"
                             />
                         <BaseTooltipResponsive
-                            size="l"
+                            size="m"
                             :top="35"
                             :right="0"
                         >
@@ -67,7 +64,6 @@
 
                 <SectionGift 
                     :benefitSReferrals="benefitReferent"
-                    :valueReferrals="valueReferent"
                     :type="'referent'"
                     @editGift="editGift"
                      v-show="!isObjectEmpty(benefitReferent)"
@@ -95,10 +91,8 @@
     />
     <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
     <Edit
-        :modal-edit="isOpenEditPanel" 
         :initial-data="selectedGiftData"
         @updateGift="updateGift"
-        @close="closeEditModal"
     />
 
     <!-- modal no save principal -->
@@ -162,16 +156,25 @@ const selectedGiftData = ref({});
 const typeModal = ref(null)
 const typePeople = ref(null)
 
-const loadingSectionGift = ref(false);
+/* const loadingSectionGift = ref(false); */
 
 
 const dataReferralsApi = ref(false);
+
+const cancelChange = () => {
+    changes.value = false;
+    hotelData.offer_benefits = initialOfferBenefits.value;
+    benefitSReferrals.value = initialBenefitSReferrals.value;
+    benefitReferent.value = initialBenefitSReferent.value;
+}
+
 
 
 // PROVIDE
 provide('hotelData', hotelData);
 provide('isOpenSidePanel', isOpenSidePanel);
 provide('isOpenEditPanel', isOpenEditPanel);
+
 provide('typeModal', typeModal);
 provide('dataReferralsApi', dataReferralsApi);
 
@@ -268,7 +271,7 @@ const editGift = (type,data) => {
 }
 
 const updateVisivilityBenefits = () => {
-    console.log('update visibility benefits')
+    /* console.log('update visibility benefits') */
     checkChanges();
 }
 
