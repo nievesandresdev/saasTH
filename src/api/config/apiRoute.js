@@ -19,7 +19,7 @@ export const saasExperiencePath = 'experience/saas'
 export const utilityPath = 'utility'
 export const rewardsPath = 'rewards'
 export const cityPath = 'city'
-export const stayPath = 'stay'
+
 export const guestPath = 'guest'
 export const chatPath = 'chat'
 export const utilsPath = 'utils'
@@ -31,7 +31,6 @@ export const galleryPath = 'gallery'
 export const chainPath = 'chain'
 export const customizationPath = 'hotel/appearence'
 export const querySettingsPath = 'query-settings'
-export const stayAccessPath = 'stayAccess'
 export const requestSettingsPath = 'request-settings'
 
 // SERVICES API REVIEW
@@ -49,3 +48,8 @@ export const platformsPath = 'platforms'
 
 //legal
 export const legalPath = 'legal'
+
+//stay
+export const stayAccessPath = 'stayAccess'
+export const stayPath = 'stay'
+export const checkinPath = 'checkin'

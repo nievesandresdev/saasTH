@@ -318,6 +318,14 @@ const menu_section = reactive([
               selectedArr: ['GeneralSettings', 'AvailabilitySettings', 'AutomaticResponses'],
             
           },
+          {
+              title: 'Check-in',
+              to: 'CheckinGeneral',
+              icon: '/assets/icons/1.TH Check-in.svg',
+              include: '/webapp/checkin',
+              selectedArr: ['CheckinGeneral', 'CheckinForms'],
+            
+          },
       ],
   },
   {
