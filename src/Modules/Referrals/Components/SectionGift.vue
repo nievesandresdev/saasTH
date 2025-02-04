@@ -36,8 +36,16 @@
             <p v-else class="text-sm font-normal mb-4">
                 {{ benefitSReferrals.description }}
             </p>
+            <div class="flex items-center gap-1" v-if="benefitSReferrals.url && benefitSReferrals.enabledUrl">
+                <img src="/assets/icons/url.svg" class="w-[16.6px] h-[16.6px]">
+                <p class="text-[12px] font-medium">
+                    {{ benefitSReferrals.url }}
+                </p>
+            </div>
         </template>
     </SectionConfig>
+
+
 </template>
 
 <script setup>

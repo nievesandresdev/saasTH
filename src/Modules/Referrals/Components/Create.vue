@@ -75,8 +75,47 @@
             class-content="flex-1"
             class-input="text-sm h-[100px] min-h-[80px] p-3"
             name="description"
+            :max="'500'"
           />
         </div>
+        <!-- url -->
+         <div class="flex flex-col gap-2 mt-4">
+          <div class="flex justify-between">
+            <div class="flex gap-2">
+              <span class="text-sm font-medium">Enlace a la página web donde canjearlo</span>
+              <BaseTooltipResponsive
+                  size="m"
+                  :top="35"
+                  :right="-75"
+              >
+                  <template #button>
+                      <img class="w-[16px] h-[16px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                      </template>
+                      <template #content>
+                          <p class="text-sm leading-[150%] font-normal">
+                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo. Si el regalo no requiere un enlace, desactívalo para ocultarlo.
+                          </p>
+                  </template>
+              </BaseTooltipResponsive>
+
+            </div>
+              <BaseSwichInput
+                v-model="form.enabledUrl"
+                class="mr-4"
+                :id="'url_switch'"
+                @change="handleUrl"
+              />
+          </div>
+          <BaseTextField
+            v-model="form.url"
+            type="text"
+            placeholder="https://..."
+            class="flex-1"
+            :error="errors.url"
+            :disabled="!form.enabledUrl"
+
+          />
+         </div>
       </div>
 
       <!-- Footer -->
@@ -108,6 +147,8 @@ import RadioButton from '@/components/Forms/RadioButton.vue';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
 import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
@@ -119,30 +160,66 @@ const showSlidePanel = ref(false);
 const isOpenSidePanel = inject('isOpenSidePanel');
 const typeModal = inject('typeModal');
 
+
+
 const form = ref({
     amount: '', 
     type_discount: 'percentage', // Tipo (porcentaje o dinero)
     code: '', 
     description: '',
+    url: '',
+    enabledUrl: false
 });
+
 
 const errors = ref({
   amount: false,
   code: false,
-  description: false
+  description: false,
+  url: false
 });
 
+const handleUrl = (event) => {
+  form.value.enabledUrl = event.target.checked;
+};
+
+
+
+
 const isFormIncomplete = computed(() => {
+
 
   return (
     !form.value.amount ||
     !form.value.code ||
     !form.value.description ||
+    (form.value.enabledUrl && (!form.value.url || errors.value.url)) ||
     errors.value.value ||
     errors.value.code ||
-    errors.value.description
+    errors.value.description 
+
+
   );
 });
+
+const isValidUrl = (url) => {
+  const urlPattern = /^https:\/\/([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
+  return urlPattern.test(url);
+};
+
+
+watch(
+  () => form.value.url,
+  (newUrl) => {
+    if (form.value.enabledUrl && form.value.url !== '') {
+      errors.value.url = newUrl && !isValidUrl(newUrl);
+    } else {
+      errors.value.url = false;
+    }
+  }
+
+);
+
 
 
 const typeModalTitle = computed(() => {
@@ -206,9 +283,12 @@ const isClosePanel = () => {
     amount: '',
     type_discount: 'percentage',
     code: '',
-    description: ''
+    description: '',
+    enabledUrl: false
   };
 };
+
+
 
 
 const cancel = () => {
@@ -230,9 +310,16 @@ watch(
   () => isOpenSidePanel.value,
   (newVal) => {
     if (newVal) {
+      errors.value = {
+        amount: false,
+        code: false,
+        description: false,
+        url: false
+      };
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
       }, 120);
+
       setTimeout(() => {
         showSlidePanel.value = isOpenSidePanel.value;
       }, 250);

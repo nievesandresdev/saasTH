@@ -268,7 +268,7 @@ const editGift = (type,data) => {
 }
 
 const updateVisivilityBenefits = () => {
-    console.log('update visibility benefits')
+    /* console.log('update visibility benefits') */
     checkChanges();
 }
 
@@ -284,9 +284,9 @@ const handlesubmitData = async() => {
     changes.value = false;
     await hotelStore.reloadHotel();
 
-    setTimeout(() => {
+   /*  setTimeout(() => {
         location.reload();
-    }, 450);
+    }, 450); */
     
 }
 
