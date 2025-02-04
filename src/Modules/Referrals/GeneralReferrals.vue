@@ -92,10 +92,8 @@
     />
     <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
     <Edit
-        :modal-edit="isOpenEditPanel" 
         :initial-data="selectedGiftData"
         @updateGift="updateGift"
-        @close="closeEditModal"
     />
 
     <!-- modal no save principal -->
@@ -290,9 +288,9 @@ const handlesubmitData = async() => {
     changes.value = false;
     await hotelStore.reloadHotel();
 
-   /*  setTimeout(() => {
+    setTimeout(() => {
         location.reload();
-    }, 450); */
+    }, 450);
     
 }
 
