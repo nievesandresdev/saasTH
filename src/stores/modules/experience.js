@@ -24,9 +24,9 @@ export const useExperienceStore = defineStore('experience', () => {
     }
 
     function getHotelParams(params = {}) {
-        const { id: idHotel, name: nameHotel, zone: zoneHotel } = hotelStore.hotelData;
+        const { id: idHotel, name: nameHotel, zone: zoneHotel, city_id: cityId } = hotelStore.hotelData;
         return {
-            hotel: { id: idHotel, name: nameHotel, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameHotel, zone: cityId },
             ...params
         };
     }

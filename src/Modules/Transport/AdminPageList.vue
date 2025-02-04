@@ -155,7 +155,10 @@ const handlerDragEnd = () => {
 //
 function initScrollListener() {
     const container = document.querySelector('#list-transport');
-    container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
+    console.log(container);
+    if (container) {
+        container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
+    }
 }
 
 function checkLoadMore () {

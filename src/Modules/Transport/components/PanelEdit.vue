@@ -150,8 +150,9 @@ const userStore = useUserStore();
 const hotelStore = inject('hotelStore');
 const transportStore = inject('transportStore');
 const changePendingInForm = inject('changePendingInForm');
+const modelActive = inject('modelActive');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
-modelActive
+
 
 // DATA
 const steps = [{name: 'Información', value: 0}, {name: 'Galeria', value: 1}];
