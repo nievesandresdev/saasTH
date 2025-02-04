@@ -84,12 +84,12 @@
               <!-- normal link -->
               <li
                 v-else
-                class="hover-hbg-gray-200"
+                class="hover-hbg-gray-200 "
                 :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
               >
                 <a
                   href="javascript:void(0)"
-                  class="w-full py-[8px] px-[24px] block"
+                  class="w-full py-[8px] pr-[14px] pl-[24px] block"
                   @click="goLink(menu.to,menu)"
                 >
                   <div class="flex items-center">
@@ -597,5 +597,9 @@ a:hover{
 }
 .shadow-menu{
   box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
+}
+.referidos-item {
+  width: 100%;
+  display: block;
 }
 </style>
