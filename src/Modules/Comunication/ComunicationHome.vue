@@ -170,6 +170,40 @@
                     </a>
                 </template>
             </CardSectionHome>
+            <CardSectionHome title="Programa de referidos" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
+                <template #msg>Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('referrals')"
+                    >
+                        Ver Detalles
+                    </a>
+                </template>
+            </CardSectionHome>
+            <CardSectionHome title="Referente - Código de regalo" >
+                <template #msg>Tus huéspedes recibirán un regalo cuando uno de sus referidos utilice su código de programa de referidos.</template>
+                <template #canal>
+                    <div class="h-full w-full py-2">
+                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                    </div>
+                </template>
+                <template #button>
+                    <a 
+                        href="javascript:void(0)" 
+                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        @click="openSidePanel('referent')"
+                    >
+                        Ver Detalles
+                    </a>
+                </template>
+            </CardSectionHome>
         </div>
     </section>
 

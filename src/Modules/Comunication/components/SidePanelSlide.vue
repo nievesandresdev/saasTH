@@ -217,6 +217,32 @@ const values = {
             {title:'SMS',icon:'Frame 2613489'},
             {title:'Telegram',icon:'Frame 2613557'},
         ]
+    },
+    "referrals":{
+        title: 'Programa de referidos',
+        description: 'Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos a través de diversos canales de comunicación.',
+        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Recomendar a un amigo ahora".',
+        issue: 'Usa mi código de referido para obtener un descuento.',
+        descriptionContent:'El mensaje incluirá un texto amigable para invitar e incentivar a los huéspedes a participar del programa de referidos y un enlace para hacerlo.',
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'},
+            {title:'WhatsApp',icon:'Frame 2613488'},
+            {title:'SMS',icon:'Frame 2613489'},
+            {title:'Telegram',icon:'Frame 2613557'},
+        ]
+    },
+    "referent":{
+        title: 'Referente - Código de regalo',
+        description: 'Este es el mensaje que recibirán tus huéspedes cuando uno de sus referidos utilice su código de referente. Este mensaje sólo se enviará si tienes activo el programa de referidos, y configurado el regalo para el Referente.',
+        trigger: 'Cuando un referido redime el código compartido por un referente.',
+        issue: '¡Enhorabuena! Has recibido un regalo',
+        descriptionContent:'Avisará a tus huéspedes que tienen un regalo para canjear. Se mostrará el valor del regalo y las instrucciones que configures sobre “Cómo canjearlo”. Y dependiendo de tus configuraciones, también se incluirán las siguientes secciones:',
+        itemsContent:['Invitación al Chat'],
+        channels:[  
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+
+
     }
 
 }
