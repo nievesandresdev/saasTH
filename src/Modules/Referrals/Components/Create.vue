@@ -100,7 +100,7 @@
 
             </div>
               <BaseSwichInput
-                v-model="form.enabledUrl"
+                v-model="form.enabled_url"
                 class="mr-4"
                 :id="'url_switch'"
                 @change="handleUrl"
@@ -112,7 +112,7 @@
             placeholder="https://..."
             class="flex-1"
             :error="errors.url"
-            :disabled="!form.enabledUrl"
+            :disabled="!form.enabled_url"
 
           />
          </div>
@@ -142,7 +142,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, watch } from 'vue';
+import { ref, computed, inject, watch,defineEmits } from 'vue';
 import RadioButton from '@/components/Forms/RadioButton.vue';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
@@ -164,11 +164,11 @@ const typeModal = inject('typeModal');
 
 const form = ref({
     amount: '', 
-    type_discount: 'percentage', // Tipo (porcentaje o dinero)
+    type_discount: 'percentage',
     code: '', 
     description: '',
     url: '',
-    enabledUrl: false
+    enabled_url: false
 });
 
 
@@ -180,10 +180,8 @@ const errors = ref({
 });
 
 const handleUrl = (event) => {
-  form.value.enabledUrl = event.target.checked;
+  form.value.enabled_url = event.target.checked;
 };
-
-
 
 
 const isFormIncomplete = computed(() => {
@@ -193,7 +191,7 @@ const isFormIncomplete = computed(() => {
     !form.value.amount ||
     !form.value.code ||
     !form.value.description ||
-    (form.value.enabledUrl && (!form.value.url || errors.value.url)) ||
+    (form.value.enabled_url && (!form.value.url || errors.value.url)) ||
     errors.value.value ||
     errors.value.code ||
     errors.value.description 
@@ -211,7 +209,7 @@ const isValidUrl = (url) => {
 watch(
   () => form.value.url,
   (newUrl) => {
-    if (form.value.enabledUrl && form.value.url !== '') {
+    if (form.value.enabled_url && form.value.url !== '') {
       errors.value.url = newUrl && !isValidUrl(newUrl);
     } else {
       errors.value.url = false;
@@ -284,7 +282,7 @@ const isClosePanel = () => {
     type_discount: 'percentage',
     code: '',
     description: '',
-    enabledUrl: false
+    enabled_url: false
   };
 };
 
