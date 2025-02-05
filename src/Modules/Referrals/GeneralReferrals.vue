@@ -78,7 +78,7 @@
                     </span>
                 </div>
                 <hr class="my-4">
-                <Integration />
+                <Integration :referent="benefitReferent" />
             </template>
         </SectionConfig>
     </div>
