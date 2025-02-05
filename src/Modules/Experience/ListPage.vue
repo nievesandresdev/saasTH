@@ -166,6 +166,7 @@ const modelActive = ref(null);
 const panelEditHosterActive = ref(null);
 const panelEditRef = ref(null);
 const panelEditHosterRef = ref(null);
+const typeActivityEditing = ref(null);
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -242,7 +243,11 @@ function mergeDataFormInUrlMockup (stringQuery, dataForm) {
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
-        mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
+        if (typeActivityEditing.vlaue == 'viator') {
+            mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
+        } else {
+            mockupStore.$setIframeUrl(`/servicios/activity/${experienceSlug}`);
+        }
     } else {
         let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
         query = 'mobile=1';
@@ -387,6 +392,7 @@ function openModalChangeInForm () {
 
 
 function openEditByViator (payload) {
+    typeActivityEditing.vlaue = 'viator';
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
@@ -398,8 +404,15 @@ function openEditByViator (payload) {
 }
 
 function openEditByHoster (payload) {
+    typeActivityEditing.vlaue = 'thehoster';
     panelEditHosterActive.value = payload.action;
-    panelEditHosterRef.value.edit(payload);
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            loadMockup(payload.experience.id);
+        } else {
+        }
+        panelEditHosterRef.value.edit(payload);
+    });
 }
 
 

@@ -15,9 +15,7 @@
         </div>
     </template>
     <div v-else id="list-experiences" class="flex flex-wrap gap-6 w-[789px] 3xl:w-[1216px]">
-        
-        <BaseCardCreate v-if="!firstLoad" title="Crear servicio" @click="openEditHoster('ADD')" />
-
+        <BaseCardCreate v-if="!firstLoad && !formFilter.visibility" title="Crear servicio" @click="openEditHoster('ADD')" />
         <template v-for="(experience, index) in experiencesData">
             <!-- experiencesData[index-1]?.experience" -->
             <div
