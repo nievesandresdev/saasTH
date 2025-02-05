@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, nextTick } from 'vue';
+import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
 import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 // COMPONENT
@@ -70,6 +70,12 @@ const paginateData = reactive({
     to: 0,
 });
 
+watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
 // COMPUTED
 const searchText = computed(() => {
    return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
@@ -84,11 +90,16 @@ onMounted(async() => {
 });
 
 // FUNCTION
-function loadMockup (path = '/') {
-    mockupStore.$setIframeUrl(`/servicios/confort`);
+function loadMockup (id = null) {
+    if (id) {
+        mockupStore.$setIframeUrl(`/servicios/confort/${id}`);
+    } else {
+        mockupStore.$setIframeUrl(`/servicios/confort`);
+    }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }
+
 async function loadConforts () {
     // console.log('loadPlaces')
     // isloadingForm.value=true;
@@ -111,12 +122,11 @@ async function loadConforts () {
     isloadingForm.value=false;
 }
 
-
 function openDrawer (payload) {
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
-            // loadMockupEdit(`${payload.facility.id}`);
+            loadMockup(`${payload.item.id}`);
         } else {
             // loadMockup('/fakedetail');
         }

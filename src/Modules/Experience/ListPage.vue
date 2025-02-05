@@ -398,6 +398,7 @@ function openEditByViator (payload) {
         if (payload.action === 'EDIT') {
             loadMockup(payload.experience.slug);
         } else {
+            
         }
         panelEditRef.value.edit(payload);
     });
