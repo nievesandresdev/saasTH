@@ -1,5 +1,4 @@
 <template>
-    
     <HeadSettingsCheckin />
     
     <section class="px-6">
@@ -31,6 +30,7 @@
                 <FieldVisibility
                     id="fieldSettings3"
                     label="Segundo apellido"
+                    textTooltip="Este campo sólo se mostrará si el tipo de documento es “DNI español”."
                     v-model:visible="firstStep.secondLastname.visible"
                     v-model:required="firstStep.secondLastname.mandatory"
                     :withDependency="firstStep.secondLastname.dependence"
@@ -73,6 +73,7 @@
                     v-model:visible="firstStep.responsibleAdult.visible"
                     v-model:required="firstStep.responsibleAdult.mandatory"
                     :withDependency="firstStep.responsibleAdult.dependence"
+                    textTooltip="Los campos “Adulto responsable” y “Relación de parentesco” sólo aplicarán a huéspedes menores de 18 años."
                     icon="1.TH.HUESPEDES"
                 />
                 <FieldVisibility
@@ -81,6 +82,7 @@
                     v-model:visible="firstStep.kinshipRelationship.visible"
                     v-model:required="firstStep.kinshipRelationship.mandatory"
                     :withDependency="firstStep.kinshipRelationship.dependence"
+                    textTooltip="Los campos “Adulto responsable” y “Relación de parentesco” sólo aplicarán a huéspedes menores de 18 años."
                     icon="1.TH.HUESPEDES"
                 />
             </div>
@@ -108,6 +110,7 @@
                     v-model:visible="secondStep.docSupportNumber.visible"
                     v-model:required="secondStep.docSupportNumber.mandatory"
                     :withDependency="secondStep.docSupportNumber.dependence"
+                    textTooltip="No todos los tipos de documentos cuentan con número de soporte. Este campo sólo aplicará a documentos tipo NIE o DNI español."
                     icon="1.TH.ID"
                 />
                 <FieldVisibility
@@ -175,6 +178,14 @@
             @submit="submit"
         />
     </section>
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes"
+        text="Si sales sin guardar, los cambios que has realizado en esta sección se perderán."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
 </template>
 <script setup>
 import { ref, onMounted, computed } from 'vue'
@@ -182,6 +193,7 @@ import HeadSettingsCheckin from './components/HeadSettingsCheckin.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import FieldVisibility from './components/FieldVisibility.vue'
 import ToggleButton from '@/components/Buttons/ToggleButton.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue'
 //
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
@@ -201,9 +213,9 @@ const showPrestayQueryRef = ref(showPrestayQuery.value);
 //
 
 onMounted(async ()=>{
+    mockupStore.$setIframeUrl('/mi-estancia/huespedes/completar-checkin/')
     mockupStore.$setLanguageTooltip(true)
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
-
     let data = await checkinStore.$getFormSettings();
     assignValuesToForm(data)
 })

@@ -13,7 +13,7 @@
                 </template>
                 <template v-slot:content>
                     <p class="text-sm">
-                        Aquí podrás configurar los aspectos, funcionamientos y disponibilidad horaria del chat, mediante el cual te comunicarás con tus huéspedes.
+                        En esta sección podrás configurar el formulario de Check-in para que completen tus huéspedes desde la WebApp
                     </p>
                 </template>
             </Tooltip>
@@ -36,14 +36,16 @@
                 </template>
                 <template v-slot:content>
                     <p class="text-sm">
-                        Con el interruptor "Mostrar en la WebApp" controlas la visibilidad de cierta información para el huésped.<br><br>
-                            Mientras se encuentre apagado, tus huéspedes dejarán de ver el contenido de esta sección en tu WebApp.
+                        Con el interruptor “Mostrar en la WebApp” controlas la visibilidad de cierta información para el huésped.<br><br>
+                        Mientras se encuentre apagado, tus huéspedes dejarán de ver el contenido de esta sección en tu WebApp.
                     </p>
                 </template>
             </Tooltip>
         </div>
     </div>
-
+    <div v-if="!showCheckin" class="bg-[#FFF3CC] py-3 px-6">
+        <p class="text-center text-sm font-medium leading-[140%]">Tienes desactivado el Check-in online. Activa "Mostrar en la WebApp" para permitir a tus huéspedes completar el formulario antes de su llegada al hotel.</p>
+    </div>
     <div class="bg-[#fafafa] px-6 z-50 mb-6">
         <TabMenuContainer>
             <TabLink
