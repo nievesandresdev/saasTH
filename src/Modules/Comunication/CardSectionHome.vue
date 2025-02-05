@@ -31,7 +31,7 @@
                         v-for="(channel, index) in multichannel" 
                         :key="channel"
                         class="rounded-full h-10 w-10 border border-white bg-[#f3f3f3] relative flex-shrink-0"
-                        :style="{ left: '-' + (index > 0 ? (index * 4) : 0) + 'px' }"
+                        :style="{ left: '-' + (index > 0 ? (index * 6) : 0) + 'px' }"
                     >
                         <div class="h-full w-full p-2">
                             <img class="mx-auto w-6 h-6" :src="`/assets/icons/comunications/${channel}.svg`" alt="">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <!-- Botón Fijo -->
-            <div>
+            <div class="mb-2">
                 <slot name="button"></slot>
             </div>
         </div>
