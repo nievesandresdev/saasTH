@@ -93,18 +93,18 @@
                       </template>
                       <template #content>
                           <p class="text-sm leading-[150%] font-normal">
-                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo. Si el regalo no requiere un enlace, desactívalo para ocultarlo.
+                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo.
                           </p>
                   </template>
               </BaseTooltipResponsive>
 
             </div>
-              <BaseSwichInput
+             <!--  <BaseSwichInput
                 v-model="form.enabled_url"
                 class="mr-4"
                 :id="'url_switch'"
                 @change="handleUrl"
-              />
+              /> -->
           </div>
           <BaseTextField
             v-model="form.url"
@@ -112,7 +112,6 @@
             placeholder="https://..."
             class="flex-1"
             :error="errors.url"
-            :disabled="!form.enabled_url"
 
           />
          </div>
@@ -168,7 +167,7 @@ const form = ref({
     code: '', 
     description: '',
     url: '',
-    enabled_url: false
+    enabled_url: true
 });
 
 
@@ -179,9 +178,9 @@ const errors = ref({
   url: false
 });
 
-const handleUrl = (event) => {
+/* const handleUrl = (event) => {
   form.value.enabled_url = event.target.checked;
-};
+}; */
 
 
 const isFormIncomplete = computed(() => {

@@ -2,7 +2,7 @@
     <ListPageHeader />
     <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
     <!-- section  Beneficios para el referido -->
-    <div class="px-6 min-h-screen">
+    <div class="px-6 h-auto pb-[46px]">
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <h1 class="text-base font-semibold mb-2">Beneficios para el referido</h1>
@@ -77,8 +77,8 @@
                         Crear regalo
                     </span>
                 </div>
-                <hr class="my-4">
-                <Integration :referent="benefitReferent" />
+                <hr class="my-4" v-show="!isObjectEmpty(benefitReferent)">
+                <Integration :referent="benefitReferent" v-show="!isObjectEmpty(benefitReferent)" />
             </template>
         </SectionConfig>
     </div>
