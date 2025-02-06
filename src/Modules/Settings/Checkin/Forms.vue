@@ -158,12 +158,28 @@
     </section>
 
     <section class="px-6 mt-[30px] mb-11">
-        <div class="rounded-[10px] bg-white shadow-hoster py-6 px-4">
-            <div class="flex justify-between items-center">
-                <h1 class="text-base font-semibold leading-[120%]">Paso 3: Adjuntar la consulta Pre-stay de seguimiento</h1>
-                <div class="flex items-center gap-1">
-                    <span class="text-sm font-semibold leading-[120%]">Activo</span>
-                    <ToggleButton v-model="showPrestayQuery"/>
+        <div class="rounded-[10px] bg-white shadow-hoster pb-6 px-4">
+            <div class="flex items-center">
+                <h1 class="text-base font-semibold leading-[120%] pt-6">Paso 3: Adjuntar la consulta Pre-stay de seguimiento</h1>
+                <div 
+                    class="flex items-center gap-1 relative ml-auto pt-6"
+                    @mouseover="hoverPrestayDisabled = true"
+                    @mouseleave="hoverPrestayDisabled = false"
+                >
+                    <span class="text-sm font-semibold leading-[120%]"  :class="{'opacity-25':querySetting && !querySetting?.pre_stay_activate}">Activo</span>
+                    <ToggleButton 
+                        v-model="showPrestayQuery"
+                        :disabled="querySetting && !querySetting?.pre_stay_activate"
+                    />
+                    <div 
+                        v-if="hoverPrestayDisabled && querySetting && !querySetting?.pre_stay_activate" 
+                        class="bottom-[26px] right-0 absolute p-4 bg-white shadow-hoster z-50 rounded-[10px] w-[290px]"
+                    >
+                        <p class="text-sm leading-[150%]">
+                            Para añadir la consulta Pre-stay al Check-in, debes activarla desde
+                            <router-link :to="{name:'SettingsPreStayPage'}" class="font-semibold underline">Seguimiento</router-link>
+                        </p>
+                    </div>
                 </div>
             </div>
             <p class="text-sm mt-2">Dale a tus huéspedes la posibilidad de hacerte peticiones especiales durante el proceso de Check-in</p>
@@ -202,14 +218,19 @@ import { useMockupStore } from '@/stores/modules/mockup'
 const mockupStore = useMockupStore();
 import { useCheckinStore } from '@/stores/modules/stay/checkin'
 const checkinStore = useCheckinStore();
+import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
+const querySettingsStore = useQuerySettingsStore();
 
 const firstStep = ref(null);
 const secondStep = ref(null);
 const showPrestayQuery = ref(true);
+const disabledButtonSubmit = ref(false);
 //
 const firstStepRef = ref(null);
 const secondStepRef = ref(null);
 const showPrestayQueryRef = ref(showPrestayQuery.value);
+const querySetting = ref(null);
+const hoverPrestayDisabled = ref(false);
 //
 
 onMounted(async ()=>{
@@ -218,6 +239,7 @@ onMounted(async ()=>{
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
     let data = await checkinStore.$getFormSettings();
     assignValuesToForm(data)
+    querySetting.value = await querySettingsStore.$getPreStaySettings();
 })
 
 async function assignValuesToForm(data){
@@ -234,6 +256,7 @@ async function assignValuesToForm(data){
 }
 
 async function submit(){
+    disabledButtonSubmit.value = true;
     let update  = await checkinStore.$updateFormSettings({
         first_step:firstStep.value,
         second_step:secondStep.value,
@@ -244,6 +267,7 @@ async function submit(){
         mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
+    disabledButtonSubmit.value = false;
 }
 
 
@@ -258,9 +282,10 @@ function cancelChanges(){
 const changes = computed(()=>{
     if(!firstStepRef.value) return
 
-    let changes = JSON.stringify(firstStep.value) !== JSON.stringify(firstStepRef.value) ||
+    let changes = (JSON.stringify(firstStep.value) !== JSON.stringify(firstStepRef.value) ||
                     JSON.stringify(secondStep.value) !== JSON.stringify(secondStepRef.value) ||
-                    JSON.stringify(showPrestayQuery.value) !== JSON.stringify(showPrestayQueryRef.value);
+                    JSON.stringify(showPrestayQuery.value) !== JSON.stringify(showPrestayQueryRef.value))
+                    && !disabledButtonSubmit.value;
     return changes;
 });
 

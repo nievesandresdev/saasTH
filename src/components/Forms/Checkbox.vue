@@ -5,7 +5,7 @@
     ></div>
     <div 
         v-else
-        :class="`${sizeClasses} inline-block ${!isDisabled ? 'cursor-pointer':''}`"
+        :class="`${sizeClasses} inline-block ${!isDisabled ? 'cursor-pointer':'cursor-not-allowed'}`"
     >
         <img 
             v-if="isChecked" 

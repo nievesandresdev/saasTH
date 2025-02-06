@@ -6,7 +6,12 @@
         <!-- label -->
         <p class="text-sm font-medium leading-[140%] ml-2">{{ label }}</p>
         
-        <div v-if="!withDependency" class="ml-auto flex gap-6 items-center">
+        <div 
+            v-if="!withDependency" 
+            class="ml-auto flex gap-6 items-center relative"
+            @mouseover="hoverDisabled = true"
+            @mouseleave="hoverDisabled = false"
+        >
             <!-- controls -->
             <div class="flex items-center gap-1">
                 <span class="text-sm font-semibold leading-[120%]" :class="{'opacity-25':disabled}">Visible</span>
@@ -20,6 +25,9 @@
             <div class="flex items-center gap-2">    
                 <span class="text-sm font-semibold leading-[120%]" :class="{'opacity-25':disabled}">Obligatorio</span>
                 <Checkbox sizeClasses="w-5 h-5" v-model="localRequired" :isDisabled="disabled"/>
+            </div>
+            <div v-if="hoverDisabled && disabled" class="top-[28px] right-0 absolute p-4 bg-white shadow-hoster z-50 rounded-[10px] w-[395px]">
+                <p class="text-sm leading-[150%]">Este campo es obligatorio y no puede desactivarse.</p>
             </div>
         </div>
         <!-- withDependency -->
@@ -95,6 +103,7 @@
   // 3. Variables reactivas locales
   const localVisible = ref(props.visible)
   const localRequired = ref(props.required)
+  const hoverDisabled = ref(false)
   
   // 4. Cuando cambian las props desde el padre, sincronizamos
   watch(() => props.visible, (newVal) => {
