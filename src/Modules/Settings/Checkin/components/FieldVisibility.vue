@@ -37,7 +37,7 @@
                 </template>
                 <template v-slot:content>
                     <p class="text-sm">
-                        Aquí podrás configurar los aspectos, funcionamientos y disponibilidad horaria del chat, mediante el cual te comunicarás con tus huéspedes.
+                        {{textTooltip}}
                     </p>
                 </template>
             </Tooltip>
@@ -79,6 +79,10 @@
     withDependency: {
         type: Boolean,
         default: false
+    },
+    textTooltip: {
+        type: String,
+        default: ''
     },
   })
   

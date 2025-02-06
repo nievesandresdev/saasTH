@@ -41,12 +41,21 @@
         />
     </section>
 </div>
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes &&  valid"
+        text="Si sales sin guardar, los cambios que has realizado en esta sección se perderán."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+    />
 </template>
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import HeadSettingsCheckin from './components/HeadSettingsCheckin.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import Editor from '@/components/Forms/Editor.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue'
 //
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
@@ -63,6 +72,7 @@ const messageFull = ref(true);
 onMounted(async ()=>{
     mockupStore.$setLanguageTooltip(true)
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    mockupStore.$setIframeUrl('/mi-estancia/huespedes/checkin-completado')
 
     let data = await checkinStore.$getGeneralSettings();
     assignValuesToForm(data)

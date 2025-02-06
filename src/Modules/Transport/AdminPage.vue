@@ -69,6 +69,12 @@ const paginateData = reactive({
     to: 0,
 });
 
+watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
 // COMPUTED
 const searchText = computed(() => {
    return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
@@ -83,8 +89,12 @@ onMounted(async() => {
 });
 
 // FUNCTION
-function loadMockup (path = '/') {
-    mockupStore.$setIframeUrl(`/servicios/transport`);
+function loadMockup (id = null) {
+    if (!id) {
+        mockupStore.$setIframeUrl(`/servicios/transport`);
+    } else {
+        mockupStore.$setIframeUrl(`/servicios/transport/${id}`);
+    }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }
@@ -113,7 +123,7 @@ function openDrawer (payload) {
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
-            // loadMockupEdit(`${payload.facility.id}`);
+            loadMockup(payload.item.id);
         } else {
             // loadMockup('/fakedetail');
         }
