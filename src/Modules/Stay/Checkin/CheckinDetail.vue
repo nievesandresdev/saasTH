@@ -41,7 +41,7 @@
                 :disabled="!settings?.first_step?.phone?.visible"
             />
             <Input 
-                :content="guest?.email"
+                :content="guest?.checkin_email"
                 label="Correo electrónico"
                 :disabled="!settings?.first_step?.email?.visible"
             />
