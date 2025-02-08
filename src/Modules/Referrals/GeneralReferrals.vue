@@ -40,6 +40,7 @@
                                 :disabled="isObjectEmpty(benefitReferent)"
                                 @change:value="updateVisivilityBenefits()"
                             />
+                            
                         <BaseTooltipResponsive
                             size="m"
                             :top="35"
