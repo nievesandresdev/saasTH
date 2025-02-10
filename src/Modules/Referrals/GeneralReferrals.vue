@@ -2,7 +2,7 @@
     <ListPageHeader />
     <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
     <!-- section  Beneficios para el referido -->
-    <div class="px-6 h-auto pb-[46px]">
+    <div class="px-6 pb-[134px]">
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <h1 class="text-base font-semibold mb-2">Beneficios para el referido</h1>
@@ -15,9 +15,9 @@
                     :benefitSReferrals="benefitSReferrals"
                     @editGift="editGift"
                     :type="'referred'"
-                    v-show="!isObjectEmpty(benefitSReferrals)"
+                    v-if="!isObjectEmpty(benefitSReferrals)"
                 />
-                <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
+                <div class="flex gap-2" v-if="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
@@ -37,7 +37,7 @@
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
-                                :disabled="isObjectEmpty(benefitReferent)"
+                                :disabled="!offerBenefits"
                                 @change:value="updateVisivilityBenefits()"
                             />
                             
@@ -67,10 +67,10 @@
                     :benefitSReferrals="benefitReferent"
                     :type="'referent'"
                     @editGift="editGift"
-                     v-show="!isObjectEmpty(benefitReferent)"
+                     v-if="!isObjectEmpty(benefitReferent)"
                 />
                 
-                <div class="flex gap-2" v-show="isObjectEmpty(benefitReferent)">
+                <div class="flex gap-2" v-if="isObjectEmpty(benefitReferent)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
@@ -78,18 +78,21 @@
                         Crear regalo
                     </span>
                 </div>
-                <hr class="my-4" v-show="!isObjectEmpty(benefitReferent)">
-                <Integration :referent="benefitReferent" v-show="!isObjectEmpty(benefitReferent)" />
+                <hr class="my-4" v-if="!isObjectEmpty(benefitReferent)">
+                <Integration :referent="benefitReferent" v-if="!isObjectEmpty(benefitReferent)" />
             </template>
         </SectionConfig>
+        
     </div>
-
     <ChangesBar 
         :existingChanges="changes"
         :validChanges="changes"
         @cancel="cancelChange" 
         @submit="handlesubmitData"
+        :forceBottom="true"
     />
+
+    
     <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
     <Edit
         :initial-data="selectedGiftData"
@@ -240,13 +243,16 @@ const isObjectEmpty = (obj) => {
 
 function loadMockup () {
     if(hotelData.show_referrals == 0){
-        mockupStore.$setIframeUrl('/alojamiento');
+        mockupStore.$setIframeUrl('');
+        mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar en la WebApp', '/assets/icons/info.svg')
     }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 0){
         mockupStore.$setIframeUrl('/perfil','referrals=true');
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 1){
         mockupStore.$setIframeUrl('/perfil','referent=true');
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }
-    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    
     
     mockupStore.$setLanguageTooltip(true)
 }
@@ -294,7 +300,7 @@ const handlesubmitData = async() => {
     
 }
 
-
+const offerBenefits = ref(null);
 //mounted
 onMounted(async () => {
     loadMockup();
@@ -304,6 +310,7 @@ onMounted(async () => {
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
+        offerBenefits.value = data?.benefitReferent ?? 0;
         
     }
 

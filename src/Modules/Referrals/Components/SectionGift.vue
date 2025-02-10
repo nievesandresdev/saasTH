@@ -36,7 +36,7 @@
             <p class="text-sm font-normal">
                 {{ benefitSReferrals.description }}
             </p>
-            <div class="flex items-center gap-1 mt-4" v-if="benefitSReferrals.url && benefitSReferrals.enabled_url">
+            <div class="flex items-center gap-1 mt-4" v-if="benefitSReferrals.url">
                 <img src="/assets/icons/url.svg" class="w-[16.6px] h-[16.6px]">
                 <p class="text-[12px] font-medium">
                     {{ benefitSReferrals.url }}
@@ -81,7 +81,7 @@ const valueReferrals = computed(() => {
     if (props.benefitSReferrals?.type_discount === 'percentage') {
         return props.benefitSReferrals?.amount + '%';
     } else {
-        return props.benefitSReferrals?.amount + '€';
+        return formatAmount(props?.benefitSReferrals?.amount);
     }
 });
 
@@ -89,7 +89,14 @@ const valueReferent = computed(() => {
     if (props.benefitSReferrals?.type_discount === 'percentage') {
         return props.benefitSReferrals?.amount + '%';
     } else {
-        return props.benefitSReferrals?.amount + '€';
+        return formatAmount(props?.benefitSReferrals?.amount);
     }
 });
+
+const formatAmount = (amount) => {
+    if (typeof amount === 'string' && amount.includes(',')) {
+        return amount + '€';
+    }
+    return parseFloat(amount).toFixed(2).replace('.', ',') + '€';
+};
 </script>

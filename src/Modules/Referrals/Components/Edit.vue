@@ -113,6 +113,8 @@
             :error="errors.url"
           />
          </div>
+
+    
         </div>
   
         <!-- Footer -->
@@ -173,8 +175,6 @@
     enabled_url: true,
     url: props?.initialData?.url,
   });
-  
-
 
   const errors = ref({
     amount: false,
@@ -182,18 +182,38 @@
     description: false,
     url: false,
   });
+
+  // Extraer solo los valores relevantes de initialData en el mismo formato que form.value
+  const normalizedInitialData = computed(() => ({
+    amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
+    type_discount: props?.initialData?.type_discount,
+    code: props?.initialData?.code,
+    description: props?.initialData?.description,
+    enabled_url: props?.initialData?.enabled_url,
+    url: props?.initialData?.url,
+  }));
+
+  const hasFormChanged = computed(() => {
+    return (
+      isInitialized.value &&
+      JSON.stringify(form.value) !== JSON.stringify(normalizedInitialData.value)
+    );
+  });
   
   const isFormIncomplete = computed(() => {
     return (
       !form.value.amount ||
       !form.value.code ||
       !form.value.description ||
-      (form.value.enabled_url && (!form.value.url || errors.value.url)) ||
+      (!form.value.url || errors.value.url) ||
       errors.value.amount ||
       errors.value.code ||
-      errors.value.description
+      errors.value.description ||
+      !hasFormChanged.value
     );
   });
+
+
 
   const handleUrl = (event) => {
     form.value.enabled_url = event.target.checked;
@@ -279,6 +299,8 @@
       isClosePanel();
     }
   };
+
+  const isInitialized = ref(false);
   
   watch(
     () => isOpenEditPanel.value,
@@ -287,17 +309,22 @@
         setTimeout(() => {
           showPanel.value = isOpenEditPanel.value;
           form.value = {
-            amount: props?.initialData?.amount,
+            amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
             type_discount: props?.initialData?.type_discount,
             code: props?.initialData?.code,
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
+
           };
+
+          isInitialized.value = true;
+
         }, 200);
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;
         }, 400);
+
       } else {
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;

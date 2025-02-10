@@ -20,7 +20,7 @@
         <!-- Descripción detallada -->
         <div class="flex w-full mt-1" v-show="showDescription">
             <p class="text-sm leading-[150%] font-normal">
-                Cuando el usuario introduce un código promocional en el formulario de reservas y lo valida, el sistema envía el código mediante una solicitud HTTP POST a un endpoint del servidor, que consulta una base de datos para verificar si el código existe, está vigente y cumple las condiciones asociadas. Si el código es válido, el servidor responde con los beneficios aplicables, como un descuento, y el total de la reserva se actualiza en tiempo real, mostrando un mensaje de confirmación al usuario; si es inválido o expirado, se muestra un error. Todo el proceso utiliza HTTPS y autenticación para garantizar la seguridad.
+                Cuando el usuario coloca este código en su sitio web, el sistema captura automáticamente un identificador de referencia desde la URL y lo envía mediante una solicitud HTTP a nuestro servidor. Allí, se verifica si el código está registrado, activo y en uso. En caso contrario, no se realiza ninguna acción. Todo el proceso se ejecuta de forma automática y segura, permitiendo un seguimiento eficaz sin intervención manual.
             </p>
         </div>
 
