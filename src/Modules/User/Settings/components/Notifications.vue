@@ -69,9 +69,11 @@
                   name="notifications"
                   :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
+                  @keypress="onlyNumbers"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
+
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
                 <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingChat10" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
@@ -92,8 +94,10 @@
                   name="notifications"
                   :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
+                  @keypress="onlyNumbers"
                 />
               </div>
+
               <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
@@ -139,9 +143,11 @@
                   name="notifications"
                   :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
+                  @keypress="onlyNumbers"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
+
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
                 <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback30" @change="emitChanges"  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
@@ -162,6 +168,7 @@
                   name="notifications"
                   :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
+                  @keypress="onlyNumbers"
                 />
               </div>
               <p class="text-sm leading-[150%]">min</p>
@@ -265,9 +272,16 @@
     emits('update:notifications', notifications.value);
   };
 
+  const onlyNumbers = (event) => {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   const tooltipHeight=104;
   const footerHeight=88;
   const dynamicTooltipTop = ref(25);
+
 
   const calculateTooltipPosition = (event) => {
     const tooltipElement = event.target.closest('.notifications-container');
