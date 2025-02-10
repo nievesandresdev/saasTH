@@ -304,13 +304,6 @@ watch(() => props.modalEdit, (newVal) => {
     initialForm.value = JSON.stringify(form.value);
     initPermissions.value = JSON.stringify(jsonHotel.value);
 
-    console.log({
-      form: JSON.stringify(form.value),
-      initialForm: initialForm.value,
-      changes: changes.value
-    })
-
-
 
   }
 });
@@ -447,9 +440,7 @@ const initializeForm = () => {
       // Llamar a la función para actualizar el acceso
       updateAccess();
       jsonHotel.value = props.dataUser.permissions;
-       console.log('dataUser',props.dataUser)
-
-      
+       //console.log('dataUser',props.dataUser)
   }else{
       console.log('no dataUser');
   }
@@ -481,20 +472,26 @@ const closeModalWorkPosition = () => {
   isModalCrudOpen.value = false;
 }
 
-
+const sameWorkPosition = ref(false);
 const selectWorkPosition = (position) => {
+  const initialWorkPositionId = JSON.parse(initialForm.value).work_position_id;
+
+  // Validar contra el valor ACTUAL del formulario
+  if (position.id === initialWorkPositionId) { // 👈 Condición corregida
+    isModalCrudOpen.value = false;
+    sameWorkPosition.value = true;
+    return;
+  }else{
+    sameWorkPosition.value = false;
+  }
+
+
+  // Resto de la lógica de actualización...
   selectedWorkPositionName.value = position.name;
   form.value.work_position_id = position.id;
   form.value.permissions = JSON.parse(position.permissions);
   isModalCrudOpen.value = false;
 
-  console.log({
-    form: JSON.stringify(form.value),
-    initialForm: initialForm.value,
-    changes: changes.value
-  })
-
-  // Parseamos el JSON de permisos
   let permissions = JSON.parse(position.permissions);
   let notifications = JSON.parse(position.notifications);
   let periodicity_chat = JSON.parse(position.periodicity_chat);
@@ -507,12 +504,9 @@ const selectWorkPosition = (position) => {
   const updateCheckboxesAndPermissions = (accessList, permissions) => {
     accessList.forEach((accessItem) => {
       const permissionKey = accessItem.value;
-      
-      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
-      
+      const isSelected = permissions[permissionKey]?.status;
       accessItem.selected = isSelected;
       accessItem.disabled = isSelected;
-
       handleCheckPermission(permissionKey, isSelected);
     });
   };
@@ -521,6 +515,7 @@ const selectWorkPosition = (position) => {
   updateCheckboxesAndPermissions(adminAccess.value, permissions);
 
   form.value.permissions = permissions;
+  //initialForm.value = JSON.stringify(form.value);
 };
 
 
@@ -764,8 +759,13 @@ const initialForm = ref({});
 
 const changes = computed(() => {
   // Comparar objetos después de convertirlos a cadenas JSON
-  return JSON.stringify(form.value) !== initialForm.value;
+  if(!sameWorkPosition.value){ // si no es la misma posición de trabajo
+    return JSON.stringify(form.value) !== initialForm.value;
+  }else{
+    return false
+  }
 });
+
 
 
 
@@ -792,14 +792,8 @@ onMounted(() => {
 
 
 
-
 function closeModal(complete = false) {
     if(!complete){
-      console.log({
-        changes: changes.value,
-        initialForm: initialForm.value,
-        form: JSON.stringify(form.value)
-      })
         if (changes.value == true) {
             if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
               showModalNoSave.value = true;

@@ -235,7 +235,6 @@ const closeDeleteWorkPositions = () => {
 
 onMounted(() => {
   handleGetUsers();
-  handleTestMail();
   adjustBodyPadding(); // Ajustar el padding al cargar la página
   window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
@@ -286,11 +285,6 @@ const handleGetUsers = async () => {
   totalUsers.value = response.data.total;
   perPage.value = response.data.per_page;
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
-};
-
-const handleTestMail = async () => {
-  const response = await userStore.$testMail();
-  console.log('mailTesting',response);
 };
 
 const handlePageChange = (page) => {
