@@ -304,6 +304,13 @@ watch(() => props.modalEdit, (newVal) => {
     initialForm.value = JSON.stringify(form.value);
     initPermissions.value = JSON.stringify(jsonHotel.value);
 
+    console.log({
+      form: JSON.stringify(form.value),
+      initialForm: initialForm.value,
+      changes: changes.value
+    })
+
+
 
   }
 });
@@ -480,6 +487,12 @@ const selectWorkPosition = (position) => {
   form.value.work_position_id = position.id;
   form.value.permissions = JSON.parse(position.permissions);
   isModalCrudOpen.value = false;
+
+  console.log({
+    form: JSON.stringify(form.value),
+    initialForm: initialForm.value,
+    changes: changes.value
+  })
 
   // Parseamos el JSON de permisos
   let permissions = JSON.parse(position.permissions);
@@ -776,6 +789,7 @@ const closeModalEditUser = () => {
 onMounted(() => {
   initialForm.value = form.value;
 });
+
 
 
 
