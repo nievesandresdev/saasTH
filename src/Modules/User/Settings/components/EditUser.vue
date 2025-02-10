@@ -281,8 +281,11 @@ const getWorkPositions = (workPosition = false) => {
   }
 };
 
+const editNameWP = ref(false);
 const handlePrintNameWP = (name) => {
   selectedWorkPositionName.value = name;
+  form.value.work_position_id = null;
+  editNameWP.value = true;
 };
 
 const isDeleteWorkPositions = ref(false);
@@ -478,7 +481,7 @@ const selectWorkPosition = (position) => {
   const initialWorkPositionId = JSON.parse(initialForm.value).work_position_id;
 
 
-  if (position.id === initialWorkPositionId) { 
+  if (position.id === initialWorkPositionId && !editNameWP.value) { 
     //alert('es la misma posición de trabajo')
     isModalCrudOpen.value = false;
     form.value.work_position_id = position.id;
@@ -492,8 +495,7 @@ const selectWorkPosition = (position) => {
     initialForm.value = JSON.stringify(form.value);
     return;
 
-  }else{
-    //alert('no es la misma posición de trabajo')
+  }else {
     form.value.work_position_id = position.id;
     //initialForm.value = JSON.stringify(form.value);
   }
