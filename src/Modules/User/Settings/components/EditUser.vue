@@ -271,7 +271,7 @@ const props = defineProps({
 });
 
 const getWorkPositions = (workPosition = false) => {
-  emits('workPositionGet');
+  emits('workPositionGet',workPosition);
   emits('handleDeleteWP');
 
 

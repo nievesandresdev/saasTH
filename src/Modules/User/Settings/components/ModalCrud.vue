@@ -93,7 +93,7 @@ const selectOption = (option) => {
 };
 
 const getWorkPositions = (wPosition) => {
-  emit('getWorkPositions');
+  emit('getWorkPositions',wPosition.name);
   emit('printNameWP', wPosition.name);
 };
 

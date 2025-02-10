@@ -306,9 +306,11 @@ const submit_filters = () => {
   console.log('submit_filters');
 };
 
-const createUser = () => {
-  workPositions('create');
+const createUser = async () => {
+  await workPositions();
+  modalAdd.value = true;
 };
+
 
 const editUser = (data) => {
   if (!data || !data.id) {
@@ -331,7 +333,7 @@ const editUser = (data) => {
 
   });
 
-  workPositions('edit');
+  workPositions();
 };
 
 
@@ -347,20 +349,20 @@ const showUser = (data) => {
   }, 200);
 };
 
-const workPositions = async (module) => {
+const workPositions = async () => {
   const response = await getWorkPosition();
   workPositionsData.value = response.data.work_positions;
 
  /*  if (module == 'create') {
     modalAdd.value = true;
-  } else {
+  } else if (module == 'edit') {
     modalEdit.value = true;
   } */
   visibleDropdown.value = false;
 };
 
 const getUserAndWP = () => {
-  workPositions('create');
+  workPositions();
   handleGetUsers();
 };  
 
