@@ -274,6 +274,7 @@ const getWorkPositions = (workPosition = false) => {
   emits('workPositionGet');
   emits('handleDeleteWP');
 
+
   if(workPosition === form.value.work_position_id){
     form.value.work_position_id = null
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
@@ -472,23 +473,40 @@ const closeModalWorkPosition = () => {
   isModalCrudOpen.value = false;
 }
 
-const sameWorkPosition = ref(false);
+//const sameWorkPosition = ref(false);
 const selectWorkPosition = (position) => {
   const initialWorkPositionId = JSON.parse(initialForm.value).work_position_id;
 
-  // Validar contra el valor ACTUAL del formulario
-  if (position.id === initialWorkPositionId) { // 👈 Condición corregida
+
+  if (position.id === initialWorkPositionId) { 
+    //alert('es la misma posición de trabajo')
     isModalCrudOpen.value = false;
-    sameWorkPosition.value = true;
+    form.value.work_position_id = position.id;
+    initialForm.value = JSON.stringify(form.value);
+    selectedWorkPositionName.value = position.name;
+    form.value.permissions = JSON.parse(position.permissions);
+    form.value.notifications = JSON.parse(position.notifications);
+    form.value.periodicityChat = JSON.parse(position.periodicity_chat);
+    form.value.periodicityStay = JSON.parse(position.periodicity_stay);
+    //sameWorkPosition.value = true;
+    initialForm.value = JSON.stringify(form.value);
     return;
+
   }else{
-    sameWorkPosition.value = false;
+    //alert('no es la misma posición de trabajo')
+    form.value.work_position_id = position.id;
+    //initialForm.value = JSON.stringify(form.value);
   }
 
+  console.log({
+    initialWorkPositionId: initialWorkPositionId,
+    positionId: position.id,
+    form: form.value.work_position_id
+  })
 
-  // Resto de la lógica de actualización...
+
   selectedWorkPositionName.value = position.name;
-  form.value.work_position_id = position.id;
+  //form.value.work_position_id = position.id;
   form.value.permissions = JSON.parse(position.permissions);
   isModalCrudOpen.value = false;
 
@@ -758,12 +776,14 @@ const intendedRoute = ref(null);
 const initialForm = ref({});
 
 const changes = computed(() => {
-  // Comparar objetos después de convertirlos a cadenas JSON
-  if(!sameWorkPosition.value){ // si no es la misma posición de trabajo
+
+  return JSON.stringify(form.value) !== initialForm.value;
+ 
+  /* if(!sameWorkPosition.value){ // si no es la misma posición de trabajo
     return JSON.stringify(form.value) !== initialForm.value;
   }else{
     return false
-  }
+  } */
 });
 
 

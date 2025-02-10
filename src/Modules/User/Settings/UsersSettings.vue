@@ -351,12 +351,12 @@ const workPositions = async (module) => {
   const response = await getWorkPosition();
   workPositionsData.value = response.data.work_positions;
 
-  if (module == 'create') {
+ /*  if (module == 'create') {
     modalAdd.value = true;
   } else {
     modalEdit.value = true;
-  }
-  visibleDropdown.value = null;
+  } */
+  visibleDropdown.value = false;
 };
 
 const getUserAndWP = () => {
