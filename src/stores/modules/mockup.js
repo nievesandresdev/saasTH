@@ -5,10 +5,12 @@ import { $urlBaseWebapp } from '@/utils/helpers';
 
 import { useHotelStore } from '@/stores/modules/hotel';
 
+import { useChainStore } from '@/stores/modules/chain';
+
 export const useMockupStore = defineStore('mockupStore', () => {
 
   const hotelStore = useHotelStore();
-
+  const chainStore = useChainStore();
   const GUEST_URL = process.env.VUE_APP_GUEST_URL
   const ENVIROMENT = process.env.VUE_APP_ENVIROMENT
   const iframeUrlRef = ref(null);
@@ -17,7 +19,8 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoTextIcon1Ref = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
-      let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+      //let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+      let subdomainChain = chainStore?.chainData?.subdomain;
       let slugHotel = hotelStore?.hotelData?.subdomain;
       let urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
       // console.log(subdomain)

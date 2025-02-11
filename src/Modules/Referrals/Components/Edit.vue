@@ -184,14 +184,16 @@
   });
 
   // Extraer solo los valores relevantes de initialData en el mismo formato que form.value
-  const normalizedInitialData = computed(() => ({
+/*   const normalizedInitialData = computed(() => ({
     amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
     type_discount: props?.initialData?.type_discount,
     code: props?.initialData?.code,
     description: props?.initialData?.description,
     enabled_url: props?.initialData?.enabled_url,
     url: props?.initialData?.url,
-  }));
+  })); */
+
+  const normalizedInitialData = ref({})
 
   const hasFormChanged = computed(() => {
     return (
@@ -315,11 +317,17 @@
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
-
           };
 
           isInitialized.value = true;
-
+          normalizedInitialData.value = {
+            amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
+            type_discount: props?.initialData?.type_discount,
+            code: props?.initialData?.code,
+            description: props?.initialData?.description,
+            enabled_url: true,
+            url: props?.initialData?.url,
+          };
         }, 200);
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;

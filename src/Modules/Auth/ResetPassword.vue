@@ -167,7 +167,6 @@
   }
 };
 
-const errorSamePassword = ref('');
 const errorPasswordMessage = ref('');
 watch([() => form.value.password], async ([newPassword]) => {
 

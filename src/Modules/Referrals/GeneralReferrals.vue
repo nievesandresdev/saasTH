@@ -1,6 +1,6 @@
 <template>
     <ListPageHeader />
-    <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
+    <BannerShow :show="hotelData.show_referrals" :chain="chainHotel" v-if="loadBannerShow"/>
     <!-- section  Beneficios para el referido -->
     <div class="px-6 pb-[134px]">
         <SectionConfig :marginTop="'24px'">
@@ -137,6 +137,9 @@ provide('hotelStore', hotelStore);
 import { useRewardStore } from '@/stores/modules/rewards/rewards';
 const rewardStore = useRewardStore();
 
+import { useChainStore } from '@/stores/modules/chain';
+const chainStore = useChainStore();
+
 
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
@@ -147,6 +150,7 @@ const toast = useToastAlert();
 provide('toast', toast);
 
 const { hotelData } = hotelStore;
+
 
 const isOpenSidePanel = ref(false);
 const isOpenEditPanel = ref(false);
@@ -160,6 +164,8 @@ const selectedGiftData = ref({});
 const typeModal = ref(null)
 const typePeople = ref(null)
 
+const chainHotel = ref({})
+const loadBannerShow = ref(false);
 /* const loadingSectionGift = ref(false); */
 
 
@@ -303,6 +309,7 @@ const handlesubmitData = async() => {
 const offerBenefits = ref(null);
 //mounted
 onMounted(async () => {
+    getChain();
     loadMockup();
     const response = await rewardStore.$getAllRewards();
     const {  data } = response;
@@ -318,17 +325,12 @@ onMounted(async () => {
         dataReferralsApi.value = true;
     }
 
-    /* setTimeout(async () => {
-        const response = await rewardStore.$getAllRewards();
-        const {  data } = response;
-
-        if(data) {
-            benefitSReferrals.value = data?.benefitSReferrals ?? {};
-            benefitReferent.value = data?.benefitReferent ?? {};
-            loadingSectionGift.value = false;
-        }
-    }, 300); */
-
 });
+
+const getChain = async () => {
+    const response = await chainStore.$getChainBySubdomain();
+    chainHotel.value = response.data;
+    loadBannerShow.value = true;
+}
 
 </script>

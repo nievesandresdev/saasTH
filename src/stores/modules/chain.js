@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 import * as chainService from '@/api/services/chain.service';
 
@@ -7,6 +7,8 @@ import * as chainService from '@/api/services/chain.service';
 export const useChainStore = defineStore('chain', () => {
 
     // const hotelStore = useHotelStore();
+
+    const chainData = ref({});
 
     async function $verifySubdomainExistPerChain (params) {
         const response = await chainService.verifySubdomainExistPerChainApi(params, {showPreloader: false});
@@ -26,10 +28,19 @@ export const useChainStore = defineStore('chain', () => {
         return response.data
     }
 
+    async function $getChainBySubdomain (params) {
+        const response = await chainService.getChainBySubdomainApi(params, {showPreloader: false});
+        chainData.value = response.data;
+        return response;
+    }
+
+  
+
     //
     return {
         $verifySubdomainExistPerChain,
-        $updateConfigGeneral
+        $updateConfigGeneral,
+        $getChainBySubdomain
     }
 
 });
