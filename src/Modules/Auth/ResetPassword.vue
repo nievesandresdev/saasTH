@@ -51,9 +51,7 @@
                             'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
                             'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
                           }"
-                          
                           placeholder="Contraseña"
-                          maxlength="12"
                           v-model="form.password" required
                         >
                       </div>
@@ -80,7 +78,6 @@
                             'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
                           }"
                           placeholder="Confirma tu contraseña"
-                          maxlength="12"
                           v-model="form.password_confirmation" required
                         >
                       </div>
@@ -88,7 +85,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                           <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                           </svg>
-                          <p class="text-xs htext-alert-negative">Debe tener maximo 12 caracteres</p>
+                          <p class="text-xs htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
                       </div>
                     </div>
                     <div class="mb-2 text-red-500 text-sm text-center">{{ error }}</div>
@@ -168,11 +165,12 @@
 };
 
 const errorPasswordMessage = ref('');
+const errorPasswordMatchMessage = ref('');
 watch([() => form.value.password], async ([newPassword]) => {
 
-      errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
+      errorPassword.value = !(newPassword.length >= 8);
       
-      errorPasswordMessage.value = errorPassword.value ? 'Debe tener maximo 12 caracteres' : '';
+      errorPasswordMessage.value = errorPassword.value ? 'Debe tener minimo 8 caracteres' : '';
 
 
       if (newPassword.length >= 8) {
@@ -188,6 +186,18 @@ watch([() => form.value.password], async ([newPassword]) => {
 });
 
 watch([() => form.value.password_confirmation], ([newPasswordConfirmation]) => {
+  if(newPasswordConfirmation.length < 8 ){
+    errorPasswordMatch.value = true;
+    errorPasswordMatchMessage.value = 'Debe tener minimo 8 caracteres';
+  }else if(newPasswordConfirmation !== form.value.password){
+    errorPasswordMatch.value = true;
+    errorPasswordMatchMessage.value = 'Las contraseñas no coinciden';
+  }else{
+    errorPasswordMatch.value = false;
+    errorPasswordMatchMessage.value = '';
+  }
+
+
   errorPasswordMatch.value = !(newPasswordConfirmation === form.value.password) || newPasswordConfirmation.length > 12;
 });
 
