@@ -32,12 +32,12 @@
                 <div class="flex justify-between">
                     <h1 class="text-base font-semibold mb-2">Beneficios para el referente</h1>
                     <div class="flex items-center">
-                        <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent)}">Ofrecer beneficios</div>
+                        <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent) || !benefitReferent.used }">Ofrecer beneficios</div>
                             <BaseSwichInput
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
-                                :disabled="!offerBenefits"
+                                :disabled="!offerBenefits || !benefitReferent.used"
                                 @change:value="updateVisivilityBenefits()"
                             />
                             
