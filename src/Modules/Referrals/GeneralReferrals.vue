@@ -102,12 +102,11 @@
     <!-- modal no save principal -->
     <ModalNoSave
         :id="'not-saved'"
-        :open="true"
+        :open="changes"
         text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
         textbtn="Guardar"
         @saveChanges="handlesubmitData"
         type="save_changes"
-        
     />
 </template>
 <script setup>

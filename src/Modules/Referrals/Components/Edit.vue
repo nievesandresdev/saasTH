@@ -239,7 +239,7 @@
   watch(
     () => form.value.url,
     (newUrl) => {
-      if (form.value.enabled_url && form.value.url !== '') {
+      if (form.value.url !== '') {
         errors.value.url = newUrl && !isValidUrl(newUrl);
       } else {
         errors.value.url = false;
@@ -316,7 +316,7 @@
     if (!isFormIncomplete.value) {
       toast.warningToast('Regalo modificado', 'top-right');
       emit('updateGift', form.value, typeModal.value);
-      isClosePanel();
+      cancel();
     }
   };
 

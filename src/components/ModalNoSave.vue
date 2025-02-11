@@ -27,11 +27,11 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type === 'exit_save'">
-              <button @click.prevent="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button @click.stop="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
               
-              <button  @click="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+              <button  @click.stop="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
                   {{ textbtn ?? 'Guardar cambios' }}
               </button>
           </div>
@@ -141,7 +141,7 @@ function hiddenModal() {
 
 function saveChanges() {
   emit('saveChanges');
-  closeModal();
+  onlyCloseModal();
 }
 
 const goLinkUrl = () => {
