@@ -93,7 +93,7 @@
                       </template>
                       <template #content>
                           <p class="text-sm leading-[150%] font-normal">
-                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo.
+                            Añade aquí el enlace para que los {{ typeModalTitle }}s accedan a la página donde canjear su regalo.
                           </p>
                   </template>
               </BaseTooltipResponsive>
