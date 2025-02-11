@@ -11,3 +11,4 @@ export const sendMsgApi = (data) => apiHttp('POST', `${chatPath}/${hosterPath}/s
 export const pendingCountByHotelApi = () => apiHttp('GET', `${chatPath}/${hosterPath}/pendingCountByHotel`, [], { showPreloader: false })
 export const pendingCountByStayApi = (stayId) => apiHttp('GET', `${chatPath}/${hosterPath}/pendingCountByStay/${stayId}`, [], { showPreloader: false })
 export const markGuesMsgstAsReadApi = (stayId, guestId) => apiHttp('POST', `${chatPath}/${hosterPath}/markGuesMsgstAsRead/${stayId}/${guestId}`, [], { showPreloader: false })
+export const markHosterMsgstAsReadApi = (stayId, guestId) => apiHttp('POST', `${chatPath}/${hosterPath}/markHosterMsgstAsRead/${stayId}/${guestId}`, [], { showPreloader: false })
