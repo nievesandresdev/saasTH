@@ -102,7 +102,7 @@
     <!-- modal no save principal -->
     <ModalNoSave
         :id="'not-saved'"
-        :open="changes"
+        :open="true"
         text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
         textbtn="Guardar"
         @saveChanges="handlesubmitData"
@@ -172,10 +172,7 @@ const loadBannerShow = ref(false);
 const dataReferralsApi = ref(false);
 
 const cancelChange = () => {
-    changes.value = false;
-    hotelData.offer_benefits = initialOfferBenefits.value;
-    benefitSReferrals.value = initialBenefitSReferrals.value;
-    benefitReferent.value = initialBenefitSReferent.value;
+    location.reload();
 }
 
 
@@ -281,6 +278,7 @@ const editGift = (type,data) => {
     isOpenEditPanel.value = true;
     selectedGiftData.value = data;
     typeModal.value = type;
+
 }
 
 const updateVisivilityBenefits = () => {

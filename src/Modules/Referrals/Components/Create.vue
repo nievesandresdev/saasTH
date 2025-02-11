@@ -138,6 +138,15 @@
       </div>
     </div>
   </Transition>
+  <ModalNoSave
+      :id="'not-saved'"
+      :open="openModalNoSave"
+      text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+      textbtn="Guardar"
+      @saveChanges="submit"
+      :type="'exit_save'"
+      @close="cancel"
+  />
 </template>
 
 <script setup>
@@ -159,7 +168,9 @@ const showSlidePanel = ref(false);
 const isOpenSidePanel = inject('isOpenSidePanel');
 const typeModal = inject('typeModal');
 
+const normalizedInitialData = ref({})
 
+const openModalNoSave = ref(false)
 
 const form = ref({
     amount: '', 
@@ -177,6 +188,7 @@ const errors = ref({
   description: false,
   url: false
 });
+
 
 /* const handleUrl = (event) => {
   form.value.enabled_url = event.target.checked;
@@ -274,8 +286,21 @@ const onTypeChange = () => {
 
 
 const isClosePanel = () => {
+  console.log(hasChangeForm.value,form.value,normalizedInitialData.value)
+  if (hasChangeForm.value) {
+    openModalNoSave.value = true;
+  } else {
+    isOpenSidePanel.value = false;
+    resetForm();
+    
+  }
+};
+
+const cancel = () => {
   isOpenSidePanel.value = false;
-  //reset form
+};
+
+const resetForm = () => {
   form.value = {
     amount: '',
     type_discount: 'percentage',
@@ -283,22 +308,16 @@ const isClosePanel = () => {
     description: '',
     enabled_url: false
   };
-};
-
-
-
-
-const cancel = () => {
-  isOpenSidePanel.value = false;
-};
+  //normalizedInitialData.value = {};
+}
 
 const submit = () => {
   if (!isFormIncomplete.value) {
-    console.log('Formulario enviado:', form.value);
     toast.warningToast('Regalo añadido','top-right')
     emit('handleReferrals', form.value);
     emit('typePeople', typeModal.value);
-    isClosePanel();
+    cancel();
+    resetForm();
 
   }
 };
@@ -313,6 +332,15 @@ watch(
         description: false,
         url: false
       };
+
+      normalizedInitialData.value = {
+        amount: form.value.amount,
+        type_discount: form.value.type_discount,
+        code: form.value.code,
+        description: form.value.description,
+        enabled_url: form.value.enabled_url,
+        url: form.value.url
+      }
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
       }, 120);
@@ -330,6 +358,11 @@ watch(
     }
   }
 );
+
+
+const hasChangeForm = computed(() => {
+  return JSON.stringify(normalizedInitialData.value) !== JSON.stringify(form.value);
+})
 </script>
 
 <style scoped>

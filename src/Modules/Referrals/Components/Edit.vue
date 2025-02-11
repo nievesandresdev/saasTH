@@ -9,6 +9,7 @@
   
     <Transition name="slide">
       <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[2000] right-[354px] flex flex-col">
+       
         <!-- Header -->
         <div class="flex justify-between items-center px-6 py-[20px] h-[64px] border-b border-[#BFBFBF]">
           <div class="flex-1 text-left">
@@ -138,6 +139,18 @@
         </div>
       </div>
     </Transition>
+    <template v-if="showSlidePanel">
+      <ModalNoSave
+        :id="'not-saved'"
+        :open="openModalNoSave"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        @close="cancel"
+        type="exit_save"
+      />
+    </template>
+
   </template>
   
   <script setup>
@@ -147,6 +160,10 @@
   import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
   import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+
+  import ModalNoSave from '@/components/ModalNoSave.vue';
+
+
   import { useToastAlert } from '@/composables/useToastAlert';
   const toast = useToastAlert();
   
@@ -165,6 +182,8 @@
   const showSlidePanel = ref(false);
   const isOpenEditPanel = inject('isOpenEditPanel');
   const typeModal = inject('typeModal');
+
+  const openModalNoSave = ref(false)
   
   // Datos del formulario inicializados con los datos precargados
   const form = ref({
@@ -182,16 +201,6 @@
     description: false,
     url: false,
   });
-
-  // Extraer solo los valores relevantes de initialData en el mismo formato que form.value
-/*   const normalizedInitialData = computed(() => ({
-    amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
-    type_discount: props?.initialData?.type_discount,
-    code: props?.initialData?.code,
-    description: props?.initialData?.description,
-    enabled_url: props?.initialData?.enabled_url,
-    url: props?.initialData?.url,
-  })); */
 
   const normalizedInitialData = ref({})
 
@@ -257,6 +266,7 @@
   
   const adjustValue = () => {
     const numericValue = parseFloat(form?.value?.amount);
+    const numericInitialData = parseFloat(normalizedInitialData?.value?.amount);
   
     if (isNaN(numericValue) || form.value.amount === '') {
       form.value.amount = '';
@@ -265,8 +275,10 @@
   
     if (form.value.type_discount === 'money') {
       form.value.amount = numericValue.toFixed(2).replace('.', ',');
+      normalizedInitialData.value.amount = numericInitialData.toFixed(2).replace('.', ',');
     } else if (form.value.type_discount === 'percentage') {
       form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
+      normalizedInitialData.value.amount = numericInitialData > 100 ? '100' : numericInitialData.toString().replace('.', ',');
     }
     errors.value.amount = false;
   };
@@ -275,7 +287,7 @@
     const numericValue = parseFloat(form?.value?.amount);
   
     if (form.value.type_discount === 'money') {
-      form.value.amount = numericValue ? numericValue.toFixed(2).replace('.', ',') : '';
+      form.value.amount = numericValue ? 12 : '';
     } else if (form.value.type_discount === 'percentage') {
       //form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
       if (!numericValue || isNaN(numericValue)) {
@@ -285,13 +297,19 @@
       }
     }
   };
-  
+
   const isClosePanel = () => {
-    isOpenEditPanel.value = false;
+    if(!isFormIncomplete.value){
+      openModalNoSave.value = true
+    }else{
+      isOpenEditPanel.value = false;
+      openModalNoSave.value = false;
+    }
   };
   
   const cancel = () => {
     isOpenEditPanel.value = false;
+    openModalNoSave.value = false;
   };
   
   const submit = () => {
@@ -311,7 +329,7 @@
         setTimeout(() => {
           showPanel.value = isOpenEditPanel.value;
           form.value = {
-            amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
+            amount: props?.initialData?.amount,
             type_discount: props?.initialData?.type_discount,
             code: props?.initialData?.code,
             description: props?.initialData?.description,
@@ -321,7 +339,7 @@
 
           isInitialized.value = true;
           normalizedInitialData.value = {
-            amount: props?.initialData?.amount.toFixed(2).replace('.', ','),
+            amount: props?.initialData?.amount,
             type_discount: props?.initialData?.type_discount,
             code: props?.initialData?.code,
             description: props?.initialData?.description,

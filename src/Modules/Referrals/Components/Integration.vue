@@ -52,7 +52,7 @@ src="{{REFERENT_URL}}?code="+code+"&hotel="+hotel+"&webUrl="+w;document.head.app
             <div class="flex justify-end mt-2 items-center gap-2">
                 <img src="/assets/icons/1.TH.COPY.svg" alt="Copiar" class="w-4 h-4 cursor-pointer" @click="copyCode" />
                 <button @click="copyCode" class="text-sm font-medium"> 
-                    {{ copied ? "Copiado!" : "Copiar" }}
+                   Copiar
                 </button>
             </div>
         </div>
@@ -60,10 +60,12 @@ src="{{REFERENT_URL}}?code="+code+"&hotel="+hotel+"&webUrl="+w;document.head.app
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, inject } from 'vue'
 
 const showDescription = ref(false)
 const copied = ref(false)
+
+const toast = inject('toast')
 
 const REFERENT_URL = process.env.VUE_APP_REFERENT_URL
 
@@ -85,6 +87,7 @@ const copyCode = () => {
         navigator.clipboard.writeText(codeElement.innerText.trim()).then(() => {
             copied.value = true
             setTimeout(() => copied.value = false, 1500) // Mensaje "Copiado!" por 1.5s
+            toast.warningToast('Copiado con éxito','top-right')
         })
     }
 }
