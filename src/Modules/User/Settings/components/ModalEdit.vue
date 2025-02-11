@@ -24,7 +24,6 @@
           v-model="form.name"
           placeholder="Ejemplo: Manager"
           classContent="mt-2"
-          :error="nameError"
           name="name"
           @input="validateName"
         />
