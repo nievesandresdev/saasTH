@@ -76,7 +76,7 @@ const props = defineProps({
   open: Boolean,
 });
 
-const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP','printNameWP']);
+const emit = defineEmits(['close', 'select','getWorkPositions','deleteWP','printNameWP','idWorkPosition']);
 
 const isEditing = ref(false);
 const isCreating = ref(false);
@@ -93,8 +93,8 @@ const selectOption = (option) => {
 };
 
 const getWorkPositions = (wPosition) => {
-  emit('getWorkPositions',wPosition.name);
-  emit('printNameWP', wPosition.name);
+  emit('getWorkPositions',wPosition);
+  emit('printNameWP', wPosition);
 };
 
 const openCreateModal = () => {

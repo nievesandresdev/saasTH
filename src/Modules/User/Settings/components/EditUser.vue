@@ -271,20 +271,21 @@ const props = defineProps({
 });
 
 const getWorkPositions = (workPosition = false) => {
-  emits('workPositionGet',workPosition);
+  emits('workPositionGet');
   emits('handleDeleteWP');
 
 
   if(workPosition === form.value.work_position_id){
+    alert('es el mismo puesto de trabajo')
     form.value.work_position_id = null
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
   }
 };
 
 const editNameWP = ref(false);
-const handlePrintNameWP = (name) => {
-  selectedWorkPositionName.value = name;
-  form.value.work_position_id = null;
+const handlePrintNameWP = (position) => {
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
   editNameWP.value = true;
 };
 
@@ -499,12 +500,6 @@ const selectWorkPosition = (position) => {
     form.value.work_position_id = position.id;
     //initialForm.value = JSON.stringify(form.value);
   }
-
-  console.log({
-    initialWorkPositionId: initialWorkPositionId,
-    positionId: position.id,
-    form: form.value.work_position_id
-  })
 
 
   selectedWorkPositionName.value = position.name;
