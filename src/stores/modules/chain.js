@@ -34,8 +34,6 @@ export const useChainStore = defineStore('chain', () => {
         return response;
     }
 
-  
-
     //
     return {
         $verifySubdomainExistPerChain,
