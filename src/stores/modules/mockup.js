@@ -20,7 +20,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
       let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
       let slugHotel = hotelStore?.hotelData?.subdomain;
       let urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
-      // console.log(subdomain)
+      console.log(urlBase,subdomainChain,slugHotel)
       // if(ENVIROMENT == 'test'){
       //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       // }
