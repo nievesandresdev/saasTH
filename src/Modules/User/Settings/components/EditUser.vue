@@ -446,9 +446,9 @@ const initializeForm = () => {
       console.log('formFRANCO',form.value.hotels,userStoreIds,areEqual)
       //handleSelectAll(true)
       if (areEqual) {
-        console.log("La persona tiene asignados todos los hoteles.");
+        handleSelectAll(true)
       } else {
-        console.log("La persona no tiene asignados todos los hoteles.");
+        handleSelectAll(false)
       }
 
       // Llamar a la función para actualizar el acceso
