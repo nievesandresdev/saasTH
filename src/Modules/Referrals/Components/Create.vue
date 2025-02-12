@@ -15,7 +15,7 @@
           <h1 class="font-medium text-[22px]">Nuevo regalo para el {{ typeModalTitle }}</h1>
         </div>
         <div class="flex justify-end">
-          <button class="" @click="isClosePanel">
+          <button class="cursor-pointer" @click="isClosePanel">
             <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
           </button>
         </div>
@@ -29,7 +29,6 @@
           <div class="flex gap-4">
             <BaseTextField
               v-model="form.amount"
-              :error="errors.amount"
               type="text"
               placeholder="Introduce el valor"
               required
@@ -93,7 +92,7 @@
                       </template>
                       <template #content>
                           <p class="text-sm leading-[150%] font-normal">
-                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo.
+                            Añade aquí el enlace para que los {{ typeModalTitle }}s accedan a la página donde canjear su regalo.
                           </p>
                   </template>
               </BaseTooltipResponsive>
@@ -112,7 +111,6 @@
             placeholder="https://..."
             class="flex-1"
             :error="errors.url"
-
           />
          </div>
       </div>
@@ -143,7 +141,7 @@
       :open="openModalNoSave"
       text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
       textbtn="Guardar"
-      @saveChanges="submit"
+      @saveChanges="saveOnClose"
       :type="'exit_save'"
       @close="cancel"
   />
@@ -169,6 +167,7 @@ const isOpenSidePanel = inject('isOpenSidePanel');
 const typeModal = inject('typeModal');
 
 const normalizedInitialData = ref({})
+const isInitialized = ref(false);
 
 const openModalNoSave = ref(false)
 
@@ -220,7 +219,7 @@ const isValidUrl = (url) => {
 watch(
   () => form.value.url,
   (newUrl) => {
-    if (form.value.enabled_url && form.value.url !== '') {
+    if (form.value.url !== '') {
       errors.value.url = newUrl && !isValidUrl(newUrl);
     } else {
       errors.value.url = false;
@@ -228,8 +227,6 @@ watch(
   }
 
 );
-
-
 
 const typeModalTitle = computed(() => {
   return typeModal.value === 'referent' ? 'referente' : 'referido';
@@ -296,8 +293,17 @@ const isClosePanel = () => {
   }
 };
 
+const saveOnClose = () => {
+  if(!isFormIncomplete.value){
+    submit();
+  }else{
+    openModalNoSave.value = false;
+  }
+}
+
 const cancel = () => {
   isOpenSidePanel.value = false;
+  resetForm();
 };
 
 const resetForm = () => {
@@ -306,7 +312,8 @@ const resetForm = () => {
     type_discount: 'percentage',
     code: '',
     description: '',
-    enabled_url: false
+    url: '',
+    enabled_url: true
   };
   //normalizedInitialData.value = {};
 }
@@ -338,9 +345,11 @@ watch(
         type_discount: form.value.type_discount,
         code: form.value.code,
         description: form.value.description,
-        enabled_url: form.value.enabled_url,
-        url: form.value.url
+        url: form.value.url,
+        enabled_url: true,
       }
+      isInitialized.value = true;
+      openModalNoSave.value = false;
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
       }, 120);

@@ -1,6 +1,6 @@
 <template>
     <ListPageHeader />
-    <BannerShow :show="hotelData.show_referrals" :chain="chainHotel" v-if="loadBannerShow"/>
+    <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
     <!-- section  Beneficios para el referido -->
     <div class="px-6 pb-[134px]">
         <SectionConfig :marginTop="'24px'">
@@ -37,8 +37,8 @@
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
-                                :disabled="!offerBenefits || !benefitReferent.used"
-                                @change:value="updateVisivilityBenefits()"
+                                :disabled="isObjectEmpty(benefitReferent) || !benefitReferent.used"
+                                
                             />
                             
                         <BaseTooltipResponsive
@@ -85,8 +85,8 @@
         
     </div>
     <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes"
+        :existingChanges="changes || changesOfferBenefits"
+        :validChanges="changes || changesOfferBenefits"
         @cancel="cancelChange" 
         @submit="handlesubmitData"
         :forceBottom="true"
@@ -102,12 +102,11 @@
     <!-- modal no save principal -->
     <ModalNoSave
         :id="'not-saved'"
-        :open="true"
+        :open="changes"
         text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
         textbtn="Guardar"
         @saveChanges="handlesubmitData"
         type="save_changes"
-        
     />
 </template>
 <script setup>
@@ -137,10 +136,6 @@ provide('hotelStore', hotelStore);
 import { useRewardStore } from '@/stores/modules/rewards/rewards';
 const rewardStore = useRewardStore();
 
-import { useChainStore } from '@/stores/modules/chain';
-const chainStore = useChainStore();
-
-
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
 provide('mockupStore', mockupStore);
@@ -159,13 +154,12 @@ const benefitSReferrals = ref({});
 const benefitReferent = ref({});
 const initialBenefitSReferrals = ref({});
 const initialBenefitSReferent = ref({});
+const initialOfferBenefits = ref(!!hotelData.offer_benefits);
 const selectedGiftData = ref({});
 
 const typeModal = ref(null)
 const typePeople = ref(null)
 
-const chainHotel = ref({})
-const loadBannerShow = ref(false);
 /* const loadingSectionGift = ref(false); */
 
 
@@ -174,8 +168,6 @@ const dataReferralsApi = ref(false);
 const cancelChange = () => {
     location.reload();
 }
-
-
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -186,15 +178,17 @@ provide('typeModal', typeModal);
 provide('dataReferralsApi', dataReferralsApi);
 
 
-const initialOfferBenefits = ref(hotelData.offer_benefits);
+
 
 // Cambios pendientes
 const changes = ref(false);
+const changesOfferBenefits = ref(false);
 
 
 const checkChanges = () => {
     // Detecta cambios en el switch
-    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    //const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    
 
     // Detecta cambios en los JSON
     const hasBenefitSReferralsChanged = !isEqual(
@@ -206,14 +200,21 @@ const checkChanges = () => {
         JSON.parse(JSON.stringify(benefitReferent.value)),
         JSON.parse(JSON.stringify(initialBenefitSReferent.value))
     );
+    
 
-    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged || hasBenefitSReferentChanged;
+    changes.value = (hasBenefitSReferralsChanged || hasBenefitSReferentChanged) ;
+    //checkChangesOfferBenefits();
+
 };
+
+const checkChangesOfferBenefits = () => {
+    changesOfferBenefits.value = hotelData.offer_benefits !== initialOfferBenefits.value;
+}
 
 watch(
     () => hotelData.offer_benefits,
     () => {
-        checkChanges();
+        checkChangesOfferBenefits();
     }
 );
 
@@ -281,10 +282,9 @@ const editGift = (type,data) => {
 
 }
 
-const updateVisivilityBenefits = () => {
-    /* console.log('update visibility benefits') */
+/* const updateVisivilityBenefits = () => {
     checkChanges();
-}
+} */
 
 const handlesubmitData = async() => {
     let params = {
@@ -292,7 +292,6 @@ const handlesubmitData = async() => {
         benefitSReferrals: benefitSReferrals.value,
         benefitReferent: benefitReferent.value
     }
-    console.log('submit data',params)
     rewardStore.$storeRewards(params);
     toast.warningToast('Cambios guardados con éxito','top-right')
     changes.value = false;
@@ -307,7 +306,6 @@ const handlesubmitData = async() => {
 const offerBenefits = ref(null);
 //mounted
 onMounted(async () => {
-    getChain();
     loadMockup();
     const response = await rewardStore.$getAllRewards();
     const {  data } = response;
@@ -315,7 +313,7 @@ onMounted(async () => {
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
-        offerBenefits.value = data?.benefitReferent ?? 0;
+        //offerBenefits.value = data?.benefitReferent ?? 0;
         
     }
 
@@ -325,10 +323,5 @@ onMounted(async () => {
 
 });
 
-const getChain = async () => {
-    const response = await chainStore.$getChainBySubdomain();
-    chainHotel.value = response.data;
-    loadBannerShow.value = true;
-}
 
 </script>

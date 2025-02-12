@@ -33,7 +33,7 @@
        
         <hr class="mb-[15px] px-4" />
         <div v-if="currentStep === 1" class="mb-6">
-          <AccessPermissions v-model:permissions="form.permissions" />
+          <AccessPermissions v-model:permissions="form.permissions"  toggleAllPermissions   />
           <Notifications
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, defineEmits } from 'vue';
+import { ref, reactive, computed, defineEmits, defineProps } from 'vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import AccessPermissions from './AccessPermisions.vue';
@@ -78,6 +78,13 @@ import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
 
 const emit = defineEmits(['storeWorkPosition', 'close']);
+
+const props = defineProps({
+  isVisible: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const form = reactive({
   name: '',
@@ -229,6 +236,7 @@ const closeModal = () => {
   resetForm();
   emit('close');
 };
+
 </script>
 
 <style scoped>

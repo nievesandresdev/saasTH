@@ -30,7 +30,6 @@
             <div class="flex gap-4">
               <BaseTextField
                 v-model="form.amount"
-                :error="errors.amount"
                 type="text"
                 placeholder="Introduce el valor"
                 required
@@ -154,7 +153,7 @@
   </template>
   
   <script setup>
-  import { ref, computed, inject, watch,defineEmits,defineProps } from 'vue';
+  import { ref, computed, inject, watch,defineEmits,defineProps, onMounted } from 'vue';
   import RadioButton from '@/components/Forms/RadioButton.vue';
   import BaseTextField from '@/components/Forms/BaseTextField';
   import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
@@ -239,7 +238,7 @@
   watch(
     () => form.value.url,
     (newUrl) => {
-      if (form.value.enabled_url && form.value.url !== '') {
+      if (form.value.url !== '') {
         errors.value.url = newUrl && !isValidUrl(newUrl);
       } else {
         errors.value.url = false;
@@ -285,9 +284,10 @@
   
   const onTypeChange = () => {
     const numericValue = parseFloat(form?.value?.amount);
+    console.log(numericValue,form.value.type_discount)
   
     if (form.value.type_discount === 'money') {
-      form.value.amount = numericValue ? 12 : '';
+      form.value.amount = numericValue ? numericValue : '';
     } else if (form.value.type_discount === 'percentage') {
       //form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
       if (!numericValue || isNaN(numericValue)) {
@@ -296,6 +296,8 @@
         form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
       }
     }
+
+    adjustValue();
   };
 
   const isClosePanel = () => {
@@ -316,11 +318,12 @@
     if (!isFormIncomplete.value) {
       toast.warningToast('Regalo modificado', 'top-right');
       emit('updateGift', form.value, typeModal.value);
-      isClosePanel();
+      cancel();
     }
   };
 
   const isInitialized = ref(false);
+
   
   watch(
     () => isOpenEditPanel.value,
@@ -335,6 +338,7 @@
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
+            used: props?.initialData?.used,
           };
 
           isInitialized.value = true;
@@ -345,7 +349,10 @@
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
+            used: props?.initialData?.used,
           };
+
+          adjustValue();
         }, 200);
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;
