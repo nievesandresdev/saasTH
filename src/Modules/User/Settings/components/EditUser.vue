@@ -216,7 +216,7 @@
           :disabled="isFormIncomplete || !changes"
           :class="isFormIncomplete || !changes ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
-          {{ currentStep === 3 ? 'Editar' : 'Editar' }}
+          {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
         </button>
       </div>
       <ModalNoSave
