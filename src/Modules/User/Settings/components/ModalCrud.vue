@@ -40,10 +40,11 @@
   <!-- ModalCreate component -->
   <ModalCreate
     v-if="isCreating"
-    :isVisible="isCreating"
+    :isVisible="open"
     @close="closeCreateModal"
     @storeWorkPosition="pushData"
     :width="'500px'"
+
   />
 
   <!-- ModalEdit component -->
