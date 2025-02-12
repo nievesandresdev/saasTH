@@ -441,15 +441,15 @@ const initializeForm = () => {
 
           
       };
+      /* aqui valido si tiene todos los hoteles seleccionados */
       const userStoreIds = userStore.$getHotels(['id']).map(hotel => hotel.id);
       const areEqual = JSON.stringify(form.value.hotels) === JSON.stringify(userStoreIds.sort());
       console.log('formFRANCO',form.value.hotels,userStoreIds,areEqual)
       //handleSelectAll(true)
-      if (areEqual) {
+      if (areEqual) { // si son iguales selecciona todos los hoteles
         handleSelectAll(true)
-      } else {
-        handleSelectAll(false)
       }
+      /* aqui valido si tiene todos los hoteles seleccionados */
 
       // Llamar a la función para actualizar el acceso
       updateAccess();
