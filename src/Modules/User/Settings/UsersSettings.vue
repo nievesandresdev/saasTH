@@ -58,6 +58,7 @@
               </th>
               <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.work_position?.name ?? '-' }}
+                  <!-- <pre>{{ user.permissions }}</pre> -->
               </td>
               <td @click="showUser(user)" class="px-6 py-4 font-medium text-sm text-[#333333] whitespace-normal break-words w-1/4">
                 {{ user.time }}
@@ -234,7 +235,6 @@ const closeDeleteWorkPositions = () => {
 
 onMounted(() => {
   handleGetUsers();
-  handleTestMail();
   adjustBodyPadding(); // Ajustar el padding al cargar la página
   window.addEventListener('resize', adjustBodyPadding); // Ajustar el padding en cada resize
 
@@ -287,11 +287,6 @@ const handleGetUsers = async () => {
   totalPages.value = Math.ceil(response.data.total / response.data.per_page);
 };
 
-const handleTestMail = async () => {
-  const response = await userStore.$testMail();
-  console.log('mailTesting',response);
-};
-
 const handlePageChange = (page) => {
   currentPage.value = page;
   handleGetUsers();
@@ -311,9 +306,11 @@ const submit_filters = () => {
   console.log('submit_filters');
 };
 
-const createUser = () => {
-  workPositions('create');
+const createUser = async () => {
+  await workPositions();
+  modalAdd.value = true;
 };
+
 
 const editUser = (data) => {
   if (!data || !data.id) {
@@ -333,10 +330,12 @@ const editUser = (data) => {
     setTimeout(() => {
       modalEdit.value = true;
     }, 10); 
+
   });
 
-  workPositions('edit');
+  workPositions();
 };
+
 
 let selectedShow = ref(null);
 
@@ -350,20 +349,20 @@ const showUser = (data) => {
   }, 200);
 };
 
-const workPositions = async (module) => {
+const workPositions = async () => {
   const response = await getWorkPosition();
   workPositionsData.value = response.data.work_positions;
 
-  if (module == 'create') {
+ /*  if (module == 'create') {
     modalAdd.value = true;
-  } else {
+  } else if (module == 'edit') {
     modalEdit.value = true;
-  }
-  visibleDropdown.value = null;
+  } */
+  visibleDropdown.value = false;
 };
 
 const getUserAndWP = () => {
-  workPositions('create');
+  workPositions();
   handleGetUsers();
 };  
 

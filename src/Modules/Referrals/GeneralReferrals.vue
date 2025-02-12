@@ -2,7 +2,7 @@
     <ListPageHeader />
     <BannerShow :show="hotelData.show_referrals" :chain="hotelData.chain"/>
     <!-- section  Beneficios para el referido -->
-    <div class="px-6 h-auto pb-[46px]">
+    <div class="px-6 pb-[134px]">
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <h1 class="text-base font-semibold mb-2">Beneficios para el referido</h1>
@@ -15,9 +15,9 @@
                     :benefitSReferrals="benefitSReferrals"
                     @editGift="editGift"
                     :type="'referred'"
-                    v-show="!isObjectEmpty(benefitSReferrals)"
+                    v-if="!isObjectEmpty(benefitSReferrals)"
                 />
-                <div class="flex gap-2" v-show="isObjectEmpty(benefitSReferrals)">
+                <div class="flex gap-2" v-if="isObjectEmpty(benefitSReferrals)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
@@ -32,14 +32,15 @@
                 <div class="flex justify-between">
                     <h1 class="text-base font-semibold mb-2">Beneficios para el referente</h1>
                     <div class="flex items-center">
-                        <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent)}">Ofrecer beneficios</div>
+                        <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent) || !benefitReferent.used }">Ofrecer beneficios</div>
                             <BaseSwichInput
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
-                                :disabled="isObjectEmpty(benefitReferent)"
-                                @change:value="updateVisivilityBenefits()"
+                                :disabled="isObjectEmpty(benefitReferent) || !benefitReferent.used"
+                                
                             />
+                            
                         <BaseTooltipResponsive
                             size="m"
                             :top="35"
@@ -66,10 +67,10 @@
                     :benefitSReferrals="benefitReferent"
                     :type="'referent'"
                     @editGift="editGift"
-                     v-show="!isObjectEmpty(benefitReferent)"
+                     v-if="!isObjectEmpty(benefitReferent)"
                 />
                 
-                <div class="flex gap-2" v-show="isObjectEmpty(benefitReferent)">
+                <div class="flex gap-2" v-if="isObjectEmpty(benefitReferent)">
                     <span class="font-medium text-sm">
                         Aún no tienes regalos creados, ¡crea uno ahora! 
                     </span>
@@ -77,18 +78,21 @@
                         Crear regalo
                     </span>
                 </div>
-                <hr class="my-4" v-show="!isObjectEmpty(benefitReferent)">
-                <Integration :referent="benefitReferent" v-show="!isObjectEmpty(benefitReferent)" />
+                <hr class="my-4" v-if="!isObjectEmpty(benefitReferent)">
+                <Integration :referent="benefitReferent" v-if="!isObjectEmpty(benefitReferent)" />
             </template>
         </SectionConfig>
+        
     </div>
-
     <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes"
+        :existingChanges="changes || changesOfferBenefits"
+        :validChanges="changes || changesOfferBenefits"
         @cancel="cancelChange" 
         @submit="handlesubmitData"
+        :forceBottom="true"
     />
+
+    
     <Create :modal-add="isOpenSidePanel" @close="closeModalAdd" @handle-referrals="dataReferrals" @typePeople="checkTypePeople"/>
     <Edit
         :initial-data="selectedGiftData"
@@ -103,7 +107,6 @@
         textbtn="Guardar"
         @saveChanges="handlesubmitData"
         type="save_changes"
-        
     />
 </template>
 <script setup>
@@ -133,7 +136,6 @@ provide('hotelStore', hotelStore);
 import { useRewardStore } from '@/stores/modules/rewards/rewards';
 const rewardStore = useRewardStore();
 
-
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
 provide('mockupStore', mockupStore);
@@ -144,6 +146,7 @@ provide('toast', toast);
 
 const { hotelData } = hotelStore;
 
+
 const isOpenSidePanel = ref(false);
 const isOpenEditPanel = ref(false);
 
@@ -151,6 +154,7 @@ const benefitSReferrals = ref({});
 const benefitReferent = ref({});
 const initialBenefitSReferrals = ref({});
 const initialBenefitSReferent = ref({});
+const initialOfferBenefits = ref(!!hotelData.offer_benefits);
 const selectedGiftData = ref({});
 
 const typeModal = ref(null)
@@ -162,13 +166,8 @@ const typePeople = ref(null)
 const dataReferralsApi = ref(false);
 
 const cancelChange = () => {
-    changes.value = false;
-    hotelData.offer_benefits = initialOfferBenefits.value;
-    benefitSReferrals.value = initialBenefitSReferrals.value;
-    benefitReferent.value = initialBenefitSReferent.value;
+    location.reload();
 }
-
-
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -179,15 +178,17 @@ provide('typeModal', typeModal);
 provide('dataReferralsApi', dataReferralsApi);
 
 
-const initialOfferBenefits = ref(hotelData.offer_benefits);
+
 
 // Cambios pendientes
 const changes = ref(false);
+const changesOfferBenefits = ref(false);
 
 
 const checkChanges = () => {
     // Detecta cambios en el switch
-    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    //const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    
 
     // Detecta cambios en los JSON
     const hasBenefitSReferralsChanged = !isEqual(
@@ -199,14 +200,21 @@ const checkChanges = () => {
         JSON.parse(JSON.stringify(benefitReferent.value)),
         JSON.parse(JSON.stringify(initialBenefitSReferent.value))
     );
+    
 
-    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged || hasBenefitSReferentChanged;
+    changes.value = (hasBenefitSReferralsChanged || hasBenefitSReferentChanged) ;
+    //checkChangesOfferBenefits();
+
 };
+
+const checkChangesOfferBenefits = () => {
+    changesOfferBenefits.value = hotelData.offer_benefits !== initialOfferBenefits.value;
+}
 
 watch(
     () => hotelData.offer_benefits,
     () => {
-        checkChanges();
+        checkChangesOfferBenefits();
     }
 );
 
@@ -239,13 +247,16 @@ const isObjectEmpty = (obj) => {
 
 function loadMockup () {
     if(hotelData.show_referrals == 0){
-        mockupStore.$setIframeUrl('/alojamiento');
+        mockupStore.$setIframeUrl('');
+        mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar en la WebApp', '/assets/icons/info.svg')
     }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 0){
         mockupStore.$setIframeUrl('/perfil','referrals=true');
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 1){
         mockupStore.$setIframeUrl('/perfil','referent=true');
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }
-    mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg')
+    
     
     mockupStore.$setLanguageTooltip(true)
 }
@@ -268,12 +279,12 @@ const editGift = (type,data) => {
     isOpenEditPanel.value = true;
     selectedGiftData.value = data;
     typeModal.value = type;
+
 }
 
-const updateVisivilityBenefits = () => {
-    /* console.log('update visibility benefits') */
+/* const updateVisivilityBenefits = () => {
     checkChanges();
-}
+} */
 
 const handlesubmitData = async() => {
     let params = {
@@ -281,7 +292,6 @@ const handlesubmitData = async() => {
         benefitSReferrals: benefitSReferrals.value,
         benefitReferent: benefitReferent.value
     }
-    console.log('submit data',params)
     rewardStore.$storeRewards(params);
     toast.warningToast('Cambios guardados con éxito','top-right')
     changes.value = false;
@@ -293,7 +303,7 @@ const handlesubmitData = async() => {
     
 }
 
-
+const offerBenefits = ref(null);
 //mounted
 onMounted(async () => {
     loadMockup();
@@ -303,6 +313,7 @@ onMounted(async () => {
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
+        //offerBenefits.value = data?.benefitReferent ?? 0;
         
     }
 
@@ -310,17 +321,7 @@ onMounted(async () => {
         dataReferralsApi.value = true;
     }
 
-    /* setTimeout(async () => {
-        const response = await rewardStore.$getAllRewards();
-        const {  data } = response;
-
-        if(data) {
-            benefitSReferrals.value = data?.benefitSReferrals ?? {};
-            benefitReferent.value = data?.benefitReferent ?? {};
-            loadingSectionGift.value = false;
-        }
-    }, 300); */
-
 });
+
 
 </script>

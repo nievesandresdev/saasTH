@@ -15,7 +15,7 @@
           <h1 class="font-medium text-[22px]">Nuevo regalo para el {{ typeModalTitle }}</h1>
         </div>
         <div class="flex justify-end">
-          <button class="" @click="isClosePanel">
+          <button class="cursor-pointer" @click="isClosePanel">
             <img src="/assets/icons/1.TH.CLOSE.svg" alt="icon_close" class="w-8 h-8 hover:bg-[#F3F3F3] rounded-[100px] p-1">
           </button>
         </div>
@@ -29,7 +29,6 @@
           <div class="flex gap-4">
             <BaseTextField
               v-model="form.amount"
-              :error="errors.amount"
               type="text"
               placeholder="Introduce el valor"
               required
@@ -93,7 +92,7 @@
                       </template>
                       <template #content>
                           <p class="text-sm leading-[150%] font-normal">
-                            Añade aquí el enlace para que los referidos accedan a la página donde canjear su regalo.
+                            Añade aquí el enlace para que los {{ typeModalTitle }}s accedan a la página donde canjear su regalo.
                           </p>
                   </template>
               </BaseTooltipResponsive>
@@ -112,7 +111,6 @@
             placeholder="https://..."
             class="flex-1"
             :error="errors.url"
-
           />
          </div>
       </div>
@@ -138,6 +136,15 @@
       </div>
     </div>
   </Transition>
+  <ModalNoSave
+      :id="'not-saved'"
+      :open="openModalNoSave"
+      text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+      textbtn="Guardar"
+      @saveChanges="saveOnClose"
+      :type="'exit_save'"
+      @close="cancel"
+  />
 </template>
 
 <script setup>
@@ -159,7 +166,10 @@ const showSlidePanel = ref(false);
 const isOpenSidePanel = inject('isOpenSidePanel');
 const typeModal = inject('typeModal');
 
+const normalizedInitialData = ref({})
+const isInitialized = ref(false);
 
+const openModalNoSave = ref(false)
 
 const form = ref({
     amount: '', 
@@ -177,6 +187,7 @@ const errors = ref({
   description: false,
   url: false
 });
+
 
 /* const handleUrl = (event) => {
   form.value.enabled_url = event.target.checked;
@@ -208,7 +219,7 @@ const isValidUrl = (url) => {
 watch(
   () => form.value.url,
   (newUrl) => {
-    if (form.value.enabled_url && form.value.url !== '') {
+    if (form.value.url !== '') {
       errors.value.url = newUrl && !isValidUrl(newUrl);
     } else {
       errors.value.url = false;
@@ -216,8 +227,6 @@ watch(
   }
 
 );
-
-
 
 const typeModalTitle = computed(() => {
   return typeModal.value === 'referent' ? 'referente' : 'referido';
@@ -274,31 +283,48 @@ const onTypeChange = () => {
 
 
 const isClosePanel = () => {
+  console.log(hasChangeForm.value,form.value,normalizedInitialData.value)
+  if (hasChangeForm.value) {
+    openModalNoSave.value = true;
+  } else {
+    isOpenSidePanel.value = false;
+    resetForm();
+    
+  }
+};
+
+const saveOnClose = () => {
+  if(!isFormIncomplete.value){
+    submit();
+  }else{
+    openModalNoSave.value = false;
+  }
+}
+
+const cancel = () => {
   isOpenSidePanel.value = false;
-  //reset form
+  resetForm();
+};
+
+const resetForm = () => {
   form.value = {
     amount: '',
     type_discount: 'percentage',
     code: '',
     description: '',
-    enabled_url: false
+    url: '',
+    enabled_url: true
   };
-};
-
-
-
-
-const cancel = () => {
-  isOpenSidePanel.value = false;
-};
+  //normalizedInitialData.value = {};
+}
 
 const submit = () => {
   if (!isFormIncomplete.value) {
-    console.log('Formulario enviado:', form.value);
     toast.warningToast('Regalo añadido','top-right')
     emit('handleReferrals', form.value);
     emit('typePeople', typeModal.value);
-    isClosePanel();
+    cancel();
+    resetForm();
 
   }
 };
@@ -313,6 +339,17 @@ watch(
         description: false,
         url: false
       };
+
+      normalizedInitialData.value = {
+        amount: form.value.amount,
+        type_discount: form.value.type_discount,
+        code: form.value.code,
+        description: form.value.description,
+        url: form.value.url,
+        enabled_url: true,
+      }
+      isInitialized.value = true;
+      openModalNoSave.value = false;
       setTimeout(() => {
         showPanel.value = isOpenSidePanel.value;
       }, 120);
@@ -330,6 +367,11 @@ watch(
     }
   }
 );
+
+
+const hasChangeForm = computed(() => {
+  return JSON.stringify(normalizedInitialData.value) !== JSON.stringify(form.value);
+})
 </script>
 
 <style scoped>

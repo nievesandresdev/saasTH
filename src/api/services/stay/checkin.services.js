@@ -13,3 +13,4 @@ export const updateFormSettingsApi = (data) => apiHttp('POST', `${stayPath}/${ho
 
 export const updateToggleShowCheckinHotelApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/${checkinPath}/updateToggleShowCheckinHotel`, data, { showPreloader: false })
 export const getToggleShowCheckinHotelApi = () => apiHttp('GET', `${stayPath}/${hosterPath}/${checkinPath}/getToggleShowCheckinHotel`)
+export const getGuestsForTabsCheckinStayApi = (params) => apiHttp('GET', `${stayPath}/${hosterPath}/${checkinPath}/getGuestsForTabsCheckinStay`, params)

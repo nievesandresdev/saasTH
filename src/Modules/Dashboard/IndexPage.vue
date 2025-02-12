@@ -18,6 +18,9 @@ import { useAuthStore } from '@/stores/modules/auth/login';
 import CustomerExperience from './components/CustomerExperience.vue'
 import HomeFeedback from './components/HomeFeedback.vue'
 
+import { useChainStore } from '@/stores/modules/chain';
+const chainStore = useChainStore();
+
 
 const mockupStore = useMockupStore();
 const authStore = useAuthStore();
@@ -27,10 +30,12 @@ const toast = useToastAlert();
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
 
-onMounted(()=>{
-    mockupStore.$setIframeUrl('/')
+onMounted(async ()=>{
+    //await chainStore.$getChainBySubdomain();
+    mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
+    
 })
 
 /* function defineMockupData() {

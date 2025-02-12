@@ -39,7 +39,7 @@
     </section>
 
     <section class="px-6 mt-6 mb-20">
-        <div class="flex justify-start gap-6 mt-6 flex-wrap">
+        <div class="grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6 3xl:pr-0 pr-[150px]">
             <CardSectionHome title="Desde tu OTA "  period="pre-stay">
                 <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva para tus huéspedes.</template>
                 <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">OTA</h1></template>

@@ -40,7 +40,7 @@
 
     <!-- promotion section -->
     <section class="px-6 mt-[24px] mb-6">
-        <div class="flex justify-start gap-6 mt-6">
+        <div class="grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6 pr-[150px] 3xl:pr-0">
             <CardSectionHome title="Te damos la bienvenida">
                 <template #msg>Cuando un huésped cree su estancia en un {{$formatTypeLodging()}} de tu cuenta, recibirá este mensaje.</template>
                 <template #canal>
@@ -135,7 +135,7 @@
             <div class="flex-1 border-b border-[#BFBFBF]"></div>
         </div>
 
-        <div class="flex justify-start gap-6 mt-6">
+        <div class="grid grid-cols-3 3xl:grid-cols-5 pr-[150px] 3xl:pr-0 gap-6 mt-6">
             <CardSectionHome title="Aviso de mensaje en chat">
                 <template #msg>Se utiliza para avisarle al huésped que tiene un mensaje no leído.</template>
                 <template #canal>
@@ -153,7 +153,7 @@
                     </a>
                 </template>
             </CardSectionHome>
-            <CardSectionHome title="Check-in Huésped - Huésped">
+            <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
                 <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
                 <template #canal>
                     <div class="h-full w-full py-2">

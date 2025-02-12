@@ -9,6 +9,9 @@ const StayQueryDetail = () => import('@/Modules/Stay/Queries/Detail');
 //chat
 const StayChatRoom = () => import('@/Modules/Stay/Chat/ChatRoom');
 
+const CheckinDetail = () => import('@/Modules/Stay/Checkin/CheckinDetail');
+
+
 
 const stayGroupRoutes = [
   {
@@ -46,6 +49,13 @@ const stayGroupRoutes = [
         name: 'StayChatRoom',
         path: ':stayId/chat',
         component: StayChatRoom,
+        meta: { sidebarRight: 'SideStayFeedback' },
+        props: (route) => ({ paramsRouter: {...route.params} })
+      },
+      {
+        name: 'CheckinDetail',
+        path: ':stayId/checkin',
+        component: CheckinDetail,
         meta: { sidebarRight: 'SideStayFeedback' },
         props: (route) => ({ paramsRouter: {...route.params} })
       }

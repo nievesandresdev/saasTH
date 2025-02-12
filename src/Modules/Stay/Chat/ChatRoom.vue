@@ -12,7 +12,7 @@
             @updateGuestMessagesCount="handleUpdateGuestMessagesCount"
         />
         <!-- body -->
-        <BodyChat :messages="dataMessages" />
+        <BodyChat />
         <!-- foot -->
         <div class="mx-6 pt-2 pb-1 pl-6 pr-3 hbg-white-100 flex sticky bottom-0 border-x">
             <textarea
@@ -49,9 +49,8 @@ import HeadChat from './HeadChat'
 import HoveredIcon from '@/components/Buttons/HoveredIcon.vue';
 //store
 import { useStaySessionsStore } from '@/stores/modules/stay/staySessions';
-import { useChatStore } from '@/stores/modules/chat/chat'
-
 const staySessionsStore = useStaySessionsStore();
+import { useChatStore } from '@/stores/modules/chat/chat'
 const chatStore = useChatStore();
 
 const route = useRoute();
@@ -61,7 +60,6 @@ const data = ref({
 })
 const session = ref([])
 const dataChat = ref(null)
-const dataMessages = ref([])
 const listGuests = ref([])
 
 const msg = ref(null)
@@ -133,42 +131,24 @@ const suscribePusher = (guestId) => {
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
-        // console.log('test UpdateChatEvent', data)
+        console.log('test UpdateChatEvent', data)
         dataChat.value = data.chatData;
-        
-        if(
-            data?.message?.automatic || //mensaje automatico departe del hoster
-            dataChat.value?.id == data.message?.chat_id //mensaje del hoster a otros hosters
-        ){
-            // console.log('cons UpdateChatEvent entro')
-            dataMessages.value = [...dataMessages.value, data.message]
+        if(data.message.by == 'Guest' || (data.message.by == "Hoster" && data.message.automatic)){    
+            await chatStore.$addMessage(data.message);
         }
         listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);
-        // callHeadChatComponent()
-        // if (data.message.by == 'Guest' && current_route == 'stay.hoster.chat') {
-        //     mark_msgs_as_read(props.stay.id)
-        // }
+        
     })
     channelChat.value.bind('App\\Events\\MsgReadChatEvent', function (data) {
-        // dataChat.value = { ...dataChat.value, pending: true };
-        // dataChat.value = dataChat.value;
-        const count_msgs = dataMessages.value.length
-        const arr = dataMessages.value
-        for (let i = count_msgs - 1; i >= 0; i--) {
-            if (arr[i].status == 'Entregado' && arr[i].by == 'Hoster') {
-                arr[i].status = 'Leído'
-            } else if (arr[i].status == 'Entregado') {
-                break
-            }
-        }
-        dataMessages.value = arr
+        chatStore.$markHosterMsgstAsRead(route.params.stayId, route.query.g)
     })
 }
 
 const getDataChat = async (showLoadPage = true) =>{
     let { chat, messages } = await chatStore.$getDataRoom(route.params.stayId, route.query.g, showLoadPage)
+
     dataChat.value = chat;
-    dataMessages.value = messages;
+    chatStore.$setMessagesList(messages);
 }
 
 const handleUpdateGuestMessagesCount = (guestId, newCount)  => {

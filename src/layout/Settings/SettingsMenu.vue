@@ -94,7 +94,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span>
+                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
                   </div>
                 </a>
               </li>
@@ -606,8 +606,5 @@ a:hover{
 .shadow-menu{
   box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
 }
-.referidos-item {
-  width: 100%;
-  display: block;
-}
+
 </style>
