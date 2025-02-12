@@ -120,7 +120,7 @@ const values = {
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
         trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
-        issue: `¿Todo listo  ${hotelStorage.hotelData?.name}?`,
+        issue: `¿Todo listo [nombreHotel]?`,
         descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
         channels:[
@@ -142,7 +142,7 @@ const values = {
         title: 'Te damos la bienvenida',
         description: 'Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.',
         trigger: 'El huésped ingresa a la WebApp por primera vez',
-        issue: `Te damos la bienvenida a la WebApp de ${hotelStorage.hotelData?.name}`,
+        issue: `Te damos la bienvenida a la WebApp de [nombreHotel]`,
         descriptionContent:'',
         itemsContent:[],
         channels:[
@@ -153,7 +153,7 @@ const values = {
         title: 'Gracias por elegirnos',
         description: 'Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.',
         trigger: 'Cuando la estancia de tus huéspedes cambie a Post-stay (según tu horario de check-out), les enviaremos este mensaje.',
-        issue: 'Tienes un chat pendiente en la WebApp',
+        issue: 'Gracias por elegirnos',
         descriptionContent:'Este mensaje contendrá el bloque de despedida y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Consulta de seguimiento','Destinos recomendados','Experiencias recomendadas'],
         channels:[
@@ -164,7 +164,7 @@ const values = {
         title: 'Te esperamos de vuelta!',
         description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
         trigger: 'Pasadas 48hs de la finalización de su estancia, tus huéspedes recibirán este mensaje',
-        issue: 'Gracias por elegirnos.',
+        issue: 'Te esperamos de vuelta!',
         descriptionContent:'Este mensaje incluirá un bloque diseñado para persuadir a tus huéspedes a regresar y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Consulta de Seguimiento/Solicitud de reseña','Invitación a crear su próxima reserva','Destinos de su interés'],
         channels:[
@@ -190,7 +190,10 @@ const values = {
         descriptionContent:'',
         itemsContent:[],
         channels:[
-            {title:'Email',icon:'material-symbols-light_mail-outline'}
+            {title:'Email',icon:'material-symbols-light_mail-outline'},
+            {title:'SMS',icon:'Frame 2613489'},
+            {title:'WhatsApp',icon:'Frame 2613488'},
+            {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
     "manualInvitation":{
