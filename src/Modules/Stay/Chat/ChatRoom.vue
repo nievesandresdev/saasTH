@@ -131,16 +131,15 @@ const suscribePusher = (guestId) => {
     pusher.value = getPusherInstance()
     channelChat.value = pusher.value.subscribe(channelChat.value)
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
-        // console.log('test UpdateChatEvent', data)
+        console.log('test UpdateChatEvent', data)
         dataChat.value = data.chatData;
-        if(data.message.by == 'Guest'){    
+        if(data.message.by == 'Guest' || (data.message.by == "Hoster" && data.message.automatic)){    
             await chatStore.$addMessage(data.message);
         }
         listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);
         
     })
     channelChat.value.bind('App\\Events\\MsgReadChatEvent', function (data) {
-        console.log('test MsgReadChatEvent', data)
         chatStore.$markHosterMsgstAsRead(route.params.stayId, route.query.g)
     })
 }
