@@ -442,6 +442,9 @@ const initializeForm = () => {
           
       };
 
+      console.log('formFRANCO',form.value)
+      handleSelectAll(true)
+
       // Llamar a la función para actualizar el acceso
       updateAccess();
       jsonHotel.value = props.dataUser.permissions;
