@@ -284,9 +284,10 @@
   
   const onTypeChange = () => {
     const numericValue = parseFloat(form?.value?.amount);
+    console.log(numericValue,form.value.type_discount)
   
     if (form.value.type_discount === 'money') {
-      form.value.amount = numericValue ? 12 : '';
+      form.value.amount = numericValue ? numericValue : '';
     } else if (form.value.type_discount === 'percentage') {
       //form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
       if (!numericValue || isNaN(numericValue)) {
@@ -295,6 +296,8 @@
         form.value.amount = numericValue > 100 ? '100' : numericValue.toString().replace('.', ',');
       }
     }
+
+    adjustValue();
   };
 
   const isClosePanel = () => {
