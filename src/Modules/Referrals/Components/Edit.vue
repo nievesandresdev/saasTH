@@ -30,7 +30,6 @@
             <div class="flex gap-4">
               <BaseTextField
                 v-model="form.amount"
-                :error="errors.amount"
                 type="text"
                 placeholder="Introduce el valor"
                 required
@@ -154,7 +153,7 @@
   </template>
   
   <script setup>
-  import { ref, computed, inject, watch,defineEmits,defineProps } from 'vue';
+  import { ref, computed, inject, watch,defineEmits,defineProps, onMounted } from 'vue';
   import RadioButton from '@/components/Forms/RadioButton.vue';
   import BaseTextField from '@/components/Forms/BaseTextField';
   import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
@@ -321,6 +320,7 @@
   };
 
   const isInitialized = ref(false);
+
   
   watch(
     () => isOpenEditPanel.value,
@@ -335,6 +335,7 @@
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
+            used: props?.initialData?.used,
           };
 
           isInitialized.value = true;
@@ -345,7 +346,10 @@
             description: props?.initialData?.description,
             enabled_url: true,
             url: props?.initialData?.url,
+            used: props?.initialData?.used,
           };
+
+          adjustValue();
         }, 200);
         setTimeout(() => {
           showSlidePanel.value = isOpenEditPanel.value;

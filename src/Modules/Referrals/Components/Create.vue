@@ -29,7 +29,6 @@
           <div class="flex gap-4">
             <BaseTextField
               v-model="form.amount"
-              :error="errors.amount"
               type="text"
               placeholder="Introduce el valor"
               required

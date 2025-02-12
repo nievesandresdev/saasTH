@@ -37,8 +37,8 @@
                                 v-model="hotelData.offer_benefits"
                                 class="mr-4"
                                 :id="'offer_benefits'"
-                                :disabled="!offerBenefits || !benefitReferent.used"
-                                @change:value="updateVisivilityBenefits()"
+                                :disabled="isObjectEmpty(benefitReferent) || !benefitReferent.used"
+                                
                             />
                             
                         <BaseTooltipResponsive
@@ -85,8 +85,8 @@
         
     </div>
     <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes"
+        :existingChanges="changes || changesOfferBenefits"
+        :validChanges="changes || changesOfferBenefits"
         @cancel="cancelChange" 
         @submit="handlesubmitData"
         :forceBottom="true"
@@ -154,6 +154,7 @@ const benefitSReferrals = ref({});
 const benefitReferent = ref({});
 const initialBenefitSReferrals = ref({});
 const initialBenefitSReferent = ref({});
+const initialOfferBenefits = ref(!!hotelData.offer_benefits);
 const selectedGiftData = ref({});
 
 const typeModal = ref(null)
@@ -168,8 +169,6 @@ const cancelChange = () => {
     location.reload();
 }
 
-
-
 // PROVIDE
 provide('hotelData', hotelData);
 provide('isOpenSidePanel', isOpenSidePanel);
@@ -179,15 +178,17 @@ provide('typeModal', typeModal);
 provide('dataReferralsApi', dataReferralsApi);
 
 
-const initialOfferBenefits = ref(hotelData.offer_benefits);
+
 
 // Cambios pendientes
 const changes = ref(false);
+const changesOfferBenefits = ref(false);
 
 
 const checkChanges = () => {
     // Detecta cambios en el switch
-    const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    //const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    
 
     // Detecta cambios en los JSON
     const hasBenefitSReferralsChanged = !isEqual(
@@ -199,14 +200,21 @@ const checkChanges = () => {
         JSON.parse(JSON.stringify(benefitReferent.value)),
         JSON.parse(JSON.stringify(initialBenefitSReferent.value))
     );
+    
 
-    changes.value = hasOfferBenefitsChanged || hasBenefitSReferralsChanged || hasBenefitSReferentChanged;
+    changes.value = (hasBenefitSReferralsChanged || hasBenefitSReferentChanged) ;
+    //checkChangesOfferBenefits();
+
 };
+
+const checkChangesOfferBenefits = () => {
+    changesOfferBenefits.value = hotelData.offer_benefits !== initialOfferBenefits.value;
+}
 
 watch(
     () => hotelData.offer_benefits,
     () => {
-        checkChanges();
+        checkChangesOfferBenefits();
     }
 );
 
@@ -274,10 +282,9 @@ const editGift = (type,data) => {
 
 }
 
-const updateVisivilityBenefits = () => {
-    /* console.log('update visibility benefits') */
+/* const updateVisivilityBenefits = () => {
     checkChanges();
-}
+} */
 
 const handlesubmitData = async() => {
     let params = {
@@ -285,7 +292,6 @@ const handlesubmitData = async() => {
         benefitSReferrals: benefitSReferrals.value,
         benefitReferent: benefitReferent.value
     }
-    console.log('submit data',params)
     rewardStore.$storeRewards(params);
     toast.warningToast('Cambios guardados con éxito','top-right')
     changes.value = false;
@@ -307,7 +313,7 @@ onMounted(async () => {
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
-        offerBenefits.value = data?.benefitReferent ?? 0;
+        //offerBenefits.value = data?.benefitReferent ?? 0;
         
     }
 
