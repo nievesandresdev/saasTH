@@ -159,6 +159,8 @@ const getData = async() => {
     form.protection = response.data.legal?.protection || false;
     form.email_protection = response.data.legal?.email_protection || '';
 
+    initialForm.value = JSON.stringify(form);
+
     //validateForm();
 };
 
