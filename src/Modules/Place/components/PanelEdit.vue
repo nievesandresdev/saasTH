@@ -103,7 +103,7 @@
     <ModalCancelChangePlace
         ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
-        @submit:closeModal="closeModal"
+        @submit:closeModal="closeModalForce"
     />
     <ModalDelete
         ref="modalDeleteRef"
