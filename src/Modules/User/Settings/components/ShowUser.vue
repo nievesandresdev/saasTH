@@ -141,7 +141,14 @@
           <button
               class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
               @click="updateUser(dataUser)"
-              v-if="dataUser.owner != 1"
+              v-if="dataUser.owner != 1 && authStore.user.owner == 0"
+          >
+              Editar
+          </button>
+          <button
+              class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%] h-10"
+              @click="updateUser(dataUser)"
+              v-if="authStore.user.owner == 1"
           >
               Editar
           </button>
