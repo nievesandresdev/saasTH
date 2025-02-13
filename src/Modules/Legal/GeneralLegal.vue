@@ -12,8 +12,8 @@
                     <label class="text-sm font-medium mb-[6px] block">Razón social*</label>
                     <BaseTextField 
                         v-model="form.name" 
-                        :placeholder="form.nameError && submitted ? 'Debes introducir la razón social' : 'Ejemplo: Tecnologías Innovadoras S.A.'" 
-                        :error="form.nameError && submitted" 
+                        :placeholder="form.nameError ? 'Debes introducir la razón social' : 'Ejemplo: Tecnologías Innovadoras S.A.'" 
+                        :error="form.nameError" 
                     />
                 </section>
                 <section class="mb-4">
@@ -22,25 +22,25 @@
                         v-model="form.address"
                         id="fiscal_address"
                         type="text"
-                        :placeholder="form.addressError && submitted ? 'Debes introducir el domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
+                        :placeholder="form.addressError ? 'Debes introducir el domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
                         class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border"
-                        :class="form.addressError && submitted ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
+                        :class="form.addressError ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
                     >
                 </section>
                 <section class="mb-4">
                     <label class="text-sm font-medium mb-[6px] block">NIF*</label>
                     <BaseTextField 
                         v-model="form.nif" 
-                        :placeholder="form.nifError && submitted ? 'Debes introducir NIF' : 'Ejemplo: A87654321'" 
-                        :error="form.nifError && submitted" 
+                        :placeholder="form.nifError ? 'Debes introducir NIF' : 'Ejemplo: A87654321'" 
+                        :error="form.nifError" 
                     />
                 </section>
                 <section class="mb-6">
                     <label class="text-sm font-medium mb-[6px] block">Correo electrónico de la empresa*</label>
                     <BaseTextField 
                         v-model="form.email" 
-                        :placeholder="form.emailError && submitted ? 'Introduce el correo electrónico de la empresa' : 'Ejemplo: direccion@dominio.com'" 
-                        :error="form.emailError && submitted || !isEmailValid"
+                        :placeholder="form.emailError ? 'Introduce el correo electrónico de la empresa' : 'Ejemplo: direccion@dominio.com'" 
+                        :error="form.emailError || !isEmailValid"
                     />
                     <div v-if="!isEmailValid" class="flex mt-1 text-[#FF6666] justify-left">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -61,8 +61,8 @@
                         <label class="text-sm font-medium mb-[6px] block">Correo electrónico del delegado*</label>
                         <BaseTextField 
                             v-model="form.email_protection" 
-                            :placeholder="form.emailProtectionError && submitted ? 'Introduce el correo electrónico del delegado' : 'Ejemplo: direccion2@dominio.com'" 
-                            :error="form.emailProtectionError && submitted || !isEmailProtectionValid" 
+                            :placeholder="form.emailProtectionError ? 'Introduce el correo electrónico del delegado' : 'Ejemplo: direccion2@dominio.com'" 
+                            :error="form.emailProtectionError || !isEmailProtectionValid" 
                             ref="emailProtectionInput"
                         />
                         <div v-if="!isEmailProtectionValid" class="flex mt-1 text-[#FF6666] justify-left">
@@ -145,7 +145,7 @@ onMounted(async () => {
     isEmailValid.value = true;
     await getData();
     initialForm.value = JSON.stringify(form);
-    validateForm(); 
+    //validateForm(); 
     loadGoogleMapsScript();
 });
 
@@ -159,12 +159,53 @@ const getData = async() => {
     form.protection = response.data.legal?.protection || false;
     form.email_protection = response.data.legal?.email_protection || '';
 
-    validateForm();
+    //validateForm();
 };
 
-watch([() => form.name, () => form.address, () => form.nif, () => form.email, () => form.email_protection, () => form.protection], validateForm);
+    watch(() => form.name, (newValue) => {
+        form.nameError = !newValue.trim();
+    });
 
-function validateForm() {
+    watch(() => form.address, (newValue) => {
+        form.addressError = !newValue.trim();
+    });
+
+    watch(() => form.nif, (newValue) => {
+        form.nifError = !newValue.trim();
+    });
+
+    watch(() => form.email, (newValue) => {
+        isEmailValid.value = validateEmail(newValue);
+        form.emailError = !newValue.trim() || !isEmailValid.value;
+    });
+
+    watch(() => form.email_protection, (newValue) => {
+        if (form.protection) {
+            isEmailProtectionValid.value = validateEmail(newValue);
+            form.emailProtectionError = !newValue.trim() || !isEmailProtectionValid.value;
+        } else {
+            form.emailProtectionError = false;
+        }
+    });
+
+    watch(() => form.protection, (newValue) => {
+        if (!newValue) {
+            form.emailProtectionError = false;
+        }
+    });
+
+    // Detectar cambios en el formulario
+    watch(form, () => {
+        changes.value = JSON.stringify(form) !== initialForm.value;
+        valid.value = !form.nameError &&
+                    !form.addressError &&
+                    !form.nifError &&
+                    !form.emailError &&
+                    (!form.protection || !form.emailProtectionError);
+    }, { deep: true });
+
+
+/* function validateForm() {
     submitted.value = false;
     
     // Validación independiente para el email principal
@@ -186,7 +227,7 @@ function validateForm() {
 
     // Determinar si hay cambios
     changes.value = JSON.stringify(form) !== initialForm.value;
-}
+} */
 
 function validateEmail(email) {
     if (email === '') return true; 
@@ -196,7 +237,7 @@ function validateEmail(email) {
 
 function cancelChange() {
     Object.assign(form, JSON.parse(initialForm.value));
-    validateForm();
+    //validateForm();
 }
 
 async function submit() {
@@ -206,7 +247,7 @@ async function submit() {
     }else{
         submitted.value = false;
     }
-    validateForm();  
+    //validateForm();  
 
     // if (!valid.value) {
     //     /* toast.errorToast('Por favor, complete todos los campos requeridos.', 'top-right'); */
