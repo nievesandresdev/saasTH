@@ -293,14 +293,11 @@
   </template>
   
   <script setup>
-  import { ref, onMounted,onUnmounted, nextTick, defineEmits,computed,watch,onBeforeUnmount } from 'vue';
-  import ModalSelect from './ModalSelect.vue';
+  import { ref, onMounted,onUnmounted, nextTick, defineEmits,computed,watch,onBeforeUnmount,defineProps } from 'vue';
   import ModalCrud from './ModalCrud.vue';
   import { useUserStore } from '@/stores/modules/users/users'
   import { useToastAlert } from '@/composables/useToastAlert'
   import { useMouseHandle } from '@/composables/useMouseHandle';
-  import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
-  import ModalWindow from '@/components/ModalWindow.vue';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
@@ -309,12 +306,11 @@
   import Notifications from './Notifications.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
-  import { useRoute, useRouter } from 'vue-router';
+  import {  useRouter } from 'vue-router';
 
   const router = useRouter();
   const intendedRoute = ref(null);
   const userStore = useUserStore();
-  const selectAll = ref(false);
   //const authStore = useAuthStore();
   const toast = useToastAlert();
   const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();

@@ -8,7 +8,7 @@
     </Transition>
   
     <Transition name="slide">
-      <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[2000] right-[354px] flex flex-col">
+      <div v-if="showSlidePanel" class="w-[500px] bg-white fixed z-[2000] right-[354px] flex flex-col"  :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'">
        
         <!-- Header -->
         <div class="flex justify-between items-center px-6 py-[20px] h-[64px] border-b border-[#BFBFBF]">
@@ -153,18 +153,22 @@
   </template>
   
   <script setup>
-  import { ref, computed, inject, watch,defineEmits,defineProps, onMounted } from 'vue';
+  import { ref, computed, inject, watch,defineEmits,defineProps } from 'vue';
   import RadioButton from '@/components/Forms/RadioButton.vue';
   import BaseTextField from '@/components/Forms/BaseTextField';
   import BaseTextareaField from '@/components/Forms/BaseTextareaField.vue';
   import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 
+
   import ModalNoSave from '@/components/ModalNoSave.vue';
 
 
   import { useToastAlert } from '@/composables/useToastAlert';
   const toast = useToastAlert();
+
+  import { useUserStore } from '@/stores/modules/users/users'
+  const userStore = useUserStore();
   
 
   const emit = defineEmits(['updateGift']);
