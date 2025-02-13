@@ -195,7 +195,7 @@
     }
 
     function loadMockup (path = '/') {
-        mockupStore.$setIframeUrl(`/instalaciones${path}`);
+        mockupStore.$setIframeUrl(`/alojamiento/instalaciones${path}`);
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
         mockupStore.$setLanguageTooltip(true)
     }
