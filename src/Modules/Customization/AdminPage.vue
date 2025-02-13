@@ -237,7 +237,8 @@ onMounted(() => {
 });
 
 function loadMockup () {
-    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp);
+    console.log('loadMockup',hotelStore.hotelData.language_default_webapp)
+    mockupStore.$setIframeUrl('/perfil','test=x',hotelStore.hotelData.language_default_webapp);
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }
@@ -255,7 +256,7 @@ function initializeForm(hotel) {
     form.slug_hotel = hotelStore.hotelData.subdomain || null;
     form.language_default_webapp = hotelStore.hotelData.language_default_webapp || null;
     Object.assign(formDefault, form);
-    mockupStore.$setIframeUrl('/','test=x',hotelStore.hotelData.language_default_webapp)
+    mockupStore.$setIframeUrl('/perfil','test=x',hotelStore.hotelData.language_default_webapp)
 
 }
 
