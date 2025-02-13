@@ -200,7 +200,7 @@
         mockupStore.$setLanguageTooltip(true)
     }
     function loadMockupEdit (facilityId) {
-        mockupStore.$setIframeUrl(`/ver-instalacion/${facilityId}`);
+        mockupStore.$setIframeUrl(`/instalaciones/ver-instalacion/${facilityId}`);
     }
 
     async function loadFacilities (reload = false,resetList = false) {
