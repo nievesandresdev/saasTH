@@ -212,11 +212,11 @@
         </button>
         <button
           class="px-4 py-2 font-medium rounded text-black"
-          @click.stop.prevent="currentStep === 3 ? handleUpdateUser() : nextStep()"
+          @click.stop.prevent="handleUpdateUser()"
           :disabled="isFormIncomplete || !changes"
           :class="isFormIncomplete || !changes ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
-          {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
+          Guardar
         </button>
       </div>
       <ModalNoSave
@@ -444,7 +444,6 @@ const initializeForm = () => {
       /* aqui valido si tiene todos los hoteles seleccionados */
       const userStoreIds = userStore.$getHotels(['id']).map(hotel => hotel.id);
       const areEqual = JSON.stringify(form.value.hotels) === JSON.stringify(userStoreIds.sort());
-      console.log('formFRANCO',form.value.hotels,userStoreIds,areEqual)
       //handleSelectAll(true)
       if (areEqual) { // si son iguales selecciona todos los hoteles
         handleSelectAll(true)
@@ -509,6 +508,11 @@ const selectWorkPosition = (position) => {
     form.value.work_position_id = position.id;
     //initialForm.value = JSON.stringify(form.value);
   }
+
+  /* console.log('positionLOG',{
+    form : JSON.stringify(form.value),
+    initialForm : initialForm.value,
+  }) */
 
 
   selectedWorkPositionName.value = position.name;
