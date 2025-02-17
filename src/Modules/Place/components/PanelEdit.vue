@@ -32,6 +32,7 @@
                         :key="index"
                         class="cursor-pointer px-4 pt-4 rounded-t-[10px] flex flex-col"
                         :class="tabSelected === index ? 'hbg-green-200' : ''"
+                        
                         @click="changeTab(index)"
                     >
                          <span
@@ -42,7 +43,7 @@
                         </span>
                         <span class="w-full h-[3px] rounded-full" :class="tabSelected === index ? 'hbg-green-800' : 'bg-white'" />
                     </li>
-                </ul>   
+                </ul>
                 <div class="px-6 pt-[31px] pb-[35px] flex-1">
                     <template v-if="tabSelected === INFORMATION">
                         <PanelEditFormInformation />
@@ -302,7 +303,7 @@ function nextTab () {
 }
 
 function changeTab (val) {
-    tabSelected.value = val
+    tabSelected.value = val;
 }
 
 function edit ({action, place}) {

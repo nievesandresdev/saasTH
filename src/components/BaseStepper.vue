@@ -12,7 +12,7 @@
                 modelValue == index ? 'bg-[#34A98F] text-white' : 'bg-white text-black border border-gray-300'
                 
                 ]"
-                @click="value = index"
+                @click="nextStep(index)"
             >
             {{ index+1 }}
             </div>
@@ -63,10 +63,11 @@ const value = computed({
 });
 
   
-const nextStep = () => {
-    if (modelValue.value < steps.length) {
-        modelValue.value++;
+const nextStep = (i) => {
+    if (steps.value[i].disabled) {
+        return;
     }
+    value.value = i;
 };
 
 const prevStep = () => {

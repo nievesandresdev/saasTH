@@ -75,8 +75,7 @@
                         :disabled="formInvalid || !changesform || isLoadingForm"
                         @click="nextTab"
                     >
-                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
-                        
+                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }} {{formInvalid}}
                     </button>
                 </template>
             </div>
@@ -142,9 +141,9 @@ const emit = defineEmits(['load:resetPageData']);
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
 
-    // COMPOSABLES
-    import { useToastAlert } from '@/composables/useToastAlert'
-    const toast = useToastAlert();
+// COMPOSABLES
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
 
 // INJECT
 const hotelStore = inject('hotelStore');
@@ -155,7 +154,6 @@ const modelActive = inject('modelActive');
 
 
 // DATA
-const steps = [{name: 'Información', value: 0}, {name: 'Galeria', value: 1}];
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
@@ -194,6 +192,8 @@ const formDefault = reactive({
 const formRules = {
     link_url: [value => !value.trim() || (!!value.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
+    hire: [value => !!value ? true : 'Este campo es obligatorio'],
+    description: [value => !!value ? true : 'Este campo es obligatorio'],
 };
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
@@ -211,6 +211,9 @@ const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
 // COMPUTED
+const steps = computed(() => {
+    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value}];
+});
 const changesform = computed(() => {
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
@@ -315,6 +318,9 @@ function resetData () {
 
 function nextTab () {
     if (stepCurrent.value == 0) {
+        if (formInvalid.value || !changesform.value || isLoadingForm.value) {
+            return;
+        }
         stepCurrent.value++;
     } else {
         submitSave();
