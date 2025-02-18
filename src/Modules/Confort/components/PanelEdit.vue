@@ -190,7 +190,7 @@ const formDefault = reactive({
     images: [],
 });
 const formRules = {
-    link_url: [value => !value.trim() || (!!value.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
+    link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
     hire: [value => !!value ? true : 'Este campo es obligatorio'],
     description: [value => !!value ? true : 'Este campo es obligatorio'],
