@@ -57,7 +57,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
                         @click="submitSave"
                     >
                         Guardar
@@ -72,7 +72,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
                         @click="nextTab"
                     >
                         {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
@@ -193,13 +193,15 @@ const formDefault = reactive({
 const formRules = {
     link_url: [value => !value.trim() || (!!value.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
+    hire: [value => !!value ? true : 'Este campo es obligatorio'],
+    description: [value => !!value ? true : 'Este campo es obligatorio'],
 };
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
 }
 
-const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
+const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
@@ -367,7 +369,7 @@ provide('transportStore', transportStore);
 provide('form', form);
 // provide('itemSelected', itemSelected);
 provide('errors', errors);
-// provide('urlsimages', urlsimages);
+provide('urlsimages', urlsimages);
 provide('validateField', validateField);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
