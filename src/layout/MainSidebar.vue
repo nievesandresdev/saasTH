@@ -392,7 +392,7 @@ const menu_links = ref([
       {
         title: 'Estancias',
         icon: '1.TH.ESTANCIAS.MM',
-        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
+        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage','CheckinDetail'],
         url: '/estancias',
         permissionName: 'estancias',
         subscription: true
@@ -442,10 +442,13 @@ const menu_links = ref([
           'PoliciesLegal',
           'PolicyPrivacyLegal',
           'PolicyCookiesLegal',
+          //checkin
+          'CheckinGeneral',
+          'CheckinForms',
           //others
           'Configuracion',
           'PromoteWebApp',
-          'Appearence'
+          'Appearence',
         ],
         url: '/webapp',
         permissionName: 'webapp',

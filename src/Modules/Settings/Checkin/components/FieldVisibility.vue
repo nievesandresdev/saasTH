@@ -116,9 +116,17 @@
   // 5. Cuando cambian las refs locales en el hijo, emitimos al padre
   watch(localVisible, (newVal) => {
     emits('update:visible', newVal)
+    // Si se desactiva la visibilidad, se quita la obligatoriedad
+    if (!newVal) {
+        localRequired.value = false
+    }
   })
   watch(localRequired, (newVal) => {
     emits('update:required', newVal)
+    // Si se marca como obligatorio, forzamos visibilidad
+    if (newVal) {
+        localVisible.value = true
+    }
   })
   </script>
   
