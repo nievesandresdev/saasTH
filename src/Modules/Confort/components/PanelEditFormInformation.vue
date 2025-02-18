@@ -22,10 +22,10 @@ Opciones del servicio:
 2. Stone hot massage - 90 minutos - 80€
 3. Masaje con aromaterapia - 75 minutos - 70€
                 `"
-                showCounter
                 mandatory
                 countType="static"
                 minHeight="180px"
+                @validation="textTitleFull = $event"
             />
         </div>
         <div class="space-y-2">
@@ -35,6 +35,8 @@ Opciones del servicio:
                 :placeholder="`Ej: Para reservar tu cita, contacta con la recepción del hotel o visita directamente nuestro salón. También puedes gestionar tu reserva a través de la página web.`"
                 class-content="flex-1"
                 name="hire"
+                :errors="errors"
+                @blur:validate="validate('hire')"
             />
         </div>
         <div class="space-y-2">
@@ -91,7 +93,6 @@ Opciones del servicio:
                     class-input="text-right"
                     name="price"
                     :errors="errors"
-                    @blur:validate="validate('name')"
                 />
                 <span
                     :class="{'opacity-40': form.type_price == 3}"
