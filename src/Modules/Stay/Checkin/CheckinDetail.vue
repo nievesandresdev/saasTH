@@ -49,16 +49,15 @@
                 :content="guest?.responsible_adult"
                 label="Adulto responsable"
             />
-            
+            <Input 
+                :content="guest?.kinship_relationship"
+                label="Relación de parentesco"
+            />
         </div>
         <div class="px-6 mt-4">
             <h4 class="text-sm font-semibold leading-[120%]">Datos de identificación</h4>
         </div>
         <div class="grid grid-cols-2 3xl:grid-cols-3 gap-4 px-6 mt-4">
-            <Input 
-                :content="guest?.kinship_relationship"
-                label="Relación de parentesco"
-            />
             <Input 
                 :content="guest?.nationality"
                 label="Nacionalidad"
