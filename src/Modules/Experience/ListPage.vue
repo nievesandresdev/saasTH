@@ -405,7 +405,7 @@ function openEditByViator (payload) {
 }
 
 function openEditByHoster (payload) {
-    typeActivityEditing.vlaue = 'thehoster';
+    typeActivityEditing.value = 'thehoster';
     panelEditHosterActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
