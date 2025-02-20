@@ -161,10 +161,10 @@ const values = {
         ]
     },
     'youBack':{
-        title: 'Te esperamos de vuelta!',
+        title: 'Te esperamos de vuelta',
         description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
         trigger: 'Pasadas 48hs de la finalización de su estancia, tus huéspedes recibirán este mensaje',
-        issue: 'Te esperamos de vuelta!',
+        issue: 'Te esperamos de vuelta',
         descriptionContent:'Este mensaje incluirá un bloque diseñado para persuadir a tus huéspedes a regresar y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Consulta de Seguimiento/Solicitud de reseña','Invitación a crear su próxima reserva','Destinos de su interés'],
         channels:[
