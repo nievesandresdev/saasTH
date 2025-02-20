@@ -151,6 +151,7 @@ const $formatTypeLodging = (title = false) => {
   const hotelStore = useHotelStore();
   const typeLodging = {
     hotel: !title ? "hotel" : "Hotel",
+    hostal: !title ? "hostal" : "Hostal",
     at: !title ? "apartamento" : "Apartamento",
     vft: !title ? "apartamento" : "Apartamento",
   }

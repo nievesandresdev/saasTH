@@ -394,7 +394,7 @@
 
     const typeLodging = [
         { value: "hotel", label: "Hotel", disabled: false },
-        // { value: "hostal", label: "Hostal", disabled: false },
+        { value: "hostal", label: "Hostal", disabled: false },
         // { value: "pensión", label: "Pensión", disabled: false },
         // {
         //     value: "ca",
