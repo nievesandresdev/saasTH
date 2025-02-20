@@ -1,7 +1,7 @@
 <template>
     <div class="px-6">
         <div class="border-b border-[#BFBFBF] py-5">
-            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ authStore.$currentHotelName }}</h1>
+            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ hotelData.name }}</h1>
         </div>
         <div class="mt-6">
             <CustomerExperience />
@@ -21,6 +21,9 @@ import HomeFeedback from './components/HomeFeedback.vue'
 import { useChainStore } from '@/stores/modules/chain';
 const chainStore = useChainStore();
 
+import { useHotelStore } from '@/stores/modules/hotel'
+const hotelStore = useHotelStore();
+const { hotelData } = hotelStore;
 
 const mockupStore = useMockupStore();
 const authStore = useAuthStore();

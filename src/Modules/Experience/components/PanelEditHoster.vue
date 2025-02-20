@@ -215,7 +215,7 @@ const isPreviewOpen = ref(false);
 
 // COMPUTED
 const steps = computed(() => {
-    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value}];
+    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value}];
 });
 const changesform = computed(() => {
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
