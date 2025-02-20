@@ -243,8 +243,9 @@ function mergeDataFormInUrlMockup (stringQuery, dataForm) {
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
-        if (typeActivityEditing.vlaue == 'viator') {
-            mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
+        console.log(experienceSlug)
+        if (typeActivityEditing.value == 'viator') {
+            mockupStore.$setIframeUrl(`/servicios/activity-externa/${experienceSlug}`);
         } else {
             mockupStore.$setIframeUrl(`/servicios/activity/${experienceSlug}`);
         }
@@ -392,7 +393,7 @@ function openModalChangeInForm () {
 
 
 function openEditByViator (payload) {
-    typeActivityEditing.vlaue = 'viator';
+    typeActivityEditing.value = 'viator';
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
@@ -405,11 +406,11 @@ function openEditByViator (payload) {
 }
 
 function openEditByHoster (payload) {
-    typeActivityEditing.vlaue = 'thehoster';
+    typeActivityEditing.value = 'thehoster';
     panelEditHosterActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
-            loadMockup(payload.experience.id);
+            loadMockup(payload.experience.slug);
         } else {
         }
         panelEditHosterRef.value.edit(payload);

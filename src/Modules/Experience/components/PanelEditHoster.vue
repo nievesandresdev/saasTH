@@ -347,24 +347,20 @@ async function submitDelete () {
     }
 }
 
-
-function edit({ action, experience }) {
+function edit ({action, experience}) {
+    urlsimages.value = [];
     if (action === 'EDIT' && experience) {
-        // Desestructuración y copia de los datos del item
-        const { id, title, description, hire, link_url, type_price, from_price, images } = experience;
-        // Copias profundas de las imágenes
-        const imagesCopy = JSON.parse(JSON.stringify(images));
-
-        // Asignación a los objetos itemSelected y form
-        const data = { id, name: title, description, hire, link_url, type_price, price: from_price, images: imagesCopy };
-        Object.assign(itemSelected, data);
-        Object.assign(form, data);[]
-
-        // Actualización de urlsimages
-        urlsimages.value = [...images];
+        let { id, title, description, hire, url, type_price, from_price, images } = experience;
+        let itemSelectedImages = JSON.parse(JSON.stringify(images));
+        let formImages = JSON.parse(JSON.stringify(images));
+        Object.assign(itemSelected, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: itemSelectedImages });
+        Object.assign(form, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: formImages });
+        images.forEach(img => {
+            urlsimages.value.push(img);
+        });
     } else {
-        // Reiniciar a valores por defecto
-        [itemSelected, form].forEach(obj => Object.assign(obj, { ...formDefault }));
+        Object.assign(itemSelected, {...formDefault});
+        Object.assign(form, {...formDefault});
     }
 }
 defineExpose({ edit });
