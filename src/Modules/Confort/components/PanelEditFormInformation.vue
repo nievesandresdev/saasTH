@@ -23,6 +23,7 @@ Opciones del servicio:
 3. Masaje con aromaterapia - 75 minutos - 70€
                 `"
                 mandatory
+                :max-length="4000"
                 countType="static"
                 minHeight="180px"
                 @validation="textTitleFull = $event"
