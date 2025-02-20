@@ -118,7 +118,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick } from 'vue';
+import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick, watch } from 'vue';
 import lodash from 'lodash';
 
 import { useFormValidation } from '@/composables/useFormValidation'
@@ -189,12 +189,30 @@ const formDefault = reactive({
     price: null,
     images: [],
 });
-const formRules = {
+
+// const formRules = reactive({
+//     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
+//     name: [value => !!value ? true : 'Este campo es obligatorio'],
+//     hire: [value => !!value ? true : 'Este campo es obligatorio'],
+//     description: [value => !!value ? true : 'Este campo es obligatorio'],
+//     price: [value => !!value && (form.type_price === 1 || form.type_price === 2) ? true : 'Este campo es obligatorio'],
+// });
+
+const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
     hire: [value => !!value ? true : 'Este campo es obligatorio'],
     description: [value => !!value ? true : 'Este campo es obligatorio'],
-};
+    price: [
+      (value) => {
+        if (form.type_price === 3) {
+          return true; // Si es 3, no validar
+        }
+        return !!value ? true : 'Este campo es obligatorio';
+      },
+    ]
+});
+
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
@@ -224,11 +242,13 @@ const changesform = computed(() => {
         (normalize(form.hire) !== normalize(itemSelected.hire)) ||
         (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
         (Number(form.type_price) !== Number(itemSelected.type_price)) ||
-        (Number(form.type_price) !== Number(itemSelected.type_price)) ||
+        (Number(form.price) !== Number(itemSelected.price)) ||
         !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
 });
+
+
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
@@ -371,6 +391,7 @@ provide('form', form);
 provide('errors', errors);
 provide('urlsimages', urlsimages);
 provide('validateField', validateField);
+provide('formRules', formRules);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
 

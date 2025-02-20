@@ -156,6 +156,7 @@ provide('form', form);
 provide('itemSelected', itemSelected);
 provide('errors', errors);
 provide('validateField', validateField);
+provide('formRules', formRules);
 provide('changePendingInForm', changePendingInForm);
 
 
