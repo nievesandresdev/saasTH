@@ -22,7 +22,6 @@ Opciones del servicio:
 2. Stone hot massage - 90 minutos - 80€
 3. Masaje con aromaterapia - 75 minutos - 70€
                 `"
-                showCounter
                 mandatory
                 countType="static"
                 minHeight="180px"

@@ -11,14 +11,13 @@
                     :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoading, 'hidden':!firstLoading && facilitiesEmpty}"
                 >{{ searchText }}</p>
                 <div class="space-y-[24px]">
-                    <div class="list-component max-w-[720px] 3xl:max-w-[1218px] grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6">
+                    <div class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6 mt-6">
                         <CardListVisible
                             v-if="filter !== 0"
                             @update:reloadItems="loadFacilities(true)"
                             @click:editFacility="editFacility"
                         />
-                    </div>
-                    <div v-if="hiddenFacilities.length && filter == null" class="flex items-center mt-6 w-full">
+                        <div v-if="hiddenFacilities.length && filter == null" class="flex items-center mt-6 w-full">
                             <div class="border-b border-gray-300 flex-grow"></div>
                             <p class="text-sm font-medium mx-6">
                                     {{ totalHiddenCount }}
@@ -26,19 +25,15 @@
                             </p>
                             <div class="border-b border-gray-300 flex-grow"></div>
                         </div>
-
-                        <div class="list-component max-w-[720px] 3xl:max-w-[1218px] grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6">
-                            
-                                <CardListHidden
-                                    v-if="filter !== 1"
-                                    @update:reloadItems="loadFacilities(true)"
-                                    @click:editFacility="editFacility"
-                                />
-                                <CardFacilityListSkeleton 
-                                    v-for="skeletonCard in skeletonCountByLoad"
-                                />
-                        </div>
-                
+                        <CardListHidden
+                            v-if="filter !== 1"
+                            @update:reloadItems="loadFacilities(true)"
+                            @click:editFacility="editFacility"
+                        />
+                        <CardFacilityListSkeleton 
+                            v-for="skeletonCard in skeletonCountByLoad"
+                        />
+                    </div>
                 </div>
             </div>
              
@@ -200,7 +195,7 @@
     }
 
     function loadMockup (path = '/') {
-        mockupStore.$setIframeUrl(`/alojamiento/instalaciones`);
+        mockupStore.$setIframeUrl(`/alojamiento/instalaciones${path}`);
         mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
         mockupStore.$setLanguageTooltip(true)
     }

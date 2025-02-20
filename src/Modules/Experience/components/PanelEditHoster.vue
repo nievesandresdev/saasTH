@@ -57,7 +57,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
                         @click="submitSave"
                     >
                         Guardar
@@ -72,7 +72,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
                         @click="nextTab"
                     >
                         {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
@@ -156,7 +156,6 @@ const panelEditHosterActive = inject('panelEditHosterActive');
 
 
 // DATA
-const steps = [{name: 'Información', value: 0}, {name: 'Galeria', value: 1}];
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
@@ -164,44 +163,46 @@ const panelEditHosterModalDeleteRef  = ref(null);
 
 const form = reactive({
     id: null,
-    name: null,
-    description: null,
-    hire: null,
-    link_url: null,
+    name: '',
+    description: '',
+    hire: '',
+    link_url: '',
     type_price: 1,
     price: null,
     images: [],
 });
 const itemSelected = reactive({
     id: null,
-    name: null,
-    description: null,
-    hire: null,
-    link_url: null,
+    name: '',
+    description: '',
+    hire: '',
+    link_url: '',
     type_price: 1,
     price: null,
     images: [],
 });
 const formDefault = reactive({
     id: null,
-    name: null,
-    description: null,
-    hire: null,
-    link_url: null,
+    name: '',
+    description: '',
+    hire: '',
+    link_url: '',
     type_price: 1,
     price: null,
     images: [],
 });
 const formRules = {
-    link_url: [value => !value.trim() || (!!value.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
+    link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
+    hire: [value => !!value ? true : 'Este campo es obligatorio'],
+    description: [value => !!value ? true : 'Este campo es obligatorio'],
 };
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
 }
 
-const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
+const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
@@ -213,6 +214,9 @@ const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
 // COMPUTED
+const steps = computed(() => {
+    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value}];
+});
 const changesform = computed(() => {
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
@@ -343,24 +347,20 @@ async function submitDelete () {
     }
 }
 
-
-function edit({ action, experience }) {
+function edit ({action, experience}) {
+    urlsimages.value = [];
     if (action === 'EDIT' && experience) {
-        // Desestructuración y copia de los datos del item
-        const { id, title, description, hire, link_url, type_price, from_price, images } = experience;
-        // Copias profundas de las imágenes
-        const imagesCopy = JSON.parse(JSON.stringify(images));
-
-        // Asignación a los objetos itemSelected y form
-        const data = { id, name: title, description, hire, link_url, type_price, price: from_price, images: imagesCopy };
-        Object.assign(itemSelected, data);
-        Object.assign(form, data);[]
-
-        // Actualización de urlsimages
-        urlsimages.value = [...images];
+        let { id, title, description, hire, url, type_price, from_price, images } = experience;
+        let itemSelectedImages = JSON.parse(JSON.stringify(images));
+        let formImages = JSON.parse(JSON.stringify(images));
+        Object.assign(itemSelected, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: itemSelectedImages });
+        Object.assign(form, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: formImages });
+        images.forEach(img => {
+            urlsimages.value.push(img);
+        });
     } else {
-        // Reiniciar a valores por defecto
-        [itemSelected, form].forEach(obj => Object.assign(obj, { ...formDefault }));
+        Object.assign(itemSelected, {...formDefault});
+        Object.assign(form, {...formDefault});
     }
 }
 defineExpose({ edit });
@@ -370,7 +370,7 @@ provide('experienceStore', experienceStore);
 provide('form', form);
 // provide('itemSelected', itemSelected);
 provide('errors', errors);
-// provide('urlsimages', urlsimages);
+provide('urlsimages', urlsimages);
 provide('validateField', validateField);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);

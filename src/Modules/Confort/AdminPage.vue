@@ -85,6 +85,7 @@ onMounted(async() => {
     if(window.screen.width > 1919){
         numberCardsDefault.value = 14;
     }
+    
     loadMockup();
     loadConforts();
 });
