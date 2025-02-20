@@ -36,7 +36,7 @@
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="flex space-x-[16px]">
                     <div class="flex-1">
-                        <label class="text-sm font-medium mb-2 inline-block">Tipo de alojamiento</label>
+                        <label class="text-sm font-medium mb-2 inline-block">Tipo de alojamiento </label>
                         <BaseSelectField
                             :id="'type_lodging'"
                             :textLabel="'Tipo de alojamiento'"
@@ -394,7 +394,7 @@
 
     const typeLodging = [
         { value: "hotel", label: "Hotel", disabled: false },
-        // { value: "hostal", label: "Hostal", disabled: false },
+        { value: "hostal", label: "Hostal", disabled: false },
         // { value: "pensión", label: "Pensión", disabled: false },
         // {
         //     value: "ca",
