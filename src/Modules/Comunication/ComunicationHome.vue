@@ -109,7 +109,7 @@
                     </a>
                 </template>
             </CardSectionHome>
-            <CardSectionHome title="Te esperamos de vuelta!">
+            <CardSectionHome title="Te esperamos de vuelta">
                 <template #msg>Recuerda a tus huéspedes de su experiencia y motívalos a regresar.</template>
                 <template #canal>
                     <div class="h-full w-full py-2">
