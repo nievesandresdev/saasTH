@@ -439,6 +439,7 @@ const menu_links = ref([
           'ComunicationFromYourWeb',
           //legaltexts
           'GeneralLegal',
+          'Referrals',
           'PoliciesLegal',
           'PolicyPrivacyLegal',
           'PolicyCookiesLegal',
