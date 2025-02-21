@@ -100,7 +100,7 @@ Opciones del servicio:
                     :class="{'opacity-40': form.type_price == 3}"
                     class="text-sm font-medium"
                 >
-                    Є
+                    €
                 </span>
             </div>
         </div>

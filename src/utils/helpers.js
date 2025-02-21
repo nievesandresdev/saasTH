@@ -192,7 +192,6 @@ function $isElementVisible(el) {
   );
 }
 
-
 export {
     $getRoleName,
     $isAssociate,

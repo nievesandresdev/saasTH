@@ -44,7 +44,7 @@
                         {{ item.price?.toFixed(2)?.replace('.', ',') }}$
                     </template>
                     <template v-else-if="item.type_price == 2">
-                        Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}$
+                        Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}€
                     </template>
                     <template v-else>
                         Servicio gratuito
@@ -72,6 +72,9 @@ import SkeletonCard from './components/SkeletonCard.vue';
 
 import { $throttle, $isElementVisible } from '@/utils/helpers';
 
+// COMPOSABLE
+import { usePaginationScrollInfinite } from '@/composables/usePaginationScrollInfinite';
+
 const emit = defineEmits(["click:editItem", "click:editItem", "loadData"]);
 
 // STORE
@@ -88,6 +91,7 @@ const draggableCard = ref(null);
 
 const defNumberCardsToLoad = ref(20);
 
+
 // INJECT
 const confortsData = inject('confortsData');
 const selectedCard = inject('selectedCard');
@@ -97,19 +101,23 @@ const firstLoad = inject('firstLoad');
 const isloadingForm = inject('isloadingForm');
 
 // COMPUTED
-const numberCardsToLoad = computed(() => {
+// const numberCardsToLoad = computed(() => {
 
-    if(firstLoad?.value) return defNumberCardsToLoad.value;
-    if(!firstLoad?.value && paginateData.total == 0) return 0;
-    let remaining = paginateData.total - confortsData.value.length;
-    if(remaining < defNumberCardsToLoad.value && paginateData.total > 0){
-        return remaining;
-    }
-    return defNumberCardsToLoad.value;
+//     if(firstLoad?.value) return defNumberCardsToLoad.value;
+//     if(!firstLoad?.value && paginateData.total == 0) return 0;
+//     let remaining = paginateData.total - confortsData.value.length;
+//     if(remaining < defNumberCardsToLoad.value && paginateData.total > 0){
+//         return remaining;
+//     }
+//     return defNumberCardsToLoad.value;
+// });
+
+const numberItemsLoadCurrent = computed(() => {
+    return confortsData.value.length;
 });
 
 onMounted(() => {
-    initScrollListener();  
+    // initScrollListener();  
 })
 
 // FUNCTION
@@ -153,25 +161,25 @@ const handlerDragEnd = () => {
 };
 
 // PAGINATION
-function initScrollListener() {
-    const container = document.querySelector('#list-confort');
-    container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
-}
+// function initScrollListener() {
+//     const container = document.querySelector('#list-confort');
+//     container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
+// }
 
-function checkLoadMore () {
-    const skeletons = document.querySelectorAll('.skeleton-confort-card');
-    for (let skeleton of skeletons) {
-        if ($isElementVisible(skeleton) && !isloadingForm.value) {
-            loadMore();
-            break;
-        }
-    }
+// function checkLoadMore () {
+//     const skeletons = document.querySelectorAll('.skeleton-confort-card');
+//     for (let skeleton of skeletons) {
+//         if ($isElementVisible(skeleton) && !isloadingForm.value) {
+//             loadMore();
+//             break;
+//         }
+//     }
     
-}
+// }
 
 function loadMore () {
     page.value += 1;
-    loadData();
+    emit('loadData');
 }
 
 //
@@ -190,11 +198,24 @@ function editItem(item) {
     emit('click:editItem', { action: 'EDIT', item});
 }
 
+const { numberCardsToLoad } = usePaginationScrollInfinite(
+    20,
+    firstLoad,
+    paginateData,
+    numberItemsLoadCurrent,
+    'main-content',
+    'skeleton-confort-card',
+    isloadingForm,
+    loadMore
+);
+
 
 </script>
 
 
 <style lang="scss">
+
+
 .shadow-card{
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }

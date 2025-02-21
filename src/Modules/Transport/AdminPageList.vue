@@ -44,7 +44,7 @@
                         {{ item.price?.toFixed(2)?.replace('.', ',') }}$
                     </template>
                     <template v-else-if="item.type_price == 2">
-                        Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}$
+                        Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}€
                     </template>
                     <template v-else>
                         Servicio gratuito
@@ -74,6 +74,9 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 const emit = defineEmits(["click:editItem", "click:editItem", "loadData"]);
 
+// COMPOSABLE
+import { usePaginationScrollInfinite } from '@/composables/usePaginationScrollInfinite';
+
 // STORE
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
@@ -97,19 +100,12 @@ const firstLoad = inject('firstLoad');
 const isloadingForm = inject('isloadingForm');
 
 // COMPUTED
-const numberCardsToLoad = computed(() => {
 
-    if(firstLoad?.value) return defNumberCardsToLoad.value;
-    if(!firstLoad?.value && paginateData.total == 0) return 0;
-    let remaining = paginateData.total - transportsData.value.length;
-    if(remaining < defNumberCardsToLoad.value && paginateData.total > 0){
-        return remaining;
-    }
-    return defNumberCardsToLoad.value;
+const numberItemsLoadCurrent = computed(() => {
+    return transportsData.value.length;
 });
 
-onMounted(() => {
-    initScrollListener();  
+onMounted(() => { 
 })
 
 // FUNCTION
@@ -152,25 +148,7 @@ const handlerDragEnd = () => {
   dragStartIndex.value = null;
 };
 
-//
-function initScrollListener() {
-    const container = document.querySelector('#list-transport');
-    console.log(container);
-    if (container) {
-        container.addEventListener('scroll', $throttle(checkLoadMore, 300), true);
-    }
-}
-
-function checkLoadMore () {
-    const skeletons = document.querySelectorAll('.skeleton-transport-card');
-    for (let skeleton of skeletons) {
-        if ($isElementVisible(skeleton) && !isloadingForm.value) {
-            loadMore();
-            break;
-        }
-    }
-    
-}
+// 
 
 function loadMore () {
     page.value += 1;
@@ -191,6 +169,16 @@ function editItem(item) {
     emit('click:editItem', { action: 'EDIT', item});
 }
 
+const { numberCardsToLoad } = usePaginationScrollInfinite(
+    20,
+    firstLoad,
+    paginateData,
+    numberItemsLoadCurrent,
+    'main-content',
+    'skeleton-transport-card',
+    isloadingForm,
+    loadMore
+);
 
 </script>
 
