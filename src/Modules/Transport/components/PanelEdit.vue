@@ -57,7 +57,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0"
                         @click="submitSave"
                     >
                         Guardar
@@ -72,7 +72,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent != 0)"
                         @click="nextTab"
                     >
                         {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
