@@ -94,6 +94,7 @@ Opciones del servicio:
                     class-input="text-right"
                     name="price"
                     :errors="errors"
+                     @blur:validate="validate('price')"
                 />
                 <span
                     :class="{'opacity-40': form.type_price == 3}"
@@ -107,7 +108,7 @@ Opciones del servicio:
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, inject } from 'vue';
+import { ref, reactive, onMounted, provide, computed, inject, watch } from 'vue';
 // COMPONENTS
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
 import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
@@ -116,12 +117,13 @@ import Editor from "@/components/Forms/Editor.vue";
 
 const form = inject('form');
 const errors = inject('errors');
+const formRules = inject('formRules');
 const validateField = inject('validateField');
 
 // DATA
 const radioItems = [
     {
-        label: 'Uníco',
+        label: 'Úníco',
         value: 1,
     },
     {
@@ -135,9 +137,23 @@ const radioItems = [
     },
 ];
 
+
+
 const validate = (field) => {
     validateField(field);
 }
+
+watch(() => form.type_price, () => {
+    formRules.price =  [
+      (value) => {
+        if (form.type_price === 3) {
+          return true; // Si es 3, no validar
+        }
+        return !!value ? true : 'Este campo es obligatorio';
+      },
+    ];
+    validate('price');
+});
 
 const resetPrice = (v) => {
     let price = v.target.value;

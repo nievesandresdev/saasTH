@@ -190,12 +190,21 @@ const formDefault = reactive({
     price: null,
     images: [],
 });
-const formRules = {
+const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
     hire: [value => !!value ? true : 'Este campo es obligatorio'],
     description: [value => !!value ? true : 'Este campo es obligatorio'],
-};
+    price: [
+      (value) => {
+        if (form.type_price === 3) {
+          return true; // Si es 3, no validar
+        }
+        return !!value ? true : 'Este campo es obligatorio';
+      },
+    ]
+});
+
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
@@ -221,7 +230,7 @@ const changesform = computed(() => {
         (normalize(form.hire) !== normalize(itemSelected.hire)) ||
         (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
         (Number(form.type_price) !== Number(itemSelected.type_price)) ||
-        (Number(form.type_price) !== Number(itemSelected.type_price)) ||
+        (Number(form.price) !== Number(itemSelected.price)) ||
         !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
@@ -367,6 +376,7 @@ defineExpose({ edit });
 //
 provide('transportStore', transportStore);
 provide('form', form);
+provide('formRules', formRules);
 // provide('itemSelected', itemSelected);
 provide('errors', errors);
 provide('urlsimages', urlsimages);

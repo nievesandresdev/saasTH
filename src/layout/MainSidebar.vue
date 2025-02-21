@@ -422,6 +422,8 @@ const menu_links = ref([
           'Facilities',
           'Perfil',
           'Experiences',
+          'Conforts',
+          'Transports',
           'WebAppHome',
           'GeneralSettings',
           'AvailabilitySettings',
