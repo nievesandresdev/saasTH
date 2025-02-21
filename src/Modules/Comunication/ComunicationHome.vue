@@ -156,7 +156,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
+                <!-- <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
                     <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
                     <template #canal>
                         <div class="h-full w-full py-2">
@@ -172,7 +172,7 @@
                             Ver Detalles
                         </a>
                     </template>
-                </CardSectionHome>
+                </CardSectionHome> -->
                 <!-- <CardSectionHome title="Programa de referidos" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
                     <template #msg>Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos.</template>
                     <template #canal>
