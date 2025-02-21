@@ -38,7 +38,7 @@
                                 @blur:validate="validate('subdomain_chain')"
                             />
                             <div class="h-[40px] flex items-center">
-                                <span class="text-sm font-medium inline-block">{{ VUE_APP_ENVIROMENT === 'test' ? '.test' : ''  }}.thehoster.io</span>
+                                <span class="text-sm font-medium inline-block">{{ VUE_APP_ENVIROMENT === 'test' ? '.test' : ''  }}.thehoster.app</span>
                             </div>
                         </div>
                         <div class="h-[40px] flex items-center">
@@ -73,7 +73,7 @@
                     <div class="flex items-start w-full">
                         <div class="flex items-start w-full">
                             <div class="h-[40px] flex items-center">
-                                <span class="text-sm font-medium inline-block">{{ `https://${hotelData.chain.subdomain}${VUE_APP_ENVIROMENT === 'test' ? '.test' : ''}.thehoster.io/` }}</span>
+                                <span class="text-sm font-medium inline-block">{{ `https://${hotelData.chain.subdomain}${VUE_APP_ENVIROMENT === 'test' ? '.test' : ''}.thehoster.app/` }}</span>
                             </div>
                             <BaseTextField
                                 v-model="form.slug_hotel"

@@ -19,7 +19,7 @@
                             @blur:validate="validate('subdomain')"
                         />
                         <div class="h-[40px] flex items-center">
-                            <span class="text-sm font-medium inline-block">.thehoster.io</span>
+                            <span class="text-sm font-medium inline-block">.thehoster.app</span>
                         </div>
                     </div>
                     <div class="h-[40px] flex items-center">
