@@ -47,7 +47,7 @@
                         Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}€
                     </template>
                     <template v-else>
-                        Servicio gratuito
+                        Gratis
                     </template>
                 </p>
             </div>
