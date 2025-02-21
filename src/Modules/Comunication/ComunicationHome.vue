@@ -40,92 +40,94 @@
 
     <!-- promotion section -->
     <section class="px-6 mt-[24px] mb-6">
-        <div class="grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6 pr-[150px] 3xl:pr-0">
-            <CardSectionHome title="Te damos la bienvenida">
-                <template #msg>Cuando un huésped cree su estancia en un {{$formatTypeLodging()}} de tu cuenta, recibirá este mensaje.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('welcomeMsg')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Prepara tu llegada">
-                <template #msg>Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu {{$formatTypeLodging()}}.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('prepareYourArrival')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="¿Qué tal va todo?">
-                <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('howGoing')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Gracias por elegirnos">
-                <template #msg>Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('thankChoosing')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Te esperamos de vuelta">
-                <template #msg>Recuerda a tus huéspedes de su experiencia y motívalos a regresar.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('youBack')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
+        <div class="w-full flex justify-start">
+            <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
+                <CardSectionHome title="Te damos la bienvenida">
+                    <template #msg>Cuando un huésped cree su estancia en un {{$formatTypeLodging()}} de tu cuenta, recibirá este mensaje.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('welcomeMsg')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Prepara tu llegada">
+                    <template #msg>Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu {{$formatTypeLodging()}}.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('prepareYourArrival')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="¿Qué tal va todo?">
+                    <template #msg>Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('howGoing')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Gracias por elegirnos">
+                    <template #msg>Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('thankChoosing')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Te esperamos de vuelta">
+                    <template #msg>Recuerda a tus huéspedes de su experiencia y motívalos a regresar.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('youBack')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+            </div>
         </div>
     </section>
 
@@ -135,75 +137,77 @@
             <div class="flex-1 border-b border-[#BFBFBF]"></div>
         </div>
 
-        <div class="grid grid-cols-3 3xl:grid-cols-5 pr-[150px] 3xl:pr-0 gap-6 mt-6">
-            <CardSectionHome title="Aviso de mensaje en chat">
-                <template #msg>Se utiliza para avisarle al huésped que tiene un mensaje no leído.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('warningMsg')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
-                <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('checkInGuestGuest')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Programa de referidos" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
-                <template #msg>Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('referrals')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Referente - Código de regalo" >
-                <template #msg>Tus huéspedes recibirán un regalo cuando uno de sus referidos utilice su código de programa de referidos.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                        @click="openSidePanel('referent')"
-                    >
-                        Ver Detalles
-                    </a>
-                </template>
-            </CardSectionHome>
+        <div class="w-full flex justify-start">
+            <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
+                <CardSectionHome title="Aviso de mensaje en chat">
+                    <template #msg>Se utiliza para avisarle al huésped que tiene un mensaje no leído.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('warningMsg')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
+                    <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('checkInGuestGuest')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <!-- <CardSectionHome title="Programa de referidos" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
+                    <template #msg>Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('referrals')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome> -->
+                <CardSectionHome title="Referente - Código de regalo" >
+                    <template #msg>Tus huéspedes recibirán un regalo cuando uno de sus referidos utilice su código de programa de referidos.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('referent')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+            </div>
         </div>
     </section>
 

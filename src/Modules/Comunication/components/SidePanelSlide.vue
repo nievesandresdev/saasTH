@@ -120,7 +120,7 @@ const values = {
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
         trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
-        issue: `¿Todo listo [nombreHotel]?`,
+        issue: `¿Todo listo [nombreHuésped]?`,
         descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
         channels:[
@@ -185,8 +185,8 @@ const values = {
     'checkInGuestGuest':{
         title: 'Check-in Huésped - Huésped',
         description: 'Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
-        issue: 'Tienes un chat pendiente en la WebApp',
+        trigger: 'El huésped envía una invitación a otro huésped, a completar su Check-in a través de uno de los canales disponibles.',
+        issue: 'Completa ahora tu Check-in online en la WebApp',
         descriptionContent:'',
         itemsContent:[],
         channels:[
