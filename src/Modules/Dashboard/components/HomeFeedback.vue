@@ -29,7 +29,7 @@
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="row-span-2 flex gap-6 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                <div class="px-4 py-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <p class="text-xs font-semibold leading-[130%]">STAY</p>
                     <!--caritas STAY -->
                     <div class="flex justify-between mt-[13px]">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                <div class="px-4 py-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <p class="text-xs font-semibold leading-[130%]">POST-STAY</p>
                     <!--caritas POST-STAY -->
                     <div class="flex justify-between mt-[13px]">
