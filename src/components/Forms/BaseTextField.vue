@@ -12,9 +12,9 @@
                 :id="inputId"
                 :type="type"
                 :value="inputValue"
-                @input="updateValue($event.target.value)"
+                @input="handleInput"
                 class="w-full hinput border rounded-[6px]"
-                :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? 'cursor-not-allowed' : 'hinput-green'}`"
+                :class="customInputClass"
                 :placeholder="placeholder"
                 :minlength="min"
                 :maxlength="max"
@@ -24,6 +24,7 @@
                 @click="onClick"
                 @blur="handleBlur"
                 :disabled="disabled"
+                :step="type === 'number' ? '0.01' : undefined"
             >
             <div v-if="(safeErrors[name] && safeErrors[name] != true) || max" class="flex w-full" :class="!(safeErrors[name] && safeErrors[name] != true) && max ? 'justify-end' : 'justify-between'">
                 <p v-if="safeErrors[name] && safeErrors[name] != true" class="text-[10px] font-medium text-left mt-[4px] text-red-600 flex items-center">
@@ -81,16 +82,14 @@ const props = defineProps({
     error: { type: Boolean, default: false },
     errors: {
         type: Object,
-        default: () => ({}), // Valor seguro por defecto
+        default: () => ({}),
     },
     disabled: { type: Boolean, default: false },
     inputId: { type: String, default: 'InputData' },
+    decimalPlaces: { type: Number, default: 2 }, // Número de decimales
 });
 
-// Crea una copia segura del prop `errors` para evitar warnings
-const safeErrors = computed(() => {
-    return props.errors || {};
-});
+const safeErrors = computed(() => props.errors || {});
 
 const inputValue = ref(props.modelValue);
 
@@ -121,13 +120,23 @@ const customInputClass = computed(() => {
     return c;
 });
 
-const updateValue = (value) => {
+const handleInput = (event) => {
+    let value = event.target.value;
+
+    if (props.type === 'number') {
+        value = value.replace(/[^0-9.]/g, ''); // Permitir solo números y puntos decimales
+        if (value) {
+            value = parseFloat(value).toFixed(props.decimalPlaces); // Formatear con decimales
+        }
+    }
+
     inputValue.value = value;
+    emit('update:modelValue', value);
 };
 
 const onClick = () => {
     emit('click');
-}
+};
 </script>
 
 <style lang="scss" scoped>

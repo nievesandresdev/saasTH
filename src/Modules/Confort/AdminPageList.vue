@@ -41,7 +41,7 @@
                 </div>
                 <p class="text-[14px] font-semibold htext-black-100 leading-[120%] mt-[12px]">
                     <template v-if="item.type_price == 1">
-                        {{ item.price?.toFixed(2)?.replace('.', ',') }}$
+                        {{ item.price?.toFixed(2)?.replace('.', ',') }}€
                     </template>
                     <template v-else-if="item.type_price == 2">
                         Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}€

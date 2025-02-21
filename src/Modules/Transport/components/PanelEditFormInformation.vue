@@ -89,9 +89,6 @@ Opciones del servicio:
                     placeholder="0,00"
                     class-content="w-[80px]"
                     class-input="text-right"
-                    name="price"
-                    :errors="errors"
-                    @blur:validate="validate('price')"
                 />
                 <span
                     :class="{'opacity-40': form.type_price == 3}"
@@ -120,7 +117,7 @@ const validateField = inject('validateField');
 // DATA
 const radioItems = [
     {
-        label: 'Úníco',
+        label: 'Único',
         value: 1,
     },
     {
