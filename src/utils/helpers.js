@@ -118,9 +118,13 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
 const $urlBaseWebapp = (subdomainChain, slugHotel) => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain).replace('webapp', slugHotel);
-  console.log(urlBase, GUEST_URL, 'urlBase');
+  
+  // Reemplazar el dominio .io por .app
+  urlBase = urlBase.replace('.io', '.app');
+
   return urlBase;
-}
+};
+
 
 const $formatImage = (payload) => {
   const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
