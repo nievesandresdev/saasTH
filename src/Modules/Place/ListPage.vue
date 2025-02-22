@@ -21,7 +21,7 @@
                                     alt="1.TH.Filters"
                                     class="w-6 h-6"
                                 >
-                            </button>
+                            </button> 
                         </div>
                         <SwitchShowCategory />
                     </div>
