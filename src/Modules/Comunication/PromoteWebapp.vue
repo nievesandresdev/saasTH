@@ -39,110 +39,128 @@
     </section>
 
     <section class="px-6 mt-6 mb-20">
-        <div class="grid grid-cols-3 3xl:grid-cols-5 gap-6 mt-6 3xl:pr-0 pr-[150px]">
-            <CardSectionHome title="Desde tu OTA "  period="pre-stay">
-                <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva para tus huéspedes.</template>
-                <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">OTA</h1></template>
-                <template #button>
-                    <router-link :to="{ name : 'comunicationInvitationByBooking'}"
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                    >
-                        Instrucciones
-                    </router-link>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Desde tu PMS"  period="pre-stay">
-                <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva en tu PMS.</template>
-                <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">PMS</h1></template>
-                <template #button>
-                    <router-link :to="{ name : 'ComunicationFromPMS'}"
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                    >
-                        Instrucciones
-                    </router-link>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Señalética" period="stay">
-                <template #msg>Utiliza medios físicos con un código QR para promocionar el acceso a tu WebApp.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2.5">
-                        <img class="mx-auto w-5 h-5" src="/assets/icons/1.TH.QR.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <router-link :to="{ name : 'ComunicationSignage'}"
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
-                    >
-                        Instrucciones
-                    </router-link>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Código QR en TV" period="stay">
-                    <template #msg>Ofrece acceso a tu WebApp desde las pantallas de los televisores de tu {{$formatTypeLodging()}}.</template>
+        <div class="w-full flex justify-start">
+            <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
+                <CardSectionHome title="Desde tu OTA "  period="pre-stay">
+                    <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva para tus huéspedes.</template>
+                    <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">OTA</h1></template>
+                    <template #button>
+                        <router-link :to="{ name : 'comunicationInvitationByBooking'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
+                            Instrucciones
+                        </router-link>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Desde tu PMS"  period="pre-stay">
+                    <template #msg>Aquí verás el mensaje que puedes incluir en el e-mail de confirmación de reserva en tu PMS.</template>
+                    <template #canal><h1 class="text-[10px] font-bold leading-[396%] text-center">PMS</h1></template>
+                    <template #button>
+                        <router-link :to="{ name : 'ComunicationFromPMS'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
+                            Instrucciones
+                        </router-link>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Señalética" period="stay">
+                    <template #msg>Utiliza medios físicos con un código QR para promocionar el acceso a tu WebApp.</template>
                     <template #canal>
                         <div class="h-full w-full py-2.5">
-                            <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.PC.svg" alt="">
+                            <img class="mx-auto w-5 h-5" src="/assets/icons/1.TH.QR.svg" alt="">
                         </div>
                     </template>
                     <template #button>
-                        <router-link :to="{ name : 'ComunicationFromQRTV'}"
+                        <router-link :to="{ name : 'ComunicationSignage'}"
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                        >
+                            Instrucciones
+                        </router-link>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Código QR en TV" period="stay">
+                        <template #msg>Ofrece acceso a tu WebApp desde las pantallas de los televisores de tu {{$formatTypeLodging()}}.</template>
+                        <template #canal>
+                            <div class="h-full w-full py-2.5">
+                                <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.PC.svg" alt="">
+                            </div>
+                        </template>
+                        <template #button>
+                            <router-link :to="{ name : 'ComunicationFromQRTV'}"
+                                class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
+                            >
+                                Instrucciones
+                            </router-link>
+                        </template>
+                </CardSectionHome>
+                <CardSectionHome title="Desde tu Web" period="pre-stay" special>
+                    <template #msg>Incluye en tu sitio web un enlace de invitación a tu WebApp.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2.5">
+                            <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.WEB.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <router-link :to="{ name : 'ComunicationFromYourWeb'}"
                             class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
                         >
                             Instrucciones
                         </router-link>
                     </template>
-            </CardSectionHome>
-            <CardSectionHome title="Desde tu Web" period="pre-stay" special>
-                <template #msg>Incluye en tu sitio web un enlace de invitación a tu WebApp.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2.5">
-                        <img class="mx-auto w-5 h-5" src="/assets/icons/2.TH.ÍCONOS.COMUNICACIONES.WEB.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <router-link :to="{ name : 'ComunicationFromYourWeb'}"
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
-                    >
-                        Instrucciones
-                    </router-link>
-                </template>
-            </CardSectionHome>
+                </CardSectionHome>
 
-            <CardSectionHome title="Invitar huésped a WebApp" special>
-                <template #msg>Invita a tus huéspedes a tu WebApp por correo electrónico.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
-                        @click="openSidePanel('manualInvitation')"
-                    >
+                <CardSectionHome title="Invitar huésped a WebApp" special>
+                    <template #msg>Invita a tus huéspedes a tu WebApp por correo electrónico.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
+                            @click="openSidePanel('manualInvitation')"
+                        >
+                            Ver detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Invitación entre huéspedes" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
+                    <template #msg>Tus huéspedes podrán invitar a otros a unirse a tu WebApp a través de varios medios.</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/1.TH.MOBILE2.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
+                            @click="openSidePanel('betweenGuests')"
+                        >
                         Ver detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-            <CardSectionHome title="Invitación entre huéspedes" :multichannel="['material-symbols-light_mail-outline','Frame 2613488','Frame 2613489','Frame 2613557']">
-                <template #msg>Tus huéspedes podrán invitar a otros a unirse a tu WebApp a través de varios medios.</template>
-                <template #canal>
-                    <div class="h-full w-full py-2">
-                        <img class="mx-auto w-6 h-6" src="/assets/icons/1.TH.MOBILE2.svg" alt="">
-                    </div>
-                </template>
-                <template #button>
-                    <a 
-                        href="javascript:void(0)" 
-                        class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8 block"
-                        @click="openSidePanel('betweenGuests')"
-                    >
-                    Ver detalles
-                    </a>
-                </template>
-            </CardSectionHome>
-                
+                        </a>
+                    </template>
+                </CardSectionHome>
+                <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
+                    <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
+                    <template #canal>
+                        <div class="h-full w-full py-2">
+                            <img class="mx-auto w-6 h-6" src="/assets/icons/material-symbols-light_mail-outline.svg" alt="">
+                        </div>
+                    </template>
+                    <template #button>
+                        <a 
+                            href="javascript:void(0)" 
+                            class="hbtn-primary p-2 text-xs font-semibold leading-[114%] h-8"
+                            @click="openSidePanel('checkInGuestGuest')"
+                        >
+                            Ver Detalles
+                        </a>
+                    </template>
+                </CardSectionHome>
+            </div>
         </div>
     </section>
     <SidePanel />
