@@ -107,7 +107,7 @@ const formFilter = reactive({
     visibility: null,
     recommendated: false,
     search_terms: null,
-    all_cities: false,
+    all_cities: true,
     current_city: null,
     distances: [],
 });
@@ -122,17 +122,17 @@ const formFilterDefault = reactive({
     visibility: null,
     recommendated: false,
     search_terms: null,
-    all_cities: false,
+    all_cities: true,
     current_city: null,
     distances: [],
 });
 const filtersSelected = reactive({
-    all_cities: false,
+    all_cities: true,
     distances: [],
     points: [],
 });
 const filtersSelectedDefault = reactive({
-    all_cities: false,
+    all_cities: true,
     distances: [],
     points: [],
 });
@@ -221,7 +221,7 @@ provide('categoryCurrent', categoryCurrent);
 provide('typePlaceCurrent', typePlaceCurrent);
 
 const emptyFilters = computed(() => {
-    return !filtersSelected.points?.length && !filtersSelected.distances?.length && !filtersSelected.all_cities;
+    return !filtersSelected.points?.length && !filtersSelected.distances?.length && filtersSelected.all_cities;
 });
 provide('emptyFilters', emptyFilters);
 
@@ -299,7 +299,7 @@ function resetDataPage () {
     formFilter.visibility = null;
     formFilter.recommendated = false;
     formFilter.search_terms = null;
-    formFilter.all_cities = false;
+    formFilter.all_cities = true;
     formFilter.distances = [];
     page.value = 1;
     placesData.value = [];
