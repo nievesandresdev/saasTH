@@ -47,7 +47,6 @@
             </div>
             <!-- {{form}}
             {{formDefault}} -->
-            {{errors}}
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
