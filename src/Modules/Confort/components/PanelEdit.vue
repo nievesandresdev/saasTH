@@ -237,6 +237,8 @@ const steps = computed(() => {
     return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value }];
 });
 const changesform = computed(() => {
+    // console.log(form.price, 'form');
+    // console.log(itemSelected.price, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.hire) !== normalize(itemSelected.hire)) ||
@@ -371,10 +373,11 @@ function edit ({action, item}) {
     if (action === 'EDIT') {
         let { id, name, description, hire, link_url, type_price, price, images } = item;
 
-        let numPrice = parseFloat(price);
-        if (!isNaN(numPrice)) {
-        numPrice = numPrice.toFixed(2);
+        let numPrice = price ? parseFloat(price) : null;
+        if (numPrice && !isNaN(numPrice)) {
+            numPrice = numPrice.toFixed(2);
         }
+
 
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
