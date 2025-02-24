@@ -137,7 +137,7 @@
             <div class="flex-1 border-b border-[#BFBFBF]"></div>
         </div>
 
-        <div class="w-full flex justify-start">
+        <div class="w-full flex justify-start mt-6">
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
                 <CardSectionHome title="Aviso de mensaje en chat">
                     <template #msg>Se utiliza para avisarle al huésped que tiene un mensaje no leído.</template>
