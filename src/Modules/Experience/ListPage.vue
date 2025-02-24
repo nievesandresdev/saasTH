@@ -6,7 +6,7 @@
                 v-if="!hotelStore.hotelData.show_experiences"
                 class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
             >
-                La sección <span class="font-semibold">Experiencias</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
+            Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar en la WebApp" para hacerla visible.
             </div>
             <div>
                 <div class="pt-6">
@@ -15,7 +15,7 @@
                             <InputSearch @reloadExperiences="reloadExperiences()" />
                             <button @click="openModalFilter()">
                                 <img
-                                    :src="`assets/icons/1.TH.${emptyFilters ? 'Filters' : 'Filters.active'}.svg`"
+                                    :src="`/assets/icons/1.TH.${emptyFilters ? 'Filters' : 'Filters.active'}.svg`"
                                     alt="1.TH.Filters"
                                     class="w-6 h-6"
                                 >

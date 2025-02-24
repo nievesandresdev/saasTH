@@ -48,6 +48,7 @@ export const useExperienceStore = defineStore('experience', () => {
 
     async function $updateVisibility (params) {
         let newParams = getHotelParams(params);
+        console.log(newParams);
         const response = await experienceService.updateVisibilityApi(newParams);
         return response;
         const { ok } = response

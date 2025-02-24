@@ -68,7 +68,7 @@
                         class="leading-[110%] underline text-sm font-medium"
                         @click="prevTab"
                     >
-                        {{ stepCurrent === 0 ? 'Cancelar' : 'Volver a atrás' }}
+                        {{ stepCurrent === 0 ? 'Cancelar' : 'Atrás' }}
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
@@ -359,10 +359,16 @@ function edit ({action, experience}) {
     urlsimages.value = [];
     if (action === 'EDIT' && experience) {
         let { id, title, description, hire, url, type_price, from_price, images } = experience;
+
+                let numPrice = parseFloat(from_price);
+        if (!isNaN(numPrice)) {
+        numPrice = numPrice.toFixed(2);
+        }
+
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: itemSelectedImages });
-        Object.assign(form, { id, name: title, description, hire, link_url: url, type_price, price: from_price, images: formImages });
+        Object.assign(itemSelected, { id, name: title, description, hire, link_url: url, type_price, price: numPrice, images: itemSelectedImages });
+        Object.assign(form, { id, name: title, description, hire, link_url: url, type_price, price: numPrice, images: formImages });
         images.forEach(img => {
             urlsimages.value.push(img);
         });

@@ -77,7 +77,7 @@ watch(modelActive, (valNew, valOld) => {
 
 // COMPUTED
 const searchText = computed(() => {
-   return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
+   return paginateData.total == 1 ? `${paginateData.total} servicio de transporte` :  `${paginateData.total} servicios de transportes`;
 });
 
 onMounted(async() => {

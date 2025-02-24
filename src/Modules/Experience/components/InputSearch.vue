@@ -3,7 +3,7 @@
         <BaseTextField
             v-model="formFilter.search"
             prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
-            placeholder="Buscar lugar..."
+            placeholder="Buscar actividad..."
             class-content="w-[345px]"
             @click="onClick"
         ></BaseTextField>

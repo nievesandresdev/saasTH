@@ -147,6 +147,18 @@ watch(() => form.type_price, () => {
     validate('price');
 });
 
+watch(() => form.price, () => {
+    formRules.price =  [
+      (value) => {
+        if (form.type_price === 3) {
+          return true; // Si es 3, no validar
+        }
+        return !!value ? true : 'Este campo es obligatorio';
+      },
+    ];
+    validate('price');
+});
+
 const resetPrice = (v) => {
     let price = v.target.value;
     if (price == 3) {
