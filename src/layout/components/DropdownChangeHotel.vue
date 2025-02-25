@@ -70,7 +70,7 @@
                             </div> -->
                         </div>
                     </div>
-                    <p class="text-xs font-semibold htext-gray-500 capitalize">{{ hotelData.type }}
+                    <p class="text-xs font-semibold htext-gray-500 capitalize">{{ $formatTypeLodging() }}
                         <template v-if="hotelData.zone">
                             - {{ hotelData.zone }}
                         </template>
@@ -235,7 +235,7 @@
                                         </div>
                                         
                                         <p class="text-xs font-semibold htext-gray-500 capitalize">
-                                            {{ hotel.type }}
+                                            {{ formatTypeLodgingList(hotel.type) }}
                                             <template v-if="hotel.zone">
                                                 - {{ hotel.zone }} 
                                             </template>
@@ -381,6 +381,17 @@ const toggleTooltip = (index, event) => {
     };
   }
 };
+
+const formatTypeLodgingList = (type) => {
+  
+  const typeLodging = {
+    hotel: "hotel",
+    at: "apartamento",
+    vft: "apartamento",
+  }
+
+  return typeLodging?.[type.toLowerCase()] ?? "hotel";
+}
 
 const handlehHotelDefault = async (hotel, event) => {
   event.stopPropagation();

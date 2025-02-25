@@ -21,6 +21,16 @@
                 :notify="false"
             />
             <TabLink
+                v-if="atLeastOneCheckin.length"
+                label="Registros"
+                :loading=" guestIdDefault ? false : true"
+                :params="{ stayId: route.params.stayId}"
+                :query="{ g: atLeastOneCheckin[0].guestId }"
+                viewName="CheckinDetail"
+                :selected="route.name == 'CheckinDetail'"
+                :notify="false"
+            />
+            <TabLink
                 label="Seguimiento"
                 :loading=" guestIdDefault ? false : true"
                 viewName="StayQueryDetail"
@@ -73,13 +83,16 @@ const guestIdDefault = ref(null)
 const channelChat = ref(null);
 const channelSession = ref(null);
 const pusher = ref(null);
+const atLeastOneCheckin = ref([]);
 
 watch(() => route.params.stayId, async (newId, oldId) => {
     countPendingChats.value = await chatStore.$pendingCountByStay(route.params.stayId);
     countPendingQueries.value = await queryStore.$pendingCountByStay(route.params.stayId);
     guestIdDefault.value = null;
     staySessionsStore.$getDefaultGuestIdAndSessions(route.params.stayId).then((res)=>{
-        guestIdDefault.value = res?.guests[0].guestId;
+        
+        atLeastOneCheckin.value = res?.guests.filter(g => Boolean(g.complete_checkin_data));
+        guestIdDefault.value = res?.guests[0].guestId; 
         session.value =  res?.sessions ? res?.sessions[0] : null;
     });
 

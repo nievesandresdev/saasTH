@@ -70,7 +70,7 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
-        mockupStore.$setIframeUrl('/');
+        mockupStore.$setIframeUrl('/alojamiento/instalaciones');
         mockupStore.$reloadIframe();
     }
 </script>

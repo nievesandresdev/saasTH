@@ -15,7 +15,7 @@
     <section class="px-6 my-6">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
             <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
-            <p class="text-sm mt-2">Configura el mensaje de respuesta del hotel, que aparecerá cuando el huésped proporcione su feedback.</p>
+            <p class="text-sm mt-2">Configura el mensaje de respuesta del {{$formatTypeLodging()}}, que aparecerá cuando el huésped proporcione su feedback.</p>
             <div class="mt-4" v-if="form.pre_stay_thanks">
                 <p class="text-sm font-semibold leading-[120%] mb-2">Mensaje de respuesta cuando el huésped proporcione el feedback</p>
                 <AutoTextArea 
@@ -66,6 +66,7 @@
 </template>
 <script setup>
 import { ref, reactive, onMounted, computed, provide } from 'vue'
+import { $formatTypeLodging } from '@/utils/helpers'
 import Head from './components/HeadSettings.vue'
 import QueryTerms from './components/QueryTerms.vue'
 import AutoTextArea from '@/components/Forms/AutoTextArea.vue'

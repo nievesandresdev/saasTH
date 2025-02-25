@@ -302,7 +302,6 @@ const connectPusher = async () => {
 
     channelQuery.value = pusher.value.subscribe(channelNameQuery);
     channelQuery.value.bind('App\\Events\\NotifySendQueryEvent', async (data) => {
-      //
       // console.log('test NotifySendQueryEvent',data)
       if(data.countPendingQueries){
         countPendingQueries.value = data.countPendingQueries;
@@ -314,11 +313,17 @@ const connectPusher = async () => {
 
     channelChat.value = pusher.value.subscribe(channelNameChat);
     channelChat.value.bind('App\\Events\\NotifyUnreadMsg', async (data) => {
+      // console.log('test NotifyUnreadMsg',data)
+      // console.log('test NotifyUnreadMsg',authStore.user?.id)
+      if(authStore.user?.id == data?.user_id){
         notifyChat(data)
+      }
+        
     });
     
     channelStay.value = pusher.value.subscribe(channelNameStay);
     channelStay.value.bind('App\\Events\\NotifyStayHotelEvent', async (data) => {
+      // console.log('test NotifyStayHotelEvent',data)
         if('pendingCountChats' in data) countPendingChats.value = data.pendingCountChats;
     });
 };
@@ -387,7 +392,7 @@ const menu_links = ref([
       {
         title: 'Estancias',
         icon: '1.TH.ESTANCIAS.MM',
-        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage'],
+        include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage','CheckinDetail'],
         url: '/estancias',
         permissionName: 'estancias',
         subscription: true
@@ -417,6 +422,8 @@ const menu_links = ref([
           'Facilities',
           'Perfil',
           'Experiences',
+          'Conforts',
+          'Transports',
           'WebAppHome',
           'GeneralSettings',
           'AvailabilitySettings',
@@ -434,13 +441,17 @@ const menu_links = ref([
           'ComunicationFromYourWeb',
           //legaltexts
           'GeneralLegal',
+          'Referrals',
           'PoliciesLegal',
           'PolicyPrivacyLegal',
           'PolicyCookiesLegal',
+          //checkin
+          'CheckinGeneral',
+          'CheckinForms',
           //others
           'Configuracion',
           'PromoteWebApp',
-          'Appearence'
+          'Appearence',
         ],
         url: '/webapp',
         permissionName: 'webapp',

@@ -1,5 +1,9 @@
 <template>
-    <section class="w-full sticky bottom-0 left-0 hbg-white-100 p-6 border-t hborder-gray-400 z-10">
+    <section class=" bottom-0  hbg-white-100 p-6 border-t hborder-gray-400 z-10" :class="{ 'fixed': forceBottom , 'sticky w-full  left-0': !forceBottom}" :style="{ 'width': forceBottom ? 'calc(100% - 650px)' : '' }" >
+        <!-- <section 
+        class="fixed bottom-0 bg-white p-6 border-t border-gray-400 z-10"
+        :style="`width: calc(100% - 650px)`"
+    > -->
         <div class="flex w-full justify-between">
             <button 
                 class="text-base leading-[110%] font-medium underline"
@@ -30,8 +34,13 @@ defineProps({
         type:Boolean,
         default:false
     },
+    forceBottom:{
+        type:Boolean,
+        default:false
+    }
 })
 const emit = defineEmits(['cancel','submit'])
+
 
 function submit(){
     emit('submit')

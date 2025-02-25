@@ -4,7 +4,7 @@
         <div class="flex flex-col justify-end">
             <div
                 class="card_message mb-6 inline-block"
-                v-for="msg in messages" :key="msg"
+                v-for="msg in chatStore.messages" :key="msg"
                 :class="{'ml-auto':msg.by == 'Hoster','mr-auto':msg.by !== 'Hoster'}"
             >
                 <p v-if="msg.by == 'Guest' && msg.messageable" class="text-sm font-medium mb-2">{{$capitalizeFirstLetter(msg.messageable.name)}}</p>
@@ -26,7 +26,7 @@
             </div>
         </div>
         <!--END card message -->
-        <template v-if="messages.length == 0">
+        <template v-if="chatStore.messages.length == 0">
             <div class="flex flex-col h-10 w-full">
                 <img class="mt-auto mx-auto w-[330px] h-[294px]" src="/assets/icons/Chat_Conversation.svg" alt="">
                 <p class="text-center mt-8 htext-gray-500 text-sm font-medium mb-auto mx-auto max-w-[710px]">
@@ -40,6 +40,9 @@
 import { watch , onMounted } from 'vue'
 import { $capitalizeFirstLetter } from '@/utils/textWritingTypes'
 
+import { useChatStore } from '@/stores/modules/chat/chat'
+const chatStore = useChatStore();
+
 const props = defineProps({
     messages: {
         type: Array,
@@ -47,7 +50,7 @@ const props = defineProps({
     },
 })
 watch(
-    () => props.messages,
+    () => chatStore.messages,
     (newValue, oldValue) => {
         setTimeout(scrollToBottom, 100);
     },

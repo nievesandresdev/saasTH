@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import {
     inviteToHotelApi,
+    findByIdApi
 } from '@/api/services/guest/guest.services'
 
 export const useGuestStore = defineStore('guest', () => {
@@ -12,16 +13,23 @@ export const useGuestStore = defineStore('guest', () => {
     // ACTIONS
     async function $inviteToHotel (data) {
         const response = await inviteToHotelApi(data)
-        console.log('inviteToHotel',response)
         const { ok } = response   
         if(ok){
             return response.data
         }
     }
     
+    async function $findById (data) {
+        const response = await findByIdApi(data)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     return {
-        $inviteToHotel
+        $inviteToHotel,
+        $findById
     }
 
 })

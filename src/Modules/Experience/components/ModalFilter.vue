@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="">
+                <!-- <div class="">
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Politica de cancelación
                     </label>
@@ -72,8 +72,8 @@
                             </p>
                         </div>
                     </div>
-                </div>
-                <div class="">
+                </div> -->
+                <!-- <div class="">
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Duración
                     </label>
@@ -97,9 +97,9 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- {{formModalFilter}} -->
-                <div class="">
+                <!-- <div class="">
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Valoraciones
                     </label>
@@ -123,7 +123,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="">
                     <label class="mb-0 text-base font-medium block htext-black-100">
                         Rango de precio

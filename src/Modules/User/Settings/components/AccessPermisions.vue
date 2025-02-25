@@ -7,7 +7,7 @@
         <div class="flex justify-between items-center text-left">
           <span class="text-[18px] font-medium text-[#333]">Permisos de la plataforma</span>
           <div class="flex items-center gap-1" :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
-            <span class="text-sm font-semibold">Todos</span>
+            <span class="text-sm font-semibold">Todos {{ props.openComponent }}</span>
             <BaseSwichInput
               v-model="selectAll"
               id="swich-visible-experience"
@@ -77,6 +77,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  toggleAllPermissions: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(['update:permissions']);
@@ -92,7 +96,13 @@ onMounted(() => {
   if (selectAll.value && !isDisabled.value) {
     toggleAllPermissions();
   }
+
+  if(props.toggleAllPermissions){
+    selectAll.value = true;
+    toggleAllPermissions();
+  }
 });
+
 
 const operationAccess = ref([
   { name: 'Estancias', selected: false, value: 'estancias', disabled: false },

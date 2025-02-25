@@ -135,7 +135,7 @@
 import { ref, provide, reactive, onMounted, computed } from 'vue';
 
 import ModalNoSave from '@/components/ModalNoSave.vue';
-
+import { $formatTypeLodging } from '@/utils/helpers'
 // STATE
 //
 import { useGalleryStore } from '@/stores/modules/gallery';
@@ -159,7 +159,7 @@ import ModalDelete from './components/ModalDelete';
 
 const PLACE = 'image-place';
 const HOTEL = 'image-hotel';
-const ITEMS_TABS = [{name: 'Mi alojamiento', value: HOTEL}, {name: 'Destino', value: PLACE}];
+const ITEMS_TABS = [{name: 'Mi '+$formatTypeLodging(), value: HOTEL}, {name: 'Destino', value: PLACE}];
 
 // DATA
 const tabCurrent = ref(HOTEL);

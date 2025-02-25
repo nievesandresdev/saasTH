@@ -28,27 +28,27 @@ export const usePlaceStore = defineStore('place', () => {
     }
     
     async function $getCategoriesByType (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.getCategoriesByTypeApi(newParams);
         return response;
     }
     async function $getTypePlaces (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.getTypePlacesApi();
         return response;
     }
     async function $getAll (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.getAllApi(newParams);
@@ -56,9 +56,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
 
     async function $getDataUtil (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.getDataUtilApi(newParams);
@@ -69,9 +69,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
 
     async function $updateVisibility (params, config = {}) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.updateVisibilityApi(newParams, config);
@@ -82,9 +82,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
 
     async function $updateRecommendation (params, config = {}) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...params
         }
         const response = await placeService.updateRecommendationApi(newParams, config);
@@ -95,9 +95,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
     
     async function $updatePosition (body) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newBody = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...body,
         }
         const response = await placeService.updatePositionApi(newBody, {showPreloader: false});
@@ -107,9 +107,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
 
     async function $update (body) {
-        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
         let newBody = {
-            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            hotel: { id: idHotel, name: nameName, zone: cityId },
             ...body,
         }
         // console.log(newBody);

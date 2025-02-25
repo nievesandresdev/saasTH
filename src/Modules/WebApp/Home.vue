@@ -73,11 +73,11 @@
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.icon.instalaciones.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
-                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Alojamiento</h3>
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">{{ $formatTypeLodging(true) }}</h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center mt-2 group-hover:text-red-200">
-                                    <p class="text-sm">Presenta a tus huéspedes tu alojamiento y sus instalaciones</p>
+                                    <p class="text-sm">Presenta a tus huéspedes tu {{ $formatTypeLodging() }} y sus instalaciones</p>
                                 </div>
                             </router-link>
                         </div>
@@ -118,7 +118,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2">
-                                    <p class="text-sm">Tus huéspedes podrán comunicarse directamente con el staff de tu hotel</p>
+                                    <p class="text-sm">Tus huéspedes podrán comunicarse directamente con el staff de tu {{ $formatTypeLodging() }}</p>
                                 </div>
                             </router-link>
                         </div>

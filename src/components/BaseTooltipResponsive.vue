@@ -77,4 +77,7 @@
     .width-l {
         width: 500px;
     }
+    .width-xl {
+        width: 650px;
+    }
 </style>

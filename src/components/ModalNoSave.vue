@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="visitNow" class="fixed inset-0 z-[9999] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <div v-if="visitNow" class="fixed inset-0 z-[99999] flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute w-full inset-0 bg-[#00000080]"></div>
       </div>
@@ -27,11 +27,11 @@
               </button>
           </div>
           <div class="mt-4 flex justify-between" v-if="type === 'exit_save'">
-              <button @click="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
+              <button @click.stop="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
                   Salir sin guardar
               </button>
               
-              <button  @click="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
+              <button  @click.stop="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">
                   {{ textbtn ?? 'Guardar cambios' }}
               </button>
           </div>
@@ -96,6 +96,7 @@ const showModal = ref(false);
 const visitNow = ref(false);
 const intendedRoute = ref(null);
 
+
 watch(() => props.open, (newVal) => {
   showModal.value = newVal;
   utilStore.$setHasUnsavedChanges(newVal)
@@ -140,7 +141,7 @@ function hiddenModal() {
 
 function saveChanges() {
   emit('saveChanges');
-  closeModal();
+  onlyCloseModal();
 }
 
 const goLinkUrl = () => {

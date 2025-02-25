@@ -1,5 +1,5 @@
 <template>
-    <div class="relative cursor-pointer" :class="{ 'opacity-50 cursor-not-allowed': disabled }">
+    <div class="relative" :class="{ 'opacity-50 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }">
       <input
         type="checkbox"
         class="sr-only"
@@ -9,7 +9,8 @@
         @change="toggle"
       />
       <label 
-        :for="id" class="cursor-pointer group"
+        :for="id" class="group"
+        :class="{ 'opacity-50 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }"
         @mouseover="isHover = true"
         @mouseout="isHover = false"
       >
@@ -18,8 +19,8 @@
           class="w-[1.875rem] h-[1.125rem] rounded-full transition-colors"
           :style="{
             backgroundColor: internalValue
-              ? (isHover ? enableColorHover : enableColor)
-              : (isHover ? disabledColorHover : disabledColor)
+              ? (isHover && !disabled ? enableColorHover : enableColor)
+              : (isHover && !disabled ? disabledColorHover : disabledColor)
           }"
         ></div>
 
