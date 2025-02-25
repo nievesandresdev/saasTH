@@ -10,7 +10,7 @@
             </div>
             <div class="ml-[4px]">
                 <p class="text-[14px] font-medium"><span class="text-[22px]">{{ timeRespondedLastThirtyDays?.toFixed(0) || '-' }}</span> h de media en contestar a una reseña una vez publicada</p>
-                <p v-if="percentageTimeResponseTwoMonthPrevious" class="mt-[4px] text-[12px] font-medium" :class="increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">Has {{ increasedResponseTime ? 'aumentado' : 'disminuido' }} un <span class="text-sm font-semibold" :class="increasedResponseTime ? 'htext-green-600':'text-[#FF6666]'">{{ percentageTimeResponseTwoMonthPreviousComputed }}%</span> tu tiempo de respuesta en {{ nameMonthPrev }}</p>
+                <p v-if="percentageTimeResponseTwoMonthPrevious" class="mt-[4px] text-[12px] font-medium" :class="increasedResponseTime ? 'text-[#FF6666]' : 'htext-green-600'">Has {{ increasedResponseTime ? 'aumentado' : 'disminuido' }} un <span class="text-sm font-semibold" :class="increasedResponseTime ? 'text-[#FF6666]' : 'htext-green-600'">{{ percentageTimeResponseTwoMonthPreviousComputed }}%</span> tu tiempo de respuesta en {{ nameMonthPrev }}</p>
             </div>
         </div>
     </div>

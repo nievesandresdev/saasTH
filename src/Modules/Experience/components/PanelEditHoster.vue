@@ -16,8 +16,8 @@
             PanelEdit"
         >
             <div
-                class="border-b hborder-bottom-gray-400 pb-4"
-                :class="{'mx-6': panelEditHosterActive === 'ADD'}"
+                class=""
+                :class="{'mx-6': panelEditHosterActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': panelEditHosterActive === 'ADD'}"
             >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">

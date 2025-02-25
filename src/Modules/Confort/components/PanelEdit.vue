@@ -16,8 +16,8 @@
             PanelEdit"
         >
             <div
-                class="border-b hborder-bottom-gray-400 pb-4"
-                :class="{'mx-6': modelActive === 'ADD'}"
+                class=""
+                :class="{'mx-6': modelActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': modelActive === 'ADD'}"
             >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
