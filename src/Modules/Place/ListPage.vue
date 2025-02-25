@@ -215,6 +215,7 @@ const categoryCurrent = computed(() => {
 });
 const typePlaceCurrent = computed(() => {
     let cat = typeplaces.value.find(type => formFilter.selected_place === type.id);
+    console.log(typeplaces.value, 'typeplaces.value')
     return cat;
 });
 provide('categoryCurrent', categoryCurrent);
