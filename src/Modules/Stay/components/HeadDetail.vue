@@ -18,6 +18,7 @@
                 :loading=" guestIdDefault ? false : true"
                 viewName="StayDetailPage"
                 :selected="route.name == 'StayDetailPage'"
+                :query="{ g: guestIdDefault }"
                 :notify="false"
             />
             <TabLink

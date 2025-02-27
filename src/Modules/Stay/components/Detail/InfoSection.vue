@@ -81,11 +81,13 @@ import BaseSelectField from '@/components/Forms/BaseSelectField.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
-
 const stayStore = useStayStore();
-const toast = useToastAlert();
+import { useLayoutStore } from '@/stores/modules/layout'
+const layoutStore = useLayoutStore();
+
 
 const data = inject('data')
 
@@ -98,6 +100,7 @@ const form = reactive({
 
 const update = async ()=>{
     await stayStore.$updateData(form);
+    layoutStore.$forceRightSidebarRerender();
     toast.warningToast('Actualizado.','top-right');
 }
 
