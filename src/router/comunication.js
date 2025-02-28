@@ -11,16 +11,30 @@ const Signage = () => import('@/Modules/Comunication/Signage');
 const FromQRTV = () => import('@/Modules/Comunication/FromQRTV');
 const FromYourWeb = () => import('@/Modules/Comunication/FromYourWeb');
 
+import PromoteWebapp from '@/Modules/Comunication/PromoteWebapp';
+
 const comunicationRoutes = [
   {
     path: '/comunicaciones',
     component: AppLayout,
     meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px', requiresAuth: true },  
     children: [
+      {
+        path: '',
+        component: comunicationHome,
+        name: 'ComunicationHome',
+      }
+    ]
+  },
+  {
+    path: '/promociona-webapp',
+    component: AppLayout,
+    meta: { sidebar: 'SettingsMenu', sidebarWidth: '236px', requiresAuth: true },  
+    children: [
         {
-            name: 'ComunicationHome',
-            path: '',
-            component: comunicationHome
+          path: '',
+          component: PromoteWebapp,
+          name: 'PromoteWebApp',
         },
         {
           path: 'invitacion-desde-ota',
@@ -63,7 +77,7 @@ const comunicationRoutes = [
           component: FromYourWeb
         },
     ]
-  }
+  },
 ];
 
 export default comunicationRoutes;
