@@ -64,7 +64,7 @@
                         />
                     </div>
                     <div
-                        v-if="experience.featured || ((hoverItem == index) && experience.is_visible)"
+                        v-if="experience.featured || ((hoverItem == index) && experience.is_visible) && experience.name_api === 'viator'"
                         class=" z-10 absolute left-0 bottom-0 rounded-tr-[8px] flex items-center space-x-[4px] p-[8px] z-40"
                         :class="experience.featured ? 'hbg-green-600' : 'hbg-white-100'"
                         @click="updateRecommendation($event, experience)"
