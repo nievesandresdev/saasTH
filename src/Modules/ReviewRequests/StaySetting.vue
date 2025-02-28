@@ -191,12 +191,11 @@ const toast = useToastAlert();
 // const urlBase = usePage().props.value.url_base_huesped
 // const hotelSubdomain = usePage().props.value.currentHotel.subdomain
 onMounted(async ()=>{
-    mockupStore.$setIframeUrl('/inbox/fakeLinkOtas','period=in-stay')
-    mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     settings.value = await requestSettingStore.$getAll();
     // console.log('test settings',settings.value)
     const data = JSON.parse(JSON.stringify(settings.value));
     assignValuesToForm(data);
+    defineMockup(data.in_stay_activate)
     mockupStore.$setLanguageTooltip(true)
 })
 
@@ -226,7 +225,8 @@ const submit = async () =>{
     let request  = await requestSettingStore.$updateDataInStay(form);
     if(request){
         settingsRef.value = JSON.parse(JSON.stringify(form))
-        mockupStore.$reloadIframe();
+        defineMockup(form.in_stay_activate)
+        // mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
 }
@@ -252,7 +252,16 @@ function assignValuesToForm(data){
     }
 }
 
-
+function defineMockup(bool){
+    if(bool){
+        mockupStore.$setIframeUrl('/inbox/fakeLinkOtas','period=in-stay')
+        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    }else{
+        mockupStore.$setIframeUrl('')
+        // mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar feedback al huésped', '/assets/icons/1.TH.MOBILE.svg')
+    }
+    
+}
 //computed
 
 const changes = computed(()=>{

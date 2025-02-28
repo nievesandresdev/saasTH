@@ -415,6 +415,8 @@ const menu_links = ref([
         icon: '1.TH.MM.WEBAPP',
         include: [
           'ReviewRequestSettingsIndex',
+          'ReviewRequestSettingsPostStay',
+          //
           'SettingsPreStayPage',
           'SettingsStayPage',
           'SettingsPostStayPage',
