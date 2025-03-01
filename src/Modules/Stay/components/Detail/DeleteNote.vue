@@ -51,6 +51,9 @@ const deleteNoteId = inject('deleteNoteId')
 const noteType = inject('noteType')
 const openDeleteModal = inject('openDeleteModal')
 
+const text = inject('noteText')
+const noteId = inject('noteId')
+
 const form = reactive({
     noteId: null,
     stayId:null
@@ -65,6 +68,9 @@ const deleteNote = async () => {
     }else{
         await stayStore.$deleteStayNote(form)
     }
+    text.value = "<p><br></p>";
+    noteId.value = null; 
+    // titleFull.value = false;    
     emit('reloadList');
     toast.warningToast('Nota eliminada','top-right');
 }

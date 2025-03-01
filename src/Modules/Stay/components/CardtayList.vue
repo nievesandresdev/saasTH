@@ -2,7 +2,7 @@
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
         :class="{'hbg-green-200':route.params.stayId == stay.id}"
-        @click="goDetailStay(stay.id, stay.trial)"
+        @click="goDetailStay(stay.id, stay.trial, stay.guests[0])"
     >
         <div class="flex items-center">
             <img class="w-5 h-5" src="/assets/icons/1.TH.schedule.svg" alt="">
@@ -111,10 +111,11 @@ const translatePeriod = {
     "invalid-stay": "POST-STAY",
 };
 
-function goDetailStay(id,trial) {
-    let queryParams = { search: searchUpdate.value };
+function goDetailStay(id,trial, guest) {
+    console.log('test guest',guest)
+    let queryParams = { search: searchUpdate.value, g : guest.id };
     if(trial){
-        queryParams = { search: searchUpdate.value, trial: true }
+        queryParams = { search: searchUpdate.value, g : guest.id, trial: true }
     }
     router.push({
         name: 'StayDetailPage',

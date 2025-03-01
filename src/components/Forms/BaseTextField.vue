@@ -100,7 +100,7 @@ const inputValue = ref(props.modelValue);
 watch(inputValue, (newValue) => {
   emit('update:modelValue', newValue);
   emit('input:typing', newValue);
-  emit('blur:validate');
+  // emit('blur:validate');
 });
 
 watch(
@@ -141,6 +141,7 @@ const handleBlur = () => {
       inputValue.value = num.toFixed(props.decimals);
     }
   }
+  // console.log('test emit')
   emit('blur:validate');
 };
 
