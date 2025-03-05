@@ -3,7 +3,7 @@
         <div class="flex items-center gap-2 pt-5 pb-[18px]">
             <!-- title -->
             <div class="flex items-center gap-2">
-                <router-link to="/webapp/promociona-webapp">
+                <router-link to="/promociona-webapp">
                     <img class="w-6 h-6" src="/assets/icons/1.TH.ARROW.LEFT.svg" alt="">
                 </router-link>
                 <h1 class="text-[24px] font-medium leading-[110%]">Invitación desde OTAs</h1>
