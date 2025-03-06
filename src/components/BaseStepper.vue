@@ -1,9 +1,10 @@
 <template>
-    <div class="flex items-center justify-between relative">
+    <div id="steps" ref="stepContainerRef" class="flex items-center justify-between relative">
         <div 
             v-for="(step, index) in steps" 
-            :key="index" 
-            class="relative flex flex-col items-center w-[25%]"
+            :key="index"
+            :id="`step-${index}`" 
+            class=" relative flex flex-col items-center w-[25%]"
         >
             <!-- Número del paso -->
             <div
@@ -21,22 +22,26 @@
                 modelValue >= index ? 'text-[#333333]' : 'text-[#333333]'
             ]"
             >
-            {{ step.name ?? step }}
+                {{ step.name ?? step }}
             </span>
-
-            <!-- Línea de conexión entre pasos -->
-        <!-- <div
-            class="absolute h-[4px] border top-0"
-            :class="modelValue == index ? 'border-green-400' : 'border-grey-300'"
-            :style="{ width: 'calc(100% - 150px)', left: '75px' }"
-        /> -->
+            <!-- <div
+                class="absolute h-1 border top-0 right-[20px]"
+                :id="`step-line-${index}`"
+                :class="modelValue >= steps.length - 1 ? 'border-[#34A98F]' : 'border-grey-300'"
+                :style="{ width: 'calc(100% - 150px)' }"
+            /> -->
+            <div 
+                v-if="index !== steps.length - 1" 
+                :id="`step-line-${index}`"
+                class="absolute h-0 border top-5"
+                :class="index + 1 <= modelValue ? 'border-[#34A98F]' : 'border-grey-300'"
+                :style="{ width: `calc(${widthContainerSteps}px / ${steps.length} )`, left: '77px' }"
+            ></div>
         </div>
-        <div
-            v-if="index !== steps.length - 1"
-            class=" absolute h-0 border top-5"
-            :class="modelValue >= steps.length - 1 ? 'border-[#34A98F]' : 'border-grey-300'"
-            :style="{ width: 'calc(100% - 150px)', left: '75px' }"
-        />
+        <!-- :class="[ 
+            'absolute h-0 border top-5',
+            currentStep >= (step.number + 1) ? 'border-[#34A98F]' : 'border-gray-300'
+        ]"  -->
     </div>
 </template>
 
@@ -55,6 +60,7 @@ const props = defineProps({
         default: () => ([])
     }
 });
+const stepContainerRef = ref(null);
 const { steps , modelValue } = toRefs(props);
 
 const value = computed({
@@ -62,6 +68,14 @@ const value = computed({
     set: (val) => emit('update:modelValue', val),
 });
 
+const widthContainerSteps = computed(() => {
+    let width = steps.value.length <= 2 ? 200 : 0;
+    if (stepContainerRef.value) {
+        width += stepContainerRef.value.offsetWidth;
+        return width;
+    }
+    return width;
+});
   
 const nextStep = (i) => {
     if (steps.value[i].disabled) {

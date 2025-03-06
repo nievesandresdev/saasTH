@@ -40,8 +40,11 @@
                     <template v-if="stepCurrent === 0">
                         <PanelEditFormInformation />
                     </template>
-                    <template v-else="stepCurrent === 1">
-                    <PanelEditFormPhotos @open:gallery="openGallery" />
+                    <template v-else-if="stepCurrent === 1">
+                        <PanelEditFormharacteristics />
+                    </template>
+                    <template v-else="stepCurrent === 2">
+                        <PanelEditFormPhotos @open:gallery="openGallery" />
                     </template>
                 </div>    
             </div>
@@ -130,6 +133,7 @@ import ModalGallery from "@/components/ModalGallery.vue";
 import BaseStepper from '@/components/BaseStepper.vue';
 import PanelEditFormInformation from './PanelEditFormInformation.vue';
 import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
+import PanelEditFormCharacteristics from './PanelEditFormCharacteristics.vue';
 import ModalCancelChange from './ModalCancelChange.vue';
 import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -234,7 +238,23 @@ onMounted(() => {
 
 // COMPUTED
 const steps = computed(() => {
-    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value }];
+    return [
+        {
+            name: 'Información',
+            value: 0,
+            disabled: false
+        },
+        {
+            name: 'Caracteristicas',
+            value: 1,
+            disabled: false
+        },
+        {
+            name: 'Galeria',
+            value: 2,
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+        },
+    ];
 });
 const changesform = computed(() => {
     // console.log(form.price, 'form');
