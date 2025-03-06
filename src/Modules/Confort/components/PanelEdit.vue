@@ -40,11 +40,8 @@
                     <template v-if="stepCurrent === 0">
                         <PanelEditFormInformation />
                     </template>
-                    <template v-else-if="stepCurrent === 1">
+                    <template v-else="stepCurrent === 1">
                         <PanelEditFormharacteristics />
-                    </template>
-                    <template v-else="stepCurrent === 2">
-                        <PanelEditFormPhotos @open:gallery="openGallery" />
                     </template>
                 </div>    
             </div>
@@ -245,13 +242,8 @@ const steps = computed(() => {
             disabled: false
         },
         {
-            name: 'Caracteristicas',
-            value: 1,
-            disabled: false
-        },
-        {
             name: 'Galeria',
-            value: 2,
+            value: 1,
             disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
         },
     ];
