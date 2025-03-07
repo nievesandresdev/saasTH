@@ -192,6 +192,9 @@ import BaseTextField from '@/components/Forms/BaseTextField';
 import { useRoute, useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+
+const params = new URLSearchParams(window.location.search)
+
 const form = ref({
   email: localStorage.getItem("user_email_form") ? localStorage.getItem("user_email_form") : '',
   password: localStorage.getItem("pass_email_form") ? localStorage.getItem("pass_email_form") : '',
@@ -226,9 +229,28 @@ const forgot = ref({
   title: ''
 });
 
-onMounted(() => {
+onMounted(async () => {
   if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
+  }
+
+  const emailURL = params.get('u')
+  const passwordURL = params.get('p')
+
+  if (emailURL) {
+    form.value.email = emailURL
+    localStorage.setItem("user_email_form", emailURL)
+  }
+  if (passwordURL) {
+    form.value.password = passwordURL
+    localStorage.setItem("pass_email_form", passwordURL)
+  }
+  
+  if(emailURL && passwordURL){
+    await authStore.login({
+      email: form.value.email,
+      password: form.value.password
+    });
   }
 
   
