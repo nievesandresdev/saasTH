@@ -84,7 +84,6 @@ export const useAuthStore = defineStore('auth', () => {
             localStorage.setItem('user', JSON.stringify(response.user));
             //token
             //localStorage.setItem('token', token);
-            console.log(response, 'response.user.current_hotel')
             localStorage.setItem('current_hotel', JSON.stringify(response.user.current_hotel));
             localStorage.setItem('current_subdomain', response.user.current_hotel.subdomain);
             localStorage.setItem('loginTime', currentTime); // Guardamos la hora actual

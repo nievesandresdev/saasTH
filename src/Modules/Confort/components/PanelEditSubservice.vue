@@ -1,13 +1,13 @@
 <template>
     <div
-        v-if="modelActive"
+        v-if="modelSubserviceActive"
         class="w-full fixed top-0 left-0 z-[40]"
         :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
     ></div>
     <transition name="slide">
         <div
-            v-if="modelActive"
+            v-if="modelSubserviceActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed bg-white"
             :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             :style="`right: 353.5px;`"
@@ -17,18 +17,18 @@
         >
             <div
                 class=""
-                :class="{'mx-6': modelActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': modelActive === 'ADD'}"
+                :class="{'mx-6': modelSubserviceActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': modelSubserviceActive === 'ADD'}"
             >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
-                        <h1 class="text-[22px] font-medium text-center">{{ modelActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
+                        <h1 class="text-[22px] font-medium text-center">{{ modelSubserviceActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
                         <button @click="closeModal">
                             <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
                         </button>
                     </div>
                 </div>
                 <!-- tabs -->
-                <template v-if="modelActive === 'ADD'">
+                <template v-if="modelSubserviceActive === 'ADD'">
                     <BaseStepper v-model="stepCurrent"  :steps="steps" />
                 </template>
                 <template v-else>
@@ -38,20 +38,17 @@
             <div class="pb-6" style="height: calc(100% - 72px); overflow: auto;">
                 <div class="px-6 mt-[24px] mt-3">
                     <template v-if="stepCurrent === 0">
-                        <PanelEditFormInformation />
+                        <PanelEditSubserviceFormInformation @open:gallery="openGallery" />
                     </template>
                     <template v-else-if="stepCurrent === 1">
-                        <PanelEditFormCharacteristics />
-                    </template>
-                    <template v-else="stepCurrent === 2">
-                        <PanelEditFormPhotos @open:gallery="openGallery" />
+                        <PanelEditSubserviceFormCharacteristics />
                     </template>
                 </div>    
             </div>
             <!-- {{form}}
             {{formDefault}} -->
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
-                <template v-if="modelActive === 'EDIT'">
+                <template v-if="modelSubserviceActive === 'EDIT'">
                     <button
                         class="py-3"
                         @click="changesform ? openModalChangeInForm() : openModalDelete()"
@@ -60,7 +57,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || !form.image"
                         @click="submitSave"
                     >
                         Guardar
@@ -75,7 +72,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent != 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent != 0)"
                         @click="nextTab"
                     >
                         {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
@@ -86,26 +83,25 @@
     </transition>
     <ModalGallery
         ref="modalGaleryRef"
-        :id="'modal-gallery'"
+        :id="'modal-gallery-subservice'"
         :name-image-new="hotelStore?.hotelData?.name"
-        multiple
         @update:img="addNewsImages($event)"
     />
-    <BasePreviewImage 
+    <!-- <BasePreviewImage 
         :url-image="previewUrl"
         :is-open="isPreviewOpen"
         @click:close="closePreviewImage"
-    />
+    /> -->
     <ModalCancelChange 
         ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModalForce"
     />
-    <ModalDelete
+    <!-- <ModalDelete
         ref="modalDeleteRef"
         @submit:delete="submitDelete()"
-    />
-    <template v-if="modelActive">
+    /> -->
+    <template v-if="modelSubserviceActive">
         <ModalNoSave
             :id="'not-saved'"
             :open="changesform"
@@ -113,7 +109,7 @@
             textbtn="Guardar"
             @saveChanges="submitSave"
             type="save_changes"
-            :force-open="modalChangePendinginForm"
+            :force-open="modalChangePendinginFormService"
             @close="closeModalForce()"
         />
     </template>
@@ -131,9 +127,8 @@ import * as rules from '@/utils/rules';
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import ModalGallery from "@/components/ModalGallery.vue";
 import BaseStepper from '@/components/BaseStepper.vue';
-import PanelEditFormInformation from './PanelEditFormInformation.vue';
-import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
-import PanelEditFormCharacteristics from './PanelEditFormCharacteristics.vue';
+import PanelEditSubserviceFormInformation from './PanelEditSubserviceFormInformation.vue';
+import PanelEditSubserviceFormCharacteristics from './PanelEditSubserviceFormCharacteristics.vue';
 import ModalCancelChange from './ModalCancelChange.vue';
 import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
@@ -154,9 +149,9 @@ const toast = useToastAlert();
 // INJECT
 const hotelStore = inject('hotelStore');
 const confortStore = inject('confortStore');
-const changePendingInForm = inject('changePendingInForm');
-const modalChangePendinginForm = inject('modalChangePendinginForm');
-const modelActive = inject('modelActive');
+const changePendingInFormService = inject('changePendingInFormService');
+const modalChangePendinginFormService = inject('modalChangePendinginFormService');
+const modelSubserviceActive = inject('modelSubserviceActive');
 
 
 // DATA
@@ -165,82 +160,30 @@ const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const modalDeleteRef  = ref(null);
 
-const form = reactive({
+const valueFormDefault = {
     id: null,
     name: '',
     description: '',
-    hire: '',
-    link_url: '',
     type_price: 1,
     price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
+    image: null,
     languages: [],
     fields_visibles: [],
     duration: null,
     address: '',
     requeriment: '',
-});
-const itemSelected = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-});
-const formDefault = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-});
+    service_id: null,
+    services_type: 'Confort',
+}
 
-// const formRules = reactive({
-//     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-//     name: [value => !!value ? true : 'Este campo es obligatorio'],
-//     hire: [value => !!value ? true : 'Este campo es obligatorio'],
-//     description: [value => !!value ? true : 'Este campo es obligatorio'],
-//     price: [value => !!value && (form.type_price === 1 || form.type_price === 2) ? true : 'Este campo es obligatorio'],
-// });
+const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
 const formRules = reactive({
-    link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
-    hire: [value => !!value ? true : 'Este campo es obligatorio'],
     description: [value => !!value ? true : 'Este campo es obligatorio'],
-    // price: [
-    //   (value) => {
-    //     if (form.type_price === 3) {
-    //       return true; // Si es 3, no validar
-    //     }
-    //     return !!value ? true : 'Este campo es obligatorio';
-    //   },
-    // ]
 });
-
-function isValidURL(url) {
-    const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
-    return pattern.test(url);
-}
 
 const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
 
@@ -269,24 +212,13 @@ const steps = computed(() => {
             value: 1,
             disabled: false
         },
-        {
-            name: 'Galeria',
-            value: 2,
-            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
-        },
     ];
 });
 const changesform = computed(() => {
-    // console.log(form.price, 'form');
-    // console.log(itemSelected.price, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
-        (normalize(form.hire) !== normalize(itemSelected.hire)) ||
-        (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
-        (Number(form.type_price) !== Number(itemSelected.type_price)) ||
-        (Number(form.price) !== Number(itemSelected.price)) ||
-        !lodash.isEqual(form.images, itemSelected?.images)
-        changePendingInForm.value = valid;
+        !lodash.isEqual(form.image, itemSelected?.image)
+        changePendingInFormService.value = valid;
     return valid;
 });
 
@@ -306,7 +238,7 @@ function prevTab () {
     if(stepCurrent.value === 1){
         stepCurrent.value--;
     } else {
-        if (changePendingInForm.value) {
+        if (changePendingInFormService.value) {
             openModalCancel();
         } else {
             closeModalForce();
@@ -323,7 +255,6 @@ async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
     const response = await confortStore.$storeOrUpdate(body);
-    return;
     // const { ok, data } = response;
     // if (ok) {
     //     toast.warningToast('Cambios guardados con éxito','top-right');
@@ -348,37 +279,46 @@ async function submitDelete () {
 function resetCompoent () {
     closeModalForce();
     resetPageData();
+    openPanelEdit();
 }
 function resetPageData () {
     emit('load:resetPageData');
 }
 function closeModal () {
-    if (changePendingInForm.value) {
+    if (changePendingInFormService.value) {
         openModalChangeInForm();
         return;
     }
-    changePendingInForm.value = false;
-    modelActive.value = null;
+    changePendingInFormService.value = false;
+    modelSubserviceActive.value = null;
     stepCurrent.value = 0;
     resetData();
+    openPanelEdit();
 }
 function closeModalForce () {
-    changePendingInForm.value = false;
-    modelActive.value = null;
+    changePendingInFormService.value = false;
+    modelSubserviceActive.value = null;
     stepCurrent.value = 0;
     resetData();
+    openPanelEdit();
 }
+
+function openPanelEdit () {
+    emit('openPanelEdit');
+}
+
 function cancelChange () {
     resetData();
 }
+
 function resetData () {
     Object.assign(form, {...formDefault});
     
     // Vaciar el array de imágenes usando splice para mantener la reactividad
-    form.images.splice(0, form.images.length);
+    form.image = null;
     
     Object.assign(itemSelected, {...formDefault});
-    itemSelected.images.splice(0, itemSelected.images.length); // Hacer lo mismo para itemSelected
+    itemSelected.image = null; // Hacer lo mismo para itemSelected
 
 }
 
@@ -396,40 +336,37 @@ function nextTab () {
 function openGallery () {
     modalGaleryRef.value.openModal();
 }
-function addNewsImages (images) {
-    images.forEach(item => {
-        let { url, name, type } = item;
-        form.images.push({ id:null, url, name, type });
-    });
+function addNewsImages (image) {
+    let { url, name, type } = image;
+    form.image = { id:null, url, name, type };
 }
 function openModalChangeInForm () {
-    modalChangePendinginForm.value = true;
+    modalChangePendinginFormService.value = true;
     nextTick(() => {
-        modalChangePendinginForm.value = false;
+        modalChangePendinginFormService.value = false;
     });
 }
 
-function edit ({action, item}) {
-    urlsimages.value = [];
+function edit ({action, serviceId, subservice}) {
     if (action === 'EDIT') {
-        let { id, name, description, hire, link_url, type_price, price, images } = item;
+    //     let { id, name, description, hire, link_url, type_price, price, images } = item;
 
-        let numPrice = price ? parseFloat(price) : null;
-        if (numPrice && !isNaN(numPrice)) {
-            numPrice = numPrice.toFixed(2);
-        }
+    //     let numPrice = price ? parseFloat(price) : null;
+    //     if (numPrice && !isNaN(numPrice)) {
+    //         numPrice = numPrice.toFixed(2);
+    //     }
 
 
-        let itemSelectedImages = JSON.parse(JSON.stringify(images));
-        let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, {  id, name, description, hire, link_url, type_price, price: numPrice, images: itemSelectedImages });
-        Object.assign(form, {id, name, description, hire, link_url, type_price, price: numPrice, images: formImages });
-        images.forEach(img => {
-            urlsimages.value.push(img);
-        });
+    //     let itemSelectedImages = JSON.parse(JSON.stringify(images));
+    //     let formImages = JSON.parse(JSON.stringify(images));
+    //     Object.assign(itemSelected, {  id, name, description, hire, link_url, type_price, price: numPrice, images: itemSelectedImages });
+    //     Object.assign(form, {id, name, description, hire, link_url, type_price, price: numPrice, images: formImages });
+    //     images.forEach(img => {
+    //         urlsimages.value.push(img);
+    //     });
     } else {
-        Object.assign(itemSelected, {...formDefault});
-        Object.assign(form, {...formDefault});
+        Object.assign(itemSelected, {...formDefault, subservice_id: serviceId});
+        Object.assign(form, {...formDefault, subservice_id: serviceId});
     }
 }
 defineExpose({ edit });

@@ -80,6 +80,7 @@ const props = defineProps({
   max: { type: Number, default: null },
   name: { type: String, default: '' },
   error: { type: Boolean, default: false },
+  isPrice: { type: Boolean, default: false },
   errors: {
     type: Object,
     default: () => ({}),
@@ -134,7 +135,7 @@ const onClick = () => {
 
 // Función para formatear el número al perder el foco
 const handleBlur = () => {
-  if (props.type === 'number' && inputValue.value !== '') {
+  if (props.isPrice && inputValue.value !== '') {
     const num = parseFloat(inputValue.value);
     if (!isNaN(num)) {
       // Formatea el número con la cantidad de decimales indicada

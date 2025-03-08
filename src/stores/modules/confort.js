@@ -66,6 +66,8 @@ export const useConfortStore = defineStore('confort', () => {
             hotel: { id: idHotel, name: nameName, zone: zoneHotel },
             ...params
         }
+        console.log(newParams);
+        return;
         const response = await confortServices.storeOrUpdateApi(newParams, {showPreloader: false});
         return response;
         if(response.ok) return response.data;
