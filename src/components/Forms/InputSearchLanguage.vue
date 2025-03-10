@@ -28,7 +28,7 @@
         >
             <img class="size-4 mr-2" :src="'/assets/icons/flags/' + lang.abbreviation + '.svg'" alt="">
             <p class="text-sm font-medium mr-2 l">{{lang.name}}</p>
-            <img @click="deleteLanguageSelected(lang.id)" class="size-4 cursor-pointer" src="/assets/icons/1.TH.CLOSE.svg" alt="">
+            <img @click="deleteLanguageSelected(lang.abbreviation, lang.id)" class="size-4 cursor-pointer" src="/assets/icons/1.TH.CLOSE.svg" alt="">
         </div>
     </div>
 </div>
@@ -81,7 +81,6 @@ const searchLang = async () => {
     }
     const response = await fetchLangs(params)
     result.value = response.data
-
     if (search.value) {
         showResults.value = true
     } else {
@@ -89,8 +88,8 @@ const searchLang = async () => {
     }
 }
 
-function deleteLanguageSelected (langId) {
-    value.value = value.value.filter(lang => lang.id !== langId);
+function deleteLanguageSelected (langAbbreviation, langId) {
+    value.value = value.value.filter(lang => lang.abbreviation !== langAbbreviation);
     notSearchLang.value = notSearchLang.value.filter(id => id !== langId);
 }
 

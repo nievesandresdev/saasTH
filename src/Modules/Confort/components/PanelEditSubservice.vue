@@ -21,7 +21,7 @@
             >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
-                        <h1 class="text-[22px] font-medium text-center">{{ modelSubserviceActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
+                        <h1 class="text-[22px] font-medium text-center">{{ modelSubserviceActive === 'EDIT' ? 'Editar subservicio' : 'Crea tu subservicio'}}</h1>
                         <button @click="closeModal">
                             <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
                         </button>
@@ -45,8 +45,6 @@
                     </template>
                 </div>    
             </div>
-            <!-- {{form}}
-            {{formDefault}} -->
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelSubserviceActive === 'EDIT'">
                     <button
@@ -87,20 +85,11 @@
         :name-image-new="hotelStore?.hotelData?.name"
         @update:img="addNewsImages($event)"
     />
-    <!-- <BasePreviewImage 
-        :url-image="previewUrl"
-        :is-open="isPreviewOpen"
-        @click:close="closePreviewImage"
-    /> -->
     <ModalCancelChange 
         ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModalForce"
     />
-    <!-- <ModalDelete
-        ref="modalDeleteRef"
-        @submit:delete="submitDelete()"
-    /> -->
     <template v-if="modelSubserviceActive">
         <ModalNoSave
             :id="'not-saved'"
@@ -113,7 +102,10 @@
             @close="closeModalForce()"
         />
     </template>
-
+    <ModalDeleteSubservice
+        ref="modalDeleteSubserviceRef"
+        @submit:delete="submitDeleteSubservice()"
+    />
 </template>
 
 <script setup>
@@ -130,9 +122,9 @@ import BaseStepper from '@/components/BaseStepper.vue';
 import PanelEditSubserviceFormInformation from './PanelEditSubserviceFormInformation.vue';
 import PanelEditSubserviceFormCharacteristics from './PanelEditSubserviceFormCharacteristics.vue';
 import ModalCancelChange from './ModalCancelChange.vue';
-import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import BaseTab from '@/components/BaseTab.vue';
+import ModalDeleteSubservice from './ModalDeleteSubservice.vue';
 
 const emit = defineEmits(['load:resetPageData']);
 
@@ -141,10 +133,15 @@ import { ServiceTypeEnum } from "@/shared/enums/ServiceTypeEnum";
 // STORE
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
+import { useSubserviceStore } from '@/stores/modules/subservice'
+const subserviceStore = useSubserviceStore();
 
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useEventBus } from '@/composables/eventBus';
+const { onEvent, emitEvent } = useEventBus();
+
 
 // INJECT
 const hotelStore = inject('hotelStore');
@@ -158,6 +155,7 @@ const modelSubserviceActive = inject('modelSubserviceActive');
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
+const modalDeleteSubserviceRef  = ref(null);
 const modalDeleteRef  = ref(null);
 
 const valueFormDefault = {
@@ -191,9 +189,13 @@ const isLoadingForm = ref(false);
 const urlsimages = ref([]);
 const modalDeleteFacilityRef = ref(null);
 const modalCancelChangeFacilityRef = ref(null);
+const subserviceDeleteId = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
+
+// EVENT
+onEvent('open-modal-delete-item', openModalDeleteItem);
 
 // ONMOUNTED
 onMounted(() => {
@@ -217,11 +219,28 @@ const steps = computed(() => {
 const changesform = computed(() => {
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
-        !lodash.isEqual(form.image, itemSelected?.image)
+        !lodash.isEqual(form.image, itemSelected?.image) ||
+        //
+        (normalize(form.price) !== normalize(itemSelected.price)) ||
+        (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.address) !== normalize(itemSelected.address)) ||
+        (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
+        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles)
+        !lodash.isEqual(form.languages, itemSelected?.languages)
         changePendingInFormService.value = valid;
     return valid;
 });
 
+const fieldsVisiblesIsEqual = (array1, array2) => {
+    let isEqual = true;
+    for(let item of array1) {
+        let exist = array2.includes(item);
+        if (!exist) {
+            isEqual = false;
+        }
+    }
+    return array1.length === array2.length && isEqual;
+}
 
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
@@ -229,9 +248,6 @@ const normalize = (value) => {
 // FUNCTION
 function closePreviewImage () {
     isPreviewOpen.value = false;
-}
-function openModalDelete () {
-    modalDeleteRef.value.openModal();
 }
 
 function prevTab () {
@@ -254,32 +270,30 @@ function closeModalCancel () {
 async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
-    const response = await confortStore.$storeOrUpdate(body);
-    // const { ok, data } = response;
-    // if (ok) {
-    //     toast.warningToast('Cambios guardados con éxito','top-right');
-    //     resetCompoent();
-    //     location.reload();
-    // } else {
-    //     toast.warningToast(data?.message,'top-right');
-    // }
-    // isLoadingForm.value = false;
-}
-async function submitDelete () {
-    const response = await confortStore.$delete(form.id);
+    const response = await subserviceStore.$storeOrUpdate(body);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
         resetCompoent();
-        location.reload();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    isLoadingForm.value = false;
+}
+async function submitDeleteSubservice () {
+    let body = {service_id: form.id, services_type: 'Confort'};
+    const response = await subserviceStore.$delete(subserviceDeleteId.value, body);
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Subservicio eliminado','top-right');
+        emitEvent('load-subservices');
     } else {
         toast.warningToast(data?.message,'top-right');
     }
 }
 function resetCompoent () {
     closeModalForce();
-    resetPageData();
-    openPanelEdit();
+    // resetPageData();
 }
 function resetPageData () {
     emit('load:resetPageData');
@@ -347,26 +361,33 @@ function openModalChangeInForm () {
     });
 }
 
+function openModalDeleteItem (payload) {
+    let { subserviceId } = payload;
+    subserviceDeleteId.value = subserviceId;
+    if (modalDeleteSubserviceRef.value) {
+        modalDeleteSubserviceRef.value.openModal();
+    }
+}
+
 function edit ({action, serviceId, subservice}) {
     if (action === 'EDIT') {
-    //     let { id, name, description, hire, link_url, type_price, price, images } = item;
+        let {
+            id, name, description, price, image, languages, fields_visibles, duration, address, requeriment
+        } = subservice;
+        let numPrice = price ? parseFloat(price) : null;
+        if (numPrice && !isNaN(numPrice)) {
+            numPrice = numPrice.toFixed(2);
+        }
 
-    //     let numPrice = price ? parseFloat(price) : null;
-    //     if (numPrice && !isNaN(numPrice)) {
-    //         numPrice = numPrice.toFixed(2);
-    //     }
-
-
-    //     let itemSelectedImages = JSON.parse(JSON.stringify(images));
-    //     let formImages = JSON.parse(JSON.stringify(images));
-    //     Object.assign(itemSelected, {  id, name, description, hire, link_url, type_price, price: numPrice, images: itemSelectedImages });
-    //     Object.assign(form, {id, name, description, hire, link_url, type_price, price: numPrice, images: formImages });
-    //     images.forEach(img => {
-    //         urlsimages.value.push(img);
-    //     });
+        let imageObject = {
+            url: image,
+        }
+        
+        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
+        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
     } else {
-        Object.assign(itemSelected, {...formDefault, subservice_id: serviceId});
-        Object.assign(form, {...formDefault, subservice_id: serviceId});
+        Object.assign(itemSelected, {...formDefault, service_id: serviceId});
+        Object.assign(form, {...formDefault, service_id: serviceId});
     }
 }
 defineExpose({ edit });

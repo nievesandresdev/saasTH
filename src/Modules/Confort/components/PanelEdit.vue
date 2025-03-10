@@ -157,7 +157,7 @@ const confortStore = inject('confortStore');
 const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
 const modelActive = inject('modelActive');
-
+const languagesData = inject('languagesData');
 
 // DATA
 const stepCurrent = ref(0);
@@ -165,7 +165,7 @@ const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const modalDeleteRef  = ref(null);
 
-const form = reactive({
+const valueFormDefault = {
     id: null,
     name: '',
     description: '',
@@ -180,39 +180,11 @@ const form = reactive({
     duration: null,
     address: '',
     requeriment: '',
-});
-const itemSelected = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-});
-const formDefault = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-});
+}
+
+const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
 // const formRules = reactive({
 //     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
@@ -252,6 +224,7 @@ const modalCancelChangeFacilityRef = ref(null);
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
+
 // ONMOUNTED
 onMounted(() => {
 });
@@ -281,15 +254,28 @@ const changesform = computed(() => {
     // console.log(itemSelected.price, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
-        (normalize(form.hire) !== normalize(itemSelected.hire)) ||
-        (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
-        (Number(form.type_price) !== Number(itemSelected.type_price)) ||
-        (Number(form.price) !== Number(itemSelected.price)) ||
-        !lodash.isEqual(form.images, itemSelected?.images)
+        //
+        (normalize(form.type) !== normalize(itemSelected.type)) ||
+        (normalize(form.price) !== normalize(itemSelected.price)) ||
+        (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.address) !== normalize(itemSelected.address)) ||
+        (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
+        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
+        !lodash.isEqual(form.languages, itemSelected?.languages)
         changePendingInForm.value = valid;
     return valid;
 });
 
+const fieldsVisiblesIsEqual = (array1, array2) => {
+    let isEqual = true;
+    for(let item of array1) {
+        let exist = array2.includes(item);
+        if (!exist) {
+            isEqual = false;
+        }
+    }
+    return array1.length === array2.length && isEqual;
+}
 
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
@@ -323,16 +309,15 @@ async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
     const response = await confortStore.$storeOrUpdate(body);
-    return;
-    // const { ok, data } = response;
-    // if (ok) {
-    //     toast.warningToast('Cambios guardados con éxito','top-right');
-    //     resetCompoent();
-    //     location.reload();
-    // } else {
-    //     toast.warningToast(data?.message,'top-right');
-    // }
-    // isLoadingForm.value = false;
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+        location.reload();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    isLoadingForm.value = false;
 }
 async function submitDelete () {
     const response = await confortStore.$delete(form.id);
@@ -409,10 +394,23 @@ function openModalChangeInForm () {
     });
 }
 
-function edit ({action, item}) {
-    urlsimages.value = [];
+async function edit ({action, item}) {
     if (action === 'EDIT') {
-        let { id, name, description, hire, link_url, type_price, price, images } = item;
+        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, address, requeriment } = item;
+
+        if (languages?.length) {
+            let languagesArray = languagesData.value.map(item => {
+                return {
+                    id: null,
+                    abbreviation: item.abbreviation,
+                    name: item.name,
+                }
+            }).filter(item => {
+                let language = languages.find(lagSub => lagSub === item.abbreviation );
+                return language;
+            });
+            languages = languagesArray;
+        }
 
         let numPrice = price ? parseFloat(price) : null;
         if (numPrice && !isNaN(numPrice)) {
@@ -422,8 +420,8 @@ function edit ({action, item}) {
 
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, {  id, name, description, hire, link_url, type_price, price: numPrice, images: itemSelectedImages });
-        Object.assign(form, {id, name, description, hire, link_url, type_price, price: numPrice, images: formImages });
+        Object.assign(itemSelected, {  id, name, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
+        Object.assign(form, {id, name, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
         images.forEach(img => {
             urlsimages.value.push(img);
         });
@@ -433,7 +431,6 @@ function edit ({action, item}) {
     }
 }
 defineExpose({ edit });
-
 
 //
 provide('confortStore', confortStore);

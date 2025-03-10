@@ -51,7 +51,9 @@ import { useConfortStore } from '@/stores/modules/confort';
 const confortStore = useConfortStore();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
-const { hotelData } = hotelStore; 
+const { hotelData } = hotelStore;
+import { useUtilStore } from '@/stores/modules/util'
+const utilStore = useUtilStore();
 
 // DATA
 const modelActive = ref(null);
@@ -83,6 +85,8 @@ const paginateData = reactive({
     to: 0,
 });
 
+const languagesData = ref([]);
+
 // EVENT
 onEvent('open-panel-edit-subservice', openPanelEditSubservice);
 
@@ -104,6 +108,7 @@ onMounted(async() => {
     
     loadMockup();
     loadConforts();
+    loadLanguanges();
 });
 
 // FUNCTION
@@ -182,7 +187,18 @@ async function openPanelEditSubservice (payload) {
     openDrawerSubservice(payload);
 }
 
+async function loadLanguanges () {
+    const response = await utilStore.$getLanguages();
+    const { ok, data } = response;
+    if (ok) {
+        languagesData.value= data;
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+
 // PROVIDE
+provide('languagesData', languagesData);
 provide('toast', toast);
 provide('mockupStore', mockupStore);
 provide('confortStore', confortStore);
