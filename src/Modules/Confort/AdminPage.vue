@@ -44,6 +44,9 @@ const toast = useToastAlert();
 import { useEventBus } from '@/composables/eventBus';
 const { onEvent } = useEventBus();
 
+import { useRouter } from 'vue-router';
+const route = useRouter();
+
 // STATE
 import { useUserStore } from '@/stores/modules/users/users';
 const userStore = useUserStore();
@@ -95,8 +98,17 @@ watch(modelActive, (valNew, valOld) => {
         loadMockup();
     }
 });
-
 // COMPUTED
+const serviceNameCurrent = computed(() => {
+    let services  = {
+        Conforts: 'Confort',
+        Transports: 'Transport',
+        Experiences: 'Product',
+    }
+    let routeName = route.currentRoute.value.name;
+    return services[routeName];
+});
+
 const searchText = computed(() => {
    return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
 });
@@ -198,6 +210,7 @@ async function loadLanguanges () {
 }
 
 // PROVIDE
+provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);
 provide('mockupStore', mockupStore);

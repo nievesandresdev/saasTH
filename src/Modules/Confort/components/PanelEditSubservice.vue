@@ -149,6 +149,7 @@ const confortStore = inject('confortStore');
 const changePendingInFormService = inject('changePendingInFormService');
 const modalChangePendinginFormService = inject('modalChangePendinginFormService');
 const modelSubserviceActive = inject('modelSubserviceActive');
+const serviceNameCurrent = inject('serviceNameCurrent');
 
 
 // DATA
@@ -171,7 +172,7 @@ const valueFormDefault = {
     address: '',
     requeriment: '',
     service_id: null,
-    services_type: 'Confort',
+    services_type: serviceNameCurrent.value,
 }
 
 const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
@@ -281,7 +282,7 @@ async function submitSave () {
     isLoadingForm.value = false;
 }
 async function submitDeleteSubservice () {
-    let body = {service_id: form.id, services_type: 'Confort'};
+    let body = {service_id: form.id, services_type: serviceNameCurrent.value};
     const response = await subserviceStore.$delete(subserviceDeleteId.value, body);
     const { ok, data } = response;
     if (ok) {

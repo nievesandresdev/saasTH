@@ -60,7 +60,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0  || (form.type == 2 && subservicesData.length <= 0)"
                         @click="submitSave"
                     >
                         Guardar
@@ -75,10 +75,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent != 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
                         @click="nextTab"
                     >
-                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
+                        {{ stepCurrent < 2 ? 'Siguiente' : 'Crear' }}
                     </button>
                 </template>
             </div>
@@ -160,6 +160,7 @@ const modelActive = inject('modelActive');
 const languagesData = inject('languagesData');
 
 // DATA
+const subservicesData = ref([]);
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
@@ -289,7 +290,7 @@ function openModalDelete () {
 }
 
 function prevTab () {
-    if(stepCurrent.value === 1){
+    if(stepCurrent.value >  0){
         stepCurrent.value--;
     } else {
         if (changePendingInForm.value) {
@@ -369,7 +370,7 @@ function resetData () {
 
 
 function nextTab () {
-    if (stepCurrent.value == 0) {
+    if (stepCurrent.value < 2) {
         if (formInvalid.value || !changesform.value || isLoadingForm.value) {
             return;
         }
@@ -430,18 +431,20 @@ async function edit ({action, item}) {
         Object.assign(form, {...formDefault});
     }
 }
+
 defineExpose({ edit });
 
 //
 provide('confortStore', confortStore);
 provide('form', form);
+provide('formRules', formRules);
 // provide('itemSelected', itemSelected);
 provide('errors', errors);
 provide('urlsimages', urlsimages);
 provide('validateField', validateField);
-provide('formRules', formRules);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
+provide('subservicesData', subservicesData);
 
 </script>
 

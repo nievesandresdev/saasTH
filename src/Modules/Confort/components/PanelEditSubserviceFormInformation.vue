@@ -42,9 +42,11 @@ import Editor from "@/components/Forms/Editor.vue";
 
 const emits = defineEmits(['open:gallery']);
 
+import { useConfortStore } from '@/stores/modules/confort';
+const confortStore = useConfortStore();
+
 import BaseCardCreateImage from '@/components/Card/BaseCardCreateImage.vue';
 
-const confortStore = inject('confortStore');
 const form = inject('form');
 const errors = inject('errors');
 const formRules = inject('formRules');
