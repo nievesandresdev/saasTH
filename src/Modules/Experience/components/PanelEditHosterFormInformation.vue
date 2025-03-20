@@ -48,7 +48,7 @@ Opciones del servicio:
                 @blur:validate="validate('link_url')"
             />
         </div>
-        <div class="space-y-2">
+        <!-- <div class="space-y-2">
             <label class="text-sm font-medium">Precio</label>
             <div class="flex space-x-4">
                 <template v-for="(item, indexRadio) in radioItems">
@@ -97,7 +97,7 @@ Opciones del servicio:
                     €
                 </span>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -144,7 +144,7 @@ watch(() => form.type_price, () => {
         return !!value ? true : 'Este campo es obligatorio';
       },
     ];
-    validate('price');
+    // validate('price');
 });
 
 watch(() => form.price, () => {
@@ -156,7 +156,7 @@ watch(() => form.price, () => {
         return !!value ? true : 'Este campo es obligatorio';
       },
     ];
-    validate('price');
+    // validate('price');
 });
 
 const resetPrice = (v) => {

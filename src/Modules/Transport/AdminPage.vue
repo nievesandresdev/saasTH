@@ -153,9 +153,9 @@ async function loadTransports () {
     firstLoad.value = false;
 }
 
-function goPanelEdit () {
-    modelActive.value = modelActiveHistory.value;
-}
+    function goPanelEdit () {
+        modelActive.value = modelActiveHistory.value;
+    }
 
 function openDrawer (payload) {
     modelActiveHistory.value = payload.action;

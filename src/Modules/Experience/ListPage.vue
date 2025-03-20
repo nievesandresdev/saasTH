@@ -50,6 +50,11 @@
             ref="panelEditHosterRef"
             @load:resetPageData="reloadExperiences()"
         />
+        <PanelEditSubservice
+            ref="panelEditSubserviceRef"
+            @load:resetPageData="resetPageData()"
+            @openPanelEdit="goPanelEdit()"
+        />
     </div>
 
 </template>
@@ -65,6 +70,7 @@ import InputSearch from './components/InputSearch.vue';
 import ModalFilter from './components/ModalFilter.vue';
 import PanelEdit from './components/PanelEdit.vue';
 import PanelEditHoster from './components/PanelEditHoster.vue';
+import PanelEditSubservice from '@/Modules/Confort/components/PanelEditSubservice.vue';
 
 import { useRouter } from 'vue-router';
 const route = useRouter();
@@ -80,16 +86,18 @@ const { queryRouter } = toRefs(props);
 
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
-
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
-
 import { useExperienceStore } from '@/stores/modules/experience';
 const experienceStore = useExperienceStore();
 
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useEventBus } from '@/composables/eventBus';
+const { onEvent } = useEventBus();
+import { useUtilStore } from '@/stores/modules/util'
+const utilStore = useUtilStore();
 
 // DATA
 const { hotelData } = hotelStore;
@@ -168,28 +176,17 @@ const panelEditRef = ref(null);
 const panelEditHosterRef = ref(null);
 const typeActivityEditing = ref(null);
 
-// PROVIDE
-provide('hotelData', hotelData);
-//
-provide('mockupStore', mockupStore);
-provide('experienceStore', experienceStore);
-provide('toast', toast);
-provide('hotelStore', hotelStore);
-provide('formFilter', formFilter);
-provide('experiencesData', experiencesData);
-provide('modelActive', modelActive);
-provide('panelEditHosterActive', panelEditHosterActive);
-provide('paginateData', paginateData);
-provide('page', page);
-provide('numberExperiencesVisible', numberExperiencesVisible);
-provide('numberExperiencesHidden', numberExperiencesHidden);
-provide('numbersByFilters', numbersByFilters);
-provide('isOpenModelFilter', isOpenModelFilter);
-provide('filtersSelected', filtersSelected);
-provide('filtersSelectedDefault', filtersSelectedDefault);
-provide('changePendingInForm', changePendingInForm);
-provide('modalChangePendinginForm', modalChangePendinginForm);
-provide('firstLoad', firstLoad);
+const modelActiveHistory = ref(null);
+const modelSubserviceActive = ref(null);
+const changePendingInFormService = ref(false);
+const modalChangePendinginFormService = ref(false);
+const panelEditSubserviceRef = ref(null);
+const languagesData = ref([]);
+
+// EVENT
+onEvent('open-panel-edit-subservice', openPanelEditSubservice);
+
+// WATCH
 
 watch(modelActive, (valNew, valOld) => {
     if (!valNew && !!valOld) {
@@ -207,9 +204,19 @@ watch(panelEditHosterActive, (valNew, valOld) => {
 onMounted(async () => {
     loadQueryInFormFilter();
     loadExperiences();
+    loadLanguanges();
 });
 
 // COMPUTED
+const serviceNameCurrent = computed(() => {
+    let services  = {
+        Conforts: 'Confort',
+        Transports: 'Transport',
+        Experiences: 'Product',
+    }
+    let routeName = route.currentRoute.value.name;
+    return services[routeName];
+});
 const emptyFilters = computed(() => {
     return !filtersSelected.score?.length &&
         !filtersSelected.duration?.length &&
@@ -221,6 +228,10 @@ const emptyFilters = computed(() => {
 provide('emptyFilters', emptyFilters);
 
 // FUNCTIONS
+
+function goPanelEdit () {
+    panelEditHosterActive.value = modelActiveHistory.value;
+}
 
 function mergeDataFormInUrlMockup (stringQuery, dataForm) {
     if (dataForm.visility === 'recommendated') {
@@ -264,19 +275,7 @@ function loadDataFormFilter () {
 }
 
 function resetDataPage () {
-
-    // formFilter.one_exp_id = null;
-    // formFilter.visibility = null;
-    // formFilter.recommendated = false;
-    // formFilter.search = null;
-    // //
-    // formFilter.all_cities = false;
-    // formFilter.free_cancelation = false;
-    // formFilter.duration = [];
-    // formFilter.score = [];
-    // formFilter.price_min = null;
-    // formFilter.price_max = null;
-
+    changePendingInFormService.value = false;
     page.value = 1;
     experiencesData.value = [];
     Object.assign(formFilter, {...formFilterDefault});
@@ -407,6 +406,7 @@ function openEditByViator (payload) {
 
 function openEditByHoster (payload) {
     typeActivityEditing.value = 'thehoster';
+    modelActiveHistory.value = payload.action;
     panelEditHosterActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
@@ -417,5 +417,61 @@ function openEditByHoster (payload) {
     });
 }
 
+// function SUBSERVICE
+function openDrawerSubservice (payload) {
+    modelSubserviceActive.value = payload.action;
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            // loadMockup(`${payload.item.id}`);
+        } else {
+            // loadMockup('/fakedetail');
+        }
+        panelEditSubserviceRef.value.edit(payload);
+    });
+}
+
+async function openPanelEditSubservice (payload) {
+    panelEditHosterActive.value = null;
+    await nextTick();
+    openDrawerSubservice(payload);
+}
+
+async function loadLanguanges () {
+    const response = await utilStore.$getLanguages();
+    const { ok, data } = response;
+    if (ok) {
+        languagesData.value= data;
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+
+// PROVIDE
+provide('hotelData', hotelData);
+provide('serviceNameCurrent', serviceNameCurrent);
+provide('languagesData', languagesData);
+provide('changePendingInFormService', changePendingInFormService);
+provide('modalChangePendinginFormService', modalChangePendinginFormService);
+provide('modelSubserviceActive', modelSubserviceActive);
+//
+provide('mockupStore', mockupStore);
+provide('experienceStore', experienceStore);
+provide('toast', toast);
+provide('hotelStore', hotelStore);
+provide('formFilter', formFilter);
+provide('experiencesData', experiencesData);
+provide('modelActive', modelActive);
+provide('panelEditHosterActive', panelEditHosterActive);
+provide('paginateData', paginateData);
+provide('page', page);
+provide('numberExperiencesVisible', numberExperiencesVisible);
+provide('numberExperiencesHidden', numberExperiencesHidden);
+provide('numbersByFilters', numbersByFilters);
+provide('isOpenModelFilter', isOpenModelFilter);
+provide('filtersSelected', filtersSelected);
+provide('filtersSelectedDefault', filtersSelectedDefault);
+provide('changePendingInForm', changePendingInForm);
+provide('modalChangePendinginForm', modalChangePendinginForm);
+provide('firstLoad', firstLoad);
 
 </script>
