@@ -26,7 +26,7 @@
         <div class="flex-1 overflow-y-auto px-6 py-6 w-full">
           <!-- Valor y Unidad -->
           <div class="flex flex-col gap-2">
-            <span class="text-sm font-medium">Edita el valor y la unidad</span>
+            <span class="text-sm font-medium">Indica el valor y la unidad</span>
             <div class="flex gap-4">
               <BaseTextField
                 v-model="form.amount"
@@ -54,7 +54,7 @@
   
           <!-- Código -->
           <div class="flex flex-col gap-2 mt-4">
-            <span class="text-sm font-medium">Edita el código</span>
+            <span class="text-sm font-medium">Indica el código que deseas utilizar</span>
             <BaseTextField
               v-model="form.code"
               :error="errors.code"
@@ -68,7 +68,7 @@
   
           <!-- Cómo canjearlo -->
           <div class="flex flex-col gap-2 mt-4">
-            <span class="text-sm font-medium">Edita cómo canjearlo</span>
+            <span class="text-sm font-medium">Cómo canjearlo</span>
             <BaseTextareaField
               v-model="form.description"
               placeholder="Ej: Descuento aplicable para la contratación de cualquier servicio de nuestro hotel. Debe efectuarse la solicitud del servicio previamente en recepción. Mostrar este cupón para solicitar el beneficio."

@@ -3,7 +3,7 @@
         <!-- head -->
         <section class="pt-5 border-b hborder-gray-400 pb-[18px]">
             <div class="flex items-center gap-2">
-                <router-link to="/webapp/promociona-webapp">
+                <router-link to="/promociona-webapp">
                     <img class="w-6 h-6" src="/assets/icons/1.TH.ARROW.LEFT.svg" alt="">
                 </router-link>
                 <h1 class="text-[24px] font-medium leading-[110%]">Desde tu PMS</h1>

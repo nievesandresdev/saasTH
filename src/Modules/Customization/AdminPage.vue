@@ -93,7 +93,7 @@
         <div class="px-4 py-6 rounded-[10px] hbg-white-100 card-form">
             <div class="space-y-2">
                 <h2 class="text-base font-medium">Idioma de la WebApp</h2>
-                <p class="text-sm">El huésped utilizará la WebApp en el idioma por defecto de su navegador, siempre que estén dentro de los 6 idiomas con los que contamos.</p>
+                <p class="text-sm">El huésped utilizará la WebApp en el idioma por defecto de su navegador, siempre que estén dentro de los 10 idiomas con los que contamos.</p>
                 <p class="text-sm mt-0.5">Si el idioma de su navegador no es uno de los 6 idiomas con los que contamos, elige el idioma por defecto:</p>
             </div>
             <div class="form-input space-y-2 mt-4">
@@ -185,7 +185,10 @@ const OPTIONS_LANGUAGES = [
     { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
     { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
     { value: 'pt', label: 'Portugués', img: '/assets/icons/flags/pt.svg' },
-    // { value: 'd', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
+    { value: 'ca', label: 'Catalán', img: '/assets/icons/flags/ca.svg' },
+    { value: 'eu', label: 'Euskera', img: '/assets/icons/flags/eu.svg' },
+    { value: 'gl', label: 'Gallego', img: '/assets/icons/flags/gl.svg' },
+    { value: 'nl', label: 'Holandés', img: '/assets/icons/flags/nl.svg' },
 ]
 
 const formDefault = reactive(cloneDeep(dataFormDefault));

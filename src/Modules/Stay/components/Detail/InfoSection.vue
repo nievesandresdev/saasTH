@@ -124,7 +124,7 @@ watch(() => data.value, async (newData) => {
 
 const middle_optiones = [
     { value:'Booking', label:'Booking', img:'/assets/icons/otas/Booking.svg' },
-    { value:'TripAdvisor', label:'TripAdvisor', img:'/assets/icons/otas/Tripadvisor.svg' },
+    // { value:'TripAdvisor', label:'TripAdvisor', img:'/assets/icons/otas/Tripadvisor.svg' },
     { value:'Expedia', label:'Expedia', img:'/assets/icons/otas/Expedia.svg' },
     { value:'Hotels.com', label:'Hotels.com', img:'/assets/icons/hotels.com.svg' },
     { value:'Email', label:'Email', img:'/assets/icons/1.TH.EMAIL.svg' },

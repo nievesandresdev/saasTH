@@ -148,7 +148,7 @@ const distances = ref([
     {name:'10 a 20 km'},
 ]);
 const formModalFilter = reactive({
-    all_cities: false,
+    all_cities: true,
     distances: [],
     points: [],
 });
