@@ -103,11 +103,11 @@
                     <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ experience.title }}</h6>
                     <div class="mt-[12px] flex items-center justify-between">
                         <span class="text-sm htext-black-100 font-semibold truncate-2">
-                            <template v-if="experience.name_api == 'viator' || (experience.name_api == 'thehoster' && experience.type_price == 2)">
-                                Desde {{ experience.from_price }}€
-                            </template>
-                            <template v-else-if="experience.type_price == 1">
+                            <template v-if="experience.name_api == 'viator' || (experience.name_api == 'thehoster' && experience.type_price == 1)">
                                 {{ experience.from_price }}€
+                            </template>
+                            <template v-else-if="experience.type_price == 2">
+                                Desde {{ experience.from_price }}€
                             </template>
                             <template v-else="experience.type_price == 3">
                                 Gratis 
