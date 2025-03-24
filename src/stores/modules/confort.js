@@ -5,6 +5,7 @@ import * as confortServices from '@/api/services/confort.service'
 import { useHotelStore } from '@/stores/modules/hotel';
 
 export const useConfortStore = defineStore('confort', () => {
+    
 
     const hotelStore = useHotelStore();
     

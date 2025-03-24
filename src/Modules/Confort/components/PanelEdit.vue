@@ -147,6 +147,10 @@ import { ServiceTypeEnum } from "@/shared/enums/ServiceTypeEnum";
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
 
+import { useServiceStore } from '@/stores/modules/service'
+const serviceStore = useServiceStore();
+const { form, itemSelected, formDefault } = serviceStore;
+
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
@@ -165,27 +169,6 @@ const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const modalDeleteRef  = ref(null);
-
-const valueFormDefault = {
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-}
-
-const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
-const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
-const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
 // const formRules = reactive({
 //     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],

@@ -21,7 +21,7 @@
                     <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
                 </button>
                 <div class="card__img">
-                    <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image })" :alt="`image_${index}`">
+                    <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image?.url ?? item.image })" :alt="`image_${index}`">
                 </div>
                 <div class="">
                     <h5 class="text-[12px] font-bold leading-[150%]">{{ item.name }}</h5>
@@ -40,7 +40,7 @@
                     >
                 </button>
                 <button
-                    @click="openModalDeleteItem(item)"
+                    @click="openModalDeleteItem(item, index)"
                 >
                     <img
                         src="/assets/icons/1.TH.DELETE.OUTLINE.svg"
@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref, nextTick } from 'vue';
+import { inject, onMounted, ref, nextTick, watch } from 'vue';
 
 const form = inject('form');
 const languagesData = inject('languagesData');
@@ -101,6 +101,10 @@ onMounted(() => {
     loadSubservices();
 });
 
+// WATCH
+
+// FUNCTIONS
+
 function openPanelEditSubservice (typeAction, subservice = null) {
     if (subservice?.languages?.length) {
         let languages = languagesData.value.map(item => {
@@ -124,25 +128,27 @@ function openPanelEditSubservice (typeAction, subservice = null) {
 }
 
 async function loadSubservices () {
-    let params = {
-        service_id: form.id,
-        services_type: serviceNameCurrent.value
-    }
-    const response = await subserviceStore.$getAll(params);
+    // let params = {
+    //     service_id: form.id,
+    //     services_type: serviceNameCurrent.value
+    // }
+    // const response = await subserviceStore.$getAll(params);
     
-    const { ok, data } = response;
-    if (ok) {
-        subservicesData.value = data;
-    } else {
-        toast.warningToast(data?.message,'top-right');
-    }
+    // const { ok, data } = response;
+    // if (ok) {
+    //     subservicesData.value = data;
+    // } else {
+    //     toast.warningToast(data?.message,'top-right');
+    // }
+
+    subservicesData.value = [...form.subservices];
 }
 
 function editItem (item) {
     openPanelEditSubservice('EDIT', item);
 }
-function openModalDeleteItem (item) {
-    emitEvent('open-modal-delete-item', {subserviceId: item.id});
+function openModalDeleteItem (item, index) {
+    emitEvent('open-modal-delete-item', {indexSubserviceId: index});
 }
 
 //DRAG
@@ -186,7 +192,7 @@ const handlerDragEnd = () => {
 async function updateOrder () {
     const idsSubservices = subservicesData.value.map(item => item.id);
     const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
-    const response = await subserviceStore.$updateOrder(data);
+    // const response = await subserviceStore.$updateOrder(data);
     // mockupStore.$reloadIframe();
 }
 

@@ -136,6 +136,10 @@ const userStore = useUserStore();
 import { useSubserviceStore } from '@/stores/modules/subservice'
 const subserviceStore = useSubserviceStore();
 
+import { useServiceStore } from '@/stores/modules/service'
+const serviceStore = useServiceStore();
+const { form: formService, itemSelected: itemSelectedService, formDefault: formDefaultService } = serviceStore;
+
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
@@ -158,6 +162,7 @@ const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const modalDeleteSubserviceRef  = ref(null);
 const modalDeleteRef  = ref(null);
+const indexItemSelected = ref(null);
 
 const valueFormDefault = {
     id: null,
@@ -190,7 +195,7 @@ const isLoadingForm = ref(false);
 const urlsimages = ref([]);
 const modalDeleteFacilityRef = ref(null);
 const modalCancelChangeFacilityRef = ref(null);
-const subserviceDeleteId = ref(null);
+const indexSubserviceDeleteId = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
@@ -271,26 +276,33 @@ function closeModalCancel () {
 async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
-    const response = await subserviceStore.$storeOrUpdate(body);
-    const { ok, data } = response;
-    if (ok) {
-        toast.warningToast('Cambios guardados con éxito','top-right');
-        resetCompoent();
+    
+    if (modelSubserviceActive.value === 'ADD') {
+        formService.subservices = [...formService.subservices, body]; 
     } else {
-        toast.warningToast(data?.message,'top-right');
+        let index = formService.subservices.findIndex(item => item.id === form.id);
+        let item = formService.subservices[index];
+        if (index !== -1) {
+            item = Object.assign(item, body);
+        }
     }
+
+    resetCompoent();
+    toast.warningToast('Cambios guardados con éxito','top-right');
     isLoadingForm.value = false;
 }
 async function submitDeleteSubservice () {
     let body = {service_id: form.id, services_type: serviceNameCurrent.value};
-    const response = await subserviceStore.$delete(subserviceDeleteId.value, body);
-    const { ok, data } = response;
-    if (ok) {
-        toast.warningToast('Subservicio eliminado','top-right');
-        emitEvent('load-subservices');
-    } else {
-        toast.warningToast(data?.message,'top-right');
-    }
+    // const response = await subserviceStore.$delete(indexSubserviceDeleteId.value, body);
+    // const { ok, data } = response;
+    // if (ok) {
+    //     toast.warningToast('Subservicio eliminado','top-right');
+    //     emitEvent('load-subservices');
+    // } else {
+    //     toast.warningToast(data?.message,'top-right');
+    // }
+    formService.subservices.splice(indexSubserviceDeleteId.value, 1);
+    emitEvent('load-subservices');
 }
 function resetCompoent () {
     closeModalForce();
@@ -363,14 +375,15 @@ function openModalChangeInForm () {
 }
 
 function openModalDeleteItem (payload) {
-    let { subserviceId } = payload;
-    subserviceDeleteId.value = subserviceId;
+    let { indexSubserviceId } = payload;
+    indexSubserviceDeleteId.value = indexSubserviceId;
     if (modalDeleteSubserviceRef.value) {
         modalDeleteSubserviceRef.value.openModal();
     }
 }
 
 function edit ({action, serviceId, subservice}) {
+    console.log('subservice', subservice);
     if (action === 'EDIT') {
         let {
             id, name, description, price, image, languages, fields_visibles, duration, address, requeriment
@@ -381,7 +394,7 @@ function edit ({action, serviceId, subservice}) {
         }
 
         let imageObject = {
-            url: image,
+            url: image?.url ?? image,
         }
         
         Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
@@ -404,6 +417,7 @@ provide('validateField', validateField);
 provide('formRules', formRules);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
+provide('indexItemSelected', indexItemSelected);
 
 </script>
 
