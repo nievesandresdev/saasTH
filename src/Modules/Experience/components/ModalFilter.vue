@@ -198,7 +198,7 @@ const distances = ref([
     {name:'5 estrellas'},
 ]);
 const formModalFilter = reactive({
-    all_cities: false,
+    all_cities: true,
     free_cancelation: false,
     duration: [],
     score: [],
