@@ -15,6 +15,11 @@
                 ref="panelEditRef"
                 @load:resetPageData="resetPageData()"
             />
+            <PanelEditSubservice
+                ref="panelEditSubserviceRef"
+                @load:resetPageData="resetPageData()"
+                @openPanelEdit="goPanelEdit()"
+            />
     </div>
 </template>
 
@@ -27,6 +32,7 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
  import AdminPageBannerShowToGuest from './AdminPageBannerShowToGuest.vue';
  import AdminPageList from './AdminPageList.vue';
  import PanelEdit from './components/PanelEdit.vue';
+ import PanelEditSubservice from './components/PanelEditSubservice.vue';
 
 // MODULE
 import { useMockupStore } from '@/stores/modules/mockup';
@@ -35,6 +41,11 @@ const mockupStore = useMockupStore();
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useEventBus } from '@/composables/eventBus';
+const { onEvent } = useEventBus();
+
+import { useRouter } from 'vue-router';
+const route = useRouter();
 
 // STATE
 import { useUserStore } from '@/stores/modules/users/users';
@@ -43,10 +54,14 @@ import { useConfortStore } from '@/stores/modules/confort';
 const confortStore = useConfortStore();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
-const { hotelData } = hotelStore; 
+const { hotelData } = hotelStore;
+import { useUtilStore } from '@/stores/modules/util'
+const utilStore = useUtilStore();
 
 // DATA
 const modelActive = ref(null);
+const modelActiveHistory = ref(null);
+const modelSubserviceActive = ref(null);
 const numberCardsDefault = ref(10);
 const confortsEmpty = ref(false);
 const confortsData = ref([]);
@@ -56,8 +71,11 @@ const isloadingForm = ref(false);
 const selectedCard = ref(null);
 
 const changePendingInForm = ref(false);
+const changePendingInFormService = ref(false);
 const modalChangePendinginForm = ref(false);
+const modalChangePendinginFormService = ref(false);
 const panelEditRef = ref(null);
+const panelEditSubserviceRef = ref(null);
 const formFilter = reactive({
 
 });
@@ -70,13 +88,27 @@ const paginateData = reactive({
     to: 0,
 });
 
+const languagesData = ref([]);
+
+// EVENT
+onEvent('open-panel-edit-subservice', openPanelEditSubservice);
+
 watch(modelActive, (valNew, valOld) => {
     if (!valNew && !!valOld) {
         loadMockup();
     }
 });
-
 // COMPUTED
+const serviceNameCurrent = computed(() => {
+    let services  = {
+        Conforts: 'Confort',
+        Transports: 'Transport',
+        Experiences: 'Product',
+    }
+    let routeName = route.currentRoute.value.name;
+    return services[routeName];
+});
+
 const searchText = computed(() => {
    return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
 });
@@ -88,6 +120,7 @@ onMounted(async() => {
     
     loadMockup();
     loadConforts();
+    loadLanguanges();
 });
 
 // FUNCTION
@@ -123,7 +156,12 @@ async function loadConforts () {
     isloadingForm.value=false;
 }
 
+function goPanelEdit () {
+    modelActive.value = modelActiveHistory.value;
+}
+
 function openDrawer (payload) {
+    modelActiveHistory.value = payload.action;
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
@@ -137,11 +175,43 @@ function openDrawer (payload) {
 
 function resetPageData () {
     changePendingInForm.value = false;
+    changePendingInFormService.value = false;
     //mockupStore.$reloadIframe();
     loadMockup();
     loadConforts();
 }
 
+// function SUBSERVICE
+function openDrawerSubservice (payload) {
+    modelSubserviceActive.value = payload.action;
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            // loadMockup(`${payload.item.id}`);
+        } else {
+            // loadMockup('/fakedetail');
+        }
+        panelEditSubserviceRef.value.edit(payload);
+    });
+}
+async function openPanelEditSubservice (payload) {
+    modelActive.value = null;
+    await nextTick();
+    openDrawerSubservice(payload);
+}
+
+async function loadLanguanges () {
+    const response = await utilStore.$getLanguages();
+    const { ok, data } = response;
+    if (ok) {
+        languagesData.value= data;
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+}
+
+// PROVIDE
+provide('serviceNameCurrent', serviceNameCurrent);
+provide('languagesData', languagesData);
 provide('toast', toast);
 provide('mockupStore', mockupStore);
 provide('confortStore', confortStore);
@@ -149,10 +219,13 @@ provide('confortsData', confortsData);
 provide('hotelStore', hotelStore);
 provide('hotelData', hotelData);
 provide('changePendingInForm', changePendingInForm);
+provide('changePendingInFormService', changePendingInFormService);
 provide('modalChangePendinginForm', modalChangePendinginForm);
+provide('modalChangePendinginFormService', modalChangePendinginFormService);
 provide('paginateData', paginateData);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
+provide('modelSubserviceActive', modelSubserviceActive);
 provide('page', page);
 provide('firstLoad', firstLoad);
 provide('isloadingForm', isloadingForm);

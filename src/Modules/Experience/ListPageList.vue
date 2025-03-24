@@ -112,6 +112,7 @@
                             <template v-else="experience.type_price == 3">
                                 Gratis 
                             </template>
+                            
                         </span>
                         <img v-if="experience.name_api === 'viator'" src="/assets/icons/TH.VIATOR.svg" alt="VIATOR">
                     </div>

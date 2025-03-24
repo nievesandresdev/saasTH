@@ -1,13 +1,13 @@
 <template>
     <div
-        v-if="modelActive"
+        v-if="modelSubserviceActive"
         class="w-full fixed top-0 left-0 z-[40]"
         :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
     ></div>
     <transition name="slide">
         <div
-            v-if="modelActive"
+            v-if="modelSubserviceActive"
             class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed bg-white"
             :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             :style="`right: 353.5px;`"
@@ -17,18 +17,18 @@
         >
             <div
                 class=""
-                :class="{'mx-6': modelActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': modelActive === 'ADD'}"
+                :class="{'mx-6': modelSubserviceActive === 'ADD', 'border-b hborder-bottom-gray-400 pb-4': modelSubserviceActive === 'ADD'}"
             >
                 <div class="px-6">
                     <div class="flex justify-between py-[20px]">
-                        <h1 class="text-[22px] font-medium text-center">{{ modelActive === 'EDIT' ? 'Editar servicio' : 'Crea tu servicio'}}</h1>
+                        <h1 class="text-[22px] font-medium text-center">{{ modelSubserviceActive === 'EDIT' ? 'Editar subservicio' : 'Crea tu subservicio'}}</h1>
                         <button @click="closeModal">
                             <img class="w-[24px] h-[24px]" src="/assets/icons/1.TH.CLOSE.svg">                            
                         </button>
                     </div>
                 </div>
                 <!-- tabs -->
-                <template v-if="modelActive === 'ADD'">
+                <template v-if="modelSubserviceActive === 'ADD'">
                     <BaseStepper v-model="stepCurrent"  :steps="steps" />
                 </template>
                 <template v-else>
@@ -38,15 +38,15 @@
             <div class="pb-6" style="height: calc(100% - 72px); overflow: auto;">
                 <div class="px-6 mt-[24px] mt-3">
                     <template v-if="stepCurrent === 0">
-                        <PanelEditFormInformation />
+                        <PanelEditSubserviceFormInformation @open:gallery="openGallery" />
                     </template>
                     <template v-else-if="stepCurrent === 1">
-                        <PanelEditFormCharacteristics />
+                        <PanelEditSubserviceFormCharacteristics />
                     </template>
                 </div>    
             </div>
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
-                <template v-if="modelActive === 'EDIT'">
+                <template v-if="modelSubserviceActive === 'EDIT'">
                     <button
                         class="py-3"
                         @click="changesform ? openModalChangeInForm() : openModalDelete()"
@@ -55,7 +55,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0  || (form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || !form.image"
                         @click="submitSave"
                     >
                         Guardar
@@ -70,10 +70,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent != 0)"
                         @click="nextTab"
                     >
-                        {{ stepCurrent < 2 ? 'Siguiente' : 'Crear' }}
+                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
                     </button>
                 </template>
             </div>
@@ -81,26 +81,16 @@
     </transition>
     <ModalGallery
         ref="modalGaleryRef"
-        :id="'modal-gallery'"
+        :id="'modal-gallery-subservice'"
         :name-image-new="hotelStore?.hotelData?.name"
-        multiple
         @update:img="addNewsImages($event)"
-    />
-    <BasePreviewImage 
-        :url-image="previewUrl"
-        :is-open="isPreviewOpen"
-        @click:close="closePreviewImage"
     />
     <ModalCancelChange 
         ref="modalCancelChangeRef"
         @submit:saveChange="submitSave()"
         @submit:closeModal="closeModalForce"
     />
-    <ModalDelete
-        ref="modalDeleteRef"
-        @submit:delete="submitDelete()"
-    />
-    <template v-if="modelActive">
+    <template v-if="modelSubserviceActive">
         <ModalNoSave
             :id="'not-saved'"
             :open="changesform"
@@ -108,11 +98,14 @@
             textbtn="Guardar"
             @saveChanges="submitSave"
             type="save_changes"
-            :force-open="modalChangePendinginForm"
+            :force-open="modalChangePendinginFormService"
             @close="closeModalForce()"
         />
     </template>
-
+    <ModalDeleteSubservice
+        ref="modalDeleteSubserviceRef"
+        @submit:delete="submitDeleteSubservice()"
+    />
 </template>
 
 <script setup>
@@ -126,13 +119,12 @@ import * as rules from '@/utils/rules';
 import BasePreviewImage from "@/components/BasePreviewImage.vue";
 import ModalGallery from "@/components/ModalGallery.vue";
 import BaseStepper from '@/components/BaseStepper.vue';
-import PanelEditFormInformation from './PanelEditFormInformation.vue';
-import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
-import PanelEditFormCharacteristics from './PanelEditFormCharacteristics.vue';
+import PanelEditSubserviceFormInformation from './PanelEditSubserviceFormInformation.vue';
+import PanelEditSubserviceFormCharacteristics from './PanelEditSubserviceFormCharacteristics.vue';
 import ModalCancelChange from './ModalCancelChange.vue';
-import ModalDelete from './ModalDelete.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import BaseTab from '@/components/BaseTab.vue';
+import ModalDeleteSubservice from './ModalDeleteSubservice.vue';
 
 const emit = defineEmits(['load:resetPageData']);
 
@@ -141,57 +133,61 @@ import { ServiceTypeEnum } from "@/shared/enums/ServiceTypeEnum";
 // STORE
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
+import { useSubserviceStore } from '@/stores/modules/subservice'
+const subserviceStore = useSubserviceStore();
 
 import { useServiceStore } from '@/stores/modules/service'
 const serviceStore = useServiceStore();
-const { form, itemSelected, formDefault } = serviceStore;
+const { form: formService, itemSelected: itemSelectedService, formDefault: formDefaultService } = serviceStore;
 
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useEventBus } from '@/composables/eventBus';
+const { onEvent, emitEvent } = useEventBus();
+
 
 // INJECT
 const hotelStore = inject('hotelStore');
 const confortStore = inject('confortStore');
-const changePendingInForm = inject('changePendingInForm');
-const modalChangePendinginForm = inject('modalChangePendinginForm');
-const modelActive = inject('modelActive');
-const languagesData = inject('languagesData');
+const changePendingInFormService = inject('changePendingInFormService');
+const modalChangePendinginFormService = inject('modalChangePendinginFormService');
+const modelSubserviceActive = inject('modelSubserviceActive');
+const serviceNameCurrent = inject('serviceNameCurrent');
+
 
 // DATA
-const subservicesData = ref([]);
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
+const modalDeleteSubserviceRef  = ref(null);
 const modalDeleteRef  = ref(null);
+const indexItemSelected = ref(null);
 
-// const formRules = reactive({
-//     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-//     name: [value => !!value ? true : 'Este campo es obligatorio'],
-//     hire: [value => !!value ? true : 'Este campo es obligatorio'],
-//     description: [value => !!value ? true : 'Este campo es obligatorio'],
-//     price: [value => !!value && (form.type_price === 1 || form.type_price === 2) ? true : 'Este campo es obligatorio'],
-// });
+const valueFormDefault = {
+    id: null,
+    name: '',
+    description: '',
+    type_price: 1,
+    price: null,
+    image: null,
+    languages: [],
+    fields_visibles: [],
+    duration: null,
+    address: '',
+    requeriment: '',
+    service_id: null,
+    services_type: serviceNameCurrent.value,
+}
+
+const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
+const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
 const formRules = reactive({
-    link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
-    hire: [value => !!value ? true : 'Este campo es obligatorio'],
     description: [value => !!value ? true : 'Este campo es obligatorio'],
-    // price: [
-    //   (value) => {
-    //     if (form.type_price === 3) {
-    //       return true; // Si es 3, no validar
-    //     }
-    //     return !!value ? true : 'Este campo es obligatorio';
-    //   },
-    // ]
 });
-
-function isValidURL(url) {
-    const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
-    return pattern.test(url);
-}
 
 const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
 
@@ -199,10 +195,13 @@ const isLoadingForm = ref(false);
 const urlsimages = ref([]);
 const modalDeleteFacilityRef = ref(null);
 const modalCancelChangeFacilityRef = ref(null);
+const indexSubserviceDeleteId = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
+// EVENT
+onEvent('open-modal-delete-item', openModalDeleteItem);
 
 // ONMOUNTED
 onMounted(() => {
@@ -217,29 +216,24 @@ const steps = computed(() => {
             disabled: false
         },
         {
-            name: 'Galeria',
+            name: 'Caracteristicas',
             value: 1,
-            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+            disabled: false
         },
     ];
 });
 const changesform = computed(() => {
-    // console.log(form.description, 'form');
-    // console.log(itemSelected.description, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
-        (normalize(form.hire) !== normalize(itemSelected.hire)) ||
-        (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
+        !lodash.isEqual(form.image, itemSelected?.image) ||
         //
-        (normalize(form.type) !== normalize(itemSelected.type)) ||
         (normalize(form.price) !== normalize(itemSelected.price)) ||
         (normalize(form.duration) !== normalize(itemSelected.duration)) ||
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
-        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
-        !lodash.isEqual(form.languages, itemSelected?.languages) ||
-        form.subservices.length !== itemSelected.subservices.length
-        changePendingInForm.value = valid;
+        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles)
+        !lodash.isEqual(form.languages, itemSelected?.languages)
+        changePendingInFormService.value = valid;
     return valid;
 });
 
@@ -261,15 +255,12 @@ const normalize = (value) => {
 function closePreviewImage () {
     isPreviewOpen.value = false;
 }
-function openModalDelete () {
-    modalDeleteRef.value.openModal();
-}
 
 function prevTab () {
-    if(stepCurrent.value >  0){
+    if(stepCurrent.value === 1){
         stepCurrent.value--;
     } else {
-        if (changePendingInForm.value) {
+        if (changePendingInFormService.value) {
             openModalCancel();
         } else {
             closeModalForce();
@@ -285,68 +276,82 @@ function closeModalCancel () {
 async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
-    const response = await confortStore.$storeOrUpdate(body);
-    const { ok, data } = response;
-    if (ok) {
-        toast.warningToast('Cambios guardados con éxito','top-right');
-        resetCompoent();
-        location.reload();
+    
+    if (modelSubserviceActive.value === 'ADD') {
+        formService.subservices = [...formService.subservices, body]; 
     } else {
-        toast.warningToast(data?.message,'top-right');
+        let index = formService.subservices.findIndex(item => item.id === form.id);
+        let item = formService.subservices[index];
+        if (index !== -1) {
+            item = Object.assign(item, body);
+        }
     }
+
+    resetCompoent();
+    toast.warningToast('Cambios guardados con éxito','top-right');
     isLoadingForm.value = false;
 }
-async function submitDelete () {
-    const response = await confortStore.$delete(form.id);
-    const { ok, data } = response;
-    if (ok) {
-        toast.warningToast('Cambios guardados con éxito','top-right');
-        resetCompoent();
-        location.reload();
-    } else {
-        toast.warningToast(data?.message,'top-right');
-    }
+async function submitDeleteSubservice () {
+    let body = {service_id: form.id, services_type: serviceNameCurrent.value};
+    // const response = await subserviceStore.$delete(indexSubserviceDeleteId.value, body);
+    // const { ok, data } = response;
+    // if (ok) {
+    //     toast.warningToast('Subservicio eliminado','top-right');
+    //     emitEvent('load-subservices');
+    // } else {
+    //     toast.warningToast(data?.message,'top-right');
+    // }
+    formService.subservices.splice(indexSubserviceDeleteId.value, 1);
+    emitEvent('load-subservices');
 }
 function resetCompoent () {
     closeModalForce();
-    resetPageData();
+    // resetPageData();
 }
 function resetPageData () {
     emit('load:resetPageData');
 }
 function closeModal () {
-    if (changePendingInForm.value) {
+    if (changePendingInFormService.value) {
         openModalChangeInForm();
         return;
     }
-    changePendingInForm.value = false;
-    modelActive.value = null;
+    changePendingInFormService.value = false;
+    modelSubserviceActive.value = null;
     stepCurrent.value = 0;
     resetData();
+    openPanelEdit();
 }
 function closeModalForce () {
-    changePendingInForm.value = false;
-    modelActive.value = null;
+    changePendingInFormService.value = false;
+    modelSubserviceActive.value = null;
     stepCurrent.value = 0;
     resetData();
+    openPanelEdit();
 }
+
+function openPanelEdit () {
+    emit('openPanelEdit');
+}
+
 function cancelChange () {
     resetData();
 }
+
 function resetData () {
     Object.assign(form, {...formDefault});
     
     // Vaciar el array de imágenes usando splice para mantener la reactividad
-    form.images.splice(0, form.images.length);
+    form.image = null;
     
     Object.assign(itemSelected, {...formDefault});
-    itemSelected.images.splice(0, itemSelected.images.length); // Hacer lo mismo para itemSelected
+    itemSelected.image = null; // Hacer lo mismo para itemSelected
 
 }
 
 
 function nextTab () {
-    if (stepCurrent.value < 2) {
+    if (stepCurrent.value == 0) {
         if (formInvalid.value || !changesform.value || isLoadingForm.value) {
             return;
         }
@@ -358,70 +363,61 @@ function nextTab () {
 function openGallery () {
     modalGaleryRef.value.openModal();
 }
-function addNewsImages (images) {
-    images.forEach(item => {
-        let { url, name, type } = item;
-        form.images.push({ id:null, url, name, type });
-    });
+function addNewsImages (image) {
+    let { url, name, type } = image;
+    form.image = { id:null, url, name, type };
 }
 function openModalChangeInForm () {
-    modalChangePendinginForm.value = true;
+    modalChangePendinginFormService.value = true;
     nextTick(() => {
-        modalChangePendinginForm.value = false;
+        modalChangePendinginFormService.value = false;
     });
 }
 
-async function edit ({action, item}) {
+function openModalDeleteItem (payload) {
+    let { indexSubserviceId } = payload;
+    indexSubserviceDeleteId.value = indexSubserviceId;
+    if (modalDeleteSubserviceRef.value) {
+        modalDeleteSubserviceRef.value.openModal();
+    }
+}
+
+function edit ({action, serviceId, subservice}) {
+    console.log('subservice', subservice);
     if (action === 'EDIT') {
-        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, address, requeriment } = item;
-
-        if (languages?.length) {
-            let languagesArray = languagesData.value.map(item => {
-                return {
-                    id: null,
-                    abbreviation: item.abbreviation,
-                    name: item.name,
-                }
-            }).filter(item => {
-                let language = languages.find(lagSub => lagSub === item.abbreviation );
-                return language;
-            });
-            languages = languagesArray;
-        }
-
+        let {
+            id, name, description, price, image, languages, fields_visibles, duration, address, requeriment
+        } = subservice;
         let numPrice = price ? parseFloat(price) : null;
         if (numPrice && !isNaN(numPrice)) {
             numPrice = numPrice.toFixed(2);
         }
 
-        let itemSelectedImages = JSON.parse(JSON.stringify(images));
-        let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, {  id, name, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
-        Object.assign(form, {id, name, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
-        images.forEach(img => {
-            urlsimages.value.push(img);
-        });
-        await nextTick();
-        itemSelected.description = form.description;
+        let imageObject = {
+            url: image?.url ?? image,
+        }
+        
+        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
+        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
     } else {
-        Object.assign(itemSelected, {...formDefault});
-        Object.assign(form, {...formDefault});
+        Object.assign(itemSelected, {...formDefault, service_id: serviceId});
+        Object.assign(form, {...formDefault, service_id: serviceId});
     }
 }
-
 defineExpose({ edit });
+
 
 //
 provide('confortStore', confortStore);
 provide('form', form);
-provide('formRules', formRules);
 // provide('itemSelected', itemSelected);
 provide('errors', errors);
 provide('urlsimages', urlsimages);
 provide('validateField', validateField);
+provide('formRules', formRules);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
-provide('subservicesData', subservicesData);
+provide('indexItemSelected', indexItemSelected);
 
 </script>
 

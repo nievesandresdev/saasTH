@@ -77,7 +77,6 @@ function openGallery (){
 }
 
 function removeImage (index){
-    console.log(urlsimages, 'urlsimages');
     urlsimages.value.splice(index, 1);
     form.images.splice(index, 1);
 }

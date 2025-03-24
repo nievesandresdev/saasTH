@@ -11,10 +11,10 @@
             />
         </div>
         <template v-if="form.type == 1">
-            <PanelEditFormCharacteristicsUnico />
+            <PanelEditHosterFormCharacteristicsUnico />
         </template>
         <template v-else>
-            <PanelEditFormCharacteristicsVarious />
+            <PanelEditHosterFormCharacteristicsVarious />
         </template>
     </div>
 </template>
@@ -31,8 +31,8 @@ import InputSearchLanguage from "@/components/Forms/InputSearchLanguage.vue";
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import Editor from "@/components/Forms/Editor.vue";
 
-import PanelEditFormCharacteristicsUnico from "./PanelEditFormCharacteristicsUnico.vue";
-import PanelEditFormCharacteristicsVarious from "./PanelEditFormCharacteristicsVarious.vue";
+import PanelEditHosterFormCharacteristicsUnico from "./PanelEditHosterFormCharacteristicsUnico.vue";
+import PanelEditHosterFormCharacteristicsVarious from "./PanelEditHosterFormCharacteristicsVarious.vue";
 
 import { ServiceTypeArray } from "@/shared/enums/ServiceTypeEnum";
 

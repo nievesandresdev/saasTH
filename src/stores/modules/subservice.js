@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import * as confortServices from '@/api/services/confort.service'
+import * as subserviceServices from '@/api/services/subservice.service'
 
 import { useHotelStore } from '@/stores/modules/hotel';
 
-export const useConfortStore = defineStore('confort', () => {
-    
+export const useSubserviceStore = defineStore('subservice', () => {
 
     const hotelStore = useHotelStore();
     
@@ -20,7 +19,7 @@ export const useConfortStore = defineStore('confort', () => {
         // console.log(`'type: '${type}, 'url: '${url}`)
         if (type === 'CDN') return url;
         if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
-        if (!type) return URL_STORAGE+'/storage/confort'+url;
+        if (!type) return URL_STORAGE+'/storage/subservice'+url;
         return `${URL_STORAGE}${url}`;
     }
 
@@ -30,7 +29,7 @@ export const useConfortStore = defineStore('confort', () => {
             hotel: { id: idHotel, name: nameName, zone: zoneHotel },
             ...params
         }
-        const response = await confortServices.getAllApi(newParams);
+        const response = await subserviceServices.getAllApi(newParams);
         if(response.ok) return response;
         return [];
     }
@@ -48,7 +47,7 @@ export const useConfortStore = defineStore('confort', () => {
             hotel: { id: idHotel, name: nameName, zone: zoneHotel },
             ...params
         }
-        const response = await confortServices.updateOrderApi(newParams, {showPreloader: false});
+        const response = await subserviceServices.updateOrderApi(newParams, {showPreloader: false});
         return response;
         if(response.ok) return response.data;
         return []
@@ -67,18 +66,19 @@ export const useConfortStore = defineStore('confort', () => {
             hotel: { id: idHotel, name: nameName, zone: zoneHotel },
             ...params
         }
-        const response = await confortServices.storeOrUpdateApi(newParams, {showPreloader: false});
+        const response = await subserviceServices.storeOrUpdateApi(newParams, {showPreloader: false});
         return response;
         if(response.ok) return response.data;
         return [];
     }
 
-    async function $delete(id) {
+    async function $delete (id, params) {
         let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
         let newParams = {
             hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...params
         }
-        const response = await confortServices.deleteApi(id, newParams, {showPreloader: false});
+        const response = await subserviceServices.deleteApi(id, newParams, {showPreloader: false});
         return response;
         if(response.ok) return response.data;
         return [];
