@@ -6,7 +6,7 @@
                 class="text-base leading-[110%] font-medium pb-2 relative cursor-pointer"
                 :key="guest.id"
                 :class="{
-                    'bg-white shadow-tab pt-4 pr-4  pl-4 rounded-t-[10px] text-[#0B6357] font-semibold': Number(route.query.g) == guest.id,
+                    'bg-white shadow-tab pt-4 pr-4  pl-4 rounded-t-[10px] text-[#0B6357] font-semibold': Number(route.query.g) == guest.id, 
                     'text-gray-500 pt-4 pr-4 pl-4 hover:bg-[#ECF9F5] hover:rounded-t-lg': Number(route.query.g) !== guest.id,
                 }"
                 @click="goGuest(guest.id)"
@@ -31,14 +31,24 @@ const router = useRouter();
 const data = inject('data');
 const notyRef = ref([]);
 
+const props = defineProps({
+    view:{
+        type:String,
+        default:null
+    }
+})
 // onMounted(()=>{
 
 // })
 
 
 function goGuest(guestId){
+    let viewName = 'StayQueryDetail';
+    if(props.view == 'checkin'){
+        viewName = 'CheckinDetail';
+    }
     router.push({
-        name: 'StayQueryDetail',
+        name: viewName,
         params: { stayId: route.params.stayId },
         query: { g: guestId }
     });

@@ -22,6 +22,7 @@
     </section>
 </template>
 <script setup>
+import { $formatTypeLodging } from '@/utils/helpers'
  defineProps({
     status:{
         type:String,
@@ -29,7 +30,7 @@
     },
     question:{
         type:String,
-        default:'¿Hay algo que podamos hacer para tu llegada al hotel?'
+        default:'¿Hay algo que podamos hacer para tu llegada al '+ $formatTypeLodging() +'?'
     },
     questionOptions:{
         type:String,

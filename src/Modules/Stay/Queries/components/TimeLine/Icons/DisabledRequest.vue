@@ -6,7 +6,7 @@
             :left="0"
         >
             <template v-slot:button>
-                <img class="w-6 h-6" src="/assets/icons/1.TH.! CIRCULODISABLED.svg" alt="">            
+                <img class="w-6 h-6" src="/assets/icons/1.TH.! CIRCULO.svg" alt="">            
             </template>
             <template v-slot:content>
                 <p class="text-xs font-medium">Solicitud de reseña en {{translatePeriod}}</p>

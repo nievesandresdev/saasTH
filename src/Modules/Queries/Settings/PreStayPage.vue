@@ -1,71 +1,76 @@
 <template>
-    <Head />
-    <section class="px-6">
-        <TitleAndActivate 
-            :defaultToggle="form.pre_stay_activate"
-            @onchange="(value) => form.pre_stay_activate = value"
+    <div class="h-full flex flex-col">
+        <Head />
+        <section class="px-6">
+            <TitleAndActivate 
+                :defaultToggle="form.pre_stay_activate"
+                @onchange="(value) => form.pre_stay_activate = value"
+            />
+            <p class="text-sm mt-2">
+                Nos enfocamos en conocer las preferencias e inquietudes de los huéspedes antes de su llegada, teniendo como objetivo igualar o superar sus expectativas.
+            </p>
+        </section>
+
+        <QueryTerms />
+
+        <section class="px-6 my-6">
+            <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
+                <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
+                <p class="text-sm mt-2">Configura el mensaje de respuesta del {{$formatTypeLodging()}}, que aparecerá cuando el huésped proporcione su feedback.</p>
+                <div class="mt-4" v-if="form.pre_stay_thanks">
+                    <p class="text-sm font-semibold leading-[120%] mb-2">Mensaje de respuesta cuando el huésped proporcione el feedback</p>
+                    <AutoTextArea 
+                        :key="forceUpdate"
+                        @empty="event => handleEmpty(event,'thanksEmpty')"
+                        :id="'AutoTextArea1'"
+                        v-model="form.pre_stay_thanks.es" 
+                        :wordLimit="150"
+                        mandatory
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- <section class="px-6 mt-6 mb-10">
+            <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
+                <h1 class="text-base font-medium">Comentarios adicionales</h1>
+                <p class="text-sm mt-2">Establece el mensaje de petición de comentarios adicionales.</p>
+                <div class="mt-4">
+                    <AutoTextArea 
+                        :key="forceUpdate"
+                        v-if="form.pre_stay_comment"
+                        @empty="event => handleEmpty(event,'commentEmpty')"
+                        :id="'AutoTextArea2'"
+                        v-model="form.pre_stay_comment.es" 
+                        :wordLimit="300"
+                        mandatory
+                    />
+                </div>
+            </div>
+        </section> -->
+
+        <div class="mt-auto sticky bottom-0 left-0">
+            <ChangesBar 
+                :existingChanges="changes"
+                :validChanges="changes && valid"
+                @cancel="cancelChanges" 
+                @submit="submit"
+            />
+        </div>
+
+        <ModalNoSave
+            :id="'not-saved'"
+            :open="changes &&  valid"
+            text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+            textbtn="Guardar"
+            @saveChanges="submit"
+            type="save_changes"
         />
-        <p class="text-sm mt-2">
-            Nos enfocamos en conocer las preferencias e inquietudes de los huéspedes antes de su llegada, teniendo como objetivo igualar o superar sus expectativas.
-        </p>
-    </section>
-
-    <QueryTerms />
-
-    <section class="px-6 my-6">
-        <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
-            <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
-            <p class="text-sm mt-2">Configura el mensaje de respuesta del hotel, que aparecerá cuando el huésped proporcione su feedback.</p>
-            <div class="mt-4" v-if="form.pre_stay_thanks">
-                <p class="text-sm font-semibold leading-[120%] mb-2">Mensaje de respuesta cuando el huésped proporcione el feedback</p>
-                <AutoTextArea 
-                    :key="forceUpdate"
-                    @empty="event => handleEmpty(event,'thanksEmpty')"
-                    :id="'AutoTextArea1'"
-                    v-model="form.pre_stay_thanks.es" 
-                    :wordLimit="150"
-                    mandatory
-                />
-            </div>
-        </div>
-    </section>
-
-    <!-- <section class="px-6 mt-6 mb-10">
-        <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
-            <h1 class="text-base font-medium">Comentarios adicionales</h1>
-            <p class="text-sm mt-2">Establece el mensaje de petición de comentarios adicionales.</p>
-            <div class="mt-4">
-                <AutoTextArea 
-                    :key="forceUpdate"
-                    v-if="form.pre_stay_comment"
-                    @empty="event => handleEmpty(event,'commentEmpty')"
-                    :id="'AutoTextArea2'"
-                    v-model="form.pre_stay_comment.es" 
-                    :wordLimit="300"
-                    mandatory
-                />
-            </div>
-        </div>
-    </section> -->
-
-    <ChangesBar 
-        :existingChanges="changes"
-        :validChanges="changes && valid"
-        @cancel="cancelChanges" 
-        @submit="submit"
-    />
-
-    <ModalNoSave
-        :id="'not-saved'"
-        :open="changes &&  valid"
-        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
-        textbtn="Guardar"
-        @saveChanges="submit"
-        type="save_changes"
-    />
+    </div>
 </template>
 <script setup>
 import { ref, reactive, onMounted, computed, provide } from 'vue'
+import { $formatTypeLodging } from '@/utils/helpers'
 import Head from './components/HeadSettings.vue'
 import QueryTerms from './components/QueryTerms.vue'
 import AutoTextArea from '@/components/Forms/AutoTextArea.vue'

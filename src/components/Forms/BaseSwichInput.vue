@@ -1,5 +1,5 @@
 <template>
-    <label :for="id" class="relative cursor-pointer">
+    <label :for="id" class="relative"  :class="computedClasses">
         <input
             :checked="modelValue"
             type="checkbox"
@@ -9,6 +9,7 @@
             :disabled="disabled"
             @click="handleCLick"
         />
+        
         <div
         :class="['block w-[1.875rem] h-[1.125rem] rounded-full', modelValue ? 'bg-[#34A98F]' : `${colorDisabled}`]"
         ></div>
@@ -41,6 +42,11 @@ const props = defineProps({
 const value = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val)
+});
+
+
+const computedClasses = computed(() => {
+    return props.disabled ? 'cursor-not-allowed opacity-25' : 'cursor-pointer';
 });
 
 function updateValue(val) {

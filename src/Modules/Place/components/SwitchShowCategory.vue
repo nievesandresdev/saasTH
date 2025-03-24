@@ -57,6 +57,11 @@
             visibilityCategory.value = !hotelStore.hotelData.hidden_categories.includes(formFilter.selected_subplace);
         // }
     });
+
+    watch(() => hotelStore.hotelData?.hidden_type_places, () => {
+        visibilityCategory.value = !hotelStore.hotelData.hidden_categories.includes(formFilter.selected_subplace);
+    });
+
     watch (() => formFilter.selected_subplace, (valueNew) => {
         // if (valueNew) {
             visibilityTypePlace.value = !hotelStore.hotelData?.hidden_type_places?.includes(formFilter.selected_place);

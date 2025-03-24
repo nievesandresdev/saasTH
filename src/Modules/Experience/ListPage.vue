@@ -6,7 +6,7 @@
                 v-if="!hotelStore.hotelData.show_experiences"
                 class="w-full h-[48px] bg-[#FFF3CC] text-center py-[14px] htext-black-100 text-sm font-medium"
             >
-                La sección <span class="font-semibold">Experiencias</span> está oculta y no es visible para tus huéspedes. Activa "Mostrar al huésped" para hacerla visible.
+            Esta sección está oculta y no es visible para tus huéspedes. Activa "Mostrar en la WebApp" para hacerla visible.
             </div>
             <div>
                 <div class="pt-6">
@@ -15,7 +15,7 @@
                             <InputSearch @reloadExperiences="reloadExperiences()" />
                             <button @click="openModalFilter()">
                                 <img
-                                    :src="`assets/icons/1.TH.${emptyFilters ? 'Filters' : 'Filters.active'}.svg`"
+                                    :src="`/assets/icons/1.TH.${emptyFilters ? 'Filters' : 'Filters.active'}.svg`"
                                     alt="1.TH.Filters"
                                     class="w-6 h-6"
                                 >
@@ -33,8 +33,9 @@
                     <ListPageList
                         ref="listPageListRef"
                         class="px-6 mt-4"
-                        @reloadExperiences="reloadExperiences()"
-                        @edit="edit"
+                        @reload-experiences="reloadExperiences()"
+                        @edit-hoster="openEditByHoster"
+                        @edit-viator="openEditByViator"
                     />
                 </div>
             </div>
@@ -43,6 +44,10 @@
         
         <PanelEdit
             ref="panelEditRef"
+            @load:resetPageData="reloadExperiences()"
+        />
+        <PanelEditHoster
+            ref="panelEditHosterRef"
             @load:resetPageData="reloadExperiences()"
         />
     </div>
@@ -59,6 +64,7 @@ import ListPageFiltersSelected from './ListPageFiltersSelected.vue';
 import InputSearch from './components/InputSearch.vue';
 import ModalFilter from './components/ModalFilter.vue';
 import PanelEdit from './components/PanelEdit.vue';
+import PanelEditHoster from './components/PanelEditHoster.vue';
 
 import { useRouter } from 'vue-router';
 const route = useRouter();
@@ -157,7 +163,10 @@ const firstLoad = ref(true);
 const emptyExperiences = ref(false);
 
 const modelActive = ref(null);
+const panelEditHosterActive = ref(null);
 const panelEditRef = ref(null);
+const panelEditHosterRef = ref(null);
+const typeActivityEditing = ref(null);
 
 // PROVIDE
 provide('hotelData', hotelData);
@@ -169,6 +178,7 @@ provide('hotelStore', hotelStore);
 provide('formFilter', formFilter);
 provide('experiencesData', experiencesData);
 provide('modelActive', modelActive);
+provide('panelEditHosterActive', panelEditHosterActive);
 provide('paginateData', paginateData);
 provide('page', page);
 provide('numberExperiencesVisible', numberExperiencesVisible);
@@ -182,6 +192,12 @@ provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('firstLoad', firstLoad);
 
 watch(modelActive, (valNew, valOld) => {
+    if (!valNew && !!valOld) {
+        loadMockup();
+    }
+});
+
+watch(panelEditHosterActive, (valNew, valOld) => {
     if (!valNew && !!valOld) {
         loadMockup();
     }
@@ -227,13 +243,18 @@ function mergeDataFormInUrlMockup (stringQuery, dataForm) {
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
-        mockupStore.$setIframeUrl(`/experiencias/${experienceSlug}`);
+        console.log(experienceSlug)
+        if (typeActivityEditing.value == 'viator') {
+            mockupStore.$setIframeUrl(`/servicios/activity-externa/${experienceSlug}`);
+        } else {
+            mockupStore.$setIframeUrl(`/servicios/activity/${experienceSlug}`);
+        }
     } else {
         let dataForm = {...filterNonNullAndNonEmpty(formFilter)};
         query = 'mobile=1';
 
         query = mergeDataFormInUrlMockup(query, dataForm);
-        mockupStore.$setIframeUrl(`/experiencias`, query);
+        mockupStore.$setIframeUrl(`/servicios/activity`, query);
     }
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
 }
@@ -371,18 +392,28 @@ function openModalChangeInForm () {
 }
 
 
-function edit (payload) {
-    if (changePendingInForm.value) {
-        openModalChangeInForm();
-        return;
-    }
+function openEditByViator (payload) {
+    typeActivityEditing.value = 'viator';
     modelActive.value = payload.action;
     nextTick(() => {
         if (payload.action === 'EDIT') {
             loadMockup(payload.experience.slug);
         } else {
+            
         }
         panelEditRef.value.edit(payload);
+    });
+}
+
+function openEditByHoster (payload) {
+    typeActivityEditing.value = 'thehoster';
+    panelEditHosterActive.value = payload.action;
+    nextTick(() => {
+        if (payload.action === 'EDIT') {
+            loadMockup(payload.experience.slug);
+        } else {
+        }
+        panelEditHosterRef.value.edit(payload);
     });
 }
 

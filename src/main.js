@@ -25,7 +25,9 @@ import {
   $nameLanguage,
   $translatePeriod,
   $getPropertyInUrl,
-  $formatTimestampDate
+  $formatTimestampDate,
+  $formatTypeLodging,
+  $formatNameLodging
 } from '@/utils/helpers.js'
 
 const head = createHead()
@@ -60,6 +62,9 @@ function initializeApp() {
   app.config.globalProperties.$translatePeriod = $translatePeriod
   app.config.globalProperties.$getPropertyInUrl = $getPropertyInUrl
   app.config.globalProperties.$formatTimestampDate = $formatTimestampDate
+  app.config.globalProperties.$formatTypeLodging = $formatTypeLodging
+  app.config.globalProperties.$formatNameLodging = $formatNameLodging
+  
 
   
   app.mount('#app')

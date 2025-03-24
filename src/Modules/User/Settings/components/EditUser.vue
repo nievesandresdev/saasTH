@@ -1,4 +1,10 @@
 <template>
+  <!-- fondo negro -->
+  <div 
+      v-if="modalEdit" 
+      class="fixed z-[2000] bg-[#00000080] top-0 left-0 h-screen w-screen"
+      @click="closeModal()"
+    ></div>
   <transition>
     <div
       v-if="modalEdit"
@@ -89,13 +95,7 @@
                       name="phone"
                       @handlePhoneError="errorPhone = $event"
                   />
-                  
-                  <div class="flex justify-start mt-2 htext-alert-negative" v-if="errorPhone">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 w-4 h-4 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                      </svg>
-                      <p class="text-xs htext-alert-negative">Introduce solo números en el campo de teléfono</p>
-                  </div>
+
               </div>
               <div class="mt-4">
                   <label class="text-sm font-medium">Correo electrónico *</label>
@@ -212,11 +212,11 @@
         </button>
         <button
           class="px-4 py-2 font-medium rounded text-black"
-          @click.stop.prevent="currentStep === 3 ? handleUpdateUser() : nextStep()"
+          @click.stop.prevent="handleUpdateUser()"
           :disabled="isFormIncomplete || !changes"
           :class="isFormIncomplete || !changes ? 'bg-gray-300 text-gray-400' : 'hbtn-cta text-black '"
         >
-          {{ currentStep === 3 ? 'Guardar' : 'Guardar' }}
+          Guardar
         </button>
       </div>
       <ModalNoSave
@@ -274,14 +274,19 @@ const getWorkPositions = (workPosition = false) => {
   emits('workPositionGet');
   emits('handleDeleteWP');
 
+
   if(workPosition === form.value.work_position_id){
+    alert('es el mismo puesto de trabajo')
     form.value.work_position_id = null
     selectedWorkPositionName.value = 'Elige el puesto de trabajo';
   }
 };
 
-const handlePrintNameWP = (name) => {
-  selectedWorkPositionName.value = name;
+const editNameWP = ref(false);
+const handlePrintNameWP = (position) => {
+  selectedWorkPositionName.value = position.name;
+  form.value.work_position_id = position.id;
+  editNameWP.value = true;
 };
 
 const isDeleteWorkPositions = ref(false);
@@ -436,13 +441,19 @@ const initializeForm = () => {
 
           
       };
+      /* aqui valido si tiene todos los hoteles seleccionados */
+      const userStoreIds = userStore.$getHotels(['id']).map(hotel => hotel.id);
+      const areEqual = JSON.stringify(form.value.hotels) === JSON.stringify(userStoreIds.sort());
+      //handleSelectAll(true)
+      if (areEqual) { // si son iguales selecciona todos los hoteles
+        handleSelectAll(true)
+      }
+      /* aqui valido si tiene todos los hoteles seleccionados */
 
       // Llamar a la función para actualizar el acceso
       updateAccess();
       jsonHotel.value = props.dataUser.permissions;
-       console.log('dataUser',props.dataUser)
-
-      
+       //console.log('dataUser',props.dataUser)
   }else{
       console.log('no dataUser');
   }
@@ -474,14 +485,41 @@ const closeModalWorkPosition = () => {
   isModalCrudOpen.value = false;
 }
 
-
+//const sameWorkPosition = ref(false);
 const selectWorkPosition = (position) => {
+  const initialWorkPositionId = JSON.parse(initialForm.value).work_position_id;
+
+
+  if (position.id === initialWorkPositionId && !editNameWP.value) { 
+    //alert('es la misma posición de trabajo')
+    isModalCrudOpen.value = false;
+    form.value.work_position_id = position.id;
+    initialForm.value = JSON.stringify(form.value);
+    selectedWorkPositionName.value = position.name;
+    form.value.permissions = JSON.parse(position.permissions);
+    form.value.notifications = JSON.parse(position.notifications);
+    form.value.periodicityChat = JSON.parse(position.periodicity_chat);
+    form.value.periodicityStay = JSON.parse(position.periodicity_stay);
+    //sameWorkPosition.value = true;
+    initialForm.value = JSON.stringify(form.value);
+    return;
+
+  }else {
+    form.value.work_position_id = position.id;
+    //initialForm.value = JSON.stringify(form.value);
+  }
+
+  /* console.log('positionLOG',{
+    form : JSON.stringify(form.value),
+    initialForm : initialForm.value,
+  }) */
+
+
   selectedWorkPositionName.value = position.name;
-  form.value.work_position_id = position.id;
+  //form.value.work_position_id = position.id;
   form.value.permissions = JSON.parse(position.permissions);
   isModalCrudOpen.value = false;
 
-  // Parseamos el JSON de permisos
   let permissions = JSON.parse(position.permissions);
   let notifications = JSON.parse(position.notifications);
   let periodicity_chat = JSON.parse(position.periodicity_chat);
@@ -494,12 +532,9 @@ const selectWorkPosition = (position) => {
   const updateCheckboxesAndPermissions = (accessList, permissions) => {
     accessList.forEach((accessItem) => {
       const permissionKey = accessItem.value;
-      
-      const isSelected = permissions[permissionKey] && permissions[permissionKey]?.status;
-      
+      const isSelected = permissions[permissionKey]?.status;
       accessItem.selected = isSelected;
       accessItem.disabled = isSelected;
-
       handleCheckPermission(permissionKey, isSelected);
     });
   };
@@ -508,6 +543,7 @@ const selectWorkPosition = (position) => {
   updateCheckboxesAndPermissions(adminAccess.value, permissions);
 
   form.value.permissions = permissions;
+  //initialForm.value = JSON.stringify(form.value);
 };
 
 
@@ -750,9 +786,16 @@ const intendedRoute = ref(null);
 const initialForm = ref({});
 
 const changes = computed(() => {
-  // Comparar objetos después de convertirlos a cadenas JSON
+
   return JSON.stringify(form.value) !== initialForm.value;
+ 
+  /* if(!sameWorkPosition.value){ // si no es la misma posición de trabajo
+    return JSON.stringify(form.value) !== initialForm.value;
+  }else{
+    return false
+  } */
 });
+
 
 
 
@@ -781,11 +824,6 @@ onMounted(() => {
 
 function closeModal(complete = false) {
     if(!complete){
-      console.log({
-        changes: changes.value,
-        initialForm: initialForm.value,
-        form: JSON.stringify(form.value)
-      })
         if (changes.value == true) {
             if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
               showModalNoSave.value = true;

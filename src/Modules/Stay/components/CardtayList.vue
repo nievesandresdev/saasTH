@@ -2,7 +2,7 @@
     <div
         class="aside-stay-card border-t border-b p-4 cursor-pointer hover-gray-100 relative"
         :class="{'hbg-green-200':route.params.stayId == stay.id}"
-        @click="goDetailStay(stay.id, stay.trial)"
+        @click="goDetailStay(stay.id, stay.trial, stay.guests[0])"
     >
         <div class="flex items-center">
             <img class="w-5 h-5" src="/assets/icons/1.TH.schedule.svg" alt="">
@@ -50,10 +50,14 @@
             </div>
 
             <!-- iconos de notificacion -->
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
+                <img 
+                    v-if="stay.has_complete_checkin_data"
+                    class="w-5 h-5 relative" src="/assets/icons/1.TH Check-in.svg"
+                >
                 <img 
                     v-if="stay.pending_queries_count > 0"
-                    class="w-[21px] h-[21px] ml-2 relative top-[-0.6px]" src="/assets/icons/1.TH.SEGUIMIENTO.NOTIFY.svg"
+                    class="w-[21px] h-[21px] relative top-[-0.6px]" src="/assets/icons/1.TH.SEGUIMIENTO.NOTIFY.svg"
                 >
                 <img 
                     v-else-if="stay.answered_queries_count > 0"
@@ -62,11 +66,11 @@
                 <!-- chat -->
                 <img 
                     v-if="stay.chats.length && !stay.has_pending_chats" 
-                    class="w-5 h-5 ml-2" src="/assets/icons/1.TH.CHAT.svg"
+                    class="w-5 h-5" src="/assets/icons/1.TH.CHAT.svg"
                 >
                 <img 
                     v-if="stay.chats.length && stay.has_pending_chats"    
-                    class="w-[21px] h-[21px] ml-2 relative top-[-0.6px]" src="/assets/icons/1.TH.CHAT.NOTIFY.svg"
+                    class="w-[21px] h-[21px] relative top-[-0.6px]" src="/assets/icons/1.TH.CHAT.NOTIFY.svg"
                 >
             </div>
         </div>
@@ -107,10 +111,11 @@ const translatePeriod = {
     "invalid-stay": "POST-STAY",
 };
 
-function goDetailStay(id,trial) {
-    let queryParams = { search: searchUpdate.value };
+function goDetailStay(id,trial, guest) {
+    console.log('test guest',guest)
+    let queryParams = { search: searchUpdate.value, g : guest.id };
     if(trial){
-        queryParams = { search: searchUpdate.value, trial: true }
+        queryParams = { search: searchUpdate.value, g : guest.id, trial: true }
     }
     router.push({
         name: 'StayDetailPage',

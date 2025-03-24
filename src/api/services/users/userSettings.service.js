@@ -31,6 +31,8 @@ export const getSubscriptionStatus = () => apiHttp('GET', `${userPath}/get-subsc
 export const verifyExistMail = (data) => apiHttp('POST', `${userPath}/verifyExistMail`, data,{ showPreloader: false })
 
 
+
+
 //testMail
 export const testMail = () => apiHttp('GET', `${userPath}/testMail`)
 

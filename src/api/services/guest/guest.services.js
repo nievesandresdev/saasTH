@@ -6,3 +6,4 @@ import {
 
 
 export const inviteToHotelApi = (data) => apiHttp('POST', `${guestPath}/${hosterPath}/inviteToHotel`, data)
+export const findByIdApi = (data) => apiHttp('GET', `${guestPath}/${hosterPath}/findById`, data)

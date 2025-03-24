@@ -81,11 +81,13 @@ import BaseSelectField from '@/components/Forms/BaseSelectField.vue'
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 //composable
 import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
 //store
 import { useStayStore } from '@/stores/modules/stay/stay';
-
 const stayStore = useStayStore();
-const toast = useToastAlert();
+import { useLayoutStore } from '@/stores/modules/layout'
+const layoutStore = useLayoutStore();
+
 
 const data = inject('data')
 
@@ -98,6 +100,7 @@ const form = reactive({
 
 const update = async ()=>{
     await stayStore.$updateData(form);
+    layoutStore.$forceRightSidebarRerender();
     toast.warningToast('Actualizado.','top-right');
 }
 
@@ -121,7 +124,7 @@ watch(() => data.value, async (newData) => {
 
 const middle_optiones = [
     { value:'Booking', label:'Booking', img:'/assets/icons/otas/Booking.svg' },
-    { value:'TripAdvisor', label:'TripAdvisor', img:'/assets/icons/otas/Tripadvisor.svg' },
+    // { value:'TripAdvisor', label:'TripAdvisor', img:'/assets/icons/otas/Tripadvisor.svg' },
     { value:'Expedia', label:'Expedia', img:'/assets/icons/otas/Expedia.svg' },
     { value:'Hotels.com', label:'Hotels.com', img:'/assets/icons/hotels.com.svg' },
     { value:'Email', label:'Email', img:'/assets/icons/1.TH.EMAIL.svg' },

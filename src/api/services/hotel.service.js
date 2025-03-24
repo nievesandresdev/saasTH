@@ -9,6 +9,7 @@ export const updateDefaultHotel = (data) => apiHttp('POST', `${hotelPath}/update
 export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: true });
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data);
 export const updateSenderMailMaskApi = (data) => apiHttp('POST', `${hotelPath}/updateSenderMailMask`, data, {showPreloader: false });
+export const updateVisivilityServiceApi = (data) => apiHttp('POST', `${hotelPath}/serviceVisivility`, data, {showPreloader: false });
 export const updateVisivilityFacilitiesApi = () => apiHttp('POST', `${hotelPath}/facilityVisivility`, [], {showPreloader: false });
 export const updateVisivilityExperiencesApi = () => apiHttp('POST', `${hotelPath}/experienceVisivility`, [], {showPreloader: false });
 export const updateVisivilityPlacesApi = () => apiHttp('POST', `${hotelPath}/placeVisivility`);
@@ -17,3 +18,4 @@ export const updateVisivilityTypePlaceApi = (data) => apiHttp('POST', `${hotelPa
 export const verifySubdomainExistPerHotel = (params, config) => apiHttp('GET', `${hotelPath}/verifySubdomainExistPerHotel`, params, config);
 export const updateCustomization = (data, config={}) => apiHttp('POST', `${hotelPath}/customization`, data, config);
 export const updateShowButtons = (data) => apiHttp('POST', `${hotelPath}/updateShowButtons`, data);
+export const handleShowReferrals = () => apiHttp('POST', `${hotelPath}/handleShowReferrals`, {},{showPreloader: false});

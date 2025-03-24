@@ -195,6 +195,7 @@ onMounted(async () => {
     initScrollListener();
     await loadMore();
     connectPusher();
+    // console.log('test list',list.value)
 });
 
 onUnmounted(() => {

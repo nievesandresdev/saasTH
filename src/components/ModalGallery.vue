@@ -129,6 +129,8 @@
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
+import { $formatTypeLodging } from '@/utils/helpers'
+
 
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
@@ -185,7 +187,7 @@ const co = ref('');
 
     const PLACE = 'image-place';
     const HOTEL = 'image-hotel';
-    const ITEMS_TABS = [{name: 'Mi alojamiento', value: HOTEL}, {name: 'Destino', value: PLACE}];
+    const ITEMS_TABS = [{name: 'Mi '+$formatTypeLodging(), value: HOTEL}, {name: 'Destino', value: PLACE}];
 
     // DATA
     const tabCurrent = ref(HOTEL);

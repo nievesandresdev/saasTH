@@ -119,24 +119,21 @@ const values = {
     'prepareYourArrival':{
         title: 'Prepara tu llegada',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
-        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Compartir estancia".',
-        issue: `¿Ya has visto la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento'],
+        trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
+        issue: `¿Todo listo [nombreHuésped]?`,
+        descriptionContent:'Este mensaje contendrá el bloque de motivación, los datos de la estancia y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Check-in online','Consulta de Seguimiento','Destinos recomendados','Instalaciones de tu alojamiento','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'},
-            {title:'WhatsApp',icon:'Frame 2613488'},
-            {title:'SMS',icon:'Frame 2613489'},
-            {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
     'howGoing':{
         title: '¿Qué tal va todo?',
-        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia a las 24hs de su ingreso a tu alojamiento.',
-        trigger: 'Desde la sección "Estancias", envías manualmente una invitación a tu WebApp utilizando el botón "Invitar huésped".',
-        issue: `¿Ya conoces la WebApp de ${hotelStorage.hotelData?.name}?`,
-        descriptionContent:'Este mensaje contendrá las siguientes secciones, dependiendo de tus configuraciones:',
-        itemsContent:['Destinos recomendados','Experiencias recomendadas','Instalaciones de tu alojamiento','Invitación al Chat'],
+        description: 'Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.',
+        trigger: 'Tus huéspedes recibirán este mensaje pasadas las 24hs del comienzo de su estancia.',
+        issue: `¿Qué tal va todo?`,
+        descriptionContent:'Este mensaje contendrá el bloque de pregunta de Sentimiento y, dependiendo de tus configuraciones, las siguientes secciones: ',
+        itemsContent:['Instalaciones de tu alojamiento','Destinos recomendados','Experiencias recomendadas','Invitación al Chat'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
@@ -145,7 +142,7 @@ const values = {
         title: 'Te damos la bienvenida',
         description: 'Cuando un huésped cree su estancia en un alojamiento de tu cuenta, recibirá este mensaje.',
         trigger: 'El huésped ingresa a la WebApp por primera vez',
-        issue: `Te damos la bienvenida a la WebApp de ${hotelStorage.hotelData?.name}`,
+        issue: `Te damos la bienvenida a la WebApp de [nombreHotel]`,
         descriptionContent:'',
         itemsContent:[],
         channels:[
@@ -156,7 +153,7 @@ const values = {
         title: 'Gracias por elegirnos',
         description: 'Enviarás a tus huéspedes un cálido mensaje de despedida y agradecimiento por su estancia.',
         trigger: 'Cuando la estancia de tus huéspedes cambie a Post-stay (según tu horario de check-out), les enviaremos este mensaje.',
-        issue: 'Tienes un chat pendiente en la WebApp',
+        issue: 'Gracias por elegirnos',
         descriptionContent:'Este mensaje contendrá el bloque de despedida y, dependiendo de tus configuraciones, las siguientes secciones:',
         itemsContent:['Consulta de seguimiento','Destinos recomendados','Experiencias recomendadas'],
         channels:[
@@ -164,12 +161,12 @@ const values = {
         ]
     },
     'youBack':{
-        title: 'Te esperamos de vuelta!',
+        title: 'Te esperamos de vuelta',
         description: 'Recuerda a tus huéspedes de su experiencia y motívalos a regresar.',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
-        issue: 'Tienes un chat pendiente en la WebApp',
-        descriptionContent:'',
-        itemsContent:[],
+        trigger: 'Pasadas 48hs de la finalización de su estancia, tus huéspedes recibirán este mensaje',
+        issue: 'Te esperamos de vuelta',
+        descriptionContent:'Este mensaje incluirá un bloque diseñado para persuadir a tus huéspedes a regresar y, dependiendo de tus configuraciones, las siguientes secciones:',
+        itemsContent:['Consulta de Seguimiento/Solicitud de reseña','Invitación a crear su próxima reserva','Destinos de su interés'],
         channels:[
             {title:'Email',icon:'material-symbols-light_mail-outline'}
         ]
@@ -188,12 +185,15 @@ const values = {
     'checkInGuestGuest':{
         title: 'Check-in Huésped - Huésped',
         description: 'Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp',
-        trigger: 'Transcurridos los 30 minutos en que el huésped no haya leído tu mensaje respuesta en a WebApp.',
-        issue: 'Tienes un chat pendiente en la WebApp',
+        trigger: 'El huésped envía una invitación a otro huésped, a completar su Check-in a través de uno de los canales disponibles.',
+        issue: 'Completa ahora tu Check-in online en la WebApp',
         descriptionContent:'',
         itemsContent:[],
         channels:[
-            {title:'Email',icon:'material-symbols-light_mail-outline'}
+            {title:'Email',icon:'material-symbols-light_mail-outline'},
+            {title:'SMS',icon:'Frame 2613489'},
+            {title:'WhatsApp',icon:'Frame 2613488'},
+            {title:'Telegram',icon:'Frame 2613557'},
         ]
     },
     "manualInvitation":{
@@ -220,6 +220,32 @@ const values = {
             {title:'SMS',icon:'Frame 2613489'},
             {title:'Telegram',icon:'Frame 2613557'},
         ]
+    },
+    "referrals":{
+        title: 'Programa de referidos',
+        description: 'Tus huéspedes podrán participar de un programa de referidos, compartiendo sus códigos a través de diversos canales de comunicación.',
+        trigger: 'El huésped envía una invitación a través de uno de los canales disponibles, utilizando el botón "Recomendar a un amigo ahora".',
+        issue: 'Usa mi código de referido para obtener un descuento.',
+        descriptionContent:'El mensaje incluirá un texto amigable para invitar e incentivar a los huéspedes a participar del programa de referidos y un enlace para hacerlo.',
+        channels:[
+            {title:'Email',icon:'material-symbols-light_mail-outline'},
+            {title:'WhatsApp',icon:'Frame 2613488'},
+            {title:'SMS',icon:'Frame 2613489'},
+            {title:'Telegram',icon:'Frame 2613557'},
+        ]
+    },
+    "referent":{
+        title: 'Referente - Código de regalo',
+        description: 'Este es el mensaje que recibirán tus huéspedes cuando uno de sus referidos utilice su código de referente. Este mensaje sólo se enviará si tienes activo el programa de referidos, y configurado el regalo para el Referente.',
+        trigger: 'Cuando un referido redime el código compartido por un referente.',
+        issue: '¡Enhorabuena! Has recibido un regalo',
+        descriptionContent:'Avisará a tus huéspedes que tienen un regalo para canjear. Se mostrará el valor del regalo y las instrucciones que configures sobre “Cómo canjearlo”. Y dependiendo de tus configuraciones, también se incluirán las siguientes secciones:',
+        itemsContent:['Invitación al Chat'],
+        channels:[  
+            {title:'Email',icon:'material-symbols-light_mail-outline'}
+        ]
+
+
     }
 
 }

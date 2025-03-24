@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 import { useAuthStore } from '@/stores/modules/auth/login'
+import { useHotelStore } from '@/stores/modules/hotel'
+
 //import { createPinia, setActivePinia, getActivePinia } from 'pinia'
 
 /*
@@ -116,8 +118,13 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
 const $urlBaseWebapp = (subdomainChain, slugHotel) => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain).replace('webapp', slugHotel);
+  
+  // Reemplazar el dominio .io por .app
+  urlBase = urlBase.replace('.io', '.app');
+
   return urlBase;
-}
+};
+
 
 const $formatImage = (payload) => {
   const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
@@ -131,7 +138,8 @@ const $formatImage = (payload) => {
   return path
 }
 
-const $formatTypeLodging = (valueType) => {
+const $formatNameLodging = (valueType) => {
+  
   const typeLodging = {
     hotel: "Hotel",
     hostal: "Hostal",
@@ -141,6 +149,20 @@ const $formatTypeLodging = (valueType) => {
     vft: "Vivienda con fines turísticos",
   }
   return typeLodging?.[valueType] ?? null;
+}
+
+const $formatTypeLodging = (title = false) => { 
+  
+  const hotelStore = useHotelStore();
+  const typeLodging = {
+    hotel: !title ? "hotel" : "Hotel",
+    hostal: !title ? "hostal" : "Hostal",
+    at: !title ? "apartamento" : "Apartamento",
+    vft: !title ? "apartamento" : "Apartamento",
+  }
+  let defaultLetter = !title ? "hotel" : "Hotel";
+
+  return typeLodging?.[hotelStore.hotelData?.type.toLowerCase()] ?? defaultLetter;
 }
 
 function $throttle(func, limit) {
@@ -187,6 +209,7 @@ export {
     $urlBaseWebapp,
     $formatImage,
     $formatTypeLodging,
+    $formatNameLodging,
     $throttle,
     $isElementVisible
 };

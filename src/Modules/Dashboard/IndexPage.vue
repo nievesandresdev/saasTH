@@ -1,7 +1,7 @@
 <template>
     <div class="px-6">
         <div class="border-b border-[#BFBFBF] py-5">
-            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ authStore.$currentHotelName }}</h1>
+            <h1 class="text-[22px] font-medium leading-[110%]">Dashboard {{ hotelData.name }}</h1>
         </div>
         <div class="mt-6">
             <CustomerExperience />
@@ -18,6 +18,12 @@ import { useAuthStore } from '@/stores/modules/auth/login';
 import CustomerExperience from './components/CustomerExperience.vue'
 import HomeFeedback from './components/HomeFeedback.vue'
 
+import { useChainStore } from '@/stores/modules/chain';
+const chainStore = useChainStore();
+
+import { useHotelStore } from '@/stores/modules/hotel'
+const hotelStore = useHotelStore();
+const { hotelData } = hotelStore;
 
 const mockupStore = useMockupStore();
 const authStore = useAuthStore();
@@ -27,10 +33,12 @@ const toast = useToastAlert();
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
 
-onMounted(()=>{
-    mockupStore.$setIframeUrl('/')
+onMounted(async ()=>{
+    //await chainStore.$getChainBySubdomain();
+    mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
+    
 })
 
 /* function defineMockupData() {

@@ -18,6 +18,25 @@ export function useFormValidation(form, rules) {
     }
   };
 
+  const formIsFull = computed(() => {
+    let full = [];
+    Object.entries(rules).forEach(item => {
+      const [field, rule] = item;
+      const fieldRules = rules[field];
+      if (fieldRules) {
+        for (let rule of fieldRules) {
+          const validationResult = rule(form[field]);
+          if (validationResult !== true) {
+            full.push(false);
+            return;
+          }
+        }
+      }
+      full.push(true);
+    });
+    return !full.some(val => !val);
+  });
+
   const validateForm = () => {
     errors.value = {}; // Limpiar errores anteriores
     Object.keys(rules).forEach(field => validateField(field));
@@ -37,5 +56,5 @@ export function useFormValidation(form, rules) {
 //     }
 //   };
 
-  return { errors, validateField, formInvalid };
+  return { errors, validateField, formInvalid, formIsFull };
 }

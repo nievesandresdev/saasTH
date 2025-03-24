@@ -21,7 +21,7 @@
             <div class="flex items-end" :class="subscribed ? '' : 'grayscale opacity-50'">
                 <div class="flex gap-4">
                     <span class="font-semibold text-sm">
-                        Promedio de tu hotel
+                        Promedio de tu {{ $formatTypeLodging() }}
                     </span>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <!-- contenido -->
         <div class="grid grid-cols-3 gap-4 mt-4">
             <div class="row-span-2 flex gap-6 flex-col" :class="subscribed ? '' : 'grayscale opacity-50'">
-                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                <div class="px-4 py-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <p class="text-xs font-semibold leading-[130%]">STAY</p>
                     <!--caritas STAY -->
                     <div class="flex justify-between mt-[13px]">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 pt-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
+                <div class="px-4 py-2 bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden">
                     <p class="text-xs font-semibold leading-[130%]">POST-STAY</p>
                     <!--caritas POST-STAY -->
                     <div class="flex justify-between mt-[13px]">
@@ -174,7 +174,7 @@
                         class="transformCircle"
                     />
                     <div class="flex flex-col gap-3 w-[118px] 3xl:w-[164px]">
-                        <span class="text-xs leading-[normal]">Promedio de todas las OTAs vinculadas a tu hotel</span>
+                        <span class="text-xs leading-[normal]">Promedio de todas las OTAs vinculadas a tu {{ $formatTypeLodging() }}</span>
                         <div class="flex items-center">
                             <span class="text-[24px] font-semibold leading-[90%]">{{ subscribed && average != 0 ? average.toFixed(1) : '-.-' }}</span>
                             <span class="text-[24px] font-semibold leading-[90%]">/</span>

@@ -84,17 +84,17 @@
               <!-- normal link -->
               <li
                 v-else
-                class="hover-hbg-gray-200"
+                class="hover-hbg-gray-200 "
                 :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
               >
                 <a
                   href="javascript:void(0)"
-                  class="w-full py-[8px] px-[24px] block"
+                  class="w-full py-[8px] pr-[14px] pl-[24px] block"
                   @click="goLink(menu.to,menu)"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm capitalize font-medium leading-[140%]">{{ menu.title }}</span>
+                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
                   </div>
                 </a>
               </li>
@@ -200,6 +200,7 @@
 <script setup>
 import { reactive, onMounted, computed, watch,watchEffect } from 'vue'
 import { useRoute, useRouter  } from 'vue-router';
+import { $formatTypeLodging } from '@/utils/helpers'
 
 const route = useRoute();
 const router = useRouter();
@@ -223,7 +224,7 @@ const menu_section = reactive([
             
           },
           {
-              title: 'Alojamiento',
+              title: $formatTypeLodging(true),
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
               expanded: ['Perfil','Facilities','Configuration'].includes(route.name),
               group: [
@@ -278,12 +279,36 @@ const menu_section = reactive([
               ],
               selectedArr: ['Places']
           },
+          // {
+          //     title: 'Experiencias',
+          //     to: 'Experiences',
+          //     icon: '/assets/icons/1.TH.CAMERA.svg',
+          //     include: '/experiencias',
+          //     selectedArr: ['Experiences'],
+          // },
           {
-              title: 'Experiencias',
-              to: 'Experiences',
-              icon: '/assets/icons/1.TH.CAMERA.svg',
-              include: '/experiencias',
-              selectedArr: ['Experiences'],
+            title: 'Servicios',
+            icon: '/assets/icons/1.TH.recepcion.svg',
+            expanded: ['Conforts', 'Transports', 'Experiences'].includes(route.name),
+            group: [
+                {
+                    title: 'Confort',
+                    to: 'Conforts',
+                    selectedArr: ['Conforts']
+                },
+                {
+                    title: 'Transporte',
+                    to: 'Transports',
+                    selectedArr: ['Transports']
+                },
+                {
+                    title: 'Actividades turísticas',
+                    to: 'Experiences',
+                    selectedArr: ['Experiences']
+                },
+
+            ],
+            selectedArr: ['Confort']
           },
           {
               title: 'Chat',
@@ -291,6 +316,14 @@ const menu_section = reactive([
               icon: '/assets/icons/1.TH.CHAT.NEW.svg',
               include: '/chat/webapp',
               selectedArr: ['GeneralSettings', 'AvailabilitySettings', 'AutomaticResponses'],
+            
+          },
+          {
+              title: 'Check-in',
+              to: 'CheckinGeneral',
+              icon: '/assets/icons/1.TH Check-in.svg',
+              include: '/webapp/checkin',
+              selectedArr: ['CheckinGeneral', 'CheckinForms'],
             
           },
       ],
@@ -318,6 +351,20 @@ const menu_section = reactive([
           }
       ],
   },
+  //reservas
+  {
+      title: '',
+      group: [
+          {
+              title: 'Programa de referidos',
+              icon: '/assets/icons/1.TH.Referidos.svg',
+              to: 'Referrals',
+              include: '/referidos',
+              selectedArr: ['Referrals'],
+          },
+      ],
+  },
+  
   {
       title: 'reputación online',
       disabled: status_subscription?.product_name_current !== 'HostMaster',
@@ -384,7 +431,7 @@ const menu_section = reactive([
             title: 'Ajustes',
             icon: '/assets/icons/1.TH.Settings.svg',
             expanded: false,
-             selectedArr: [],
+            selectedArr: [],
             group: [
                 {
                     title: 'General',
@@ -559,4 +606,5 @@ a:hover{
 .shadow-menu{
   box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.15);
 }
+
 </style>

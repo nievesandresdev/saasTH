@@ -100,7 +100,7 @@ export const useHotelStore = defineStore('hotel', () => {
     async function reloadHotel () {
         let params = {subdomain: subdomain.value}
         let hotel = await $findByParams(params, { showPreloader: false });
-        console.log(hotel, 'reloadHotel');
+        //console.log(hotel, 'reloadHotel');
         updateHoteInSession(hotel);
         return hotel;
     }
@@ -192,6 +192,16 @@ export const useHotelStore = defineStore('hotel', () => {
         return response.data
     }
 
+    async function $updateVisivilityService (data) {
+        // console.log('findByParamsApi',localStorage.getItem('subdomain'))
+        const response = await hotelService.updateVisivilityServiceApi(data);
+        return response;
+        const { ok } = response
+
+        hotelData.value = ok ? response.data : null
+        return response.data
+    }
+
     async function $updateVisivilityExperiences () {
         const response = await hotelService.updateVisivilityExperiencesApi();
         return response;
@@ -251,6 +261,11 @@ export const useHotelStore = defineStore('hotel', () => {
         const response = await hotelService.updateShowButtons(data);
         return response;
     }
+
+    async function $handleShowReferrals () {
+        const response = await hotelService.handleShowReferrals();
+        return response;
+    }
     
 
 
@@ -260,6 +275,7 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelData,
         hotelsAvailables,
         hotelsByUserAvailables,
+        $handleShowReferrals,
         subdomain,
         formatImage,
         reloadHotel,
@@ -273,6 +289,7 @@ export const useHotelStore = defineStore('hotel', () => {
         loadHotelsByUser,
         $updateVisivilityFacilities,
         $updateVisivilityExperiences,
+        $updateVisivilityService,
         $updateVisivilityPlaces,
         $updateVisivilityCategory,
         $updateVisivilityTypePlace,

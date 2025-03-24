@@ -48,7 +48,7 @@
     const visibilityCategory = inject('visibilityCategory');
 
     // DATA
-    
+
     
     onMounted(() => {
         visibilityTypePlace.value = !hotelStore.hotelData?.hidden_type_places?.includes(formFilter.selected_place);

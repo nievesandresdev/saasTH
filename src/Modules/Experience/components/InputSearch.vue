@@ -3,7 +3,7 @@
         <BaseTextField
             v-model="formFilter.search"
             prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
-            placeholder="Buscar lugar..."
+            placeholder="Buscar actividad..."
             class-content="w-[345px]"
             @click="onClick"
         ></BaseTextField>
@@ -36,6 +36,7 @@ const emits = defineEmits(['reloadExperiences']);
 
 // DATA
 
+const debounce = ref(null);
 const dropdownSearch = ref(false);
 const searchList = ref([]);
 
@@ -66,6 +67,10 @@ function selectExperience (experienceId) {
 }
 
 async function submitSearch () {
+
+    clearTimeout(debounce.value);
+    debounce.value = setTimeout(async() => {
+
     if (!formFilter.search_terms) {
         searchList.value = [];
     }
@@ -79,6 +84,9 @@ async function submitSearch () {
     if (response.ok) {
         searchList.value = response.data.experiences.data;
     }
+
+}, 500);
+
 }
 
 </script>

@@ -36,6 +36,7 @@ const emits = defineEmits(['reloadPlaces']);
 
 // DATA
 
+const debounce = ref(null);
 const dropdownSearch = ref(false);
 const searchList = ref([]);
 
@@ -68,6 +69,8 @@ function selectPlace (placeId) {
 }
 
 async function submitSearch () {
+    clearTimeout(debounce.value);
+    debounce.value = setTimeout(async() => {
     if (!formFilter.search_terms) {
         searchList.value = [];
     }
@@ -77,22 +80,14 @@ async function submitSearch () {
     data.featured = false;
     data.visibility = 'visible';
     data.points = [];
-    // axios({
-    //     url: route('hoster.plataform.cityguide.data', data),
-    //     method: 'GET',
-    // })
-    // .then((res) => {
-    //     // console.log(res.data)
-    //     search_list.value = res.data.places.data;
-    // })
-    // .catch((error)=>{
-    //     console.log(error, 'error')
-    // })
+
+
     const response = await placeStore.$getAll(data);
     if (response.ok) {
-        console.log(response.data.places, 'response.data.places.data');
         searchList.value = response.data.places.data;
     }
+
+        }, 500);
 }
 
 </script>

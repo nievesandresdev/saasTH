@@ -7,8 +7,9 @@
           'editor-is-full': characterCount > 0,
           'editor-is-invalid': !isValid && mandatory,
           'padding-with-counter': showCounter && countType === 'absolute',
-          'padding-without-counter': !showCounter || (showCounter && countType !== 'absolute'),
+          'padding-without-counter': !showCounter || (showCounter && countType !== 'absolute')
         }"
+        :style="{ minHeight: minHeight ?? null }"
       >
         <QuillEditor
             :key="id"
@@ -18,6 +19,7 @@
             :placeholder="placeholder"
             :toolbar="toolbarOptions"
             ref="quillRef"
+            
         />
       </div>
       <div
@@ -63,7 +65,6 @@
     // console.log('mounted editor',props.modelValue)
     if(props.modelValue){
       characterCount.value = props.modelValue.length
-      emptyEditor()
     }
   })
   const toolbarOptions = [
@@ -103,6 +104,7 @@
       emptyEditor()
       // console.log('content.value',content.value)
     });
+
   </script>
   <style lang="scss">
   #editor-quill{
@@ -162,5 +164,16 @@
       line-height: 90%;
       color: #A0A0A0;
     }
+
+    .quill-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+  .ql-editor {
+  overflow-y: hidden; /* Evita el scroll vertical */
+}
   </style>
   
