@@ -48,8 +48,6 @@
                     </template>
                 </div>    
             </div>
-            <!-- {{form}}
-            {{formDefault}} -->
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
                     <button
@@ -234,10 +232,12 @@ const steps = computed(() => {
     ];
 });
 const changesform = computed(() => {
-    // console.log(form.price, 'form');
-    // console.log(itemSelected.price, 'itemSelected');
+    // console.log(form.description, 'form');
+    // console.log(itemSelected.description, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
+        (normalize(form.hire) !== normalize(itemSelected.hire)) ||
+        (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
         //
         (normalize(form.type) !== normalize(itemSelected.type)) ||
         (normalize(form.price) !== normalize(itemSelected.price)) ||
@@ -245,7 +245,8 @@ const changesform = computed(() => {
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
-        !lodash.isEqual(form.languages, itemSelected?.languages)
+        !lodash.isEqual(form.languages, itemSelected?.languages) ||
+        form.subservices.length !== itemSelected.subservices.length
         changePendingInForm.value = valid;
     return valid;
 });
@@ -401,7 +402,6 @@ async function edit ({action, item}) {
             numPrice = numPrice.toFixed(2);
         }
 
-
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
         Object.assign(itemSelected, {  id, name, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
@@ -409,6 +409,8 @@ async function edit ({action, item}) {
         images.forEach(img => {
             urlsimages.value.push(img);
         });
+        await nextTick();
+        itemSelected.description = form.description;
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});
