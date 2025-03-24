@@ -168,27 +168,11 @@ const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const modalDeleteRef  = ref(null);
 
-// const formRules = reactive({
-//     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-//     name: [value => !!value ? true : 'Este campo es obligatorio'],
-//     hire: [value => !!value ? true : 'Este campo es obligatorio'],
-//     description: [value => !!value ? true : 'Este campo es obligatorio'],
-//     price: [value => !!value && (form.type_price === 1 || form.type_price === 2) ? true : 'Este campo es obligatorio'],
-// });
-
 const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
     hire: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio'],
-    // price: [
-    //   (value) => {
-    //     if (form.type_price === 3) {
-    //       return true; // Si es 3, no validar
-    //     }
-    //     return !!value ? true : 'Este campo es obligatorio';
-    //   },
-    // ]
+    description: [value => !!value ? true : 'Este campo es obligatorio']
 });
 
 function isValidURL(url) {
@@ -200,8 +184,6 @@ const { errors, validateField, formInvalid, formIsFull } = useFormValidation(for
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
-const modalDeleteFacilityRef = ref(null);
-const modalCancelChangeFacilityRef = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
@@ -232,8 +214,6 @@ const steps = computed(() => {
     ];
 });
 const changesform = computed(() => {
-    // console.log(form.description, 'form');
-    // console.log(itemSelected.description, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.hire) !== normalize(itemSelected.hire)) ||
@@ -246,7 +226,7 @@ const changesform = computed(() => {
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
         !lodash.isEqual(form.languages, itemSelected?.languages) ||
-        form.subservices.length !== itemSelected.subservices.length
+        !lodash.isEqual(form.subservices, itemSelected?.subservices)
         changePendingInForm.value = valid;
     return valid;
 });
@@ -305,6 +285,7 @@ async function submitSave () {
     isLoadingForm.value = false;
 }
 async function submitDelete () {
+    isLoadingForm.value =true;
     const response = await confortStore.$delete(form.id);
     const { ok, data } = response;
     if (ok) {
@@ -314,6 +295,7 @@ async function submitDelete () {
     } else {
         toast.warningToast(data?.message,'top-right');
     }
+    isLoadingForm.value = false;
 }
 function resetCompoent () {
     closeModalForce();
@@ -381,7 +363,7 @@ function openModalChangeInForm () {
 
 async function edit ({action, item}) {
     if (action === 'EDIT') {
-        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, address, requeriment } = item;
+        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, address, requeriment, subservices } = item;
 
         if (languages?.length) {
             let languagesArray = languagesData.value.map(item => {
@@ -411,6 +393,44 @@ async function edit ({action, item}) {
         });
         await nextTick();
         itemSelected.description = form.description;
+
+        let subservicesArray = subservices.map(subservice => {
+            if (subservice.languages?.length) {
+                let languagesArray = languagesData.value.map(item => {
+                    return {
+                        id: null,
+                        abbreviation: item.abbreviation,
+                        name: item.name,
+                    }
+                }).filter(item => {
+                    let language = subservice.languages.find(lagSub => lagSub === item.abbreviation );
+                    return language;
+                });
+                subservice.languages = languagesArray;
+            }
+
+            let numPrice = subservice.price ? parseFloat(subservice.price) : null;
+            if (numPrice && !isNaN(numPrice)) {
+                numPrice = numPrice.toFixed(2);
+            }
+
+            return {
+                id: subservice.id,
+                name: subservice.name || null,
+                description: subservice.description || null,
+                image: {url: subservice.image?.url ?? subservice.image},
+                languages: JSON.parse(JSON.stringify(subservice.languages)),
+                fields_visibles: JSON.parse(JSON.stringify(subservice.fields_visibles)),
+                price: numPrice || null,
+                duration: subservice.duration || null,
+                address: subservice.address || null,
+                requeriment: subservice.requeriment || null,
+                order: subservice.order,
+            }
+        });
+ 
+        form.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
+        itemSelected.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});
@@ -423,7 +443,7 @@ defineExpose({ edit });
 provide('confortStore', confortStore);
 provide('form', form);
 provide('formRules', formRules);
-// provide('itemSelected', itemSelected);
+provide('itemSelected', itemSelected);
 provide('errors', errors);
 provide('urlsimages', urlsimages);
 provide('validateField', validateField);

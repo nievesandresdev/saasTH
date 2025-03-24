@@ -64,13 +64,13 @@
             {{ subservicesData.length > 0 ? 'Añadir' : 'Añadir subservicio' }}
         </button>
     </div>
-
 </template>
 
 <script setup>
 import { inject, onMounted, ref, nextTick, watch } from 'vue';
 
 const form = inject('form');
+const itemSelected = inject('itemSelected');
 const languagesData = inject('languagesData');
 const subservicesData = inject('subservicesData');
 const serviceNameCurrent = inject('serviceNameCurrent');
@@ -114,7 +114,7 @@ function openPanelEditSubservice (typeAction, subservice = null) {
                 name: item.name,
             }
         }).filter(item => {
-            let language = subservice.languages.find(lagSub => lagSub === item.abbreviation );
+            let language = subservice.languages.find(lagSub => (lagSub.abbreviation || lagSub) === item.abbreviation );
             return language;
         });
         subservice.languages = languages;
@@ -128,19 +128,6 @@ function openPanelEditSubservice (typeAction, subservice = null) {
 }
 
 async function loadSubservices () {
-    // let params = {
-    //     service_id: form.id,
-    //     services_type: serviceNameCurrent.value
-    // }
-    // const response = await subserviceStore.$getAll(params);
-    
-    // const { ok, data } = response;
-    // if (ok) {
-    //     subservicesData.value = data;
-    // } else {
-    //     toast.warningToast(data?.message,'top-right');
-    // }
-
     subservicesData.value = [...form.subservices];
 }
 
@@ -177,7 +164,9 @@ const handlerDrop = (index, facility) => {
   const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
   if (draggedIndex !== index) {
     const droppedItem = subservicesData.value.splice(draggedIndex, 1)[0];
+    form.subservices.splice(draggedIndex, 1)[0];
     subservicesData.value.splice(index, 0, droppedItem);
+    form.subservices.splice(index, 0, droppedItem);
     updateOrder();
   }
   draggedItem.value = null;
@@ -190,10 +179,14 @@ const handlerDragEnd = () => {
 };
 
 async function updateOrder () {
-    const idsSubservices = subservicesData.value.map(item => item.id);
-    const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
+    const idsSubservices = subservicesData.value.map((item, index) => index);
+    // const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
     // const response = await subserviceStore.$updateOrder(data);
     // mockupStore.$reloadIframe();
+    // subservicesData.value.forEach((item, index) => {
+    //     form.subservices[index].order = index;
+    //     item.order = index;
+    // });
 }
 
 </script>

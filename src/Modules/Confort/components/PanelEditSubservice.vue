@@ -49,9 +49,10 @@
                 <template v-if="modelSubserviceActive === 'EDIT'">
                     <button
                         class="py-3"
-                        @click="changesform ? openModalChangeInForm() : openModalDelete()"
+                        @click="openModalChangeInForm()"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || !form.image"
                     >
-                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar servicio' }}</span>
+                        <span class="underline font-medium">Cancelar</span>
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
@@ -73,7 +74,7 @@
                         :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent != 0)"
                         @click="nextTab"
                     >
-                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
+                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }} {{  formInvalid  }}
                     </button>
                 </template>
             </div>
@@ -168,7 +169,6 @@ const valueFormDefault = {
     id: null,
     name: '',
     description: '',
-    type_price: 1,
     price: null,
     image: null,
     languages: [],
@@ -176,8 +176,7 @@ const valueFormDefault = {
     duration: null,
     address: '',
     requeriment: '',
-    service_id: null,
-    services_type: serviceNameCurrent.value,
+    order: null,
 }
 
 const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
@@ -231,7 +230,7 @@ const changesform = computed(() => {
         (normalize(form.duration) !== normalize(itemSelected.duration)) ||
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
-        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles)
+        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
         !lodash.isEqual(form.languages, itemSelected?.languages)
         changePendingInFormService.value = valid;
     return valid;
@@ -275,17 +274,16 @@ function closeModalCancel () {
 }
 async function submitSave () {
     isLoadingForm.value =true;
-    let body = { ...form };
     
     if (modelSubserviceActive.value === 'ADD') {
-        formService.subservices = [...formService.subservices, body]; 
+        formService.subservices.push({...form }); 
     } else {
-        let index = formService.subservices.findIndex(item => item.id === form.id);
-        let item = formService.subservices[index];
+        const index = formService.subservices.findIndex(item => item.id === form.id);
         if (index !== -1) {
-            item = Object.assign(item, body);
+            formService.subservices[index] = { ...form };
         }
     }
+
 
     resetCompoent();
     toast.warningToast('Cambios guardados con éxito','top-right');
@@ -293,14 +291,6 @@ async function submitSave () {
 }
 async function submitDeleteSubservice () {
     let body = {service_id: form.id, services_type: serviceNameCurrent.value};
-    // const response = await subserviceStore.$delete(indexSubserviceDeleteId.value, body);
-    // const { ok, data } = response;
-    // if (ok) {
-    //     toast.warningToast('Subservicio eliminado','top-right');
-    //     emitEvent('load-subservices');
-    // } else {
-    //     toast.warningToast(data?.message,'top-right');
-    // }
     formService.subservices.splice(indexSubserviceDeleteId.value, 1);
     emitEvent('load-subservices');
 }
@@ -383,10 +373,9 @@ function openModalDeleteItem (payload) {
 }
 
 function edit ({action, serviceId, subservice}) {
-    console.log('subservice', subservice);
     if (action === 'EDIT') {
         let {
-            id, name, description, price, image, languages, fields_visibles, duration, address, requeriment
+            id, name, description, price, image, languages, fields_visibles, duration, address, requeriment, order
         } = subservice;
         let numPrice = price ? parseFloat(price) : null;
         if (numPrice && !isNaN(numPrice)) {
@@ -396,12 +385,14 @@ function edit ({action, serviceId, subservice}) {
         let imageObject = {
             url: image?.url ?? image,
         }
-        
-        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
-        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, service_id: serviceId});
+
+
+
+        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, order });
+        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, order });
     } else {
-        Object.assign(itemSelected, {...formDefault, service_id: serviceId});
-        Object.assign(form, {...formDefault, service_id: serviceId});
+        Object.assign(itemSelected, {...formDefault});
+        Object.assign(form, {...formDefault});
     }
 }
 defineExpose({ edit });
