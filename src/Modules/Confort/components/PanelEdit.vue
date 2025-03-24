@@ -43,6 +43,9 @@
                     <template v-else-if="stepCurrent === 1">
                         <PanelEditFormCharacteristics />
                     </template>
+                    <template v-else="stepCurrent === 2">
+                        <PanelEditFormPhotos @open:gallery="openGallery" />
+                    </template>
                 </div>    
             </div>
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
@@ -217,8 +220,13 @@ const steps = computed(() => {
             disabled: false
         },
         {
-            name: 'Galeria',
+            name: 'Caracteristicas',
             value: 1,
+            disabled: false
+        },
+        {
+            name: 'Galeria',
+            value: 2,
             disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
         },
     ];
