@@ -74,7 +74,7 @@
                         :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent != 0)"
                         @click="nextTab"
                     >
-                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }} {{  formInvalid  }}
+                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
                     </button>
                 </template>
             </div>
@@ -283,7 +283,6 @@ async function submitSave () {
             formService.subservices[index] = { ...form };
         }
     }
-
 
     resetCompoent();
     toast.warningToast('Cambios guardados con éxito','top-right');

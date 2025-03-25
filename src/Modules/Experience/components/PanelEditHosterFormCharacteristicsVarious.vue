@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4">
+    <div class="mt-4 space-y-6">
         <div
             v-for="(item, index) in subservicesData"
             @dragover="handlerDragOver"
@@ -10,7 +10,8 @@
             ref="draggableCard"
             @mouseover="hoverItem = index"
             @mouseleave="hoverItem = null"
-            class="p-[12px] card flex justify-between items-center"
+            class="p-[12px] card-item flex justify-between items-center"
+            :class="{'card-item__dragging': draggedItem == index}"
         >
             <div class="space-x-2 flex">
                      <!-- v-if="hoverItem == index" -->
@@ -20,12 +21,12 @@
                 >
                     <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
                 </button>
-                <div class="card__img">
-                    <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image })" :alt="`image_${index}`">
+                <div class="card-item__img">
+                    <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image?.url ?? item.image })" :alt="`image_${index}`">
                 </div>
                 <div class="">
                     <h5 class="text-[12px] font-bold leading-[150%]">{{ item.name }}</h5>
-                    <span v-if="!item.fields_visibles.includes('PRICE')" class="text-[12px] font-medium">{{ item.price?.toFixed(2) }}€</span>
+                    <span v-if="!item.fields_visibles.includes('PRICE')" class="text-[12px] font-medium">{{ item.price }}€</span>
                     <span v-else class="text-[12px] font-medium">GRATIS</span>
                 </div>
             </div>
@@ -110,7 +111,7 @@ function openPanelEditSubservice (typeAction, subservice = null) {
                 name: item.name,
             }
         }).filter(item => {
-            let language = subservice.languages.find(lagSub => lagSub === item.abbreviation );
+            let language = subservice.languages.find(lagSub => (lagSub.abbreviation || lagSub) === item.abbreviation );
             return language;
         });
         subservice.languages = languages;
@@ -124,18 +125,7 @@ function openPanelEditSubservice (typeAction, subservice = null) {
 }
 
 async function loadSubservices () {
-    let params = {
-        service_id: form.id,
-        services_type: serviceNameCurrent.value
-    }
-    const response = await subserviceStore.$getAll(params);
-    
-    const { ok, data } = response;
-    if (ok) {
-        subservicesData.value = data;
-    } else {
-        toast.warningToast(data?.message,'top-right');
-    }
+    subservicesData.value = [...form.subservices];
 }
 
 function editItem (item) {
@@ -171,7 +161,9 @@ const handlerDrop = (index, facility) => {
   const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
   if (draggedIndex !== index) {
     const droppedItem = subservicesData.value.splice(draggedIndex, 1)[0];
+    form.subservices.splice(draggedIndex, 1)[0];
     subservicesData.value.splice(index, 0, droppedItem);
+    form.subservices.splice(index, 0, droppedItem);
     updateOrder();
   }
   draggedItem.value = null;
@@ -184,24 +176,27 @@ const handlerDragEnd = () => {
 };
 
 async function updateOrder () {
-    const idsSubservices = subservicesData.value.map(item => item.id);
-    const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
-    const response = await subserviceStore.$updateOrder(data);
+    // const idsSubservices = subservicesData.value.map(item => item.id);
+    // const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
+    // const response = await subserviceStore.$updateOrder(data);
     // mockupStore.$reloadIframe();
 }
 
 </script>
 
 <style lang="scss">
-    .card {
+    .card-item {
         border-radius: 6px;
         border: 1px solid #BFBFBF;
         background: #FFF;
     }
-    .card__img {
+    .card-item__img {
         background-size: cover;
         width: 60px;
         height: 40px;
         border-radius: 5.455px;
+    }
+    .card-item__dragging {
+        box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
     }
 </style>

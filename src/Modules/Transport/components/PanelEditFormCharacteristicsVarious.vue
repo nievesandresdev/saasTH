@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4">
+    <div class="mt-4 space-y-6">
         <div
             v-for="(item, index) in subservicesData"
             @dragover="handlerDragOver"
@@ -10,7 +10,8 @@
             ref="draggableCard"
             @mouseover="hoverItem = index"
             @mouseleave="hoverItem = null"
-            class="p-[12px] card flex justify-between items-center"
+            class="p-[12px] card-item flex justify-between items-center"
+            :class="{'card-item__dragging': draggedItem == index}"
         >
             <div class="space-x-2 flex">
                      <!-- v-if="hoverItem == index" -->
@@ -20,7 +21,7 @@
                 >
                     <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
                 </button>
-                <div class="card__img">
+                <div class="card-item__img">
                     <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image?.url ?? item.image })" :alt="`image_${index}`">
                 </div>
                 <div class="">
@@ -179,7 +180,7 @@ const handlerDragEnd = () => {
 };
 
 async function updateOrder () {
-    const idsSubservices = subservicesData.value.map((item, index) => index);
+    // const idsSubservices = subservicesData.value.map((item, index) => index);
     // const data = {order: idsSubservices, service_id: form.id, services_type: serviceNameCurrent.value};
     // const response = await subserviceStore.$updateOrder(data);
     // mockupStore.$reloadIframe();
@@ -192,15 +193,18 @@ async function updateOrder () {
 </script>
 
 <style lang="scss">
-    .card {
+    .card-item {
         border-radius: 6px;
         border: 1px solid #BFBFBF;
         background: #FFF;
     }
-    .card__img {
+    .card-item__img {
         background-size: cover;
         width: 60px;
         height: 40px;
         border-radius: 5.455px;
+    }
+    .card-item__dragging {
+        box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
     }
 </style>

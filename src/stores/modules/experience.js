@@ -85,8 +85,6 @@ export const useExperienceStore = defineStore('experience', () => {
 
     async function $storeOrUpdateHoster (params, config = {}) {
         let newParams = getHotelParams(params);
-        console.log(newParams);
-        return;
         const response = await experienceService.storeOrUpdateHosterApi(newParams, config);
         return response;
         const { ok } = response

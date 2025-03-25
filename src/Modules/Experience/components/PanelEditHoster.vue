@@ -48,8 +48,6 @@
                     </template>
                 </div>    
             </div>
-            <!-- {{form}}
-            {{formDefault}} -->
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="panelEditHosterActive === 'EDIT'">
                     <button
@@ -60,7 +58,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0  || (form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0 || (form.type == 2 && subservicesData.length <= 0)"
                         @click="submitSave"
                     >
                         Guardar
@@ -147,9 +145,13 @@ import { ServiceTypeEnum } from "@/shared/enums/ServiceTypeEnum";
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
 
-    // COMPOSABLES
-    import { useToastAlert } from '@/composables/useToastAlert'
-    const toast = useToastAlert();
+import { useServiceStore } from '@/stores/modules/service'
+const serviceStore = useServiceStore();
+const { form, itemSelected, formDefault } = serviceStore;
+
+// COMPOSABLES
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
 
 // INJECT
 const hotelStore = inject('hotelStore');
@@ -166,40 +168,11 @@ const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const panelEditHosterModalDeleteRef  = ref(null);
 
-const valueFormDefault = {
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-    type: ServiceTypeEnum.UNICO,
-    languages: [],
-    fields_visibles: [],
-    duration: null,
-    address: '',
-    requeriment: '',
-}
-
-const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
-const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
-const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
-
 const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
     name: [value => !!value ? true : 'Este campo es obligatorio'],
     hire: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio'],
-    // price: [
-    //   (value) => {
-    //     if (form.type_price === 3) {
-    //       return true; // Si es 3, no validar
-    //     }
-    //     return !!value ? true : 'Este campo es obligatorio';
-    //   },
-    // ]
+    description: [value => !!value ? true : 'Este campo es obligatorio']
 });
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
@@ -210,9 +183,7 @@ const { errors, validateField, formInvalid, formIsFull } = useFormValidation(for
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
-const modalDeleteFacilityRef = ref(null);
 const modalDeleteRef = ref(null);
-const modalCancelChangeFacilityRef = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
@@ -238,10 +209,10 @@ const steps = computed(() => {
     ];
 });
 const changesform = computed(() => {
-    // console.log(form.price, 'form');
-    // console.log(itemSelected.price, 'itemSelected');
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
+        (normalize(form.hire) !== normalize(itemSelected.hire)) ||
+        (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
         //
         (normalize(form.type) !== normalize(itemSelected.type)) ||
         (normalize(form.price) !== normalize(itemSelected.price)) ||
@@ -249,7 +220,8 @@ const changesform = computed(() => {
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
-        !lodash.isEqual(form.languages, itemSelected?.languages)
+        !lodash.isEqual(form.languages, itemSelected?.languages) ||
+        !lodash.isEqual(form.subservices, itemSelected?.subservices)
         changePendingInForm.value = valid;
     return valid;
 });
@@ -271,9 +243,6 @@ const normalize = (value) => {
 // FUNCTION
 function closePreviewImage () {
     isPreviewOpen.value = false;
-}
-function openModalDeleteFacility () {
-
 }
 
 function prevTab () {
@@ -297,15 +266,16 @@ async function submitSave () {
     isLoadingForm.value =true;
     let body = { ...form };
     const response = await experienceStore.$storeOrUpdateHoster(body);
-    // const { ok, data } = response;
-    // if (ok) {
-    //     toast.warningToast('Cambios guardados con éxito','top-right');
-    //     resetCompoent();
-    //     location.reload();
-    // } else {
-    //     toast.warningToast(data?.message,'top-right');
-    // }
-    // isLoadingForm.value = false;
+    console.log(response, 'response');
+    const { ok, data } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        resetCompoent();
+        location.reload();
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    isLoadingForm.value = false;
 }
 function resetCompoent () {
     closeModalForce();
@@ -387,11 +357,10 @@ async function submitDelete () {
     }
 }
 
-function edit ({action, experience}) {
-    urlsimages.value = [];
+async function edit ({action, experience}) {
     if (action === 'EDIT') {
-        let { id, title, description, type, hire, link_url, type_price, from_price, images, languages, fields_visibles, duration, address, requeriment } = experience;
-        console.log(languages);
+        let { id, title, description, type, hire, link_url, type_price, from_price, images, languages, fields_visibles, duration, address, requeriment, subservices } = experience;
+
         if (languages?.length) {
             let languagesArray = languagesData.value.map(item => {
                 return {
@@ -418,11 +387,52 @@ function edit ({action, experience}) {
         images.forEach(img => {
             urlsimages.value.push(img);
         });
+        await nextTick();
+        itemSelected.description = form.description;
+
+        let subservicesArray = subservices.map(subservice => {
+            if (subservice.languages?.length) {
+                let languagesArray = languagesData.value.map(item => {
+                    return {
+                        id: null,
+                        abbreviation: item.abbreviation,
+                        name: item.name,
+                    }
+                }).filter(item => {
+                    let language = subservice.languages.find(lagSub => lagSub === item.abbreviation );
+                    return language;
+                });
+                subservice.languages = languagesArray;
+            }
+
+            let numPrice = subservice.price ? parseFloat(subservice.price) : null;
+            if (numPrice && !isNaN(numPrice)) {
+                numPrice = numPrice.toFixed(2);
+            }
+
+            return {
+                id: subservice.id,
+                name: subservice.name || null,
+                description: subservice.description || null,
+                image: {url: subservice.image?.url ?? subservice.image},
+                languages: JSON.parse(JSON.stringify(subservice.languages)),
+                fields_visibles: JSON.parse(JSON.stringify(subservice.fields_visibles)),
+                price: numPrice || null,
+                duration: subservice.duration || null,
+                address: subservice.address || null,
+                requeriment: subservice.requeriment || null,
+                order: subservice.order,
+            }
+        });
+ 
+        form.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
+        itemSelected.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});
     }
 }
+
 defineExpose({ edit });
 
 //

@@ -58,7 +58,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0  || (form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
                         @click="submitSave"
                     >
                         Guardar
@@ -184,7 +184,6 @@ const { errors, validateField, formInvalid, formIsFull } = useFormValidation(for
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
-
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
