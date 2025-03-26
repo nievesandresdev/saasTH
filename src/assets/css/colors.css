@@ -42,7 +42,8 @@
     /* secondary */
     --font-secondary: #8D9196;
     /* disabled */
-    --Input-border-read-only: #33333340;/*es igual a rgba(51, 51, 51, 0.25)*/
+    --text-read-only-desactivated: #33333340;/*es igual a rgba(51, 51, 51, 0.25)*/
+    --Input-border-read-only: #bfbfbf80;/*es igual a rgba(191, 191, 191, 0.50)*/
     --Input-surface-read-only: #fafafa80;/*es igual a rgba(250, 250, 250, 0.50)*/
 }
 
@@ -56,6 +57,10 @@
     }
     .hborder-disabled-input{
         border-color: var(--Input-border-read-only);
+    }
+
+    .htext-read-only-desactivated{
+        color: var(--text-read-only-desactivated);
     }
 
     /*

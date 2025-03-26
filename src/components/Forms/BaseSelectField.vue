@@ -67,7 +67,7 @@
       </div>
       <div class="mt-1 flex items-center" v-if="error">
         <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
-        <p class="text-xs htext-alert-negative">
+        <p class="text-xs htext-alert-negative leading-[90%]">
           {{ texterror }}
         </p>
       </div>

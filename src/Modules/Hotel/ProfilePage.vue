@@ -42,7 +42,6 @@
                             v-model="form.type"
                             :options="typeLodging"
                             mandatory
-                            :error="false"
                         />
                     </div>
                     <div class="flex-1">
@@ -56,8 +55,8 @@
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium block mb-2">Nombre de {{ $formatTypeLodging() }}</label>
                     <BaseTextField
+                        :textLabel="'Nombre de '+$formatTypeLodging()"
                         v-model="form.name"
                         placeholder="Nombre de alojamiento"
                         class-content="flex-1"
@@ -69,14 +68,14 @@
             </section>
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium inline-block">Descripción {{ $formatTypeLodging(true) }}</label>
-                    <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
                     <BaseTextareaField
+                        :textLabel="'Descripción '+ $formatTypeLodging(true)"
+                        textDescription="Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial." 
                         v-model="form.description"
                         placeholder="Descripción..."
                         class-content="flex-1"
                         name="description"
-                        :max="'500'"
+                        max="500"
                     />
                 </div>
             </section>
