@@ -13,9 +13,14 @@ export const useHotelCommunicationStore = defineStore('hotelCommunication', () =
         return response;
     }
 
-    //
+    async function $updateOrStoreHotelCommunication (data) {
+        const response = await hotelService.updateOrStoreHotelCommunication(data)
+        return response;
+    }
+
     return {
-        $getHotelCommunication
+        $getHotelCommunication,
+        $updateOrStoreHotelCommunication
     }
      
 

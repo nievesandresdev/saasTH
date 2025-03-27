@@ -249,15 +249,15 @@
 
     <SidePanel />
     <ChangesBar 
-        :existingChanges="true"
-        :validChanges="true"
+        :existingChanges="changes"
+        :validChanges="changes"
         @cancel="cancelChange" 
         @submit="handlesubmitData"
        
     />
 </template>
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, onMounted, computed } from 'vue'
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import CardSectionHome from "./CardSectionHome.vue";
@@ -270,6 +270,9 @@ const hotelStorage = useHotelStore();
 
 import { useHotelCommunicationStore } from '@/stores/modules/hotelCommunication';
 const hotelCommunicationStorage = useHotelCommunicationStore();
+
+import { useToastAlert } from '@/composables/useToastAlert';
+const toast = useToastAlert();
 
 const isOpenSidePanel = ref(false)
 const conceptPanel = ref(null)
@@ -292,27 +295,31 @@ const toggleOptions = ref({
 
 const initToggleOptions = ref({})
 
+const changes = computed(() => {
+    return JSON.stringify(toggleOptions.value) !== JSON.stringify(initToggleOptions.value);
+})
+
+const getHotelCommunication = async () => {
+    let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
+    toggleOptions.value = dataHotelCommunication.data.email
+    initToggleOptions.value = { ...toggleOptions.value }; 
+}
+
+
 
 onMounted(async() => {
-    // {subdomain: sessionStorage.getItem('current_subdomain')}
     let dataHotel = await hotelStorage.$findByParams()
     if(dataHotel.sender_mail_mask){
         maskEmail.value = dataHotel.sender_mail_mask;
     }
 
-    let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
-    //console.log(dataHotelCommunication.data.email)
-    toggleOptions.value = dataHotelCommunication.data.email
-    initToggleOptions.value = dataHotelCommunication.data.email
+    await getHotelCommunication()
 })
 
 const updateTogglecommunication = (key, val) => {
     toggleOptions.value[key] = val
-    console.log('updateTogglecommunication',key,val)
-    console.log(toggleOptions.value)
-    
-
 }
+
 
 const hotel = ref({
     show_confort: false
@@ -322,8 +329,19 @@ const cancelChange = () => {
     console.log('cancelChange')
 }
 
-const handlesubmitData = () => {
-    console.log('handlesubmitData')
+const handlesubmitData = async () => {
+    let params = {
+        options: toggleOptions.value,
+        type: 'email'
+    }
+    const response = await hotelCommunicationStorage.$updateOrStoreHotelCommunication(params)
+    //console.log('updateOrStoreHotelCommunication',response)
+    if(response.ok){
+        toast.warningToast('Actualizado correctamente','top-right')
+    }else{
+        toast.errorToast('Error al actualizar','top-right')
+    }
+    await getHotelCommunication()
 }
 
 provide('isOpenSidePanel',isOpenSidePanel)
