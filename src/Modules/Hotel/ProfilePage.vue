@@ -84,7 +84,7 @@
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
                         <div class="flex justify-between">
-                            <label class="text-sm font-medium inline-block">Teléfono principal</label>
+                            <label class="text-sm font-medium leading-[140%] inline-block">Teléfono principal</label>
                             <BaseTooltipResponsive
                                 size="l"
                                 :top="-85"
@@ -108,7 +108,7 @@
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium inline-block">Teléfono secundario</label>
+                        <label class="text-sm font-medium leading-[140%] inline-block">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"

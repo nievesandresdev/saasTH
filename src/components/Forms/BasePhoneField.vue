@@ -1,25 +1,22 @@
 <template>
     <div 
-        class="hinput hinput-green border rounded-[6px] cursor-pointer relative flex"
+        class="border-[2px] rounded-[6px] cursor-pointer relative flex"
         :class="[
-          {'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone},
+          borderColorClass,
           heigthClass
         ]"
     >
         <div
-            class="flex h-full items-center w-[92px] relative px-3 py-2.5"
-            :class="{
-                'br-gray': !code || !phone,
-                'br-negative': isError,
-                'br-black': code && phone,
-            }"
+            class="flex h-full items-center w-[92px] relative border-r-[2px]"
+            :class="[borderColorClass]"
         >
             <input
                 type="text" 
-                class="hinput-green w-full p-0 text-sm focus:border-none hover:border-none border-none"
-                :class="{'htext-alert-negative placeholder-negative': isError}"
+                class="w-full h-full text-sm font-medium leading-[140%] htext-black-100 focus:border-none hover:border-none border-none px-3 py-2 bg-white rounded-l-[5px]"
                 v-model="code"
                 @keyup="searchCodes"
+                @focus="isFocused = true"
+                @blur="isFocused = false"
                 placeholder="+ Código"
                 :disabled="!initialLoad"
             >
@@ -32,23 +29,21 @@
                     {{cde.label}}
                 </p>
             </div>
-            <!-- <div class="bg-white w-6 h-6 mx-2 flex-shrink-0 cursor-default">
-              <img class="w-full h-full" src="/assets/icons/1.TH.I.dropdownBig.svg" alt="">
-            </div> -->
+            <!-- :class="{'htext-alert-negative placeholder-negative': isError}" -->
         </div>
-    
         <input 
             type="number" 
-            class="hinput-green flex-grow px-3 py-2.5 text-sm focus:border-none hover:border-none border-none rounded-[6px]"
-            :class="{'htext-alert-negative placeholder-negative': isError}"
+            class="flex-grow px-3 py-2 text-sm font-medium leading-[140%] htext-black-100 focus:border-none hover:border-none border-none bg-white rounded-r-[5px]"
             :placeholder="placeholderPhone"
             v-model="phone"
+            @focus="isFocused = true"
+            @blur="isFocused = false"
             :disabled="!initialLoad"
         >
     </div>
-    <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined)" class="mt-2">
-      <p class="text-xs font-medim flex items-center htext-alert-negative leading-[10%]">
-          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+    <div v-if="(errors?.[name] !== true && errors?.[name] !== undefined)" class="mt-1 flex items-center">
+      <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+      <p class="text-xs leading-[90%] htext-alert-negative">    
           {{ errors?.[name] !== true || !modelValue ? errors?.[name] : '' }}
       </p>
     </div>
@@ -105,6 +100,7 @@ const searchList = ref([]);
 const error_phone = ref(false);
 const initialLoad = ref(false);
 const uniqueLook = ref(false);
+const isFocused = ref(false);
 
 onMounted(async ()=>{
   defineFullPhone(modelValue.value?.trim() ?? null)
@@ -117,6 +113,13 @@ const isError = computed(() => {
     }
     return false;
 })
+
+const borderColorClass = computed(() => {
+  if (isError.value) return 'hborder-alert-negative';
+  if (isFocused.value) return 'hborder-green-600';
+  return 'hborder-gray-400';
+  // {'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone},
+});
 
 // fucntions
 const defineFullPhone = async (stringPhone = null) => {
@@ -219,9 +222,11 @@ watch(code, (newVal, oldVal) => {
     box-shadow: 0px 3.5px 7px rgba(0, 0, 0, 0.15);
     border-radius: 0px 0px 10px 10px;
 }
-input::placeholder{
-    color: var(--h-gray-500);
-    font-weight: 500;
+input::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8D9196;
+  line-height: 140%; /* 19.6px */
 }
 
 .disabled:hover{
