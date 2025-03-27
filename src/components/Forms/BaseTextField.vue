@@ -1,4 +1,9 @@
 <template>
+  <label 
+    v-if="textLabel" 
+    class="text-sm font-medium leading-[140%] block mb-2"
+    :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
+    >{{ textLabel }}</label>
   <div class="relative" :class="classContent">
     <img
       v-if="prependInnerIcon"
@@ -13,9 +18,8 @@
         :type="type"
         :value="inputValue"
         @input="updateValue($event.target.value)"
-        class="w-full hinput border rounded-[6px]"
-        :class="`${customInputClass} ${inputValue ? 'hborder-black-100' : 'hborder-gray-400'} ${error ? 'hinput-error' : disabled ? 'cursor-not-allowed' : 'hinput-green'}`
-        "
+        class="w-full border-[2px] rounded-[6px]"
+        :class="`${customInputClass} ${bgClasses} ${borderClasses} ${desactivated ? 'htext-read-only-desactivated italic' : 'htext-black-100'}`"
         :placeholder="placeholder"
         :minlength="min"
         :maxlength="max"
@@ -24,14 +28,15 @@
         @keyup.prevent="handleKeyup"
         @click="onClick"
         @blur="handleBlur"
+        @focus="handleFocus"
         :disabled="disabled"
       >
       <div v-if="(safeErrors[name] && safeErrors[name] != true) || max" class="flex w-full" :class="!(safeErrors[name] && safeErrors[name] != true) && max ? 'justify-end' : 'justify-between'">
-        <p v-if="safeErrors[name] && safeErrors[name] != true" class="text-[10px] font-medium text-left mt-[4px] text-red-600 flex items-center">
+        <p v-if="safeErrors[name] && safeErrors[name] != true" class="text-xs leading-[90%] text-left mt-1 flex items-center htext-alert-negative">
           <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
           {{ safeErrors[name] }}
         </p>
-        <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
+        <p class="text-xs font-medium leading-[90%] htext-gray-500 text-right mt-1">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
       </div>
     </div>
     <button
@@ -67,6 +72,7 @@ const emit = defineEmits([
 
 const props = defineProps({
   type: { type: String, default: 'text' },
+  textLabel: { type: String, default: null },
   classContent: { type: String, default: '' },
   classInput: { type: String, default: '' },
   prependInnerIcon: { type: String, default: '' },
@@ -86,6 +92,7 @@ const props = defineProps({
     default: () => ({}),
   },
   disabled: { type: Boolean, default: false },
+  desactivated: { type: Boolean, default: false },
   inputId: { type: String, default: 'InputData' },
   // Prop para configurar la cantidad de decimales deseados
   decimals: { type: Number, default: 2 },
@@ -97,6 +104,7 @@ const safeErrors = computed(() => {
 });
 
 const inputValue = ref(props.modelValue);
+const isFocused = ref(false);
 
 watch(inputValue, (newValue) => {
   emit('update:modelValue', newValue);
@@ -112,17 +120,27 @@ watch(
 );
 
 const customInputClass = computed(() => {
-  let c = `${props.classInput} p-3 h-10 text-sm`;
+  let c = `${props.classInput} py-2 px-3 h-10 text-sm font-medium leading-[140%]`;
   if (props.prependInnerIcon) {
     c += ' pl-11';
   }
   if (safeErrors.value?.[props.name] && safeErrors.value?.[props.name] != true) {
-    c += ' hinput-error';
-  }
-  if (props.disabled) {
-    c += ' bg-[#FAFAFA] border-[#BFBFBF] text-[#A0A0A0]';
+    c += ' hborder-alert-negative';
   }
   return c;
+});
+
+const bgClasses = computed(() => {
+  if(props.disabled || props.desactivated) return 'cursor-not-allowed hbg-disabled-input'
+  if(!isFocused.value) return 'bg-white'//hover-hbg-gray-200
+  return 'bg-white';
+});
+
+const borderClasses = computed(() => {
+  if(props.disabled || props.desactivated) return 'hborder-disabled-input'
+  if(props.error) return 'hborder-alert-negative'
+  if(isFocused.value) return 'hborder-green-600'
+  return 'hborder-gray-400';
 });
 
 const updateValue = (value) => {
@@ -135,6 +153,7 @@ const onClick = () => {
 
 // Función para formatear el número al perder el foco
 const handleBlur = () => {
+  isFocused.value = false;
   if (props.isPrice && inputValue.value !== '') {
     const num = parseFloat(inputValue.value);
     if (!isNaN(num)) {
@@ -151,6 +170,10 @@ const handleKeyup = () => {
   emit('keyup:prevent');
 };
 
+const handleFocus = () => {
+  isFocused.value = true;
+};
+
 const searchbyenter = () => {
   emit('enter:search');
 };
@@ -161,11 +184,10 @@ const searchbyKey = () => {
 </script>
 
 <style lang="scss" scoped>
-.hinput-error {
-  border-color: #DC2626;
-}
 input::placeholder {
+  font-size: 14px;
   font-weight: 500;
-  color: var(--h-gray-500);
+  color: #8D9196;
+  line-height: 140%; /* 19.6px */
 }
 </style>

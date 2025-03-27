@@ -1,71 +1,77 @@
 <template>
-  <div class="cursor-pointer relative w-full" v-if="options.length > 0" ref="dropdown">
-    <div
-      :disabled="disabled"
-      :id="`dropdown-input-${options[0].value}`"
-      class="text-start flex items-center bg-white w-full hinput hinput-green border"
-      :class="[
-        size ? style.content : '',
-        {
-            'hborder-gray-400': !modelValue,
-            'hborder-black-100': modelValue || focusedAlweys,
-          },
-      ]"
-      @click="toggleOptions"
-    >
-      <img v-if="icon_left" :src="icon_left" :class="icon_left_class">
-      <span
-        class="flex-grow truncate text-label font-medium mr-2 hover-htext-green-600"
-        :class="[
-          {
-            'htext-gray-500': !error && !modelValue && !focusedAlweys,
-            'htext-alert-negative': error,
-            'htext-black-100': modelValue || focusedAlweys,
-          },
-          size ? style.text : ''
-        ]"
-      >
-        {{ labelSelect }}
-      </span>
-      <template v-if="modelValue && !mandatory">
-        <img :src="icon_delete" :class="icon_delete_class" @click.stop="deleteOption" class="cursor-pointer">
-      </template>
-      <template v-else>
-        <img :src="icon_right" :class="icon_right_class">
-      </template>
-    </div>
-    <div
-      class="absolute z-50 bg-white"
-      :class="'dropdown-menu ' + extra_dropdown + ' ' + top_dropdown"
-      :aria-labelledby="`dropdown-input-${options[0].value}`"
-      v-if="showOptions"
-    >
+  <div>
+    <label class="block text-sm mb-2 font-medium leading-[140%] htext-black-100" v-if="textLabel">
+      {{ textLabel }}
+    </label>
+    <div class="cursor-pointer relative w-full" v-if="options.length > 0" ref="dropdown">
       <div
-        v-for="(option, index) in options"
-        :key="index"
-        class="option cursor-pointer relative h-10 p-3 text-sm"
-        @click.prevent="selectOption(option)"
-        @mouseover="hoverOption = index"
-        @mouseleave="hoverOption = false"
-        tabindex="-1" aria-disabled="true"
-        :class="{
-          'active': option.value == modelValue,
-          'disabled': option.disabled
-        }"
+        :disabled="disabled"
+        :id="`dropdown-input-${options[0].value}`"
+        class="text-start flex items-center w-full border-[2px]"
+        :class="[
+          size ? style.content : '',
+          borderClasses,
+          bgClasses,
+          { 'hover-hbg-gray-200': !showOptions }
+        ]"
+        @click="toggleOptions"
       >
-        <p>
-          <img v-if="option.img" :src="option.img" :class="option.img_class ?? option_classes">
-          {{ option.label }}
-          <span v-if="option.tag" class="status-tag inline ml-2" :class="option.tag.class">
-            {{ option.tag.text }}
-          </span>
+        <img v-if="icon_left" :src="icon_left" :class="icon_left_class">
+        <span
+          class="flex-grow truncate font-medium mr-2"
+          :class="[
+            {
+              'htext-font-secondary': !error && !modelValue && !focusedAlweys,
+              // 'htext-alert-negative': error,
+              'htext-black-100': modelValue || focusedAlweys,
+            },
+            size ? style.text : ''
+          ]"
+        >
+          {{ labelSelect }}
+        </span>
+        <template v-if="modelValue && !mandatory">
+          <img :src="icon_delete" :class="icon_delete_class" @click.stop="deleteOption" class="cursor-pointer">
+        </template>
+        <template v-else>
+          <img :src="icon_right" :class="icon_right_class">
+        </template>
+      </div>
+      <div
+        class="absolute z-50 bg-white"
+        :class="'dropdown-menu ' + extra_dropdown + ' ' + top_dropdown"
+        :aria-labelledby="`dropdown-input-${options[0].value}`"
+        v-if="showOptions"
+      >
+        <div
+          v-for="(option, index) in options"
+          :key="index"
+          class="option cursor-pointer relative h-10 p-3 text-sm"
+          @click.prevent="selectOption(option)"
+          @mouseover="hoverOption = index"
+          @mouseleave="hoverOption = false"
+          tabindex="-1" aria-disabled="true"
+          :class="{
+            'active': option.value == modelValue,
+            'disabled': option.disabled
+          }"
+        >
+          <p>
+            <img v-if="option.img" :src="option.img" :class="option.img_class ?? option_classes">
+            {{ option.label }}
+            <span v-if="option.tag" class="status-tag inline ml-2" :class="option.tag.class">
+              {{ option.tag.text }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="mt-1 flex items-center" v-if="error">
+        <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+        <p class="text-xs htext-alert-negative leading-[90%]">
+          {{ texterror }}
         </p>
       </div>
     </div>
-    <p v-if="error" class="mt-1 text-xs htext-alert-negative flex">
-      <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
-      {{ texterror }}
-    </p>
   </div>
 </template>
 
@@ -150,6 +156,10 @@ export default {
       type: String,
       default: '', //opciones : top-auto
     },
+    textLabel: {
+      type: String,
+      default: null,
+    },
     focusedAlweys: Boolean
   },
   setup(props, { emit }) {
@@ -195,7 +205,7 @@ export default {
 
     const style = computed(() => {
       let s = {
-        content: 'h-10 rounded-[6px] p-3',
+        content: 'h-10 rounded-[6px] py-2 px-3',
         text: 'text-sm',
       };
       if (props.size == 's') {
@@ -210,6 +220,20 @@ export default {
         return s;
       }
       return s;
+    });
+
+    const borderClasses = computed(() => {
+      if(props.disabled){
+        return 'hborder-disabled-input';
+      }
+      if(props.error){
+        return 'hborder-alert-negative';
+      }
+      return showOptions.value ? 'hborder-green-600' : 'hborder-gray-400';
+    });
+
+    const bgClasses = computed(() => {
+      return props.disabled ? 'hbg-disabled-input' : 'bg-white';
     });
 
     const handleClickOutside = (event) => {
@@ -243,7 +267,9 @@ export default {
       selectOption,
       deleteOption,
       labelSelect,
-      style
+      style,
+      borderClasses,
+      bgClasses
     };
   }
 };
@@ -253,12 +279,6 @@ export default {
 .border-0:hover,
 .border-0 {
   border: none !important;
-}
-.box-input-field:hover {
-  border-color: var(--h-green-600) !important;
-}
-.box-input-field:hover > .text-label {
-  color: var(--h-green-600) !important;
 }
 .top-dropdown {
   top: 40px !important;
@@ -275,9 +295,6 @@ export default {
   padding: 0;
 }
 
-.option {
-  /* border-radius: 0px 0px 10px 10px; */
-}
 .option:last-child {
   border-radius: 0px 0px 10px 10px;
 }
@@ -304,12 +321,5 @@ export default {
     color: var(--h-green-600);
     opacity: 1;
   }
-  .box-input-field:hover{
-    border-color:var(--h-green-600) !important;
-    color:var(--h-green-600) !important;
-}
 
-.box-input-field:hover > input::placeholder{
-    color:var(--h-green-600) !important;
-}
 </style>

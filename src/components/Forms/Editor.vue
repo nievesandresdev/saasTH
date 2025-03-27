@@ -3,13 +3,13 @@
       <div
         id="editor-quill"
         :class="{
-          'editor-is-empty': characterCount === 0 && isValid || !mandatory && !isValid,
-          'editor-is-full': characterCount > 0,
+          'editor-is-empty': isValid || !mandatory && !isValid,
+          'editor-is-focused': isFocused,
           'editor-is-invalid': !isValid && mandatory,
           'padding-with-counter': showCounter && countType === 'absolute',
           'padding-without-counter': !showCounter || (showCounter && countType !== 'absolute')
         }"
-        :style="{ minHeight: minHeight ?? null }"
+        :style="{ minHeight: minHeight ?? null, '--editorMinHeight': `calc(${minHeight} - 42px)` }"
       >
         <QuillEditor
             :key="id"
@@ -19,7 +19,8 @@
             :placeholder="placeholder"
             :toolbar="toolbarOptions"
             ref="quillRef"
-            
+            @focus="onFocus"
+            @blur="onBlur"
         />
       </div>
       <div
@@ -59,7 +60,8 @@
   
     const content = ref(props.modelValue)
     const quillRef = ref(null);
-
+    const isFocused = ref(false);
+    
   
   onMounted(() => {
     // console.log('mounted editor',props.modelValue)
@@ -98,6 +100,15 @@
       isValid.value = false;
     }
   }
+
+  const onFocus = () => {
+    isFocused.value = true;
+  }
+
+  const onBlur = () => {
+    isFocused.value = false;
+  }
+  
   
   watch(() => props.modelValue, (newValue) => {
       content.value = newValue;
@@ -115,29 +126,17 @@
       background-color: #f2f2f2;
     }
   }
-  
-    .editor-is-full:hover,
-    .editor-is-empty:hover,
-    #editor-quill:hover .ql-editor p,
-    .editor-is-full:hover .ql-blank::before,
-    .editor-is-empty:hover .ql-blank::before {
-      border-color: #34A98F !important;
-      color: #34A98F !important;
-    }
     
     .editor-is-empty {
-      border: 1px solid #ccc;
+      border: 2px solid #ccc;
     }
     
-    .editor-is-full {
-      border: 1px solid #333;
+    .editor-is-focused {
+      border: 2px solid var(--h-green-600);
     }
     
     .editor-is-invalid {
-      border: 1px solid #FF6666;
-    }
-    .editor-is-invalid .ql-blank::before {
-      color: #FF6666 !important;
+      border: 2px solid #FF6666;
     }
     
     .padding-with-counter .ql-editor {
@@ -174,6 +173,33 @@
 
   .ql-editor {
   overflow-y: hidden; /* Evita el scroll vertical */
+}
+
+#editor-quill  .ql-editor.ql-blank::before {
+  padding: 12px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  color: var(--font-secondary);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 21px */
+}
+
+#editor-quill .ql-container > .ql-editor {
+  min-height: var(--editorMinHeight);
+}
+
+#editor-quill .ql-container:focus{
+  background-color: navy;
+}
+
+#editor-quill .ql-editor p{
+  color: var(--h-black-100);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%; /* 19.6px */
 }
   </style>
   
