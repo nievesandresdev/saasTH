@@ -7,7 +7,7 @@
                 <!-- title -->
                 <div class="flex items-center gap-2">
                     <h1 class="text-[22px] font-medium leading-[110%]">Comunicaciones</h1>
-                    <BaseTooltipResponsive
+                    <!-- <BaseTooltipResponsive
                         size="l"
                         :top="30"
                         :left="0"
@@ -20,7 +20,7 @@
                                 En esta sección podrás ver todas las vías e impactos de comunicación, para configurarlas o ver las instrucciones sobre como aplicarlas a tu alojamiento.
                             </p>
                         </template>
-                    </BaseTooltipResponsive>
+                    </BaseTooltipResponsive> -->
                 </div>
                 <div class="flex items-center gap-2">
                     <h2 class="font-semibold text-sm leading-[120%]">Idiomas</h2>
@@ -40,6 +40,15 @@
 
     <!-- promotion section -->
     <section class="px-6 mt-[24px] mb-6">
+        <div class="flex flex-col w-full mb-6 gap-2">
+            <p class="text-[16px] leading-[120%] font-semibold">
+                Gestiona la comunicación con tus huéspedes en cada etapa de su estancia.
+            </p>
+            <p class="text-[14px] leading-[140%] font-normal">
+                Aquí encontrarás todos los mensajes automáticos que recibirán, antes, durante y después de su estancia.<br>
+                Configura su envío y optimiza cada impacto para mejorar la experiencia de tus huéspedes y potenciar su experiencia en tu alojamiento.
+            </p>
+        </div>
         <div class="w-full flex justify-start">
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
                 <CardSectionHome title="Te damos la bienvenida">
