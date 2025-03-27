@@ -132,7 +132,7 @@ const customInputClass = computed(() => {
 
 const bgClasses = computed(() => {
   if(props.disabled || props.desactivated) return 'cursor-not-allowed hbg-disabled-input'
-  if(!isFocused.value) return 'bg-white hover-hbg-gray-200'
+  if(!isFocused.value) return 'bg-white'//hover-hbg-gray-200
   return 'bg-white';
 });
 

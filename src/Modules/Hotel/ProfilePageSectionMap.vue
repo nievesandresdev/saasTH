@@ -1,9 +1,9 @@
 <template>
-    <div class="space-y-2">
-        <label class="text-sm font-medium">Ubicación</label>
+    <div class="">
+        <label class="text-sm font-medium leading-[140%] block mb-2">Ubicación</label>
         <div class="relative">
         <img
-            class="w-6 h-6 absolute top-2 left-3.5"
+            class="w-6 h-6 absolute top-2 left-3"
             src="/assets/icons/lupa.svg"
             alt
         />
@@ -12,20 +12,19 @@
             type="text"
             id="metting_point"
             ref="metting_point"
-            class="h-10 rounded-[6px] text-sm font-medium w-full pl-11 hinput border hinput-green"
-            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'}`"
+            class="w-full th-Input-text-area text-area-icon-left"
+            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'} ${!form.address ? 'text-area-error' : ''}`"
             :placeholder="'Introduce la ubicación del '+$formatTypeLodging()"
         />
-        <p v-if="!form.address" class="mt-2 text-xs htext-alert-negative flex items-center">
-            <img
-                src="/assets/icons/1.TH.WARNING.RED.svg"
-                alt="icon alert red"
-                class="inline w-4 h-4 mr-2"
-            />
+        <div class="mt-1 flex items-center" v-if="!form.address">
+          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+          <p class="text-xs htext-alert-negative leading-[90%]">
             Introduce la ubicación
-        </p>
+          </p>
         </div>
-        <div id="map" class="h-[13.436rem] w-full rounded-2xl border-2 border-gray-500 mt-2"></div>
+        </div>
+        <div class="mt-2 block"></div>
+        <div id="map" class="h-[13.436rem] w-full rounded-2xl border-2 border-gray-500"></div>
     </div>
 </template>
 

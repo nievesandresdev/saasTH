@@ -45,7 +45,38 @@ input[type=radio]:hover {
     color: #34A98F;
 }
 
+.th-Input-text-area{
+  border-width: 2px;
+  border-color: var(--h-gray-400);
+  border-radius: 6px;
+  background-color: #fff;
+  height: 40px;
+  padding: 8px 12px;
 
+  color: var(--h-black-100);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140%; /* 19.6px */
+}
+
+.th-Input-text-area::placeholder{  
+    color: var(--font-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%; /* 19.6px */
+}
+
+.text-area-icon-left{
+  padding-left: 44px !important;
+}
+
+.th-Input-text-area:focus{
+  border-color: var(--h-green-600) !important;
+}
+
+.text-area-error{
+  border-color: var(--alert-negative) !important;
+}
 /* ========================= */
 
 .hcheckbox {
