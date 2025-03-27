@@ -236,7 +236,17 @@
         </div>
     </section>
 
+    
+    
+
     <SidePanel />
+    <ChangesBar 
+        :existingChanges="true"
+        :validChanges="true"
+        @cancel="cancelChange" 
+        @submit="handlesubmitData"
+       
+    />
 </template>
 <script setup>
 import { ref, provide, onMounted } from 'vue'
@@ -245,6 +255,7 @@ import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import CardSectionHome from "./CardSectionHome.vue";
 import SidePanel from "./components/SidePanel.vue";
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import ChangesBar from '@/components/Forms/ChangesBar.vue'
 
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStorage = useHotelStore();
@@ -273,6 +284,14 @@ const updateVisivilityService = () => {
 const hotel = ref({
     show_confort: false
 })
+
+const cancelChange = () => {
+    console.log('cancelChange')
+}
+
+const handlesubmitData = () => {
+    console.log('handlesubmitData')
+}
 
 provide('isOpenSidePanel',isOpenSidePanel)
 provide('conceptPanel',conceptPanel)
