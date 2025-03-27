@@ -36,7 +36,7 @@
           <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
           {{ safeErrors[name] }}
         </p>
-        <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
+        <p class="text-xs font-medium leading-[90%] htext-gray-500 text-right mt-1">{{ max ? `${inputValue?.length || 0}/${max || 0}` : '' }}</p>
       </div>
     </div>
     <button

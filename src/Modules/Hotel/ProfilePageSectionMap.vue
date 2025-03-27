@@ -12,8 +12,8 @@
             type="text"
             id="metting_point"
             ref="metting_point"
-            class="w-full th-Input-text-area text-area-icon-left"
-            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'} ${!form.address ? 'text-area-error' : ''}`"
+            class="w-full th-Input p-input-icon-left"
+            :class="`${form.address ? 'hborder-black-100' : 'hborder-gray-400'} ${!form.address ? 'border-input-error' : ''}`"
             :placeholder="'Introduce la ubicación del '+$formatTypeLodging()"
         />
         <div class="mt-1 flex items-center" v-if="!form.address">
