@@ -260,6 +260,9 @@ import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStorage = useHotelStore();
 
+import { useHotelCommunicationStore } from '@/stores/modules/hotelCommunication';
+const hotelCommunicationStorage = useHotelCommunicationStore();
+
 const isOpenSidePanel = ref(false)
 const conceptPanel = ref(null)
 const maskEmail = ref("no-reply@thehoster.es")
@@ -275,6 +278,9 @@ onMounted(async() => {
     if(dataHotel.sender_mail_mask){
         maskEmail.value = dataHotel.sender_mail_mask;
     }
+
+    let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
+    console.log(dataHotelCommunication)
 })
 
 const updateVisivilityService = () => {
