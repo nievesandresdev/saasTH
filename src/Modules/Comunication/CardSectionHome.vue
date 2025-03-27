@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-[10px]  shadow-hoster w-[296px] flex flex-col justify-between bg-[#FFFFFF]" :class="padding">
-        <div class="flex justify-end">
+        <div class="flex justify-end gap-1">
             <slot name="toggle"></slot>
         </div>
         <div class="flex justify-between items-center">

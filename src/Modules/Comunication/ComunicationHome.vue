@@ -53,10 +53,12 @@
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
                 <CardSectionHome title="Te damos la bienvenida" padding="p-4">
                     <template #toggle>
+                        <small class="text-[10px] font-semibold opacity-50 cursor-not-allowed">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.welcome_email"
+                            @update:modelValue="(val) => updateTogglecommunication('welcome_email', val)"
+                            :id="`welcome_email`"
+                            :disabled="true"
                         />
                     </template>
                     <template #msg>Cuando tus huéspedes accedan por primera vez a la WebApp, recibirán este mensaje de bienvenida.</template>
@@ -77,10 +79,11 @@
                 </CardSectionHome>
                 <CardSectionHome title="¿Todo listo huésped?" padding="p-4">
                     <template #toggle>
+                        <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.pre_checkin_email"
+                            @update:modelValue="(val) => updateTogglecommunication('pre_checkin_email', val)"
+                            :id="`pre_checkin_email`"
                         />
                     </template>
                     <template #msg>Faltando 2 días para su check-in, les enviaremos este email con información clave.</template>
@@ -101,10 +104,11 @@
                 </CardSectionHome>
                 <CardSectionHome title="¿Cómo va todo?" padding="p-4">
                     <template #toggle>  
+                        <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.post_checkin_email"
+                            @update:modelValue="(val) => updateTogglecommunication('post_checkin_email', val)"
+                            :id="`post_checkin_email`"
                         />
                     </template>
                     <template #msg>A las 24 horas de su llegada, este mensaje te ayudará a medir su satisfacción en tiempo real.</template>
@@ -125,10 +129,11 @@
                 </CardSectionHome>
                 <CardSectionHome title="Gracias por elegirnos" padding="p-4">
                     <template #toggle>  
+                        <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.checkout_email"
+                            @update:modelValue="(val) => updateTogglecommunication('checkout_email', val)"
+                            :id="`checkout_email`"
                         />
                     </template>
                     <template #msg>Al momento del check-out, recibirán un mensaje de agradecimiento y despedida.</template>
@@ -149,10 +154,11 @@
                 </CardSectionHome>
                 <CardSectionHome title="Te esperamos de vuelta" padding="p-4">
                     <template #toggle>  
+                        <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.pre_checkout_email"
+                            @update:modelValue="(val) => updateTogglecommunication('pre_checkout_email', val)"
+                            :id="`pre_checkout_email`"
                         />
                     </template>
                     <template #msg>Dos días después de su partida, este recordatorio los invitará a regresar.</template>
@@ -185,10 +191,11 @@
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
                 <CardSectionHome title="Aviso de mensaje en chat" padding="p-4">
                     <template #toggle>
+                        <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.new_chat_email"
+                            @update:modelValue="(val) => updateTogglecommunication('new_chat_email', val)"
+                            :id="`new_chat_email`"
                         />
                     </template>
                     
@@ -210,10 +217,11 @@
                 </CardSectionHome>
                 <CardSectionHome title="Referente - Código de regalo" padding="p-4">
                     <template #toggle>
+                        <span class="text-[10px] font-semibold">Activo</span>
                         <BaseSwichInput
-                            v-model="hotel.show_confort"
-                            
-                            @click="updateVisivilityService"
+                            v-model="toggleOptions.referent_email"
+                            @update:modelValue="(val) => updateTogglecommunication('referent_email', val)"
+                            :id="`referent_email`"
                         />
                     </template>
                     <template #msg>Tus huéspedes recibirán un regalo cuando uno de sus referidos utilice su código de programa de referidos.</template>
@@ -272,6 +280,19 @@ const openSidePanel = (concept) =>{
     isOpenSidePanel.value = true;
 }
 
+const toggleOptions = ref({
+    welcome_email: false,
+    pre_checkin_email: true,
+    post_checkin_email: false,
+    checkout_email: false,
+    pre_checkout_email: false,
+    new_chat_email: false,
+    referent_email: false,
+})
+
+const initToggleOptions = ref({})
+
+
 onMounted(async() => {
     // {subdomain: sessionStorage.getItem('current_subdomain')}
     let dataHotel = await hotelStorage.$findByParams()
@@ -280,11 +301,17 @@ onMounted(async() => {
     }
 
     let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
-    console.log(dataHotelCommunication)
+    //console.log(dataHotelCommunication.data.email)
+    toggleOptions.value = dataHotelCommunication.data.email
+    initToggleOptions.value = dataHotelCommunication.data.email
 })
 
-const updateVisivilityService = () => {
-    console.log('updateVisivilityService')
+const updateTogglecommunication = (key, val) => {
+    toggleOptions.value[key] = val
+    console.log('updateTogglecommunication',key,val)
+    console.log(toggleOptions.value)
+    
+
 }
 
 const hotel = ref({
