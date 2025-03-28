@@ -43,10 +43,10 @@ onMounted(async ()=>{
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
 
-    if(emailURL && passwordURL){
+ /*    if(emailURL && passwordURL){
         alert('email: '+emailURL+' password: '+passwordURL)
     }
-    
+     */
 })
 
 /* function defineMockupData() {
