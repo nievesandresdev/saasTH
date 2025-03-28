@@ -8,7 +8,7 @@
             ref="emailInput"
             :id="id"
             type="email"
-            :class="`${computeClasses} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+            :class="`${computeClasses}`"
             :placeholder="placeholderText"
             :value="modelValue"
             @input="onInput"
@@ -31,6 +31,10 @@
             </svg>
             Verificando...
         </p>
+    </div>
+    <div v-if="hasError" class="flex items-center mt-1">
+        <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+        <p class="text-xs leading-[90%] htext-alert-negative">{{ currentErrorMessage }}</p>
     </div>
 </template>
 
@@ -78,7 +82,7 @@ export default {
         },
         textError: {
             type: String,
-            default: 'Campo requerido'
+            default: 'El correo electrónico ya está registrado.'
         },
         iconLeft: {
             type: String,
@@ -111,9 +115,9 @@ export default {
             return this.placeholder || 'Introduce un email';
         },
         computeClasses() {
-            let classes = 'hinput-green rounded-[6px] border w-full ' + this.customClasses;
+            let classes = 'th-Input w-full ' + this.customClasses;
             if (this.hasError || this.activeError) {
-                classes += ' hborder-alert-negative htext-alert-negative placeholder-negative';
+                classes += ' border-input-error';
             } else {
                 classes += '';
             }

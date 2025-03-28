@@ -66,12 +66,19 @@ input[type=radio]:hover {
     line-height: 140%; /* 19.6px */
 }
 
+.placeholder-selected::placeholder{  
+  color: var(--h-black-100) !important;
+}
 .p-input-icon-left{
   padding-left: 44px !important;
 }
 
 .th-Input:focus{
   border-color: var(--h-green-600) !important;
+}
+
+.select-hover:not(:focus):hover {
+  background-color: var(--h-gray-200) !important;
 }
 
 .p-input-time{
