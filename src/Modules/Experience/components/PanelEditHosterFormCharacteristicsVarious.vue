@@ -32,8 +32,7 @@
                 </div>
                 <div class="">
                     <h5 class="text-[12px] font-bold leading-[150%]">{{ item.name }}</h5>
-                    <span v-if="!item.fields_visibles.includes('PRICE')" class="text-[12px] font-medium">{{ item.price }}€</span>
-                    <span v-else class="text-[12px] font-medium">GRATIS</span>
+                    <span class="text-[12px] font-medium"> {{ subserviceStore.calPrice(item) }} </span>
                 </div>
             </div>
             <div class="space-x-4">

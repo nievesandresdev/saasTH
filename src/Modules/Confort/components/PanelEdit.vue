@@ -225,7 +225,8 @@ const changesform = computed(() => {
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
         !lodash.isEqual(form.languages, itemSelected?.languages) ||
-        !lodash.isEqual(form.subservices, itemSelected?.subservices)
+        !lodash.isEqual(form.subservices, itemSelected?.subservices) ||
+        !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
 });

@@ -88,6 +88,8 @@ import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
+import { useServiceStore } from '@/stores/modules/service';
+const serviceStore = useServiceStore();
 import { useExperienceStore } from '@/stores/modules/experience';
 const experienceStore = useExperienceStore();
 
@@ -456,6 +458,7 @@ provide('modelSubserviceActive', modelSubserviceActive);
 //
 provide('mockupStore', mockupStore);
 provide('experienceStore', experienceStore);
+provide('serviceStore', serviceStore);
 provide('toast', toast);
 provide('hotelStore', hotelStore);
 provide('formFilter', formFilter);

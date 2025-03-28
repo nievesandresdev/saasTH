@@ -37,6 +37,8 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
 // MODULE
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
+import { useServiceStore } from '@/stores/modules/service';
+const serviceStore = useServiceStore();
 
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -212,6 +214,7 @@ provide('languagesData', languagesData);
 provide('toast', toast);
 provide('mockupStore', mockupStore);
 provide('transportStore', transportStore);
+provide('serviceStore', serviceStore);
 provide('transportsData', transportsData);
 provide('hotelStore', hotelStore);
 provide('hotelData', hotelData);
