@@ -30,14 +30,22 @@ const authStore = useAuthStore();
 
 const toast = useToastAlert();
 
+const params = new URLSearchParams(window.location.search)
+
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
 
 onMounted(async ()=>{
+    const emailURL = params.get('u')
+    const passwordURL = params.get('p')
     //await chainStore.$getChainBySubdomain();
     mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true)
+
+    if(emailURL && passwordURL){
+        alert('email: '+emailURL+' password: '+passwordURL)
+    }
     
 })
 
