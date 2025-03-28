@@ -53,7 +53,7 @@
                           v-model="form.password" required
                         >
                       </div>
-                      <div v-if="errorPassword" class="flex items-center mt-1">
+                      <div v-if="errorPassword" class="flex items-center">
                           <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                           <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMessage }}</p>
                       </div>
@@ -81,7 +81,7 @@
                           v-model="form.password_confirmation" required
                         >
                       </div>
-                      <div v-if="errorPasswordMatch" class="flex items-center mt-1">
+                      <div v-if="errorPasswordMatch" class="flex items-center">
                           <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                           <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
                       </div>
