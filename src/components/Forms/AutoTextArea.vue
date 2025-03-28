@@ -1,11 +1,15 @@
 <template>
+  <label 
+    v-if="textLabel" 
+    class="text-sm font-medium leading-[140%] block mb-2 htext-black-100"
+    >{{ textLabel }}</label>
+    <p v-if="textDescription" class="text-sm mb-2 leading-[140%]">{{ textDescription }}</p>
   <div>
     <textarea
       :id="id"
-      class="auto-height p-3 text-sm leading-[140%] w-full border rounded-[6px] block overflow-y-hidden"
+      class="auto-height th-Input p-input-textarea w-full block overflow-y-hidden"
       :class="{
-          'hborder-black-100 hover-htext-green-600 hover-hborder-green-600': text.length > 0,
-          'placeholder-negative htext-alert-negative hborder-negative': isEmpty || text.length == 0
+          'border-input-error': isEmpty || text.length == 0
       }"
       v-model="text"
       @input="handleInput"
@@ -14,7 +18,13 @@
       @blur="checkEmpty"
       placeholder="Debes introducir un texto"
     ></textarea>
-    <p class="mt-2 text-xs leading-[90%] htext-gray-500 text-right">{{ text.length }}/{{ wordLimit }}</p>
+    <div class="flex items-center mt-1">
+      <div v-if="errorText && (isEmpty || text.length == 0)" class="flex items-center">
+        <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+        <p class="text-xs leading-[90%] htext-alert-negative">{{errorText}}</p>
+      </div>
+      <p class="text-xs font-medium leading-[90%] htext-gray-500 text-right ml-auto">{{ text.length }}/{{ wordLimit }}</p>
+    </div>
   </div>
 </template>
 
@@ -34,6 +44,18 @@ const props = defineProps({
   mandatory: {
     type: Boolean,
     default: false
+  },
+  errorText: {
+    type: String,
+    default: null
+  },
+  textLabel: {
+    type: String,
+    default: null
+  },
+  textDescription: {  
+    type: String,
+    default: null
   }
 });
 
@@ -104,6 +126,7 @@ textarea:focus{
     border-color:initial;
 }
 .auto-height {
+    height: auto !important;
     min-height: 40px;
     resize: none;
 }

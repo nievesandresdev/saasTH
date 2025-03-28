@@ -27,6 +27,7 @@
               :placeholder="errors.title && attemptedSending ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
               :error="errors.title && attemptedSending" 
               @input="handleInput"
+              max="100"
             />
             <!-- <div v-if="errors.title === 'Te has pasado el límite de caracteres'" class="flex mt-1 text-[#FF6666] justify-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-1 bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -34,7 +35,7 @@
               </svg>
               <small>{{ errors.title }}</small>
             </div> -->
-            <div class="text-sm text-right">{{ form.title.length }}/100</div>
+            <!-- <div class="text-sm text-right">{{ form.title.length }}/100</div> -->
           </section>
           <section class="mb-4">
             <label class="text-sm font-medium mb-[6px] block">Descripción*</label>

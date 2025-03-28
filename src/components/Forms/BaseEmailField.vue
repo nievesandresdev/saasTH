@@ -8,7 +8,7 @@
             ref="emailInput"
             :id="id"
             type="email"
-            :class="`${computeClasses} ${modelValue ? 'hborder-black-100' : 'hborder-gray-400'}`"
+            :class="`${computeClasses}`"
             :placeholder="placeholderText"
             :value="modelValue"
             @input="validateEmail"
@@ -16,14 +16,10 @@
             autocomplete="nope"
             :disabled="disabled"
         >
-        <p v-if="hasError && showTextError" class="mt-2 text-xs text-alert-negative flex items-center">
-            <img
-                src="/assets/icons/1.TH.WARNING.svg"
-                alt="icon alert red"
-                class="inline w-4 h-4 mr-2"
-            />
-            {{ textError }}
-        </p>
+        <div v-if="hasError && showTextError" class="flex items-center mt-1">
+            <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+            <p class="text-xs leading-[90%] htext-alert-negative">{{ textError }}</p>
+        </div>
     </div>
 </template>
 
@@ -62,9 +58,9 @@ export default {
             return this.placeholder || 'Introduce un email';
         },
         computeClasses() {
-            let classes = 'hinput-green rounded-[6px] border w-full ' + this.customClasses;
+            let classes = 'th-Input w-full ' + this.customClasses;
             if (this.hasError || this.activeError) {
-                classes += ' hborder-alert-negative htext-alert-negative placeholder-negative';
+                classes += ' border-input-error';
             } else {
                 classes += '';
             }
