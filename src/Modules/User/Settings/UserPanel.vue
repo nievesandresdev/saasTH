@@ -62,11 +62,9 @@
                                     <img v-if="changePassword && form.current_password !== '' && !visible_pass.current_password" class="absolute cursor-pointer w-5 right-2.5 top-3 " src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('current_password')">
                                     <input 
                                         :type="visible_pass.current_password ? 'text' : 'password'"
-                                        class="w-full rounded h-10 py-4 px-4 text-sm border" 
+                                        class="w-full th-Input" 
                                         :class="{
-                                            'hborder-black-100':form.current_password,
-                                            'hborder-gray-400':!form.current_password.trim(),
-                                            'hborder-alert-negative htext-alert-negative': changePassword && !form.current_password && attemptedSending || passError,
+                                            'border-input-error': changePassword && !form.current_password && attemptedSending || passError,
                                         }"
                                         :placeholder="placeholderPassword"
                                         v-model="form.current_password"
@@ -93,11 +91,9 @@
                                         <img v-if="form.new_password !== '' && !visible_pass.new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 " src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('new_password')">
                                         <input 
                                             :type="visible_pass.new_password ? 'text' : 'password'"
-                                            class="w-full rounded h-10 py-4 px-4 text-sm border" 
+                                            class="w-full th-Input" 
                                             :class="{
-                                                'hborder-black-100':form.new_password,
-                                                'hborder-gray-400':!form.new_password.trim(),
-                                                'hborder-alert-negative htext-alert-negative': form.confirm_new_password && !confirmPassword || !form.new_password && attemptedSending,
+                                                'border-input-error': form.confirm_new_password && !confirmPassword || !form.new_password && attemptedSending,
                                             }"
                                             id="new_password" 
                                             :placeholder="placeholderPassword"
@@ -116,11 +112,9 @@
                                         <img v-if="form.confirm_new_password !== '' && !visible_pass.confirm_new_password" class="absolute cursor-pointer w-5 right-2.5 top-3 " src="/assets/img/hoster/icons/disableeye.svg" @click="toggleVisibility('confirm_new_password')">
                                         <input 
                                             :type="visible_pass.confirm_new_password ? 'text' : 'password'"
-                                            class="w-full rounded h-10 py-4 px-4 text-sm border" 
+                                            class="w-full th-Input" 
                                             :class="{
-                                                'hborder-black-100':form.confirm_new_password,
-                                                'hborder-gray-400':!form.confirm_new_password.trim(),
-                                                'hborder-alert-negative htext-alert-negative': form.confirm_new_password && !confirmPassword  || !form.confirm_new_password && attemptedSending,
+                                                'border-input-error': form.confirm_new_password && !confirmPassword  || !form.confirm_new_password && attemptedSending,
                                             }"
                                             id="confirm_new_password" 
                                             :placeholder="placeholderPassword"

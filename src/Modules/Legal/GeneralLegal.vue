@@ -23,8 +23,8 @@
                         id="fiscal_address"
                         type="text"
                         :placeholder="form.addressError ? 'Debes introducir el domicilio fiscal' : 'Ejemplo: Plaza Trinidad 15, 5C - Sevilla'"
-                        class="h-10 rounded-[6px] text-sm font-medium w-full pl-3 hinput border"
-                        :class="form.addressError ? 'border-red-500 placeholder:text-red-500' : form.address ? 'border-black hinput-green' : 'hborder-gray-400'"
+                        class="w-full th-Input"
+                        :class="form.addressError ? 'border-input-error' : ''"
                     >
                 </section>
                 <section class="mb-4">

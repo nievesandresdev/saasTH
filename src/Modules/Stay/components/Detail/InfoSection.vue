@@ -63,7 +63,6 @@
                 <div class="mt-4">
                     <label class="text-sm font-medium mb-2 leading-[110%]">Medio de la reserva</label>
                     <BaseSelectField
-                        textLabel="Elige el medio de la reserva"
                         :icon_left="iconLeftDropdown"
                         :options="middle_optiones"
                         v-model="form.middle_reservation"

@@ -26,9 +26,10 @@
               :placeholder="errors.title ? 'Debes añadir un título' : 'Ejemplo: No salir sin camiseta'" 
               :error="errors.title"
               :maxLength="100" 
+              max="100"
               @input="handleInput"
             />
-            <div class="text-sm text-right">{{ form.title.length }}/100</div>
+            <!-- <div class="text-sm text-right">{{ form.title.length }}/100</div> -->
           </section>
           <section class="mb-4">
             <label class="text-sm font-medium mb-[6px] block">Descripción*</label>

@@ -78,7 +78,12 @@ input[type=radio]:hover {
   padding: 5px 2px !important;
 }
 
-.border-input-error{
+.p-input-textarea{
+  padding: 12px !important;
+}
+
+.border-input-error,
+.border-input-error:focus{
   border-color: var(--alert-negative) !important;
 }
 /* ========================= */
