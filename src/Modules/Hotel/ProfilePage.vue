@@ -36,31 +36,27 @@
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="flex space-x-[16px]">
                     <div class="flex-1">
-                        <label class="text-sm font-medium mb-2 inline-block">Tipo de alojamiento </label>
                         <BaseSelectField
+                            textLabel="Tipo de alojamiento"
                             :id="'type_lodging'"
-                            :textLabel="'Tipo de alojamiento'"
                             v-model="form.type"
                             :options="typeLodging"
                             mandatory
-                            :error="false"
                         />
                     </div>
                     <div class="flex-1">
-                        <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
                         <BaseSelectField
                             :id="'type_lodging'"
-                            :textLabel="'Elige categoría'"
+                            textLabel="Categoría"
                             v-model="form.category"
                             :options="categoryLodging"
                             mandatory
-                            :error="false"
                         />
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium block mb-2">Nombre de {{ $formatTypeLodging() }}</label>
                     <BaseTextField
+                        :textLabel="'Nombre de '+$formatTypeLodging()"
                         v-model="form.name"
                         placeholder="Nombre de alojamiento"
                         class-content="flex-1"
@@ -72,14 +68,14 @@
             </section>
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium inline-block">Descripción {{ $formatTypeLodging(true) }}</label>
-                    <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
                     <BaseTextareaField
+                        :textLabel="'Descripción '+ $formatTypeLodging(true)"
+                        textDescription="Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial." 
                         v-model="form.description"
                         placeholder="Descripción..."
                         class-content="flex-1"
                         name="description"
-                        :max="'500'"
+                        max="500"
                     />
                 </div>
             </section>
@@ -88,7 +84,7 @@
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
                         <div class="flex justify-between">
-                            <label class="text-sm font-medium inline-block">Teléfono principal</label>
+                            <label class="text-sm font-medium leading-[140%] inline-block">Teléfono principal</label>
                             <BaseTooltipResponsive
                                 size="l"
                                 :top="-85"
@@ -112,7 +108,7 @@
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium inline-block">Teléfono secundario</label>
+                        <label class="text-sm font-medium leading-[140%] inline-block">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"

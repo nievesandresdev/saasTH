@@ -19,3 +19,8 @@ export const verifySubdomainExistPerHotel = (params, config) => apiHttp('GET', `
 export const updateCustomization = (data, config={}) => apiHttp('POST', `${hotelPath}/customization`, data, config);
 export const updateShowButtons = (data) => apiHttp('POST', `${hotelPath}/updateShowButtons`, data);
 export const handleShowReferrals = () => apiHttp('POST', `${hotelPath}/handleShowReferrals`, {},{showPreloader: false});
+
+
+//communication
+export const getHotelCommunication = () => apiHttp('POST', `${hotelPath}/communication/getHotelCommunication`);
+export const updateOrStoreHotelCommunication = (data) => apiHttp('POST', `${hotelPath}/communication/updateOrStoreHotelCommunication`, data);

@@ -117,7 +117,7 @@ const dataPanel = computed(()=>{
 
 const values = {
     'prepareYourArrival':{
-        title: 'Prepara tu llegada',
+        title: '¿Todo listo huésped?',
         description: 'Este es el mensaje que recibirán tus huéspedes faltando 2 días para su llegada a tu alojamiento.',
         trigger: 'Cuando falten 48hs para el comienzo de la estancia de tu huésped.',
         issue: `¿Todo listo [nombreHuésped]?`,
@@ -128,7 +128,7 @@ const values = {
         ]
     },
     'howGoing':{
-        title: '¿Qué tal va todo?',
+        title: '¿Cómo va todo?',
         description: 'Conocerás cómo se sienten tus huéspedes durante su estancia y les harás recomendaciones.',
         trigger: 'Tus huéspedes recibirán este mensaje pasadas las 24hs del comienzo de su estancia.',
         issue: `¿Qué tal va todo?`,
