@@ -47,6 +47,7 @@ onMounted(async ()=>{
             localStorage.removeItem("user");
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
+            location.reload();
         }
     });
     
