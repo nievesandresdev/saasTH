@@ -255,9 +255,10 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
+    await authStore.logout()
     await authStore.login({
       email: form.value.email,
-      password: form.value.password
+      password: form.value.password,
     });
   }
 

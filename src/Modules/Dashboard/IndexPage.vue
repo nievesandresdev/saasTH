@@ -30,6 +30,8 @@ const authStore = useAuthStore();
 
 const toast = useToastAlert();
 
+const params = new URLSearchParams(window.location.search)
+
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
 
@@ -37,9 +39,20 @@ onMounted(async ()=>{
     //await chainStore.$getChainBySubdomain();
     mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
-    mockupStore.$setLanguageTooltip(true)
+    mockupStore.$setLanguageTooltip(true) 
+
+    window.addEventListener("message", (event) => {
+        if (event.data === "clearStorage") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            // Confirmación opcional
+            event.source?.postMessage("storageCleared", event.origin);
+            location.reload();
+        }
+    });
     
 })
+
 
 /* function defineMockupData() {
     mockupStore.$setIframeUrl('/consultas/fakeLinkOtas')
