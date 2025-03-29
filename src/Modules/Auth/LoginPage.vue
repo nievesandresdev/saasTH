@@ -251,7 +251,6 @@ onMounted(async () => {
     await authStore.login({
       email: form.value.email,
       password: form.value.password,
-      dossier : true
     });
   }
 
