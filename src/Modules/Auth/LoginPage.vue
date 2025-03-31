@@ -257,8 +257,9 @@ onMounted(async () => {
   if (emailURL && passwordURL) {
     await authStore.logout();
     form.value.email = emailURL
-    alert("ssss")
+   
     form.value.password = passwordURL
+    console.log('loginDossier',form.value)
     const loginButton = document.querySelector('button[type="submit"]');
     if (loginButton && !loginButton.disabled) {
       loginButton.click(); // Simula el clic
