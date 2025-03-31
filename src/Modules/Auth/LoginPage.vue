@@ -254,12 +254,12 @@ onMounted(async () => {
     localStorage.setItem("pass_email_form", passwordURL)
   }
   
-  if(emailURL && passwordURL){
-    await authStore.logout()
-    await authStore.login({
-      email: form.value.email,
-      password: form.value.password,
-    });
+  if (emailURL && passwordURL) {
+    await authStore.logout();
+    const loginButton = document.querySelector('button[type="submit"]');
+    if (loginButton && !loginButton.disabled) {
+      loginButton.click(); // Simula el clic
+    }
   }
 
   
