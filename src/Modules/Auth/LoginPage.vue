@@ -257,6 +257,7 @@ onMounted(async () => {
   if (emailURL && passwordURL) {
     await authStore.logout();
     form.value.email = emailURL
+    alert("ssss")
     form.value.password = passwordURL
     const loginButton = document.querySelector('button[type="submit"]');
     if (loginButton && !loginButton.disabled) {
