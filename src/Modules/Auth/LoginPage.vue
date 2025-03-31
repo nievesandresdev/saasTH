@@ -241,9 +241,12 @@ onMounted(async () => {
   if (route.query.tokenExpired || route.query.changePassword) {
     showAlertModal.value = true;
   }
+  
 
   const emailURL = params.get('u')
   const passwordURL = params.get('p')
+
+  console.log('URLDATADOSSIERmounted',emailURL,passwordURL)
 
   if (emailURL) {
     form.value.email = emailURL
