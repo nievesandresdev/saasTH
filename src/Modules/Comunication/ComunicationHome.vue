@@ -244,9 +244,11 @@
     <ModalNoSave
         :id="'not-saved'"
         :open="changes"
-        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        title="¿Salir sin guardar?"
+        text="Si sales sin guardar, los cambios que has realizado en esta sección se perderán."
         textbtn="Guardar"
         @saveChanges="handlesubmitData"
+        type="save_changes"
     />
 </template>
 <script setup>
@@ -289,9 +291,12 @@ const toggleOptions = ref({
 const initToggleOptions = ref({})
 
 const changes = computed(() => {
-    //console.log({toggleOptions: toggleOptions.value, initToggleOptions: initToggleOptions.value})
     return JSON.stringify(toggleOptions.value) !== JSON.stringify(initToggleOptions.value);
 })
+
+const cancelChange = () => {
+    toggleOptions.value = { ...initToggleOptions.value };
+}
 
 const getHotelCommunication = async () => {
     let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
@@ -316,21 +321,13 @@ const updateTogglecommunication = (key, val) => {
 }
 
 
-const hotel = ref({
-    show_confort: false
-})
-
-const cancelChange = () => {
-    console.log('cancelChange')
-}
-
 const handlesubmitData = async () => {
     let params = {
         options: toggleOptions.value,
         type: 'email'
     }
     const response = await hotelCommunicationStorage.$updateOrStoreHotelCommunication(params)
-    //console.log('updateOrStoreHotelCommunication',response)
+
     if(response.ok){
         toast.warningToast('Actualizado correctamente','top-right')
     }else{
