@@ -256,6 +256,7 @@ onMounted(async () => {
         email: form.value.email,
         password: form.value.password
       });
+      router.push('/dashboard')
       const loginButton = document.querySelector('button[type="submit"]');
       if (loginButton && !loginButton.disabled) {
         loginButton.click(); 
