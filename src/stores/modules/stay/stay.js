@@ -14,7 +14,8 @@ import {
     deleteGuestNoteApi,
     getDetailQueryByGuestApi,
     getGuestListWithNotiApi,
-    deleteTestStaysApi
+    deleteTestStaysApi,
+    findByIdApi
 } from '@/api/services/stay/stay.services'
 
 export const useStayStore = defineStore('stay', () => {
@@ -135,9 +136,18 @@ export const useStayStore = defineStore('stay', () => {
             return response.data
         }
     }
+    
+    async function $findById (stayId) {
+        const response = await findByIdApi(stayId)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
 
     return {
         $getAllByHotel,
+        $findById,
         $statisticsByHotel,
         $getdetailData,
         $updateData,

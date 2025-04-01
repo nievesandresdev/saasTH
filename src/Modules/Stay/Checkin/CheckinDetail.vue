@@ -26,7 +26,7 @@
                 label="Segundo apellido"
             />
             <Input 
-                :content="guest?.birthdate"
+                :content="guest?.birthdate ? $formatTimestampDate(guest?.birthdate,'dd/MM/yyyy') : ''"
                 label="Fecha de nacimiento"
                 :disabled="!settings?.first_step?.birthdate?.visible"
             />

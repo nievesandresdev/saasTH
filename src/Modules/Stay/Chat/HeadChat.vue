@@ -18,7 +18,7 @@
                         class="w-2.5 h-2.5 absolute top-[-4px] right-[-8px]"
                         src="/assets/icons/EllipseWarning.svg" alt=""
                     >
-                    {{ guest.name ?? 'Sin nombre'}}
+                    {{ guest.name ? guest.name + ' ' + guest.lastname : 'Sin nombre'}}
                 </div>
             </div>
         </div>

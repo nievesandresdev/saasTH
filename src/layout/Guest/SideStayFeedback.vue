@@ -15,7 +15,7 @@
                         :src="`https://ui-avatars.com/api/?name=${data.guest?.acronym}&color=fff&background=${data.guest.color}`"
                     >
                     <div class="ml-4">
-                        <h1 class="text-lg font-semibold leading-[120%]">{{data.guest?.name}}</h1>
+                        <h1 class="text-lg font-semibold leading-[120%]">{{data.guest?.name}} {{data.guest?.lastname}}</h1>
                         <div class="flex items-center">
                             <h2 class="text-sm font-medium leading-[140%]">Idioma - {{ $nameLanguage(data.guest?.lang_web) }}</h2>
                             <img

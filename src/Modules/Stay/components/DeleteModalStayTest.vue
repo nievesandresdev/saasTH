@@ -47,9 +47,11 @@ function closeDeleteTestModal(){
 async function deleteTestStays(){
   closeDeleteTestModal();
   let stayId = route.params.stayId;
+  let currentStay = await stayStore.$findById(stayId);
   await stayStore.$deleteTestStays(stayId);
   toast.warningToast('Estancias de prueba eliminadas con éxito','top-right');
-  if(route.query.trial){
+  // console.log('test currentStay',currentStay)
+  if(currentStay && currentStay.trial){
     router.push({ name : 'StayHomePage'})
   }
 }

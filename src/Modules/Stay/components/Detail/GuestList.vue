@@ -14,7 +14,7 @@
                     class="w-10 h-8 rounded-[6px] object-cover" 
                     :src="`https://ui-avatars.com/api/?name=${g.acronym}&color=fff&background=${g.color}`"
                 >
-                <p class="text-base ml-2" v-html="highlightSearch(g.name, searchQuery)"></p>
+                <p class="text-base ml-2" v-html="highlightSearch(g.name + ' ' + g.lastname, searchQuery)"></p>
                 <img 
                     class="w-4 h-4 ml-auto" 
                     :src="`/assets/icons/flags/${g.lang_web}.svg`"
