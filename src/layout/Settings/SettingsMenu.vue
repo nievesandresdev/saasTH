@@ -25,10 +25,11 @@
                   href="javascript:void(0)"
                   @click="toggleSubMenu(index_section, index_menu, section, menu)"
                   class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-hbg-gray-200"
+                  :class="menu.selectedArr.includes(route.name) ? 'hbg-green-200 ' : ''"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 
-                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span> <!-- items con icono -->
+                    <span class="text-sm font-medium leading-[140%]" :class="menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ menu.title }}</span> <!-- items con icono -->
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
@@ -74,7 +75,7 @@
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
                             <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[25px] w-[3px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
                           </div>
-                          <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
+                          <span class="text-sm font-medium leading-[140%] ml-2" :class="sub_menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ sub_menu.title }} </span>
                         </div>
                       </div>
                     </li>
@@ -475,7 +476,7 @@ const dataTypePlaces = reactive([
 
 
 onMounted(() => {
-  loadMenuState();
+  //loadMenuState();
   getTypePlaces()
   focusMenu()
 
@@ -521,7 +522,7 @@ function toggleSubMenu(index_section_selected, index_menu_selected, section_sele
     localStorage.setItem('menuState', JSON.stringify(menuState));
 } */
 
-function loadMenuState() {
+/* function loadMenuState() {
     const menuState = JSON.parse(localStorage.getItem('menuState'));
     //if (menuState && menuState.length === menu_section.length) {
         menu_section.forEach((section, index_section) => {
@@ -532,7 +533,7 @@ function loadMenuState() {
             }
         });
     //}
-}
+} */
 
 function focusMenu() {
     // No cambiaremos el estado `expanded` si ya ha sido cargado.
