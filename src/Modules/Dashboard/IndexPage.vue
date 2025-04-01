@@ -64,6 +64,8 @@ onMounted(async ()=>{
 
            // mockupStore.$reloadIframe()
             mockupStore.$setIframeUrl('')
+            alert('hola')
+            location.reload()
         }
     }); //fin de la funcionalidad para DOSSIER
     mockupStore.$reloadIframe()
