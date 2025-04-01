@@ -247,6 +247,7 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
+    alert('holaMountedLoginPage')
     await authStore.logout()
     if (emailURL && passwordURL) {
       await authStore.logout();
