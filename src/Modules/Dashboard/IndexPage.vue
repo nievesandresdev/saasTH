@@ -62,7 +62,7 @@ onMounted(async ()=>{
                 }
             })
 
-            mockupStore.$reloadIframe()
+            //mockupStore.$reloadIframe()
         }
     }); //fin de la funcionalidad para DOSSIER
     
