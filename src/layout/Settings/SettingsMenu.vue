@@ -1,7 +1,7 @@
 <template>
   <nav class="h-full w-full bg-white shadow-menu overflow-y-auto">
       <div class="py-3">
-          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6">WebApp</p>
+          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6 cursor-pointer">WebApp</p>
       </div>
       <template
         v-for="(section, index_section) in menu_section"
@@ -95,7 +95,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
+                    <span class="text-sm font-medium leading-[140%]" :class="menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ menu.title }}</span>
                   </div>
                 </a>
               </li>
@@ -309,7 +309,7 @@ const menu_section = reactive([
                 },
 
             ],
-            selectedArr: ['Confort']
+            selectedArr: ['Conforts', 'Transports', 'Experiences']
           },
           {
               title: 'Chat',
@@ -432,7 +432,7 @@ const menu_section = reactive([
             title: 'Ajustes',
             icon: '/assets/icons/1.TH.Settings.svg',
             expanded: false,
-            selectedArr: [],
+            selectedArr: ['Customization', 'GeneralLegal', 'PoliciesLegal', 'PolicyCookiesLegal', 'PolicyPrivacyLegal'],
             group: [
                 {
                     title: 'General',
