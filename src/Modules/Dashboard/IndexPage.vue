@@ -61,8 +61,12 @@ onMounted(async ()=>{
                     p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
                 }
             })
+
+           // mockupStore.$reloadIframe()
+            mockupStore.$setIframeUrl('')
         }
     }); //fin de la funcionalidad para DOSSIER
+    mockupStore.$reloadIframe()
     
 })
 
