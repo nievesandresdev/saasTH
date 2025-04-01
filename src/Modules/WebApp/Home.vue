@@ -46,17 +46,10 @@
             </div>
             <!-- section -->
             <div class="w-full p-2 ml-[15px] flex-1 fixed-size-content">
-                <!-- <div class="flex justify-start items-center m-4 pt-2">
-                    <span class="text-[18px] font-medium mb-4">
-                        Customer Experience + Reputación Online
-                        <div class="h-1 z-10" style="width: 150%; margin-left: -50%; background: linear-gradient(to right, white 18%, rgb(52, 169, 143));"></div>
-                    </span>
-                </div> -->
-
                 <div class="mb-4">
                     <div class="grid fixed-grid w-3/5">
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
-                            <router-link :to="{ path: '/alojamiento/configuracion' }" class="block p-3">
+                            <router-link :to="{ path: '/alojamiento/configuracion' }" class="block p-4">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/1.TH.Home.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -64,12 +57,12 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center mt-2 group-hover:text-red-200">
-                                    <p class="text-sm">Configura el contenido que tus huéspedes verán en la Home de tu WebApp.</p>
+                                    <p class="text-sm">Configura el contenido que tus huéspedes verán en la Home de tu WebApp</p>
                                 </div>
                             </router-link>
                         </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
-                            <router-link :to="{ path: '/alojamiento/perfil' }" class="block p-3">
+                            <router-link :to="{ path: '/alojamiento/perfil' }" class="block p-4">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.icon.instalaciones.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -83,7 +76,7 @@
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/places',query: {selected_place: 5} }" class="block p-3">
+                            <router-link :to="{ path: '/places',query: {selected_place: 5} }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.GUÍA CIUDAD.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -95,8 +88,8 @@
                                 </div>
                             </router-link>
                         </div>
-                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
-                            <router-link :to="{ path: '/experiencias' }" class="block p-3">
+                        <!-- <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/experiencias' }" class="block p-4">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.CAMERA.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -107,14 +100,27 @@
                                     <p class="text-sm">Recomienda las mejores experiencias para un viaje inolvidable</p>
                                 </div>
                             </router-link>
+                        </div> -->
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/servicios/conforts' }" class="block p-4">
+                                <div class="flex items-center">
+                                    <img src="/assets/icons/webapp/1.TH.Recepcion.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-2 h-[32px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Servicios</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <p class="text-sm">Da a conocer a tus huéspedes las opciones y experiencias disponibles para su estancia</p>
+                                </div>
+                            </router-link>
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
-                            <router-link :to="{ path: '/chat/webapp/general' }" class="block p-3">
+                            <router-link :to="{ path: '/webapp/checkin/general' }" class="block p-4">
                                 <div class="flex items-center ">
-                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Chat.png" alt="icon" class="w-8 h-8">
+                                    <img src="/assets/icons/webapp/checkin.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
-                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Chat</h3>
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Check-in</h3>
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2">
@@ -122,6 +128,23 @@
                                 </div>
                             </router-link>
                         </div>
+
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/chat/webapp/general' }" class="block p-4">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/webapp/1.TH.Icon.Header.Chat.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-2 h-[32px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Chat</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2">
+                                    <p class="text-sm">Permite a tus huéspedes realizar su Check-in online desde tu WebApp</p>
+                                </div>
+                            </router-link>
+                        </div>
+
+                        
+
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md group hover:border-[#34A98F] transition duration-200 hover:bg-white">
                             <router-link :to="{ path: '/feedback/webapp/pre-stay' }" class="block p-3 ">
                                 <div class="flex items-center group">
@@ -135,16 +158,24 @@
                                 </div>
                             </router-link>
                         </div>
+
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/webapp/referidos' }" class="block p-4">
+                                <div class="flex items-center ">
+                                    <img src="/assets/icons/webapp/referrals.png" alt="icon" class="w-8 h-8">
+                                    <div class="ml-2 h-[32px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Programa de referidos</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center group mt-2">
+                                    <p class="text-sm">Incentiva a tus huéspedes a recomendar el {{ $formatTypeLodging() }} mediante regalos exclusivos</p>
+                                </div>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
                 <!-- General Configuration Section -->
                 <div class="">
-                    <!-- <div class="flex justify-start items-center m-4 pt-2">
-                        <span class="text-[18px] font-medium mb-4">
-                            General
-                            <div class="h-1 z-10" style="width: 150%; margin-left: -50%; background: linear-gradient(to right, white 18%, rgb(52, 169, 143));"></div>
-                        </span>
-                    </div> -->
                     <div class="flex items-center m-4 pt-2">
                         <span class="text-[18px] font-medium uppercase">
                             General
@@ -156,7 +187,7 @@
                     
                     <div class="grid fixed-grid w-1/2">
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '' }" class="block p-3">
+                            <router-link :to="{ path: '' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/1.TH.PROMOCIONA.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
                                     <div class="ml-2 h-[2px] items-center flex">
@@ -172,7 +203,7 @@
                             </router-link>
                         </div>
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/comunicaciones' }" class="block p-3">
+                            <router-link :to="{ path: '/comunicaciones' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/Comunicaciones.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -186,7 +217,7 @@
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/apariencia' }" class="block p-3">
+                            <router-link :to="{ path: '/apariencia' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/Personalización.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -200,7 +231,7 @@
                         </div>
 
                         <div class="fixed-card-gallery hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
-                            <router-link :to="{ path: '/galeria' }" class="block p-3">
+                            <router-link :to="{ path: '/galeria' }" class="block p-4">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Galeria de imagenes.png" alt="icon" class="w-8 h-8">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -214,7 +245,7 @@
                         </div>
 
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 hover:bg-white group">
-                            <router-link :to="{ path: '/personalizacion' }" class="block p-3">
+                            <router-link :to="{ path: '/personalizacion' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/1.TH.Settings-white.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
                                     <div class="ml-2 h-[32px] items-center flex">
@@ -222,11 +253,10 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center group mt-2 group-hover:text-[#FAFAFA]">
-                                    <p class="text-sm">Configura el idioma, URL y los textos legales necesarios para tu WebApp.</p>
+                                    <p class="text-sm">Configura el idioma, URL y los textos legales necesarios para tu WebApp</p>
                                 </div>
                             </router-link>
                         </div>
-                        
                     </div>
                 </div>
             </div>
