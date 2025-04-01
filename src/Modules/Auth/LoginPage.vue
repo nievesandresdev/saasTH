@@ -247,7 +247,7 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
-    alert('holaMountedLoginPage')
+    //alert('holaMountedLoginPage')
     await authStore.logout()
 
       form.value.email = emailURL

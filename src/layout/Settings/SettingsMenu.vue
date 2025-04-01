@@ -508,15 +508,15 @@ async function getTypePlaces(){
 
 function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
     menu_selected.expanded = !menu_selected.expanded;
-    saveMenuState();
+    //saveMenuState();
 }
 
-function saveMenuState() {
+/* function saveMenuState() {
     const menuState = menu_section.map(section => {
         return section.group.map(menu => menu.expanded);
     });
     localStorage.setItem('menuState', JSON.stringify(menuState));
-}
+} */
 
 function loadMenuState() {
     const menuState = JSON.parse(localStorage.getItem('menuState'));
