@@ -42,7 +42,7 @@
                     <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-hbg-gray-200"
-                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
+                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200 font-semibold' : ''"
                     >
                       <div
                         class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
