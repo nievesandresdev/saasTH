@@ -466,7 +466,7 @@ const menu_links = ref([
         url: '/dashboard',
       }, */
       {
-        title: 'Hoster',
+        title: 'Backoffice',
         icon: '1.TH.MM.HOSTER',
         include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
         url: '/equipo/configuracion/usuarios',
