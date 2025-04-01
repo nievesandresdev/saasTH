@@ -108,7 +108,7 @@ const formFilter = reactive({
     city: null,
     search: null,
     //
-    all_cities: false,
+    all_cities: true,
     free_cancelation: false,
     duration: [],
     score: [],
@@ -121,7 +121,7 @@ const formFilterDefault = reactive({
     city: null,
     search: null,
     //
-    all_cities: false,
+    all_cities: true,
     free_cancelation: false,
     duration: [],
     score: [],
@@ -129,7 +129,7 @@ const formFilterDefault = reactive({
     price_max: null,
 });
 const filtersSelected = reactive({
-    all_cities: false,
+    all_cities: true,
     free_cancelation: false,
     duration: [],
     score: [],
@@ -137,7 +137,7 @@ const filtersSelected = reactive({
     price_max: null,
 });
 const filtersSelectedDefault = reactive({
-    all_cities: false,
+    all_cities: true,
     free_cancelation: false,
     duration: [],
     score: [],
@@ -220,7 +220,7 @@ const serviceNameCurrent = computed(() => {
 const emptyFilters = computed(() => {
     return !filtersSelected.score?.length &&
         !filtersSelected.duration?.length &&
-        !filtersSelected.all_cities &&
+        filtersSelected.all_cities &&
         !filtersSelected.free_cancelation &&
         !filtersSelected.price_min &&
         !filtersSelected.price_max;

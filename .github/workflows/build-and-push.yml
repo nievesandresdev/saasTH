@@ -15,6 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set npm registry to public
+        run: npm config set registry https://registry.npmjs.org/
+
       # Crear el archivo .env con las variables necesarias
       - name: Create .env file
         run: |
@@ -39,6 +42,8 @@ jobs:
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_MAIN }}" >> .env
             echo "VUE_APP_X_API=${{ secrets.VUE_APP_X_KEY_API_MAIN }}" >> .env
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_MAIN }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_MAIN }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_MAIN }}" >> .env
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
             echo "VUE_APP_API_URL_BACKEND_GENERAL=${{ secrets.VUE_APP_API_URL_BACKEND_GENERAL_TEST }}" >> .env
@@ -50,10 +55,15 @@ jobs:
             echo "VUE_APP_API_URL_REVIEW=${{ secrets.VUE_APP_API_URL_REVIEW_TEST }}" >> .env
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_TEST }}" >> .env
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_TEST }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_TEST }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_TEST }}" >> .env
 
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
-
+          
+      - name: Clean npm cache
+        run: npm cache clean --force
+        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 

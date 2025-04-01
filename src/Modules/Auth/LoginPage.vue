@@ -27,19 +27,7 @@
             <form @submit.prevent="handleLogin">
               <h1 class="text-xl lg:text-22xl hmb-4 lg:mb-6 font-medium text-center">¡Bienvenid@ a TheHoster!</h1>
               <div class="hmb-4 lg:mb-6 flex flex-col">
-                <BaseTextField
-                  text-label="Correo electrónico"
-                  v-model="form.email" 
-                  type="email"
-                  :error="authStore.errorLogin"
-                  :placeholder="placeholderEmail" 
-                  required
-                />            
-                <div v-if="authStore.errorLogin" class="flex items-center mt-1">
-                    <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
-                    <p class="text-xs leading-[90%] htext-alert-negative">{{ authStore.errorLogin }}</p>
-                </div>
-                <!-- <label class="font-medium text-sm mb-1">Correo electrónico</label>
+                <label class="font-medium text-sm mb-1">Correo electrónico</label>
                 <input 
                   type="email"
                   class="w-100 rounded h-11 lg:h-14 p-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
@@ -48,20 +36,24 @@
                   v-model="form.email" 
                   :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                   required
-                > -->
+                >
+                <div v-show="authStore.errorLogin" class="flex justify-start gap-2 mt-[7.5px]">
+                  <img class="w-4 h-4 cursor-pointer" src="/assets/icons/1.TH.WARNING.RED.svg" alt="">
+                  <span class="text-[#FF6666] text-xs font-normal "> {{ authStore.errorLogin }}</span>
+                </div>
               </div>
               <div class="mb-2">
-                <label  class="text-sm font-medium leading-[140%] block mb-2">Contraseña</label>
+                <label class="font-medium text-sm mb-1">Contraseña</label>
                 <div class="relative w-100 collaborator-box">
                   <!-- <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
                   <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
                   <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
                   <input 
                     :type="visible_pass ? 'text' : 'password'"
-                    class="w-full th-Input" 
+                    class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                     id="password" 
                     :placeholder="placeholderPassword"
-                    :class="{'border-input-error' : authStore.errorLogin}"
+                    :class="{'border-red-400 text-red-400 placeholder-red-400' : authStore.errorLogin}"
                     v-model="form.password" required
                   >
                 </div>
@@ -255,10 +247,20 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
-    await authStore.login({
-      email: form.value.email,
-      password: form.value.password
-    });
+    //alert('holaMountedLoginPage')
+    await authStore.logout()
+
+      form.value.email = emailURL
+      form.value.password = passwordURL
+      await authStore.login({
+        email: form.value.email,
+        password: form.value.password
+      });
+      const loginButton = document.querySelector('button[type="submit"]');
+      if (loginButton && !loginButton.disabled) {
+        loginButton.click(); 
+      }
+    
   }
 
   

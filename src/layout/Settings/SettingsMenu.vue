@@ -42,7 +42,7 @@
                     <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-hbg-gray-200"
-                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
+                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200 font-semibold' : ''"
                     >
                       <div
                         class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
@@ -63,7 +63,7 @@
                     <li
                       v-else
                       class=" w-full h-full"
-                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-hbg-gray-200'"
+                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200 font-semibold' : 'hover-hbg-gray-200'"
                     >
                       <div
                         class="w-full block px-6 cursor-pointer"
@@ -85,7 +85,7 @@
               <li
                 v-else
                 class="hover-hbg-gray-200 "
-                :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
+                :class="fullUrl.includes(menu.include) ? 'hbg-green-200 font-semibold' : ''"
               >
                 <a
                   href="javascript:void(0)"
@@ -478,6 +478,9 @@ onMounted(() => {
   loadMenuState();
   getTypePlaces()
   focusMenu()
+
+  //delete menuState
+  localStorage.removeItem('menuState');
 })
 
 const fullUrl = computed(() => {
@@ -486,7 +489,7 @@ return url;
 });
 
 watch(route, (to, from) => {
-focusMenu();
+  focusMenu();
 });
 
 async function getTypePlaces(){
@@ -508,19 +511,19 @@ async function getTypePlaces(){
 
 function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
     menu_selected.expanded = !menu_selected.expanded;
-    saveMenuState();
+    //saveMenuState();
 }
 
-function saveMenuState() {
+/* function saveMenuState() {
     const menuState = menu_section.map(section => {
         return section.group.map(menu => menu.expanded);
     });
     localStorage.setItem('menuState', JSON.stringify(menuState));
-}
+} */
 
 function loadMenuState() {
     const menuState = JSON.parse(localStorage.getItem('menuState'));
-    if (menuState && menuState.length === menu_section.length) {
+    //if (menuState && menuState.length === menu_section.length) {
         menu_section.forEach((section, index_section) => {
             if (menuState[index_section] && menuState[index_section].length === section.group.length) {
                 section.group.forEach((menu, index_menu) => {
@@ -528,7 +531,7 @@ function loadMenuState() {
                 });
             }
         });
-    }
+    //}
 }
 
 function focusMenu() {
