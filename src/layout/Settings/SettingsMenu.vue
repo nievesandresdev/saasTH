@@ -520,7 +520,7 @@ function toggleSubMenu(index_section_selected, index_menu_selected, section_sele
 
 function loadMenuState() {
     const menuState = JSON.parse(localStorage.getItem('menuState'));
-    if (menuState && menuState.length === menu_section.length) {
+    //if (menuState && menuState.length === menu_section.length) {
         menu_section.forEach((section, index_section) => {
             if (menuState[index_section] && menuState[index_section].length === section.group.length) {
                 section.group.forEach((menu, index_menu) => {
@@ -528,7 +528,7 @@ function loadMenuState() {
                 });
             }
         });
-    }
+    //}
 }
 
 function focusMenu() {
