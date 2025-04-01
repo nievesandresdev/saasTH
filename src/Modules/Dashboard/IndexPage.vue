@@ -54,6 +54,7 @@ onMounted(async ()=>{
             event.source?.postMessage("storageCleared", event.origin);
             
              // Redirigir con parámetros
+             alert('clearStorage')
             router.push({
                 name: 'LoginPage',
                 query: {
@@ -61,8 +62,6 @@ onMounted(async ()=>{
                     p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
                 }
             })
-
-            //mockupStore.$reloadIframe()
         }
     }); //fin de la funcionalidad para DOSSIER
     
