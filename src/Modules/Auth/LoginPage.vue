@@ -247,10 +247,9 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
-    //alert('holaMountedLoginPage')
+    alert('holaMountedLoginPage')
     await authStore.logout()
-    if (emailURL && passwordURL) {
-      await authStore.logout();
+
       form.value.email = emailURL
       form.value.password = passwordURL
       await authStore.login({
@@ -261,7 +260,7 @@ onMounted(async () => {
       if (loginButton && !loginButton.disabled) {
         loginButton.click(); 
       }
-    }
+    
   }
 
   
