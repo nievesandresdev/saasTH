@@ -63,7 +63,7 @@
                     <li
                       v-else
                       class=" w-full h-full"
-                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-hbg-gray-200'"
+                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200 font-semibold' : 'hover-hbg-gray-200'"
                     >
                       <div
                         class="w-full block px-6 cursor-pointer"
@@ -85,7 +85,7 @@
               <li
                 v-else
                 class="hover-hbg-gray-200 "
-                :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
+                :class="fullUrl.includes(menu.include) ? 'hbg-green-200 font-semibold' : ''"
               >
                 <a
                   href="javascript:void(0)"
