@@ -478,6 +478,9 @@ onMounted(() => {
   loadMenuState();
   getTypePlaces()
   focusMenu()
+
+  //delete menuState
+  localStorage.removeItem('menuState');
 })
 
 const fullUrl = computed(() => {
@@ -486,7 +489,7 @@ return url;
 });
 
 watch(route, (to, from) => {
-focusMenu();
+  focusMenu();
 });
 
 async function getTypePlaces(){
