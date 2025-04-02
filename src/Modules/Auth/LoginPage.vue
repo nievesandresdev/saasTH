@@ -267,7 +267,7 @@ onMounted(async () => {
           //alert('hola');
           loginButton.click();
         }
-    }, 1050); // 1050 ms de espera, puedes ajustar este tiempo según sea necesario
+    }, 1010); // 1010 ms de espera, puedes ajustar este tiempo según sea necesario
     
   }
 
