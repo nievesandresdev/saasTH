@@ -52,7 +52,7 @@ onMounted(async ()=>{
             localStorage.removeItem('redirectTo')
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
-            
+            alert("listenerLogin")
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
