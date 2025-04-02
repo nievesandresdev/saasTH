@@ -61,7 +61,7 @@ onMounted(async ()=>{
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
             await authStore.logout()
-            alert('listenerLogin '+hotelData.name)
+            alert('listenerLogin '+hotelData.id)
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
