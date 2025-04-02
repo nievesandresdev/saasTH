@@ -46,6 +46,7 @@ onMounted(async ()=>{
             //alert('holaMockupDossier')
             mockupStore.$reloadIframe()
             mockupStore.$setIframeUrl('')
+            location.reload()
 
         }, 1400);
     }
