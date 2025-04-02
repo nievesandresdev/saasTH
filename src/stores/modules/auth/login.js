@@ -124,6 +124,7 @@ export const useAuthStore = defineStore('auth', () => {
             localStorage.removeItem('current_subdomain');
             localStorage.removeItem('loginTime');
             localStorage.removeItem('redirectTo');
+            localStorage.removeItem('dossierReloaded')
         }
     }
 

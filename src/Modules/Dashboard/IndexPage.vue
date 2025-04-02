@@ -41,13 +41,10 @@ onMounted(async ()=>{
     mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
-    if(params.get('dossier') === 'true'){
+    if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
+        localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            //alert('holaMockupDossier')
-            //mockupStore.$reloadIframe()
-            //mockupStore.$setIframeUrl('')
-            location.reload()
-
+            location.reload();
         }, 1400);
     }
 
@@ -59,6 +56,7 @@ onMounted(async ()=>{
             localStorage.removeItem('current_subdomain')
             localStorage.removeItem('loginTime')
             localStorage.removeItem('redirectTo')
+            localStorage.removeItem('dossierReloaded')
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
             await authStore.logout()
