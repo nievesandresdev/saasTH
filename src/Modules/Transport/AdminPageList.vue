@@ -40,15 +40,7 @@
                     <h5 class="text-[14px] font-semibold htext-black-100 leading-[120%] truncate-2" v-html="item.name" />
                 </div>
                 <p class="text-[14px] font-semibold htext-black-100 leading-[120%] mt-[12px]">
-                    <template v-if="item.type_price == 1">
-                        {{ item.price?.toFixed(2)?.replace('.', ',') }}€
-                    </template>
-                    <template v-else-if="item.type_price == 2">
-                        Desde {{ item.price?.toFixed(2)?.replace('.', ',') }}€
-                    </template>
-                    <template v-else>
-                        Gratis
-                    </template>
+                    {{ serviceStore.calPrice(item) }}
                 </p>
             </div>
             <button
@@ -80,7 +72,6 @@ import { usePaginationScrollInfinite } from '@/composables/usePaginationScrollIn
 // STORE
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
-import { useConfortStore } from '@/stores/modules/confort';
 
 // DATA
 const draggedItem = ref(null);
@@ -93,6 +84,7 @@ const defNumberCardsToLoad = ref(20);
 // INJECT
 const transportsData = inject('transportsData');
 const transportStore = inject('transportStore');
+const serviceStore = inject('serviceStore');
 const selectedCard = inject('selectedCard');
 const paginateData = inject('paginateData');
 const page = inject('page');

@@ -174,6 +174,7 @@ const valueFormDefault = {
     languages: [],
     fields_visibles: [],
     duration: null,
+    availability: '',
     address: '',
     requeriment: '',
     order: null,
@@ -228,6 +229,7 @@ const changesform = computed(() => {
         //
         (normalize(form.price) !== normalize(itemSelected.price)) ||
         (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.availability) !== normalize(itemSelected.availability)) ||
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
@@ -374,7 +376,7 @@ function openModalDeleteItem (payload) {
 function edit ({action, serviceId, subservice}) {
     if (action === 'EDIT') {
         let {
-            id, name, description, price, image, languages, fields_visibles, duration, address, requeriment, order
+            id, name, description, price, image, languages, fields_visibles, duration, availability, address, requeriment, order
         } = subservice;
         let numPrice = price ? parseFloat(price) : null;
         if (numPrice && !isNaN(numPrice)) {
@@ -387,8 +389,8 @@ function edit ({action, serviceId, subservice}) {
 
 
 
-        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, order });
-        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment, order });
+        Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment, order });
+        Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment, order });
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});

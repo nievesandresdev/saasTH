@@ -21,6 +21,7 @@ export const useServiceStore = defineStore('service', () => {
         languages: [],
         fields_visibles: [],
         duration: null,
+        availability: '',
         address: '',
         requeriment: '',
         subservices: [],
@@ -30,10 +31,51 @@ export const useServiceStore = defineStore('service', () => {
     const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
     const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
+    function calPrice (item) {
+    
+        let { from_price: fromPrice, price: price, name_api: nameApi, type_price: typePrice, fields_values: fieldsValues, type: typeService, subservices } = item;
+        price = price ?? fromPrice;
+        price = price ? parseFloat(price) : 0;
+    
+        if(nameApi == 'viator') {
+            return `${price?.toFixed(2)}€`;
+        }
+    
+        if (typePrice == 'Activities') {
+            return `${price?.toFixed(2)}€`;
+        }
+    
+        if (typeService == '2') {
+            let minPrice = calMinPriceSubservices(subservices);
+        return `Desde ${minPrice}€`;
+        }
+    
+        if (!['1','2'].includes(typePrice)) {
+            return `${price?.toFixed(2)}€`;
+        }
+    
+        if (fieldsValues.includes('PRICE')) {
+            return "GRATIS";
+        }
+    
+        return `${price?.toFixed(2)}€`;
+    }
+    
+    function calMinPriceSubservices (subservices) {
+        let minPrice = subservices.reduce((acc, item) => {
+            if (item.price < acc) {
+                return item.price;
+            }
+            return acc;
+        }, subservices[0].price);
+        return minPrice?.toFixed(2);
+    }
+
     return {
         form,
         itemSelected,
         formDefault,
+        calPrice
     }
 
 })

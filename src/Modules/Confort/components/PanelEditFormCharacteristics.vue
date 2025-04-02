@@ -48,6 +48,7 @@ const inputsVisibles = ref({
     address: false,
     requeriment: false,
     languages: false,
+    availability: false,
 });
 
 onMounted(() => {
