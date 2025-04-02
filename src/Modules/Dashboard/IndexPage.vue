@@ -43,11 +43,11 @@ onMounted(async ()=>{
     mockupStore.$setLanguageTooltip(true) 
     if(params.get('dossier') === 'true'){
         setTimeout(() => {
-            alert('holaMockupDossier')
+            //alert('holaMockupDossier')
             mockupStore.$reloadIframe()
             mockupStore.$setIframeUrl('')
 
-        }, 1000);
+        }, 1400);
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
