@@ -44,7 +44,8 @@ onMounted(async ()=>{
     if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            location.reload();
+            alert(hotelData.name)
+            //location.reload();
         }, 1400);
     }
 
