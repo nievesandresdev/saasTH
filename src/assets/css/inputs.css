@@ -66,6 +66,9 @@ input[type=radio]:hover {
     line-height: 140%; /* 19.6px */
 }
 
+.placeholder-selected::placeholder{  
+  color: var(--h-black-100) !important;
+}
 .p-input-icon-left{
   padding-left: 44px !important;
 }
@@ -74,11 +77,20 @@ input[type=radio]:hover {
   border-color: var(--h-green-600) !important;
 }
 
+.select-hover:not(:focus):hover {
+  background-color: var(--h-gray-200) !important;
+}
+
 .p-input-time{
   padding: 5px 2px !important;
 }
 
-.border-input-error{
+.p-input-textarea{
+  padding: 12px !important;
+}
+
+.border-input-error,
+.border-input-error:focus{
   border-color: var(--alert-negative) !important;
 }
 /* ========================= */

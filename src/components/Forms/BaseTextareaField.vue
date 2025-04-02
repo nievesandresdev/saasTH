@@ -140,4 +140,8 @@ textarea::placeholder {
   color: #8D9196;
   line-height: 140%; /* 19.6px */
 }
+
+textarea {
+    resize: none;
+}
 </style>

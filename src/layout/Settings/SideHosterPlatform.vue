@@ -17,7 +17,7 @@
                     <div class="flex items-center justify-between w-full">
                         <div class="flex items-center">
                             <img :src="item.icon" class="w-6 h-6 mr-3" />
-                            <span class="text-sm font-medium">{{ item.text }}</span>
+                            <span class="text-sm font-medium" :class="isActive(item.url) ? 'font-semibold' : 'font-medium'">{{ item.text }}</span>
                         </div>
                        <!--  <img v-if="item.text === 'Equipo'" src="/assets/icons/1.TH.I.dropdown.svg" :class="{'rotate-180': showSubmenu || isActiveSubmenu(item.text), 'transition-transform': true, 'duration-300': true}" class="w-4 h-4 ml-3" /> -->
                     </div>

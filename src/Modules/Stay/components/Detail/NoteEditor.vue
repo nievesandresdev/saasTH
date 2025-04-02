@@ -4,7 +4,6 @@
         <div v-if="type !== 'edit'" class="w-[362px] mb-4">
             <BaseSelectField
                 :icon_left="iconLeftDropdown"
-                textLabel="Selecciona el medio de la reserva"
                 :options="dataDetail.optionsListNote"
                 v-model="noteTo"
                 mandatory

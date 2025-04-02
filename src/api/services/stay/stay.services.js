@@ -5,8 +5,9 @@ import {
     queryPath
 } from '../../config/apiRoute'
 
-
+export const findByIdApi = (stayId) => apiHttp('GET', `${stayPath}/${hosterPath}/findById/${stayId}`, null)
 export const getAllByHotelApi = (data, showLoadPage) => apiHttp('POST', `${stayPath}/${hosterPath}/getAllByHotel`, data, { showPreloader: showLoadPage })
+
 export const statisticsByHotelApi = () => apiHttp('GET', `${stayPath}/${hosterPath}/statisticsByHotel`, null)
 export const getdetailDataApi = (data) => apiHttp('GET', `${stayPath}/${hosterPath}/getdetailData`, data, { showPreloader: true })
 export const updateDataApi = (data) => apiHttp('POST', `${stayPath}/${hosterPath}/updateData`, data, { showPreloader: false })

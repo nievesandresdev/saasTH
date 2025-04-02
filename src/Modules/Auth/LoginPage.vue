@@ -72,6 +72,7 @@
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
+                  id="handleLogin"
                   class="hbtn-cta w-full lg:w-8/12 h-[44px] rounded-lg text-base font-medium disabled:opacity-50" 
                   :disabled="authStore.loading || form.email === 'admin@email.com'  || form.email === '' || form.password === ''"
                 >
@@ -247,10 +248,27 @@ onMounted(async () => {
   }
   
   if(emailURL && passwordURL){
-    await authStore.login({
-      email: form.value.email,
-      password: form.value.password
-    });
+    //alert('holaMountedLoginPage')
+    await authStore.logout()
+
+      form.value.email = emailURL
+      form.value.password = passwordURL
+     
+      //router.push('/dashboard')
+      setTimeout(async () => {
+        //alert('hola111')
+        await authStore.login({
+          email: form.value.email,
+          password: form.value.password,
+          dossier: true
+        });
+        const loginButton = document.querySelector('#handleLogin');
+        if (loginButton && !loginButton.disabled) {
+          //alert('hola');
+          loginButton.click();
+        }
+    }, 1010); // 1010 ms de espera, puedes ajustar este tiempo según sea necesario
+    
   }
 
   

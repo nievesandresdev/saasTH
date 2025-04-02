@@ -7,20 +7,6 @@
                 <!-- title -->
                 <div class="flex items-center gap-2">
                     <h1 class="text-[22px] font-medium leading-[110%]">Comunicaciones</h1>
-                    <!-- <BaseTooltipResponsive
-                        size="l"
-                        :top="30"
-                        :left="0"
-                    >
-                        <template #button>
-                            <img class="w-5 h-5" src="/assets/icons/TH.INFO.GREEN.svg">
-                        </template>
-                        <template #content>
-                            <p class="text-sm leading-[150%] font-normal">
-                                En esta sección podrás ver todas las vías e impactos de comunicación, para configurarlas o ver las instrucciones sobre como aplicarlas a tu alojamiento.
-                            </p>
-                        </template>
-                    </BaseTooltipResponsive> -->
                 </div>
                 <div class="flex items-center gap-2">
                     <h2 class="font-semibold text-sm leading-[120%]">Idiomas</h2>
@@ -37,7 +23,6 @@
             </div>
         </div>
     </section>
-
     <!-- promotion section -->
     <section class="px-6 mt-[24px] mb-6">
         <div class="flex flex-col w-full mb-6 gap-2">
@@ -255,15 +240,25 @@
         @submit="handlesubmitData"
        
     />
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changes"
+        title="¿Salir sin guardar?"
+        text="Si sales sin guardar, los cambios que has realizado en esta sección se perderán."
+        textbtn="Guardar"
+        @saveChanges="handlesubmitData"
+        type="save_changes"
+    />
 </template>
 <script setup>
 import { ref, provide, onMounted, computed } from 'vue'
-import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import CardSectionHome from "./CardSectionHome.vue";
 import SidePanel from "./components/SidePanel.vue";
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStorage = useHotelStore();
@@ -299,6 +294,10 @@ const changes = computed(() => {
     return JSON.stringify(toggleOptions.value) !== JSON.stringify(initToggleOptions.value);
 })
 
+const cancelChange = () => {
+    toggleOptions.value = { ...initToggleOptions.value };
+}
+
 const getHotelCommunication = async () => {
     let dataHotelCommunication = await hotelCommunicationStorage.$getHotelCommunication()
     toggleOptions.value = dataHotelCommunication.data.email
@@ -317,17 +316,10 @@ onMounted(async() => {
 })
 
 const updateTogglecommunication = (key, val) => {
-    toggleOptions.value[key] = val
+    toggleOptions.value[key] = val 
+    console.log({toggleOptions: toggleOptions.value, initToggleOptions: initToggleOptions.value})
 }
 
-
-const hotel = ref({
-    show_confort: false
-})
-
-const cancelChange = () => {
-    console.log('cancelChange')
-}
 
 const handlesubmitData = async () => {
     let params = {
@@ -335,7 +327,7 @@ const handlesubmitData = async () => {
         type: 'email'
     }
     const response = await hotelCommunicationStorage.$updateOrStoreHotelCommunication(params)
-    //console.log('updateOrStoreHotelCommunication',response)
+
     if(response.ok){
         toast.warningToast('Actualizado correctamente','top-right')
     }else{

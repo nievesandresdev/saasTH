@@ -1,7 +1,7 @@
 <template>
   <nav class="h-full w-full bg-white shadow-menu overflow-y-auto">
       <div class="py-3">
-          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6">WebApp</p>
+          <p class="text-base font-semibold leading-[120%] py-[10.5px] px-6 cursor-pointer hover:text-[#000]" @click="goLink('WebAppHome')">WebApp</p>
       </div>
       <template
         v-for="(section, index_section) in menu_section"
@@ -25,10 +25,11 @@
                   href="javascript:void(0)"
                   @click="toggleSubMenu(index_section, index_menu, section, menu)"
                   class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-hbg-gray-200"
+                  :class="menu.selectedArr.includes(route.name) ? 'hbg-green-200 ' : ''"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 
-                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span> <!-- items con icono -->
+                    <span class="text-sm font-medium leading-[140%]" :class="menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ menu.title }}</span> <!-- items con icono -->
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
@@ -42,7 +43,7 @@
                     <li
                       v-if="sub_menu.place"
                       class=" w-full h-full hover-hbg-gray-200"
-                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200' : ''"
+                      :class="isActive(sub_menu, index_sub_menu) ? 'hbg-green-200 font-semibold' : ''"
                     >
                       <div
                         class="w-full h-full block pl-[36px] pr-[24px] cursor-pointer"
@@ -63,7 +64,7 @@
                     <li
                       v-else
                       class=" w-full h-full"
-                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200' : 'hover-hbg-gray-200'"
+                      :class="sub_menu.selectedArr.includes(route.name) ? 'hbg-green-200 font-semibold' : 'hover-hbg-gray-200'"
                     >
                       <div
                         class="w-full block px-6 cursor-pointer"
@@ -74,7 +75,7 @@
                             <div class="mx-auto h-full w-[1px] hbg-gray-400"></div>
                             <div v-if="sub_menu.selectedArr.includes(route.name)" class="h-[25px] w-[3px] bg-[#2A8873] absolute inset-0 mx-auto my-1 rounded-full"></div>
                           </div>
-                          <span class="text-sm font-medium leading-[140%] ml-2">{{ sub_menu.title }} </span>
+                          <span class="text-sm font-medium leading-[140%] ml-2" :class="sub_menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ sub_menu.title }} </span>
                         </div>
                       </div>
                     </li>
@@ -85,7 +86,7 @@
               <li
                 v-else
                 class="hover-hbg-gray-200 "
-                :class="fullUrl.includes(menu.include) ? 'hbg-green-200' : ''"
+                :class="fullUrl.includes(menu.include) ? 'hbg-green-200 font-semibold' : ''"
               >
                 <a
                   href="javascript:void(0)"
@@ -94,7 +95,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-[24px] h-[24px] mr-2">
-                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span>
+                    <span class="text-sm font-medium leading-[140%]" :class="menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ menu.title }}</span>
                   </div>
                 </a>
               </li>
@@ -308,7 +309,7 @@ const menu_section = reactive([
                 },
 
             ],
-            selectedArr: ['Confort']
+            selectedArr: ['Conforts', 'Transports', 'Experiences']
           },
           {
               title: 'Chat',
@@ -431,7 +432,7 @@ const menu_section = reactive([
             title: 'Ajustes',
             icon: '/assets/icons/1.TH.Settings.svg',
             expanded: false,
-            selectedArr: [],
+            selectedArr: ['Customization', 'GeneralLegal', 'PoliciesLegal', 'PolicyCookiesLegal', 'PolicyPrivacyLegal'],
             group: [
                 {
                     title: 'General',
@@ -475,9 +476,12 @@ const dataTypePlaces = reactive([
 
 
 onMounted(() => {
-  loadMenuState();
+  //loadMenuState();
   getTypePlaces()
   focusMenu()
+
+  //delete menuState
+  localStorage.removeItem('menuState');
 })
 
 const fullUrl = computed(() => {
@@ -486,7 +490,7 @@ return url;
 });
 
 watch(route, (to, from) => {
-focusMenu();
+  focusMenu();
 });
 
 async function getTypePlaces(){
@@ -508,19 +512,19 @@ async function getTypePlaces(){
 
 function toggleSubMenu(index_section_selected, index_menu_selected, section_selected, menu_selected) {
     menu_selected.expanded = !menu_selected.expanded;
-    saveMenuState();
+    //saveMenuState();
 }
 
-function saveMenuState() {
+/* function saveMenuState() {
     const menuState = menu_section.map(section => {
         return section.group.map(menu => menu.expanded);
     });
     localStorage.setItem('menuState', JSON.stringify(menuState));
-}
+} */
 
-function loadMenuState() {
+/* function loadMenuState() {
     const menuState = JSON.parse(localStorage.getItem('menuState'));
-    if (menuState && menuState.length === menu_section.length) {
+    //if (menuState && menuState.length === menu_section.length) {
         menu_section.forEach((section, index_section) => {
             if (menuState[index_section] && menuState[index_section].length === section.group.length) {
                 section.group.forEach((menu, index_menu) => {
@@ -528,8 +532,8 @@ function loadMenuState() {
                 });
             }
         });
-    }
-}
+    //}
+} */
 
 function focusMenu() {
     // No cambiaremos el estado `expanded` si ya ha sido cargado.

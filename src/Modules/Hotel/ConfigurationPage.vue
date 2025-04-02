@@ -323,10 +323,10 @@
     }
 
     const loadForm = (hotel) => {
-        form.show_wifi = hotel.buttons_home.show_wifi || false;
+        /* form.show_wifi = hotel.buttons_home.show_wifi || false;
         form.show_call = hotel.buttons_home.show_call || false;
         form.show_legal_text = hotel.buttons_home.show_legal_text || false;
-        form.show_all = hotel.buttons_home.show_all || false;
+        form.show_all = hotel.buttons_home.show_all || false; */
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
         isDisabled.value = hotel.legal;
