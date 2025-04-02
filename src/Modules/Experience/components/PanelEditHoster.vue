@@ -217,6 +217,7 @@ const changesform = computed(() => {
         (normalize(form.type) !== normalize(itemSelected.type)) ||
         (normalize(form.price) !== normalize(itemSelected.price)) ||
         (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.availability) !== normalize(itemSelected.availability)) ||
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
@@ -359,7 +360,7 @@ async function submitDelete () {
 
 async function edit ({action, experience}) {
     if (action === 'EDIT') {
-        let { id, title, description, type, hire, link_url, type_price, from_price, images, languages, fields_visibles, duration, address, requeriment, subservices } = experience;
+        let { id, title, description, type, hire, link_url, type_price, from_price, images, languages, fields_visibles, duration, availability, address, requeriment, subservices } = experience;
 
         if (languages?.length) {
             let languagesArray = languagesData.value.map(item => {
@@ -382,8 +383,8 @@ async function edit ({action, experience}) {
 
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, {  id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
-        Object.assign(form, {id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
+        Object.assign(itemSelected, {  id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
+        Object.assign(form, {id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
         images.forEach(img => {
             urlsimages.value.push(img);
         });

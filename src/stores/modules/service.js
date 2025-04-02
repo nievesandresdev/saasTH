@@ -21,6 +21,7 @@ export const useServiceStore = defineStore('service', () => {
         languages: [],
         fields_visibles: [],
         duration: null,
+        availability: '',
         address: '',
         requeriment: '',
         subservices: [],

@@ -56,6 +56,25 @@
                 </span>
             </div>
         </div>
+        <div class="space-y-2 w-full">
+            <div class="flex space-x-1">
+                <label class="text-sm font-semibold">Disponibilidad</label>
+                <BaseSwichInput
+                  v-model="inputsVisibles.availability"
+                  class-content="w-full"
+                  class-input="text-sm"
+                  id="availability-switch"
+                />
+            </div>
+            <div class="flex space-x-2 items-center">
+                <BaseTextField
+                    v-model="form.availability"
+                    placeholder="Ej: durante toda la estancia"
+                    class-content="flex-1"
+                    name="availability"
+                />
+            </div>
+        </div>
         <div class="space-y-2">
             <div class="flex space-x-1">
                 <label class="text-sm font-semibold mb-2">Accesible</label>
