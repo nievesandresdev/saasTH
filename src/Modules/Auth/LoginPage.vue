@@ -259,14 +259,15 @@ onMounted(async () => {
         //alert('hola111')
         await authStore.login({
           email: form.value.email,
-          password: form.value.password
+          password: form.value.password,
+          dossier: true
         });
         const loginButton = document.querySelector('#handleLogin');
         if (loginButton && !loginButton.disabled) {
           //alert('hola');
           loginButton.click();
         }
-    }, 1300); // 1000 ms de espera, puedes ajustar este tiempo según sea necesario
+    }, 1200); // 1200 ms de espera, puedes ajustar este tiempo según sea necesario
     
   }
 

@@ -41,8 +41,14 @@ onMounted(async ()=>{
     mockupStore.$setIframeUrl('')
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
+    if(params.get('dossier') === 'true'){
+        setTimeout(() => {
+            alert('holaMockupDossier')
+            mockupStore.$reloadIframe()
+            mockupStore.$setIframeUrl('')
 
-    mockupStore.$reloadIframe()
+        }, 1000);
+    }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
         if (event.data === "clearStorage") {
