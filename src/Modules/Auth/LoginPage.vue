@@ -256,17 +256,17 @@ onMounted(async () => {
      
       //router.push('/dashboard')
       setTimeout(async () => {
-        alert('hola111')
+        //alert('hola111')
         await authStore.login({
           email: form.value.email,
           password: form.value.password
         });
         const loginButton = document.querySelector('#handleLogin');
         if (loginButton && !loginButton.disabled) {
-          alert('hola');
+          //alert('hola');
           loginButton.click();
         }
-    }, 1600); // 1000 ms de espera, puedes ajustar este tiempo según sea necesario
+    }, 1300); // 1000 ms de espera, puedes ajustar este tiempo según sea necesario
     
   }
 

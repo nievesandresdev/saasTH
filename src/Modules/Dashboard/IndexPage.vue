@@ -42,6 +42,8 @@ onMounted(async ()=>{
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
 
+    mockupStore.$reloadIframe()
+
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
         if (event.data === "clearStorage") {
             localStorage.removeItem('token')
@@ -68,7 +70,7 @@ onMounted(async ()=>{
             //location.reload()
         }
     }); //fin de la funcionalidad para DOSSIER
-    mockupStore.$reloadIframe()
+    
     
 })
 
