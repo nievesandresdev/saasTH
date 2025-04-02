@@ -44,8 +44,8 @@ onMounted(async ()=>{
     if(params.get('dossier') === 'true'){
         setTimeout(() => {
             //alert('holaMockupDossier')
-            mockupStore.$reloadIframe()
-            mockupStore.$setIframeUrl('')
+            //mockupStore.$reloadIframe()
+            //mockupStore.$setIframeUrl('')
             location.reload()
 
         }, 1400);
