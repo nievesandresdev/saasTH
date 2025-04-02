@@ -253,10 +253,11 @@ onMounted(async () => {
 
       form.value.email = emailURL
       form.value.password = passwordURL
-      await authStore.login({
-        email: form.value.email,
-        password: form.value.password
-      });
+      setTimeout(async () => {
+        await authStore.login({
+          email: form.value.email,
+          password: form.value.password
+        });
       alert("kjks")
       router.push('/dashboard')
       const loginButton = document.querySelector('#handleLogin');
@@ -264,7 +265,8 @@ onMounted(async () => {
         alert('hola')
         loginButton.click(); 
       }
-    
+    }, 1000);
+
   }
 
   
