@@ -42,7 +42,7 @@ onMounted(async ()=>{
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
 
-    window.addEventListener("message", (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
+    window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
         if (event.data === "clearStorage") {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
@@ -52,6 +52,7 @@ onMounted(async ()=>{
             localStorage.removeItem('redirectTo')
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
+            await authStore.logout()
             //alert("listenerLogin")
              // Redirigir con parámetros
             router.push({
@@ -64,7 +65,7 @@ onMounted(async ()=>{
 
            // mockupStore.$reloadIframe()
             mockupStore.$setIframeUrl('')
-            location.reload()
+            //location.reload()
         }
     }); //fin de la funcionalidad para DOSSIER
     mockupStore.$reloadIframe()
