@@ -253,12 +253,14 @@ onMounted(async () => {
 
       form.value.email = emailURL
       form.value.password = passwordURL
-      await authStore.login({
-        email: form.value.email,
-        password: form.value.password
-      });
+     
       //router.push('/dashboard')
-      setTimeout(() => {
+      setTimeout(async () => {
+        alert('hola111')
+        await authStore.login({
+          email: form.value.email,
+          password: form.value.password
+        });
         const loginButton = document.querySelector('#handleLogin');
         if (loginButton && !loginButton.disabled) {
           alert('hola');

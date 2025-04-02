@@ -52,7 +52,7 @@ onMounted(async ()=>{
             localStorage.removeItem('redirectTo')
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
-            alert("listenerLogin")
+            //alert("listenerLogin")
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
@@ -64,7 +64,7 @@ onMounted(async ()=>{
 
            // mockupStore.$reloadIframe()
             mockupStore.$setIframeUrl('')
-            location.reload()
+            //location.reload()
         }
     }); //fin de la funcionalidad para DOSSIER
     mockupStore.$reloadIframe()
