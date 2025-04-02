@@ -257,6 +257,7 @@ onMounted(async () => {
         email: form.value.email,
         password: form.value.password
       });
+      alert("kjks")
       router.push('/dashboard')
       const loginButton = document.querySelector('#handleLogin');
       if (loginButton && !loginButton.disabled) {
