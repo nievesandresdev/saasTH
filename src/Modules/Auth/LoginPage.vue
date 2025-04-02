@@ -72,6 +72,7 @@
               <div class="mt-6 lg:mt-8 text-center">
                 <button 
                   type="submit" 
+                  id="handleLogin"
                   class="hbtn-cta w-full lg:w-8/12 h-[44px] rounded-lg text-base font-medium disabled:opacity-50" 
                   :disabled="authStore.loading || form.email === 'admin@email.com'  || form.email === '' || form.password === ''"
                 >
@@ -257,8 +258,9 @@ onMounted(async () => {
         password: form.value.password
       });
       router.push('/dashboard')
-      const loginButton = document.querySelector('button[type="submit"]');
+      const loginButton = document.querySelector('#handleLogin');
       if (loginButton && !loginButton.disabled) {
+        alert('hola')
         loginButton.click(); 
       }
     
