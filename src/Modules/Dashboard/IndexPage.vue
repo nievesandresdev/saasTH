@@ -35,6 +35,7 @@ const params = new URLSearchParams(window.location.search)
 
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
+const dossierHotelId = process.env.VUE_APP_DOSSIER_HOTEL_ID //dossier 
 
 onMounted(async ()=>{
     //await chainStore.$getChainBySubdomain();
@@ -42,15 +43,18 @@ onMounted(async ()=>{
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
     if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
+        
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            alert('settimeout '+hotelData.name)
-            //location.reload();
+            if(hotelData.id !== dossierHotelId){
+                alert('settimeout '+hotelData.name)
+                location.reload();
+            }
         }, 1400);
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
-        if (event.data === "clearStorage") {
+        if (event.data === "clearStorage" && hotelData.id !== dossierHotelId) {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             localStorage.removeItem('current_hotel')
