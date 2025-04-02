@@ -47,10 +47,10 @@ onMounted(async ()=>{
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
             if(hotelData.id !== dossierHotelId){
-                alert('settimeout '+hotelData.name)
+                //alert('settimeout '+hotelData.name)
                 location.reload();
             }
-        }, 1400);
+        }, 1150);
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
@@ -65,7 +65,7 @@ onMounted(async ()=>{
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
             await authStore.logout()
-            alert('listenerLogin '+hotelData.id)
+            //alert('listenerLogin '+hotelData.id)
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
