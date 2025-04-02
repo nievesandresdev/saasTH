@@ -44,7 +44,7 @@ onMounted(async ()=>{
     if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            alert(hotelData.name)
+            alert('settimeout '+hotelData.name)
             //location.reload();
         }, 1400);
     }
@@ -61,7 +61,7 @@ onMounted(async ()=>{
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
             await authStore.logout()
-            alert(hotelData.name)
+            alert('listenerLogin '+hotelData.name)
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
