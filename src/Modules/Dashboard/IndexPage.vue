@@ -46,6 +46,7 @@ onMounted(async ()=>{
         
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
+        alert('settimeout '+dossierHotelId)
             if(hotelData.id !== dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
@@ -65,7 +66,8 @@ onMounted(async ()=>{
             // Confirmación opcional
             event.source?.postMessage("storageCleared", event.origin);
             await authStore.logout()
-            //alert('listenerLogin '+hotelData.id)
+            alert('listenerLogin '+hotelData.id)
+            alert('listenerLogin2 '+dossierHotelId)
              // Redirigir con parámetros
             router.push({
                 name: 'LoginPage',
