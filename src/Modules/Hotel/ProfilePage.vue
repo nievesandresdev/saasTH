@@ -95,7 +95,7 @@
                                     </template>
                                     <template #content>
                                     <p class="text-sm leading-[150%] font-normal">
-                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón “Llamar a recepción” en tu WebApp
+                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp
                                     </p>
                                 </template>
                             </BaseTooltipResponsive>
@@ -117,15 +117,22 @@
                         />
                     </div>
                 </div>
-                <div class="space-y-2 w-[706px]">
-                    <label class="text-sm font-medium inline-block">Email</label>
+                <div class="w-[706px]">
+                    <label class="text-sm font-medium inline-block mb-2">Email</label>
                     <BaseTextField
                         v-model="form.email"
                         :placeholder="'Introduce email contacto del '+$formatTypeLodging()"
-                        class-content="flex-1"
                         name="email"
+                    />
+                </div>
+                <div class="w-[706px]">
+                    <label class="text-sm font-medium inline-block mb-2">Sitio web - URL</label>
+                    <BaseTextField
+                        v-model="form.website_google"
+                        placeholder="Introduce la URL de tu sitio web"
+                        name="website_google"
                         :errors="errors"
-                        @blur:validate="validate('email')"
+                        @blur:validate="validate('website_google')"
                     />
                 </div>
                 <div class="space-y-2">
@@ -201,21 +208,7 @@
 
 
             </section>
-            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
-                <div class="max-w-profile">
-                    <h2 class="font-medium text-lg">Servicio de WiFi</h2>
-                    <div class="flex justify-between mt-2">
-                        <p class="text-sm htext-gray-500 text-justify">
-                            Comunica a tus huéspedes si tu {{$formatTypeLodging()}} cuenta con servicio de WiFi gratuito
-                        </p>
-                        <div class="flex space-x-2">
-                            <label class="text-sm font-medium leading-[110%]" :class="!form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">No</label>
-                            <BaseSwichInput id="toggle-wifi" v-model="form.with_wifi" />
-                            <label class="text-sm font-medium leading-[110%]" :class="form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">Si</label>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <ProfilePageSectionWifi />
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <h2 class="font-medium text-lg">Fotos</h2>
                 <profilePageSectionPhotos @openModelGallery="openModelGallery()" />
@@ -228,7 +221,9 @@
                         placeholder="Instagram URL"
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.INSTAGRAM.COLOR.svg"
+                        :errors="errors"
                         name="urlInstagram"
+                        @blur:validate="validate('urlInstagram')"
                     />
                     <BaseTextField
                         v-model="form.urlFacebook"
@@ -236,6 +231,8 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.FACEBOOK.COLOR.svg"
                         name="urlFacebook"
+                        :errors="errors"
+                        @blur:validate="validate('urlFacebook')"
                     />
                     <BaseTextField
                         v-model="form.urlPinterest"
@@ -243,6 +240,8 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.PINTEREST.COLOR.svg"
                         name="urlPinterest"
+                        :errors="errors"
+                        @blur:validate="validate('urlPinterest')"
                     />
                     <BaseTextField
                         v-model="form.urlX"
@@ -250,6 +249,8 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.X.svg"
                         name="urlX"
+                        :errors="errors"
+                        @blur:validate="validate('urlX')"
                     />
                 </div>
             </section>
@@ -289,6 +290,7 @@
         multiple
         @update:img="addNewsImages($event)"
     />
+    
 </template>
 
 <script setup>
@@ -301,12 +303,13 @@
     import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
     import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
     import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
-    import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
     //
     import ModalGallery from '@/components/ModalGallery.vue';
     import ModalNoSave from '@/components/ModalNoSave.vue'
     import ProfilePageSectionMap from "./ProfilePageSectionMap.vue";
     import ProfilePageSectionPhotos from "./ProfilePageSectionPhotos.vue";
+    import ProfilePageSectionWifi from './ProfilePageSectionWifi.vue';
+    
     
     import { useFormValidation } from '@/composables/useFormValidation'
     import * as rules from '@/utils/rules';
@@ -319,6 +322,8 @@
     const mockupStore = useMockupStore();
     import { useLayoutStore } from '@/stores/modules/layout'
     const layoutStore = useLayoutStore();
+    import { useWifiNetworksStore } from '@/stores/modules/wifiNetworks'
+    const wifiNetworksStore = useWifiNetworksStore();
 
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
@@ -352,21 +357,30 @@
         images_hotel: [],
         show_profile: false,
         with_wifi: false,
+        website_google: null,
     });
     const modalGaleryRef = ref(null);
+    
     const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)*[\w-]+\.[\w-]+(\/[\w-./?%&=]*)?$/;
     const formRules = {
         name: [value => value.trim() ? true : 'Introduce el nombre de tu alojamiento'],
         email: [value => emailPattern.test(value) ? true : 'Formato de e-mail permitido ej: xxxx@email.com'],
         phone: [value => (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')  ? true : 'La cantidad de dígitos ingresada es incorrecta'],
         phone_optional: [value => !value || (!!value && (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')) ? true : 'La cantidad de dígitos ingresada es incorrecta'],
+        website_google: [value => !value || urlPattern.test(value) ? true : 'Ingresa un formato de URL válido'],
+        urlInstagram: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
+        urlPinterest: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
+        urlFacebook: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
+        urlX: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
     };
 
     const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
     const hotelData = reactive({});
     const profilePageSectionMap = ref(null);
+    const wifiNetworks = ref([]);
 
     const categoryLodging = computed(()=>{
         let options = [
@@ -377,6 +391,7 @@
             { value: 6, label: "4 estrellas Superior" },
             { value: 5, label: "5 estrellas" },
             { value: 7, label: "5 estrellas Gran Lujo" },
+            { value: 8, label: "No mostrar categoría" },
         ];
         // if (form.type == "Hostal" || form.type == "Pensión") {
         //     options = [
@@ -402,16 +417,18 @@
         { value: "vft", label: "Vivienda con fines turísticos", disabled: false },
     ]
 
-
-    provide('form', form)
-    provide('hotelData', hotelData)
-
+    
     onMounted(async() => {
+        wifiNetworks.value = await wifiNetworksStore.$getAll();
         loadHotel()
         loadMockup()
         await nextTick();
         useScrollToElement();
     })
+
+    provide('form', form)
+    provide('hotelData', hotelData)
+    provide('wifiNetworks', wifiNetworks)
 
     // COMPUTED
     const isChanged = computed(()=>{
@@ -432,6 +449,7 @@
             normalize(form.urlPinterest) !== hotelData.pinterest_url ||
             normalize(form.urlFacebook) !== hotelData.facebook_url ||
             normalize(form.urlX) !== hotelData.x_url ||
+            normalize(form.website_google) !== hotelData.website_google ||
             form.images_hotel?.length !== hotelData.images?.length ||
             Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
 
@@ -486,6 +504,7 @@
         form.images_hotel = [...hotel.images];
         form.show_profile = hotel.show_profile || false;
         form.with_wifi = hotel.with_wifi || false;
+        form.website_google = hotel.website_google || null;
     }
 
     function updateShowHotel (val) {

@@ -6,8 +6,10 @@
     > -->
         <div class="flex w-full justify-between">
             <button 
-                class="text-base leading-[110%] font-medium underline"
-                :class="{'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200' : existingChanges}"
+                :class="[
+                    {'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200' : existingChanges},
+                    textCancelClass
+                ]"
                     :disabled="!existingChanges"
                 @click="cancelChanges"
             >
@@ -37,6 +39,10 @@ defineProps({
     forceBottom:{
         type:Boolean,
         default:false
+    },
+    textCancelClass:{
+        type:String,
+        default:'text-base leading-[110%] font-medium underline'
     }
 })
 const emit = defineEmits(['cancel','submit'])
