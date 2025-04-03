@@ -25,6 +25,7 @@
                 class="w-full object-cover rounded-t-lg h-full"
                 :src="facilityStore.formatImage(item.image)"
             />
+            
         </div>
         <div class="py-[19px] px-[12px] text-center bg-white truncate-1">
             <h5 class="text-base htext-black-100 px-[20px] leading-[110%] truncate-1" v-html="item.title"></h5>

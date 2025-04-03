@@ -221,11 +221,13 @@ const changesform = computed(() => {
         (normalize(form.type) !== normalize(itemSelected.type)) ||
         (normalize(form.price) !== normalize(itemSelected.price)) ||
         (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.availability) !== normalize(itemSelected.availability)) ||
         (normalize(form.address) !== normalize(itemSelected.address)) ||
         (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
         !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
         !lodash.isEqual(form.languages, itemSelected?.languages) ||
-        !lodash.isEqual(form.subservices, itemSelected?.subservices)
+        !lodash.isEqual(form.subservices, itemSelected?.subservices) ||
+        !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
 });
@@ -362,7 +364,7 @@ function openModalChangeInForm () {
 
 async function edit ({action, item}) {
     if (action === 'EDIT') {
-        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, address, requeriment, subservices } = item;
+        let { id, name, description, type, hire, link_url, type_price, price, images, languages, fields_visibles, duration, availability, address, requeriment, subservices } = item;
 
         if (languages?.length) {
             let languagesArray = languagesData.value.map(item => {
@@ -385,8 +387,8 @@ async function edit ({action, item}) {
 
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, {  id, name, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
-        Object.assign(form, {id, name, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, address, requeriment });
+        Object.assign(itemSelected, {  id, name, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
+        Object.assign(form, {id, name, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
         images.forEach(img => {
             urlsimages.value.push(img);
         });
@@ -422,6 +424,7 @@ async function edit ({action, item}) {
                 fields_visibles: JSON.parse(JSON.stringify(subservice.fields_visibles)),
                 price: numPrice || null,
                 duration: subservice.duration || null,
+                availability: subservice.availability || null,
                 address: subservice.address || null,
                 requeriment: subservice.requeriment || null,
                 order: subservice.order,

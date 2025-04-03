@@ -84,6 +84,12 @@ export const useSubserviceStore = defineStore('subservice', () => {
         return [];
     }
 
+    function calPrice (item) {
+        let { price, fields_visibles: fieldsVisibles } = item;
+        price = price ? parseFloat(price) : 0;
+        if (fieldsVisibles.includes('PRICE')) return 'GRATIS';
+        return `${price.toFixed(2)}€`;
+    }
     //
     return {
         formatImage,
@@ -93,6 +99,7 @@ export const useSubserviceStore = defineStore('subservice', () => {
         $updateOrder,
         $storeOrUpdate,
         $delete,
+        calPrice
     }
 
 })

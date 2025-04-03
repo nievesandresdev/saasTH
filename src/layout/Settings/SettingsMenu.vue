@@ -25,7 +25,6 @@
                   href="javascript:void(0)"
                   @click="toggleSubMenu(index_section, index_menu, section, menu)"
                   class="text-sm font-medium flex items-center justify-between py-2 px-6 hover-hbg-gray-200"
-                  :class="menu.selectedArr.includes(route.name) ? 'hbg-green-200 ' : ''"
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 

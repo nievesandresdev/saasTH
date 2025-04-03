@@ -1,8 +1,9 @@
 <template>
-    <div class="mt-4 space-y-6">
+    <div class="mt-4 relative">
         <div
             v-for="(item, index) in subservicesData"
-            @dragover="handlerDragOver"
+            @dragover="handlerDragOver($event, index)"
+            @dragleave="handlerDragLeave($event, index)"
             @drop="handlerDrop(index, item)"
             :draggable="true"
             @dragstart="handlerDragStart(index, $event)"
@@ -10,8 +11,13 @@
             ref="draggableCard"
             @mouseover="hoverItem = index"
             @mouseleave="hoverItem = null"
-            class="p-[12px] card-item flex justify-between items-center"
-            :class="{'card-item__dragging': draggedItem == index}"
+            class="p-[12px] card-item flex justify-between items-center transition-all duration-200"
+            :class="{
+                'opacity-75': draggedItem === index,
+                'card-item__dragging': draggedItem === index,
+                'transform translate-y-4': dragOverIndex === index && draggedItem !== index,
+                'mb-6': index < subservicesData.length - 1
+            }"
         >
             <div class="space-x-2 flex">
                      <!-- v-if="hoverItem == index" -->
@@ -51,6 +57,21 @@
                 </button>
             </div>
         </div>
+
+        <!-- Skeleton Card -->
+        <div 
+            v-if="draggedItem !== null && dragOverIndex !== null && dragStartIndex !== index"
+            class="card-item-skeleton flex justify-between items-center absolute w-full"
+            :style="{
+                top: `${dragStartIndex * (67 + 24)}px`,
+                transition: 'all 0.2s ease'
+            }"
+        >
+        <!-- top: `${dragOverIndex * (67 + 48)}px`, -->
+            <div class="space-x-2 flex w-full">
+            </div>
+        </div>
+
     </div>
     <div class="flex" :class="subservicesData.length > 0 ? 'justify-end' : 'justify-between'">
         <button
@@ -92,6 +113,7 @@ const subserviceStore = useSubserviceStore();
 
 const draggedItem = ref(null);
 const dragStartIndex = ref(null);
+const dragOverIndex = ref(null);
 const hoverItem = ref(null);
 const draggableCard = ref(null);
 
@@ -157,8 +179,18 @@ const handlerDragStart = (index, event) => {
   });
 };
 
-const handlerDragOver = (event) => {
+const handlerDragLeave = (event, index) => {
+    const relatedTarget = event.relatedTarget;
+    if (!relatedTarget || !relatedTarget.closest('.card-item')) {
+        dragOverIndex.value = null;
+    }
+};
+
+const handlerDragOver = (event, index) => {
   event.preventDefault();
+  if (dragStartIndex.value !== index) {
+    dragOverIndex.value = index;
+  }
 };
 
 const handlerDrop = (index, facility) => {
@@ -172,11 +204,13 @@ const handlerDrop = (index, facility) => {
   }
   draggedItem.value = null;
   dragStartIndex.value = null;
+  dragOverIndex.value = null;
 };
 
 const handlerDragEnd = () => {
-  draggedItem.value = null;
-  dragStartIndex.value = null;
+    draggedItem.value = null;
+    dragStartIndex.value = null;
+    dragOverIndex.value = null;
 };
 
 async function updateOrder () {
@@ -206,5 +240,13 @@ async function updateOrder () {
     }
     .card-item__dragging {
         box-shadow: 0px 3.5px 7px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-item-skeleton {
+        height: 67px;
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #E9E9E9;
+        background: #E9E9E9;
     }
 </style>

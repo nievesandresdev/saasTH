@@ -53,7 +53,8 @@ export const useAuthStore = defineStore('auth', () => {
                 localStorage.setItem('loginTime', currentTime); // Guardamos la hora actual
                 localStorage.setItem('login_from', 'hoster');
                 if(credentials.dossier){
-                    this.$router.push('/dashboard/?u=' + credentials.email + '&p=' + credentials.password);
+                    //alert('dossier true')
+                    this.$router.push('/dashboard/?dossier=true');
                 }else{
                     this.$router.push('/dashboard');
                 }
@@ -124,6 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
             localStorage.removeItem('current_subdomain');
             localStorage.removeItem('loginTime');
             localStorage.removeItem('redirectTo');
+            localStorage.removeItem('dossierReloaded')
         }
     }
 

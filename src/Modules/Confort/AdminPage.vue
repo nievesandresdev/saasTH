@@ -35,8 +35,6 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
  import PanelEditSubservice from './components/PanelEditSubservice.vue';
 
 // MODULE
-import { useMockupStore } from '@/stores/modules/mockup';
-const mockupStore = useMockupStore();
 
 // COMPOSABLES
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -55,8 +53,12 @@ const confortStore = useConfortStore();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
 const { hotelData } = hotelStore;
+import { useMockupStore } from '@/stores/modules/mockup';
+const mockupStore = useMockupStore();
 import { useUtilStore } from '@/stores/modules/util'
 const utilStore = useUtilStore();
+import { useServiceStore } from '@/stores/modules/service';
+const serviceStore = useServiceStore();
 
 // DATA
 const modelActive = ref(null);
@@ -210,19 +212,21 @@ async function loadLanguanges () {
 }
 
 // PROVIDE
+provide('mockupStore', mockupStore);
+provide('confortStore', confortStore);
+provide('serviceStore', serviceStore);
+provide('hotelStore', hotelStore);
+
 provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);
-provide('mockupStore', mockupStore);
-provide('confortStore', confortStore);
-provide('confortsData', confortsData);
-provide('hotelStore', hotelStore);
 provide('hotelData', hotelData);
 provide('changePendingInForm', changePendingInForm);
 provide('changePendingInFormService', changePendingInFormService);
 provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('modalChangePendinginFormService', modalChangePendinginFormService);
 provide('paginateData', paginateData);
+provide('confortsData', confortsData);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
 provide('modelSubserviceActive', modelSubserviceActive);
