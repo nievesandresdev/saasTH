@@ -247,11 +247,7 @@ onMounted(async () => {
     localStorage.setItem("pass_email_form", passwordURL)
   }
   
-<<<<<<< HEAD
-
-=======
   
->>>>>>> main
   if(emailURL && passwordURL){
     await authStore.logout()
 
