@@ -46,8 +46,8 @@ onMounted(async ()=>{
         
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            alert('settimeout '+dossierHotelId)
-            if(hotelData.id !== dossierHotelId){
+            //alert('settimeout '+dossierHotelId)
+            if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
             }
@@ -57,8 +57,8 @@ onMounted(async ()=>{
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
         if (event.data === "clearStorage") {
             if(hotelData.id != dossierHotelId){
-                alert('clearStorage '+hotelData.id)
-                alert('clearStorage2 '+dossierHotelId)
+                //alert('clearStorage '+hotelData.id)
+                //alert('clearStorage2 '+dossierHotelId)
                 localStorage.removeItem('token')
                 localStorage.removeItem('user')
                 localStorage.removeItem('current_hotel')
@@ -69,8 +69,8 @@ onMounted(async ()=>{
                 // Confirmación opcional
                 event.source?.postMessage("storageCleared", event.origin);
                 await authStore.logout()
-                alert('listenerLogin '+hotelData.id)
-                alert('listenerLogin2 '+dossierHotelId)
+                //alert('listenerLogin '+hotelData.id)
+                //alert('listenerLogin2 '+dossierHotelId)
                 // Redirigir con parámetros
                 router.push({
                     name: 'LoginPage',
