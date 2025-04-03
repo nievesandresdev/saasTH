@@ -59,7 +59,7 @@ onMounted(async ()=>{
         //alert('listenerLogin4 '+dossierHotelId)
        
             if (event.data === "clearStorage") {
-                if(hotelData.id !== dossierHotelId){
+                if(hotelData.id != dossierHotelId){
                     alert('clearStorage '+hotelData.id)
                     alert('clearStorage2 '+dossierHotelId)
                     localStorage.removeItem('token')
