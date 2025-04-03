@@ -42,6 +42,7 @@ jobs:
             echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_MAIN }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_MAIN }}" >> .env
             echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env
+            
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
             echo "VUE_APP_API_URL_BACKEND_GENERAL=${{ secrets.VUE_APP_API_URL_BACKEND_GENERAL_TEST }}" >> .env
