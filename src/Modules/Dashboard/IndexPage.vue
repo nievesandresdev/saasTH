@@ -47,7 +47,7 @@ onMounted(async ()=>{
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
             mockupStore.$reloadIframe()
-            mockupStore.$setIframeUrl('')
+            mockupStore.$setIframeUrl('/')
             //alert('settimeout '+dossierHotelId)
             if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
