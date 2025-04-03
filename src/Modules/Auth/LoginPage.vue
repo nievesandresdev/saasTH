@@ -247,28 +247,18 @@ onMounted(async () => {
     localStorage.setItem("pass_email_form", passwordURL)
   }
   
-  if(emailURL && passwordURL){
-    //alert('holaMountedLoginPage')
-    await authStore.logout()
 
+  if(emailURL && passwordURL){
+    await authStore.logout()
+    if (emailURL && passwordURL) {
+      await authStore.logout();
       form.value.email = emailURL
       form.value.password = passwordURL
-     
-      //router.push('/dashboard')
-      setTimeout(async () => {
-        //alert('hola111')
-        await authStore.login({
-          email: form.value.email,
-          password: form.value.password,
-          dossier: true
-        });
-        const loginButton = document.querySelector('#handleLogin');
-        if (loginButton && !loginButton.disabled) {
-          //alert('hola');
-          loginButton.click();
-        }
-    }, 1000); // 1010 ms de espera, puedes ajustar este tiempo según sea necesario
-    
+      const loginButton = document.querySelector('button[type="submit"]');
+      if (loginButton && !loginButton.disabled) {
+        loginButton.click(); 
+      }
+    }
   }
 
   
