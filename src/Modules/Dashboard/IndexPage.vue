@@ -46,14 +46,14 @@ onMounted(async ()=>{
         
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            mockupStore.$reloadIframe()
-            mockupStore.$setIframeUrl('/')
+            //mockupStore.$reloadIframe()
+            //mockupStore.$setIframeUrl('/')
             //alert('settimeout '+dossierHotelId)
-            if(hotelData.id != dossierHotelId){
+            //if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
-            }
-        }, 1150);
+            //}
+        }, 1100);
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
