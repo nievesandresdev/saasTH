@@ -55,8 +55,8 @@ onMounted(async ()=>{
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
-        alert('listenerLogin3 '+hotelData.id)
-        alert('listenerLogin4 '+dossierHotelId)
+        //alert('listenerLogin3 '+hotelData.id)
+        //alert('listenerLogin4 '+dossierHotelId)
         if(hotelData.id !== dossierHotelId){
             if (event.data === "clearStorage") {
                 localStorage.removeItem('token')
