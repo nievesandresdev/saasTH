@@ -57,33 +57,36 @@ onMounted(async ()=>{
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
         //alert('listenerLogin3 '+hotelData.id)
         //alert('listenerLogin4 '+dossierHotelId)
-        if(hotelData.id !== dossierHotelId){
+       
             if (event.data === "clearStorage") {
-                localStorage.removeItem('token')
-                localStorage.removeItem('user')
-                localStorage.removeItem('current_hotel')
-                localStorage.removeItem('current_subdomain')
-                localStorage.removeItem('loginTime')
-                localStorage.removeItem('redirectTo')
-                localStorage.removeItem('dossierReloaded')
-                // Confirmación opcional
-                event.source?.postMessage("storageCleared", event.origin);
-                await authStore.logout()
-                alert('listenerLogin '+hotelData.id)
-                alert('listenerLogin2 '+dossierHotelId)
-                // Redirigir con parámetros
-                router.push({
-                    name: 'LoginPage',
-                    query: {
-                        u: process.env.VUE_APP_LOGIN_DOSSIER_EMAIL,
-                        p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
-                    }
-                })
+                if(hotelData.id !== dossierHotelId){
+                    alert('clearStorage '+hotelData.id)
+                    alert('clearStorage2 '+dossierHotelId)
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('user')
+                    localStorage.removeItem('current_hotel')
+                    localStorage.removeItem('current_subdomain')
+                    localStorage.removeItem('loginTime')
+                    localStorage.removeItem('redirectTo')
+                    localStorage.removeItem('dossierReloaded')
+                    // Confirmación opcional
+                    event.source?.postMessage("storageCleared", event.origin);
+                    await authStore.logout()
+                    alert('listenerLogin '+hotelData.id)
+                    alert('listenerLogin2 '+dossierHotelId)
+                    // Redirigir con parámetros
+                    router.push({
+                        name: 'LoginPage',
+                        query: {
+                            u: process.env.VUE_APP_LOGIN_DOSSIER_EMAIL,
+                            p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
+                        }
+                    })
 
-            // mockupStore.$reloadIframe()
-                mockupStore.$setIframeUrl('')
-                //location.reload()
-            }
+                    // mockupStore.$reloadIframe()
+                    mockupStore.$setIframeUrl('')
+                    //location.reload()
+                }
         }
     }); //fin de la funcionalidad para DOSSIER
     
