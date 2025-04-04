@@ -43,6 +43,7 @@ onMounted(async ()=>{
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
     if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
+         await hotelStore.reloadHotel();
         
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
