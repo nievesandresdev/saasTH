@@ -18,7 +18,7 @@
                         v-model="formNetwork.name"
                         textLabel="Red"
                         tooltipText="Completa este campo con el nombre real de la red."
-                        @input:typing="validateField('name')"
+                        @input:typing="validateInputs"
                     />
                 </div>
                 <div class="mt-4">
@@ -26,18 +26,20 @@
                         v-model="formNetwork.password"
                         textLabel="Contraseña"
                         tooltipText="Para facilitar la conexión, tus huéspedes podrán copiar la clave del WiFi desde tu WebApp.</br></br>Si dejas este campo vacío, se indicará que la red no tiene contraseña."
+                        @input:typing="validateInputs"
                     />
                 </div>
                 <!-- {{ JSON.stringify(errors) }} <br>
-                {{ JSON.stringify(formInvalid) }} -->
+                {{ String(Boolean(changesExists)) }}<br>
+                {{ String(Boolean(!formInvalid)) }}<br> -->
             </div>
         </div>
         <!-- footer panel -->
         <div class="">
             <ChangesBar 
                 textCancelClass="text-sm leading-[110%] font-medium underline"    
-                :existingChanges="!formInvalid"
-                :validChanges="!formInvalid"
+                :existingChanges="changesExists"
+                :validChanges="!formInvalid && changesExists"
                 @cancel="cancelChanges" 
                 @submit="submit"
             />
@@ -60,9 +62,10 @@ const emit =  defineEmits(['reloadList']);
 
 const isOpenPanelToWifi = inject('isOpenPanelToWifi');
 const formNetwork = inject('formNetwork');
+const wifiNetworks = inject('wifiNetworks')
 
 const formRules = {
-    name: [value => value?.trim() ? true : ''],
+    name: [value => value?.trim() ? true : '']
 };
 const { errors, formInvalid, validateField } = useFormValidation(formNetwork, formRules);
 
@@ -76,16 +79,32 @@ const cancelChanges = () => {
 
 const submit = async () => {
     closePanel();
+    let textAlert = 'Red WiFi modificada';
     if(formNetwork.networkId){
+        await wifiNetworksStore.$updateById(formNetwork);
         
     }else{
         await wifiNetworksStore.$store(formNetwork);
-        emit('reloadList')
-        toast.warningToast('Nueva red WiFi añadida','top-right');
+        textAlert = 'Nueva red WiFi añadida';
     }
-
-    
+    toast.warningToast(textAlert,'top-right');
+    emit('reloadList')
 }
+
+const validateInputs = () =>{
+    validateField('name');
+    // validateField('password');
+}
+
+const currentItem = computed(()=> wifiNetworks.value.find(item => item.id == formNetwork.networkId))
+
+const changesExists = computed(()=>{ 
+    
+    if(formNetwork.networkId){
+        return (formNetwork.name !== currentItem.value?.name?.trim() || formNetwork.password?.trim() !== currentItem.value?.password?.trim())
+    }
+    return formNetwork.name?.trim();
+})
 
 watch(isOpenPanelToWifi,(newVal)=>{
     if(newVal){

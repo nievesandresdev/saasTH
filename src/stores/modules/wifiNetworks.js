@@ -15,7 +15,6 @@ export const useWifiNetworksStore = defineStore('wifiNetworks', () => {
     //
     async function $getAll () {
         const response = await getAllByHotelApi()
-        console.log('test response',response)
         if(response.ok) return response.data
         return []
     }

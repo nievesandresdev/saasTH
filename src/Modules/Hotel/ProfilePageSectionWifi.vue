@@ -1,16 +1,27 @@
 <template>
     <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
         <div class="max-w-profile">
-            <div class="flex mt-2 items-center relative">
+            <div 
+                class="flex mt-2 items-center relative"
+                tabindex="0" 
+                @blur="clickOnToggle = false"
+                @click="clickOnToggle = true"
+            >
                 <h2 class="font-medium text-lg">Servicio de WiFi</h2>
-                <span class="text-sm font-semibold leading-[120%] ml-auto mr-1 opacity-50">Mostrar en la WebApp</span>
+                <span 
+                    class="text-sm font-semibold leading-[120%] ml-auto mr-1"
+                    :class="{'opacity-50':wifiNetworks.length == 0}"
+                >Mostrar en la WebApp</span>
                 <ToggleButton
                     v-model="form.with_wifi"
                     id="toggle-wifi"
-                    disabled
+                    :disabled="wifiNetworks.length == 0"
                 />
                 <!-- error text -->
-                <div class="absolute top-[30px] right-0">
+                <div 
+                    class="absolute top-[30px] right-0"
+                    v-if="clickOnToggle && !wifiNetworks.length"
+                >
                     <div class="flex items-center">
                         <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg"> 
                         <p class="text-xs leading-[90%] htext-alert-negative">Añade una red de WiFi</p>        
@@ -26,10 +37,10 @@
             <p class="text-sm text-justify leading-[140%] max-w-[541px] 3xl:max-w-full">
                 Comparte con tus huéspedes la ubicación, nombre y contraseña de las redes de WiFi de tu {{$formatTypeLodging()}}.
             </p>
-            <div class="mt-4 flex items-center gap-4">
+            <div class="mt-4 flex items-center gap-4 flex-wrap">
                 <!-- add button -->
                 <div 
-                    class="relative w-[224px] h-20 rounded-[10px] border hborder-black-100 cursor-pointer gallery-file flex justify-center group container-icon-green"
+                    class="relative w-[224px] flex-shrink-0 h-20 rounded-[10px] border hborder-black-100 cursor-pointer gallery-file flex justify-center group container-icon-green"
                     @click="openPanelToCreate"
                 >
                     <div class="my-auto">
@@ -41,20 +52,23 @@
                 </div>
                 <!-- card network -->
                 <div 
-                    class="relative w-[224px] h-20 rounded-[10px] shadow-hoster p-4 bg-white"
+                    class="relative w-[224px] flex-shrink-0 h-20 rounded-[10px] shadow-hoster p-4 bg-white"
                     v-for="(item, index) in wifiNetworks" :key="item.id"
+                    @click="openPanelToCreate(item)"
                 >
                     <div class="flex items-center justify-between">
                         <p class="text-sm leading-[140%]">Red:</p>
                         <div class="flex items-center gap-1 px-2 relative">
                             <label class="text-[10px] font-semibold leading-[90%]">Visible</label>
                             <ToggleButton
-                                v-model="wifiNetworks[index]"
+                                v-model="wifiNetworks[index].visible"
+                                @change="updateVisibility(wifiNetworks[index])"
                                 :id="`toggle-network-${index}`"
+                                 @click.stop
                             />
                         </div>
                     </div>
-                    <p class="mt-2 text-sm font-medium leading-[140%]">{{ item.name }}</p>
+                    <p class="mt-2 text-sm font-medium leading-[140%] truncate">{{ item.name }}</p>
                 </div>
             </div>
         </div>
@@ -66,11 +80,15 @@
 import { inject, ref, provide, reactive } from 'vue';
 import PanelToWifi from "./Components/PanelToWifi.vue";
 import ToggleButton from '@/components/Buttons/ToggleButton.vue';
+
 import { useWifiNetworksStore } from '@/stores/modules/wifiNetworks'
 const wifiNetworksStore = useWifiNetworksStore();
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
 
 
 const isOpenPanelToWifi = ref(false);
+const clickOnToggle = ref(false);
 
 const form = inject('form')
 const wifiNetworks = inject('wifiNetworks')
@@ -81,19 +99,24 @@ const formNetwork = reactive({
 })
 
 const openPanelToCreate = (data = null) =>{
-    if(data){
-        formNetwork.networkId = data.id;
-        formNetwork.name = data.name;
-        formNetwork.password = data.password;    
-    }
+    formNetwork.networkId = data?.id ?? null;
+    formNetwork.name = data?.name ?? null;
+    formNetwork.password = data?.password ?? null;    
     isOpenPanelToWifi.value = true;
-    formNetwork.networkId = null;
-    formNetwork.name = null;
-    formNetwork.password = null;
+    console.log('test formNetwork',formNetwork)
 }
 
 const reloadList = async () =>{
     wifiNetworks.value = await wifiNetworksStore.$getAll();
+}
+
+const updateVisibility = async (data) =>{
+    let test = await wifiNetworksStore.$updateVisibility(data);
+    if(test){
+        toast.warningToast('Actualizado!','top-right');
+    }else{
+        toast.errorToast('Error','top-right');
+    }
 }
 provide('isOpenPanelToWifi', isOpenPanelToWifi)
 provide('formNetwork',formNetwork)
