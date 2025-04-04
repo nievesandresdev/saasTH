@@ -37,6 +37,7 @@ const params = new URLSearchParams(window.location.search)
 const current_hotel = computed(() => authStore.current_hotel?.name)
 const dossierHotelId = process.env.VUE_APP_DOSSIER_HOTEL_ID //dossier 
 
+
 onMounted(async ()=>{
     //await chainStore.$getChainBySubdomain();
     mockupStore.$setIframeUrl('')
@@ -46,51 +47,48 @@ onMounted(async ()=>{
         
         localStorage.setItem('dossierReloaded', 'true'); 
         setTimeout(() => {
-            alert('settimeout '+dossierHotelId)
-            if(hotelData.id !== dossierHotelId){
+            //mockupStore.$reloadIframe()
+            //mockupStore.$setIframeUrl('/')
+            //alert('settimeout '+dossierHotelId)
+            //if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
-            }
-        }, 1150);
+            //}
+        }, 1100);
     }
 
     window.addEventListener("message", async (event) => { //captura el mensaje del loginPage y cerrar sesion , esto es funcionalidad para DOSSIER
-        //alert('listenerLogin3 '+hotelData.id)
-        //alert('listenerLogin4 '+dossierHotelId)
-       
-            if (event.data === "clearStorage") {
-                if(hotelData.id != dossierHotelId){
-                    alert('clearStorage '+hotelData.id)
-                    alert('clearStorage2 '+dossierHotelId)
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('user')
-                    localStorage.removeItem('current_hotel')
-                    localStorage.removeItem('current_subdomain')
-                    localStorage.removeItem('loginTime')
-                    localStorage.removeItem('redirectTo')
-                    localStorage.removeItem('dossierReloaded')
-                    // Confirmación opcional
-                    event.source?.postMessage("storageCleared", event.origin);
-                    await authStore.logout()
-                    alert('listenerLogin '+hotelData.id)
-                    alert('listenerLogin2 '+dossierHotelId)
-                    // Redirigir con parámetros
-                    router.push({
-                        name: 'LoginPage',
-                        query: {
-                            u: process.env.VUE_APP_LOGIN_DOSSIER_EMAIL,
-                            p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
-                        }
-                    })
+        if (event.data === "clearStorage") {
+            if(hotelData.id != dossierHotelId){
+                //alert('clearStorage '+hotelData.id)
+                //alert('clearStorage2 '+dossierHotelId)
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+                localStorage.removeItem('current_hotel')
+                localStorage.removeItem('current_subdomain')
+                localStorage.removeItem('loginTime')
+                localStorage.removeItem('redirectTo')
+                localStorage.removeItem('dossierReloaded')
+                // Confirmación opcional
+                event.source?.postMessage("storageCleared", event.origin);
+                await authStore.logout()
+                //alert('listenerLogin '+hotelData.id)
+                //alert('listenerLogin2 '+dossierHotelId)
+                // Redirigir con parámetros
+                router.push({
+                    name: 'LoginPage',
+                    query: {
+                        u: process.env.VUE_APP_LOGIN_DOSSIER_EMAIL,
+                        p: process.env.VUE_APP_LOGIN_DOSSIER_PASSWORD
+                    }
+                })
 
-                    // mockupStore.$reloadIframe()
-                    mockupStore.$setIframeUrl('')
-                    //location.reload()
-                }
+                // mockupStore.$reloadIframe()
+                mockupStore.$setIframeUrl('')
+                //location.reload()
+            }
         }
     }); //fin de la funcionalidad para DOSSIER
-    
-    
 })
 
 
