@@ -40,15 +40,13 @@ const dossierHotelId = process.env.VUE_APP_DOSSIER_HOTEL_ID //dossier
 onMounted(async ()=>{
     //await chainStore.$getChainBySubdomain();
     mockupStore.$setIframeUrl('')
-    
     // mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     mockupStore.$setLanguageTooltip(true) 
     if (params.get('dossier') === 'true' && !localStorage.getItem('dossierReloaded')) {
          await hotelStore.reloadHotel();
         
         localStorage.setItem('dossierReloaded', 'true'); 
-        setTimeout(async () => {
-            await hotelStore.reloadHotel();
+        setTimeout(() => {
             //mockupStore.$reloadIframe()
             //mockupStore.$setIframeUrl('/')
             //alert('settimeout '+dossierHotelId)
