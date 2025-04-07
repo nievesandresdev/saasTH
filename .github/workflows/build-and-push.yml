@@ -39,6 +39,10 @@ jobs:
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_MAIN }}" >> .env
             echo "VUE_APP_X_API=${{ secrets.VUE_APP_X_KEY_API_MAIN }}" >> .env
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_MAIN }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_MAIN }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_MAIN }}" >> .env
+            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env
+            
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
             echo "VUE_APP_API_URL_BACKEND_GENERAL=${{ secrets.VUE_APP_API_URL_BACKEND_GENERAL_TEST }}" >> .env
@@ -50,6 +54,9 @@ jobs:
             echo "VUE_APP_API_URL_REVIEW=${{ secrets.VUE_APP_API_URL_REVIEW_TEST }}" >> .env
             echo "VUE_APP_X_KEY_REVIEW=${{ secrets.VUE_APP_X_KEY_REVIEW_TEST }}" >> .env
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_TEST }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_TEST }}" >> .env
+            echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_TEST }}" >> .env
+            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_TEST }}" >> .env
 
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
@@ -92,7 +99,7 @@ jobs:
       # 3. Configurar el registro privado (GHCR) en la Container App si no está configurado
       - name: Set GHCR Registry
         run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
+          if [ "${{ github.ref_name }}" = "main" ]; then
             az containerapp registry set \
               --resource-group th-test-resources \
               --name th-main-hoster \
@@ -100,7 +107,7 @@ jobs:
               --username ${{ secrets.GHCR_ACTOR }} \
               --password ${{ secrets.GHCR_PAT }}
           fi
-          if [ "${{ github.ref_name }}" == "test" ]; then
+          if [ "${{ github.ref_name }}" = "test" ]; then
             az containerapp registry set \
               --resource-group th-test-resources \
               --name th-test-hoster \
@@ -112,13 +119,13 @@ jobs:
       # 4. Actualizar la Container App con la imagen versionada
       - name: Update Azure Container App image
         run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
+          if [ "${{ github.ref_name }}" = "main" ]; then
             az containerapp update \
               --name th-main-hoster \
               --resource-group th-test-resources \
               --image ghcr.io/th-the-hoster/${{ env.IMAGE_NAME }}:${{ github.run_number }}
           fi
-          if [ "${{ github.ref_name }}" == "test" ]; then
+          if [ "${{ github.ref_name }}" = "test" ]; then
             az containerapp update \
               --name th-test-hoster \
               --resource-group th-test-resources \
