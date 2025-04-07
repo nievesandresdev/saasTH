@@ -1,6 +1,7 @@
 import { apiHttp } from '../AxiosConfig'
 import {
     hotelPath,
+    wifiNetworksPath
 } from '../config/apiRoute'
 
 export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
@@ -24,3 +25,10 @@ export const handleShowReferrals = () => apiHttp('POST', `${hotelPath}/handleSho
 //communication
 export const getHotelCommunication = () => apiHttp('POST', `${hotelPath}/communication/getHotelCommunication`);
 export const updateOrStoreHotelCommunication = (data) => apiHttp('POST', `${hotelPath}/communication/updateOrStoreHotelCommunication`, data);
+
+
+//wifi networks
+export const storeNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/store`, params);
+export const updateByIdNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateById`, params);
+export const updateVisibilityNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateVisibilityNetwork`, params, {showPreloader: false });
+export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null);

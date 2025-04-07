@@ -54,3 +54,6 @@ export const legalPath = 'legal'
 export const stayAccessPath = 'stayAccess'
 export const stayPath = 'stay'
 export const checkinPath = 'checkin'
+
+//hotel
+export const wifiNetworksPath = 'wifiNetworks'

@@ -1,9 +1,26 @@
 <template>
-  <label 
-    v-if="textLabel" 
-    class="text-sm font-medium leading-[140%] block mb-2"
-    :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
-    >{{ textLabel }}</label>
+  <div class="flex items-center gap-2 mb-2">
+      <label 
+      v-if="textLabel" 
+      class="text-sm font-medium leading-[140%] block"
+      :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
+      >{{ textLabel }}</label>
+      <div class="max-w-[16px] max-h-[16px]">
+        <Tooltip
+            v-if="tooltipText"
+            size="s"
+            :top="24"
+            :left="0"
+        >
+            <template v-slot:button>
+                <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
+            </template>
+            <template v-slot:content>
+                <p class="text-sm leading-[150%]" v-html="tooltipText"></p>
+            </template>
+        </Tooltip>
+      </div>
+    </div>
   <div class="relative" :class="classContent">
     <img
       v-if="prependInnerIcon"
@@ -57,7 +74,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-
+import Tooltip from '@/components/Tooltip.vue'
 const emit = defineEmits([
   'click:appendInner',
   'update:modelValue',
@@ -96,6 +113,7 @@ const props = defineProps({
   inputId: { type: String, default: 'InputData' },
   // Prop para configurar la cantidad de decimales deseados
   decimals: { type: Number, default: 2 },
+  tooltipText: { type: String, default: null },
 });
 
 // Crea una copia segura del prop errors para evitar warnings

@@ -108,6 +108,10 @@
         border-color: var(--h-green-800);
     }
 
+    .container-icon-green:hover .green-600-onhover{
+        filter: invert(49%) sepia(98%) saturate(290%) hue-rotate(116deg) brightness(95%) contrast(86%);
+    }
+
     
 
     /*
