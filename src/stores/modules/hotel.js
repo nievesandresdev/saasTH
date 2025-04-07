@@ -82,7 +82,7 @@ export const useHotelStore = defineStore('hotel', () => {
     }
 
     function formatImage ({image = null, url = null}) {
-        url = image?.url || url;
+        return url = image?.url || url;
         if (!url) return;
         let type = url.includes('https://') ? 'CDN' : 'STORAGE';
         // console.log(process.env.VUE_APP_STORAGE_URL, 'process.env.VUE_APP_STORAGE_URL')

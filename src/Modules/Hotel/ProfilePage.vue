@@ -84,14 +84,14 @@
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
                         <div class="flex justify-between">
-                            <label class="text-sm font-medium leading-[140%] inline-block">Teléfono principal</label>
+                            <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono principal</label>
                             <BaseTooltipResponsive
                                 size="l"
                                 :top="-85"
                                 :left="0"
                             >
                                 <template #button>
-                                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
+                                    <img class="w-[16px] h-[16px]" src="/assets/icons/TH.INFO.GREEN.svg">
                                     </template>
                                     <template #content>
                                     <p class="text-sm leading-[150%] font-normal">
@@ -108,7 +108,7 @@
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium leading-[140%] inline-block">Teléfono secundario</label>
+                        <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"
@@ -118,16 +118,16 @@
                     </div>
                 </div>
                 <div class="w-[706px]">
-                    <label class="text-sm font-medium inline-block mb-2">Email</label>
                     <BaseTextField
+                        text-label="Email"
                         v-model="form.email"
                         :placeholder="'Introduce email contacto del '+$formatTypeLodging()"
                         name="email"
                     />
                 </div>
                 <div class="w-[706px]">
-                    <label class="text-sm font-medium inline-block mb-2">Sitio web - URL</label>
                     <BaseTextField
+                        text-label="Sitio web - URL"
                         v-model="form.website_google"
                         placeholder="Introduce la URL de tu sitio web"
                         name="website_google"
@@ -209,8 +209,8 @@
 
             </section>
             <ProfilePageSectionWifi />
-            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
-                <h2 class="font-medium text-lg">Fotos</h2>
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
+                <h2 class="font-medium text-lg mb-4">Fotos del {{ $formatTypeLodging() }}</h2 >
                 <profilePageSectionPhotos @openModelGallery="openModelGallery()" />
             </section>
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
