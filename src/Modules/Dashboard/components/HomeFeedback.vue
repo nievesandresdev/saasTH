@@ -90,7 +90,7 @@
                             <img src="/assets/icons/otas/Expedia.svg" alt="Expedia">
                             <span class="text-sm font-medium">Expedia</span>
                         </div>
-                        <template v-if="bookingReview?.data_review">
+                        <template v-if="expediaReview?.data_review?.reviews_rating">
                             <div class="ml-auto">
                                 <span class="text-sm font-medium">{{  expediaReview.data_review.reviews_rating }}</span>
                                 <span class="text-[10px] font-medium">/10</span>
@@ -108,7 +108,7 @@
                             <img src="/assets/icons/otas/Google.svg" alt="Google">
                             <span class="text-sm font-medium">Google</span>
                         </div>
-                        <template v-if="googleReview?.data_review">
+                        <template v-if="googleReview?.data_review?.reviews_rating">
                             <div class="ml-auto">
                                 <span class="text-sm font-medium">{{  googleReview.data_review.reviews_rating }}</span>
                                 <span class="text-[10px] font-medium">/5</span>
@@ -126,7 +126,7 @@
                             <img src="/assets/icons/otas/Tripadvisor.svg" alt="Tripadvisor">
                             <span class="text-sm font-medium">Tripadvisor</span>
                         </div>
-                        <template v-if="tripadvisorReview?.data_review">
+                        <template v-if="tripadvisorReview?.data_review?.reviews_rating">
                             <div class="ml-auto">
                                 <span class="text-sm font-medium">{{  tripadvisorReview.data_review.reviews_rating }}</span>
                                 <span class="text-[10px] font-medium">/5</span>
@@ -144,7 +144,7 @@
                             <img src="/assets/icons/otas/Airbnb.svg" alt="Airbnb">
                             <span class="text-sm font-medium">Airbnb</span>
                         </div>
-                        <template v-if="airbnbReview?.data_review">
+                        <template v-if="airbnbReview?.data_review?.reviews_rating">
                             <div class="ml-auto">
                                 <span class="text-sm font-medium">{{  airbnbReview.data_review.reviews_rating }}</span>
                                 <span class="text-[10px] font-medium">/5</span>
