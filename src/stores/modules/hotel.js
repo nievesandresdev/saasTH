@@ -82,7 +82,7 @@ export const useHotelStore = defineStore('hotel', () => {
     }
 
     function formatImage ({image = null, url = null}) {
-        return url = image?.url || url;
+        url = image?.url || url;
         if (!url) return;
         let type = url.includes('https://') ? 'CDN' : 'STORAGE';
         // console.log(process.env.VUE_APP_STORAGE_URL, 'process.env.VUE_APP_STORAGE_URL')
@@ -266,6 +266,11 @@ export const useHotelStore = defineStore('hotel', () => {
         const response = await hotelService.handleShowReferrals();
         return response;
     }
+
+    async function $deleteImageByHotel (data) {
+        const response = await hotelService.deleteImageByHotelApi(data);
+        return response;
+    }
     
 
 
@@ -298,7 +303,8 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateSenderMailMask,
         hotelsUser,
         hotelsParent,
-        $handleDefaultHotel
+        $handleDefaultHotel,
+        $deleteImageByHotel
     }
 
 })

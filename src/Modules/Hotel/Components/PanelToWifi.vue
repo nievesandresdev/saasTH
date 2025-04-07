@@ -40,17 +40,28 @@
                 textCancelClass="text-sm leading-[110%] font-medium underline"    
                 :existingChanges="changesExists"
                 :validChanges="!formInvalid && changesExists"
-                @cancel="cancelChanges" 
+                @cancel="closePanel" 
                 @submit="submit"
             />
         </div>
     </SlidePanel>
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="changesExists"
+        text="Tienes cambios sin guardar. Para aplicar los cambios realizados debes guardar."
+        textbtn="Guardar"
+        @saveChanges="submit"
+        type="save_changes"
+        :force-open="changePendinginForm"
+        @close="closePanel(true)"
+    />
 </template>
 <script setup>
-import { inject, computed, onMounted, watch } from 'vue';
+import { inject, computed, ref, watch } from 'vue';
 import SlidePanel from '@/components/SlidePanel.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
+import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useFormValidation } from '@/composables/useFormValidation'
 //
 import { useToastAlert } from '@/composables/useToastAlert'
@@ -64,21 +75,23 @@ const isOpenPanelToWifi = inject('isOpenPanelToWifi');
 const formNetwork = inject('formNetwork');
 const wifiNetworks = inject('wifiNetworks')
 
+const changePendinginForm = ref(false);
+
 const formRules = {
     name: [value => value?.trim() ? true : '']
 };
 const { errors, formInvalid, validateField } = useFormValidation(formNetwork, formRules);
 
-const closePanel = () => {
-    isOpenPanelToWifi.value = false;
-}
-
-const cancelChanges = () => {
-    isOpenPanelToWifi.value = false;
+const closePanel = (force = false) => {
+    changePendinginForm.value = changesExists.value;
+    if(force  || !changePendinginForm.value){
+        isOpenPanelToWifi.value = false;
+        changePendinginForm.value = false;
+    }
 }
 
 const submit = async () => {
-    closePanel();
+    closePanel(true);
     let textAlert = 'Red WiFi modificada';
     if(formNetwork.networkId){
         await wifiNetworksStore.$updateById(formNetwork);

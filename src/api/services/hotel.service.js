@@ -1,8 +1,13 @@
 import { apiHttp } from '../AxiosConfig'
 import {
     hotelPath,
+    hosterPath,
     wifiNetworksPath
 } from '../config/apiRoute'
+
+
+export const deleteImageByHotelApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/deleteImageByHotel`, data, {showPreloader: false });
+
 
 export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
 export const getHotelsByUser = () => apiHttp('GET', `${hotelPath}/getHotelsByUser`);

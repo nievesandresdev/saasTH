@@ -24,10 +24,13 @@
                             loading="lazy"
                             class="w-full h-full rounded-[6px] object-cover"
                         />
-                        <div class="absolute z-20 top-2 left-2 bg-white rounded-[3px] p-0.5 hidden group-hover:block">
+                        <div class="absolute z-20 top-2 left-2 bg-white rounded-[3px] p-0.5 hidden group-hover:block cursor-pointer">
                             <img class="w-5 h-5" src="/assets/icons/1.TH.SEARCH.svg" alt="">
                         </div>
-                        <div class="absolute z-20 top-2 right-2 bg-white rounded-[3px] hidden group-hover:block">
+                        <div 
+                            class="absolute z-20 top-2 right-2 bg-white rounded-[3px] hidden group-hover:block cursor-pointer"
+                            @click.stop="deleteImage(image.id)"
+                        >
                             <img class="w-6 h-6" src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="">
                         </div>
                     </div>
@@ -66,7 +69,10 @@
     import { useHotelStore } from '@/stores/modules/hotel';
     const hotelStorage = useHotelStore();
 
-    const emits = defineEmits(['openModelGallery']);
+    import { useToastAlert } from '@/composables/useToastAlert'
+    const toast = useToastAlert();
+
+    const emits = defineEmits(['openModelGallery','reloadImages']);
 
     // DATA
     const form = inject('form');
@@ -113,6 +119,17 @@
     const closePreview = () => {
         isPreviewOpen.value = false;
     };
+
+    const deleteImage = async (id) =>{
+        const { ok, data } = await hotelStorage.$deleteImageByHotel({imageId : id})
+        if (ok) {
+            toast.warningToast('Imagen eliminada.','top-right');
+            emits('reloadImages')
+        } else {
+            toast.errorToast(data?.message,'top-right');
+        }
+
+    }
 
     provide('isPreviewOpen',isPreviewOpen)
 
