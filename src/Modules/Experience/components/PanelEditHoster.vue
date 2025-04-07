@@ -170,16 +170,29 @@ const panelEditHosterModalDeleteRef  = ref(null);
 
 const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-    name: [value => !!value ? true : 'Este campo es obligatorio'],
-    hire: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio']
+    name: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    hire: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    description: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
 });
+
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
 }
 
-const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
+const {  errors, validateField, formInvalid, formIsFull, validateAllFields, isFormFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);

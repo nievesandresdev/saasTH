@@ -185,11 +185,19 @@ const itemSelected = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 const formDefault = reactive(JSON.parse(JSON.stringify(valueFormDefault)));
 
 const formRules = reactive({
-    name: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio'],
+    name: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    description: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
 });
 
-const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
+const { errors, validateField, formInvalid, formIsFull, validateAllFields, isFormFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);

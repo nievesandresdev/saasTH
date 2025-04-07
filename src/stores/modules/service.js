@@ -69,7 +69,7 @@ export const useServiceStore = defineStore('service', () => {
                 return item.price;
             }
             return acc;
-        }, 0);
+        }, subservices[0].price);
         return minPrice;
     }
 

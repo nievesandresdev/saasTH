@@ -19,8 +19,8 @@ export const useSubserviceStore = defineStore('subservice', () => {
         // console.log(`'type: '${type}, 'url: '${url}`)
         if (type === 'CDN') return url;
         if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
-        if (!type) return URL_STORAGE+'/storage/subservice'+url;
-        return `${URL_STORAGE}${url}`;
+        if (url?.includes('storage/subservices')) return `${URL_STORAGE}${url}`;
+        if (!type) return URL_STORAGE+'/storage/subservices/'+url;
     }
 
     async function $getAll (params) {

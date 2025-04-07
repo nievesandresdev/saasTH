@@ -58,9 +58,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0)"
                         @click="submitSave"
-                    >
+                        >
+                        <!-- :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0)" -->
                         Guardar
                     </button>
                 </template>
@@ -73,9 +74,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
                         @click="nextTab"
-                    >
+                        >
+                        <!-- :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)" -->
                         {{ stepCurrent < 2 ? 'Siguiente' : 'Crear' }}
                     </button>
                 </template>
@@ -169,10 +171,23 @@ const modalCancelChangeRef  = ref(null);
 const modalDeleteRef  = ref(null);
 
 const formRules = reactive({
+
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-    name: [value => !!value ? true : 'Este campo es obligatorio'],
-    hire: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio']
+    name: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    hire: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    description: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
 });
 
 function isValidURL(url) {
@@ -180,7 +195,7 @@ function isValidURL(url) {
     return pattern.test(url);
 }
 
-const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
+const { errors, validateField, formInvalid, formIsFull, validateAllFields, isFormFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
@@ -337,6 +352,7 @@ function resetData () {
 
 
 function nextTab () {
+    validateAllFields();
     if (stepCurrent.value < 2) {
         if (formInvalid.value || !changesform.value || isLoadingForm.value) {
             return;
