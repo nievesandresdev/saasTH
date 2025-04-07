@@ -564,7 +564,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
 
     function updateToggleWifiNetworks(){
         form.with_wifi = true;
-        submit();
+        submit(false);
     }
 
     function updateShowHotel (val) {
@@ -587,7 +587,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
     }
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
-    async function submit () {
+    async function submit (showToast = true) {
         // isloadingForm.value = true
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
@@ -597,10 +597,12 @@ import { $formatTypeLodging } from '@/utils/helpers';
         const  {ok, data} = response ?? {}
         await loadHotel()
         isloadingForm.value = false
-        if (ok) {
-            toast.warningToast('Cambios guardados con éxito','top-right');
-        } else {
-            toast.warningToast(data?.message,'top-right');
+        if(showToast){
+            if (ok) {
+                toast.warningToast('Cambios guardados con éxito','top-right');
+            } else {
+                toast.warningToast(data?.message,'top-right');
+            }
         }
         mockupStore.$reloadIframe()
         layoutStore.$forceLeftSidebarRerender()
