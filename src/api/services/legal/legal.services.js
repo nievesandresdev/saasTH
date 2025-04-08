@@ -11,3 +11,5 @@ export const storePoliciesLegal = (params) => apiHttp('POST', `${legalPath}/poli
 export const updatePoliciesLegal = (params) => apiHttp('POST', `${legalPath}/updatePolicies`, params, { showPreloader: true })
 export const apiDeletePolicy = (params) => apiHttp('POST', `${legalPath}/deletePolicy`, params, { showPreloader: true })
 export const generatePdf = (params) => apiHttp('POST', `${legalPath}/generate-pdf`, params, { showPreloader: true })
+
+export const getCountPoliciesByHotelApi = () => apiHttp('GET', `${legalPath}/getCountPoliciesByHotel`, null)

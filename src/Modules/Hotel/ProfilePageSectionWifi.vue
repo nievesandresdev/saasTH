@@ -1,22 +1,23 @@
 <template>
     <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
         <div class="max-w-profile">
-            <div 
-                class="flex mt-2 items-center relative"
-                tabindex="0" 
-                @blur="clickOnToggle = false"
-                @click="clickOnToggle = true"
-            >
+            <div class="flex mt-2 items-center relative">
                 <h2 class="font-medium text-lg">Servicio de WiFi</h2>
                 <span 
                     class="text-sm font-semibold leading-[120%] ml-auto mr-1"
                     :class="{'opacity-50':wifiNetworks.length == 0}"
                 >Mostrar en la WebApp</span>
-                <ToggleButton
-                    v-model="form.with_wifi"
-                    id="toggle-wifi"
-                    :disabled="wifiNetworks.length == 0"
-                />
+                <div
+                    tabindex="0" 
+                    @blur="clickOnToggle = false"
+                    @click="clickOnToggle = true"
+                >
+                    <ToggleButton
+                        v-model="form.with_wifi"
+                        id="toggle-wifi"
+                        :disabled="wifiNetworks.length == 0"
+                    />
+                </div>
                 <!-- error text -->
                 <div 
                     class="absolute top-[30px] right-0"
@@ -77,15 +78,19 @@
     <PanelToWifi :isOpen="isOpenPanelToWifi" @reloadList="reloadList" />
 </template>
 <script setup>
-import { inject, ref, provide, reactive } from 'vue';
+import { inject, ref, provide, reactive, watch, nextTick } from 'vue';
 import PanelToWifi from "./Components/PanelToWifi.vue";
 import ToggleButton from '@/components/Buttons/ToggleButton.vue';
+
 
 import { useWifiNetworksStore } from '@/stores/modules/wifiNetworks'
 const wifiNetworksStore = useWifiNetworksStore();
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useMockupStore } from '@/stores/modules/mockup';
+const mockupStore = useMockupStore();
 
+const emit = defineEmits(['updateToggleWifiNetworks'])
 
 const isOpenPanelToWifi = ref(false);
 const clickOnToggle = ref(false);
@@ -103,11 +108,14 @@ const openPanelToCreate = (data = null) =>{
     formNetwork.name = data?.name ?? null;
     formNetwork.password = data?.password ?? null;    
     isOpenPanelToWifi.value = true;
-    console.log('test formNetwork',formNetwork)
+    // console.log('test formNetwork',formNetwork)
 }
 
 const reloadList = async () =>{
     wifiNetworks.value = await wifiNetworksStore.$getAll();
+    if(wifiNetworks.value.length == 1){
+        emit('updateToggleWifiNetworks');
+    }
 }
 
 const updateVisibility = async (data) =>{
@@ -118,6 +126,18 @@ const updateVisibility = async (data) =>{
         toast.errorToast('Error','top-right');
     }
 }
+
+
+watch(isOpenPanelToWifi, (newVal)=>{
+    let wifiIdMockup;
+    if(newVal){
+        wifiIdMockup = formNetwork.networkId ?? 0;
+        mockupStore.$setIframeUrl('/alojamiento','showWifiModal=true&wifiIdMockup='+wifiIdMockup);
+    }else{
+        mockupStore.$setIframeUrl('/alojamiento');
+    }
+    console.log('test isOpenPanelToWifi',newVal)
+})
 provide('isOpenPanelToWifi', isOpenPanelToWifi)
 provide('formNetwork',formNetwork)
 </script>

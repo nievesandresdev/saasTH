@@ -1,5 +1,5 @@
 <template>
-    <transition>
+    <transition name="fade">
     <div 
         v-if="isOpen" 
         class="bg-[#16161680] w-screen fixed left-0 z-[2000]"   
@@ -61,6 +61,22 @@ const closePanel = () => {
 /* Estado final al entrar y estado inicial al salir */
 .slide-enter-to, .slide-leave-from {
   transform: translateX(0);
+}
+
+
+/* Define las transiciones para entrar y salir */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+/* Estado inicial al entrar y estado final al salir */
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+/* Estado final al entrar y estado inicial al salir */
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
 }
 
 

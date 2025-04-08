@@ -20,7 +20,7 @@
   />
   
   <!-- Contenedor del nombre de la imagen -->
-  <div class="bg-white px-4 py-2 rounded-b-[6px] max-w-full absolute left-0 bottom-[-39px]">
+  <div class="bg-white px-4 py-2 rounded-b-[6px] max-w-full min-w-full absolute left-0 bottom-[-39px]">
     <p class="text-base font-medium leading-[140%] truncate w-full overflow-hidden text-ellipsis">
       {{ currentImage.name }}
     </p>
@@ -51,7 +51,6 @@
   
   const currentImage = computed(() => {
     console.log('test props.images',props.images)
-    console.log('test 0',props.images[Number(currentIndex.value)])
     return props.images[Number(currentIndex.value)]
   });
   

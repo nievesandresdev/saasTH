@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-[24px] bg-[#FAFAFA]">
+    <div class="h-screen pl-[24px] pr-[12px] bg-[#FAFAFA]">
         <div class="pb-[104px]">
             <section class="flex justify-between py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
@@ -66,6 +66,7 @@
                     />
                 </div>
             </section>
+            <!-- description -->
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="space-y-2">
                     <BaseTextareaField
@@ -142,6 +143,7 @@
                     {{`address: ${form.address}`}} -->
                 </div>
             </section>
+            <!-- horary -->
             <section 
                 class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4"
                 id="checkin-checkout"
@@ -208,11 +210,52 @@
 
 
             </section>
-            <ProfilePageSectionWifi />
+            <ProfilePageSectionWifi  @updateToggleWifiNetworks="updateToggleWifiNetworks"/>
+            <!-- rules -->
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
+                
+                <div 
+                    class="flex mt-2 items-center relative"
+                >
+                    <h2 class="font-medium text-lg">Normas del {{$formatTypeLodging()}}</h2>
+                    <span 
+                        class="text-sm font-semibold leading-[120%] ml-auto mr-1"
+                        :class="{'opacity-50':countPolicies == 0}"
+                    >Mostrar en la WebApp</span>
+                    <div
+                        tabindex="0" 
+                        @blur="clickOnToggle = false"
+                        @click="clickOnToggle = true"
+                    >
+                        <ToggleButton
+                            v-model="form.show_rules"
+                            id="toggle-show_rules"
+                            :disabled="countPolicies == 0"
+                        />
+                    </div>
+                    <!-- countPolicies -->
+                    <div 
+                    class="absolute top-[30px] right-0"
+                        v-if="clickOnToggle && !countPolicies"
+                    >
+                        <div class="flex items-center">
+                            <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg"> 
+                            <p class="text-xs leading-[90%] htext-alert-negative">Registra las Normas del alojamiento</p>        
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm leading-[140%]">
+                    Muestra a tus huéspedes las 
+                    <router-link class="font-medium underline hover:underline" :to="{ name: 'PoliciesLegal'}">normas del alojamiento</router-link>
+                    en el perfil de tu hotel
+                </p>
+            </section>
+            <!-- gallery -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
                 <h2 class="font-medium text-lg mb-4">Fotos del {{ $formatTypeLodging() }}</h2 >
-                <profilePageSectionPhotos @openModelGallery="openModelGallery()" />
+                <profilePageSectionPhotos @openModelGallery="openModelGallery()"  @reloadImages="loadHotel"/>
             </section>
+            <!-- social networks -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
                 <h2 class="font-medium text-lg">Redes sociales</h2>
                 <div class="space-y-4 w-[585px]">
@@ -256,7 +299,7 @@
             </section>
 
         </div>
-        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 mx-[-24px]">
+        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 ml-[-24px] mr-[-12px]">
             <button 
                 class="text-base leading-[110%] font-medium underline"
                 :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
@@ -303,6 +346,7 @@
     import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
     import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
     import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
+    import ToggleButton from '@/components/Buttons/ToggleButton.vue';
     //
     import ModalGallery from '@/components/ModalGallery.vue';
     import ModalNoSave from '@/components/ModalNoSave.vue'
@@ -324,11 +368,14 @@
     const layoutStore = useLayoutStore();
     import { useWifiNetworksStore } from '@/stores/modules/wifiNetworks'
     const wifiNetworksStore = useWifiNetworksStore();
+    import { useLegalStore } from '@/stores/modules/legal';
+    const legalStore = useLegalStore();
 
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
     import useScrollToElement from '@/composables/useScrollToElement';
+import { $formatTypeLodging } from '@/utils/helpers';
     const { scrollToElement } = useScrollToElement();
     //DATA
     const form = reactive({
@@ -358,9 +405,11 @@
         show_profile: false,
         with_wifi: false,
         website_google: null,
+        show_rules: false,
     });
     const modalGaleryRef = ref(null);
-    
+    const countPolicies = ref(0);
+    const clickOnToggle = ref(false)
     const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const urlPattern = /^(https?:\/\/)?([\w-]+\.)*[\w-]+\.[\w-]+(\/[\w-./?%&=]*)?$/;
@@ -419,6 +468,7 @@
 
     
     onMounted(async() => {
+        countPolicies.value = await legalStore.$getCountPoliciesByHotel()
         wifiNetworks.value = await wifiNetworksStore.$getAll();
         loadHotel()
         loadMockup()
@@ -432,13 +482,15 @@
 
     // COMPUTED
     const isChanged = computed(()=>{
+        let with_wifi = wifiNetworks.value.length ? Boolean(hotelData.with_wifi) : false;
+        let show_rules = Number(countPolicies.value) ? Boolean(hotelData.show_rules) : false;
         let c =
             form.name !== hotelData.name || form.type !== hotelData.type ||
             Number(form.category) !== Number(hotelData.category) ||
             normalize(form.email) !== normalize(hotelData.email) ||
             normalizePhone(form.phone) !== normalizePhone(hotelData.phone) ||
             normalizePhone(form.phone_optional) !== normalizePhone(hotelData?.phone_optional) ||
-            Boolean(form.with_wifi) !== Boolean(hotelData.with_wifi) ||
+            Boolean(form.with_wifi) !== Boolean(with_wifi) ||
             normalize(form.address) !== hotelData.address ||
             normalize(form.checkin) !== hotelData.checkin ||
             normalize(form.checkin_until) !== hotelData.checkin_until ||
@@ -451,7 +503,8 @@
             normalize(form.urlX) !== hotelData.x_url ||
             normalize(form.website_google) !== hotelData.website_google ||
             form.images_hotel?.length !== hotelData.images?.length ||
-            Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
+            Boolean(form.show_profile) !== Boolean(hotelData.show_profile) ||
+            Boolean(form.show_rules) !== Boolean(show_rules);
 
         return c;
     });
@@ -503,8 +556,15 @@
         form.city = hotel.city || null;
         form.images_hotel = [...hotel.images];
         form.show_profile = hotel.show_profile || false;
-        form.with_wifi = hotel.with_wifi || false;
         form.website_google = hotel.website_google || null;
+
+        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) : false;
+        form.show_rules = Number(countPolicies.value) ? Boolean(hotel.show_rules) : false;
+    }
+
+    function updateToggleWifiNetworks(){
+        form.with_wifi = true;
+        submit(false);
     }
 
     function updateShowHotel (val) {
@@ -527,7 +587,7 @@
     }
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
-    async function submit () {
+    async function submit (showToast = true) {
         // isloadingForm.value = true
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
@@ -537,10 +597,12 @@
         const  {ok, data} = response ?? {}
         await loadHotel()
         isloadingForm.value = false
-        if (ok) {
-            toast.warningToast('Cambios guardados con éxito','top-right');
-        } else {
-            toast.warningToast(data?.message,'top-right');
+        if(showToast){
+            if (ok) {
+                toast.warningToast('Cambios guardados con éxito','top-right');
+            } else {
+                toast.warningToast(data?.message,'top-right');
+            }
         }
         mockupStore.$reloadIframe()
         layoutStore.$forceLeftSidebarRerender()
