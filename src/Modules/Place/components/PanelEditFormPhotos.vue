@@ -1,5 +1,6 @@
 <template>
     <div class="space-y-6">
+        <!-- <pre>{{ form.images }}</pre> -->
         <div class="grid grid-cols-3 gap-4">
                 <div
                     class="button-add h-24 w-full border hborder-black-100 flex flex-col justify-center items-center rounded-xl cursor-pointer"
@@ -76,7 +77,7 @@ function removeImage (index, image){
     }
     if (image?.id && image.origin === 'PLACE') {
         form.delete_place_images.push(image.id);
-    }
+    } 
 }
 
 function openPreview(url) {
