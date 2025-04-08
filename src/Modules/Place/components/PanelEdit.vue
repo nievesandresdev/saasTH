@@ -307,6 +307,7 @@ function changeTab (val) {
 }
 
 function edit ({action, place}) {
+    resetData();
     urlsimages.value = [];
     if (action === 'EDIT') {
         let { id, title, description, featured, place_images, address, metting_point_latitude, metting_point_longitude, recomendations, web_link, phone_wheretoeat, email_wheretoeat } = place;
@@ -335,7 +336,6 @@ async function submitSave () {
             changePendingInForm.value = false;
             modelActive.value = null;
             tabSelected.value = INFORMATION;
-            resetData();
         resetCompoent();
     } else {
         toast.warningToast(data?.message,'top-right');
@@ -385,8 +385,8 @@ function closeModalForce () {
     resetData();
 }
 function resetData () {
-    Object.assign(form, {...formDefault});
-    Object.assign(itemSelected, {...formDefault});
+    Object.assign(form, JSON.parse(JSON.stringify(formDefault)));
+    Object.assign(itemSelected, JSON.parse(JSON.stringify(formDefault)));
 }
 function resetPageData () {
     emit('load:resetPageData');

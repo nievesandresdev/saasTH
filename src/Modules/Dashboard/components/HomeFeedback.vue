@@ -72,7 +72,7 @@
                             <img src="/assets/icons/otas/Booking.svg" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
-                        <template v-if="bookingReview?.data_review">
+                        <template v-if="bookingReview?.data_review?.reviews_rating">
                             <div class="ml-auto">
                                 <span class="text-sm font-medium">{{  bookingReview.data_review.reviews_rating }}</span>
                                 <span class="text-[10px] font-medium">/10</span>
