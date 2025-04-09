@@ -16,7 +16,7 @@
                 Cada cambio que realices en la configuración se traducirá automáticamente del español a todos los idiomas disponibles.
             </p>
             <br>
-            <div class="grid grid-cols-3 gap-1">
+            <div class="grid grid-cols-3 gap-2">
                 <template v-for="(language, index) in languages">
                     <div class="flex items-center">
                         <img :src="language.img" class="w-4 h-4">
