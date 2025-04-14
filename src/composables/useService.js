@@ -59,7 +59,6 @@ export const useService = () => {
             inputsValidate[input].isValidated = validationResult;
 
         }
-        
         let isValidate = Object.values(inputsValidate).every(input => input.isValidated);
         return !isValidate;
     }

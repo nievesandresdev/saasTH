@@ -58,7 +58,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0) || (form.type == 1 && validCharacteristics(form))"
                         @click="submitSave"
                     >
                         Guardar
