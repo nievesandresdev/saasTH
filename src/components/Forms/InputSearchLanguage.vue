@@ -4,9 +4,9 @@
         v-model="search"
         prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
         :placeholder="placeholder"
-        @keyup.prevent="searchLang"
+        @keyup:prevent="handleSearchLang"
         class-content="'w-full'"
-        @enter:search="searchLang"
+        @enter:search="handleSearchLang"
     ></BaseTextField>
     <ul
         v-if="result.length > 0 && showResults"
@@ -74,7 +74,7 @@ const selectlanguage = (lang) => {
     emit('selectedValue', lang);
 }
 
-const searchLang = async () => {
+const handleSearchLang = async () => {
     const params = {
         search: search.value,
         notSearch: []

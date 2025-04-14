@@ -8,13 +8,14 @@
                   class-content="w-full"
                   class-input="text-sm"
                   id="price-switch"
+                  @change="resetPriceFree(form)"
                 />
             </div>
             <div class="flex space-x-2 items-center">
                 <BaseTextField
                     v-model="form.price"
                     type="number"
-                    :disabled="form.type_price == 3"
+                    :disabled="form.type_price == 3 || form.fields_visibles.includes('PRICE')"
                     placeholder="0,00"
                     class-content="w-[80px]"
                     class-input="text-right"
@@ -136,6 +137,14 @@
                     class-content="flex-1"
                     name="requeriment"
                 />
+                <!-- <Editor
+                    v-model="form.requeriment"
+                    :placeholder="'Ej: debe traer su propia indumentaria'"
+                    mandatory
+                    :max-length="4000"
+                    countType="static"
+                    minHeight="180px"
+                /> -->
             </div>
         </div>
 </template>
@@ -160,6 +169,9 @@ const errors = inject('errors');
 const formRules = inject('formRules');
 const validateField = inject('validateField');
 
+import { useService } from '@/composables/useService';
+const { resetPriceFree } = useService();
+
 const inputsVisibles = ref({
     price: false,
     duration: false,
@@ -171,7 +183,8 @@ const inputsVisibles = ref({
 
 onMounted(() => {
     loadInputsVisibles();
-})
+});
+
 
 watch(inputsVisibles, (inputs) => {
     for (let [key, value] of Object.entries(inputs)) {

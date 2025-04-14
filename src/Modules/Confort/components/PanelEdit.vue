@@ -58,10 +58,9 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0) || (form.type == 1 && validCharacteristics(form))"
                         @click="submitSave"
-                        >
-                        <!-- :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0) || (form.type == 2 && subservicesData.length <= 0)" -->
+                    >
                         Guardar
                     </button>
                 </template>
@@ -74,7 +73,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0) || (stepCurrent == 1 && form.type == 1 && validCharacteristics(form))"
                         @click="nextTab"
                         >
                         <!-- :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0)" -->
@@ -155,6 +154,9 @@ const { form, itemSelected, formDefault } = serviceStore;
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
 
+import { useService } from '@/composables/useService'
+const { validCharacteristics } = useService();
+
 // INJECT
 const hotelStore = inject('hotelStore');
 const confortStore = inject('confortStore');
@@ -207,23 +209,29 @@ const isPreviewOpen = ref(false);
 onMounted(() => {
 });
 
+// watch( () => form.requeriment, (value, oldValue) => {
+//     if (value.includes('<p>') && !oldValue.includes('<p>')) {
+//         itemSelected.requeriment = value;
+//     }
+// });
+
 // COMPUTED
 const steps = computed(() => {
     return [
         {
             name: 'Información',
             value: 0,
-            disabled: false
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
         },
         {
             name: 'Caracteristicas',
             value: 1,
-            disabled: false
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
         },
         {
             name: 'Galeria',
             value: 2,
-            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value || (form.type == 2 && subservicesData.value.length <= 0) || (form.type == 1 && validCharacteristics(form))
         },
     ];
 });
@@ -446,8 +454,8 @@ async function edit ({action, item}) {
                 order: subservice.order,
             }
         });
- 
         form.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
+        subservicesData.value = JSON.parse(JSON.stringify([...subservicesArray]));
         itemSelected.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
     } else {
         Object.assign(itemSelected, {...formDefault});

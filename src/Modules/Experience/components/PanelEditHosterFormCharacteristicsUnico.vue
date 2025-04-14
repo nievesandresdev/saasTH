@@ -8,17 +8,19 @@
                   class-content="w-full"
                   class-input="text-sm"
                   id="price-switch"
+                  @change="resetPriceFree(form)"
                 />
             </div>
             <div class="flex space-x-2 items-center">
                 <BaseTextField
                     v-model="form.price"
                     type="number"
-                    :disabled="form.type_price == 3"
+                    :disabled="form.type_price == 3 || form.fields_visibles.includes('PRICE')"
                     placeholder="0,00"
                     class-content="w-[80px]"
                     class-input="text-right"
                     is-price
+                    @change="resetPriceFree(form)"
                 />
                 <!--  -->
                 <span
@@ -136,6 +138,14 @@
                     class-content="flex-1"
                     name="requeriment"
                 />
+                <!-- <Editor
+                    v-model="form.requeriment"
+                    :placeholder="'Ej: debe traer su propia indumentaria'"
+                    mandatory
+                    :max-length="4000"
+                    countType="static"
+                    minHeight="180px"
+                /> -->
             </div>
         </div>
 </template>
@@ -155,6 +165,9 @@ import Editor from "@/components/Forms/Editor.vue";
 
 import { ServiceTypeArray } from "@/shared/enums/ServiceTypeEnum";
 
+import { useService } from '@/composables/useService';
+const { resetPriceFree } = useService();
+
 const form = inject('form');
 const errors = inject('errors');
 const formRules = inject('formRules');
@@ -172,6 +185,12 @@ const inputsVisibles = ref({
 onMounted(() => {
     loadInputsVisibles();
 })
+
+watch(() => form.requeriment, (value) => {
+    if (value == '<p><br></p>') {
+        form.requeriment = '';
+    }
+});
 
 watch(inputsVisibles, (inputs) => {
     for (let [key, value] of Object.entries(inputs)) {
