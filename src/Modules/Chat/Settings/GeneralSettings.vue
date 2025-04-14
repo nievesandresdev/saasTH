@@ -44,7 +44,7 @@
                                 prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                                 placeholder="Selecciona los idiomas con los que se comunicará tu personal"
                                 :class-content="'3xl:w-1/2 1xl:w-full'"
-                                @keyup.prevent="$searchLang"
+                                @keyup:prevent="$searchLang"
                                 @enter:search="$searchLang"
                             ></BaseTextField>
                             <ul
@@ -167,6 +167,7 @@ const $searchLang = async () => {
         notSearch: notSearchLang.value
     }
     const response = await fetchLangs(params)
+    console.log('test response',response)
     result.value = response.data
 
     if (search.value) {
