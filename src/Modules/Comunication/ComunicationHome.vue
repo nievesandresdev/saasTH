@@ -36,7 +36,7 @@
         </div>
         <div class="w-full flex justify-start">
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
-                <CardSectionHome title="Te damos la bienvenida" padding="p-4">
+                <CardSectionHome title="Te damos la bienvenida" padding="p-4" communication>
                     <template #toggle>
                         <small class="text-[10px] font-semibold opacity-50 cursor-not-allowed">Activo</small>
                         <BaseSwichInput
@@ -62,7 +62,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="¿Todo listo huésped?" padding="p-4">
+                <CardSectionHome title="¿Todo listo huésped?" padding="p-4" communication>
                     <template #toggle>
                         <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
@@ -112,7 +112,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Gracias por elegirnos" padding="p-4">
+                <CardSectionHome title="Gracias por elegirnos" padding="p-4" communication>
                     <template #toggle>  
                         <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
@@ -137,7 +137,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Te esperamos de vuelta" padding="p-4">
+                <CardSectionHome title="Te esperamos de vuelta" padding="p-4" communication>
                     <template #toggle>  
                         <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
@@ -174,7 +174,7 @@
 
         <div class="w-full flex justify-start mt-6">
             <div class="grid grid-cols-3 gap-6 pr-[150px]  3xl:grid-cols-5 3xl:pr-0 max-w-[1920px]">
-                <CardSectionHome title="Aviso de mensaje en chat" padding="p-4">
+                <CardSectionHome title="Aviso de mensaje en chat" padding="p-4" communication>
                     <template #toggle>
                         <small class="text-[10px] font-semibold">Activo</small>
                         <BaseSwichInput
@@ -200,7 +200,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Referente - Código de regalo" padding="p-4">
+                <CardSectionHome title="Referente - Código de regalo" padding="p-4" communication>
                     <template #toggle>
                         <span class="text-[10px] font-semibold">Activo</span>
                         <BaseSwichInput

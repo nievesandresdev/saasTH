@@ -28,7 +28,7 @@
                 >
                   <div class="flex items-center">
                     <img :src="menu.icon" class="inline-block w-6 h-6 mr-2"> 
-                    <span class="text-sm font-medium leading-[140%]" :class="menu.selectedArr.includes(route.name) ? 'font-semibold' : 'font-medium'">{{ menu.title }}</span> <!-- items con icono -->
+                    <span class="text-sm font-medium leading-[140%]">{{ menu.title }}</span> <!-- items con icono -->
                   </div>
                   <img :src="menu.expanded ? '/assets/icons/1.TH.I.DROPDOWN.OPEN.svg' : '/assets/icons/1.TH.I.dropdown.svg'" class="inline-block w-[12px] h-[12px]">
                 </a>
