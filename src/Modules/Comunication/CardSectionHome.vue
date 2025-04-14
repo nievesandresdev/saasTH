@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center">
            
             <div class="flex flex-col">
-                <p class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Asunto:</p>
+                <p v-if="communication" class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Asunto:</p>
                 <h1 v-if="title" class="text-base font-semibold leading-[120%]">{{ title }}</h1>
             </div>
             <span 
@@ -23,7 +23,7 @@
                 class="text-sm leading-[140%] overflow-hidden text-ellipsis" 
                 :class="{'line-clamp-3': special}"
             >
-            <p class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Asunto:</p>
+            <p v-if="communication" class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Asunto:</p>
                 <slot name="msg"></slot>
             </p>
         </div>
@@ -67,6 +67,10 @@ defineProps({
     padding: {
         type: String,
         default: 'p-6',
+    },
+    communication: {
+        type: Boolean,
+        default: false,
     },
 });
 
