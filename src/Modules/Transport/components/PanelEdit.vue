@@ -445,7 +445,6 @@ async function edit ({action, item}) {
                 order: subservice.order,
             }
         });
- 
         form.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
         subservicesData.value = JSON.parse(JSON.stringify([...subservicesArray]));
         itemSelected.subservices = JSON.parse(JSON.stringify([...subservicesArray]));

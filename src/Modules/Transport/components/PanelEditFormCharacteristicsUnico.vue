@@ -132,20 +132,20 @@
                 />
             </div>
             <div class="flex space-x-2 items-center">
-                <!-- <BaseTextField
+                <BaseTextField
                     v-model="form.requeriment"
                     placeholder="Ej: debe traer su propia indumentaria"
                     class-content="flex-1"
                     name="requeriment"
-                /> -->
-                <Editor
+                />
+                <!-- <Editor
                     v-model="form.requeriment"
                     :placeholder="'Ej: debe traer su propia indumentaria'"
                     mandatory
                     :max-length="4000"
                     countType="static"
                     minHeight="180px"   
-                />
+                /> -->
             </div>
         </div>
 </template>
