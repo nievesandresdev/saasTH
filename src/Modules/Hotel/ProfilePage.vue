@@ -124,6 +124,8 @@
                         v-model="form.email"
                         :placeholder="'Introduce email contacto del '+$formatTypeLodging()"
                         name="email"
+                        :errors="errors"
+                        @blur:validate="validate('email')"
                     />
                 </div>
                 <div class="w-[706px]">
@@ -413,17 +415,49 @@ import { $formatTypeLodging } from '@/utils/helpers';
     const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const urlPattern = /^(https?:\/\/)?([\w-]+\.)*[\w-]+\.[\w-]+(\/[\w-./?%&=]*)?$/;
-    const formRules = {
-        name: [value => value.trim() ? true : 'Introduce el nombre de tu alojamiento'],
-        email: [value => emailPattern.test(value) ? true : 'Formato de e-mail permitido ej: xxxx@email.com'],
-        phone: [value => (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')  ? true : 'La cantidad de dígitos ingresada es incorrecta'],
-        phone_optional: [value => !value || (!!value && (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')) ? true : 'La cantidad de dígitos ingresada es incorrecta'],
-        website_google: [value => !value || urlPattern.test(value) ? true : 'Ingresa un formato de URL válido'],
-        urlInstagram: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
-        urlPinterest: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
-        urlFacebook: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
-        urlX: [value => !value || urlPattern.test(value) ? true : 'Escribe un formato de enlace válido'],
-    };
+    
+    const formRules = reactive({
+        name: [{
+            required: true,
+            validator: value => !!value,
+            message: 'Introduce el nombre de tu alojamiento'
+        }],
+        email: [{
+            required: true,
+            validator: value => !!emailPattern.test(value),
+            message: 'Formato de e-mail permitido ej: xxxx@email.com'
+        }],
+        phone: [{
+            required: true,
+            validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
+            message: 'La cantidad de dígitos ingresada es incorrecta'
+        }],
+        phone_optional: [{
+            required: true,
+            validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
+            message: 'La cantidad de dígitos ingresada es incorrecta'
+        }],
+        website_google: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Ingresa un formato de URL válido'
+        }],
+        urlInstagram: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+        urlPinterest: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+        urlX: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+    });
 
     const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
@@ -573,6 +607,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
     }
 
     const validate = (field) => {
+        
         validateField(field)
     }
     

@@ -12,15 +12,14 @@
                     <h1 class="text-base font-medium mb-2">Ajustes del chat</h1>
                 </template>
                 <template #content>
-                    <div class="w-full">
+                    <div class="w-full 3xl:w-[50%]">
                         <label class="text-sm font-medium mb-2 block">Nombre en la ventana de conversación</label>
                         <BaseTextField
                             v-model="form.name"
                             placeholder="Ej: “Hotel Posada del Sol”"
-                            :class-content="'3xl:w-1/2 1xl:w-full'"
                             @input="handleInputChange"
                         ></BaseTextField>
-                        <div class="flex justify-between 3xl:w-1/2 1xl:w-full">
+                        <div class="flex justify-between">
                             <label class="text-sm font-medium mb-2 block mt-4">Idiomas disponibles para la atención a tus huéspedes</label>
                             <Tooltip
                                 size="l"
@@ -43,13 +42,12 @@
                                 v-model="search"
                                 prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
                                 placeholder="Selecciona los idiomas con los que se comunicará tu personal"
-                                :class-content="'3xl:w-1/2 1xl:w-full'"
                                 @keyup:prevent="$searchLang"
                                 @enter:search="$searchLang"
                             ></BaseTextField>
                             <ul
                                 v-if="result.length > 0 && showResults"
-                                class="absolute top-10 left-0 w-full z-50 bg-white overflow-hidden shadow-md rounded-lg"
+                                class="absolute top-12 left-0 w-full z-50 bg-white overflow-hidden shadow-md rounded-lg"
                             >
                                 <li
                                     v-for="lg in result" :key="lg.id"
@@ -167,7 +165,7 @@ const $searchLang = async () => {
         notSearch: notSearchLang.value
     }
     const response = await fetchLangs(params)
-    console.log('test response',response)
+    // console.log('test response',response)
     result.value = response.data
 
     if (search.value) {

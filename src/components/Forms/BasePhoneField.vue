@@ -115,8 +115,8 @@ const isError = computed(() => {
 })
 
 const borderColorClass = computed(() => {
-  if (isError.value) return 'hborder-alert-negative';
   if (isFocused.value) return 'hborder-green-600';
+  if (isError.value) return 'hborder-alert-negative';
   return 'hborder-gray-400';
   // {'hinput-error': isError,'hborder-black-100':code && phone,'hborder-gray-400':!code || !phone},
 });

@@ -143,7 +143,7 @@ const customInputClass = computed(() => {
     c += ' pl-11';
   }
   if (safeErrors.value?.[props.name] && safeErrors.value?.[props.name] != true) {
-    c += ' hborder-alert-negative';
+    c += ' hborder-alert-negative focus-hborder-green-600';
   }
   return c;
 });
@@ -156,8 +156,8 @@ const bgClasses = computed(() => {
 
 const borderClasses = computed(() => {
   if(props.disabled || props.desactivated) return 'hborder-disabled-input'
-  if(props.error) return 'hborder-alert-negative'
   if(isFocused.value) return 'hborder-green-600'
+  if(props.error) return 'hborder-alert-negative'
   return 'hborder-gray-400';
 });
 
