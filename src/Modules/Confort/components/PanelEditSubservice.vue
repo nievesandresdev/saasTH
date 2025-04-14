@@ -229,7 +229,7 @@ const steps = computed(() => {
         {
             name: 'Caracteristicas',
             value: 1,
-            disabled:  formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+            disabled:  formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value || !form.image
         },
     ];
 });
