@@ -11,7 +11,7 @@
             />
         </div>
         <template v-if="form.type == 1">
-            <PanelEditFormCharacteristicsUnico />
+        <PanelEditFormCharacteristicsUnico />
         </template>
         <template v-else>
             <PanelEditFormCharacteristicsVarious />

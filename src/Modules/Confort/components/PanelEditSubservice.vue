@@ -56,7 +56,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || !form.image"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || !form.image || validCharacteristics(form)"
                         @click="submitSave"
                     >
                         Guardar
@@ -71,7 +71,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent != 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (!form.image && stepCurrent == 0) || (stepCurrent == 1 && validCharacteristics(form))"
                         @click="nextTab"
                     >
                         {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
@@ -146,6 +146,9 @@ import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
 import { useEventBus } from '@/composables/eventBus';
 const { onEvent, emitEvent } = useEventBus();
+
+import { useService } from '@/composables/useService';
+const { validCharacteristics } = useService();
 
 
 // INJECT
@@ -226,7 +229,7 @@ const steps = computed(() => {
         {
             name: 'Caracteristicas',
             value: 1,
-            disabled: false
+            disabled:  formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
         },
     ];
 });
