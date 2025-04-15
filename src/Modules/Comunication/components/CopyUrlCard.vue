@@ -5,13 +5,13 @@
         </div>
         <div class="text-right mt-8">
             <a @click="copyLinkToClipboard" href="javascript:void(0)" class="hbtn-primary cursor-pointer px-4 py-3 h-10 text-sm leading-[100%] inline-block">
-                Copiar enlace
+                Copiar enlace 
             </a>
         </div>
     </div>
 </template>
 <script setup>
-import { $urlBaseWebapp } from '@/utils/helpers';
+import { $urlBaseWebappField } from '@/utils/helpers';
 import { useToastAlert } from '@/composables/useToastAlert'
 import { useHotelStore } from '@/stores/modules/hotel';
 import { typeChain } from '@/utils/enums';
@@ -22,7 +22,7 @@ let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
 let slugHotel = hotelStore?.hotelData?.subdomain;
 let hotelType = hotelStore?.hotelData?.chain?.type;
 
-const urlBaseWebapp = $urlBaseWebapp(subdomainChain, slugHotel);
+const urlBaseWebapp = $urlBaseWebappField(subdomainChain, slugHotel, hotelType);
 const toast = useToastAlert();
 
 const copyLinkToClipboard = async () => {
