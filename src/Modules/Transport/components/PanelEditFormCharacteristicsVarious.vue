@@ -28,7 +28,7 @@
                     <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
                 </button>
                 <div class="card-item__img">
-                    <img class="rounded-[5.455px]" :src="subserviceStore.formatImage({ url: item.image?.url ?? item.image })" :alt="`image_${index}`">
+                    <img class="rounded-[5.455px] w-[60px] h-[40px]" :src="subserviceStore.formatImage({ url: item.image?.url ?? item.image })" :alt="`image_${index}`">
                 </div>
                 <div class="">
                     <h5 class="text-[12px] font-bold leading-[150%]">{{ item.name }}</h5>

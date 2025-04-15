@@ -45,10 +45,10 @@ export const useServiceStore = defineStore('service', () => {
         }
         if (typeService == '2') {
             let minPrice = calMinPriceSubservices(subservices);
-            if (minPrice == 0) {
+            if (minPrice === 0 && price !== null) {
                 return 'GRATIS';
             }
-            return `Desde ${minPrice?.toFixed(2)}€`;
+            return `Desde ${minPrice?.toFixed(2) ?? 0}€`;
         }
     
         if (!['1','2'].includes(typePrice) && !fieldsValues.includes('PRICE')) {

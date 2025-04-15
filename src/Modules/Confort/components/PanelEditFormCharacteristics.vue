@@ -1,7 +1,6 @@
 <template>
     <div class="space-y-4">
         <div class="space-y-2 pb-2">
-             <label class="text-sm font-medium">Cantidad de servicios</label>
             <BaseSelectField
                 id="type-service"
                 :textLabel="'Cantidad de servicio'"

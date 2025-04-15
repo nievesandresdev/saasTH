@@ -133,7 +133,13 @@
                 />
             </div>
             <div class="flex space-x-2 items-center">
-                <BaseTextField
+                <!-- <BaseTextField
+                    v-model="form.requeriment"
+                    placeholder="Ej: debe traer su propia indumentaria"
+                    class-content="flex-1"
+                    name="requeriment"
+                /> -->
+                <BaseTextareaField
                     v-model="form.requeriment"
                     placeholder="Ej: debe traer su propia indumentaria"
                     class-content="flex-1"
