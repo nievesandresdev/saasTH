@@ -129,7 +129,7 @@ const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') =>
   
   // Reemplazar el dominio .io por .app
   urlBase = urlBase.replace('.io', '.app');
-  console.log(urlBase, typeChain);
+  console.log(urlBase, typeChain,GUEST_URL);
 
   return urlBase;
 };
