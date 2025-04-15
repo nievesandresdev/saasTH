@@ -226,7 +226,7 @@ const submit = async () =>{
     if(request){
         settingsRef.value = JSON.parse(JSON.stringify(form))
         defineMockup(form.in_stay_activate)
-        // mockupStore.$reloadIframe();
+        mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
 }

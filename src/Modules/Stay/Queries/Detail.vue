@@ -41,7 +41,6 @@ const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
-    console.log('test data',data.value)
 })
 
 
@@ -60,7 +59,7 @@ onBeforeRouteLeave((to, from, next) => {
 watch(() => data.value, async (newData) => {
     guestAccess.value = newData?.timeline?.guestAccess;
     timeLineData.value = newData?.timeline;
-    console.log('test newData',newData)
+    // console.log('test newData detail',newData)
     currentQuery.value = newData?.queryByGuest.find(query => query.period == newData?.timeline?.currentPeriod);
 }, { immediate: true });  
 

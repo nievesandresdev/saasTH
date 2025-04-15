@@ -21,7 +21,7 @@
       <div class="flex gap-4">
         <div
             class="px-2 py-4 rounded-lg text-center border-[1px] w-[91px] h-[93px]"
-            v-for="(feed,index) in feedback " :key="feed.icon"
+            v-for="(feed, index, key) in feedback " :key="key"
             :class="{
                 'border-black shadow-md hover:bg-[#FAFAFA]': feed.answeredTime,
                 'border-[#BFBFBF]': !feed.answeredTime,
@@ -62,7 +62,7 @@
                 :src="`/assets/icons/emojis/1.TH.Emojis${feed.feeling}.svg`"
             >
           </div>
-          <div class="text-[#333333] text-xs font-semibold">{{ qualification(index,feed)  }}</div>
+          <div class="text-[#333333] text-xs font-semibold">{{ qualification(index,feed)  }} {{ key }}</div>
           <div class="text-[10px] font-semibold text-[#A0A0A0]">{{ period[index] }} </div>
         </div>
       </div>
