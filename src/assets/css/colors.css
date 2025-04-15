@@ -91,6 +91,7 @@
     .hbg-green-600 {
         background-color: var(--h-green-600);
     }
+    .focus-hborder-green-600:focus,
     .hover-hborder-green-600:hover,
     .hborder-green-600 {
         border-color: var(--h-green-600) !important;
@@ -177,7 +178,7 @@
     }
     .hborder-alert-negative:hover,
     .hborder-alert-negative {
-        border-color: var(--alert-negative) !important;
+        border-color: var(--alert-negative);
     }
     .hborder-negative {
         border-color: var(--alert-negative) !important;

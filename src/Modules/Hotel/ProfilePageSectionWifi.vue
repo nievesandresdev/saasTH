@@ -53,7 +53,7 @@
                 </div>
                 <!-- card network -->
                 <div 
-                    class="relative w-[224px] flex-shrink-0 h-20 rounded-[10px] shadow-hoster p-4 bg-white"
+                    class="relative w-[224px] flex-shrink-0 h-20 rounded-[10px] shadow-hoster p-4 bg-white cursor-pointer"
                     v-for="(item, index) in wifiNetworks" :key="item.id"
                     @click="openPanelToCreate(item)"
                 >

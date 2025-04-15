@@ -1,5 +1,5 @@
 <template>
-<ModalWindow v-if="open" :isVisible="open"  :width="'768px'" padding-content="p-0" footer="true">
+<ModalWindow v-if="open" :isVisible="open"  :width="'768px'" padding-content="p-0" footer="true" topOffset="0">
     <template #content>
         <div class="px-6 py-4 flex items-center justify-between">
             <h2 class="text-[18px] font-medium">Galería de imágenes</h2>
