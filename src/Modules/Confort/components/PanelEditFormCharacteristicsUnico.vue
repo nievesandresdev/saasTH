@@ -11,7 +11,7 @@
                   @change="resetPriceFree(form)"
                 />
             </div>
-            <div class="flex space-x-2 items-center">
+            <div class="flex items-center">
                 <BaseTextField
                     v-model="form.price"
                     type="number"
@@ -24,14 +24,14 @@
                 <!--  -->
                 <span
                     :class="{'opacity-40': form.type_price == 3}"
-                    class="text-sm font-medium"
+                    class="text-sm font-medium ml-2"
                 >
                     €
                 </span>
             </div>
         </div>
         <div class="space-y-2">
-            <div class="flex space-x-1">
+            <div class="flex">
                 <label class="text-sm font-semibold">Duración</label>
                 <BaseSwichInput
                   v-model="inputsVisibles.duration"
@@ -40,7 +40,7 @@
                   id="duration-switch"
                 />
             </div>
-            <div class="flex space-x-2 items-center">
+            <div class="flex items-center">
                 <BaseTextField
                     v-model="form.duration"
                     type="number"
@@ -51,7 +51,7 @@
                 <!--  -->
                 <span
                     :class="{'opacity-40': form.type_price == 3}"
-                    class="text-sm font-medium"
+                    class="text-sm font-medium ml-2"
                 >
                     h
                 </span>
@@ -67,7 +67,7 @@
                   id="availability-switch"
                 />
             </div>
-            <div class="flex space-x-2 items-center">
+            <div class="flex items-center">
                 <BaseTextField
                     v-model="form.availability"
                     placeholder="Ej: durante toda la estancia"
@@ -97,7 +97,7 @@
                   id="address-switch"
                 />
             </div>
-            <div class="flex space-x-2 items-center">
+            <div class="flex items-center">
                 <BaseTextField
                     v-model="form.address"
                     placeholder="Ej: recepción del hotel"
@@ -116,7 +116,7 @@
                   id="languages-switch"
                 />
             </div>
-            <div class="space-x-2 items-center w-full">
+            <div class=" items-center w-full">
                 <InputSearchLanguage v-model="form.languages" placeholder="Busca y añade los idiomas disponibles"/>
             </div>
         </div>
@@ -130,8 +130,14 @@
                   id="requirement-switch"
                 />
             </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
+            <div class="flex items-center">
+                <!-- <BaseTextField
+                    v-model="form.requeriment"
+                    placeholder="Ej: debe traer su propia indumentaria"
+                    class-content="flex-1"
+                    name="requeriment"
+                /> -->
+                <BaseTextareaField
                     v-model="form.requeriment"
                     placeholder="Ej: debe traer su propia indumentaria"
                     class-content="flex-1"

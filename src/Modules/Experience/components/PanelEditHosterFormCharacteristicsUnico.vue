@@ -1,153 +1,158 @@
 <template>
-        <div class="space-y-2">
-            <label class="text-sm font-semibold mb-2">Precio del Servicio</label>
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Gratis</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.price"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="price-switch"
-                  @change="resetPriceFree(form)"
-                />
-            </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
-                    v-model="form.price"
-                    type="number"
-                    :disabled="form.type_price == 3 || form.fields_visibles.includes('PRICE')"
-                    placeholder="0,00"
-                    class-content="w-[80px]"
-                    class-input="text-right"
-                    is-price
-                    @change="resetPriceFree(form)"
-                />
-                <!--  -->
-                <span
-                    :class="{'opacity-40': form.type_price == 3}"
-                    class="text-sm font-medium"
-                >
-                    €
-                </span>
-            </div>
+    <div class="space-y-2">
+        <label class="text-sm font-semibold mb-2">Precio del Servicio</label>
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold">Gratis</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.price"
+              class-content="w-full"
+              class-input="text-sm"
+              id="price-switch"
+              @change="resetPriceFree(form)"
+            />
         </div>
-        <div class="space-y-2">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Duración</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.duration"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="duration-switch"
-                />
-            </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
-                    v-model="form.duration"
-                    type="number"
-                    placeholder="0"
-                    class-content="w-[80px]"
-                    class-input="text-right"
-                />
-                <!--  -->
-                <span
-                    :class="{'opacity-40': form.type_price == 3}"
-                    class="text-sm font-medium"
-                >
-                    h
-                </span>
-            </div>
+        <div class="flex items-center">
+            <BaseTextField
+                v-model="form.price"
+                type="number"
+                :disabled="form.type_price == 3 || form.fields_visibles.includes('PRICE')"
+                placeholder="0,00"
+                class-content="w-[80px]"
+                class-input="text-right"
+                is-price
+            />
+            <!--  -->
+            <span
+                :class="{'opacity-40': form.type_price == 3}"
+                class="text-sm font-medium ml-2"
+            >
+                €
+            </span>
         </div>
-        <div class="space-y-2 w-full">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Disponibilidad</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.availability"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="availability-switch"
-                />
-            </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
-                    v-model="form.availability"
-                    placeholder="Ej: durante toda la estancia"
-                    class-content="flex-1"
-                    name="availability"
-                />
-            </div>
+    </div>
+    <div class="space-y-2">
+        <div class="flex">
+            <label class="text-sm font-semibold">Duración</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.duration"
+              class-content="w-full"
+              class-input="text-sm"
+              id="duration-switch"
+            />
         </div>
-        <div class="space-y-2">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold mb-2">Accesible</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.accessible"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="accessible-switch"
-                />
-            </div>
+        <div class="flex items-center">
+            <BaseTextField
+                v-model="form.duration"
+                type="number"
+                placeholder="0"
+                class-content="w-[80px]"
+                class-input="text-right"
+            />
+            <!--  -->
+            <span
+                :class="{'opacity-40': form.type_price == 3}"
+                class="text-sm font-medium ml-2"
+            >
+                h
+            </span>
         </div>
-        <div class="space-y-2 w-full">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Ubicación</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.address"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="address-switch"
-                />
-            </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
-                    v-model="form.address"
-                    placeholder="Ej: recepción del hotel"
-                    class-content="flex-1"
-                    name="requeriment"
-                />
-            </div>
+    </div>
+    <div class="space-y-2 w-full">
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold">Disponibilidad</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.availability"
+              class-content="w-full"
+              class-input="text-sm"
+              id="availability-switch"
+            />
         </div>
-        <div class="space-y-2 w-full">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Idiomas disponibles</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.languages"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="languages-switch"
-                />
-            </div>
-            <div class="space-x-2 items-center w-full">
-                <InputSearchLanguage v-model="form.languages" placeholder="Busca y añade los idiomas disponibles"/>
-            </div>
+        <div class="flex items-center">
+            <BaseTextField
+                v-model="form.availability"
+                placeholder="Ej: durante toda la estancia"
+                class-content="flex-1"
+                name="availability"
+            />
         </div>
-        <div class="space-y-2">
-            <div class="flex space-x-1">
-                <label class="text-sm font-semibold">Requisitos</label>
-                <BaseSwichInput
-                  v-model="inputsVisibles.requeriment"
-                  class-content="w-full"
-                  class-input="text-sm"
-                  id="requirement-switch"
-                />
-            </div>
-            <div class="flex space-x-2 items-center">
-                <BaseTextField
-                    v-model="form.requeriment"
-                    placeholder="Ej: debe traer su propia indumentaria"
-                    class-content="flex-1"
-                    name="requeriment"
-                />
-                <!-- <Editor
-                    v-model="form.requeriment"
-                    :placeholder="'Ej: debe traer su propia indumentaria'"
-                    mandatory
-                    :max-length="4000"
-                    countType="static"
-                    minHeight="180px"
-                /> -->
-            </div>
+    </div>
+    <div class="space-y-2">
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold mb-2">Accesible</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.accessible"
+              class-content="w-full"
+              class-input="text-sm"
+              id="accessible-switch"
+            />
         </div>
+    </div>
+    <div class="space-y-2 w-full">
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold">Ubicación</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.address"
+              class-content="w-full"
+              class-input="text-sm"
+              id="address-switch"
+            />
+        </div>
+        <div class="flex items-center">
+            <BaseTextField
+                v-model="form.address"
+                placeholder="Ej: recepción del hotel"
+                class-content="flex-1"
+                name="requeriment"
+            />
+        </div>
+    </div>
+    <div class="space-y-2 w-full">
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold">Idiomas disponibles</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.languages"
+              class-content="w-full"
+              class-input="text-sm"
+              id="languages-switch"
+            />
+        </div>
+        <div class=" items-center w-full">
+            <InputSearchLanguage v-model="form.languages" placeholder="Busca y añade los idiomas disponibles"/>
+        </div>
+    </div>
+    <div class="space-y-2">
+        <div class="flex space-x-1">
+            <label class="text-sm font-semibold">Requisitos</label>
+            <BaseSwichInput
+              v-model="inputsVisibles.requeriment"
+              class-content="w-full"
+              class-input="text-sm"
+              id="requirement-switch"
+            />
+        </div>
+        <div class="flex items-center">
+            <!-- <BaseTextField
+                v-model="form.requeriment"
+                placeholder="Ej: debe traer su propia indumentaria"
+                class-content="flex-1"
+                name="requeriment"
+            /> -->
+            <BaseTextareaField
+                v-model="form.requeriment"
+                placeholder="Ej: debe traer su propia indumentaria"
+                class-content="flex-1"
+                name="requeriment"
+            />
+            <!-- <Editor
+                v-model="form.requeriment"
+                :placeholder="'Ej: debe traer su propia indumentaria'"
+                mandatory
+                :max-length="4000"
+                countType="static"
+                minHeight="180px"
+            /> -->
+        </div>
+    </div>
 </template>
 
 <script setup>

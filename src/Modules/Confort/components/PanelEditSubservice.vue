@@ -398,8 +398,6 @@ function edit ({action, serviceId, subservice}) {
             url: image?.url ?? image,
         }
 
-
-
         Object.assign(itemSelected, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment, order });
         Object.assign(form, { id, name, description, price: numPrice, image: imageObject, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment, order });
     } else {
