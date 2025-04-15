@@ -62,7 +62,7 @@
                 :src="`/assets/icons/emojis/1.TH.Emojis${feed.feeling}.svg`"
             >
           </div>
-          <div class="text-[#333333] text-xs font-semibold">{{ qualification(index,feed)  }} {{ key }}</div>
+          <div class="text-[#333333] text-xs font-semibold">{{ qualification(index,feed)  }}</div>
           <div class="text-[10px] font-semibold text-[#A0A0A0]">{{ period[index] }} </div>
         </div>
       </div>
