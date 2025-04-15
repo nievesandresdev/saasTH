@@ -22,7 +22,7 @@ let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
 let slugHotel = hotelStore?.hotelData?.subdomain;
 let hotelType = hotelStore?.hotelData?.chain?.type;
 
-const urlBaseWebapp = $urlBaseWebapp(subdomainChain, slugHotel);
+const urlBaseWebapp = $urlBaseWebapp(subdomainChain, slugHotel, hotelType);
 const toast = useToastAlert();
 
 const copyLinkToClipboard = async () => {

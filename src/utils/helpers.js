@@ -115,10 +115,15 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
   }
 };
 
-const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain) => {
+const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain).replace('webapp', slugHotel);
-  
+
+  if (typeChain === 'CHAIN') {
+    urlBase = urlBase.replace('webapp', slugHotel);
+  } else {
+    urlBase = urlBase.replace('webapp', '');
+  }
   
   // Reemplazar el dominio .io por .app
   urlBase = urlBase.replace('.io', '.app');
