@@ -84,36 +84,21 @@
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
-                        <div class="flex justify-between">
-                            <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono principal</label>
-                            <BaseTooltipResponsive
-                                size="l"
-                                :top="-85"
-                                :left="0"
-                            >
-                                <template #button>
-                                    <img class="w-[16px] h-[16px]" src="/assets/icons/TH.INFO.GREEN.svg">
-                                    </template>
-                                    <template #content>
-                                    <p class="text-sm leading-[150%] font-normal">
-                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp
-                                    </p>
-                                </template>
-                            </BaseTooltipResponsive>
-                        </div>
                         <BasePhoneField
                             v-model="form.phone"
                             name="phone"
                             :errors="errors"
                             @blur:validate="validate('phone')"
+                            textLabel="Teléfono principal"
+                            tooltipText='Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp'
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"
                             :errors="errors"
+                            textLabel="Teléfono secundario"
                             @blur:validate="validate('phone_optional')"
                         />
                     </div>
