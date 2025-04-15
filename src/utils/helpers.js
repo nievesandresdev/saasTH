@@ -122,7 +122,7 @@ const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain) => {
   
   // Reemplazar el dominio .io por .app
   urlBase = urlBase.replace('.io', '.app');
-   alert(GUEST_URL);
+   console.log(urlBase, typeChain);
 
   return urlBase;
 };
