@@ -121,10 +121,10 @@ const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') =>
 
   if (typeChain === 'CHAIN') {
     urlBase = urlBase.replace('webapp', slugHotel);
-    console.log('chain');
+    //console.log('chain');
   } else {
     urlBase = urlBase.replace('webapp', '');
-    console.log('independent');
+    //console.log('independent');
   }
   
   // Reemplazar el dominio .io por .app
