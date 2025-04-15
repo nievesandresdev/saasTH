@@ -115,7 +115,7 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
   }
 };
 
-/* const $urlBaseWebapp = (subdomainChain, slugHotel) => {
+const $urlBaseWebapp = (subdomainChain, slugHotel) => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain).replace('webapp', slugHotel);
   
@@ -123,9 +123,9 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
   urlBase = urlBase.replace('.io', '.app');
 
   return urlBase;
-}; */
+};
 
-const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') => {
+const $urlBaseWebappField = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
 
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain);
@@ -227,6 +227,7 @@ export {
     $formatTimestampDate,
     $getPropertyInUrl,
     $urlBaseWebapp,
+    $urlBaseWebappField,
     $formatImage,
     $formatTypeLodging,
     $formatNameLodging,
