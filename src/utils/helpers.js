@@ -133,7 +133,7 @@ const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') =>
 
   if (typeChain === 'CHAIN') {
     //reemplaza 'webapp' por slugHotel
-    urlBase = urlBase.replace('/webapp', '/' + slugHotel);
+    urlBase = urlBase.replace('webapp',slugHotel);
   } else {
     //elimina '/webapp' 
     urlBase = urlBase.replace('/webapp', '');
