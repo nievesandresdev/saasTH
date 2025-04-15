@@ -127,19 +127,19 @@ const $formatTimestampDate = (date, format = 'dd/MM/yyyy') => {
 
 const $urlBaseWebapp = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') => {
   const GUEST_URL = process.env.VUE_APP_GUEST_URL;
-  // Primero reemplazamos el subdominio
+
   let urlBase = GUEST_URL.replace('subdomain', subdomainChain);
 
-  // Manejamos los casos según el tipo de cadena
+
   if (typeChain === 'CHAIN') {
-    // Para CHAIN: reemplazamos 'webapp' por slugHotel
+    //reemplaza 'webapp' por slugHotel
     urlBase = urlBase.replace('/webapp', '/' + slugHotel);
   } else {
-    // Para INDEPENDENT: eliminamos '/webapp' completamente
+    //elimina '/webapp' 
     urlBase = urlBase.replace('/webapp', '');
   }
   
-  // Reemplazar el dominio .io por .app
+
   urlBase = urlBase.replace('.io', '.app');
   
   return urlBase;

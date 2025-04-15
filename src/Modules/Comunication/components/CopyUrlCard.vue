@@ -5,7 +5,7 @@
         </div>
         <div class="text-right mt-8">
             <a @click="copyLinkToClipboard" href="javascript:void(0)" class="hbtn-primary cursor-pointer px-4 py-3 h-10 text-sm leading-[100%] inline-block">
-                Copiar enlace {{ hotelType }}
+                Copiar enlace
             </a>
         </div>
     </div>
