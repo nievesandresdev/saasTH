@@ -1,13 +1,12 @@
 <template>
-  <div class="flex items-center gap-2 mb-2">
+  <div class="flex items-center gap-2 mb-2" v-if="textLabel || tooltipText">
       <label 
       v-if="textLabel" 
       class="text-sm font-medium leading-[140%] block"
       :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
       >{{ textLabel }}</label>
-      <div class="max-w-[16px] max-h-[16px]">
+      <div v-if="tooltipText" class="max-w-[16px] max-h-[16px]">
         <Tooltip
-            v-if="tooltipText"
             size="s"
             :top="24"
             :left="0"
