@@ -43,7 +43,6 @@ export const useServiceStore = defineStore('service', () => {
         if (typePrice == 'Activities') {
             return `${price?.toFixed(2)}€`;
         }
-    
         if (typeService == '2') {
             let minPrice = calMinPriceSubservices(subservices);
             if (minPrice == 0) {
