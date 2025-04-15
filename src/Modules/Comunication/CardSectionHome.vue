@@ -23,7 +23,7 @@
                 class="text-sm leading-[140%] overflow-hidden text-ellipsis" 
                 :class="{'line-clamp-3': special}"
             >
-            <p v-if="communication" class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Asunto:</p>
+            <p v-if="communication" class="text-xs font-medium leading-[120%] text-[#A0A0A0]">Motivo:</p>
                 <slot name="msg"></slot>
             </p>
         </div>
