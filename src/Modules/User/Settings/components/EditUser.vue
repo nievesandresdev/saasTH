@@ -39,7 +39,7 @@
                   'text-center py-2 text-[16px] font-semibold cursor-pointer relative px-4',
                   currentStep === step.number
                     ? 'bg-[#ECF9F5] text-[#0B6357] rounded-t-lg rounded-bottom-border'
-                    : 'text-gray-300',
+                    : 'htext-black-100',
                 ]"
                 :style="{
                   flexGrow: step.number === 3 ? 2 : 1, 
@@ -57,36 +57,18 @@
           <hr class="mb-5 px-4">
           <div v-if="currentStep === 1">
               <div class="mt-4">
-                  <label class="text-sm font-medium">Nombre *</label>
-                  <div class="relative">
-                      <input
-                          v-model="form.name"
-                          type="text"
-                          class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
-                          :class="
-                          {
-                            'hborder-black-100 htext-black-100 font-medium': form.name,
-                            'hborder-gray-400 htext-gray-500': !form.name
-                          }"
-                          placeholder="Nombre del usuario"
-                      />
-                  </div>
+                <BaseTextField
+                    textLabel="Nombre *"
+                    placeholder="Nombre del usuario"
+                    v-model="form.name"
+                />
               </div>
               <div class="mt-4">
-                  <label class="text-sm font-medium">Apelido *</label>
-                  <div class="relative">
-                      <input
-                          v-model="form.lastname"
-                          type="text"
-                          class="w-full h-10 p-3 text-sm font-medium  border  rounded-6 hoverForm rounded-md hinput-green"
-                          :class="
-                          {
-                            'hborder-black-100 htext-black-100 font-medium': form.lastname,
-                            'hborder-gray-400 htext-gray-500': !form.lastname
-                          }"
-                          placeholder="Apellido del usuario"
-                      />
-                  </div>
+                <BaseTextField
+                  textLabel="Apelido *"
+                  placeholder="Apellido del usuario"
+                  v-model="form.lastname"
+                />
               </div>
               <div class="mt-4">
                 <label class="text-sm font-medium">Teléfono móvil</label>
@@ -161,10 +143,9 @@
                     @click.stop="toggleModalWorkPosition"
                     :value="selectedWorkPositionName"
                     readonly
-                    class="bg-white w-full rounded-md border text-black font-medium text-sm px-4 py-2.5 cursor-pointer placeholder:font-normal placeholder:text-[#A0A0A0] hinput-green"
+                    class="w-full th-Input cursor-pointer select-hover"
                     :class="{
-                      'placeholder:text-black border-black': selectedWorkPositionName != 'Elige el puesto de trabajo',
-                    'placeholder:text-gray-400  border-gray-300': selectedWorkPositionName === 'Elige el puesto de trabajo' || selectedWorkPositionName === 'Puesto de Trabajo'
+                      'placeholder-selected': selectedWorkPositionName != 'Elige el puesto de trabajo'
                     }"
                     :placeholder="selectedWorkPositionName ?? 'Elige el puesto de trabajo'"
                   />
@@ -253,6 +234,7 @@ import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
 import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
 import { useAuthStore } from '@/stores/modules/auth/login';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import BaseTextField from '@/components/Forms/BaseTextField';
 
 const { mouseDownInside, handleMouseDown, handleMouseLeave } = useMouseHandle();
 
