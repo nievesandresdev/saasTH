@@ -81,7 +81,10 @@ export default {
       } else {
         this.error = false;
       }
-      this.$emit('update:modelValue', this.formattedTime);
+      
+      if(this.formattedTime) {
+        this.$emit('update:modelValue', this.formattedTime);
+      }
     },
     handleFocus() {
       this.isFocused = true;

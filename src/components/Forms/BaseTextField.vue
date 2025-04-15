@@ -1,13 +1,12 @@
 <template>
-  <div class="flex items-center gap-2 mb-2">
+  <div class="flex items-center gap-2 mb-2" v-if="textLabel || tooltipText">
       <label 
       v-if="textLabel" 
       class="text-sm font-medium leading-[140%] block"
       :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
       >{{ textLabel }}</label>
-      <div class="max-w-[16px] max-h-[16px]">
+      <div v-if="tooltipText" class="max-w-[16px] max-h-[16px]">
         <Tooltip
-            v-if="tooltipText"
             size="s"
             :top="24"
             :left="0"
@@ -143,7 +142,7 @@ const customInputClass = computed(() => {
     c += ' pl-11';
   }
   if (safeErrors.value?.[props.name] && safeErrors.value?.[props.name] != true) {
-    c += ' hborder-alert-negative';
+    c += ' hborder-alert-negative focus-hborder-green-600';
   }
   return c;
 });
@@ -156,8 +155,8 @@ const bgClasses = computed(() => {
 
 const borderClasses = computed(() => {
   if(props.disabled || props.desactivated) return 'hborder-disabled-input'
-  if(props.error) return 'hborder-alert-negative'
   if(isFocused.value) return 'hborder-green-600'
+  if(props.error) return 'hborder-alert-negative'
   return 'hborder-gray-400';
 });
 

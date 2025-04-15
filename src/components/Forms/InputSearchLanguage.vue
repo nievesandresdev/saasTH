@@ -4,9 +4,9 @@
         v-model="search"
         prepend-inner-icon="/assets/icons/1.TH.SEARCH.svg"
         :placeholder="placeholder"
-        @keyup.prevent="searchLang"
+        @keyup:prevent="handleSearchLang"
         class-content="'w-full'"
-        @enter:search="searchLang"
+        @enter:search="handleSearchLang"
     ></BaseTextField>
     <ul
         v-if="result.length > 0 && showResults"
@@ -21,10 +21,10 @@
             <p class="text-sm">{{lg.name}}</p>
         </li>
     </ul>
-    <div class="flex flex-wrap mt-4">
+    <div class="flex flex-wrap mt-2">
         <div
             v-for="lang in value ?? []" :key="lang.id"
-            class="chip-primary rounded-lg px-3 py-2 flex items-center mt-2 mr-4"
+            class="chip-primary rounded-lg px-3 py-2 flex items-center mr-4 h-[24px]"
         >
             <img class="size-4 mr-2" :src="'/assets/icons/flags/' + lang.abbreviation + '.svg'" alt="">
             <p class="text-sm font-medium mr-2 l">{{lang.name}}</p>
@@ -74,7 +74,7 @@ const selectlanguage = (lang) => {
     emit('selectedValue', lang);
 }
 
-const searchLang = async () => {
+const handleSearchLang = async () => {
     const params = {
         search: search.value,
         notSearch: []
