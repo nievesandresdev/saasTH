@@ -557,9 +557,14 @@ import { $formatTypeLodging } from '@/utils/helpers';
         }
     }
 
-    function addDeleteImgs(id){
-        form.delete_imgs.push(id);
-        form.images_hotel = form.images_hotel.filter(item => item.id !== id);
+    function addDeleteImgs(image){
+        if(image.id){
+            form.delete_imgs.push(image.id);
+            form.images_hotel = form.images_hotel.filter(item => item.id !== image.id);
+        }else{
+            form.images_hotel = form.images_hotel.filter(item => item.url !== image.url);
+        }
+        
     }
 
     function addIdsDeleteImgs(){
@@ -668,6 +673,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
             let { url, name, type } = item;
             form.images_hotel.unshift({ id: null, url, name, type });
         });
+        console.log('test form.images_hotel',form.images_hotel)
     }
 
     provide('form', form)

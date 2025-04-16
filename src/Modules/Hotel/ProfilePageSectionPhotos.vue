@@ -29,7 +29,7 @@
                         </div>
                         <div 
                             class="absolute z-20 top-2 right-2 bg-white rounded-[3px] hidden group-hover:block cursor-pointer"
-                            @click.stop="deleteImage(image.id)"
+                            @click.stop="deleteImage(image)"
                         >
                             <img class="w-6 h-6" src="/assets/icons/1.TH.DELETE.OUTLINE.svg" alt="">
                         </div>
@@ -120,7 +120,7 @@
         isPreviewOpen.value = false;
     };
 
-    const deleteImage = async (id) =>{
+    const deleteImage = async (image) =>{
         // const { ok, data } = await hotelStorage.$deleteImageByHotel({imageId : id})
         // if (ok) {
         //     toast.warningToast('Imagen eliminada.','top-right');
@@ -128,7 +128,7 @@
         // } else {
         //     toast.errorToast(data?.message,'top-right');
         // }
-        emits('addDeleteImg',id);
+        emits('addDeleteImg',image);
 
     }
 
