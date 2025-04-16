@@ -2,7 +2,7 @@
     <transition name="fade">
     <div 
         v-if="isOpen" 
-        class="bg-[#16161680] w-screen fixed left-0 z-[2000]"   
+        class="bg-[#16161680] w-screen fixed top-0 left-0 z-[2000]"   
         :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closePanel"
     ></div>
