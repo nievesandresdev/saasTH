@@ -28,7 +28,7 @@ export default {
                         Deseamos que su estancia sea cómoda y placentera. Nuestro equipo está a su disposición para cualquier necesidad que pueda surgir.<br/><br/><br/>
                         Te invitamos a explorar nuestra WebApp, donde encontrarás la información sobre nuestras instalaciones y servicios. Además, descubre nuestras recomendaciones de experiencias y restaurantes seleccionados. Lo mejor de la ciudad, sin necesidad de descargar nada.<br/>
                         Prueba nuestra WebApp click <a href="${urlBase}" style="text-decoration: underline;color:#0B6357;">aquí</a>.<br/>
-                        ${urlBase}
+                       
                     </p>
                 `;
             }

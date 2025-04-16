@@ -8,18 +8,6 @@
                 <div class="flex items-center gap-2">
                     <h1 class="text-[22px] font-medium leading-[110%]">Comunicaciones</h1>
                 </div>
-                <div class="flex items-center gap-2">
-                    <h2 class="font-semibold text-sm leading-[120%]">Idiomas</h2>
-                    <TooltipLanguages
-                        size="l"
-                        :top="30"
-                        :right="0"
-                    >
-                        <template #button>
-                            <img class="w-5 h-5" src="/assets/icons/TH.INFO.GREEN.svg">
-                        </template>
-                    </TooltipLanguages>
-                </div>
             </div>
         </div>
     </section>
