@@ -21,7 +21,7 @@
       <div class="flex gap-4">
         <div
             class="px-2 py-4 rounded-lg text-center border-[1px] w-[91px] h-[93px]"
-            v-for="(feed,index) in feedback " :key="feed.icon"
+            v-for="(feed, index, key) in feedback " :key="key"
             :class="{
                 'border-black shadow-md hover:bg-[#FAFAFA]': feed.answeredTime,
                 'border-[#BFBFBF]': !feed.answeredTime,

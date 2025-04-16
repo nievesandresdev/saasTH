@@ -54,6 +54,7 @@ onMounted(async ()=>{
             //if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
+
             //}
         }, 1100);
     }
@@ -70,6 +71,9 @@ onMounted(async ()=>{
                 localStorage.removeItem('loginTime')
                 localStorage.removeItem('redirectTo')
                 localStorage.removeItem('dossierReloaded')
+                localStorage.removeItem('user_email_form')
+                localStorage.removeItem('pass_email_form')
+                localStorage.removeItem('remember_form')
                 // Confirmación opcional
                 event.source?.postMessage("storageCleared", event.origin);
                 await authStore.logout()

@@ -84,36 +84,21 @@
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
-                        <div class="flex justify-between">
-                            <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono principal</label>
-                            <BaseTooltipResponsive
-                                size="l"
-                                :top="-85"
-                                :left="0"
-                            >
-                                <template #button>
-                                    <img class="w-[16px] h-[16px]" src="/assets/icons/TH.INFO.GREEN.svg">
-                                    </template>
-                                    <template #content>
-                                    <p class="text-sm leading-[150%] font-normal">
-                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp
-                                    </p>
-                                </template>
-                            </BaseTooltipResponsive>
-                        </div>
                         <BasePhoneField
                             v-model="form.phone"
                             name="phone"
                             :errors="errors"
                             @blur:validate="validate('phone')"
+                            textLabel="Teléfono principal"
+                            tooltipText='Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp'
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium leading-[140%] inline-block mb-0">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"
                             :errors="errors"
+                            textLabel="Teléfono secundario"
                             @blur:validate="validate('phone_optional')"
                         />
                     </div>
@@ -212,7 +197,7 @@
 
 
             </section>
-            <ProfilePageSectionWifi  @updateToggleWifiNetworks="updateToggleWifiNetworks"/>
+            <ProfilePageSectionWifi @reloadList="reloadWifiList"/>
             <!-- rules -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
                 
@@ -255,7 +240,11 @@
             <!-- gallery -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
                 <h2 class="font-medium text-lg mb-4">Fotos del {{ $formatTypeLodging() }}</h2 >
-                <profilePageSectionPhotos @openModelGallery="openModelGallery()"  @reloadImages="loadHotel"/>
+                <profilePageSectionPhotos 
+                    @openModelGallery="openModelGallery()"  
+                    @addDeleteImg="addDeleteImgs"
+                />
+                <!-- @reloadImages="loadHotel" -->
             </section>
             <!-- social networks -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
@@ -407,7 +396,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
         show_profile: false,
         with_wifi: false,
         website_google: null,
-        show_rules: false,
+        show_rules: false
     });
     const modalGaleryRef = ref(null);
     const countPolicies = ref(0);
@@ -423,17 +412,17 @@ import { $formatTypeLodging } from '@/utils/helpers';
             message: 'Introduce el nombre de tu alojamiento'
         }],
         email: [{
-            required: true,
+            required: false,
             validator: value => !!emailPattern.test(value),
             message: 'Formato de e-mail permitido ej: xxxx@email.com'
         }],
         phone: [{
-            required: true,
+            required: false,
             validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
             message: 'La cantidad de dígitos ingresada es incorrecta'
         }],
         phone_optional: [{
-            required: true,
+            required: false,
             validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
             message: 'La cantidad de dígitos ingresada es incorrecta'
         }],
@@ -443,17 +432,17 @@ import { $formatTypeLodging } from '@/utils/helpers';
             message: 'Ingresa un formato de URL válido'
         }],
         urlInstagram: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
         urlPinterest: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
         urlX: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
@@ -510,13 +499,10 @@ import { $formatTypeLodging } from '@/utils/helpers';
         useScrollToElement();
     })
 
-    provide('form', form)
-    provide('hotelData', hotelData)
-    provide('wifiNetworks', wifiNetworks)
-
     // COMPUTED
     const isChanged = computed(()=>{
-        let with_wifi = wifiNetworks.value.length ? Boolean(hotelData.with_wifi) : false;
+        
+        let with_wifi = wifiNetworks.value.length && someWifiVisible.value ? Boolean(hotelData.with_wifi) : false;
         let show_rules = Number(countPolicies.value) ? Boolean(hotelData.show_rules) : false;
         let c =
             form.name !== hotelData.name || form.type !== hotelData.type ||
@@ -543,6 +529,10 @@ import { $formatTypeLodging } from '@/utils/helpers';
         return c;
     });
 
+    const someWifiVisible = computed(()=>{
+        return wifiNetworks.value?.some(item => item.visible);
+    })
+
     //FUNCTIONS
 
     const normalizePhone = (str) => {
@@ -565,6 +555,20 @@ import { $formatTypeLodging } from '@/utils/helpers';
         if (profilePageSectionMap.value?.initGoogleMap) {
             profilePageSectionMap.value.initGoogleMap()
         }
+    }
+
+    function addDeleteImgs(image){
+        if(image.id){
+            form.delete_imgs.push(image.id);
+            form.images_hotel = form.images_hotel.filter(item => item.id !== image.id);
+        }else{
+            form.images_hotel = form.images_hotel.filter(item => item.url !== image.url);
+        }
+        
+    }
+
+    function addIdsDeleteImgs(){
+        form.images_hotel = form.images_hotel.filter(item => !form.delete_imgs.includes(item.id));
     }
 
     function loadForm(hotel) {
@@ -592,13 +596,29 @@ import { $formatTypeLodging } from '@/utils/helpers';
         form.show_profile = hotel.show_profile || false;
         form.website_google = hotel.website_google || null;
 
-        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) : false;
+        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) && wifiNetworks.value.some(item => item.visible) : false;
         form.show_rules = Number(countPolicies.value) ? Boolean(hotel.show_rules) : false;
+
+        addIdsDeleteImgs();
+    }
+
+    const reloadWifiList = async () =>{
+        wifiNetworks.value = await wifiNetworksStore.$getAll();
+        if(wifiNetworks.value.length == 1){
+            updateToggleWifiNetworks()
+        }
+        validWifiList();
     }
 
     function updateToggleWifiNetworks(){
         form.with_wifi = true;
         submit(false);
+    }
+
+    const validWifiList = ()=>{
+        // console.log('test someWifiVisible',someWifiVisible.value)
+        let val = hotelData.with_wifi ?? false;
+        form.with_wifi = someWifiVisible.value ? val : false;
     }
 
     function updateShowHotel (val) {
@@ -634,6 +654,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
         isloadingForm.value = false
         if(showToast){
             if (ok) {
+                form.delete_imgs = [];
                 toast.warningToast('Cambios guardados con éxito','top-right');
             } else {
                 toast.warningToast(data?.message,'top-right');
@@ -652,7 +673,13 @@ import { $formatTypeLodging } from '@/utils/helpers';
             let { url, name, type } = item;
             form.images_hotel.unshift({ id: null, url, name, type });
         });
+        console.log('test form.images_hotel',form.images_hotel)
     }
+
+    provide('form', form)
+    provide('hotelData', hotelData)
+    provide('wifiNetworks', wifiNetworks)
+    provide('someWifiVisible', someWifiVisible)
 
 </script>
 

@@ -1,4 +1,25 @@
 <template>
+    <div class="flex items-center gap-2 mb-2" v-if="textLabel || tooltipText">
+      <label 
+      v-if="textLabel" 
+      class="text-sm font-medium leading-[140%] block"
+      :class="desactivated ? 'htext-read-only-desactivated' : 'htext-black-100'"
+      >{{ textLabel }}</label>
+      <div v-if="tooltipText" class="max-w-[16px] max-h-[16px]">
+        <Tooltip
+            size="s"
+            :top="24"
+            :left="0"
+        >
+            <template v-slot:button>
+                <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
+            </template>
+            <template v-slot:content>
+                <p class="text-sm leading-[150%]" v-html="tooltipText"></p>
+            </template>
+        </Tooltip>
+      </div>
+    </div>
     <div 
         class="border-[2px] rounded-[6px] cursor-pointer relative flex"
         :class="[
@@ -53,6 +74,7 @@
 import { ref, watch, onMounted, computed, inject, toRefs } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import { useUtilStore } from '@/stores/modules/util';
+import Tooltip from '@/components/Tooltip.vue'
 import axios from 'axios';
 
 const utilStore = useUtilStore();
@@ -84,6 +106,14 @@ const props = defineProps({
   placeholderPhone: {
       type: String,
       default: 'Teléfono de contacto',
+  },
+  tooltipText: {
+    type: String,
+    default: null,
+  },
+  textLabel: {
+    type: String,
+    default: null,
   },
 });
 

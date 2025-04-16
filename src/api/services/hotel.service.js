@@ -36,4 +36,4 @@ export const updateOrStoreHotelCommunication = (data) => apiHttp('POST', `${hote
 export const storeNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/store`, params);
 export const updateByIdNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateById`, params);
 export const updateVisibilityNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateVisibilityNetwork`, params, {showPreloader: false });
-export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null);
+export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null, {showPreloader: false });

@@ -158,6 +158,7 @@ watch(() => route.query.g, async (newId) => {
             stayId: route.params.stayId,
         }
         data.value = await queryStore.$getFeedbackSummaryByGuest(params);
+        console.log('test data',data.value)
         countStayTest.value = data.value.countStayTest;
         if(!showSideBar.value){
             showSideBar.value = true;
