@@ -54,6 +54,7 @@ onMounted(async ()=>{
             //if(hotelData.id != dossierHotelId){
                 //alert('settimeout '+hotelData.name)
                 location.reload();
+                
             //}
         }, 1100);
     }
