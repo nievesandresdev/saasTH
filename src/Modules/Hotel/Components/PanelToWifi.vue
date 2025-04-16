@@ -57,7 +57,7 @@
     />
 </template>
 <script setup>
-import { inject, computed, ref, watch } from 'vue';
+import { inject, computed, ref, watch, reactive } from 'vue';
 import SlidePanel from '@/components/SlidePanel.vue';
 import BaseTextField from '@/components/Forms/BaseTextField.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
@@ -77,9 +77,13 @@ const wifiNetworks = inject('wifiNetworks')
 
 const changePendinginForm = ref(false);
 
-const formRules = {
-    name: [value => value?.trim() ? true : '']
-};
+const formRules = reactive({
+    name: [{
+        required: true,
+        validator: value => !!value,
+        message: ''
+    }]
+})
 const { errors, formInvalid, validateField } = useFormValidation(formNetwork, formRules);
 
 const closePanel = (force = false) => {

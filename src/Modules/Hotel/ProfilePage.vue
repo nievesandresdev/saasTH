@@ -197,7 +197,7 @@
 
 
             </section>
-            <ProfilePageSectionWifi  @updateToggleWifiNetworks="updateToggleWifiNetworks"/>
+            <ProfilePageSectionWifi @reloadList="reloadWifiList"/>
             <!-- rules -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
                 
@@ -240,7 +240,11 @@
             <!-- gallery -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
                 <h2 class="font-medium text-lg mb-4">Fotos del {{ $formatTypeLodging() }}</h2 >
-                <profilePageSectionPhotos @openModelGallery="openModelGallery()"  @reloadImages="loadHotel"/>
+                <profilePageSectionPhotos 
+                    @openModelGallery="openModelGallery()"  
+                    @addDeleteImg="addDeleteImgs"
+                />
+                <!-- @reloadImages="loadHotel" -->
             </section>
             <!-- social networks -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
@@ -392,7 +396,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
         show_profile: false,
         with_wifi: false,
         website_google: null,
-        show_rules: false,
+        show_rules: false
     });
     const modalGaleryRef = ref(null);
     const countPolicies = ref(0);
@@ -408,17 +412,17 @@ import { $formatTypeLodging } from '@/utils/helpers';
             message: 'Introduce el nombre de tu alojamiento'
         }],
         email: [{
-            required: true,
+            required: false,
             validator: value => !!emailPattern.test(value),
             message: 'Formato de e-mail permitido ej: xxxx@email.com'
         }],
         phone: [{
-            required: true,
+            required: false,
             validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
             message: 'La cantidad de dígitos ingresada es incorrecta'
         }],
         phone_optional: [{
-            required: true,
+            required: false,
             validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
             message: 'La cantidad de dígitos ingresada es incorrecta'
         }],
@@ -428,17 +432,17 @@ import { $formatTypeLodging } from '@/utils/helpers';
             message: 'Ingresa un formato de URL válido'
         }],
         urlInstagram: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
         urlPinterest: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
         urlX: [{
-            required: true,
+            required: false,
             validator: value => !value || urlPattern.test(value),
             message: 'Escribe un formato de enlace válido'
         }],
@@ -495,13 +499,10 @@ import { $formatTypeLodging } from '@/utils/helpers';
         useScrollToElement();
     })
 
-    provide('form', form)
-    provide('hotelData', hotelData)
-    provide('wifiNetworks', wifiNetworks)
-
     // COMPUTED
     const isChanged = computed(()=>{
-        let with_wifi = wifiNetworks.value.length ? Boolean(hotelData.with_wifi) : false;
+        
+        let with_wifi = wifiNetworks.value.length && someWifiVisible.value ? Boolean(hotelData.with_wifi) : false;
         let show_rules = Number(countPolicies.value) ? Boolean(hotelData.show_rules) : false;
         let c =
             form.name !== hotelData.name || form.type !== hotelData.type ||
@@ -528,6 +529,10 @@ import { $formatTypeLodging } from '@/utils/helpers';
         return c;
     });
 
+    const someWifiVisible = computed(()=>{
+        return wifiNetworks.value?.some(item => item.visible);
+    })
+
     //FUNCTIONS
 
     const normalizePhone = (str) => {
@@ -550,6 +555,15 @@ import { $formatTypeLodging } from '@/utils/helpers';
         if (profilePageSectionMap.value?.initGoogleMap) {
             profilePageSectionMap.value.initGoogleMap()
         }
+    }
+
+    function addDeleteImgs(id){
+        form.delete_imgs.push(id);
+        form.images_hotel = form.images_hotel.filter(item => item.id !== id);
+    }
+
+    function addIdsDeleteImgs(){
+        form.images_hotel = form.images_hotel.filter(item => !form.delete_imgs.includes(item.id));
     }
 
     function loadForm(hotel) {
@@ -577,13 +591,29 @@ import { $formatTypeLodging } from '@/utils/helpers';
         form.show_profile = hotel.show_profile || false;
         form.website_google = hotel.website_google || null;
 
-        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) : false;
+        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) && wifiNetworks.value.some(item => item.visible) : false;
         form.show_rules = Number(countPolicies.value) ? Boolean(hotel.show_rules) : false;
+
+        addIdsDeleteImgs();
+    }
+
+    const reloadWifiList = async () =>{
+        wifiNetworks.value = await wifiNetworksStore.$getAll();
+        if(wifiNetworks.value.length == 1){
+            updateToggleWifiNetworks()
+        }
+        validWifiList();
     }
 
     function updateToggleWifiNetworks(){
         form.with_wifi = true;
         submit(false);
+    }
+
+    const validWifiList = ()=>{
+        // console.log('test someWifiVisible',someWifiVisible.value)
+        let val = hotelData.with_wifi ?? false;
+        form.with_wifi = someWifiVisible.value ? val : false;
     }
 
     function updateShowHotel (val) {
@@ -619,6 +649,7 @@ import { $formatTypeLodging } from '@/utils/helpers';
         isloadingForm.value = false
         if(showToast){
             if (ok) {
+                form.delete_imgs = [];
                 toast.warningToast('Cambios guardados con éxito','top-right');
             } else {
                 toast.warningToast(data?.message,'top-right');
@@ -638,6 +669,11 @@ import { $formatTypeLodging } from '@/utils/helpers';
             form.images_hotel.unshift({ id: null, url, name, type });
         });
     }
+
+    provide('form', form)
+    provide('hotelData', hotelData)
+    provide('wifiNetworks', wifiNetworks)
+    provide('someWifiVisible', someWifiVisible)
 
 </script>
 

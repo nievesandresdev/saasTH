@@ -72,7 +72,7 @@
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
 
-    const emits = defineEmits(['openModelGallery','reloadImages']);
+    const emits = defineEmits(['openModelGallery','reloadImages','addDeleteImg']);
 
     // DATA
     const form = inject('form');
@@ -121,13 +121,14 @@
     };
 
     const deleteImage = async (id) =>{
-        const { ok, data } = await hotelStorage.$deleteImageByHotel({imageId : id})
-        if (ok) {
-            toast.warningToast('Imagen eliminada.','top-right');
-            emits('reloadImages')
-        } else {
-            toast.errorToast(data?.message,'top-right');
-        }
+        // const { ok, data } = await hotelStorage.$deleteImageByHotel({imageId : id})
+        // if (ok) {
+        //     toast.warningToast('Imagen eliminada.','top-right');
+        //     emits('reloadImages')
+        // } else {
+        //     toast.errorToast(data?.message,'top-right');
+        // }
+        emits('addDeleteImg',id);
 
     }
 

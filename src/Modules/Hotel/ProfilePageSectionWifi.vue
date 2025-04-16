@@ -2,10 +2,10 @@
     <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
         <div class="max-w-profile">
             <div class="flex mt-2 items-center relative">
-                <h2 class="font-medium text-lg">Servicio de WiFi</h2>
+                <h2 class="font-medium text-lg">Servicio de WiFi {{ String(Boolean(someWifiVisible)) }}</h2>
                 <span 
                     class="text-sm font-semibold leading-[120%] ml-auto mr-1"
-                    :class="{'opacity-50':wifiNetworks.length == 0}"
+                    :class="{'opacity-50':wifiNetworks.length == 0 || !someWifiVisible}"
                 >Mostrar en la WebApp</span>
                 <div
                     tabindex="0" 
@@ -15,17 +15,19 @@
                     <ToggleButton
                         v-model="form.with_wifi"
                         id="toggle-wifi"
-                        :disabled="wifiNetworks.length == 0"
+                        :disabled="wifiNetworks.length == 0 || !someWifiVisible"
                     />
                 </div>
                 <!-- error text -->
                 <div 
                     class="absolute top-[30px] right-0"
-                    v-if="clickOnToggle && !wifiNetworks.length"
+                    v-if="clickOnToggle && (!wifiNetworks.length || !someWifiVisible)"
                 >
                     <div class="flex items-center">
                         <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg"> 
-                        <p class="text-xs leading-[90%] htext-alert-negative">Añade una red de WiFi</p>        
+                        <p class="text-xs leading-[90%] htext-alert-negative">
+                            {{ !wifiNetworks.length ? 'Añade una red de WiFi' : 'No hay redes visibles'}}
+                        </p>        
                     </div>
                 </div>
                 <!-- :disabled="loadingChangeStatusAttended" -->
@@ -78,7 +80,7 @@
     <PanelToWifi :isOpen="isOpenPanelToWifi" @reloadList="reloadList" />
 </template>
 <script setup>
-import { inject, ref, provide, reactive, watch, nextTick } from 'vue';
+import { inject, ref, provide, reactive, watch} from 'vue';
 import PanelToWifi from "./Components/PanelToWifi.vue";
 import ToggleButton from '@/components/Buttons/ToggleButton.vue';
 
@@ -90,18 +92,21 @@ const toast = useToastAlert();
 import { useMockupStore } from '@/stores/modules/mockup';
 const mockupStore = useMockupStore();
 
-const emit = defineEmits(['updateToggleWifiNetworks'])
+const emit = defineEmits(['reloadList'])
 
 const isOpenPanelToWifi = ref(false);
 const clickOnToggle = ref(false);
 
 const form = inject('form')
 const wifiNetworks = inject('wifiNetworks')
+const someWifiVisible = inject('someWifiVisible')
+
 const formNetwork = reactive({
     networkId: null,
     name: null,
     password: null
 })
+
 
 const openPanelToCreate = (data = null) =>{
     formNetwork.networkId = data?.id ?? null;
@@ -112,11 +117,9 @@ const openPanelToCreate = (data = null) =>{
 }
 
 const reloadList = async () =>{
-    wifiNetworks.value = await wifiNetworksStore.$getAll();
-    if(wifiNetworks.value.length == 1){
-        emit('updateToggleWifiNetworks');
-    }
+    emit('reloadList');
 }
+
 
 const updateVisibility = async (data) =>{
     let test = await wifiNetworksStore.$updateVisibility(data);
@@ -125,6 +128,7 @@ const updateVisibility = async (data) =>{
     }else{
         toast.errorToast('Error','top-right');
     }
+    reloadList();
 }
 
 
@@ -136,7 +140,7 @@ watch(isOpenPanelToWifi, (newVal)=>{
     }else{
         mockupStore.$setIframeUrl('/alojamiento');
     }
-    console.log('test isOpenPanelToWifi',newVal)
+    // console.log('test isOpenPanelToWifi',newVal)
 })
 provide('isOpenPanelToWifi', isOpenPanelToWifi)
 provide('formNetwork',formNetwork)
