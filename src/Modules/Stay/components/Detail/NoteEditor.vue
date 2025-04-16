@@ -4,7 +4,6 @@
         <div v-if="type !== 'edit'" class="w-[362px] mb-4">
             <BaseSelectField
                 :icon_left="iconLeftDropdown"
-                textLabel="Selecciona el medio de la reserva"
                 :options="dataDetail.optionsListNote"
                 v-model="noteTo"
                 mandatory
@@ -28,17 +27,17 @@
         />
     </div>
     <div class="mt-4 flex justify-end items-center">
-        <button @click="closeEdit" class="text-sm font-medium leading-[110%] underline mr-8"  v-if="text && titleFull || type == 'edit'">
+        <span @click="closeEdit" class="text-sm font-medium leading-[110%] underline mr-8 cursor-pointer"  v-if="text && titleFull || type == 'edit'">
             Cancelar
-        </button>
-        <button 
-            class="hbtn-primary px-4 py-3 text-sm leading-[110%]"
+        </span>
+        <span 
+            class="hbtn-primary px-4 py-3 text-sm leading-[110%] cursor-pointer"
             @click="submit"
             :class="{'primary-disabled':!validate}"
             :disabled="!validate"
         >
             Guardar nota 
-        </button>
+        </span>
     </div>
 </template>
 <script setup>
@@ -94,10 +93,11 @@ const submit = async () =>{
    
 }
 
-const closeEdit = () =>{
+const closeEdit = (event) =>{
     text.value = "<p><br></p>";
     noteId.value = null; 
     titleFull.value = false;    
+    event.target.blur();
 }
 
 const validate = computed(()=>{

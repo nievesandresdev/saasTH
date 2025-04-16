@@ -5,6 +5,7 @@ import * as confortServices from '@/api/services/confort.service'
 import { useHotelStore } from '@/stores/modules/hotel';
 
 export const useConfortStore = defineStore('confort', () => {
+    
 
     const hotelStore = useHotelStore();
     
@@ -19,7 +20,9 @@ export const useConfortStore = defineStore('confort', () => {
         // console.log(`'type: '${type}, 'url: '${url}`)
         if (type === 'CDN') return url;
         if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
+        if (url?.includes('storage/subservices')) return `${URL_STORAGE}${url}`;
         if (!type) return URL_STORAGE+'/storage/confort'+url;
+        
         return `${URL_STORAGE}${url}`;
     }
 

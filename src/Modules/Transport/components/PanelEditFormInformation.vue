@@ -26,6 +26,7 @@ Opciones del servicio:
                 mandatory
                 countType="static"
                 minHeight="180px"
+                @validation="textTitleFull = $event"
             />
         </div>
         <div class="space-y-2">
@@ -33,8 +34,10 @@ Opciones del servicio:
             <BaseTextareaField
                 v-model="form.hire"
                 :placeholder="`Ej: Para reservar tu cita, contacta con la recepción del hotel o visita directamente nuestro salón. También puedes gestionar tu reserva a través de la página web.`"
-                class-content="flex-1"
+               class-content="flex-1"
                 name="hire"
+                :errors="errors"
+                @blur:validate="validate('hire')"
             />
         </div>
         <div class="space-y-2">
@@ -48,7 +51,7 @@ Opciones del servicio:
                 @blur:validate="validate('link_url')"
             />
         </div>
-        <div class="space-y-2">
+        <!-- <div class="space-y-2">
             <label class="text-sm font-medium">Precio</label>
             <div class="flex space-x-4">
                 <template v-for="(item, indexRadio) in radioItems">
@@ -97,7 +100,7 @@ Opciones del servicio:
                     Є
                 </span>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -144,7 +147,7 @@ watch(() => form.type_price, () => {
         return !!value ? true : 'Este campo es obligatorio';
       },
     ];
-    validate('price');
+    // validate('price');
 });
 watch(() => form.price, () => {
     formRules.price =  [
@@ -155,7 +158,7 @@ watch(() => form.price, () => {
         return !!value ? true : 'Este campo es obligatorio';
       },
     ];
-    validate('price');
+    // validate('price');
 });
 
 const resetPrice = (v) => {

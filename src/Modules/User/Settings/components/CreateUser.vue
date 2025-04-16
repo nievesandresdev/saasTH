@@ -71,7 +71,11 @@
                 <div class="mt-[10px]">
                   <label class="text-sm font-medium">Nombre *</label>
                   <div class="relative">
-                      <input
+                    <BaseTextField
+                          placeholder="Nombre"
+                          v-model="form.name"
+                      />
+                      <!-- <input
                           v-model="form.name"
                           type="text"
                           class="w-full h-10 p-3 text-sm border rounded-6 hoverForm rounded-md hinput-green mt-1"
@@ -81,12 +85,16 @@
                             'hborder-black-100 htext-black-100 font-medium': form.name,
                             'hborder-gray-400 htext-gray-500': !form.name
                           }"
-                      />
+                      /> -->
                   </div>
                 </div>
                 <div class="mt-4">
                     <label class="text-sm font-medium">Apellidos *</label>
-                    <div class="relative">
+                    <BaseTextField
+                          placeholder="Apellidos"
+                          v-model="form.lastname"
+                      />
+                    <!-- <div class="relative">
                         <input
                             v-model="form.lastname"
                             type="text"
@@ -98,7 +106,7 @@
                               }"
                             placeholder="Apellidos"
                         />
-                    </div>
+                    </div> -->
                 </div>
                 <div class="mt-4 flex flex-col gap-[7px]">
                   <label class="text-sm font-medium">Teléfono móvil </label>
@@ -118,18 +126,18 @@
                             @errorMessage="errorEmailText = $event"
                             @handleError="errorEmail = $event"    
                         />
-                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                        <!-- <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="mt-4">
                     <label class="text-sm font-medium">Contraseña *</label>
                     <div class="relative">
-                        <input
+                        <!-- <input
                             v-model="form.password"
                             type="password"
                             class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
@@ -141,19 +149,33 @@
                             }"
                             placeholder="Contraseña de acceso al sistema"
                             autocomplete="nope"
+                        /> -->
+                        <input
+                            v-model="form.password"
+                            type="password"
+                            class="w-full th-Input mt-1"
+                            :class="{'border-input-error' : errorPassword}"
+                            placeholder="Contraseña de acceso al sistema"
+                            autocomplete="nope"
                         />
-                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPassword">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <p class="text-xs htext-alert-negative">Debe tener minimo 8 caracteres</p>
+                        <div v-if="errorPassword" class="flex items-center mt-1">
+                            <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                            <p class="text-xs leading-[90%] htext-alert-negative">Debe tener minimo 8 caracteres</p>
                         </div>
                     </div>
                 </div>
                 <div class="mt-4">
                     <label class="text-sm font-medium">Confirmar contraseña *</label>
                     <div class="relative">
-                        <input
+                      <input
+                            v-model="form.password_confirmation"
+                            type="password"
+                            class="w-full th-Input mt-1"
+                            :class="{'border-input-error' : errorPasswordMatch}"
+                            placeholder="Confirmar Contraseña"
+                            autocomplete="nope"
+                        />
+                        <!-- <input
                             v-model="form.password_confirmation"
                             type="password"
                             class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
@@ -165,12 +187,10 @@
                             }"
                             placeholder="Confirmar Contraseña"
                             autocomplete="nope"
-                        />
-                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorPasswordMatch">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                            </svg>
-                            <p class="text-xs htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
+                        /> -->
+                        <div v-if="errorPasswordMatch" class="flex items-center mt-1">
+                            <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                            <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
                         </div>
                     </div>
                 </div>
@@ -214,7 +234,17 @@
                       <span class="text-sm font-medium mb-1">Puesto de Trabajo</span>
                     </div>
                     <div class="relative w-full">
-                      <input
+                      <input 
+                          id="workPositionInput"
+                          @click.stop="toggleModalWorkPosition"
+                          readonly
+                          class="w-full th-Input cursor-pointer select-hover" 
+                          :class="{
+                            'placeholder-selected': selectedWorkPositionName != 'Elige el puesto de trabajo'
+                          }"
+                          :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
+                      />
+                      <!-- <input
                           type="text"
                           id="workPositionInput"
                           @click.stop="toggleModalWorkPosition"
@@ -225,7 +255,7 @@
                             'placeholder:text-[#A0A0A0]  border-gray-300': selectedWorkPositionName == 'Elige el puesto de trabajo'
                           }"
                           :placeholder="selectedWorkPositionName ?? 'Selecciona un puesto de trabajo'"
-                        />
+                        /> -->
                       <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <img src="/assets/icons/1.TH.I.dropdownBig.svg">
                       </div>
@@ -300,6 +330,7 @@
   import { useMouseHandle } from '@/composables/useMouseHandle';
   import ModalDeleteWork from './ModalDeleteWork.vue';
   import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+  import BaseTextField from '@/components/Forms/BaseTextField';
   import BaseEmailFieldLive from '@/components/Forms/BaseEmailFieldLive.vue';
   import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
   import AccessPermissions from './AccessPermisions.vue';

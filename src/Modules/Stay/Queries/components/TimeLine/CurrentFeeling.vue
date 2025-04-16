@@ -9,10 +9,10 @@
             class="w-full h-full"
             :src="`/assets/icons/emojis/1.TH.Emojis${ timeLineData[timeLineData.currentPeriod].feeling }.svg`"
         >
+        <!-- (timeLineData.currentPeriod == 'in-stay' || timeLineData.currentPeriod == 'post-stay') && -->
         <img
             v-else-if="
                 timeLineData && 
-                (timeLineData.currentPeriod == 'in-stay' || timeLineData.currentPeriod == 'post-stay') &&
                 !timeLineData[timeLineData.currentPeriod].feeling
             "
             class="w-full h-full" 

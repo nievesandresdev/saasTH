@@ -6,7 +6,7 @@
       <div class="relative flex w-1/3" ref="ref_dropdown_container" :class="{'mb-4':data_filter.search_terms}">
         <input
           type="text"
-          class="pl-10 text-sm border border-[#BFBFBF] h-11 rounded w-full hover:border-[#34A98F] hover:placeholder:text-[#34A98F]"
+          class="th-Input p-input-icon-left w-full"
           placeholder="Buscar por nombre o por puesto de trabajo"
           v-model="formFilter.search_terms"
           :class="{'border-dark':formFilter.search_terms}"

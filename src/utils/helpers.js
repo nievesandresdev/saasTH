@@ -125,6 +125,26 @@ const $urlBaseWebapp = (subdomainChain, slugHotel) => {
   return urlBase;
 };
 
+const $urlBaseWebappField = (subdomainChain, slugHotel, typeChain = 'INDEPENDENT') => {
+  const GUEST_URL = process.env.VUE_APP_GUEST_URL;
+
+  let urlBase = GUEST_URL.replace('subdomain', subdomainChain);
+
+
+  if (typeChain === 'CHAIN') {
+    //reemplaza 'webapp' por slugHotel
+    urlBase = urlBase.replace('webapp',slugHotel);
+  } else {
+    //elimina '/webapp' 
+    urlBase = urlBase.replace('/webapp', '');
+  }
+  
+
+  urlBase = urlBase.replace('.io', '.app');
+  
+  return urlBase;
+};
+
 
 const $formatImage = (payload) => {
   const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
@@ -207,6 +227,7 @@ export {
     $formatTimestampDate,
     $getPropertyInUrl,
     $urlBaseWebapp,
+    $urlBaseWebappField,
     $formatImage,
     $formatTypeLodging,
     $formatNameLodging,

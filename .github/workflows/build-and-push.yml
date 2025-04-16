@@ -15,6 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set npm registry to public
+        run: npm config set registry https://registry.npmjs.org/
+
       # Crear el archivo .env con las variables necesarias
       - name: Create .env file
         run: |
@@ -60,7 +63,10 @@ jobs:
 
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
-
+          
+      - name: Clean npm cache
+        run: npm cache clean --force
+        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 

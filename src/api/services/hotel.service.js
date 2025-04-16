@@ -1,7 +1,13 @@
 import { apiHttp } from '../AxiosConfig'
 import {
     hotelPath,
+    hosterPath,
+    wifiNetworksPath
 } from '../config/apiRoute'
+
+
+export const deleteImageByHotelApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/deleteImageByHotel`, data, {showPreloader: false });
+
 
 export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
 export const getHotelsByUser = () => apiHttp('GET', `${hotelPath}/getHotelsByUser`);
@@ -19,3 +25,15 @@ export const verifySubdomainExistPerHotel = (params, config) => apiHttp('GET', `
 export const updateCustomization = (data, config={}) => apiHttp('POST', `${hotelPath}/customization`, data, config);
 export const updateShowButtons = (data) => apiHttp('POST', `${hotelPath}/updateShowButtons`, data);
 export const handleShowReferrals = () => apiHttp('POST', `${hotelPath}/handleShowReferrals`, {},{showPreloader: false});
+
+
+//communication
+export const getHotelCommunication = () => apiHttp('POST', `${hotelPath}/communication/getHotelCommunication`);
+export const updateOrStoreHotelCommunication = (data) => apiHttp('POST', `${hotelPath}/communication/updateOrStoreHotelCommunication`, data);
+
+
+//wifi networks
+export const storeNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/store`, params);
+export const updateByIdNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateById`, params);
+export const updateVisibilityNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateVisibilityNetwork`, params, {showPreloader: false });
+export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null);

@@ -266,6 +266,11 @@ export const useHotelStore = defineStore('hotel', () => {
         const response = await hotelService.handleShowReferrals();
         return response;
     }
+
+    async function $deleteImageByHotel (data) {
+        const response = await hotelService.deleteImageByHotelApi(data);
+        return response;
+    }
     
 
 
@@ -298,7 +303,8 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateSenderMailMask,
         hotelsUser,
         hotelsParent,
-        $handleDefaultHotel
+        $handleDefaultHotel,
+        $deleteImageByHotel
     }
 
 })

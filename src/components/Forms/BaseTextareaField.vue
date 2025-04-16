@@ -1,4 +1,9 @@
 <template>
+    <label 
+    v-if="textLabel" 
+    class="text-sm font-medium leading-[140%] block mb-2 htext-black-100"
+    >{{ textLabel }}</label>
+    <p v-if="textDescription" class="text-sm mb-2 leading-[140%]">{{ textDescription }}</p>
     <div class="relative" :class="classContent">
         <img
             v-if="prependInnerIcon"
@@ -12,19 +17,20 @@
                 :rows="rows"
                 :value="modelValue"
                 @input="updateValue($event)"
-                class="w-full h-[108px] max-h-[225px] rounded-[6px] border"
-                :class="`${customInputClass} ${modelValue ? 'hborder-black-100 hinput-green' : disabled ? 'hborder-gray-300' : 'hborder-gray-400 hinput-green'} ${error ? 'hinput-error' : ''}`"
+                @focus="isFocused = true"
+                @blur="isFocused = false"
+                class="w-full h-[108px] max-h-[225px] rounded-[6px] border-[2px]"
+                :class="`${customInputClass} ${borderClasses}`"
                 :placeholder="errors?.[name] !== undefined && errors?.[name] !== true ? errors?.[name] : placeholder"
                 :minlength="min"
                 :maxlength="max"
                 @keyup.enter="searchbyenter"
                 :disabled="disabled"
-                :style="{ backgroundColor: disabled ? 'white' : '', color: disabled ? '#A0A0A0' : '' }"
             />
             
             <div v-if="errors?.[name] !== true || max" class="flex justify-between">
-                <p class="text-[10px] font-medim text-left mt-[4px] text-red-600">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
-                <p class="text-[12px] htext-gray-500 text-right mt-[4px]">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
+                <p class="text-xs text-left leading-[90%] htext-alert-negative">{{ errors?.[name] !== true && modelValue ? errors?.[name] : '' }}</p>
+                <p class="text-xs font-medium leading-[90%] htext-gray-500 text-right">{{ max ? `${modelValue?.length || 0}/${max || 0}` : '' }}</p>
             </div>
         </div>
     </div>
@@ -46,7 +52,7 @@ const props = defineProps({
     },
     classInput: {
         type: String,
-        default: 'p-3 text-sm min-h-[114px]'
+        default: 'p-3 text-sm font-medium leading-[150%] min-h-[114px] htext-black-100 bg-white'
     },
     placeholder: {
         type: String,
@@ -79,9 +85,18 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    textLabel: {
+        type: String,
+        default: null,
+    },
+    textDescription: {
+        type: String,
+        default: null,
+    },
 });
 
 const textareaRef = ref(null);
+const isFocused = ref(false);
 
 const searchbyenter = () => {
     emit('enter:search');
@@ -101,15 +116,32 @@ function autoResize() {
         textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`; // Ajusta según el contenido
     }
 }
+// ${modelValue ? 'hborder-black-100' : disabled ? 'hborder-gray-300' : 'hborder-gray-400'} ${error ? 'hinput-error' : ''}
+const borderClasses = computed(() => {
+  if(props.disabled) return 'hborder-disabled-input'
+  if(props.error || (Object.keys(props.errors).length > 0 && props.errors?.['name'] !== true)) return 'hborder-alert-negative'
+  if(isFocused.value) return 'hborder-green-600'
+  return 'hborder-gray-400';
+});
 
 const customInputClass = computed(() => {
     let c = props.classInput;
     if (props.errors?.[props?.name] !== undefined && props.errors?.[props?.name] !== true) {
-        c += ' hinput-error';
+        c += ' hborder-alert-negative';
     }
     return c;
 })
 </script>
 
 <style lang="scss" scoped>
+textarea::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8D9196;
+  line-height: 140%; /* 19.6px */
+}
+
+textarea {
+    resize: none;
+}
 </style>

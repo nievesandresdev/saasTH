@@ -112,7 +112,7 @@ const translatePeriod = {
 };
 
 function goDetailStay(id,trial, guest) {
-    console.log('test guest',guest)
+    // console.log('test guest',guest)
     let queryParams = { search: searchUpdate.value, g : guest.id };
     if(trial){
         queryParams = { search: searchUpdate.value, g : guest.id, trial: true }

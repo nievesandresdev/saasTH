@@ -16,7 +16,7 @@
                 Cada cambio que realices en la configuración se traducirá automáticamente del español a todos los idiomas disponibles.
             </p>
             <br>
-            <div class="grid grid-cols-3 gap-1">
+            <div class="grid grid-cols-3 gap-2">
                 <template v-for="(language, index) in languages">
                     <div class="flex items-center">
                         <img :src="language.img" class="w-4 h-4">
@@ -37,5 +37,9 @@ const languages = [
         { value: 'en', label: 'Inglés', img: '/assets/icons/flags/en.svg' },
         { value: 'it', label: 'Italiano', img: '/assets/icons/flags/it.svg' },
         { value: 'fr', label: 'Francés', img: '/assets/icons/flags/fr.svg' },
+        { value: 'nl', label: 'Holandés', img: '/assets/icons/flags/nl.svg' },
+        { value: 'ca', label: 'Catalán', img: '/assets/icons/flags/ca.svg' },
+        { value: 'eu', label: 'Euskera', img: '/assets/icons/flags/eu.svg' },
+        { value: 'gl', label: 'Gallego', img: '/assets/icons/flags/gl.svg' },
     ]
 </script>

@@ -103,15 +103,7 @@
                     <h6 class="text-sm htext-black-100 font-medium truncate-2 h-[40px]">{{ experience.title }}</h6>
                     <div class="mt-[12px] flex items-center justify-between">
                         <span class="text-sm htext-black-100 font-semibold truncate-2">
-                            <template v-if="experience.name_api == 'viator' || (experience.name_api == 'thehoster' && experience.type_price == 2)">
-                                Desde {{ experience.from_price }}€
-                            </template>
-                            <template v-else-if="experience.type_price == 1">
-                                {{ experience.from_price }}€
-                            </template>
-                            <template v-else="experience.type_price == 3">
-                                Gratis 
-                            </template>
+                            {{ serviceStore.calPrice(experience) }}                            
                         </span>
                         <img v-if="experience.name_api === 'viator'" src="/assets/icons/TH.VIATOR.svg" alt="VIATOR">
                     </div>
@@ -142,6 +134,7 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 const emits = defineEmits(['reloadExperiences', 'edit-viator', 'edit-hoster']);
 
+const serviceStore = inject('serviceStore');
 const hotelStore = inject('hotelStore');
 const experienceStore = inject('experienceStore');
 const hotelData = inject('hotelData');
@@ -456,7 +449,7 @@ function openModalChangeInForm () {
         modalChangePendinginForm.value = false;
     });
 }
-  
+
 
 </script>
 

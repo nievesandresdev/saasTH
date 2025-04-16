@@ -1,12 +1,12 @@
 <template>
-  <div class="time-picker">
+  <div class="relative">
       <div class="input-container">
         <!-- ${error ? 'hinput-error' : 'hinput-green'} -->
           <input 
               type="time" 
               :value="formattedTime || modelValue" 
-              class="rounded-[6px] text-sm font-medium px-1 border hinput h-10 w-[60px] text-center"
-              :class="`${customClasses} ${formattedTime || modelValue ? 'hborder-black-100' : 'hborder-gray-400'} ${disabled ? '' : 'hinput-green'}`"
+              class="th-Input p-input-time rounded-[6px] w-[60px] text-center"
+              :class="`${customClasses}`"
               :placeholder="placeholder"
               :disabled="disabled" 
               @input="handleInput"
@@ -66,19 +66,7 @@ export default {
     }
   },
   computed: {
-      computeClasses() {
-          // return {
-          //     'h-10 rounded-[6px] text-sm font-medium px-1 border hinput': true,
-          //     'hborder-black-100': this.modelValue && !this.error && !this.isFocused,
-          //     'hborder-gray-400 htext-gray-400': (!this.modelValue || this.modelValue === '') && !this.error && !this.isFocused,
-          //     'w-24 text-center': !this.customClasses,
-          //     'hborder-alert-negative htext-alert-negative': this.error,
-          //     'hoverForm': !this.error,
-          //     'no-hover-input': this.disabled && !this.error,
-          //     ...this.customClasses
-          // }
-          return '';
-      }
+      //
   },
   methods: {
     handleInput(event) {
@@ -93,7 +81,10 @@ export default {
       } else {
         this.error = false;
       }
-      this.$emit('update:modelValue', this.formattedTime);
+      
+      if(this.formattedTime) {
+        this.$emit('update:modelValue', this.formattedTime);
+      }
     },
     handleFocus() {
       this.isFocused = true;
@@ -114,28 +105,5 @@ export default {
 <style scoped>
 input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
-}
-.time-picker {
-  position: relative;
-}
-.input-container {
-  display: flex;
-  align-items: center;
-}
-/* .hinput-green {
-  border-color: #38A169;
-}
-.hborder-black-100 {
-  border-color: #1F2937;
-} */
-.hborder-alert-negative {
-  border-color: #DC2626; /* Borde rojo */
-}
-.htext-alert-negative {
-  color: #DC2626; /* Texto rojo */
-}
-.no-hover-input {
-  color: initial !important;
-  border: 1px solid #333 !important;
 }
 </style>

@@ -35,8 +35,9 @@ const params = new URLSearchParams(window.location.search)
 
 //computed current_hotel
 const current_hotel = computed(() => authStore.current_hotel?.name)
-
 const dossierHotelId = process.env.VUE_APP_DOSSIER_HOTEL_ID //dossier 
+
+
 onMounted(async ()=>{
     //await chainStore.$getChainBySubdomain();
     mockupStore.$setIframeUrl('')

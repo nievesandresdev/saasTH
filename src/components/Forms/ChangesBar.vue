@@ -5,22 +5,24 @@
         :style="`width: calc(100% - 650px)`"
     > -->
         <div class="flex w-full justify-between">
-            <button 
-                class="text-base leading-[110%] font-medium underline"
-                :class="{'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200' : existingChanges}"
+            <span 
+                :class="[
+                    {'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200 cursor-pointer' : existingChanges},
+                    textCancelClass
+                ]"
                     :disabled="!existingChanges"
                 @click="cancelChanges"
             >
                 Cancelar
-            </button>
-            <button 
-                class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium"
+            </span>
+            <span 
+                class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium cursor-pointer"
                 :class="{'cta-disabled':!validChanges}"
                 :disabled="!validChanges"
                 @click="submit"
             >
                 Guardar
-            </button>
+            </span>
         </div>
     </section>
 </template>
@@ -37,6 +39,10 @@ defineProps({
     forceBottom:{
         type:Boolean,
         default:false
+    },
+    textCancelClass:{
+        type:String,
+        default:'text-base leading-[110%] font-medium underline'
     }
 })
 const emit = defineEmits(['cancel','submit'])

@@ -40,13 +40,14 @@
                     <template v-if="stepCurrent === 0">
                         <PanelEditHosterFormInformation />
                     </template>
-                    <template v-else="stepCurrent === 1">
-                    <PanelEditHosterFormPhotos @open:gallery="openGallery" />
+                    <template v-else-if="stepCurrent === 1">
+                        <PanelEditHosterFormCharacteristics />
+                    </template>
+                    <template v-else="stepCurrent === 2">
+                        <PanelEditHosterFormPhotos @open:gallery="openGallery" />
                     </template>
                 </div>    
             </div>
-            <!-- {{form}}
-            {{formDefault}} -->
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="panelEditHosterActive === 'EDIT'">
                     <button
@@ -57,7 +58,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || form.images.length <= 0 || (form.type == 2 && subservicesData.length <= 0) || (form.type == 1 && validCharacteristics(form))"
                         @click="submitSave"
                     >
                         Guardar
@@ -72,11 +73,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent != 0)"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !formIsFull || (form.images.length <= 0 && stepCurrent == 2) || (stepCurrent == 1 && form.type == 2 && subservicesData.length <= 0) || (stepCurrent == 1 && form.type == 1 && validCharacteristics(form))"
                         @click="nextTab"
                     >
-                        {{ stepCurrent === 0 ? 'Siguiente' : 'Crear' }}
-                        
+                        {{ stepCurrent < 2 ? 'Siguiente' : 'Crear' }}
                     </button>
                 </template>
             </div>
@@ -132,19 +132,29 @@ import BaseStepper from '@/components/BaseStepper.vue';
 import BaseTab from '@/components/BaseTab.vue';
 import PanelEditHosterModalDelete from './PanelEditHosterModalDelete.vue';
 import PanelEditHosterFormInformation from './PanelEditHosterFormInformation.vue';
+import PanelEditHosterFormCharacteristics from './PanelEditHosterFormCharacteristics.vue';
 import PanelEditHosterFormPhotos from './PanelEditHosterFormPhotos.vue';
 import PanelEditHosterModalCancelChange from './PanelEditHosterModalCancelChange.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 
 const emit = defineEmits(['load:resetPageData']);
 
+import { ServiceTypeEnum } from "@/shared/enums/ServiceTypeEnum";
+
 // STORE
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
 
-    // COMPOSABLES
-    import { useToastAlert } from '@/composables/useToastAlert'
-    const toast = useToastAlert();
+import { useServiceStore } from '@/stores/modules/service'
+const serviceStore = useServiceStore();
+const { form, itemSelected, formDefault } = serviceStore;
+
+// COMPOSABLES
+import { useToastAlert } from '@/composables/useToastAlert'
+const toast = useToastAlert();
+
+import { useService } from '@/composables/useService';
+const { validCharacteristics } = useService();
 
 // INJECT
 const hotelStore = inject('hotelStore');
@@ -152,99 +162,105 @@ const experienceStore = inject('experienceStore');
 const changePendingInForm = inject('changePendingInForm');
 const modalChangePendinginForm = inject('modalChangePendinginForm');
 const panelEditHosterActive = inject('panelEditHosterActive');
-
-
+const languagesData = inject('languagesData');
 
 // DATA
+const subservicesData = ref([]);
 const stepCurrent = ref(0);
 const modalGaleryRef  = ref(null);
 const modalCancelChangeRef  = ref(null);
 const panelEditHosterModalDeleteRef  = ref(null);
 
-const form = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-});
-const itemSelected = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-});
-const formDefault = reactive({
-    id: null,
-    name: '',
-    description: '',
-    hire: '',
-    link_url: '',
-    type_price: 1,
-    price: null,
-    images: [],
-});
 const formRules = reactive({
     link_url: [value => !value?.trim() || (!!value?.trim() && isValidURL(value))  ? true : 'El formato introducido es incorrecto'],
-    name: [value => !!value ? true : 'Este campo es obligatorio'],
-    hire: [value => !!value ? true : 'Este campo es obligatorio'],
-    description: [value => !!value ? true : 'Este campo es obligatorio'],
-    price: [
-      (value) => {
-        if (form.type_price === 3) {
-          return true; // Si es 3, no validar
-        }
-        return !!value ? true : 'Este campo es obligatorio';
-      },
-    ]
+    name: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    hire: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
+    description: [{
+        required: true,
+        validator: value => !!value,
+        message: 'Este campo es obligatorio'
+    }],
 });
+
 function isValidURL(url) {
     const pattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(:[0-9]{1,5})?(\/.*)?$/;
     return pattern.test(url);
 }
 
-const { errors, validateField, formInvalid, formIsFull } = useFormValidation(form, formRules);
+const {  errors, validateField, formInvalid, formIsFull, validateAllFields, isFormFull } = useFormValidation(form, formRules);
 
 const isLoadingForm = ref(false);
 const urlsimages = ref([]);
-const modalDeleteFacilityRef = ref(null);
 const modalDeleteRef = ref(null);
-const modalCancelChangeFacilityRef = ref(null);
 
 const previewUrl = ref(null);
 const isPreviewOpen = ref(false);
 
 // COMPUTED
 const steps = computed(() => {
-    return [{name: 'Información', value: 0, disabled: false}, {name: 'Galeria', value: 1, disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value}];
+    return [
+        {
+            name: 'Información',
+            value: 0,
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+        },
+        {
+            name: 'Caracteristicas',
+            value: 1,
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value
+        },
+        {
+            name: 'Galeria',
+            value: 2,
+            disabled: formInvalid.value || !changesform.value || isLoadingForm.value || !formIsFull.value || (form.type == 2 && subservicesData.value.length <= 0) || (form.type == 1 && validCharacteristics(form))
+        },
+    ];
 });
 const changesform = computed(() => {
     let valid = (normalize(form.name) !== normalize(itemSelected.name)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.hire) !== normalize(itemSelected.hire)) ||
         (normalize(form.link_url) !== normalize(itemSelected.link_url)) ||
-        (Number(form.type_price) !== Number(itemSelected.type_price)) ||
-        (Number(form.price) !== Number(itemSelected.price)) ||
+        //
+        (normalize(form.type) !== normalize(itemSelected.type)) ||
+        (normalize(form.price) !== normalize(itemSelected.price)) ||
+        (normalize(form.duration) !== normalize(itemSelected.duration)) ||
+        (normalize(form.availability) !== normalize(itemSelected.availability)) ||
+        (normalize(form.address) !== normalize(itemSelected.address)) ||
+        (normalize(form.requeriment) !== normalize(itemSelected.requeriment)) ||
+        !fieldsVisiblesIsEqual(form.fields_visibles, itemSelected?.fields_visibles) ||
+        !lodash.isEqual(form.languages, itemSelected?.languages) ||
+        !lodash.isEqual(form.subservices, itemSelected?.subservices) ||
         !lodash.isEqual(form.images, itemSelected?.images)
         changePendingInForm.value = valid;
     return valid;
 });
+
+const fieldsVisiblesIsEqual = (array1, array2) => {
+    let isEqual = true;
+    for(let item of array1) {
+        let exist = array2.includes(item);
+        if (!exist) {
+            isEqual = false;
+        }
+    }
+    return array1.length === array2.length && isEqual;
+}
+
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
 // FUNCTION
 function closePreviewImage () {
     isPreviewOpen.value = false;
-}
-function openModalDeleteFacility () {
-
 }
 
 function prevTab () {
@@ -317,8 +333,11 @@ function resetData () {
 
 
 function nextTab () {
-    if (stepCurrent.value == 0) {
-        stepCurrent.value++;
+    if (stepCurrent.value < 2) {
+        if (formInvalid.value || !changesform.value || isLoadingForm.value) {
+            return;
+        }
+        stepCurrent.value++;   
     } else {
         submitSave();
     }
@@ -355,28 +374,81 @@ async function submitDelete () {
     }
 }
 
-function edit ({action, experience}) {
-    urlsimages.value = [];
-    if (action === 'EDIT' && experience) {
-        let { id, title, description, hire, url, type_price, from_price, images } = experience;
+async function edit ({action, experience}) {
+    if (action === 'EDIT') {
+        let { id, title, description, type, hire, link_url, type_price, from_price, images, languages, fields_visibles, duration, availability, address, requeriment, subservices } = experience;
 
-                let numPrice = parseFloat(from_price);
-        if (!isNaN(numPrice)) {
-        numPrice = numPrice.toFixed(2);
+        if (languages?.length) {
+            let languagesArray = languagesData.value.map(item => {
+                return {
+                    id: null,
+                    abbreviation: item.abbreviation,
+                    name: item.name,
+                }
+            }).filter(item => {
+                let language = languages.find(lagSub => lagSub === item.abbreviation );
+                return language;
+            });
+            languages = languagesArray;
+        }
+
+        let numPrice = from_price ? parseFloat(from_price) : null;
+        if (numPrice && !isNaN(numPrice)) {
+            numPrice = numPrice.toFixed(2);
         }
 
         let itemSelectedImages = JSON.parse(JSON.stringify(images));
         let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, { id, name: title, description, hire, link_url: url, type_price, price: numPrice, images: itemSelectedImages });
-        Object.assign(form, { id, name: title, description, hire, link_url: url, type_price, price: numPrice, images: formImages });
+        Object.assign(itemSelected, {  id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: itemSelectedImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
+        Object.assign(form, {id, name: title, description, type, hire, link_url, type_price, price: numPrice, images: formImages, languages: JSON.parse(JSON.stringify(languages)), fields_visibles: JSON.parse(JSON.stringify(fields_visibles)), duration, availability, address, requeriment });
         images.forEach(img => {
             urlsimages.value.push(img);
         });
+        await nextTick();
+        itemSelected.description = form.description;
+
+        let subservicesArray = subservices.map(subservice => {
+            if (subservice.languages?.length) {
+                let languagesArray = languagesData.value.map(item => {
+                    return {
+                        id: null,
+                        abbreviation: item.abbreviation,
+                        name: item.name,
+                    }
+                }).filter(item => {
+                    let language = subservice.languages.find(lagSub => lagSub === item.abbreviation );
+                    return language;
+                });
+                subservice.languages = languagesArray;
+            }
+
+            let numPrice = subservice.price ? parseFloat(subservice.price) : null;
+            if (numPrice && !isNaN(numPrice)) {
+                numPrice = numPrice.toFixed(2);
+            }
+
+            return {
+                id: subservice.id,
+                name: subservice.name || null,
+                description: subservice.description || null,
+                image: {url: subservice.image?.url ?? subservice.image},
+                languages: JSON.parse(JSON.stringify(subservice.languages)),
+                fields_visibles: JSON.parse(JSON.stringify(subservice.fields_visibles)),
+                price: numPrice || null,
+                duration: subservice.duration || null,
+                address: subservice.address || null,
+                requeriment: subservice.requeriment || null,
+                order: subservice.order,
+            }
+        });
+        subservicesData.value = JSON.parse(JSON.stringify([...subservicesArray]));
+        itemSelected.subservices = JSON.parse(JSON.stringify([...subservicesArray]));
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});
     }
 }
+
 defineExpose({ edit });
 
 //
@@ -389,6 +461,7 @@ provide('urlsimages', urlsimages);
 provide('validateField', validateField);
 provide('previewUrl', previewUrl);
 provide('isPreviewOpen', isPreviewOpen);
+provide('subservicesData', subservicesData);
 
 </script>
 

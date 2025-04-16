@@ -25,10 +25,10 @@
                   <form @submit.prevent="resetPassword">
                     <h1 class="text-xl lg:text-22xl  hmb-4 lg:mb-6 font-medium text-center">Restablecer contraseña</h1>
                     <div class="mb-[13px] flex flex-col gap-2">
-                      <label class="font-medium text-[14px]">Correo electrónico</label>
+                      <label class="text-sm font-medium leading-[140%] block mb-2">Correo electrónico</label>
                       <input 
                         type="text"
-                        class="w-100 rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                        class="w-full th-Input" 
                         :placeholder="placeholderEmail" 
                         autocomplete="on" 
                         v-model="email"
@@ -44,23 +44,25 @@
                         <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
                         <input 
                           :type="visible_pass ? 'text' : 'password'"
-                          class="w-full rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                          class="w-full th-Input" 
                           id="password" 
                           :class="{
-                            'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                            'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
-                            'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
+                            'border-input-error' : errorPassword,
                           }"
                           placeholder="Contraseña"
                           v-model="form.password" required
                         >
                       </div>
-                      <div class="flex htext-alert-negative justify-left" v-if="errorPassword">
+                      <div v-if="errorPassword" class="flex items-center">
+                          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                          <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMessage }}</p>
+                      </div>
+                      <!-- <div class="flex htext-alert-negative justify-left" v-if="errorPassword">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative">{{ errorPasswordMessage }}</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="mb-2 flex flex-col gap-2">
                       <label class="font-medium text-[14px]">Confirmar contraseña</label>
@@ -70,25 +72,21 @@
                         <img v-if="form.password_confirmation !== '' && !visible_pass_confirm" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password_confirmation')"> -->
                         <input 
                           :type="visible_pass_confirm ? 'text' : 'password'"
-                          class="w-full rounded-[6px] h-[40px] py-4 px-4 text-sm border placeholder-gray-400 text-black border-[#BFBFBF] focus:border-black" 
+                          class="w-full th-Input" 
                           id="password_confirmation" 
                           :class="{
-                            'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                            'hborder-gray-400 htext-gray-500 ': !form.password_confirmation || errorPasswordMatch,
-                            'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
+                            'border-input-error' : errorPasswordMatch,
                           }"
                           placeholder="Confirma tu contraseña"
                           v-model="form.password_confirmation" required
                         >
                       </div>
-                      <div class="flex htext-alert-negative justify-left" v-if="errorPasswordMatch">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
-                          <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                          </svg>
-                          <p class="text-xs htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
+                      <div v-if="errorPasswordMatch" class="flex items-center">
+                          <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
+                          <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
                       </div>
                     </div>
-                    <div class="mb-2 text-red-500 text-sm text-center">{{ error }}</div>
+                    <div class="mb-2 htext-alert-negative text-sm text-center">{{ error }}</div>
                     <div class="mt-6 lg:mt-8 text-center">
                       <button 
                         type="submit" 

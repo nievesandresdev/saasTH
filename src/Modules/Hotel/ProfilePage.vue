@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-[24px] bg-[#FAFAFA]">
+    <div class="h-screen pl-[24px] pr-[12px] bg-[#FAFAFA]">
         <div class="pb-[104px]">
             <section class="flex justify-between py-[20px] border-b border-[#BFBFBF]">
                 <div class="space-x-2 flex">
@@ -36,31 +36,27 @@
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="flex space-x-[16px]">
                     <div class="flex-1">
-                        <label class="text-sm font-medium mb-2 inline-block">Tipo de alojamiento </label>
                         <BaseSelectField
+                            textLabel="Tipo de alojamiento"
                             :id="'type_lodging'"
-                            :textLabel="'Tipo de alojamiento'"
                             v-model="form.type"
                             :options="typeLodging"
                             mandatory
-                            :error="false"
                         />
                     </div>
                     <div class="flex-1">
-                        <label class="text-sm font-medium mb-2 inline-block">Categoría</label>
                         <BaseSelectField
                             :id="'type_lodging'"
-                            :textLabel="'Elige categoría'"
+                            textLabel="Categoría"
                             v-model="form.category"
                             :options="categoryLodging"
                             mandatory
-                            :error="false"
                         />
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium block mb-2">Nombre de {{ $formatTypeLodging() }}</label>
                     <BaseTextField
+                        :textLabel="'Nombre de '+$formatTypeLodging()"
                         v-model="form.name"
                         placeholder="Nombre de alojamiento"
                         class-content="flex-1"
@@ -70,16 +66,17 @@
                     />
                 </div>
             </section>
+            <!-- description -->
             <section class="shadow-md px-4 py-6 mt-6 space-y-4 bg-white rounded-[10px] hborder-black-100">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium inline-block">Descripción {{ $formatTypeLodging(true) }}</label>
-                    <p class="text-sm">Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial.</p>
                     <BaseTextareaField
+                        :textLabel="'Descripción '+ $formatTypeLodging(true)"
+                        textDescription="Presenta tu alojamiento a los futuros huéspedes. Describe las características únicas, los servicios y la atmósfera que lo hacen especial." 
                         v-model="form.description"
                         placeholder="Descripción..."
                         class-content="flex-1"
                         name="description"
-                        :max="'500'"
+                        max="500"
                     />
                 </div>
             </section>
@@ -87,49 +84,43 @@
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
                 <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
-                        <div class="flex justify-between">
-                            <label class="text-sm font-medium inline-block">Teléfono principal</label>
-                            <BaseTooltipResponsive
-                                size="l"
-                                :top="-85"
-                                :left="0"
-                            >
-                                <template #button>
-                                    <img class="w-[24px] h-[24px]" src="/assets/icons/TH.INFO.GREEN.svg">
-                                    </template>
-                                    <template #content>
-                                    <p class="text-sm leading-[150%] font-normal">
-                                        Este es el número de teléfono al que llamará el huésped cuando presione el botón “Llamar a recepción” en tu WebApp
-                                    </p>
-                                </template>
-                            </BaseTooltipResponsive>
-                        </div>
                         <BasePhoneField
                             v-model="form.phone"
                             name="phone"
                             :errors="errors"
                             @blur:validate="validate('phone')"
+                            textLabel="Teléfono principal"
+                            tooltipText='Este es el número de teléfono al que llamará el huésped cuando presione el botón "Llamar a recepción" en tu WebApp'
                         />
                     </div>
                     <div class="space-y-2 w-[384px]">
-                        <label class="text-sm font-medium inline-block">Teléfono secundario</label>
                         <BasePhoneField
                             v-model="form.phone_optional"
                             name="phone_optional"
                             :errors="errors"
+                            textLabel="Teléfono secundario"
                             @blur:validate="validate('phone_optional')"
                         />
                     </div>
                 </div>
-                <div class="space-y-2 w-[706px]">
-                    <label class="text-sm font-medium inline-block">Email</label>
+                <div class="w-[706px]">
                     <BaseTextField
+                        text-label="Email"
                         v-model="form.email"
                         :placeholder="'Introduce email contacto del '+$formatTypeLodging()"
-                        class-content="flex-1"
                         name="email"
                         :errors="errors"
                         @blur:validate="validate('email')"
+                    />
+                </div>
+                <div class="w-[706px]">
+                    <BaseTextField
+                        text-label="Sitio web - URL"
+                        v-model="form.website_google"
+                        placeholder="Introduce la URL de tu sitio web"
+                        name="website_google"
+                        :errors="errors"
+                        @blur:validate="validate('website_google')"
                     />
                 </div>
                 <div class="space-y-2">
@@ -139,6 +130,7 @@
                     {{`address: ${form.address}`}} -->
                 </div>
             </section>
+            <!-- horary -->
             <section 
                 class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4"
                 id="checkin-checkout"
@@ -205,25 +197,52 @@
 
 
             </section>
-            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
-                <div class="max-w-profile">
-                    <h2 class="font-medium text-lg">Servicio de WiFi</h2>
-                    <div class="flex justify-between mt-2">
-                        <p class="text-sm htext-gray-500 text-justify">
-                            Comunica a tus huéspedes si tu {{$formatTypeLodging()}} cuenta con servicio de WiFi gratuito
-                        </p>
-                        <div class="flex space-x-2">
-                            <label class="text-sm font-medium leading-[110%]" :class="!form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">No</label>
-                            <BaseSwichInput id="toggle-wifi" v-model="form.with_wifi" />
-                            <label class="text-sm font-medium leading-[110%]" :class="form.with_wifi ? 'text-[#333]' : 'text-[#A0A0A0]'">Si</label>
+            <ProfilePageSectionWifi  @updateToggleWifiNetworks="updateToggleWifiNetworks"/>
+            <!-- rules -->
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
+                
+                <div 
+                    class="flex mt-2 items-center relative"
+                >
+                    <h2 class="font-medium text-lg">Normas del {{$formatTypeLodging()}}</h2>
+                    <span 
+                        class="text-sm font-semibold leading-[120%] ml-auto mr-1"
+                        :class="{'opacity-50':countPolicies == 0}"
+                    >Mostrar en la WebApp</span>
+                    <div
+                        tabindex="0" 
+                        @blur="clickOnToggle = false"
+                        @click="clickOnToggle = true"
+                    >
+                        <ToggleButton
+                            v-model="form.show_rules"
+                            id="toggle-show_rules"
+                            :disabled="countPolicies == 0"
+                        />
+                    </div>
+                    <!-- countPolicies -->
+                    <div 
+                    class="absolute top-[30px] right-0"
+                        v-if="clickOnToggle && !countPolicies"
+                    >
+                        <div class="flex items-center">
+                            <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg"> 
+                            <p class="text-xs leading-[90%] htext-alert-negative">Registra las Normas del alojamiento</p>        
                         </div>
                     </div>
                 </div>
+                <p class="mt-2 text-sm leading-[140%]">
+                    Muestra a tus huéspedes las 
+                    <router-link class="font-medium underline hover:underline" :to="{ name: 'PoliciesLegal'}">normas del alojamiento</router-link>
+                    en el perfil de tu hotel
+                </p>
             </section>
-            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
-                <h2 class="font-medium text-lg">Fotos</h2>
-                <profilePageSectionPhotos @openModelGallery="openModelGallery()" />
+            <!-- gallery -->
+            <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100">
+                <h2 class="font-medium text-lg mb-4">Fotos del {{ $formatTypeLodging() }}</h2 >
+                <profilePageSectionPhotos @openModelGallery="openModelGallery()"  @reloadImages="loadHotel"/>
             </section>
+            <!-- social networks -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-6">
                 <h2 class="font-medium text-lg">Redes sociales</h2>
                 <div class="space-y-4 w-[585px]">
@@ -232,7 +251,9 @@
                         placeholder="Instagram URL"
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.INSTAGRAM.COLOR.svg"
+                        :errors="errors"
                         name="urlInstagram"
+                        @blur:validate="validate('urlInstagram')"
                     />
                     <BaseTextField
                         v-model="form.urlFacebook"
@@ -240,6 +261,8 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.FACEBOOK.COLOR.svg"
                         name="urlFacebook"
+                        :errors="errors"
+                        @blur:validate="validate('urlFacebook')"
                     />
                     <BaseTextField
                         v-model="form.urlPinterest"
@@ -247,6 +270,8 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.PINTEREST.COLOR.svg"
                         name="urlPinterest"
+                        :errors="errors"
+                        @blur:validate="validate('urlPinterest')"
                     />
                     <BaseTextField
                         v-model="form.urlX"
@@ -254,12 +279,14 @@
                         class-content="flex-1"
                         prepend-inner-icon="/assets/icons/1.TH.X.svg"
                         name="urlX"
+                        :errors="errors"
+                        @blur:validate="validate('urlX')"
                     />
                 </div>
             </section>
 
         </div>
-        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 mx-[-24px]">
+        <div class="border-t hbg-white-100 p-6 sticky bottom-0 flex justify-between items-center z-10 ml-[-24px] mr-[-12px]">
             <button 
                 class="text-base leading-[110%] font-medium underline"
                 :class="{'htext-gray-300':!isChanged, 'htext-black-100 hover-htext-black-200' : isChanged}"
@@ -293,6 +320,7 @@
         multiple
         @update:img="addNewsImages($event)"
     />
+    
 </template>
 
 <script setup>
@@ -305,12 +333,14 @@
     import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
     import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
     import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
-    import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+    import ToggleButton from '@/components/Buttons/ToggleButton.vue';
     //
     import ModalGallery from '@/components/ModalGallery.vue';
     import ModalNoSave from '@/components/ModalNoSave.vue'
     import ProfilePageSectionMap from "./ProfilePageSectionMap.vue";
     import ProfilePageSectionPhotos from "./ProfilePageSectionPhotos.vue";
+    import ProfilePageSectionWifi from './ProfilePageSectionWifi.vue';
+    
     
     import { useFormValidation } from '@/composables/useFormValidation'
     import * as rules from '@/utils/rules';
@@ -323,11 +353,16 @@
     const mockupStore = useMockupStore();
     import { useLayoutStore } from '@/stores/modules/layout'
     const layoutStore = useLayoutStore();
+    import { useWifiNetworksStore } from '@/stores/modules/wifiNetworks'
+    const wifiNetworksStore = useWifiNetworksStore();
+    import { useLegalStore } from '@/stores/modules/legal';
+    const legalStore = useLegalStore();
 
     // COMPOSABLES
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
     import useScrollToElement from '@/composables/useScrollToElement';
+import { $formatTypeLodging } from '@/utils/helpers';
     const { scrollToElement } = useScrollToElement();
     //DATA
     const form = reactive({
@@ -356,21 +391,64 @@
         images_hotel: [],
         show_profile: false,
         with_wifi: false,
+        website_google: null,
+        show_rules: false,
     });
     const modalGaleryRef = ref(null);
+    const countPolicies = ref(0);
+    const clickOnToggle = ref(false)
     const isloadingForm = ref(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const formRules = {
-        name: [value => value.trim() ? true : 'Introduce el nombre de tu alojamiento'],
-        email: [value => emailPattern.test(value) ? true : 'Formato de e-mail permitido ej: xxxx@email.com'],
-        phone: [value => (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')  ? true : 'La cantidad de dígitos ingresada es incorrecta'],
-        phone_optional: [value => !value || (!!value && (value.trim().length > 10 && value.trim().length < 16) && value.includes('+')) ? true : 'La cantidad de dígitos ingresada es incorrecta'],
-    };
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)*[\w-]+\.[\w-]+(\/[\w-./?%&=]*)?$/;
+    
+    const formRules = reactive({
+        name: [{
+            required: true,
+            validator: value => !!value,
+            message: 'Introduce el nombre de tu alojamiento'
+        }],
+        email: [{
+            required: true,
+            validator: value => !!emailPattern.test(value),
+            message: 'Formato de e-mail permitido ej: xxxx@email.com'
+        }],
+        phone: [{
+            required: true,
+            validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
+            message: 'La cantidad de dígitos ingresada es incorrecta'
+        }],
+        phone_optional: [{
+            required: true,
+            validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
+            message: 'La cantidad de dígitos ingresada es incorrecta'
+        }],
+        website_google: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Ingresa un formato de URL válido'
+        }],
+        urlInstagram: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+        urlPinterest: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+        urlX: [{
+            required: true,
+            validator: value => !value || urlPattern.test(value),
+            message: 'Escribe un formato de enlace válido'
+        }],
+    });
 
     const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
 
     const hotelData = reactive({});
     const profilePageSectionMap = ref(null);
+    const wifiNetworks = ref([]);
 
     const categoryLodging = computed(()=>{
         let options = [
@@ -381,6 +459,7 @@
             { value: 6, label: "4 estrellas Superior" },
             { value: 5, label: "5 estrellas" },
             { value: 7, label: "5 estrellas Gran Lujo" },
+            { value: 8, label: "No mostrar categoría" },
         ];
         // if (form.type == "Hostal" || form.type == "Pensión") {
         //     options = [
@@ -406,26 +485,31 @@
         { value: "vft", label: "Vivienda con fines turísticos", disabled: false },
     ]
 
-
-    provide('form', form)
-    provide('hotelData', hotelData)
-
+    
     onMounted(async() => {
+        countPolicies.value = await legalStore.$getCountPoliciesByHotel()
+        wifiNetworks.value = await wifiNetworksStore.$getAll();
         loadHotel()
         loadMockup()
         await nextTick();
         useScrollToElement();
     })
 
+    provide('form', form)
+    provide('hotelData', hotelData)
+    provide('wifiNetworks', wifiNetworks)
+
     // COMPUTED
     const isChanged = computed(()=>{
+        let with_wifi = wifiNetworks.value.length ? Boolean(hotelData.with_wifi) : false;
+        let show_rules = Number(countPolicies.value) ? Boolean(hotelData.show_rules) : false;
         let c =
             form.name !== hotelData.name || form.type !== hotelData.type ||
             Number(form.category) !== Number(hotelData.category) ||
             normalize(form.email) !== normalize(hotelData.email) ||
             normalizePhone(form.phone) !== normalizePhone(hotelData.phone) ||
             normalizePhone(form.phone_optional) !== normalizePhone(hotelData?.phone_optional) ||
-            Boolean(form.with_wifi) !== Boolean(hotelData.with_wifi) ||
+            Boolean(form.with_wifi) !== Boolean(with_wifi) ||
             normalize(form.address) !== hotelData.address ||
             normalize(form.checkin) !== hotelData.checkin ||
             normalize(form.checkin_until) !== hotelData.checkin_until ||
@@ -436,8 +520,10 @@
             normalize(form.urlPinterest) !== hotelData.pinterest_url ||
             normalize(form.urlFacebook) !== hotelData.facebook_url ||
             normalize(form.urlX) !== hotelData.x_url ||
+            normalize(form.website_google) !== hotelData.website_google ||
             form.images_hotel?.length !== hotelData.images?.length ||
-            Boolean(form.show_profile) !== Boolean(hotelData.show_profile);
+            Boolean(form.show_profile) !== Boolean(hotelData.show_profile) ||
+            Boolean(form.show_rules) !== Boolean(show_rules);
 
         return c;
     });
@@ -489,7 +575,15 @@
         form.city = hotel.city || null;
         form.images_hotel = [...hotel.images];
         form.show_profile = hotel.show_profile || false;
-        form.with_wifi = hotel.with_wifi || false;
+        form.website_google = hotel.website_google || null;
+
+        form.with_wifi = wifiNetworks.value.length ? Boolean(hotel.with_wifi) : false;
+        form.show_rules = Number(countPolicies.value) ? Boolean(hotel.show_rules) : false;
+    }
+
+    function updateToggleWifiNetworks(){
+        form.with_wifi = true;
+        submit(false);
     }
 
     function updateShowHotel (val) {
@@ -498,6 +592,7 @@
     }
 
     const validate = (field) => {
+        
         validateField(field)
     }
     
@@ -512,7 +607,7 @@
     }
     // Bienvenido al Hotel Nobu, donde la elegancia se encuentra con la comodidad en el corazón de la ciudad. Nuestras habitaciones lujosas y nuestras instalaciones de primera clase te ofrecen una estancia inolvidable. Disfruta de deliciosa cocina internacional, relájate en nuestro bar y spa, y aprovecha nuestras instalaciones para eventos. Con servicio impecable y atención personalizada, tu experiencia en el Hotel Nobu será única.
 
-    async function submit () {
+    async function submit (showToast = true) {
         // isloadingForm.value = true
         form.metting_point_latitude = form.metting_point_latitude?.toString()
         form.metting_point_longitude = form.metting_point_longitude?.toString()
@@ -522,10 +617,12 @@
         const  {ok, data} = response ?? {}
         await loadHotel()
         isloadingForm.value = false
-        if (ok) {
-            toast.warningToast('Cambios guardados con éxito','top-right');
-        } else {
-            toast.warningToast(data?.message,'top-right');
+        if(showToast){
+            if (ok) {
+                toast.warningToast('Cambios guardados con éxito','top-right');
+            } else {
+                toast.warningToast(data?.message,'top-right');
+            }
         }
         mockupStore.$reloadIframe()
         layoutStore.$forceLeftSidebarRerender()

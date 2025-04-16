@@ -1,60 +1,124 @@
 import { ref, computed } from 'vue';
+
 export function useFormValidation(form, rules) {
   const errors = ref({});
+  const requiredFields = ref({});
+
+  const processRule = (rule) => {
+    if (!rule) return null;
+
+    if (typeof rule === 'object' && !Array.isArray(rule)) {
+      return {
+        required: rule.required ?? false,
+        validator: rule.validator,
+        message: rule.message
+      };
+    }
+    if (typeof rule === 'function') {
+      return {
+        required: false,
+        validator: rule,
+        message: ''
+      };
+    }
+    return null;
+  };
+
+  // Inicializar los campos requeridos
+  Object.entries(rules).forEach(([field, fieldRules]) => {
+    if (Array.isArray(fieldRules)) {
+      const firstRule = processRule(fieldRules[0]);
+      if (firstRule) {
+        requiredFields.value[field] = firstRule.required;
+      }
+    }
+  });
 
   const validateField = (field) => {
-    errors.value[field] = ''; // Limpiar errores anteriores
+    errors.value[field] = '';
     const fieldRules = rules[field];
-    if (fieldRules) {
-      for (let rule of fieldRules) {
-        const validationResult = rule(form[field]);
-        if (validationResult !== true) {
-          errors.value[field] = validationResult;
-          break; // Detener la validación en el primer error
-        } else {
-            errors.value[field] = true;
+
+    if (Array.isArray(fieldRules)) {
+      const firstRule = processRule(fieldRules[0]);
+      if (firstRule?.required || form[field]) {
+        for (let rule of fieldRules) {
+          const processedRule = processRule(rule);
+          if (processedRule) {
+            const validationResult = processedRule.validator(form[field]);
+            if (validationResult !== true) {
+              errors.value[field] = processedRule.message || validationResult;
+              break;
+            } else {
+              errors.value[field] = true;
+            }
+          }
         }
+      } else {
+        errors.value[field] = true;
       }
     }
   };
 
-  const formIsFull = computed(() => {
-    let full = [];
-    Object.entries(rules).forEach(item => {
-      const [field, rule] = item;
-      const fieldRules = rules[field];
-      if (fieldRules) {
-        for (let rule of fieldRules) {
-          const validationResult = rule(form[field]);
-          if (validationResult !== true) {
-            full.push(false);
-            return;
+  const formInvalid = computed(() => {
+    let hasErrors = false;
+    
+    Object.entries(rules).forEach(([field, fieldRules]) => {
+      if (Array.isArray(fieldRules)) {
+        const firstRule = processRule(fieldRules[0]);
+        if (firstRule?.required || form[field]) {
+          for (let rule of fieldRules) {
+            const processedRule = processRule(rule);
+            if (processedRule) {
+              const validationResult = processedRule.validator(form[field]);
+              if (validationResult !== true) {
+                hasErrors = true;
+                break;
+              }
+            }
           }
         }
       }
-      full.push(true);
     });
-    return !full.some(val => !val);
+
+    return hasErrors;
   });
 
-  const validateForm = () => {
-    errors.value = {}; // Limpiar errores anteriores
-    Object.keys(rules).forEach(field => validateField(field));
-    return Object.keys(errors.value).every(field => errors.value[field] === '');
+  const formIsFull = computed(() => {
+    let isComplete = true;
+    
+    Object.entries(rules).forEach(([field, fieldRules]) => {
+      if (Array.isArray(fieldRules)) {
+        const firstRule = processRule(fieldRules[0]);
+        if (firstRule?.required) {
+          for (let rule of fieldRules) {
+            const processedRule = processRule(rule);
+            if (processedRule) {
+              const validationResult = processedRule.validator(form[field]);
+              if (validationResult !== true) {
+                isComplete = false;
+                break;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    return isComplete;
+  });
+
+  const validateAllFields = () => {
+    Object.keys(rules).forEach(field => {
+      validateField(field);
+    });
   };
 
-  const formInvalid = computed(() => {
-      let error = Object.keys(errors.value).some(field => typeof errors.value?.[field] === 'string')
-      return error
-  })
-
-//   const submitForm = (onSuccess, onFail) => {
-//     if (validateForm()) {
-//       onSuccess(form.value); // Pasar el formulario validado a la función de éxito
-//     } else {
-//       onFail(errors.value); // Pasar los errores a la función de fallo
-//     }
-//   };
-
-  return { errors, validateField, formInvalid, formIsFull };
+  return {
+    errors,
+    validateField,
+    formInvalid,
+    formIsFull,
+    validateAllFields,
+    requiredFields
+  };
 }
