@@ -17,8 +17,9 @@
               v-for="(menu, index_menu) in section.group"
               :key="index_menu"
             >
+              <!-- sub-menu 1 -->
               <li
-                v-if="menu?.group"
+                v-if="menu?.group && !menu?.disabled"
                 :key="index_menu"
               >
                 <a
@@ -83,7 +84,7 @@
               </li>
               <!-- normal link -->
               <li
-                v-else
+                v-else-if="!menu?.disabled"
                 class="hover-hbg-gray-200 "
                 :class="fullUrl.includes(menu.include) ? 'hbg-green-200 font-semibold' : ''"
               >
@@ -208,6 +209,8 @@ const status_subscription = false
 
 import { usePlaceStore } from '@/stores/modules/place';
 const placeStore = usePlaceStore();
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
 
 
@@ -318,7 +321,7 @@ const menu_section = reactive([
               icon: '/assets/icons/1.TH.CHAT.NEW.svg',
               include: '/chat/webapp',
               selectedArr: ['GeneralSettings', 'AvailabilitySettings', 'AutomaticResponses'],
-            
+              disabled: !hotelStore.hotelData?.chat_service_enabled,
           },
           {
               title: 'Check-in',
@@ -326,7 +329,7 @@ const menu_section = reactive([
               icon: '/assets/icons/1.TH Check-in.svg',
               include: '/webapp/checkin',
               selectedArr: ['CheckinGeneral', 'CheckinForms'],
-            
+              disabled: !hotelStore.hotelData?.checkin_service_enabled,
           },
       ],
   },

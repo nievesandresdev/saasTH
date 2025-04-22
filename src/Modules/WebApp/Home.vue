@@ -115,7 +115,10 @@
                             </router-link>
                         </div>
 
-                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
+                        <div 
+                            class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white"
+                            v-if="hotelStore.hotelData?.chat_service_enabled"
+                        >
                             <router-link :to="{ path: '/chat/webapp/general' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/1.TH.Icon.Header.Chat.svg" alt="icon" class="w-8 h-8">
@@ -129,7 +132,10 @@
                             </router-link>
                         </div>
 
-                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white">
+                        <div 
+                            class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white"
+                            v-if="hotelStore.hotelData?.checkin_service_enabled"
+                        >
                             <router-link :to="{ path: '/webapp/checkin/general' }" class="block p-4">
                                 <div class="flex items-center ">
                                     <img src="/assets/icons/webapp/checkin.svg" alt="icon" class="w-8 h-8">
@@ -268,8 +274,9 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import { useMockupStore } from '@/stores/modules/mockup';
-
 const mockup = useMockupStore();
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
 onMounted(()=>{
     mockup.$setIframeUrl('')

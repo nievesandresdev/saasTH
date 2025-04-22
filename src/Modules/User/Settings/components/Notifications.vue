@@ -35,7 +35,10 @@
         <!-- Notificaciones en plataforma Hoster -->
         <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
           <!-- estancias chat -->
-          <div class="flex flex-col">
+          <div 
+            class="flex flex-col"
+            v-if="hotelStore.hotelData?.chat_service_enabled"
+          >
             <div class="flex items-center justify-between">
               <span class="text-sm font-semibold">Estancias - Chat</span>
             </div>
@@ -182,7 +185,10 @@
           </div>
 
           <!--resenas-->
-          <div class="flex flex-col mt-4">
+          <div 
+            class="flex flex-col mt-4"
+            v-if="hotelStore.hotelData?.reviews_service_enabled"
+          >
             <div class="flex items-center justify-between">
               <span class="text-sm font-semibold">Reseñas</span>
             </div>
@@ -213,7 +219,10 @@
   import { ref, defineProps, defineEmits,computed, watch } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
-  
+  //stores
+  import { useHotelStore } from '@/stores/modules/hotel'; 
+  const hotelStore = useHotelStore();
+
   const props = defineProps({
     periodicityChat: {
       type: Object,

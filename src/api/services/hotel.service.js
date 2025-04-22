@@ -37,3 +37,7 @@ export const storeNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiN
 export const updateByIdNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateById`, params);
 export const updateVisibilityNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateVisibilityNetwork`, params, {showPreloader: false });
 export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null, {showPreloader: false });
+//
+export const toggleChatService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleChatService`, data, {showPreloader: false });
+export const toggleCheckinService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleCheckinService`, data, {showPreloader: false });
+export const toggleReviewsService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleReviewsService`, data, {showPreloader: false });

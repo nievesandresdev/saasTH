@@ -52,7 +52,7 @@
             <!-- iconos de notificacion -->
             <div class="flex items-center gap-2">
                 <img 
-                    v-if="stay.has_complete_checkin_data"
+                    v-if="stay.has_complete_checkin_data && hotelStore.hotelData?.checkin_service_enabled"
                     class="w-5 h-5 relative" src="/assets/icons/1.TH Check-in.svg"
                 >
                 <img 
@@ -65,11 +65,11 @@
                 >
                 <!-- chat -->
                 <img 
-                    v-if="stay.chats.length && !stay.has_pending_chats" 
+                    v-if="stay.chats.length && !stay.has_pending_chats && hotelStore.hotelData?.chat_service_enabled" 
                     class="w-5 h-5" src="/assets/icons/1.TH.CHAT.svg"
                 >
                 <img 
-                    v-if="stay.chats.length && stay.has_pending_chats"    
+                    v-if="stay.chats.length && stay.has_pending_chats && hotelStore.hotelData?.chat_service_enabled"    
                     class="w-[21px] h-[21px] relative top-[-0.6px]" src="/assets/icons/1.TH.CHAT.NOTIFY.svg"
                 >
             </div>
@@ -81,8 +81,9 @@
 import { ref, watch } from 'vue';
 import { DateTime } from 'luxon';
 import { useRouter, useRoute } from 'vue-router';
-
-
+//stores
+import { useHotelStore } from '@/stores/modules/hotel'
+const hotelStore = useHotelStore();
 const router = useRouter();
 const route = useRoute();
 

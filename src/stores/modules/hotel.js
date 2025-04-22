@@ -272,7 +272,27 @@ export const useHotelStore = defineStore('hotel', () => {
         return response;
     }
     
-
+    async function $toggleChatService (enabled) {
+        const response = await hotelService.toggleChatService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
+    
+    async function $toggleCheckinService (enabled) {
+        const response = await hotelService.toggleCheckinService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
+    
+    async function $toggleReviewsService (enabled) {
+        const response = await hotelService.toggleReviewsService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
+    
 
 
     //
@@ -304,7 +324,10 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelsUser,
         hotelsParent,
         $handleDefaultHotel,
-        $deleteImageByHotel
+        $deleteImageByHotel,
+        $toggleChatService,
+        $toggleCheckinService,
+        $toggleReviewsService
     }
 
 })
