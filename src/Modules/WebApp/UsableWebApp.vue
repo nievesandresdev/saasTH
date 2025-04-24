@@ -17,21 +17,43 @@
   
       <!-- Main content with 3-column grid -->
       <div class="relative z-10 container mx-auto px-4">
-        <div class="grid grid-cols-3 gap-8">
+        <div class="grid grid-cols-12 gap-2">
           <!-- Column 1 -->
-          <div class="grid-1 bg-white p-6 rounded-lg shadow">
-            <h2 class="text-2xl font-bold mb-4">Grid 1</h2>
-            <!-- Add your content here -->
+          <div class="grid-1 bg-white p-1 rounded-lg col-span-4">
+            <!-- <h2 class="text-2xl font-bold mb-4 font-caveat">Grid 1</h2> -->
+            <div class="flex flex-col gap-[64px]"> <!-- flex principal-->
+                <div class="flex gap-4">
+                    <img src="/assets/icons/phone.svg" alt="Phone icon" class="w-[64px] h-[64px] object-cover" />
+                    <div class="flex flex-col gap-2">
+                        <p class="text-[20px] font-medium">Visualiza aquí y navega en la WebApp de tu [hotel]</p>
+                        <p class="text-[24px] font-normal font-caveat text-[#0B6357]">Tal y como la verán tus huéspedes!</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-end">
+                    <img src="/assets/icons/warninggreen.svg" alt="Warning icon" class="w-[64px] h-[64px] object-cover" />
+                    <div class="flex flex-col gap-2">
+                        <p class="text-[24px] font-normal font-caveat text-[#0B6357]">Pssst! Un consejo...</p>
+                        <p class="text-[20px] font-medium">No ves los cambios realizados? Asegúrate de haberlos guardado, y recarga esta página.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-end">
+                    <img src="/assets/icons/qr.svg" alt="QR icon" class="w-[64px] h-[64px] object-cover" />
+                    <div class="flex flex-col gap-2">
+                        <p class="text-[24px] font-normal font-caveat text-[#0B6357]">Accede desde tu móvil!</p>
+                        <p class="text-[20px] font-medium">Escanea el código QR de la derecha con la cámara de tu móvil y accederás a la WebApp.</p>
+                    </div>
+                </div>
+            </div>
           </div>
   
           <!-- Column 2 -->
-          <div class="grid-2 bg-white p-6 rounded-lg shadow">
-            <h2 class="text-2xl font-bold mb-4">Grid 2</h2>
+          <div class="grid-2 bg-white p-6 rounded-lg shadow col-span-4">
+            <h2 class="text-2xl font-bold mb-4">{{ iframeUrlHosterPage }}</h2>
             <!-- Add your content here -->
           </div>
   
           <!-- Column 3 -->
-          <div class="grid-3 bg-white p-6 rounded-lg shadow">
+          <div class="grid-3 bg-white p-6 rounded-lg shadow col-span-4">
             <h2 class="text-2xl font-bold mb-4">Grid 3</h2>
             <!-- Add your content here -->
           </div>
@@ -54,7 +76,7 @@
   //const hotelData = hotelStore.hotelData;
 
   //mockupStore.$setIframeUrl(subdomain,hotelStore.hotelData.language);
-  mockupStore.$setIframeUrl('/','',hotelStore.hotelData.language,false);
+  mockupStore.$setIframeUrl('/','fran=12',hotelStore.hotelData.language,false);
 
   const iframeUrlHosterPage = computed(() => mockupStore.iframeUrl);
   
