@@ -63,12 +63,15 @@
 
 <script setup>
 import { useMockupStore } from '@/stores/modules/mockup';
+import { useHotelStore } from '@/stores/modules/hotel';
 import TooltipLanguagesMini from "@/components/TooltipLanguagesMini.vue";
 
 const store = useMockupStore();
+const hotelStore = useHotelStore();
 
 const openMockup = () => {
-    window.open(store.iframeUrl, '_blank');
+    store.$setIframeUrlWebAppPage(`/${hotelStore.hotelData.subdomain}`, hotelStore.hotelData.language);
+    window.open(store.iframeUrlHosterPage, '_blank');
 }
 </script>
 

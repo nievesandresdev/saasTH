@@ -11,10 +11,12 @@ export const useMockupStore = defineStore('mockupStore', () => {
 
   const GUEST_URL = process.env.VUE_APP_GUEST_URL
   const ENVIROMENT = process.env.VUE_APP_ENVIROMENT
+  const URL_HOSTER_PAGE = process.env.VUE_APP_URL_HOSTER_PAGE
   const iframeUrlRef = ref(null);
   const infoText1Ref = ref(null);
   const languageRef = ref(null);
   const infoTextIcon1Ref = ref(null);
+  const iframeUrlHosterPageRef = ref(null);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
       let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
@@ -25,6 +27,11 @@ export const useMockupStore = defineStore('mockupStore', () => {
       // }
       let completeURL =urlBase+`${uri}?chainsubdomain=${subdomainChain}&subdomain=${slugHotel}&lang=${lang}&mockup=true&${params}`;
       iframeUrlRef.value = completeURL;
+  }
+
+  function $setIframeUrlWebAppPage(params, lang = 'es'){
+    let url = URL_HOSTER_PAGE + `?${params}&lang=${lang}`;
+    iframeUrlHosterPageRef.value = url;
   }
 
   function $reloadIframe() {
@@ -52,6 +59,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   }
 
   const iframeUrl = computed(() => iframeUrlRef.value);
+  const iframeUrlHosterPage = computed(() => iframeUrlHosterPageRef.value);
   const infoText1 = computed(() => infoText1Ref.value);
   const infoTextIcon1 = computed(() => infoTextIcon1Ref.value);
   const setLanguage = computed(() => languageRef.value);
@@ -59,7 +67,9 @@ export const useMockupStore = defineStore('mockupStore', () => {
 
   return {
     iframeUrl,
+    iframeUrlHosterPage,
     $setIframeUrl,
+    $setIframeUrlWebAppPage,
     infoText1,
     infoTextIcon1,
     $setInfo1,
