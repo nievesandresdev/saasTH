@@ -65,13 +65,15 @@
 import { useMockupStore } from '@/stores/modules/mockup';
 import { useHotelStore } from '@/stores/modules/hotel';
 import TooltipLanguagesMini from "@/components/TooltipLanguagesMini.vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const store = useMockupStore();
 const hotelStore = useHotelStore();
 
 const openMockup = () => {
-    store.$setIframeUrlWebAppPage(`${hotelStore.hotelData.subdomain}`, hotelStore.hotelData.language);
-    window.open(store.iframeUrlHosterPage, '_blank');
+    const route = router.resolve({ name: 'WebAppUsable', params: { subdomain: hotelStore.hotelData.subdomain } });
+    window.open(route.href, '_blank');
 }
 </script>
 

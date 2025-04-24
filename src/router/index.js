@@ -39,6 +39,7 @@ function isAuthenticated() {
 // Configuración de rutas
 const routes = [
   { path: '/', redirect: '/login' }, // Redirigir la raíz a /login
+  { path: '/:subdomain', name: 'WebAppUsable', component: () => import(/* webpackChunkName: "subdomain" */ '@/Modules/WebApp/UsableWebApp.vue') },
   ...authRoutes,
   ...dashboardRoutes,
   ...comunicationRoutes,
@@ -78,6 +79,11 @@ const router = createRouter({
 // Middleware de navegación auth
 router.beforeEach((to, from, next) => {
   const isAuth = isAuthenticated();
+
+  // Permitir acceso a la ruta de subdominio sin autenticación
+  if (to.name === 'Subdomain') {
+    return next();
+  }
 
   // Evita que el middleware afecte la ruta de restablecimiento de contraseña
   if (to.name === 'ResetPassword') {
