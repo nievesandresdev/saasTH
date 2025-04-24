@@ -70,7 +70,7 @@ const store = useMockupStore();
 const hotelStore = useHotelStore();
 
 const openMockup = () => {
-    store.$setIframeUrlWebAppPage(`/${hotelStore.hotelData.subdomain}`, hotelStore.hotelData.language);
+    store.$setIframeUrlWebAppPage(`${hotelStore.hotelData.subdomain}`, hotelStore.hotelData.language);
     window.open(store.iframeUrlHosterPage, '_blank');
 }
 </script>

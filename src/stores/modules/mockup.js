@@ -30,7 +30,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   }
 
   function $setIframeUrlWebAppPage(params, lang = 'es'){
-    let url = URL_HOSTER_PAGE + `?${params}&lang=${lang}`;
+    let url = URL_HOSTER_PAGE + `${params}&lang=${lang}`;
     iframeUrlHosterPageRef.value = url;
   }
 
