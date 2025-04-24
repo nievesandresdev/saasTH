@@ -75,10 +75,10 @@
   //const hotelData = hotelStore.hotelData;
 
   onMounted(async () => {
-    const response = await hotelStore.$findByParams({subdomain: subdomain});
-    mockupStore.$setIframeUrlUsable(response.chain.subdomain, response.subdomain,hotelStore.hotelData.language);
+    const response = await hotelStore.$findByParams({subdomain: subdomain,stayDemo:true});
+    mockupStore.$setIframeUrlUsable(response.hotel.chain.subdomain, response.hotel.subdomain);
 
-    console.log(mockupStore.iframeUrlUsable);
+    console.log(mockupStore.iframeUrlUsable,response.demo_stay);
 
   });
 
