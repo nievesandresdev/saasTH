@@ -48,7 +48,7 @@
   
           <!-- Column 2 -->
           <div class="grid-2 bg-white p-6 rounded-lg shadow col-span-4">
-            <h2 class="text-2xl font-bold mb-4">{{ iframeUrlHosterPage }}</h2>
+            <h2 class="text-2xl font-bold mb-4">{{ iframeUrlUsable }}</h2>
             <!-- Add your content here -->
           </div>
   
@@ -63,10 +63,9 @@
   </template>
   
   <script setup>
-  import { computed } from 'vue';
+  import { computed,onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import { useHotelStore } from '@/stores/modules/hotel';
-
   import { useMockupStore } from '@/stores/modules/mockup';
   const mockupStore = useMockupStore();
 
@@ -75,12 +74,20 @@
   const hotelStore = useHotelStore();
   //const hotelData = hotelStore.hotelData;
 
-  //mockupStore.$setIframeUrl(subdomain,hotelStore.hotelData.language);
-  mockupStore.$setIframeUrl('/','fran=12',hotelStore.hotelData.language,false);
+  onMounted(async () => {
+    const response = await hotelStore.$findByParams({subdomain: subdomain});
+    mockupStore.$setIframeUrlUsable(response.chain.subdomain, response.subdomain,hotelStore.hotelData.language);
 
-  const iframeUrlHosterPage = computed(() => mockupStore.iframeUrl);
+    console.log(mockupStore.iframeUrlUsable);
+
+  });
+
+  //mockupStore.$setIframeUrl(subdomain,hotelStore.hotelData.language);
   
-  console.log(iframeUrlHosterPage.value);
+
+  const iframeUrlUsable = computed(() => mockupStore.iframeUrlUsable);
+  
+  //console.log(iframeUrlHosterPage.value);
   
   </script>
   
