@@ -44,7 +44,8 @@ jobs:
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_MAIN }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_MAIN }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_MAIN }}" >> .env
-            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env
+            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env 
+            echo "VUE_APP_URL_HOSTER_PAGE=${{ secrets.VUE_APP_URL_HOSTER_PAGE_MAIN }}" >> .env 
             
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
@@ -60,6 +61,7 @@ jobs:
             echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_TEST }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_TEST }}" >> .env
             echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_TEST }}" >> .env
+            echo "VUE_APP_URL_HOSTER_PAGE=${{ secrets.VUE_APP_URL_HOSTER_PAGE_TEST }}" >> .env 
 
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
