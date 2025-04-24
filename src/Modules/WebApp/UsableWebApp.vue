@@ -53,11 +53,12 @@
   const hotelStore = useHotelStore();
   //const hotelData = hotelStore.hotelData;
 
-  mockupStore.$setIframeUrlWebAppPage(subdomain,hotelStore.hotelData.language);
+  //mockupStore.$setIframeUrl(subdomain,hotelStore.hotelData.language);
+  mockupStore.$setIframeUrl('/','',hotelStore.hotelData.language,false);
 
-  const iframeUrlHosterPage = computed(() => mockupStore.iframeUrlHosterPage);
+  const iframeUrlHosterPage = computed(() => mockupStore.iframeUrl);
   
-  console.log(subdomain,iframeUrlHosterPage.value);
+  console.log(iframeUrlHosterPage.value);
   
   </script>
   
