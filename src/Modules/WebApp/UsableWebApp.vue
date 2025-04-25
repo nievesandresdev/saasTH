@@ -60,8 +60,32 @@
                 <p class="text-[41px] font-semibold text-center">{{ hotelData.name }}</p>
               </div>
               <div class="mt-8 p-[50px] flex justify-center">
-                <pre class="hidden">{{ iframeUrlUsable }}</pre>
-                <BaseQrCode :url="iframeUrlUsable" ref="qrCodeRef" :width="150" :height="150"/>
+                <div v-if="isLoading" class="flex items-center justify-center">
+                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                </div>
+                <QRCodeVue3 
+                  v-else
+                  :value="iframeUrlUsable"
+                  :width="300"
+                  :height="300"
+                  :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
+                  :imageOptions="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
+                  :dotsOptions="{
+                    type: 'square',
+                    color: '#333',
+                    gradient: {
+                      type: 'linear',
+                      rotation: 0,
+                      colorStops: [
+                        { offset: 0, color: '#333' },
+                        { offset: 1, color: '#333' },
+                      ],
+                    },
+                  }"
+                  :backgroundOptions="{ color: '#ffffff' }"
+                  :cornersSquareOptions="{ type: 'dot', color: '#333' }"
+                  :cornersDotOptions="{ type: undefined, color: '#333' }"
+                />
               </div>
             </div>
           </div>
@@ -72,36 +96,38 @@
   
   <script setup>
   import { computed,onMounted,ref } from 'vue';
-  import BaseQrCode from '@/components/BaseQrCode.vue';
+  import QRCodeVue3 from "qrcode-vue3";
   import { useRoute } from 'vue-router';
   import { useHotelStore } from '@/stores/modules/hotel';
   import { useMockupStore } from '@/stores/modules/mockup';
-  const mockupStore = useMockupStore();
+  import { $urlBaseWebapp } from '@/utils/helpers';
 
+  const mockupStore = useMockupStore();
   const route = useRoute();
   const subdomain = route.params.subdomain;
   const hotelStore = useHotelStore();
   const hotelData = ref({})
-  const qrCodeRef = ref(null);
-
-  const iframeUrlUsable = computed(() => {
-    if (!mockupStore.iframeUrlUsable) return '';
-    // Asegurarnos de que la URL tenga el formato correcto
-    const baseUrl = window.location.origin;
-    const url = new URL(mockupStore.iframeUrlUsable, baseUrl);
-    return url.toString();
-  });
+  //const urlQrCode = ref('');
+  const isLoading = ref(true);
 
   onMounted(async () => {
-    const response = await hotelStore.$findByParams({subdomain: subdomain,stayDemo:true});
-    mockupStore.$setIframeUrlUsable(response.hotel.chain.subdomain, response.hotel.subdomain,`e=${response.demo_stay.stay_id}&g=${response.demo_stay.guest_id}`);
-    hotelData.value = response.hotel;
-    console.log('URL completa:', iframeUrlUsable.value);
+    try {
+      const response = await hotelStore.$findByParams({subdomain: subdomain,stayDemo:true});
+      mockupStore.$setIframeUrlUsable(response.hotel.chain.subdomain, response.hotel.subdomain,`e=${response.demo_stay.stay_id}&g=${response.demo_stay.guest_id}`);
+      hotelData.value = response.hotel;
+      //urlQrCode.value = $urlBaseWebapp(response.hotel.chain.subdomain, response.hotel.subdomain);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      isLoading.value = false;
+    }
   });
 
   //mockupStore.$setIframeUrl(subdomain,hotelStore.hotelData.language);
   
 
+  const iframeUrlUsable = computed(() => mockupStore.iframeUrlUsable);
+  
   //console.log(iframeUrlHosterPage.value);
   
   </script>
