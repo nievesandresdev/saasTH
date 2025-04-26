@@ -17,9 +17,9 @@
   
       <!-- Main content with 3-column grid -->
       <div class="relative z-10 w-full max-w-[1400px] mx-auto px-2 sm:px-4">
-        <div class="grid grid-cols-12 gap-2">
+        <div class="grid grid-cols-12 gap-2 items-center">
           <!-- Column 1 -->
-          <div class="grid-1 bg-white p-1 rounded-lg col-span-4">
+          <div class="grid-1 bg-white p-1 rounded-lg col-span-4 mt-8">
             <!-- <h2 class="text-2xl font-bold mb-4 font-caveat">Grid 1</h2> -->
             <div class="flex flex-col gap-4 sm:gap-[64px]">
                 <div class="flex gap-2 sm:gap-4">
@@ -47,45 +47,52 @@
           </div>
   
           <!-- Column 2 -->
-          <div class="grid-2 bg-white p-2 sm:p-6 rounded-lg shadow col-span-4">
-            <h2 class="text-2xl font-bold mb-4">xx</h2>
-            <!-- Add your content here -->
+          <div class="grid-2 bg-white p-2 sm:p-6 col-span-4">
+            <div class="flex flex-col items-center justify-center">
+              <div id="mockup" class="relative h-[460px] w-[310px]">
+                <div id="content-mockup" class="hbg-gray-100 absolute z-[49] top-[30px] left-[25px] overflow-hidden">
+                  <iframe class="w-full h-full" :src="iframeUrlUsable"></iframe>
+                </div>
+                <img class="w-full absolute left-0 top-0 h-full z-50 pointer-events-none" src="/assets/img/mockup-black.svg" alt="">
+              </div>
+            </div>
           </div>
   
           <!-- Column 3 -->
-          <div class="grid-3 bg-white p-2 sm:p-6 rounded-lg shadow col-span-4">
+          <div class="grid-3 bg-white p-2 sm:p-6 col-span-4">
             <div class="flex flex-col items-center justify-center">
               <div class="mb-8">
                 <p class="text-[41px] font-semibold text-center">{{ hotelData.type == 'hotel' ? 'Hotel' : hotelData.type }}</p>
                 <p class="text-[41px] font-semibold text-center">{{ hotelData.name }}</p>
               </div>
-              <div class="mt-8 p-[50px] flex justify-center">
+              <div class="mt-8 flex justify-center">
                 <div v-if="isLoading" class="flex items-center justify-center">
                   <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                 </div>
-                <QRCodeVue3 
-                  v-else
-                  :value="iframeUrlUsable"
-                  :width="300"
-                  :height="300"
-                  :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
-                  :imageOptions="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
-                  :dotsOptions="{
-                    type: 'square',
-                    color: '#333',
-                    gradient: {
-                      type: 'linear',
-                      rotation: 0,
-                      colorStops: [
-                        { offset: 0, color: '#333' },
-                        { offset: 1, color: '#333' },
-                      ],
-                    },
-                  }"
-                  :backgroundOptions="{ color: '#ffffff' }"
-                  :cornersSquareOptions="{ type: 'dot', color: '#333' }"
-                  :cornersDotOptions="{ type: undefined, color: '#333' }"
-                />
+                <div v-else class="border border-[#BFBFBF] rounded-[20px] p-[4px]">
+                  <QRCodeVue3 
+                    :value="iframeUrlUsable"
+                    :width="300"
+                    :height="300"
+                    :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
+                    :imageOptions="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
+                    :dotsOptions="{
+                      type: 'square',
+                      color: '#333',
+                      gradient: {
+                        type: 'linear',
+                        rotation: 0,
+                        colorStops: [
+                          { offset: 0, color: '#333' },
+                          { offset: 1, color: '#333' },
+                        ],
+                      },
+                    }"
+                    :backgroundOptions="{ color: '#ffffff' }"
+                    :cornersSquareOptions="{ type: 'dot', color: '#333' }"
+                    :cornersDotOptions="{ type: undefined, color: '#333' }"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -136,6 +143,18 @@
   .container {
     max-width: 1400px;
     width: 100%;
+  }
+
+  #mockup {
+    cursor: inherit;
+    min-width: 342px;
+    min-height: 720px;
+  }
+
+  #content-mockup {
+    border-radius: 0 0 18px 18px;
+    height: 655px;
+    width: 298px;
   }
   </style>
   
