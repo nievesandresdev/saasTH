@@ -34,15 +34,25 @@
             </section>
         </div>
         <div class="h-screen mt-[31px] flex flex-col md:flex-row">
-            <!-- mockup -->
-            <div id="mockup" class="relative h-[520px] w-[265px]">
-                <div id="content-mockup" class="bg-gray-100 absolute z-[100] top-11 left-5 overflow-hidden">
-                    <iframe class="w-full h-full" :src="mockup.iframeUrl"></iframe>
+            <!-- mockup container -->
+            <div class="flex flex-col items-center">
+                <div id="mockup" class="relative h-[520px] w-[265px]">
+                    <div id="content-mockup" class="bg-gray-100 absolute z-[100] top-11 left-5 overflow-hidden">
+                        <iframe class="w-full h-full" :src="mockup.iframeUrl"></iframe>
+                    </div>
+                    <div class="fixed-size-container">
+                        <img class="fixed-size-image left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt="">
+                    </div>
                 </div>
-                <div class="fixed-size-container">
-                    <img class="fixed-size-image left-0 top-0 h-full z-50 w-[520px]" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt="">
+                <!-- Add "Ir a la WebApp" link below mockup -->
+                <div class="flex items-center gap-2 mt-8 group" @click="openMockup">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="cursor-pointer">
+                        <path d="M10 2H14V6" stroke="#333333" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#34A98F]"/>
+                        <path d="M6.66675 9.33333L14.0001 2" stroke="#333333" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#34A98F]"/>
+                        <path d="M12 8.66667V12.6667C12 13.0203 11.8595 13.3594 11.6095 13.6095C11.3594 13.8595 11.0203 14 10.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V5.33333C2 4.97971 2.14048 4.64057 2.39052 4.39052C2.64057 4.14048 2.97971 4 3.33333 4H7.33333" stroke="#333333" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#34A98F]"/>
+                    </svg>
+                    <p class="text-xs leading-[130%] font-semibold underline cursor-pointer group-hover:text-[#34A98F]">Ir a la WebApp</p>
                 </div>
-                <!-- <img class=" left-0 top-0 h-full z-50 w-[520px] fixed-size" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.BIG.png" alt=""> -->
             </div>
             <!-- section -->
             <div class="w-full p-2 ml-[15px] flex-1 fixed-size-content">
@@ -277,6 +287,13 @@ import { useMockupStore } from '@/stores/modules/mockup';
 const mockup = useMockupStore();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const openMockup = () => {
+    const route = router.resolve({ name: 'WebAppUsable', params: { subdomain: hotelStore.hotelData.subdomain } });
+    window.open(route.href, '_blank');
+}
 
 onMounted(()=>{
     mockup.$setIframeUrl('')
