@@ -25,7 +25,7 @@
                 <div class="flex gap-2 sm:gap-4">
                     <img src="/assets/icons/phone.svg" alt="Phone icon" class="w-[48px] h-[48px] sm:w-[64px] sm:h-[64px] object-cover" />
                     <div class="flex flex-col gap-1 sm:gap-2">
-                        <p class="text-[16px] sm:text-[20px] font-medium">Visualiza aquí y navega en la WebApp de tu [hotel]</p>
+                        <p class="text-[16px] sm:text-[20px] font-medium">Visualiza aquí y navega en la WebApp de tu {{ hotelData.type == 'hotel' ? 'Hotel' : hotelData.type }}</p>
                         <p class="text-[20px] sm:text-[24px] font-normal font-caveat text-[#0B6357]">Tal y como la verán tus huéspedes!</p>
                     </div>
                 </div>
