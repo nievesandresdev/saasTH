@@ -152,14 +152,14 @@
 
   #mockup {
     cursor: inherit;
-    min-width: 412px;
+    min-width: 302px;
     min-height: 732px;
   }
 
   #content-mockup {
     border-radius: 36px;
     height: 700px;
-    width: 327px;
+    width: 326px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     background-color: black;
   }
