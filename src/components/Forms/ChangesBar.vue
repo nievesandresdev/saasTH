@@ -4,7 +4,7 @@
         class="fixed bottom-0 bg-white p-6 border-t border-gray-400 z-10"
         :style="`width: calc(100% - 650px)`"
     > -->
-        <div class="flex w-full justify-between">
+        <div class="flex w-full justify-between items-center">
             <span 
                 :class="[
                     {'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200 cursor-pointer' : existingChanges},

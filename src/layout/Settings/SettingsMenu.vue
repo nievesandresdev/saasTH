@@ -316,6 +316,14 @@ const menu_section = reactive([
             selectedArr: ['Conforts', 'Transports', 'Experiences']
           },
           {
+              title: 'Contacto',
+              to: 'ContactPhones',
+              icon: '/assets/icons/1.TH.EMAIL.2.svg',
+              include: '/webapp/contacto/telefonos',
+              selectedArr: ['ContactPhones','ContactWhatsapp','ContactEmail'],
+              disabled: false,
+          },
+          {
               title: 'Chat',
               to: 'GeneralSettings',
               icon: '/assets/icons/1.TH.CHAT.NEW.svg',

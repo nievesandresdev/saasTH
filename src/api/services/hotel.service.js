@@ -41,3 +41,14 @@ export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetwork
 export const toggleChatService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleChatService`, data, {showPreloader: false });
 export const toggleCheckinService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleCheckinService`, data, {showPreloader: false });
 export const toggleReviewsService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleReviewsService`, data, {showPreloader: false });
+
+export const updateContactPhonesApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactPhones`, data, {showPreloader: false });
+export const updateContactEmailApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactEmail`, data, {showPreloader: false });
+export const updateContactWhatsappApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactWhatsapp`, data, {showPreloader: false });
+
+export const getProfilePhonesApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfilePhones`);
+export const getProfileEmailApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileEmail`);
+export const getProfileWhatsappApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileWhatsapp`);
+
+
+    

@@ -22,6 +22,7 @@ import comunicationRoutes from './comunication'
 import serviceRoutes from './serviceRoutes'
 import settingsCheckinRoutes from './settings/settingsCheckinRoutes.js';
 import marketplaceRoutes from './marketplaceRoutes';
+import contactRoutes from './hotel/contactRoutes';
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
@@ -61,6 +62,7 @@ const routes = [
   ...legalTextGroupRoutes,
   ...settingsCheckinRoutes,
   ...marketplaceRoutes,
+  ...contactRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ];
 

@@ -292,8 +292,42 @@ export const useHotelStore = defineStore('hotel', () => {
         await reloadHotel();
         return  ok ? response.data : null;
     }
-    
 
+    async function $updateContactPhones (data) {
+        const response = await hotelService.updateContactPhonesApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+
+    async function $updateContactEmail (data) {
+        const response = await hotelService.updateContactEmailApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+
+    async function $updateContactWhatsapp (data) {
+        const response = await hotelService.updateContactWhatsappApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+    
+    async function $getProfilePhones () {
+        const response = await hotelService.getProfilePhonesApi();
+        return response;
+    }
+
+    async function $getProfileEmail () {
+        const response = await hotelService.getProfileEmailApi();
+        return response;
+    }
+
+    async function $getProfileWhatsapp () {
+        const response = await hotelService.getProfileWhatsappApi();
+        return response;
+    }
 
     //
     return {
@@ -327,7 +361,13 @@ export const useHotelStore = defineStore('hotel', () => {
         $deleteImageByHotel,
         $toggleChatService,
         $toggleCheckinService,
-        $toggleReviewsService
+        $toggleReviewsService,
+        $updateContactPhones,
+        $updateContactEmail,
+        $updateContactWhatsapp,
+        $getProfilePhones,
+        $getProfileEmail,
+        $getProfileWhatsapp
     }
 
 })
