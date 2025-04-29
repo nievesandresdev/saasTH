@@ -16,6 +16,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoText1Ref = ref(null);
   const languageRef = ref(null);
   const infoTextIcon1Ref = ref(null);
+  const showGoWebappRef = ref(false);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
       let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
@@ -51,12 +52,17 @@ export const useMockupStore = defineStore('mockupStore', () => {
   function $setLanguageTooltip(show = false){
     languageRef.value = show;
   }
+
+  function $setShowGoWebapp(show = false){
+    showGoWebappRef.value = show;
+  }
   
   function $resetStore() {
     iframeUrlRef.value = null;
     infoText1Ref.value = null;
     languageRef.value = null;
     infoTextIcon1Ref.value = null;
+    showGoWebappRef.value = false;
   }
 
   const iframeUrl = computed(() => iframeUrlRef.value);
@@ -64,6 +70,7 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const infoTextIcon1 = computed(() => infoTextIcon1Ref.value);
   const setLanguage = computed(() => languageRef.value);
   const iframeUrlUsable = computed(() => iframeUrlUsableRef.value);
+  const showGoWebapp = computed(() => showGoWebappRef.value);
 
   return {
     iframeUrl,
@@ -76,6 +83,8 @@ export const useMockupStore = defineStore('mockupStore', () => {
     $reloadIframe,
     $setLanguageTooltip,
     setLanguage,
-    $resetStore
+    $resetStore,
+    showGoWebapp,
+    $setShowGoWebapp
   };
 });

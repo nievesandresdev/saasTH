@@ -49,11 +49,12 @@
           <!-- Column 2 -->
           <div class="grid-2 bg-white p-2 sm:p-6 col-span-4">
             <div class="flex flex-col items-center justify-center">
-              <div id="mockup" class="relative h-[460px] w-[310px]">
+              <div id="mockup" class="relative h-[732px] w-[412px]">
                 <div id="content-mockup" class="hbg-gray-100 absolute z-[49] top-[30px] left-[25px] overflow-hidden">
-                  <iframe class="w-full h-full" :src="iframeUrlUsable"></iframe>
+                  <!-- <iframe class="w-full h-full" :src="iframeUrlUsable"></iframe> -->
+                   <iframe class="w-full h-full" src="https://hotelpresentacionB.test.thehoster.app/hoteltaykosevilla28B/?e=215&g=31"></iframe>
                 </div>
-                <img class="w-full absolute left-0 top-0 h-full z-50 pointer-events-none" src="/assets/img/mockup-black.svg" alt="">
+                <img class="w-[212px] h-[366px] absolute left-0 top-0 z-50 pointer-events-none" src="/assets/img/mockup-black.svg" alt="">
               </div>
             </div>
           </div>

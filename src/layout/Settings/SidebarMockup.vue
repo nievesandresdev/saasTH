@@ -16,7 +16,7 @@
 
             <!-- container info text's -->
             <div class="mt-4">
-                <div class="flex items-center gap-2 mb-4 group" @click="openMockup">
+                <div class="flex items-center gap-2 mb-4 group" @click="openMockup" v-if="store.showGoWebapp">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="cursor-pointer">
                         <path d="M10 2H14V6" stroke="#333333" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#34A98F]"/>
                         <path d="M6.66675 9.33333L14.0001 2" stroke="#333333" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:stroke-[#34A98F]"/>
