@@ -13,7 +13,8 @@
                 </template>
                 <template v-slot:content>
                     <p class="text-sm">
-                        Configura todos los canales a través de los cuales los huéspedes podrán contactar con tu {{ $formatTypeLodging() }}
+                        Con el interruptor "Mostrar en la WebApp" controlas la visibilidad de cierta información para el huésped.<br><br>    
+                        Mientras se encuentre apagado, tus huéspedes dejarán de ver el contenido de esta sección en tu WebApp.
                     </p>
                 </template>
             </Tooltip>
@@ -21,10 +22,10 @@
         <div class="flex items-center gap-2">
             <p class="text-sm font-semibold">Mostrar Contacto en la WebApp</p>
             <ToggleButton
-                v-model="showCheckin"
-                id="ToggleButton_showCheckin"
+                v-model="showContact"
+                id="ToggleButton_showContact"
                 @change="toggle"
-                :disabled="updateCheckin"
+                :disabled="updateContact"
             />
             <Tooltip
                 size="l"
@@ -43,12 +44,7 @@
             </Tooltip>
         </div>
     </div>
-    <div v-if="!showCheckin" class="bg-[#FFF3CC] py-3 px-6">
-        <p class="text-center text-sm font-medium leading-[140%]">
-            Tienes desactivado el Check-in online. Activa "Mostrar en la WebApp" para permitir a tus huéspedes completar el formulario antes de su llegada al hotel.
-        </p>
-    </div>
-    <div class="bg-[#fafafa] px-6 z-50 mb-6">
+    <div class="bg-[#fafafa] px-6 z-50" :class="{'mb-6': showContact}">
         <TabMenuContainer>
             <TabLink
                 label="Teléfono"
@@ -67,6 +63,11 @@
             />
         </TabMenuContainer>
     </div>
+    <div v-if="!showContact" class="bg-[#FFF3CC] py-3 px-6 mb-6">
+        <p class="text-center text-sm font-medium leading-[140%]">
+            Esta sección se encuentra oculta, tus huéspedes no podrán verla en tu WebApp. Para mostrarla, activa el toggle de "Mostrar Contacto en la WebApp"
+        </p>
+    </div>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
@@ -82,21 +83,23 @@ const toast = useToastAlert();
 import { useRoute } from 'vue-router';
 const route = useRoute();
 //
-import { useCheckinStore } from '@/stores/modules/stay/checkin'
-const checkinStore = useCheckinStore();
+import { useHotelStore } from '@/stores/modules/hotel'
+const hotelStore = useHotelStore();
 
-const showCheckin = ref(true)
-const updateCheckin = ref(false)
+const showContact = ref(true)
+const updateContact = ref(false)
 
 onMounted(async() => {
-    showCheckin.value = await checkinStore.$getToggleShowCheckinHotel();
+    let response = await hotelStore.$getShowContact();
+    console.log('test res', response)
+    showContact.value = response.data;
 })
 
 
 async function toggle(){
-    updateCheckin.value = true;
-    await checkinStore.$updateToggleShowCheckinHotel(showCheckin.value);
-    updateCheckin.value = false;
+    updateContact.value = true;
+    await hotelStore.$toggleShowContact(showContact.value);
+    updateContact.value = false;
     toast.warningToast('Actualizado!','top-right');
 }
 

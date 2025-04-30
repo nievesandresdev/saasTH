@@ -5,24 +5,24 @@
         :style="`width: calc(100% - 650px)`"
     > -->
         <div class="flex w-full justify-between items-center">
-            <span 
+            <button 
                 :class="[
-                    {'htext-gray-300':!existingChanges, 'htext-black-100 hover-htext-black-200 cursor-pointer' : existingChanges},
+                    {'htext-gray-300':!existingChanges || !validChanges, 'htext-black-100 hover-htext-black-200 cursor-pointer' : existingChanges && validChanges},
                     textCancelClass
                 ]"
-                    :disabled="!existingChanges"
+                :disabled="!existingChanges || !validChanges"
                 @click="cancelChanges"
             >
                 Cancelar
-            </span>
-            <span 
+            </button>
+            <button 
                 class="hbtn-cta py-3 px-4 text-sm leading-[110%] font-medium cursor-pointer"
                 :class="{'cta-disabled':!validChanges}"
                 :disabled="!validChanges"
                 @click="submit"
             >
                 Guardar
-            </span>
+            </button>
         </div>
     </section>
 </template>

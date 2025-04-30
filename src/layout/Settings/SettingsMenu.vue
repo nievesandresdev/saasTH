@@ -319,7 +319,7 @@ const menu_section = reactive([
               title: 'Contacto',
               to: 'ContactPhones',
               icon: '/assets/icons/1.TH.EMAIL.2.svg',
-              include: '/webapp/contacto/telefonos',
+              include: '/webapp/contacto',
               selectedArr: ['ContactPhones','ContactWhatsapp','ContactEmail'],
               disabled: false,
           },

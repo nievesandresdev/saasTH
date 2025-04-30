@@ -1,7 +1,7 @@
 <template>
 <div class="h-full flex flex-col">
     <HeaderHotelContact />
-    <div class="px-6 mt-6">
+    <div class="px-6">
         <div class="rounded-[10px] bg-white shadow-hoster py-6 px-4">
             <h3 class="text-base font-medium leading-[110%]">
                 Llamar al {{$formatTypeLodging()}} 
@@ -18,7 +18,6 @@
                         name="phone"
                         :errors="errors"
                         @blur:validate="validateField('phone')"
-                        @handlePhoneError="PhoneFieldError = $event"
                     />
                 </div>
                 <div class="w-full">
@@ -85,7 +84,7 @@ onMounted(async () => {
     const response = await hotelStore.$getProfilePhones()
     originalForm.phone = response.data.phone
     originalForm.phone_optional = response.data.phone_optional
-    console.log('test', response)
+    // console.log('test', response)
     form.phone = response.data.phone
     form.phone_optional = response.data.phone_optional
 })
@@ -129,6 +128,9 @@ const submit = async () => {
     }else{
         toast.errorToast('Error al actualizar el teléfono', 'top-right')
     }
+    // if(!originalForm.phone || !originalForm.phone_optional){
+    //     phoneFieldKey.value++;
+    // }
     submitLoading.value = false
 }
 </script>

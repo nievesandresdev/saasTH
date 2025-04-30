@@ -49,6 +49,7 @@ export const updateContactWhatsappApi = (data) => apiHttp('POST', `${hotelPath}/
 export const getProfilePhonesApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfilePhones`);
 export const getProfileEmailApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileEmail`);
 export const getProfileWhatsappApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileWhatsapp`);
-
+export const getShowContactApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getShowContact`); 
+export const toggleShowContactApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleShowContact`, data, {showPreloader: false });
 
     

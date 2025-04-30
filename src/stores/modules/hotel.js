@@ -329,6 +329,17 @@ export const useHotelStore = defineStore('hotel', () => {
         return response;
     }
 
+    async function $getShowContact () {
+        const response = await hotelService.getShowContactApi();
+        return response;
+    }
+
+    async function $toggleShowContact (enabled) {
+        const response = await hotelService.toggleShowContactApi({enabled});
+        return response;
+    }
+
+
     //
     return {
         hotelData,
@@ -367,7 +378,9 @@ export const useHotelStore = defineStore('hotel', () => {
         $updateContactWhatsapp,
         $getProfilePhones,
         $getProfileEmail,
-        $getProfileWhatsapp
+        $getProfileWhatsapp,
+        $getShowContact,
+        $toggleShowContact
     }
 
 })
