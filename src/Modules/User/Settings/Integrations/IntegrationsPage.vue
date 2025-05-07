@@ -102,22 +102,38 @@
             <hr>
             <div class="p-4">
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="'https://www.booking.com/hotel/es/hotel-name.html'" />
-                    <BaseTextField v-model="form.url" placeholder="https://www.booking.com/hotel/es/hotel-name.html" />
+                    <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" />
+                    <BaseTextField v-model="form.url" :placeholder="placeholderUrl" />
                 </div>
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="'https://www.booking.com/hotel/es/hotel-name.html'" />
+                    <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" />
                     <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                 </div>
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="'https://www.booking.com/hotel/es/hotel-name.html'" />
+                    <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" />
                     <BaseTextField v-model="form.password" placeholder="Introduce tu contraseña" />
                 </div>
+                <section>
+                    <div class="flex flex-col gap-[6px]">
+                        <span class="text-sm font-medium">
+                            Tus credenciales de {{ selectedOtaCapitalize }}
+                        </span>
+                        <div class="flex justify-between">
+                            <div class="flex justify-start gap-2">
+                                <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
+                                <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
+                            </div>
+                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer">
+                                <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-4 h-4">
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
             <hr>
             <div class="p-4 flex justify-between">
-                <button @click="closeModalIntegration" class="hbtn-tertiary text-sm font-medium underline my-auto">
-                    Descartar
+                <button @click="closeModalIntegration" class="hbtn-tertiary text-sm font-medium underline my-auto px-4 py-3">
+                    Cancelar
                 </button>
                 
                 <button  @click="submit" class="hbtn-cta px-4 py-3 text-sm leading-[110%] font-medium">
@@ -180,6 +196,30 @@ const getSettings = async () => {
 
 const selectedOtaCapitalize = computed(() => {
     return serviceSelected.value.charAt(0).toUpperCase() + serviceSelected.value.slice(1);
+});
+
+const placeholderUrl = computed(() => {
+    switch (serviceSelected.value) {
+        case 'booking':
+            return 'https://www.booking.com/Seville-Hotels-Hotel-Tayko-Sevilla.h81845900.Hotel-Information';
+        case 'tripadvisor':
+            return 'https://www.tripadvisor.com/hotel/nombre-del-hotel';
+        case 'expedia':
+            return 'https://www.expedia.com/hotel/nombre-del-hotel';
+        case 'google':
+            return 'hhttps://maps.google.com/hotel/nombre-del-hotel';
+        case 'airbnb':
+            return 'https://www.airbnb.com/hotel/nombre-del-hotel';
+    }
+});
+
+const tooltips = computed(() => {
+    const baseUrl = 'https://www.booking.com/hotel/es/hotel-name.html';
+    return {
+        url: `<span class="text-sm font-medium mb-4">¿Necesitas cambiar la URL?</span><p class="text-xs mt-4 font-normal">Encontrarás atención personalizada llamando al teléfono +34 624 149 605 o a la direccón de correo electrónico info@thehoster.io <br><br>Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>`,
+        email: `<span class="font-medium">correo@tu-hotel.com</span>`,
+        password: `<span class="text-red-500">Tu contraseña de acceso</span>`
+    };
 });
 
 const submit = () => {
