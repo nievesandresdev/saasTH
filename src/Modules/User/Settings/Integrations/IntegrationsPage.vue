@@ -32,7 +32,7 @@
 
             <div @click="openModalIntegrations('tripadvisor')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
-                    <img src="/assets/icons/otas/TripAdvisor.svg" class="w-8 h-8">
+                    <img src="/assets/icons/otas/Tripadvisor.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">TripAdvisor</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
