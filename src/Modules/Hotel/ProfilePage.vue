@@ -82,7 +82,7 @@
             </section>
             <!-- phones, email and location -->
             <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
-                <div class="flex space-x-4">
+                <!-- <div class="flex space-x-4">
                     <div class="space-y-2 w-[384px]">
                         <BasePhoneField
                             v-model="form.phone"
@@ -102,7 +102,7 @@
                             @blur:validate="validate('phone_optional')"
                         />
                     </div>
-                </div>
+                </div> -->
                 <div class="w-[706px]">
                     <BaseTextField
                         text-label="Email"
@@ -335,7 +335,7 @@
     import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
     import BaseTextField from "@/components/Forms/BaseTextField.vue";
     import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
-    import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
+    // import BasePhoneField from "@/components/Forms/BasePhoneField.vue";
     import BaseTimeField from "@/components/Forms/BaseTimeField.vue";
     import ToggleButton from '@/components/Buttons/ToggleButton.vue';
     //
@@ -375,8 +375,8 @@ import { $formatTypeLodging } from '@/utils/helpers';
         type: null,
         category: null,
         email: null,
-        phone: null,
-        phone_optional: null,
+        // phone: null,
+        // phone_optional: null,
         address: null,
         metting_point_latitude: null,
         metting_point_longitude: null,
@@ -416,16 +416,16 @@ import { $formatTypeLodging } from '@/utils/helpers';
             validator: value => !!emailPattern.test(value),
             message: 'Formato de e-mail permitido ej: xxxx@email.com'
         }],
-        phone: [{
-            required: false,
-            validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
-            message: 'La cantidad de dígitos ingresada es incorrecta'
-        }],
-        phone_optional: [{
-            required: false,
-            validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
-            message: 'La cantidad de dígitos ingresada es incorrecta'
-        }],
+        // phone: [{
+        //     required: false,
+        //     validator: value => (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+'),
+        //     message: 'La cantidad de dígitos ingresada es incorrecta'
+        // }],
+        // phone_optional: [{
+        //     required: false,
+        //     validator: value => !value || (!!value && (value?.trim().length > 10 && value?.trim().length < 16) && value?.includes('+')),
+        //     message: 'La cantidad de dígitos ingresada es incorrecta'
+        // }],
         website_google: [{
             required: true,
             validator: value => !value || urlPattern.test(value),
@@ -508,8 +508,8 @@ import { $formatTypeLodging } from '@/utils/helpers';
             form.name !== hotelData.name || form.type !== hotelData.type ||
             Number(form.category) !== Number(hotelData.category) ||
             normalize(form.email) !== normalize(hotelData.email) ||
-            normalizePhone(form.phone) !== normalizePhone(hotelData.phone) ||
-            normalizePhone(form.phone_optional) !== normalizePhone(hotelData?.phone_optional) ||
+            // normalizePhone(form.phone) !== normalizePhone(hotelData.phone) ||
+            // normalizePhone(form.phone_optional) !== normalizePhone(hotelData?.phone_optional) ||
             Boolean(form.with_wifi) !== Boolean(with_wifi) ||
             normalize(form.address) !== hotelData.address ||
             normalize(form.checkin) !== hotelData.checkin ||
@@ -535,9 +535,9 @@ import { $formatTypeLodging } from '@/utils/helpers';
 
     //FUNCTIONS
 
-    const normalizePhone = (str) => {
-        return str === null || str === undefined ? null : str.replace(/\s/g, '');
-    }
+    // const normalizePhone = (str) => {
+    //     return str === null || str === undefined ? null : str.replace(/\s/g, '');
+    // }
 
     const normalize = (value) => {
       return value === "" || value === null || value === undefined ? null : value;
@@ -577,8 +577,8 @@ import { $formatTypeLodging } from '@/utils/helpers';
         form.type = hotel.type || null;
         form.category = hotel.category || null;
         form.email = hotel.email || null;
-        form.phone = hotel.phone || null;
-        form.phone_optional = hotel.phone_optional || null;
+        // form.phone = hotel.phone || null;
+        // form.phone_optional = hotel.phone_optional || null;
         form.address = hotel.address || null;
         form.metting_point_latitude = hotel.latitude || null;
         form.metting_point_longitude = hotel.longitude || null;

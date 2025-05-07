@@ -37,7 +37,7 @@
                 v-model="code"
                 @keyup="searchCodes"
                 @focus="isFocused = true"
-                @blur="isFocused = false"
+                @blur="onBlur"
                 placeholder="+ Código"
                 :disabled="!initialLoad"
             >
@@ -58,7 +58,7 @@
             :placeholder="placeholderPhone"
             v-model="phone"
             @focus="isFocused = true"
-            @blur="isFocused = false"
+            @blur="onBlur"
             :disabled="!initialLoad"
         >
     </div>
@@ -153,24 +153,29 @@ const borderColorClass = computed(() => {
 
 // fucntions
 const defineFullPhone = async (stringPhone = null) => {
-  utilStore.$getPhoneCodesApi()
-  .then(res => {
-    codeList.value = res.data;
-    if (stringPhone) {
-      let phoneString = props.modelValue?.replace(/\s+/g, '');
-      codeList.value.map(item => item.value).some(item => {
-        if (phoneString && phoneString.startsWith(item)) {
-          code.value = item;
-          phone.value = phoneString.replace(code.value, '');
-          return true; // Detiene las iteraciones
-        }
-        return false;
-      });
-    }
+  // console.log('test defineFullPhone',stringPhone)
+  if (stringPhone) {
+    utilStore.$getPhoneCodesApi()
+    .then(res => {
+      codeList.value = res.data;
+      
+        let phoneString = props.modelValue?.replace(/\s+/g, '');
+        codeList.value.map(item => item.value).some(item => {
+          if (phoneString && phoneString.startsWith(item)) {
+            code.value = item;
+            phone.value = phoneString.replace(code.value, '');
+            return true; // Detiene las iteraciones
+          }
+          return false;
+        });
+      initialLoad.value = true;
+    }).catch(error => {
+      console.log(error);
+    });
+  }else{
+    code.value = '+34';
     initialLoad.value = true;
-  }).catch(error => {
-    console.log(error);
-  });
+  }
 };
 
 const searchCodes = async () => {
@@ -192,7 +197,6 @@ const selectOption = (value) => {
 
 const validPhone = (phone, code) => {
   const pattern = /^\+?\d{9,13}$/;
-  // console.log('test valid',phone)
   if (phone && !pattern.test(phone) || !code && phone) {
     error_phone.value = true;
   } else {
@@ -200,36 +204,47 @@ const validPhone = (phone, code) => {
   }
 };
 
+const onBlur = () => {
+  emit('blur:validate');
+  validPhone(phone.value, code.value);
+  isFocused.value = false;
+}
+
+const updateValue = (fullPhone, phoneNumber) => {
+  if (Boolean(phoneNumber)) {
+    emit('update:modelValue', fullPhone);
+  }else{
+    emit('update:modelValue', null);
+  }
+}
 watch(modelValue, (newVal, oldVal) => {
-  if (uniqueLook.value) return;
+  // console.log('test watch modelValue',newVal)
+  // if (uniqueLook.value) return;
   defineFullPhone(newVal)
-  uniqueLook.value = true;
+  // uniqueLook.value = true;
 });
 
 
 watch(phone, (newVal, oldVal) => {
   let phoneNumber = code.value + newVal;
   if (phoneNumber === 'null') phoneNumber = null;
-  validPhone(phoneNumber, code.value);
-  // console.log('test phone error',error_phone.value )
+  // validPhone(phoneNumber, code.value);
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
   if (!code.value) return;
-  emit('update:modelValue', phoneNumber);
-  emit('blur:validate');
+  updateValue(phoneNumber, newVal);
 });
 
 watch(code, (newVal, oldVal) => {
   let phoneNumber = newVal + phone.value;
   if (phoneNumber === 'null') phoneNumber = null;
-  validPhone(phoneNumber, newVal);
-  // console.log('test code error',error_phone.value )
+  // validPhone(phoneNumber, newVal);
   emit('handlePhoneError', error_phone.value);
   emit('keyupInput');
-  // if (!phone.value && newVal.length < 2) return;
-  emit('update:modelValue', phoneNumber);
-  emit('blur:validate');
+  updateValue(phoneNumber, phone.value);
 });
+
+
 
 
 
