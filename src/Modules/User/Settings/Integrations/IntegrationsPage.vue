@@ -105,13 +105,31 @@
                     <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
                     <BaseTextField v-model="form.url" :placeholder="placeholderUrl" />
                 </div>
-                <div class="flex flex-col gap-2 mb-4">
+                <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking'">
                     <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                     <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                 </div>
-                <div class="flex flex-col gap-2 mb-4">
+                <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking'">
                     <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
-                    <BaseTextField v-model="form.password" placeholder="Introduce tu contraseña" />
+                    <div class="relative">
+                        <BaseTextField 
+                            v-model="form.password" 
+                            :type="visiblePassword ? 'text' : 'password'"
+                            placeholder="Introduce tu contraseña" 
+                        />
+                        <img 
+                            v-if="visiblePassword" 
+                            class="absolute cursor-pointer w-5 right-2.5 top-3" 
+                            src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
+                            @click="togglePasswordVisibility"
+                        >
+                        <img 
+                            v-if="!visiblePassword" 
+                            class="absolute cursor-pointer w-5 right-2.5 top-3" 
+                            src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
+                            @click="togglePasswordVisibility"
+                        >
+                    </div>
                 </div>
                 <section>
                     <div class="flex flex-col gap-[6px]">
@@ -123,7 +141,7 @@
                                 <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
                                 <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
                             </div>
-                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer">
+                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="handleDeleteCredentials">
                                 <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-4 h-4">
                             </div>
                         </div>
@@ -167,6 +185,12 @@ const form = ref({
     email: '',
     password: '',
 });
+
+const visiblePassword = ref(false);
+
+const togglePasswordVisibility = () => {
+    visiblePassword.value = !visiblePassword.value;
+};
 
 const openModalIntegrations = (service) => {
     console.log('Opening modal for service:', service);
@@ -232,6 +256,10 @@ const tooltips = computed(() => {
 
 const submit = () => {
     console.log(form.value);
+}
+
+const handleDeleteCredentials = () => {
+    console.log('Delete credentials');
 }
 
 </script>
