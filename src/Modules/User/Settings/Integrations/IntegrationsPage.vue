@@ -136,7 +136,7 @@
                         <span class="text-sm font-medium">
                             Tus credenciales de {{ selectedOtaCapitalize }}
                         </span>
-                        <div class="flex justify-between">
+                        <div class="flex justify-between items-center">
                             <div class="flex justify-start gap-2">
                                 <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
                                 <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
@@ -160,6 +160,8 @@
             </div>
         </template>
     </ModalWindow>
+
+    <ModalAirbnb :open="openAirbnb" :tooltips="tooltips" @closeModalAirbnb="closeModalAirbnb" />
     
 </template>
 <script setup>
@@ -168,6 +170,7 @@ import HeaderIntegrations from './Components/HeaderIntegrations.vue';
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import LabelIntegrations from './Components/LabelIntegrations.vue';
+import ModalAirbnb from './Components/ModalAirbnb.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 const platformsStore = platformsExternalStore();
 
@@ -175,6 +178,7 @@ const platformsStore = platformsExternalStore();
 const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
 const dataOTAS = ref([]);
 const open = ref(false);
+const openAirbnb = ref(false);
 const serviceSelected = ref(null);
 const closeModalIntegration = () => {
     open.value = false;
@@ -193,9 +197,16 @@ const togglePasswordVisibility = () => {
 };
 
 const openModalIntegrations = (service) => {
-    console.log('Opening modal for service:', service);
-    open.value = true;
-    serviceSelected.value = service;
+    //console.log('Opening modal for service:', service);
+    if (service === 'airbnb') {
+        openAirbnb.value = true;
+        serviceSelected.value = service;
+    } else {
+        open.value = true;
+        serviceSelected.value = service;
+    }
+
+
 };
 
 onMounted(async () => {
@@ -219,7 +230,7 @@ const getSettings = async () => {
 };
 
 const selectedOtaCapitalize = computed(() => {
-    return serviceSelected.value.charAt(0).toUpperCase() + serviceSelected.value.slice(1);
+    return serviceSelected?.value?.charAt(0).toUpperCase() + serviceSelected?.value?.slice(1);
 });
 
 const placeholderUrl = computed(() => {
@@ -260,6 +271,10 @@ const submit = () => {
 
 const handleDeleteCredentials = () => {
     console.log('Delete credentials');
+}
+
+const closeModalAirbnb = () => {
+    openAirbnb.value = false;
 }
 
 </script>
