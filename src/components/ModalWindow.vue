@@ -5,7 +5,7 @@
       class="fixed inset-0 flex items-center justify-center bg-[#00000088] z-[10000]"
       @click.self="closeModal"
     >
-      <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all">
+      <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all relative">
         <slot name="header"></slot>
         <div :class="computedPaddingContent">
           <slot name="content"></slot>
@@ -52,7 +52,7 @@ const props = defineProps({
   },
   topOffset: {
     type: String,
-    default: '20%' 
+    default: '-16%' 
   }
 });
 
