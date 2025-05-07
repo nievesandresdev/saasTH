@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-start gap-2">
         <label class="text-sm font-medium">{{ props.label }}</label>
-        <Tooltip size="s" :top="-212" :left="-55">
+        <Tooltip size="l" :top="props.tooltipTop" :left="props.tooltipLeft">
             <template v-slot:button>
                 <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
             </template>
@@ -18,6 +18,8 @@ import Tooltip from '@/components/Tooltip.vue';
 const props = defineProps({
     label: String,
     tooltip: String,
+    tooltipTop: String,
+    tooltipLeft: String,
 })
 </script>
 

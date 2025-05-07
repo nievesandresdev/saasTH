@@ -102,15 +102,15 @@
             <hr>
             <div class="p-4">
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" />
+                    <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
                     <BaseTextField v-model="form.url" :placeholder="placeholderUrl" />
                 </div>
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" />
+                    <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                     <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                 </div>
                 <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" />
+                    <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                     <BaseTextField v-model="form.password" placeholder="Introduce tu contraseña" />
                 </div>
                 <section>
@@ -214,11 +214,19 @@ const placeholderUrl = computed(() => {
 });
 
 const tooltips = computed(() => {
-    const baseUrl = 'https://www.booking.com/hotel/es/hotel-name.html';
     return {
-        url: `<span class="text-sm font-medium mb-4">¿Necesitas cambiar la URL?</span><p class="text-xs mt-4 font-normal">Encontrarás atención personalizada llamando al teléfono +34 624 149 605 o a la direccón de correo electrónico info@thehoster.io <br><br>Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>`,
-        email: `<span class="font-medium">correo@tu-hotel.com</span>`,
-        password: `<span class="text-red-500">Tu contraseña de acceso</span>`
+        url: `<div>
+            <span style="font-size: 14px; font-weight: 500; margin-bottom: 8px; display: block;">¿Necesitas cambiar la URL?</span>
+            <p style="font-size: 14px; margin-top: 8px; font-weight: normal;">Encontrarás atención personalizada llamando al teléfono +34 624 149 605 o a la direccón de correo electrónico info@thehoster.io <br><br>Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>
+        </div>`,
+        email: `<div>
+            <span style="font-size: 14px; font-weight: 400;">Utiliza el correo asociado a tu cuenta de ${selectedOtaCapitalize.value} con permisos de administrador.</span>
+            <p style="margin-top: 8px;">Si tienes dudas, accede a tu cuenta para confirmar qué correo tienes configurado.</p>
+        </div>`,
+        password: `<div>
+            <span style="font-size: 14px; font-weight: 400;">Introduce la contraseña que usas para acceder a tu cuenta de ${selectedOtaCapitalize.value}.</span>
+            <p style="margin-top: 8px;">Si no la recuerdas, puedes verificarla o restablecerla desde el sitio de ${selectedOtaCapitalize.value}.</p>
+        </div>`
     };
 });
 
