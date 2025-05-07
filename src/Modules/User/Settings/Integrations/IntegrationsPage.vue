@@ -19,7 +19,7 @@
                     <span class="text-[#333333] text-base font-medium">Booking</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <img :src="dataOTAS?.otas?.find(ota => ota.ota === 'BOOKING')?.url ? '/assets/icons/TH.CHECK.svg' : '/assets/icons/1.TH.WARNING.svg'" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium truncate">
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'BOOKING')?.url || 'Sin URL' }}
                     </span>
@@ -36,7 +36,7 @@
                     <span class="text-[#333333] text-base font-medium">TripAdvisor</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <img :src="dataOTAS?.otas?.find(ota => ota.ota === 'TRIPADVISOR')?.url ? '/assets/icons/TH.CHECK.svg' : '/assets/icons/1.TH.WARNING.svg'" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium truncate">
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'TRIPADVISOR')?.url || 'Sin URL' }}
                     </span>
@@ -53,7 +53,7 @@
                     <span class="text-[#333333] text-base font-medium">Expedia</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <img :src="dataOTAS?.otas?.find(ota => ota.ota === 'EXPEDIA')?.url ? '/assets/icons/TH.CHECK.svg' : '/assets/icons/1.TH.WARNING.svg'" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium truncate">
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'EXPEDIA')?.url || 'Sin URL' }}
                     </span>
@@ -70,7 +70,7 @@
                     <span class="text-[#333333] text-base font-medium">Google</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <img :src="dataOTAS?.otas?.find(ota => ota.ota === 'GOOGLE')?.url ? '/assets/icons/TH.CHECK.svg' : '/assets/icons/1.TH.WARNING.svg'" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium truncate">
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'GOOGLE')?.url || 'Sin URL' }}
                     </span>
