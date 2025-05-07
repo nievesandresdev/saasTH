@@ -3,6 +3,7 @@ const NotificationsSettings = () => import('@/Modules/User/Settings/Notification
 const UsersSettings = () => import('@/Modules/User/Settings/UsersSettings');
 const UserPanel = () => import('@/Modules/User/Settings/UserPanel');
 const ExternalPlatform = () => import('@/Modules/User/Settings/ExternalPlatforms');
+const Integrations = () => import('@/Modules/User/Settings/Integrations/IntegrationsPage');
 
 const userSettingsRoutes = [
   {
@@ -28,6 +29,11 @@ const userSettingsRoutes = [
         name: 'ExternalPlatforms',
         path: 'plataformas-externas',
         component : ExternalPlatform
+      },
+      {
+        name: 'Integrations',
+        path: 'integraciones',
+        component : Integrations
       }
     ],
   },
