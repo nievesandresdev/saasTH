@@ -13,10 +13,15 @@
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'BOOKING')?.url || 'Sin URL' }}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 mt-2">
+                <div class="flex items-center gap-2 mt-2" v-if="!dataOTAS?.otas?.find(ota => ota.ota === 'BOOKING')?.withCredentials">
                     <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
                 </div>
+                <div class="flex items-center gap-2 mt-2" v-else>
+                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <span class="text-[#333333] text-[12px] font-medium">Credenciales actualizadas</span>
+                </div>
+
             </div>
 
             <div @click="openModalIntegrations('tripadvisor')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
@@ -47,9 +52,13 @@
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'EXPEDIA')?.url || 'Sin URL' }}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 mt-2">
+                <div class="flex items-center gap-2 mt-2" v-if="!dataOTAS?.otas?.find(ota => ota.ota === 'EXPEDIA')?.withCredentials">
                     <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
+                </div>
+                <div class="flex items-center gap-2 mt-2" v-else>
+                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <span class="text-[#333333] text-[12px] font-medium">Credenciales actualizadas</span>
                 </div>
             </div>
 
@@ -81,9 +90,13 @@
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'AIRBNB')?.url || 'Sin URL' }}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 mt-2">
+                <div class="flex items-center gap-2 mt-2" v-if="!dataOTAS?.otas?.find(ota => ota.ota === 'AIRBNB')?.withCredentials">
                     <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
+                </div>
+                <div class="flex items-center gap-2 mt-2" v-else>
+                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <span class="text-[#333333] text-[12px] font-medium">Credenciales actualizadas</span>
                 </div>
             </div>
         </div>
@@ -121,11 +134,11 @@
                             <p class="text-red-500">{{ errorMessage.url }}</p>
                         </div>
                     </div>
-                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && !credentialsOta" class="flex flex-col gap-2 mb-4">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && !credentialsOta" class="flex flex-col gap-2 mb-4">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -147,7 +160,7 @@
                             >
                         </div>
                     </div>
-                    <section v-if="credentialsOta">
+                    <section v-if="credentialsOta && credentialsOta.email !== '' && credentialsOta.password !== ''">
                         <div class="flex flex-col gap-[6px]">
                             <span class="text-sm font-medium">
                                 Tus credenciales de {{ selectedOtaCapitalize }}
@@ -415,10 +428,11 @@ const openModalIntegrations = (service) => {
     } else {
         open.value = true;
         serviceSelected.value = service;
+        getDataByOta(service);
+        getAllDataByOtas(service);
     }
 
-    getDataByOta(service);
-    getAllDataByOtas(service);
+    
 };
 
 const getDataByOta = async (ota) => {
@@ -522,6 +536,10 @@ const tooltips = computed(() => {
     };
 });
 
+const withCredentialsOta = computed(() => {
+    return dataOTAS.value?.otas?.filter(ota => ota.ota === serviceSelected?.value) || [];
+});
+
 const submit = async () => {
     if (!validateCredentials()) {
         return;
@@ -544,8 +562,8 @@ const submit = async () => {
         credentialsByOtas: serviceSelected.value === 'expedia' || serviceSelected.value === 'booking' 
             ? {
                 [serviceSelected.value.toUpperCase()]: {
-                    email: form.value.email || null,
-                    password: form.value.password || null
+                    email: form.value.email || '',
+                    password: form.value.password || ''
                 }
             }
             : {},
@@ -553,18 +571,19 @@ const submit = async () => {
     };
 
     console.log('Datos a enviar:', dataToSubmit);
-    /* const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
+    const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
 
     if (response.ok) {
         toast.warningToast('Cambios guardados con éxito', 'top-right');
         await getSettings();
-        closeModalIntegration();
+        //closeModalIntegration();
+        open.value = false;
         setTimeout(() => {
             location.reload();
         }, 1100);
     } else {
         toast.errorToast(response.message.text, 'top-right');
-    } */
+    }
 }
 
 const handleDeleteCredentials = async () => {

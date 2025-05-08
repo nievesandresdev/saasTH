@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <template v-else>
-                    <div v-if="credentialsByAirbnb" class="flex flex-col gap-2 mb-4">
+                    <div v-if="credentialsByAirbnb && credentialsByAirbnb.email !== '' && credentialsByAirbnb.password !== ''" class="flex flex-col gap-2 mb-4">
                         <section>
                             <div class="flex flex-col gap-[6px]">
                                 <span class="text-sm font-medium">
@@ -69,10 +69,11 @@
                         </section>
                     </div>
                     <div v-else class="flex flex-col gap-2 mb-4">
+                       
                         <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="!credentialsByAirbnb" class="flex flex-col gap-2 mb-4">
+                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -298,8 +299,8 @@ const submit = async () => {
         googleMapCid: current_hotel.value.code,
         credentialsByOtas: {
             AIRBNB: {
-                email: form.value.email || null,
-                password: form.value.password || null
+                email: form.value.email || '',
+                password: form.value.password || ''
             }
         },
         urls: urlsPayload
@@ -310,7 +311,8 @@ const submit = async () => {
 
     if (response.ok) {
         toast.warningToast('Cambios guardados con éxito', 'top-right');
-        closeModalAirbnb();
+        //closeModalAirbnb();
+        emit('closeModalAirbnb');
         setTimeout(() => {
             location.reload();
         }, 1100);
