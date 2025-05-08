@@ -120,11 +120,11 @@
                             <p class="text-red-500">{{ errorMessage.url }}</p>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking' && !credentialsOta">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && !credentialsOta" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking' && !credentialsOta">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && !credentialsOta" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -304,7 +304,32 @@ const validateUrl = (url, type) => {
     return null;
 };
 
-// Modificar el computed hasChanges para incluir la validación
+// Modificar la validación de credenciales
+const validateCredentials = () => {
+    // Si hay credenciales iniciales y se están eliminando
+    if (credentialsOta.value && !form.value.email && !form.value.password) {
+        return true;
+    }
+
+    // Si se está intentando agregar credenciales
+    if (form.value.email || form.value.password) {
+        if (!form.value.email || !form.value.password) {
+            errors.value.email = true;
+            errors.value.password = true;
+            errorMessage.value.email = 'Ambos campos son obligatorios';
+            errorMessage.value.password = 'Ambos campos son obligatorios';
+            return false;
+        }
+    }
+    
+    errors.value.email = false;
+    errors.value.password = false;
+    errorMessage.value.email = '';
+    errorMessage.value.password = '';
+    return true;
+};
+
+// Modificar el computed hasChanges
 const hasChanges = computed(() => {
     if (!initialForm.value) return false;
     
@@ -314,7 +339,27 @@ const hasChanges = computed(() => {
         password: form.value.password
     };
     
-    return JSON.stringify(currentState) !== initialForm.value;
+    const initialState = JSON.parse(initialForm.value);
+    
+    // Si hay credenciales iniciales
+    if (credentialsOta.value) {
+        // Si se están eliminando las credenciales
+        if (!currentState.email && !currentState.password) {
+            return true;
+        }
+        // Si se están modificando las credenciales
+        return currentState.url !== initialState.url || 
+               currentState.email !== credentialsOta.value.email || 
+               currentState.password !== credentialsOta.value.password;
+    }
+    
+    // Si no hay credenciales iniciales
+    const hasUrlChanges = currentState.url !== initialState.url;
+    const hasCredentialChanges = currentState.email !== initialState.email || 
+                                currentState.password !== initialState.password;
+    
+    // Solo habilitar si hay cambios en la URL o si ambos campos de credenciales están llenos
+    return  (currentState.email && currentState.password) || hasCredentialChanges;
 });
 
 // Agregar watch para validar la URL cuando cambia
@@ -373,10 +418,8 @@ const getDataByOta = async (ota) => {
 }
 
 const getAllDataByOtas = async (ota) => {
-    //credentialsOta.value = null;
     loading.value = true;
     let otaCapitalize = ota.toUpperCase();
-    console.log(otaCapitalize);
     try {
         const response = await platformsStore.$getAllDataByOtas({ googleMapCid: current_hotel.value.code });
         credentialsOta.value = response.data.hotelDetail?.credentialsByOtas?.[otaCapitalize];
@@ -384,6 +427,13 @@ const getAllDataByOtas = async (ota) => {
         if (credentialsOta.value) {
             form.value.email = credentialsOta.value.email;
             form.value.password = credentialsOta.value.password;
+            
+            // Actualizar el estado inicial con las credenciales
+            initialForm.value = JSON.stringify({
+                url: form.value.url,
+                email: credentialsOta.value.email,
+                password: credentialsOta.value.password
+            });
         }
     } catch (error) {
         console.error('Error loading credentials:', error);
@@ -449,6 +499,10 @@ const tooltips = computed(() => {
 });
 
 const submit = async () => {
+    if (!validateCredentials()) {
+        return;
+    }
+
     const urlsPayload = [];
     
     // Solo agregar URL si existe y ha cambiado
@@ -486,13 +540,43 @@ const submit = async () => {
     }
 }
 
-const handleDeleteCredentials = () => {
-    console.log('Delete credentials');
+const handleDeleteCredentials = async () => {
+    try {
+        loading.value = true;
+        // Limpiar las credenciales
+        credentialsOta.value = null;
+        form.value.email = '';
+        form.value.password = '';
+        
+        // Actualizar el estado inicial para reflejar que no hay credenciales
+        initialForm.value = JSON.stringify({
+            url: form.value.url,
+            email: '',
+            password: ''
+        });
+        
+        // Limpiar errores
+        errors.value.url = false;
+        errors.value.email = false;
+        errors.value.password = false;
+        errorMessage.value.url = '';
+        errorMessage.value.email = '';
+        errorMessage.value.password = '';
+    } catch (error) {
+        console.error('Error deleting credentials:', error);
+    } finally {
+        loading.value = false;
+    }
 }
 
 const closeModalAirbnb = () => {
     openAirbnb.value = false;
 }
+
+// Agregar watch para validar credenciales cuando cambian
+watch([() => form.value.email, () => form.value.password], () => {
+    validateCredentials();
+});
 
 </script>
 
