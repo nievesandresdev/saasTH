@@ -118,6 +118,16 @@
         @submit:delete="() => removeUrl(indexToDelete)" 
         @close:modal="openModalDeleteURL = false" 
     />
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="openModalNoSave"
+        text="Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?"
+        textbtn="Guardar cambios"
+        @saveChanges="submit"
+        type="exit_save"
+        @close="forceCloseModalAirbnb"
+    />
 </template>
 
 <script setup>
@@ -128,6 +138,7 @@ import LabelIntegrations from './LabelIntegrations.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 import { useToastAlert } from '@/composables/useToastAlert';
 import ModalDeleteURL from '@/Modules/User/Settings/components/ModalDeleteURL.vue';
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
@@ -164,7 +175,7 @@ const credentialsByAirbnb = ref(null);
 const openModalDeleteURL = ref(false);
 const nameOtaDelete = ref('');
 const indexToDelete = ref(null);
-
+const openModalNoSave = ref(false);
 
 // Agregar después de la definición de form
 const errors = ref({
@@ -247,8 +258,17 @@ const togglePasswordVisibility = () => {
 };
 
 const closeModalAirbnb = () => {
+    if (hasChanges.value) {
+        openModalNoSave.value = true;
+        console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
+        return false;
+    }
     emit('closeModalAirbnb');
 };
+
+const forceCloseModalAirbnb = () => {
+    emit('closeModalAirbnb');
+}
 
 const submit = async () => {
     const urlsPayload = [];

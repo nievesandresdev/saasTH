@@ -52,7 +52,7 @@ const props = defineProps({
   },
   topOffset: {
     type: String,
-    default: '-8%' 
+    default: '-5%' 
   }
 });
 

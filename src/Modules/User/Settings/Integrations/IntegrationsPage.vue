@@ -188,7 +188,16 @@
         :airbnbUrls="airbnbUrls"
         @closeModalAirbnb="closeModalAirbnb" 
     />
-    
+
+    <ModalNoSave
+        :id="'not-saved'"
+        :open="openModalNoSave"
+        text="Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?"
+        textbtn="Guardar cambios"
+        @saveChanges="submit"
+        type="exit_save"
+        @close="forceCloseModalIntegration"
+    />
 </template>
 <script setup>
 import { ref, onMounted, computed, watch, nextTick } from 'vue';
@@ -199,6 +208,7 @@ import LabelIntegrations from './Components/LabelIntegrations.vue';
 import ModalAirbnb from './Components/ModalAirbnb.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 import { useToastAlert } from '@/composables/useToastAlert';
+import ModalNoSave from '@/components/ModalNoSave.vue';
 
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
@@ -210,6 +220,7 @@ const openAirbnb = ref(false);
 const serviceSelected = ref(null);
 const loading = ref(false);
 const credentialsOta = ref(null);
+const openModalNoSave = ref(false);
 
 // Computed para obtener las URLs de Airbnb
 const airbnbUrls = computed(() => {
@@ -217,6 +228,16 @@ const airbnbUrls = computed(() => {
 });
 
 const closeModalIntegration = () => {
+    if (hasChanges.value) {
+        openModalNoSave.value = true;
+    } else {
+        open.value = false;
+        disabledInput.value.url = false;
+    }
+}
+
+const forceCloseModalIntegration = () => {
+    openModalNoSave.value = false;
     open.value = false;
     disabledInput.value.url = false;
 }
@@ -532,7 +553,7 @@ const submit = async () => {
     };
 
     console.log('Datos a enviar:', dataToSubmit);
-    const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
+    /* const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
 
     if (response.ok) {
         toast.warningToast('Cambios guardados con éxito', 'top-right');
@@ -543,7 +564,7 @@ const submit = async () => {
         }, 1100);
     } else {
         toast.errorToast(response.message.text, 'top-right');
-    }
+    } */
 }
 
 const handleDeleteCredentials = async () => {
