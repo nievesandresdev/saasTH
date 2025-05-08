@@ -7,6 +7,7 @@ export const requestChangeUrlApi = (data) => apiHttp('POST', `${platformsPath}/r
 //export const dataOTAS = () => apiHttp('GET', `${platformsPath}/getDataOtas`)
 export const dataOTAS = (params) => apiHttp('GET', `hotelOtas/getByParams`,params,{},'API_REVIEW')
 export const updateBulkOTASApi = (params) => apiHttp('POST', `hotelOtas/updateBulk`,params,{},'API_REVIEW')
+export const getAllDataByOtas = (params) => apiHttp('GET', `hotelDetails/findOne`,params,{},'API_REVIEW')
 
 //export const updateBulkOTASApi = (data) => apiHttp('POST', `${platformsPath}/updateBulkOTAS`, data)
 

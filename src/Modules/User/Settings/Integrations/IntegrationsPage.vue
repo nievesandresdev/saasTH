@@ -161,7 +161,12 @@
         </template>
     </ModalWindow>
 
-    <ModalAirbnb :open="openAirbnb" :tooltips="tooltips" @closeModalAirbnb="closeModalAirbnb" />
+    <ModalAirbnb 
+        :open="openAirbnb" 
+        :tooltips="tooltips" 
+        :airbnbUrls="airbnbUrls"
+        @closeModalAirbnb="closeModalAirbnb" 
+    />
     
 </template>
 <script setup>
@@ -180,6 +185,12 @@ const dataOTAS = ref([]);
 const open = ref(false);
 const openAirbnb = ref(false);
 const serviceSelected = ref(null);
+
+// Computed para obtener las URLs de Airbnb
+const airbnbUrls = computed(() => {
+    return dataOTAS.value?.otas?.filter(ota => ota.ota === 'AIRBNB') || [];
+});
+
 const closeModalIntegration = () => {
     open.value = false;
 }
