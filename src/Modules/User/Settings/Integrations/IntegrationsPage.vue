@@ -30,9 +30,9 @@
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'TRIPADVISOR')?.url || 'Sin URL' }}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
-                    <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
+                <div class="flex items-center gap-2 mt-2" >
+                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <span class="text-[#333333] text-[12px] font-medium">No requiere credenciales</span>
                 </div>
             </div>
 
@@ -65,8 +65,8 @@
                     </span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
-                    <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
+                    <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
+                    <span class="text-[#333333] text-[12px] font-medium">No requiere credenciales</span>
                 </div>
             </div>
 
@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <ModalWindow v-if="open" :isVisible="open"  :width="'440px'" padding-content="p-0" footer="true" >
+    <ModalWindow v-if="open" :isVisible="open"  :width="'480px'" padding-content="p-0" footer="true" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
@@ -101,52 +101,68 @@
             </div>
             <hr>
             <div class="p-4">
-                <div class="flex flex-col gap-2 mb-4">
-                    <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
-                    <BaseTextField v-model="form.url" :placeholder="placeholderUrl" />
-                </div>
-                <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking'">
-                    <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
-                    <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
-                </div>
-                <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking'">
-                    <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
-                    <div class="relative">
-                        <BaseTextField 
-                            v-model="form.password" 
-                            :type="visiblePassword ? 'text' : 'password'"
-                            placeholder="Introduce tu contraseña" 
-                        />
-                        <img 
-                            v-if="visiblePassword" 
-                            class="absolute cursor-pointer w-5 right-2.5 top-3" 
-                            src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
-                            @click="togglePasswordVisibility"
-                        >
-                        <img 
-                            v-if="!visiblePassword" 
-                            class="absolute cursor-pointer w-5 right-2.5 top-3" 
-                            src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
-                            @click="togglePasswordVisibility"
-                        >
+                <div v-if="loading" class="flex flex-col gap-2 mb-4">
+                    <div class="animate-pulse">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-10 bg-gray-200 rounded"></div>
                     </div>
                 </div>
-                <section>
-                    <div class="flex flex-col gap-[6px]">
-                        <span class="text-sm font-medium">
-                            Tus credenciales de {{ selectedOtaCapitalize }}
-                        </span>
-                        <div class="flex justify-between items-center">
-                            <div class="flex justify-start gap-2">
-                                <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
-                                <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
-                            </div>
-                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="handleDeleteCredentials">
-                                <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-4 h-4">
-                            </div>
+                <template v-else>
+                    <div class="flex flex-col gap-2 mb-4">
+                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
+                        <BaseTextField 
+                            v-model="form.url" 
+                            :placeholder="placeholderUrl"
+                            :error="errors.url"
+                        />
+                        <div v-if="errors.url" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
+                            <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
+                            <p class="text-red-500">{{ errorMessage.url }}</p>
                         </div>
                     </div>
-                </section>
+                    <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking' && !credentialsOta">
+                        <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
+                        <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
+                    </div>
+                    <div class="flex flex-col gap-2 mb-4" v-if="serviceSelected === 'expedia' || serviceSelected === 'booking' && !credentialsOta">
+                        <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
+                        <div class="relative">
+                            <BaseTextField 
+                                v-model="form.password" 
+                                :type="visiblePassword ? 'text' : 'password'"
+                                placeholder="Introduce tu contraseña" 
+                            />
+                            <img 
+                                v-if="visiblePassword" 
+                                class="absolute cursor-pointer w-5 right-2.5 top-3" 
+                                src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
+                                @click="togglePasswordVisibility"
+                            >
+                            <img 
+                                v-if="!visiblePassword" 
+                                class="absolute cursor-pointer w-5 right-2.5 top-3" 
+                                src="/assets/icons/1.TH.PASSWORD.OUTLINE.svg" 
+                                @click="togglePasswordVisibility"
+                            >
+                        </div>
+                    </div>
+                    <section v-if="credentialsOta">
+                        <div class="flex flex-col gap-[6px]">
+                            <span class="text-sm font-medium">
+                                Tus credenciales de {{ selectedOtaCapitalize }}
+                            </span>
+                            <div class="flex justify-between items-center">
+                                <div class="flex justify-start gap-2">
+                                    <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
+                                    <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
+                                </div>
+                                <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="handleDeleteCredentials">
+                                    <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-4 h-4">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </template>
             </div>
             <hr>
             <div class="p-4 flex justify-between">
@@ -154,7 +170,11 @@
                     Cancelar
                 </button>
                 
-                <button  @click="submit" class="hbtn-cta px-4 py-3 text-sm leading-[110%] font-medium">
+                <button 
+                    @click="submit" 
+                    class="hbtn-cta px-4 py-3 text-sm leading-[110%] font-medium"
+                    :disabled="!hasChanges"
+                >
                     Guardar
                 </button>
             </div>
@@ -170,21 +190,25 @@
     
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import HeaderIntegrations from './Components/HeaderIntegrations.vue';
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import LabelIntegrations from './Components/LabelIntegrations.vue';
 import ModalAirbnb from './Components/ModalAirbnb.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
-const platformsStore = platformsExternalStore();
+import { useToastAlert } from '@/composables/useToastAlert';
 
+const platformsStore = platformsExternalStore();
+const toast = useToastAlert();
 
 const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
 const dataOTAS = ref([]);
 const open = ref(false);
 const openAirbnb = ref(false);
 const serviceSelected = ref(null);
+const loading = ref(false);
+const credentialsOta = ref(null);
 
 // Computed para obtener las URLs de Airbnb
 const airbnbUrls = computed(() => {
@@ -196,9 +220,115 @@ const closeModalIntegration = () => {
 }
 
 const form = ref({
+    _id: '',
     url: '',
     email: '',
     password: '',
+});
+
+// Agregar estado inicial del formulario para comparar cambios
+const initialForm = ref(null);
+
+// Agregar estado para errores
+const errors = ref({
+    url: false,
+    email: false,
+    password: false
+});
+
+const errorMessage = ref({
+    url: '',
+    email: '',
+    password: ''
+});
+
+// Función de validación de URLs
+const validateUrl = (url, type) => {
+    // Si el campo está vacío, no hay errores
+    if (!url) {
+        return 'El enlace no puede estar vacío';
+    }
+
+    let urlParts;
+    try {
+        urlParts = new URL(url);
+    } catch (error) {
+        return 'URL no válida';
+    }
+
+    const hostname = urlParts.origin; 
+    let pathname = urlParts.pathname;
+
+    // Verifica que termine en .com
+    if (!hostname.endsWith('.com')) {
+        return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
+    }
+
+    // Elimina cualquier query string o fragmento en la URL
+    pathname = pathname.split('?')[0].split('#')[0];
+
+    switch (type) {
+        case 'booking':
+            // Elimina cualquier cosa después de ".html" en la URL
+            if (pathname.includes('.html')) {
+                pathname = pathname.substring(0, pathname.indexOf('.html') + 5);
+                form.value.url = hostname + pathname;
+            }
+            if (!pathname.includes('/hotel/') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de Booking es incorrecto. Debe contener "/hotel/" y terminar en ".html".';
+            }
+            break;
+        case 'tripadvisor':
+            if (!pathname.startsWith('/Hotel_Review-') || !pathname.endsWith('.html')) {
+                return 'El formato del enlace de TripAdvisor es incorrecto. Debe empezar con "/Hotel_Review-" y terminar en ".html".';
+            }
+            break;
+        case 'google':
+            /* if (!pathname.startsWith('/maps/place/')) {
+                return 'El formato del enlace de Google es incorrecto. Debe empezar con "/maps/place/".';
+            } */
+            return null;
+            break;
+        case 'airbnb':
+            if (!url.startsWith('https://es.airbnb.com/rooms/')) {
+                return 'El formato del enlace de Airbnb es incorrecto. Debe comenzar con "https://es.airbnb.com/rooms/".';
+            }
+            break;
+        case 'expedia':
+            // No hay validación específica para Expedia
+            break;
+        default:
+            return 'Tipo de enlace no soportado';
+    }
+
+    return null;
+};
+
+// Modificar el computed hasChanges para incluir la validación
+const hasChanges = computed(() => {
+    if (!initialForm.value) return false;
+    
+    const currentState = {
+        url: form.value.url,
+        email: form.value.email,
+        password: form.value.password
+    };
+    
+    return JSON.stringify(currentState) !== initialForm.value;
+});
+
+// Agregar watch para validar la URL cuando cambia
+watch(() => form.value.url, (newUrl) => {
+    if (serviceSelected.value) {
+        const validationError = validateUrl(newUrl, serviceSelected.value);
+        if (!validationError) {
+            errors.value.url = false;
+            errorMessage.value.url = '';
+        } else {
+            errors.value.url = true;
+            errorMessage.value.url = validationError;
+        }
+    }
 });
 
 const visiblePassword = ref(false);
@@ -208,7 +338,11 @@ const togglePasswordVisibility = () => {
 };
 
 const openModalIntegrations = (service) => {
-    //console.log('Opening modal for service:', service);
+    form.value.email = '';
+    form.value.password = '';
+    errorMessage.value.url = '';
+    errorMessage.value.email = '';
+    errorMessage.value.password = '';
     if (service === 'airbnb') {
         openAirbnb.value = true;
         serviceSelected.value = service;
@@ -217,8 +351,46 @@ const openModalIntegrations = (service) => {
         serviceSelected.value = service;
     }
 
-
+    getDataByOta(service);
+    getAllDataByOtas(service);
 };
+
+const getDataByOta = async (ota) => {
+    const params = {
+        googleMapCid: current_hotel.value.code,
+        ota: ota.toUpperCase(),
+    };
+    const response = await platformsStore.$findByParamsOta(params);
+    form.value.url = response.data?.ota?.url;
+    form.value._id = response.data?.ota?._id;
+    
+    // Guardar estado inicial después de cargar los datos
+    initialForm.value = JSON.stringify({
+        url: form.value.url,
+        email: form.value.email,
+        password: form.value.password
+    });
+}
+
+const getAllDataByOtas = async (ota) => {
+    //credentialsOta.value = null;
+    loading.value = true;
+    let otaCapitalize = ota.toUpperCase();
+    console.log(otaCapitalize);
+    try {
+        const response = await platformsStore.$getAllDataByOtas({ googleMapCid: current_hotel.value.code });
+        credentialsOta.value = response.data.hotelDetail?.credentialsByOtas?.[otaCapitalize];
+
+        if (credentialsOta.value) {
+            form.value.email = credentialsOta.value.email;
+            form.value.password = credentialsOta.value.password;
+        }
+    } catch (error) {
+        console.error('Error loading credentials:', error);
+    } finally {
+        loading.value = false;
+    }
+}
 
 onMounted(async () => {
     await getSettings();
@@ -276,8 +448,42 @@ const tooltips = computed(() => {
     };
 });
 
-const submit = () => {
-    console.log(form.value);
+const submit = async () => {
+    const urlsPayload = [];
+    
+    // Solo agregar URL si existe y ha cambiado
+    if (form.value.url) {
+        urlsPayload.push({
+            _id: form.value._id || "",
+            delete: false,
+            ota: serviceSelected.value.toUpperCase(),
+            url: form.value.url
+        });
+    }
+
+    const dataToSubmit = {
+        googleMapCid: current_hotel.value.code,
+        credentialsByOtas: serviceSelected.value === 'expedia' || serviceSelected.value === 'booking' 
+            ? {
+                [serviceSelected.value.toUpperCase()]: {
+                    email: form.value.email || null,
+                    password: form.value.password || null
+                }
+            }
+            : {},
+        urls: urlsPayload
+    };
+
+    console.log('Datos a enviar:', dataToSubmit);
+    const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
+
+    if (response.ok) {
+        toast.warningToast('Cambios guardados con éxito', 'top-right');
+        await getSettings();
+        closeModalIntegration();
+    } else {
+        toast.errorToast(response.message.text, 'top-right');
+    }
 }
 
 const handleDeleteCredentials = () => {

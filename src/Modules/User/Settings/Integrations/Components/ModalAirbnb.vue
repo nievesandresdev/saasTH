@@ -284,10 +284,10 @@ const submit = async () => {
     const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
 
     if (response.ok) {
-        toast.warningToast('Cambios aplicados con éxito', 'top-right');
+        toast.warningToast('Cambios guardados con éxito', 'top-right');
         //await getSettings();
     } else {
-        toast.errorToast(response.data.message, 'top-right');
+        toast.errorToast(response.message.text, 'top-right');
     }
 }
 

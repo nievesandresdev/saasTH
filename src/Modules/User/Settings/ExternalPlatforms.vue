@@ -255,7 +255,7 @@ import { $getPropertyInUrl } from '@/utils/helpers';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import {
     requestChangeUrlApi,
-} from '@/api/services/platforms/platformsServices'
+} from '@/api/services/platforms/platforms.service'
 
 const platformsStore = platformsExternalStore();
 const authStore = useAuthStore();

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { dataOTAS,updateBulkOTASApi,getAllDataByOtas } from '@/api/services/platforms/platformsServices';
+import { dataOTAS,updateBulkOTASApi,getAllDataByOtas,findByParamsOta } from '@/api/services/platforms/platforms.service';
 
 export const platformsExternalStore = defineStore('platformsExternal', () => {
 
@@ -23,11 +23,18 @@ export const platformsExternalStore = defineStore('platformsExternal', () => {
     return response;
   }
 
+  async function $findByParamsOta(params){
+    const response = await findByParamsOta(params);
+    return response;
+  }
+
+
 
   return {
     $getDataOTAS,
     $bulkUpdateOTAS,
     $getAllDataByOtas,
+    $findByParamsOta,
   };
 
 });
