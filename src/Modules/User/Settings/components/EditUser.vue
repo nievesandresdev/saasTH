@@ -454,7 +454,7 @@ const isModalCrudOpen = ref(false);
   const adminAccess = ref([
       { name: 'WebApp', selected: false , value: 'webapp' },
       { name: 'Comunicaciones', selected: false , value: 'comunicaciones' },
-      { name: 'Plataformas externas', selected: false , value: 'plataformas_externas' },
+      { name: 'Integraciones', selected: false , value: 'plataformas_externas' },
       { name: 'Datos', selected: false , value: 'datos' },
       { name: 'Equipo', selected: false , value: 'equipo' },
   ]);
