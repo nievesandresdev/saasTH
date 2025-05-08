@@ -109,13 +109,12 @@
                 </div>
                 <template v-else>
                     <div class="flex flex-col gap-2 mb-4">
-                        <pre>{{ credentialsOta }}</pre>
-                        <pre>{{ form }}</pre>
-                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
+                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" :disabled-tootlip="disabledInput.url" />
                         <BaseTextField 
                             v-model="form.url" 
                             :placeholder="placeholderUrl"
                             :error="errors.url"
+                            :disabled="disabledInput.url"
                         />
                         <div v-if="errors.url" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
                             <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
@@ -219,6 +218,7 @@ const airbnbUrls = computed(() => {
 
 const closeModalIntegration = () => {
     open.value = false;
+    disabledInput.value.url = false;
 }
 
 const form = ref({
@@ -226,6 +226,11 @@ const form = ref({
     url: '',
     email: '',
     password: '',
+});
+
+// Agregar estado para controlar si el input de URL debe estar deshabilitado
+const disabledInput = ref({
+    url: false
 });
 
 // Agregar estado inicial del formulario para comparar cambios
@@ -343,8 +348,8 @@ const hasChanges = computed(() => {
     
     const initialState = JSON.parse(initialForm.value);
     
-    // Verificar cambios en la URL
-    const hasUrlChanges = currentState.url !== initialState.url;
+    // Verificar cambios en la URL solo si no está deshabilitada
+    const hasUrlChanges = !disabledInput.value.url && currentState.url !== initialState.url;
     
     // Verificar cambios en las credenciales
     const hasCredentialChanges = 
@@ -377,6 +382,7 @@ const togglePasswordVisibility = () => {
 };
 
 const openModalIntegrations = (service) => {
+   
     form.value.email = '';
     form.value.password = '';
     errorMessage.value.url = '';
@@ -402,6 +408,9 @@ const getDataByOta = async (ota) => {
     const response = await platformsStore.$findByParamsOta(params);
     form.value.url = response.data?.ota?.url;
     form.value._id = response.data?.ota?._id;
+    
+    // Si existe una URL, deshabilitar el input
+    disabledInput.value.url = !!response.data?.ota?.url;
     
     // Guardar estado inicial después de cargar los datos
     initialForm.value = JSON.stringify({
@@ -479,7 +488,7 @@ const tooltips = computed(() => {
     return {
         url: `<div>
             <span style="font-size: 14px; font-weight: 500; margin-bottom: 8px; display: block;">¿Necesitas cambiar la URL?</span>
-            <p style="font-size: 14px; margin-top: 8px; font-weight: normal;">Encontrarás atención personalizada llamando al teléfono +34 624 149 605 o a la direccón de correo electrónico info@thehoster.io <br><br>Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>
+            <p style="font-size: 14px; margin-top: 8px; font-weight: normal;">Encontrarás atención personalizada llamando al teléfono +34 624 149 605 o a la dirección de correo electrónico info@thehoster.io <br><br>Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>
         </div>`,
         email: `<div>
             <span style="font-size: 14px; font-weight: 400;">Utiliza el correo asociado a tu cuenta de ${selectedOtaCapitalize.value} con permisos de administrador.</span>
@@ -499,7 +508,7 @@ const submit = async () => {
 
     const urlsPayload = [];
     
-    // Solo agregar URL si existe y ha cambiado
+    // Si hay una URL existente (aunque esté deshabilitada), incluirla en el payload
     if (form.value.url) {
         urlsPayload.push({
             _id: form.value._id || "",
@@ -529,6 +538,9 @@ const submit = async () => {
         toast.warningToast('Cambios guardados con éxito', 'top-right');
         await getSettings();
         closeModalIntegration();
+        setTimeout(() => {
+            location.reload();
+        }, 1100);
     } else {
         toast.errorToast(response.message.text, 'top-right');
     }
@@ -566,8 +578,9 @@ const handleDeleteCredentials = async () => {
         
         // Forzar una actualización del estado
         await nextTick();
+        toast.warningToast('Credenciales eliminadas con éxito', 'top-right');
     } catch (error) {
-        console.error('Error deleting credentials:', error);
+       toast.errorToast('Error al eliminar las credenciales', 'top-right');
     } finally {
         loading.value = false;
     }

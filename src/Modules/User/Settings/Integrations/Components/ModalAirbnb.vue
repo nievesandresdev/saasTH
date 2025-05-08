@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div v-if="index > 0" class="mt-8">
-                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="removeUrl(index)">
+                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="openDeleteModal(index)">
                                 <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-4 h-4">
                             </div>
                         </div>
@@ -112,6 +112,12 @@
             </div>
         </template>
     </ModalWindow>
+    <ModalDeleteURL 
+        :open="openModalDeleteURL" 
+        :nameOTA="nameOtaDelete" 
+        @submit:delete="() => removeUrl(indexToDelete)" 
+        @close:modal="openModalDeleteURL = false" 
+    />
 </template>
 
 <script setup>
@@ -121,6 +127,7 @@ import BaseTextField from '@/components/Forms/BaseTextField';
 import LabelIntegrations from './LabelIntegrations.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 import { useToastAlert } from '@/composables/useToastAlert';
+import ModalDeleteURL from '@/Modules/User/Settings/components/ModalDeleteURL.vue';
 
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
@@ -149,11 +156,26 @@ const form = ref({
 });
 
 const urls = ref([]);
-const initialUrls = ref([]);
+//const initialUrls = ref([]);
 const initialForm = ref(null);
 const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
 const loading = ref(true);
 const credentialsByAirbnb = ref(null);
+const openModalDeleteURL = ref(false);
+const nameOtaDelete = ref('');
+const indexToDelete = ref(null);
+
+
+// Agregar después de la definición de form
+const errors = ref({
+    email: false,
+    password: false
+});
+
+const errorMessage = ref({
+    email: '',
+    password: ''
+});
 
 // Función para inicializar las URLs
 const initializeUrls = () => {
@@ -166,11 +188,8 @@ const initializeUrls = () => {
             errorMessage: '',
             delete: false
         }));
-        // Guardar el estado inicial
-        initialUrls.value = [...urls.value];
     } else {
         urls.value = [{ url: '', _id: '', errors: false, disabled: false, errorMessage: '', delete: false }];
-        initialUrls.value = [];
     }
     
     // Guardar estado inicial del formulario
@@ -208,6 +227,12 @@ const getAllDataByOtas = async () => {
             form.value.email = credentialsByAirbnb.value.email;
             form.value.password = credentialsByAirbnb.value.password;
         }
+
+        // Actualizar el estado inicial después de cargar los datos
+        initialForm.value = JSON.stringify({
+            urls: urls.value,
+            form: { ...form.value }
+        });
     } catch (error) {
         console.error('Error loading credentials:', error);
     } finally {
@@ -228,36 +253,18 @@ const closeModalAirbnb = () => {
 const submit = async () => {
     const urlsPayload = [];
 
-    /* console.log('URLs antes del submit:', urls.value);
-    console.log('URLs iniciales:', initialUrls.value); */
-
     // Procesar todas las URLs, incluyendo las eliminadas
     urls.value.forEach(url => {
-        const initialUrl = initialUrls.value.find(initial => initial._id === url._id);
-        //console.log('Procesando URL:', { url, initialUrl });
-        
-        if (initialUrl) {
-            // URL existente
-            if (url.delete) {
-                console.log('URL marcada como eliminada:', url);
-                // URL eliminada - mantener la URL original
-                urlsPayload.push({
-                    _id: url._id,
-                    delete: true,
-                    ota: 'AIRBNB',
-                    url: initialUrl.url // Usar la URL original
-                });
-            } else {
-                // URL activa (modificada o sin cambios)
-                urlsPayload.push({
-                    _id: url._id,
-                    delete: false,
-                    ota: 'AIRBNB',
-                    url: url.url
-                });
-            }
+        if (url.delete) {
+            // URL eliminada - incluir en el payload con delete: true
+            urlsPayload.push({
+                _id: url._id,
+                delete: true,
+                ota: 'AIRBNB',
+                url: url.url
+            });
         } else if (url.url) {
-            // Nueva URL
+            // URL activa o nueva
             urlsPayload.push({
                 _id: url._id || "",
                 delete: false,
@@ -266,8 +273,6 @@ const submit = async () => {
             });
         }
     });
-
-    //console.log('URLs payload final:', urlsPayload);
 
     const dataToSubmit = {
         googleMapCid: current_hotel.value.code,
@@ -285,7 +290,10 @@ const submit = async () => {
 
     if (response.ok) {
         toast.warningToast('Cambios guardados con éxito', 'top-right');
-        //await getSettings();
+        closeModalAirbnb();
+        setTimeout(() => {
+            location.reload();
+        }, 1100);
     } else {
         toast.errorToast(response.message.text, 'top-right');
     }
@@ -315,15 +323,15 @@ const handleDeleteCredentials = async () => {
             }
         });
         
-        // Limpiar errores si existen
-        if (errors.value) {
-            errors.value.email = false;
-            errors.value.password = false;
-            errorMessage.value.email = '';
-            errorMessage.value.password = '';
-        }
+        // Limpiar errores
+        errors.value.email = false;
+        errors.value.password = false;
+        errorMessage.value.email = '';
+        errorMessage.value.password = '';
+
+        toast.warningToast('Credenciales eliminadas con éxito', 'top-right');
     } catch (error) {
-        console.error('Error deleting credentials:', error);
+        toast.errorToast('Error al eliminar las credenciales', 'top-right');
     } finally {
         loading.value = false;
     }
@@ -349,6 +357,14 @@ const removeUrl = (index) => {
         // Marcamos el objeto como eliminado
         url.delete = true;
     }
+    openModalDeleteURL.value = false;
+};
+
+const openDeleteModal = (index) => {
+    nameOtaDelete.value = 'AIRBNB';
+    openModalDeleteURL.value = true;
+    // Guardar el índice para usarlo cuando se confirme la eliminación
+    indexToDelete.value = index;
 };
 
 const displayedUrls = computed(() => {
@@ -371,10 +387,10 @@ const hasChanges = computed(() => {
     
     // Verificar cambios en las credenciales
     const hasCredentialChanges = 
-        (initialState.form.email && !currentState.form.email) || // Se eliminó el email
-        (initialState.form.password && !currentState.form.password) || // Se eliminó la contraseña
-        (currentState.form.email && currentState.form.email !== initialState.form.email) || // Se modificó el email
-        (currentState.form.password && currentState.form.password !== initialState.form.password); // Se modificó la contraseña
+        (initialState.form.email && !currentState.form.email) || 
+        (initialState.form.password && !currentState.form.password) ||  
+        (currentState.form.email && currentState.form.email !== initialState.form.email) || 
+        (currentState.form.password && currentState.form.password !== initialState.form.password); 
     
     return hasUrlChanges || hasCredentialChanges;
 });

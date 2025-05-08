@@ -12,7 +12,7 @@
                 <div class="text-center">
                     <img class="mx-auto h-8 w-8" src="/assets/icons/warning.svg" alt="Warning">
                     <h3 class="mt-4 text-[20px] font-semibold htext-black-100 leading-6">¿Eliminar enlace?</h3>
-                    <p class="mt-2 text-sm leading-[150%] htext-black-100">En caso de eliminar el enlace no podrás visualizar las reseñas de {{ nameOTA }}. Para volver a mostrarlas tendrás que añadirlo nuevamente.</p>
+                    <p class="mt-2 text-sm leading-[150%] htext-black-100">En caso de eliminar el enlace no podrás visualizar las reseñas de Airbnb. Para volver a mostrarlas tendrás que añadirlo nuevamente.</p>
                 </div>
             </div>
             <div class="mt-4 flex justify-between">
