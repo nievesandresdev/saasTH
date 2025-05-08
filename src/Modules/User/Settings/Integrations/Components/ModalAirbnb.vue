@@ -294,11 +294,34 @@ const submit = async () => {
 const handleDeleteCredentials = async () => {
     try {
         loading.value = true;
-        // Aquí iría la llamada al endpoint para eliminar credenciales
-        // await api.delete('/airbnb-integration/credentials');
+        
+        // Guardar el estado actual antes de eliminar
+        const currentCredentials = {
+            email: form.value.email,
+            password: form.value.password
+        };
+        
+        // Limpiar las credenciales
         credentialsByAirbnb.value = null;
         form.value.email = '';
         form.value.password = '';
+        
+        // Actualizar el estado inicial con las credenciales que acabamos de eliminar
+        initialForm.value = JSON.stringify({
+            urls: urls.value,
+            form: {
+                email: currentCredentials.email,
+                password: currentCredentials.password
+            }
+        });
+        
+        // Limpiar errores si existen
+        if (errors.value) {
+            errors.value.email = false;
+            errors.value.password = false;
+            errorMessage.value.email = '';
+            errorMessage.value.password = '';
+        }
     } catch (error) {
         console.error('Error deleting credentials:', error);
     } finally {
@@ -341,7 +364,19 @@ const hasChanges = computed(() => {
         form: { ...form.value }
     };
     
-    return JSON.stringify(currentState) !== initialForm.value;
+    const initialState = JSON.parse(initialForm.value);
+    
+    // Verificar cambios en las URLs
+    const hasUrlChanges = JSON.stringify(currentState.urls) !== JSON.stringify(initialState.urls);
+    
+    // Verificar cambios en las credenciales
+    const hasCredentialChanges = 
+        (initialState.form.email && !currentState.form.email) || // Se eliminó el email
+        (initialState.form.password && !currentState.form.password) || // Se eliminó la contraseña
+        (currentState.form.email && currentState.form.email !== initialState.form.email) || // Se modificó el email
+        (currentState.form.password && currentState.form.password !== initialState.form.password); // Se modificó la contraseña
+    
+    return hasUrlChanges || hasCredentialChanges;
 });
 
 </script>

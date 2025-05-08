@@ -109,6 +109,8 @@
                 </div>
                 <template v-else>
                     <div class="flex flex-col gap-2 mb-4">
+                        <pre>{{ credentialsOta }}</pre>
+                        <pre>{{ form }}</pre>
                         <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" />
                         <BaseTextField 
                             v-model="form.url" 
@@ -190,7 +192,7 @@
     
 </template>
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
 import HeaderIntegrations from './Components/HeaderIntegrations.vue';
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
@@ -341,25 +343,17 @@ const hasChanges = computed(() => {
     
     const initialState = JSON.parse(initialForm.value);
     
-    // Si hay credenciales iniciales
-    if (credentialsOta.value) {
-        // Si se están eliminando las credenciales
-        if (!currentState.email && !currentState.password) {
-            return true;
-        }
-        // Si se están modificando las credenciales
-        return currentState.url !== initialState.url || 
-               currentState.email !== credentialsOta.value.email || 
-               currentState.password !== credentialsOta.value.password;
-    }
-    
-    // Si no hay credenciales iniciales
+    // Verificar cambios en la URL
     const hasUrlChanges = currentState.url !== initialState.url;
-    const hasCredentialChanges = currentState.email !== initialState.email || 
-                                currentState.password !== initialState.password;
     
-    // Solo habilitar si hay cambios en la URL o si ambos campos de credenciales están llenos
-    return  (currentState.email && currentState.password) || hasCredentialChanges;
+    // Verificar cambios en las credenciales
+    const hasCredentialChanges = 
+        (initialState.email && !currentState.email) || // Se eliminó el email
+        (initialState.password && !currentState.password) || // Se eliminó la contraseña
+        (currentState.email && currentState.email !== initialState.email) || // Se modificó el email
+        (currentState.password && currentState.password !== initialState.password); // Se modificó la contraseña
+    
+    return hasUrlChanges || hasCredentialChanges;
 });
 
 // Agregar watch para validar la URL cuando cambia
@@ -543,16 +537,23 @@ const submit = async () => {
 const handleDeleteCredentials = async () => {
     try {
         loading.value = true;
+        
+        // Guardar el estado actual antes de eliminar
+        const currentCredentials = {
+            email: form.value.email,
+            password: form.value.password
+        };
+        
         // Limpiar las credenciales
         credentialsOta.value = null;
         form.value.email = '';
         form.value.password = '';
         
-        // Actualizar el estado inicial para reflejar que no hay credenciales
+        // Actualizar el estado inicial con las credenciales que acabamos de eliminar
         initialForm.value = JSON.stringify({
             url: form.value.url,
-            email: '',
-            password: ''
+            email: currentCredentials.email,
+            password: currentCredentials.password
         });
         
         // Limpiar errores
@@ -562,6 +563,9 @@ const handleDeleteCredentials = async () => {
         errorMessage.value.url = '';
         errorMessage.value.email = '';
         errorMessage.value.password = '';
+        
+        // Forzar una actualización del estado
+        await nextTick();
     } catch (error) {
         console.error('Error deleting credentials:', error);
     } finally {
