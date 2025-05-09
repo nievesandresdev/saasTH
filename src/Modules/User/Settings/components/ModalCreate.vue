@@ -38,6 +38,7 @@
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
+            v-model:informGeneral="form.informGeneral"
           />
         </div>
        
@@ -125,6 +126,10 @@ const form = reactive({
       pendingFeedback60: false,
       new_reviews: false,
     },
+    informGeneral: {
+      periodicity: 'mensual',
+    },
+
 
   },
 });

@@ -140,7 +140,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityStay.pendingFeedback30"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
@@ -165,7 +165,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityStay.pendingFeedback60"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
@@ -201,24 +201,33 @@
             <!--chat poendiente 30-->
             <div class="flex items-center justify-between">
               <div class="flex gap-2 items-center justify-start">
-              <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
-              <div class="w-[38px]">
-                <BaseTextField
+              <p class="text-sm leading-[150%]">Informe General</p>
+              <div class="w-[88px]">
+                <!-- <BaseTextField
                   v-model="periodicityStay.pendingFeedback60"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
                   :disabled="isDisabled || disabledGeneral"
                   @input="emitChanges"
                   @keypress="onlyNumbers"
+                /> -->
+                <BaseSelectField
+                  v-model="props.informGeneral"
+                  :options="optionsSelect"
+                  :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
+                  :errors="errors"
+                  :id="'periodicityStay'"
+                  mandatory
+                  compact
                 />
+                <!-- <pre>{{ props.informGeneral }}</pre> -->
               </div>
-              <p class="text-sm leading-[150%]">min</p>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <!-- <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"> -->
                 <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
@@ -230,7 +239,7 @@
             v-if="hotelStore.hotelData?.reviews_service_enabled"
           >
             <div class="flex items-center justify-between">
-              <span class="text-sm font-semibold">Reseñasss</span>
+              <span class="text-sm font-semibold">Reseñas</span>
             </div>
             <div class="flex flex-col justify-end">
               <div class="flex justify-end gap-4">
@@ -259,6 +268,7 @@
   import { ref, defineProps, defineEmits,computed, watch } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
+  import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
   //stores
   import { useHotelStore } from '@/stores/modules/hotel'; 
   const hotelStore = useHotelStore();
@@ -299,6 +309,10 @@
     disabledGeneral: {
       type: Boolean,
       default: false,
+    },
+    informGeneral: {
+      type: Number,
+      default: 1,
     },
   });
 
@@ -347,14 +361,19 @@
   };
 
   watch(
-  () => props.notifications,
-  () => {
-    notifications.value = { ...props.notifications };
-    periodicityChat.value = { ...props.periodicityChat };
-    periodicityStay.value = { ...props.periodicityStay };
-  },
-  { immediate: true }
-);
+    () => props.notifications,
+    () => {
+      notifications.value = { ...props.notifications };
+      periodicityChat.value = { ...props.periodicityChat };
+      periodicityStay.value = { ...props.periodicityStay };
+    },
+    { immediate: true }
+  );
+
+  const optionsSelect = ref([
+    { label: 'Mensual', value: 1, disabled: false },
+    { label: 'Semanal', value: 2, disabled: false },
+  ]);
 
   </script>
   

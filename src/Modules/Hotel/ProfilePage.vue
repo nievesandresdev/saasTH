@@ -366,7 +366,7 @@
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
     import useScrollToElement from '@/composables/useScrollToElement';
-import { $formatTypeLodging } from '@/utils/helpers';
+    import { $formatTypeLodging } from '@/utils/helpers';
     const { scrollToElement } = useScrollToElement();
     //DATA
     const form = reactive({

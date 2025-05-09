@@ -25,16 +25,17 @@
               // 'htext-alert-negative': error,
               'htext-black-100': modelValue || focusedAlweys,
             },
-            size ? style.text : ''
+            size ? style.text : '',
+            compact ? 'text-xs' : ''
           ]"
         >
           {{ labelSelect }}
         </span>
         <template v-if="modelValue && !mandatory">
-          <img :src="icon_delete" :class="icon_delete_class" @click.stop="deleteOption" class="cursor-pointer">
+          <img :src="icon_delete" :class="[icon_delete_class, compact ? 'h-4 w-4' : '']" @click.stop="deleteOption" class="cursor-pointer">
         </template>
         <template v-else>
-          <img :src="icon_right" :class="icon_right_class">
+          <img :src="icon_right" :class="[icon_right_class, compact ? '!h-4 !w-4' : '']">
         </template>
       </div>
       <div
@@ -47,7 +48,7 @@
           v-for="(option, index) in options"
           :key="index"
           class="option cursor-pointer relative h-10 p-3 text-sm"
-          @click.prevent="selectOption(option)"
+          @click.stop="selectOption(option)"
           @mouseover="hoverOption = index"
           @mouseleave="hoverOption = false"
           tabindex="-1" aria-disabled="true"
@@ -160,7 +161,11 @@ export default {
       type: String,
       default: null,
     },
-    focusedAlweys: Boolean
+    focusedAlweys: Boolean,
+    compact: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, { emit }) {
     const showOptions = ref(false);
@@ -217,6 +222,10 @@ export default {
           content: 'border-0',
           text: 'mr-1'
         };
+        return s;
+      }
+      if (props.compact) {
+        s.content = 'h-[20px] rounded-[6px] !py-0 !px-1';
         return s;
       }
       return s;
