@@ -235,7 +235,7 @@ export default {
         return s;
       }
       if (props.compact) {
-        s.content = 'h-[20px] rounded-[6px] !py-0 !px-1';
+        s.content = 'h-[21px] rounded-[6px] !py-0 !px-1';
         return s;
       }
       return s;
@@ -307,7 +307,7 @@ export default {
   top: 0;
 }
 .compact-dropdown {
-  top: 20px !important;
+  top: 21px !important;
 }
 .dropdown-menu {
   box-shadow: 0px 3.5px 7px rgba(0, 0, 0, 0.15);

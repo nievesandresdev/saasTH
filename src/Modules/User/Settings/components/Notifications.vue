@@ -214,15 +214,15 @@
                   @keypress="onlyNumbers"
                 /> -->
                 <BaseSelectField
-                  v-model="props.informGeneral"
+                  v-model="informGeneral.periodicity"
                   :options="optionsSelect"
                   :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :errors="errors"
                   :id="'periodicityStay'"
+                  @change="emitChanges"
                   mandatory
                   compact
                 />
-                <!-- <pre>{{ props.informGeneral }}</pre> -->
               </div>
             </div>
               <div class="flex justify-center gap-4 mr-[8px]">
@@ -311,8 +311,10 @@
       default: false,
     },
     informGeneral: {
-      type: Number,
-      default: 1,
+      type: Object,
+      default: () => ({
+        periodicity: 1,
+      }),
     },
   });
 
@@ -327,12 +329,14 @@
   const periodicityChat = ref({...props.periodicityChat});
   const periodicityStay = ref({...props.periodicityStay});
   const notifications = ref({ ...props.notifications });
+  const informGeneral = ref({ ...props.informGeneral });
   
   
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
+    emits('update:informGeneral', informGeneral.value);
   };
 
   const onlyNumbers = (event) => {

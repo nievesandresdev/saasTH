@@ -127,7 +127,7 @@ const form = reactive({
       new_reviews: false,
     },
     informGeneral: {
-      periodicity: 'mensual',
+      periodicity: 1,
     },
 
 
