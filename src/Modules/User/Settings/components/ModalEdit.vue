@@ -35,6 +35,7 @@
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
+            v-model:informGeneral="form.informGeneral"
           />
         </div>
         <div v-if="currentStep === 2">
@@ -42,6 +43,7 @@
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
+            v-model:informGeneral="form.informGeneral"
           />
         </div>
       </div>
@@ -125,7 +127,12 @@ const form = reactive({
       pendingFeedback30: false,
       pendingFeedback60: false,
       new_reviews: false,
+      informGeneral: true,
+      informDiscontent: true,
     },
+  },
+  informGeneral: {
+    periodicity: 1,
   },
 });
 

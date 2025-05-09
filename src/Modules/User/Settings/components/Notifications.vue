@@ -198,37 +198,34 @@
               
             </div>
 
-            <!--chat poendiente 30-->
+            <!--informe general-->
             <div class="flex items-center justify-between">
               <div class="flex gap-2 items-center justify-start">
-              <p class="text-sm leading-[150%]">Informe General</p>
-              <div class="w-[88px]">
-                <!-- <BaseTextField
-                  v-model="periodicityStay.pendingFeedback60"
-                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
-                  :type="'number'"
-                  :errors="errors"
-                  name="notifications"
-                  :disabled="isDisabled || disabledGeneral"
-                  @input="emitChanges"
-                  @keypress="onlyNumbers"
-                /> -->
-                <BaseSelectField
-                  v-model="informGeneral.periodicity"
-                  :options="optionsSelect"
-                  :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
-                  :errors="errors"
-                  :id="'periodicityStay'"
-                  @change="emitChanges"
-                  mandatory
-                  compact
-                />
+                <p class="text-sm leading-[150%]">Informe General</p>
+                <div class="w-[88px]">
+                  <BaseSelectField
+                    v-model="informGeneral.periodicity"
+                    :options="optionsSelect"
+                    :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
+                    :errors="errors"
+                    :id="'periodicityStay'"
+                    @change="emitChanges"
+                    mandatory
+                    compact
+                  />
+                </div>
+              </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.informGeneral" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
+
+            <div class="flex items-center justify-between mt-[13px]">
+              <div class="flex gap-2 items-center justify-start">
+                <p class="text-sm leading-[150%]">Informe de huésped disconforme</p>
+              </div>
               <div class="flex justify-center gap-4 mr-[8px]">
-                <!-- <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
-                <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"> -->
-                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.informDiscontent" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
               </div>
             </div>
           </div>
