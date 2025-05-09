@@ -40,22 +40,32 @@
       </div>
       <div
         class="absolute z-50 bg-white"
-        :class="'dropdown-menu ' + extra_dropdown + ' ' + top_dropdown"
+        :class="[
+          'dropdown-menu',
+          extra_dropdown,
+          top_dropdown,
+          { 'compact-dropdown': compact }
+        ]"
         :aria-labelledby="`dropdown-input-${options[0].value}`"
         v-if="showOptions"
       >
         <div
           v-for="(option, index) in options"
           :key="index"
-          class="option cursor-pointer relative h-10 p-3 text-sm"
+          class="option cursor-pointer relative p-3 text-sm"
+          :class="[
+            {
+              'active': option.value == modelValue,
+              'disabled': option.disabled,
+              'h-8': compact,
+              'h-10': !compact
+            }
+          ]"
           @click.stop="selectOption(option)"
           @mouseover="hoverOption = index"
           @mouseleave="hoverOption = false"
-          tabindex="-1" aria-disabled="true"
-          :class="{
-            'active': option.value == modelValue,
-            'disabled': option.disabled
-          }"
+          tabindex="-1"
+          aria-disabled="true"
         >
           <p>
             <img v-if="option.img" :src="option.img" :class="option.img_class ?? option_classes">
@@ -295,6 +305,9 @@ export default {
 }
 .top-auto {
   top: 0;
+}
+.compact-dropdown {
+  top: 20px !important;
 }
 .dropdown-menu {
   box-shadow: 0px 3.5px 7px rgba(0, 0, 0, 0.15);
