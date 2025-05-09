@@ -184,13 +184,53 @@
             </div>
           </div>
 
+          <!-- informes seguimeinto-->
+          <div class="flex flex-col mt-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Informes - Seguimiento</span>
+            </div>
+            <div class="flex flex-col justify-end">
+              <div class="flex justify-end gap-4">
+                <span class="text-[10px] font-semibold">Push</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
+                <span class="text-[10px] font-semibold">Email</span>
+              </div>
+              
+            </div>
+
+            <!--chat poendiente 30-->
+            <div class="flex items-center justify-between">
+              <div class="flex gap-2 items-center justify-start">
+              <p class="text-sm leading-[150%]">Feedback pendiente tras</p>
+              <div class="w-[38px]">
+                <BaseTextField
+                  v-model="periodicityStay.pendingFeedback60"
+                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :type="'number'"
+                  :errors="errors"
+                  name="notifications"
+                  :disabled="isDisabled || disabledGeneral"
+                  @input="emitChanges"
+                  @keypress="onlyNumbers"
+                />
+              </div>
+              <p class="text-sm leading-[150%]">min</p>
+            </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.push.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" v-model="notifications.platform.pendingFeedback60" @change="emitChanges" :disabled="true" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.pendingFeedback60" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+          </div>
+
           <!--resenas-->
           <div 
             class="flex flex-col mt-4"
             v-if="hotelStore.hotelData?.reviews_service_enabled"
           >
             <div class="flex items-center justify-between">
-              <span class="text-sm font-semibold">Reseñas</span>
+              <span class="text-sm font-semibold">Reseñasss</span>
             </div>
             <div class="flex flex-col justify-end">
               <div class="flex justify-end gap-4">
