@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div :class="disabled ? 'opacity-[0.8] cursor-not-allowed' : ''">
     <label class="block text-sm mb-2 font-medium leading-[140%] htext-black-100" v-if="textLabel">
       {{ textLabel }}
     </label>
-    <div class="cursor-pointer relative w-full" v-if="options.length > 0" ref="dropdown">
+    <div class="relative w-full" v-if="options.length > 0" ref="dropdown" :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'">
       <div
         :disabled="disabled"
         :id="`dropdown-input-${options[0].value}`"

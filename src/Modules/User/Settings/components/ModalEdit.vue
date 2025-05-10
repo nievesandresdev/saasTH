@@ -35,7 +35,6 @@
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
-            v-model:informGeneral="form.informGeneral"
           />
         </div>
         <div v-if="currentStep === 2">
@@ -43,7 +42,6 @@
             v-model:periodicityChat="form.periodicityChat"
             v-model:periodicityStay="form.periodicityStay"
             v-model:notifications="form.notifications"
-            v-model:informGeneral="form.informGeneral"
           />
         </div>
       </div>

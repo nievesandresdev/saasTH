@@ -204,12 +204,13 @@
                 <p class="text-sm leading-[150%]">Informe General</p>
                 <div class="w-[88px]">
                   <BaseSelectField
-                    v-model="informGeneral.periodicity"
+                    v-model="notifications.informGeneral.periodicity"
                     :options="optionsSelect"
                     :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                     :errors="errors"
                     :id="'periodicityStay'"
                     @change="emitChanges"
+                    :disabled="disabledGeneral"
                     mandatory
                     compact
                   />
