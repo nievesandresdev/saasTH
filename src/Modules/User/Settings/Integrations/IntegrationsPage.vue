@@ -287,7 +287,7 @@ const errorMessage = ref({
 const validateUrl = (url, type) => {
     // Si el campo está vacío, no hay errores
     if (!url) {
-        return 'El enlace no puede estar vacío';
+        return null;
     }
 
     let urlParts;
@@ -392,22 +392,23 @@ const hasChanges = computed(() => {
         (currentState.email && currentState.email !== initialState.email) || // Se modificó el email
         (currentState.password && currentState.password !== initialState.password); // Se modificó la contraseña
     
+    // Verificar si los campos están vacíos
+    const hasEmptyFields = !currentState.url;
+    
+    // Si hay cambios pero los campos están vacíos, no permitir guardar
+    if (hasEmptyFields) return false;
+    
     return hasUrlChanges || hasCredentialChanges;
 });
 
-// Agregar watch para validar la URL cuando cambia
+// Modificar el watch para validar la URL solo cuando cambia
 watch(() => form.value.url, (newUrl) => {
     if (serviceSelected.value) {
         const validationError = validateUrl(newUrl, serviceSelected.value);
-        if (!validationError) {
-            errors.value.url = false;
-            errorMessage.value.url = '';
-        } else {
-            errors.value.url = true;
-            errorMessage.value.url = validationError;
-        }
+        errors.value.url = !!validationError;
+        errorMessage.value.url = validationError || '';
     }
-});
+}, { immediate: false }); // Cambiar a false para que no valide al inicio
 
 const visiblePassword = ref(false);
 
