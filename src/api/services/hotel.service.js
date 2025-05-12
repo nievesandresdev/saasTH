@@ -37,3 +37,19 @@ export const storeNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiN
 export const updateByIdNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateById`, params);
 export const updateVisibilityNetworkApi = (params) => apiHttp('POST', `${hotelPath}/${wifiNetworksPath}/updateVisibilityNetwork`, params, {showPreloader: false });
 export const getAllByHotelApi = () => apiHttp('GET', `${hotelPath}/${wifiNetworksPath}/getAllByHotel`, null, {showPreloader: false });
+//
+export const toggleChatService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleChatService`, data, {showPreloader: false });
+export const toggleCheckinService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleCheckinService`, data, {showPreloader: false });
+export const toggleReviewsService = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleReviewsService`, data, {showPreloader: false });
+
+export const updateContactPhonesApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactPhones`, data, {showPreloader: false });
+export const updateContactEmailApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactEmail`, data, {showPreloader: false });
+export const updateContactWhatsappApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateContactWhatsapp`, data, {showPreloader: false });
+
+export const getProfilePhonesApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfilePhones`);
+export const getProfileEmailApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileEmail`);
+export const getProfileWhatsappApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getProfileWhatsapp`);
+export const getShowContactApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getShowContact`); 
+export const toggleShowContactApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleShowContact`, data, {showPreloader: false });
+
+    

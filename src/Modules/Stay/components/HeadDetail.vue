@@ -22,7 +22,7 @@
                 :notify="false"
             />
             <TabLink
-                v-if="atLeastOneCheckin.length"
+                v-if="atLeastOneCheckin.length && hotelStore.hotelData?.checkin_service_enabled"
                 label="Registros"
                 :loading=" guestIdDefault ? false : true"
                 :params="{ stayId: route.params.stayId}"
@@ -41,6 +41,7 @@
                 :selected="route.name == 'StayQueryDetail'"
             />
             <TabLink
+                v-if="hotelStore.hotelData?.chat_service_enabled"
                 label="Chat"
                 :loading=" guestIdDefault ? false : true"
                 :viewName="'StayChatRoom'"

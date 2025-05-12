@@ -81,7 +81,7 @@
             </div>
 
             <!-- chat -->
-            <div class="mt-6">
+            <div class="mt-6" v-if="hotelStore.hotelData?.chat_service_enabled">
                 <h2 class="text-base font-medium leading-[120%]">Chat</h2>
                 <div class="shadow-hoster rounded-[10px] bg-white py-6 mt-4">
                     <!-- new chat -->
@@ -160,7 +160,9 @@
             </div>
 
             <!-- reputation online -->
-            <div class="flex justify-between items-center pb-4 pr-6 border-b hborder-gray-400 mt-8">
+            <div v-if="hotelStore.hotelData?.reviews_service_enabled"
+                class="flex justify-between items-center pb-4 pr-6 border-b hborder-gray-400 mt-8"
+            >
                 <p class="text-lg font-semibold leading-[110%]">Reputación online</p>
                 <div class="grid gap-10 grid-cols-3 w-[452px]">
                     <div>
@@ -303,10 +305,10 @@ import { useToastAlert } from '@/composables/useToastAlert'
 //store
 import { useQuerySettingsStore } from '@/stores/modules/queries/querySettings';
 import { useChatSettingsStore } from '@/stores/modules/chat/chatSettings';
-
+import { useHotelStore } from '@/stores/modules/hotel';
 
 const toast = useToastAlert();
-
+const hotelStore = useHotelStore();
 const querySettingsStore = useQuerySettingsStore();
 const chatSettingsStore = useChatSettingsStore();
 

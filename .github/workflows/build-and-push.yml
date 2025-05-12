@@ -44,7 +44,8 @@ jobs:
             echo "VUE_APP_REFERENT_URL=${{ secrets.REFERENT_URL_MAIN }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_MAIN }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_MAIN }}" >> .env
-            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env
+            echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_MAIN }}" >> .env 
+            echo "VUE_APP_URL_HOSTER_PAGE=${{ secrets.VUE_APP_URL_HOSTER_PAGE_MAIN }}" >> .env 
             
           else
             echo "ADMIN_URL=${{ secrets.ADMIN_URL_TEST }}" >> .env
@@ -60,6 +61,7 @@ jobs:
             echo "VUE_APP_LOGIN_DOSSIER_EMAIL=${{ secrets.VUE_APP_LOGIN_DOSSIER_EMAIL_TEST }}" >> .env
             echo "VUE_APP_LOGIN_DOSSIER_PASSWORD=${{ secrets.VUE_APP_LOGIN_DOSSIER_PASSWORD_TEST }}" >> .env
             echo "VUE_APP_DOSSIER_HOTEL_ID=${{ secrets.VUE_APP_DOSSIER_HOTEL_ID_TEST }}" >> .env
+            echo "VUE_APP_URL_HOSTER_PAGE=${{ secrets.VUE_APP_URL_HOSTER_PAGE_TEST }}" >> .env 
 
           fi
           echo "VUE_APP_ADMIN_URL=${{ secrets.VUE_APP_ADMIN_URL }}" >> .env
@@ -137,3 +139,20 @@ jobs:
               --resource-group th-test-resources \
               --image ghcr.io/th-the-hoster/${{ env.IMAGE_NAME }}:${{ github.run_number }}
           fi
+      - name: Purge Cloudflare cache for ALL zones
+        if: github.ref_name == 'main'
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}   # guarda tu token aquí
+        run: |
+          echo "🔍 Obteniendo lista de zonas de Cloudflare…"
+          zones=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" \
+                        -H "Content-Type: application/json" \
+                          "https://api.cloudflare.com/client/v4/zones" | jq -r '.result[].id')
+    
+          for zone in $zones; do
+              echo "🧹 Purging cache in zone $zone"
+              curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone/purge_cache" \
+                  -H "Authorization: Bearer $CF_API_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  --data '{"purge_everything":true}' | jq -r '. | {zone_result: .success}'
+            done

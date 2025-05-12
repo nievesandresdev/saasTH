@@ -35,7 +35,10 @@
         <!-- Notificaciones en plataforma Hoster -->
         <div :style="{  opacity: disabledGeneral ? 0.5 : 1,cursor: disabledGeneral ? 'not-allowed' : 'default'  }">
           <!-- estancias chat -->
-          <div class="flex flex-col">
+          <div 
+            class="flex flex-col"
+            v-if="hotelStore.hotelData?.chat_service_enabled"
+          >
             <div class="flex items-center justify-between">
               <span class="text-sm font-semibold">Estancias - Chat</span>
             </div>
@@ -137,7 +140,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityStay.pendingFeedback30"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
@@ -162,7 +165,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityStay.pendingFeedback60"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
@@ -181,8 +184,58 @@
             </div>
           </div>
 
-          <!--resenas-->
+          <!-- informes seguimeinto-->
           <div class="flex flex-col mt-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Informes - Seguimiento</span>
+            </div>
+            <div class="flex flex-col justify-end">
+              <div class="flex justify-end gap-4">
+                <span class="text-[10px] font-semibold">Push</span>
+                <span class="text-[10px] font-semibold">Plat.</span>
+                <span class="text-[10px] font-semibold">Email</span>
+              </div>
+              
+            </div>
+
+            <!--informe general-->
+            <div class="flex items-center justify-between">
+              <div class="flex gap-2 items-center justify-start">
+                <p class="text-sm leading-[150%]">Informe General</p>
+                <div class="w-[88px]">
+                  <BaseSelectField
+                    v-model="notifications.informGeneral.periodicity"
+                    :options="optionsSelect"
+                    :classInput="'h-[20px] w-[100px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
+                    :errors="errors"
+                    :id="'periodicityStay'"
+                    @change="emitChanges"
+                    :disabled="disabledGeneral"
+                    mandatory
+                    compact
+                  />
+                </div>
+              </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.informGeneral" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-[13px]">
+              <div class="flex gap-2 items-center justify-start">
+                <p class="text-sm leading-[150%]">Informe de huésped disconforme</p>
+              </div>
+              <div class="flex justify-center gap-4 mr-[8px]">
+                <input type="checkbox" :disabled="disabledGeneral" v-model="notifications.email.informDiscontent" @change="emitChanges" class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50">
+              </div>
+            </div>
+          </div>
+
+          <!--resenas-->
+          <div 
+            class="flex flex-col mt-4"
+            v-if="hotelStore.hotelData?.reviews_service_enabled"
+          >
             <div class="flex items-center justify-between">
               <span class="text-sm font-semibold">Reseñas</span>
             </div>
@@ -213,7 +266,11 @@
   import { ref, defineProps, defineEmits,computed, watch } from 'vue';
   import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
   import BaseTextField from '@/components/Forms/BaseTextField.vue';
-  
+  import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
+  //stores
+  import { useHotelStore } from '@/stores/modules/hotel'; 
+  const hotelStore = useHotelStore();
+
   const props = defineProps({
     periodicityChat: {
       type: Object,
@@ -251,6 +308,12 @@
       type: Boolean,
       default: false,
     },
+    informGeneral: {
+      type: Object,
+      default: () => ({
+        periodicity: 1,
+      }),
+    },
   });
 
   const emits = defineEmits([
@@ -264,12 +327,14 @@
   const periodicityChat = ref({...props.periodicityChat});
   const periodicityStay = ref({...props.periodicityStay});
   const notifications = ref({ ...props.notifications });
+  const informGeneral = ref({ ...props.informGeneral });
   
   
   const emitChanges = () => {
     emits('update:periodicityChat', periodicityChat.value);
     emits('update:periodicityStay', periodicityStay.value);
     emits('update:notifications', notifications.value);
+    emits('update:informGeneral', informGeneral.value);
   };
 
   const onlyNumbers = (event) => {
@@ -298,14 +363,19 @@
   };
 
   watch(
-  () => props.notifications,
-  () => {
-    notifications.value = { ...props.notifications };
-    periodicityChat.value = { ...props.periodicityChat };
-    periodicityStay.value = { ...props.periodicityStay };
-  },
-  { immediate: true }
-);
+    () => props.notifications,
+    () => {
+      notifications.value = { ...props.notifications };
+      periodicityChat.value = { ...props.periodicityChat };
+      periodicityStay.value = { ...props.periodicityStay };
+    },
+    { immediate: true }
+  );
+
+  const optionsSelect = ref([
+    { label: 'Mensual', value: 1, disabled: false },
+    { label: 'Semanal', value: 2, disabled: false },
+  ]);
 
   </script>
   

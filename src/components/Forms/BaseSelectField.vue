@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div :class="disabled ? 'opacity-[0.8] cursor-not-allowed' : ''">
     <label class="block text-sm mb-2 font-medium leading-[140%] htext-black-100" v-if="textLabel">
       {{ textLabel }}
     </label>
-    <div class="cursor-pointer relative w-full" v-if="options.length > 0" ref="dropdown">
+    <div class="relative w-full" v-if="options.length > 0" ref="dropdown" :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'">
       <div
         :disabled="disabled"
         :id="`dropdown-input-${options[0].value}`"
@@ -25,36 +25,47 @@
               // 'htext-alert-negative': error,
               'htext-black-100': modelValue || focusedAlweys,
             },
-            size ? style.text : ''
+            size ? style.text : '',
+            compact ? 'text-xs' : ''
           ]"
         >
           {{ labelSelect }}
         </span>
         <template v-if="modelValue && !mandatory">
-          <img :src="icon_delete" :class="icon_delete_class" @click.stop="deleteOption" class="cursor-pointer">
+          <img :src="icon_delete" :class="[icon_delete_class, compact ? 'h-4 w-4' : '']" @click.stop="deleteOption" class="cursor-pointer">
         </template>
         <template v-else>
-          <img :src="icon_right" :class="icon_right_class">
+          <img :src="icon_right" :class="[icon_right_class, compact ? '!h-4 !w-4' : '']">
         </template>
       </div>
       <div
         class="absolute z-50 bg-white"
-        :class="'dropdown-menu ' + extra_dropdown + ' ' + top_dropdown"
+        :class="[
+          'dropdown-menu',
+          extra_dropdown,
+          top_dropdown,
+          { 'compact-dropdown': compact }
+        ]"
         :aria-labelledby="`dropdown-input-${options[0].value}`"
         v-if="showOptions"
       >
         <div
           v-for="(option, index) in options"
           :key="index"
-          class="option cursor-pointer relative h-10 p-3 text-sm"
-          @click.prevent="selectOption(option)"
+          class="option cursor-pointer relative p-3 text-sm"
+          :class="[
+            {
+              'active': option.value == modelValue,
+              'disabled': option.disabled,
+              'h-8': compact,
+              'h-10': !compact
+            }
+          ]"
+          @click.stop="selectOption(option)"
           @mouseover="hoverOption = index"
           @mouseleave="hoverOption = false"
-          tabindex="-1" aria-disabled="true"
-          :class="{
-            'active': option.value == modelValue,
-            'disabled': option.disabled
-          }"
+          tabindex="-1"
+          aria-disabled="true"
         >
           <p>
             <img v-if="option.img" :src="option.img" :class="option.img_class ?? option_classes">
@@ -160,7 +171,11 @@ export default {
       type: String,
       default: null,
     },
-    focusedAlweys: Boolean
+    focusedAlweys: Boolean,
+    compact: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, { emit }) {
     const showOptions = ref(false);
@@ -217,6 +232,10 @@ export default {
           content: 'border-0',
           text: 'mr-1'
         };
+        return s;
+      }
+      if (props.compact) {
+        s.content = 'h-[21px] rounded-[6px] !py-0 !px-1';
         return s;
       }
       return s;
@@ -286,6 +305,9 @@ export default {
 }
 .top-auto {
   top: 0;
+}
+.compact-dropdown {
+  top: 21px !important;
 }
 .dropdown-menu {
   box-shadow: 0px 3.5px 7px rgba(0, 0, 0, 0.15);

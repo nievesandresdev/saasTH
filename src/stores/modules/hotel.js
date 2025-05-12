@@ -272,7 +272,72 @@ export const useHotelStore = defineStore('hotel', () => {
         return response;
     }
     
+    async function $toggleChatService (enabled) {
+        const response = await hotelService.toggleChatService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
+    
+    async function $toggleCheckinService (enabled) {
+        const response = await hotelService.toggleCheckinService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
+    
+    async function $toggleReviewsService (enabled) {
+        const response = await hotelService.toggleReviewsService({enabled});
+        const { ok } = response
+        await reloadHotel();
+        return  ok ? response.data : null;
+    }
 
+    async function $updateContactPhones (data) {
+        const response = await hotelService.updateContactPhonesApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+
+    async function $updateContactEmail (data) {
+        const response = await hotelService.updateContactEmailApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+
+    async function $updateContactWhatsapp (data) {
+        const response = await hotelService.updateContactWhatsappApi(data);
+        const { ok } = response
+        hotelData.value = ok ? response.data : null
+        return response;
+    }
+    
+    async function $getProfilePhones () {
+        const response = await hotelService.getProfilePhonesApi();
+        return response;
+    }
+
+    async function $getProfileEmail () {
+        const response = await hotelService.getProfileEmailApi();
+        return response;
+    }
+
+    async function $getProfileWhatsapp () {
+        const response = await hotelService.getProfileWhatsappApi();
+        return response;
+    }
+
+    async function $getShowContact () {
+        const response = await hotelService.getShowContactApi();
+        return response;
+    }
+
+    async function $toggleShowContact (enabled) {
+        const response = await hotelService.toggleShowContactApi({enabled});
+        return response;
+    }
 
 
     //
@@ -304,7 +369,18 @@ export const useHotelStore = defineStore('hotel', () => {
         hotelsUser,
         hotelsParent,
         $handleDefaultHotel,
-        $deleteImageByHotel
+        $deleteImageByHotel,
+        $toggleChatService,
+        $toggleCheckinService,
+        $toggleReviewsService,
+        $updateContactPhones,
+        $updateContactEmail,
+        $updateContactWhatsapp,
+        $getProfilePhones,
+        $getProfileEmail,
+        $getProfileWhatsapp,
+        $getShowContact,
+        $toggleShowContact
     }
 
 })
