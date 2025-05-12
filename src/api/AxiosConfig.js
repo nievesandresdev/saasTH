@@ -131,13 +131,16 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
 
   const HAS_HOTEL = await generateHash(subdomain ?? '');
   const HAS_USER = await generateHash(localStorage.getItem('token') ?? '');
+
+
+
   let formatHeader = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
     'subdomainHotel': subdomain,
-    'Has-Hotel': HAS_HOTEL,
-    'Has-User': HAS_USER,
+    'Hash-Hotel': HAS_HOTEL,
+    'Hash-User': HAS_USER,
     'Origin-Component': 'HOSTER',
     //'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
     'x-key-api':  X_KEY_API,
