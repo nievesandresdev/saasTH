@@ -66,7 +66,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityChat.pendingChat10"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
@@ -91,7 +91,7 @@
               <div class="w-[38px]">
                 <BaseTextField
                   v-model="periodicityChat.pendingChat30"
-                  :classInput="'h-[20px] px-1 py-[7px] text-sm font-semibold leading-[120%] text-center'"
+                  :classInput="'h-[20px] !px-0 !py-0 text-sm font-semibold leading-[120%] text-center'"
                   :type="'number'"
                   :errors="errors"
                   name="notifications"
