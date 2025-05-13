@@ -564,7 +564,7 @@ const submit = async () => {
             ? {
                 [serviceSelected.value.toUpperCase()]: {
                     email: form.value.email || '',
-                    password: form.value.password || ''
+                    password: btoa(form.value.password) || ''
                 }
             }
             : {},
