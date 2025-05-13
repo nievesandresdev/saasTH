@@ -3,6 +3,7 @@ import { i18n } from '@/i18n'
 import { usePreloaderStore } from '@/stores/modules/preloader';
 import { useAuthStore } from '@/stores/modules/auth/login'
 import router from '@/router'; 
+import { generateHash } from '@/utils/hash';
 
 // const locale = localStorage.getItem('locale') || 'es'
 const URL_BASE_BACKEND_GENERAL = process.env.VUE_APP_API_URL_BACKEND_GENERAL
@@ -127,11 +128,20 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
       api_url_backend: api_url_backend,
     })
   } */
+
+  const HAS_HOTEL = await generateHash(subdomain ?? '');
+  const HAS_USER = await generateHash(localStorage.getItem('token') ?? '');
+
+
+
   let formatHeader = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'Accept-Language': 'es',
     'subdomainHotel': subdomain,
+    'Hash-Hotel': HAS_HOTEL,
+    'Hash-User': HAS_USER,
+    'Origin-Component': 'HOSTER',
     //'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
     'x-key-api':  X_KEY_API,
   };
