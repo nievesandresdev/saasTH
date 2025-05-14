@@ -1,5 +1,9 @@
 <template>
-  <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4 auto-rows-[141px]">
+  <TransitionGroup 
+    name="list" 
+    tag="div" 
+    class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4 auto-rows-[141px]"
+  >
     <div 
       v-for="(button, index) in buttons" 
       :key="button.id"
@@ -7,9 +11,13 @@
       :class="{
         'shadow-draginng border border-gray-300': button.id == selectedCard,
         'shadow-draginng': dragStartIndex == index,
-        'shadow-card': dragStartIndex != index
+        'shadow-card': dragStartIndex != index,
+        'is-dragging': dragStartIndex === index,
+        'margin-left': isDragging && dragOverIndex > dragStartIndex && index > dragStartIndex && index <= dragOverIndex,
+        'margin-right': isDragging && dragOverIndex < dragStartIndex && index < dragStartIndex && index >= dragOverIndex
       }"
       @dragover="handlerDragOver"
+      @dragenter="handleDragEnter(index)"
       @drop="handlerDrop(index)"
       :draggable="button.is_visible"
       @dragstart="handlerDragStart(index, $event)"
@@ -61,7 +69,7 @@
         <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
       </button>
     </div>
-  </div>
+  </TransitionGroup>
 </template>
 
 <script setup>
@@ -83,6 +91,8 @@ const props = defineProps({
 const emit = defineEmits(['update:buttons']);
 
 const selectedCard = ref(null);
+const isDragging = ref(false);
+const dragOverIndex = ref(null);
 const dragStartIndex = ref(null);
 const draggedItem = ref(null);
 const draggableCard = ref(null);
@@ -92,35 +102,42 @@ const setDragStart = (index) => {
 };
 
 const handlerDragStart = (index, event) => {
-  if (dragStartIndex.value !== index) {
-    event.preventDefault();
-    return;
-  }
+  console.log('DragStart:', index);
+  isDragging.value = true;
+  dragStartIndex.value = index;
   draggedItem.value = index;
+  dragOverIndex.value = index;
   event.dataTransfer.effectAllowed = 'move';
-  event.dataTransfer.setData('text/plain', index);
 };
 
 const handlerDragOver = (event) => {
   event.preventDefault();
 };
 
+const handleDragEnter = (index) => {
+  dragOverIndex.value = index;
+};
+
 const handlerDrop = (index) => {
-  const draggedIndex = parseInt(event.dataTransfer.getData('text/plain'));
-  if (draggedIndex !== index) {
+  console.log('Drop:', { from: draggedItem.value, to: index });
+  if (draggedItem.value !== index) {
     const updatedButtons = [...props.buttons];
-    const droppedItem = updatedButtons.splice(draggedIndex, 1)[0];
-    updatedButtons.splice(index, 0, droppedItem);
+    const [movedItem] = updatedButtons.splice(draggedItem.value, 1);
+    updatedButtons.splice(index, 0, movedItem);
     emit('update:buttons', updatedButtons);
     updateButtonsOrder();
   }
+  isDragging.value = false;
   draggedItem.value = null;
   dragStartIndex.value = null;
+  dragOverIndex.value = null;
 };
 
 const handlerDragEnd = () => {
+  isDragging.value = false;
   draggedItem.value = null;
   dragStartIndex.value = null;
+  dragOverIndex.value = null;
 };
 
 const handlerClickSwichVisibility = (event) => {
@@ -149,6 +166,7 @@ const updateButtonVisibility = async (button) => {
 
 const updateButtonsOrder = async () => {
   try {
+    console.log('updateButtonsOrder called');
     const payload = {
       visible: props.buttons
         .filter(button => button.is_visible)
@@ -158,6 +176,7 @@ const updateButtonsOrder = async () => {
         .map(button => ({ id: button.id }))
     };
     
+    console.log('Sending payload:', payload);
     await hotelButtonsStore.$updateOrderButtons(payload);
     toast.warningToast('Orden actualizado con éxito', 'top-right');
   } catch (error) {
@@ -168,6 +187,41 @@ const updateButtonsOrder = async () => {
 </script>
 
 <style lang="scss" scoped>
+.button-card {
+  height: 141px;
+  transition: all 0.2s ease;
+  
+  &.is-dragging {
+    opacity: 0.5;
+    transform: scale(1.05);
+    cursor: grabbing;
+    z-index: 10;
+  }
+
+  &.margin-left {
+    margin-left: 128px;
+  }
+  
+  &.margin-right {
+    margin-right: 128px;
+  }
+}
+
+.list-move {
+  transition: transform 0.5s ease;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 .shadow-card {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
 }
