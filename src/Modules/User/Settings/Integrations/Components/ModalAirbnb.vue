@@ -300,7 +300,7 @@ const submit = async () => {
         credentialsByOtas: {
             AIRBNB: {
                 email: form.value.email || '',
-                password: form.value.password || ''
+                password: btoa(form.value.password) || ''
             }
         },
         urls: urlsPayload
