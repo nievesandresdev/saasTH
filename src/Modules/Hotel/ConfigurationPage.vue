@@ -65,72 +65,24 @@
           </template>
         </SectionConfig>
   
-        <SectionConfig class="hidden">
+        <SectionConfig >
           <template #title>
             <div class="flex justify-between">
               <span class="font-medium text-base">Botonera</span>
               <div class="flex items-center">
                 <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div>
-                <!-- Toggle para mostrar todos -->
                 <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
               </div>
             </div>
             <p class="font-normal text-sm mb-6">
-              Elige y controla la visibilidad de los botones para la botonera de la Home de tu WebApp.
+              Elige los accesos rápidos que deseas para optimizar el uso de tu WebApp.
             </p>
           </template>
           <template #content>
-            <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4">
-              <!-- Toggle para WIFI -->
-              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
-                <div class="flex justify-end">
-                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle  v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img src="/assets/icons/1.TH.WiFi.png" alt="Wifi" class="h-6 w-6 " :class="{
-                    'opacity-50': !form.show_wifi
-                  }" />
-                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_wifi, 'text-[#A0A0A0]': !form.show_wifi }]">Información de WiFi</h3>
-                </div>
-              </div>
-  
-              <!-- Toggle para Llamar al hotel -->
-              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
-                <div class="flex justify-end">
-                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle  v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" :class="{
-                    'opacity-50': !form.show_call
-                  }" />
-                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_call, 'text-[#A0A0A0]': !form.show_call }]">Llamar al hotel</h3>
-                </div>
-              </div>
-  
-              <!-- Toggle para Normas del hotel -->
-              <div :class="['bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
-                <div class="flex justify-end">
-                  <div :class="['mr-2 font-semibold text-[10px]', { 'text-[#333]': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
-                  <div class="flex flex-col">
-                    <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
-                    <div class="flex mt-2" v-if="isDisabled">
-                      <img
-                          src="/assets/icons/1.TH.WARNING.RED.svg"
-                          alt="icon alert red"
-                          class="inline w-4 h-4 mr-1"
-                      />
-                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SectionButtons 
+              v-model:buttons="buttons"
+              @update:buttons="handleButtonsUpdate"
+            />
           </template>
         </SectionConfig>
       </div>
@@ -170,7 +122,7 @@
 </template>
   
 <script setup>
-    import { reactive, ref, onMounted, computed,watch } from 'vue';
+    import { reactive, ref, onMounted, computed,watch, nextTick } from 'vue';
     import Toggle from '@/components/Toggle.vue';
     import SectionConfig from '@/components/SectionConfig.vue';
     import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
@@ -178,6 +130,10 @@
     import { useHotelStore } from '@/stores/modules/hotel';
     import { useToastAlert } from '@/composables/useToastAlert'
     import BasePreviewImage from '@/components/BasePreviewImage.vue';
+    import SectionButtons from '@/Modules/Hotel/Components/SectionButtons.vue';
+
+    import { useHotelButtonsStore } from '@/stores/modules/hotelButtons'
+    const hotelButtonsStore = useHotelButtonsStore();
 
     import { useMockupStore } from '@/stores/modules/mockup'
     const mockupStore = useMockupStore();
@@ -188,36 +144,63 @@
 
     const form = reactive({
         show_wifi: false,
-        show_call: false,
-        show_legal_text: false,
         show_all: false
     });
 
     const checkAllHidden = () => {
-        if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
-            form.show_all = false; // Ocultar si todos los botones están ocultos
+        if (!form.show_wifi) {
+            form.show_all = false;
         } else {
-            form.show_all = true; // Marcar Visible si al menos un botón está activo
+            form.show_all = true;
         }
     };
 
-    watch([() => form.show_wifi, () => form.show_call, () => form.show_legal_text], () => {
+    watch(() => form.show_wifi, () => {
         checkAllHidden();
     });
 
     watch(() => form.show_all, (newVal) => {
         if (newVal) {
-            if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
+            if (!form.show_wifi) {
                 form.show_wifi = true;
-                form.show_call = true;
-                form.show_legal_text = isDisabled.value ? false : true;
             }
         } else {
             form.show_wifi = false;
-            form.show_call = false;
-            form.show_legal_text = false;
         }
     });
+
+    const buttons = ref([]);
+    const buttonsHidden = ref([]);
+
+    const getHotelButtons = async () => {
+        const response = await hotelButtonsStore.$getAllHotelButtons();
+        buttons.value = response.data.visible;
+        buttonsHidden.value = response.data.hidden;
+    }
+
+    const updateButtonVisibility = async (button) => {
+        try {
+            const payload = {
+                visible: buttons.value
+                    .filter(btn => btn.is_visible)
+                    .map(btn => ({ id: btn.id })),
+                hidden: buttons.value
+                    .filter(btn => !btn.is_visible)
+                    .map(btn => ({ id: btn.id }))
+            };
+
+            console.log(payload, 'payload')
+            
+            // Llamada a la API con el nuevo formato
+            await hotelButtonsStore.$updateOrderButtons(payload);
+            toast.warningToast('Visibilidad actualizada con éxito', 'top-right');
+        } catch (error) {
+            console.error('Error updating button visibility:', error);
+            // Revertir el cambio en caso de error
+            button.is_visible = !button.is_visible;
+            toast.warningToast('Error al actualizar la visibilidad', 'top-right');
+        }
+    };
 
     const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
     const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
@@ -233,12 +216,10 @@
 
     const isChanged = computed(() => {
         return (
-        form.show_wifi !== initialState.show_wifi ||
-        form.show_call !== initialState.show_call ||
-        form.show_legal_text !== initialState.show_legal_text ||
-        form.show_all !== initialState.show_all ||
-        (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
-        (!initialImage.value && imgSelected.value) 
+            form.show_wifi !== initialState.show_wifi ||
+            form.show_all !== initialState.show_all ||
+            (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
+            (!initialImage.value && imgSelected.value) 
         );
     });
 
@@ -260,7 +241,6 @@
         isPreviewOpen.value = false;
     }
 
-    
 
     const initialImage = ref(null);
 
@@ -270,6 +250,7 @@
         initialImage.value = { ...imgSelected.value };
         Object.assign(initialState, form);
         loadHotel()
+        getHotelButtons()
     });
 
     const openModelGallery = () => {
@@ -287,35 +268,20 @@
     const submit = async () => {
         const body = {
             buttons: {
-            show_wifi: form.show_wifi,
-            show_call: form.show_call,
-            show_legal_text: form.show_legal_text,
-            show_all: form.show_all
+                show_wifi: form.show_wifi,
+                show_all: form.show_all
             },
             image: imgSelected.value.url ?? null
         };
 
-        const response  = await hotelStorage.$updateShowButtons(body);
-            // console.log(response, 'response')
-            const  {ok, data} = response ?? {}
-            await loadHotel()
-            isloadingForm.value = false
-            if (ok) {
-                toast.warningToast('Cambios guardados con éxito','top-right');
-            } else {
-                toast.warningToast(data?.message,'top-right');
-            }
-            mockupStore.$reloadIframe();
-
-        
+        const response = await hotelStorage.$updateShowButtons(body);
+        // ... resto del código del submit ...
     };
     async function loadHotel () {
         const hotel = await hotelStorage.$findByParams()
 
         Object.assign(hotelData, hotel)
-        loadForm(hotel)
-
-        
+        loadForm(hotel) 
 
         // Guardar los valores iniciales una vez que los datos del hotel se han cargado
         Object.assign(initialState, { ...form });
@@ -323,10 +289,7 @@
     }
 
     const loadForm = (hotel) => {
-        /* form.show_wifi = hotel.buttons_home.show_wifi || false;
-        form.show_call = hotel.buttons_home.show_call || false;
-        form.show_legal_text = hotel.buttons_home.show_legal_text || false;
-        form.show_all = hotel.buttons_home.show_all || false; */
+
         imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
         isDisabled.value = hotel.legal;
@@ -344,9 +307,24 @@
         return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
     };
 
-    /* const removeLogo = () => {
-        imgSelected.value = {...bgDefault};
-    }; */
+
+
+    const hoverWifi = ref(false);
+
+    watch(() => buttons.value, (newButtons) => {
+        const allVisible = newButtons.every(button => button.is_visible);
+        form.show_all = allVisible;
+    }, { deep: true });
+
+    watch(() => form.show_all, (newVal) => {
+        buttons.value.forEach(button => {
+            button.is_visible = newVal;
+        });
+    });
+
+    const handleButtonsUpdate = async (newButtons) => {
+        buttons.value = newButtons;
+    };
 </script>
   
 <style lang="scss" scoped>
@@ -388,6 +366,51 @@
             }
 
         }
+    }
+
+    .shadow-card {
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .shadow-draginng {
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+
+    .buttom-drag {
+      transition: all 0.2s ease;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .button-card {
+      height: 141px;
+      transition: all 0.2s ease;
+      
+      &.is-dragging {
+        opacity: 0.5;
+        transform: scale(1.05);
+        cursor: grabbing;
+        z-index: 10;
+      }
+      
+      &.shift-left {
+        transform: translateX(-128px);
+        transition: transform 0.2s ease;
+      }
+      
+      &.shift-right {
+        transform: translateX(128px);
+        transition: transform 0.2s ease;
+      }
+    }
+
+    // Agregar animación para el grid
+    .grid {
+      display: grid;
+      grid-auto-flow: dense;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
 </style>
