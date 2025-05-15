@@ -282,45 +282,8 @@ const updateButtonVisibility = async (button) => {
   height: 100px;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
-  
-  &.is-dragging {
-    opacity: 0.5;
-    transform: scale(1.05);
-    cursor: grabbing;
-    z-index: 10;
-  }
-
-  &.margin-left {
-    margin-left: 128px;
-  }
-  
-  &.margin-right {
-    margin-right: 128px;
-  }
 }
 
-.list-move {
-  transition: transform 0.5s ease;
-}
-
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.shadow-card {
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
-}
-
-.shadow-draginng {
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
 
 .buttom-drag {
   &:hover {
