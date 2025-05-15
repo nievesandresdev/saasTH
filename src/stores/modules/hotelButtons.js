@@ -15,11 +15,17 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
         return response;
     }
 
+    async function $updateButtonVisibility (data) {
+        const response = await hotelButtonsServices.updateButtonVisibilityApi(data)
+        return response;
+    }
+
 
 
     return {
         $getAllHotelButtons,
-        $updateOrderButtons
+        $updateOrderButtons,
+        $updateButtonVisibility
     }
 
 })

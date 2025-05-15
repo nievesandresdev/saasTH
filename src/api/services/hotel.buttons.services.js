@@ -6,4 +6,5 @@ import {
 export const getHotelButtonsApi = () => apiHttp('GET', `${hotelButtonsPath}/getButtons`, {}, {showPreloader: false });
 //updateOrder
 export const updateOrderButtonsApi = (data) => apiHttp('POST', `${hotelButtonsPath}/updateOrder`, data, {showPreloader: false });
+export const updateButtonVisibilityApi = (data) => apiHttp('POST', `${hotelButtonsPath}/updateButtonVisibility`, data, {showPreloader: false });
 //export const storeOrUpdateHotelButtonsApi = (data) => apiHttp('POST', `${hotelButtonsPath}/storeOrUpdateHotelButtons`, data, {showPreloader: true });

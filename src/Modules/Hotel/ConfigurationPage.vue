@@ -82,7 +82,8 @@
             <SectionButtons 
               v-model:buttons="buttons"
               :buttons-hidden="buttonsHidden"
-              @update:buttons="handleButtonsUpdate"
+              @updateButtons="handleButtonsUpdate"
+              @getButtons="getHotelButtons"
             />
           </template>
         </SectionConfig>
