@@ -3,10 +3,10 @@
     <label class="block text-sm mb-2 font-medium leading-[140%] htext-black-100" v-if="textLabel">
       {{ textLabel }}
     </label>
-    <div class="relative w-full" v-if="options.length > 0" ref="dropdown" :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'">
+    <div class="relative w-full" v-if="opts.length > 0" ref="dropdown" :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'">
       <div
         :disabled="disabled"
-        :id="`dropdown-input-${options[0].value}`"
+        :id="`dropdown-input-${opts[0].value}`"
         class="text-start flex items-center w-full border-[2px]"
         :class="[
           size ? style.content : '',
@@ -39,18 +39,18 @@
         </template>
       </div>
       <div
-        class="absolute z-50 bg-white"
+        class="absolute z-50 bg-white max-h-[300px] overflow-y-auto"
         :class="[
           'dropdown-menu',
           extra_dropdown,
           top_dropdown,
           { 'compact-dropdown': compact }
         ]"
-        :aria-labelledby="`dropdown-input-${options[0].value}`"
+        :aria-labelledby="`dropdown-input-${opts[0].value}`"
         v-if="showOptions"
       >
         <div
-          v-for="(option, index) in options"
+          v-for="(option, index) in opts"
           :key="index"
           class="option cursor-pointer relative p-3 text-sm"
           :class="[
@@ -210,7 +210,7 @@ export default {
     };
 
     const label = computed(() => {
-      const lb = props.options.find(item => props.modelValue == item.value);
+      const lb = opts.value.find(item => props.modelValue == item.value);
       return lb ? lb.label : null;
     });
 
@@ -276,6 +276,8 @@ export default {
       value.value = newValue;
     });
 
+    const opts = computed(() => props.options);
+
     return {
       showOptions,
       hoverOption,
@@ -288,7 +290,8 @@ export default {
       labelSelect,
       style,
       borderClasses,
-      bgClasses
+      bgClasses,
+      opts
     };
   }
 };

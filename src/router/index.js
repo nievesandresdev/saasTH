@@ -24,8 +24,12 @@ import settingsCheckinRoutes from './settings/settingsCheckinRoutes.js';
 import marketplaceRoutes from './marketplaceRoutes';
 import contactRoutes from './hotel/contactRoutes';
 
+
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
+
+//stores
+import { useAuthStore } from '@/stores/modules/auth/login';
 
 // Función para verificar si los datos críticos existen en localStorage
 function isAuthenticated() {
@@ -79,7 +83,19 @@ const router = createRouter({
 });
 
 // Middleware de navegación auth
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  /*
+  esto sirve para inciar sesion a cualquier url con un codigo de usuario
+  */ 
+  const authStore = useAuthStore();
+  if(to.query?.redirect == 'view' && to.query.code){
+    const toQueryWithout = { ...to.query };
+    delete toQueryWithout.redirect;
+    delete toQueryWithout.code;
+    await authStore.$loginByCode(to.query.code);
+    return next({ path: to.path, query: toQueryWithout });
+  }
+
   const isAuth = isAuthenticated();
 
   // Permitir acceso a la ruta de subdominio sin autenticación

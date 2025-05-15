@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { login as loginService, logout as LogoutService } from '@/api/services/auth';
+import { login as loginService, logout as LogoutService, loginByCode } from '@/api/services/auth';
 import { getUserData } from '@/api/services/users/userSettings.service';
 import { deleteSessionByHotelAndEmailApi } from '@/api/services/stay/staySession.services';
 import { computed, ref } from 'vue';
@@ -69,6 +69,40 @@ export const useAuthStore = defineStore('auth', () => {
             loading.value = false;
         }
     }
+
+    async function $loginByCode(code) {
+        loading.value = true;
+        errorLogin.value = null;
+
+        try {
+            const response = await loginByCode(code);
+            // console.log('response', response);
+            if (response.ok) {
+                token.value = response.data.token;
+                user.value = response.data.user;
+                errorLogin.value = null;
+                // Guardamos la sesión en localStorage y el tiempo de inicio
+                const currentTime = new Date().getTime();
+                localStorage.setItem('token', token.value);
+                localStorage.setItem('user', JSON.stringify(user.value));
+                localStorage.setItem('current_hotel', JSON.stringify(response.data.user.current_hotel));
+                localStorage.setItem('current_subdomain', response.data.user.current_hotel.subdomain);
+                localStorage.setItem('loginTime', currentTime); // Guardamos la hora actual
+                localStorage.setItem('login_from', 'hoster');
+            } else {
+                errorLogin.value = response.data.motives.message;
+                console.log('errorLogin', response.data);
+            }
+
+        } catch (error) {
+            errorLogin.value = error.response?.data?.message || 'Ha ocurrido un error';
+        } finally {
+            loading.value = false;
+        }
+        return;
+    }
+
+
 
     // Función para iniciar sesión como administrador
     async function loginAdmin(token) {
@@ -174,6 +208,7 @@ export const useAuthStore = defineStore('auth', () => {
         $currentHotelName,
         loginAdmin,
         $getPermissions,
-        $getCodeHotel
+        $getCodeHotel,
+        $loginByCode
     };
 });
