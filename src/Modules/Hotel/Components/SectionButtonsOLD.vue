@@ -3,7 +3,7 @@
     name="list" 
     tag="div" 
     ref="parent"
-    class="grid grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 auto-rows-[100px]"
+    class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4 auto-rows-[141px]"
   >
   <!-- <span id="no-drag">No drag</span> -->
     <div 
@@ -11,19 +11,26 @@
       :key="button.id"
       class="button-card bg-white rounded-lg shadow-md py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
       :class="{
+        'shadow-draginng border border-gray-300': button.id == selectedCard,
+        'shadow-draginng': dragStartIndex == index,
+        'shadow-card': dragStartIndex != index,
+        'is-dragging': dragStartIndex === index,
         
       }"
-     
+      @dragover="handlerDragOver"
+      @dragenter="handleDragEnter(index)"
+      @drop="handlerDrop(index)"
       :draggable="button.is_visible"
-    
+      @dragstart="handlerDragStart(index, $event)"
+      @dragend="handlerDragEnd"
       ref="draggableCard"
       @mouseenter="button.hover = true"
       @mouseleave="button.hover = false"
     >
       <!-- Overlay negro en hover con toggle -->
       <div 
-        v-if="button.hover && showOverlays" 
-        class="overlay-drag absolute inset-0 bg-black bg-opacity-25 rounded-lg"
+        v-if="button.hover" 
+        class="absolute inset-0 bg-black bg-opacity-25 rounded-lg"
       >
         <div class="flex justify-end p-2">
           <div class="flex items-center bg-white p-1 rounded-[10px]">
@@ -40,7 +47,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col items-center justify-center h-full gap-2 relative z-10">
+      <div class="flex flex-col items-center justify-center h-full gap-4 relative z-10">
         <img 
           :src="`/assets/icons/${button.icon}`"
           :alt="button.name" 
@@ -48,7 +55,7 @@
           :class="{'opacity-50': !button.is_visible}" 
         />
         <h3 
-          :class="['text-sm font-medium text-center', { 'text-[#333]': button.is_visible, 'text-[#A0A0A0]': !button.is_visible }]"
+          :class="['text-base font-medium text-center', { 'text-[#333]': button.is_visible, 'text-[#A0A0A0]': !button.is_visible }]"
         >
           {{ button.name }}
         </h3>
@@ -59,7 +66,6 @@
         class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
         :class="{'cursor-grabbing': dragStartIndex == index}"
         @mousedown="setDragStart(index)"
-        :draggable="button.is_visible"
       >
         <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
       </button>
@@ -72,7 +78,6 @@ import { ref, nextTick, watch } from 'vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useHotelButtonsStore } from '@/stores/modules/hotelButtons';
-import { animations, state } from "@formkit/drag-and-drop";
 
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 
@@ -92,29 +97,6 @@ const [ parent, dragButtons ] = useDragAndDrop(props.buttons, {
   draggable: (el) => {
     return el.id !== 'no-drag';
   }
-});
-
-const showOverlays = ref(true);
-
-state.on('dragStarted', () => {
-  console.log('dragStarted', props.buttons);
-  showOverlays.value = false;
-  // Disable hover and hide overlay for all buttons during drag
-  props.buttons.forEach(button => {
-    button.hover = false;
-  });
-});
-
-state.on('dragEnded', () => {
-  console.log('dragEnded', props.buttons);
-  // Wait for the next tick to ensure animations are complete
-  nextTick(() => {
-    showOverlays.value = true;
-    // Reset hover states
-    props.buttons.forEach(button => {
-      button.hover = false;
-    });
-  });
 });
 
 // Sincronizar los botones del drag and drop con los props
@@ -241,7 +223,7 @@ const updateButtonVisibility = async (button) => {
 
 <style lang="scss" scoped>
 .button-card {
-  height: 100px;
+  height: 141px;
   transition: all 0.2s ease;
   
   &.is-dragging {

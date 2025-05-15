@@ -81,6 +81,7 @@
           <template #content>
             <SectionButtons 
               v-model:buttons="buttons"
+              :buttons-hidden="buttonsHidden"
               @update:buttons="handleButtonsUpdate"
             />
           </template>
@@ -311,10 +312,11 @@
 
     const hoverWifi = ref(false);
 
-    watch(() => buttons.value, (newButtons) => {
+    /* watch(() => buttons.value, (newButtons) => {
+        console.log(newButtons, 'newButtons')
         const allVisible = newButtons.every(button => button.is_visible);
         form.show_all = allVisible;
-    }, { deep: true });
+    }, { deep: true }); */
 
     watch(() => form.show_all, (newVal) => {
         buttons.value.forEach(button => {
@@ -324,6 +326,7 @@
 
     const handleButtonsUpdate = async (newButtons) => {
         buttons.value = newButtons;
+        //await getHotelButtons();
     };
 </script>
   
