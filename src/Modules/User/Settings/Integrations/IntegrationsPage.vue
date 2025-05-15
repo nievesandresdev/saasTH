@@ -483,9 +483,7 @@ const getAllDataByOtas = async (ota) => {
 
 onMounted(async () => {
     await getSettings();
-    console.log( btoa('1234567890') ); //encriptar
 
-    console.log( atob('MTIzNDU2Nzg5MA==') ); //desencriptar
 });
 
 const getSettings = async () => {
