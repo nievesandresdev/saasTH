@@ -70,7 +70,8 @@
             <div class="flex justify-between">
               <span class="font-medium text-base">Botonera</span>
               <div class="flex items-center">
-                <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div>
+                <!-- <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div> -->
+                <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
                 <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
               </div>
             </div>

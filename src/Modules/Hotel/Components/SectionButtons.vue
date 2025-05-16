@@ -10,7 +10,7 @@
       <div 
         v-for="(button, index) in buttons" 
         :key="button.id"
-        class="button-card bg-[#FAFAFA] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
+        class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
         :class="{
         }"
         @mouseenter="button.hover = true"
@@ -24,7 +24,8 @@
           <div class="flex justify-end p-2">
             <div class="flex items-center bg-white p-1 rounded-[10px] z-20">
               <div class="mr-2 text-[#333] font-semibold text-[10px]">
-                {{ button.is_visible ? 'Visible' : 'Oculto' }}
+                <!-- {{ button.is_visible ? 'Visible' : 'Oculto' }} -->
+                  Visible
               </div>
               <BaseSwichInput
                 v-model="button.is_visible"
@@ -92,7 +93,7 @@
           <div class="flex justify-end p-2">
             <div class="flex items-center bg-white p-1 rounded-[10px] z-20">
               <div class="mr-2 text-[#333] font-semibold text-[10px]">
-                {{ button.is_visible ? 'Visible' : 'Oculto' }}
+                Visible
               </div>
               <BaseSwichInput
                 v-model="button.is_visible"
@@ -112,7 +113,7 @@
             :class="{'opacity-50': !button.is_visible}" 
           />
           <h3 
-            :class="['text-sm font-medium text-center', { 'text-[#333]': button.is_visible, 'text-[#A0A0A0]': !button.is_visible }]"
+            class="text-sm font-medium text-center text-[#333]"
           >
             {{ button.name }}
           </h3>
