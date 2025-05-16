@@ -203,6 +203,12 @@
         :tooltips="tooltips" 
         :airbnbUrls="airbnbUrls"
         @closeModalAirbnb="closeModalAirbnb" 
+        @closeModalAirbnbSoft="closeModalAirbnbSoft"
+    />
+
+    <ModalNotEdit
+        :open="openModalNotEdit"
+        @close="closeModalNotEdit"
     />
 
     <ModalNoSave
@@ -225,6 +231,7 @@ import ModalAirbnb from './Components/ModalAirbnb.vue';
 import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 import { useToastAlert } from '@/composables/useToastAlert';
 import ModalNoSave from '@/components/ModalNoSave.vue';
+import ModalNotEdit from './Components/ModalNotEdit.vue';
 
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
@@ -238,6 +245,8 @@ const loading = ref(false);
 const credentialsOta = ref(null);
 const openModalNoSave = ref(false);
 
+const openModalNotEdit = ref(false);
+
 // Computed para obtener las URLs de Airbnb
 const airbnbUrls = computed(() => {
     return dataOTAS.value?.otas?.filter(ota => ota.ota === 'AIRBNB') || [];
@@ -250,6 +259,10 @@ const closeModalIntegration = () => {
         open.value = false;
         disabledInput.value.url = false;
     }
+}
+
+const closeModalNotEdit = () => {
+    openModalNotEdit.value = false;
 }
 
 const forceCloseModalIntegration = () => {
@@ -419,7 +432,13 @@ const togglePasswordVisibility = () => {
 };
 
 const openModalIntegrations = (service) => {
-   
+   let serviceUpper = service.toUpperCase();
+   if(service === 'tripadvisor' || service === 'google'){
+    if(dataOTAS?.value?.otas?.find(ota => ota.ota === serviceUpper)?.url){
+        openModalNotEdit.value = true;
+        return false;
+    }
+   }
     form.value.email = '';
     form.value.password = '';
     errorMessage.value.url = '';
@@ -630,6 +649,10 @@ const handleDeleteCredentials = async () => {
 const closeModalAirbnb = async () => {
     toast.warningToast('Cambios guardados con éxito', 'top-right');
     await getSettings();
+    openAirbnb.value = false;
+}
+
+const closeModalAirbnbSoft = async () => {
     openAirbnb.value = false;
 }
 

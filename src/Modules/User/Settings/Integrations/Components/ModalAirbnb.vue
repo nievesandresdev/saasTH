@@ -5,7 +5,7 @@
                 <span class="text-[18px] font-medium">
                     Configura la integración con Airbnb
                 </span>
-                <button @click="closeModalAirbnb">
+                <button @click="closeModalAirbnbSoft">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
                 </button>
             </div>
@@ -145,7 +145,7 @@ const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
 
 
-const emit = defineEmits(['closeModalAirbnb']);
+const emit = defineEmits(['closeModalAirbnb', 'closeModalAirbnbSoft']);
 
 const props = defineProps({
     open: {
@@ -261,7 +261,7 @@ const togglePasswordVisibility = () => {
 const closeModalAirbnb = () => {
     if (hasChanges.value) {
         openModalNoSave.value = true;
-        console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
+        //console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
         return false;
     }
     emit('closeModalAirbnb');
@@ -269,6 +269,10 @@ const closeModalAirbnb = () => {
 
 const forceCloseModalAirbnb = () => {
     emit('closeModalAirbnb');
+}
+
+const closeModalAirbnbSoft = () => {
+    emit('closeModalAirbnbSoft');
 }
 
 const submit = async () => {
@@ -308,6 +312,7 @@ const submit = async () => {
 
     console.log('Datos a enviar:', dataToSubmit);
     const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
+    console.log('Respuesta:', response);
 
     if (response.ok) {
         //toast.warningToast('Cambios guardados con éxito', 'top-right');
@@ -317,7 +322,7 @@ const submit = async () => {
             location.reload();
         }, 1100); */
     } else {
-        toast.errorToast(response.message.text, 'top-right');
+        toast.errorToast('Error al guardar los cambios', 'top-right');
     }
 }
 
