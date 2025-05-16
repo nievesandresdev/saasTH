@@ -1,7 +1,7 @@
 <template>
     <aside class="w-full h-full flex flex-col bg-white shadow-custom">
         <div class="py-3 px-6 block">
-            <h5 class="text-base font-semibold leading-[120%] py-[10.5px]">Hoster</h5>
+            <h5 class="text-base font-semibold leading-[120%] py-[10.5px] cursor-pointer" @click="goLink('/equipo/configuracion/usuarios')">Backoffice</h5>
         </div>
 
         <nav class="">
@@ -35,7 +35,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const menuItems = [
     { text: 'Equipo', icon: '/assets/icons/1.TH.EQUIPO.svg' , url: '/equipo/configuracion/usuarios' },
@@ -48,7 +48,7 @@ const menuItems = [
 
 const showSubmenu = ref(false);
 const route = useRoute();
-
+const router = useRouter();
 const toggleSubmenu = (itemText) => {
     if (itemText === 'Equipo') {
         if (showSubmenu.value && !isActiveSubmenu(itemText)) {
@@ -75,6 +75,10 @@ watch(route, (newRoute, oldRoute) => {
         showSubmenu.value = false;
     }
 });
+
+const goLink = (url) => {
+    router.push(url);
+};
 </script>
 
 <style scoped>

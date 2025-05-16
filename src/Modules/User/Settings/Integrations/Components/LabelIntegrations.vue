@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-start gap-2">
+    <div class="flex justify-start gap-2 mb-2">
         <label class="text-sm font-medium">{{ props.label }}</label>
         <Tooltip size="m" :top="props.tooltipTop" :left="props.tooltipLeft" v-if="!props.disabledTooltip">
             <template v-slot:button>

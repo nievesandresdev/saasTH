@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-start items-center gap-2 cursor-pointer" @click="addAnotherUrlAirbnb">
+                    <div class="flex justify-start items-center gap-2 cursor-pointer mt-[-2.5px]" @click="addAnotherUrlAirbnb">
                         <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4">
                         <span class="text-xs font-medium">
                             Añadir otro enlace
@@ -69,12 +69,11 @@
                             </div>
                         </section>
                     </div>
-                    <div v-else class="flex flex-col gap-2 mb-4">
-                       
+                    <div v-else class="flex flex-col mb-4">
                         <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2 mb-4">
+                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col">
                         <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -311,12 +310,12 @@ const submit = async () => {
     const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
 
     if (response.ok) {
-        toast.warningToast('Cambios guardados con éxito', 'top-right');
+        //toast.warningToast('Cambios guardados con éxito', 'top-right');
         //closeModalAirbnb();
         emit('closeModalAirbnb');
-        setTimeout(() => {
+        /* setTimeout(() => {
             location.reload();
-        }, 1100);
+        }, 1100); */
     } else {
         toast.errorToast(response.message.text, 'top-right');
     }

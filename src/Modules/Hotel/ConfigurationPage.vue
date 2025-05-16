@@ -82,6 +82,8 @@
             <SectionButtons 
               v-model:buttons="buttons"
               :buttons-hidden="buttonsHidden"
+              :count-buttons="buttons.length"
+              :count-buttons-hidden="buttonsHidden.length"
               @updateButtons="handleButtonsUpdate"
               @getButtons="getHotelButtons"
             />

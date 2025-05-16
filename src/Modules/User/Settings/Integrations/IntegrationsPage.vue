@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 flex-grow min-h-screen">
         <HeaderIntegrations />
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 3xl:grid-cols-4 gap-4">
             <div @click="openModalIntegrations('booking')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Booking.svg" class="w-8 h-8">
@@ -141,7 +141,7 @@
                         <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2">
                         <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -579,9 +579,9 @@ const submit = async () => {
         await getSettings();
         //closeModalIntegration();
         open.value = false;
-        setTimeout(() => {
+       /*  setTimeout(() => {
             location.reload();
-        }, 1100);
+        }, 1100); */
     } else {
         toast.errorToast(response.message.text, 'top-right');
     }
@@ -627,7 +627,9 @@ const handleDeleteCredentials = async () => {
     }
 }
 
-const closeModalAirbnb = () => {
+const closeModalAirbnb = async () => {
+    toast.warningToast('Cambios guardados con éxito', 'top-right');
+    await getSettings();
     openAirbnb.value = false;
 }
 
