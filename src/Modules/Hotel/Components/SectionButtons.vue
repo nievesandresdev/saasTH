@@ -51,7 +51,7 @@
         </div>
 
         <button
-          v-if="button.hover && button.is_visible && showDragButtons"
+          v-if="button.hover && button.is_visible && showDragButtons && !isDragging"
           class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
           :class="{'cursor-grabbing': dragStartIndex == index}"
           @mousedown="setDragStart(index)"
@@ -119,7 +119,7 @@
         </div>
 
         <button
-          v-if="button.hover && button.is_visible && showDragButtons"
+          v-if="button.hover && button.is_visible && showDragButtons && !isDragging"
           class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
           :class="{'cursor-grabbing': dragStartIndex == index}"
           @mousedown="setDragStart(index)"
@@ -167,11 +167,13 @@ const [ parent, dragButtons ] = useDragAndDrop(props.buttons, {
 
 const showOverlays = ref(true);
 const showDragButtons = ref(true);
+const isDragging = ref(false);
 
 state.on('dragStarted', () => {
   console.log('dragStarted', props.buttons);
   showOverlays.value = false;
   showDragButtons.value = false;
+  isDragging.value = true;
   // Disable hover and hide overlay for all buttons during drag
   props.buttons.forEach(button => {
     button.hover = false;
@@ -187,6 +189,7 @@ state.on('dragEnded', async () => {
     // Si está en la zona de no-drag, solo actualizamos la UI sin hacer la petición
     showOverlays.value = true;
     showDragButtons.value = true;
+    isDragging.value = false;
     return;
   }
 
@@ -196,6 +199,7 @@ state.on('dragEnded', async () => {
   
   showOverlays.value = true;
   showDragButtons.value = true;
+  isDragging.value = false;
   
   // Reset hover states and trigger hover for the current element
   const updatedButtons = props.buttons.map(button => ({

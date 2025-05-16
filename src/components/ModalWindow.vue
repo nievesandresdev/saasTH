@@ -2,7 +2,8 @@
   <transition name="modal-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 flex items-center justify-center bg-[#00000088] z-[10000]"
+      class="fixed inset-0 flex items-center justify-center z-[10000]"
+      :class="{'bg-[#00000088]': showOverlay}"
       @click.self="closeModal"
     >
       <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all relative">
@@ -53,6 +54,10 @@ const props = defineProps({
   topOffset: {
     type: String,
     default: '-5%' 
+  },
+  showOverlay: {
+    type: Boolean,
+    default: true
   }
 });
 

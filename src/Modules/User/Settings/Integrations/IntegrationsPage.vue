@@ -2,7 +2,7 @@
     <div class="px-6 flex-grow min-h-screen">
         <HeaderIntegrations />
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div @click="openModalIntegrations('booking')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+            <div @click="openModalIntegrations('booking')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Booking.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">Booking</span>
@@ -24,7 +24,7 @@
 
             </div>
 
-            <div @click="openModalIntegrations('tripadvisor')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+            <div @click="openModalIntegrations('tripadvisor')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Tripadvisor.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">TripAdvisor</span>
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div @click="openModalIntegrations('expedia')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+            <div @click="openModalIntegrations('expedia')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Expedia.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">Expedia</span>
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div @click="openModalIntegrations('google')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+            <div @click="openModalIntegrations('google')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Google.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">Google</span>
@@ -79,15 +79,18 @@
                 </div>
             </div>
 
-            <div @click="openModalIntegrations('airbnb')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+            <div @click="openModalIntegrations('airbnb')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
                     <img src="/assets/icons/otas/Airbnb.svg" class="w-8 h-8">
                     <span class="text-[#333333] text-base font-medium">Airbnb</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
                     <img :src="dataOTAS?.otas?.find(ota => ota.ota === 'AIRBNB')?.url ? '/assets/icons/TH.CHECK.svg' : '/assets/icons/1.TH.WARNING.svg'" class="w-[16px] h-[16px]">
-                    <span class="text-[#333333] text-[12px] font-medium truncate">
+                    <span class="text-[#333333] text-[12px] font-medium truncate" v-if="airbnbUrls.length <= 1">
                         {{ dataOTAS?.otas?.find(ota => ota.ota === 'AIRBNB')?.url || 'Sin URL' }}
+                    </span>
+                    <span class="text-[#333333] text-[12px] font-medium truncate" v-else>
+                        {{ airbnbUrls.length }} URL Actualizadas
                     </span>
                 </div>
                 <div class="flex items-center gap-2 mt-2" v-if="!dataOTAS?.otas?.find(ota => ota.ota === 'AIRBNB')?.withCredentials">
@@ -122,7 +125,7 @@
                 </div>
                 <template v-else>
                     <div class="flex flex-col gap-2 mb-4">
-                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-172'" :tooltip-left="'-55'" :disabled-tootlip="disabledInput.url" />
+                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-205'" :tooltip-left="'-125'" :disabled-tooltip="disabledInput.url" />
                         <BaseTextField 
                             v-model="form.url" 
                             :placeholder="placeholderUrl"
@@ -301,9 +304,9 @@ const validateUrl = (url, type) => {
     let pathname = urlParts.pathname;
 
     // Verifica que termine en .com
-    if (!hostname.endsWith('.com')) {
+    /* if (!hostname.endsWith('.com')) {
         return 'El dominio del enlace es incorrecto. Asegúrate que termine en ".com".';
-    }
+    } */
 
     // Elimina cualquier query string o fragmento en la URL
     pathname = pathname.split('?')[0].split('#')[0];
@@ -329,7 +332,6 @@ const validateUrl = (url, type) => {
                 return 'El formato del enlace de Google es incorrecto. Debe empezar con "/maps/place/".';
             } */
             return null;
-            break;
         case 'airbnb':
             if (!url.startsWith('https://es.airbnb.com/rooms/')) {
                 return 'El formato del enlace de Airbnb es incorrecto. Debe comenzar con "https://es.airbnb.com/rooms/".';
@@ -337,7 +339,7 @@ const validateUrl = (url, type) => {
             break;
         case 'expedia':
             // No hay validación específica para Expedia
-            break;
+            return null;
         default:
             return 'Tipo de enlace no soportado';
     }

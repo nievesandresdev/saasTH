@@ -1,5 +1,5 @@
 <template>
-    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'440px'" padding-content="p-0" footer="true" >
+    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
@@ -11,14 +11,15 @@
             </div>
             <hr>
             <div class="p-4">
-                <div class="flex flex-col gap-2 mb-4">
+                <div class="flex flex-col gap-2 mb-4 max-h-[300px] overflow-y-auto pr-2">
                     <div v-for="(url, index) in displayedUrls" :key="url._id || index" class="flex items-start gap-2">
                         <div class="flex-grow">
                             <LabelIntegrations 
                                 :label="index === 0 ? 'URL de Airbnb' : 'URL adicional'" 
                                 :tooltip="tooltips.url" 
-                                :tooltip-top="'-172'" 
+                                :tooltip-top="'-196'" 
                                 :tooltip-left="'-55'" 
+                                :disabled-tooltip="url.url !== ''"
                             />
                             <BaseTextField 
                                 v-model="url.url" 
