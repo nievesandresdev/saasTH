@@ -127,211 +127,178 @@
 </template>
   
 <script setup>
-    import { reactive, ref, onMounted, computed,watch, nextTick } from 'vue';
-    import Toggle from '@/components/Toggle.vue';
-    import SectionConfig from '@/components/SectionConfig.vue';
-    import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
-    import ModalGallery from '@/components/ModalGallery.vue';
-    import { useHotelStore } from '@/stores/modules/hotel';
-    import { useToastAlert } from '@/composables/useToastAlert'
-    import BasePreviewImage from '@/components/BasePreviewImage.vue';
-    import SectionButtons from '@/Modules/Hotel/Components/SectionButtons.vue';
+  import { reactive, ref, onMounted, computed,watch, nextTick } from 'vue';
+  import Toggle from '@/components/Toggle.vue';
+  import SectionConfig from '@/components/SectionConfig.vue';
+  import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+  import ModalGallery from '@/components/ModalGallery.vue';
+  import { useHotelStore } from '@/stores/modules/hotel';
+  import { useToastAlert } from '@/composables/useToastAlert'
+  import BasePreviewImage from '@/components/BasePreviewImage.vue';
+  import SectionButtons from '@/Modules/Hotel/Components/SectionButtons.vue';
 
-    import { useHotelButtonsStore } from '@/stores/modules/hotelButtons'
-    const hotelButtonsStore = useHotelButtonsStore();
+  import { useHotelButtonsStore } from '@/stores/modules/hotelButtons'
+  const hotelButtonsStore = useHotelButtonsStore();
 
-    import { useMockupStore } from '@/stores/modules/mockup'
-    const mockupStore = useMockupStore();
+  import { useMockupStore } from '@/stores/modules/mockup'
+  const mockupStore = useMockupStore();
 
-    const toast = useToastAlert();
-    const hotelStorage = useHotelStore();
-    const { hotelData } = hotelStorage;
+  const toast = useToastAlert();
+  const hotelStorage = useHotelStore();
+  const { hotelData } = hotelStorage;
 
-    const form = reactive({
-        show_wifi: false,
-        show_all: false
-    });
+  const form = reactive({
+      show_wifi: false,
+      show_all: false
+  });
 
-    const checkAllHidden = () => {
-        if (!form.show_wifi) {
-            form.show_all = false;
-        } else {
-            form.show_all = true;
-        }
-    };
+  const checkAllHidden = () => {
+      if (!form.show_wifi) {
+          form.show_all = false;
+      } else {
+          form.show_all = true;
+      }
+  };
 
-    watch(() => form.show_wifi, () => {
-        checkAllHidden();
-    });
+  watch(() => form.show_wifi, () => {
+      checkAllHidden();
+  });
 
-    watch(() => form.show_all, (newVal) => {
-        if (newVal) {
-            if (!form.show_wifi) {
-                form.show_wifi = true;
-            }
-        } else {
-            form.show_wifi = false;
-        }
-    });
+  watch(() => form.show_all, (newVal) => {
+      if (newVal) {
+          if (!form.show_wifi) {
+              form.show_wifi = true;
+          }
+      } else {
+          form.show_wifi = false;
+      }
+  });
 
-    const buttons = ref([]);
-    const buttonsHidden = ref([]);
+  const buttons = ref([]);
+  const buttonsHidden = ref([]);
 
-    const getHotelButtons = async () => {
-        const response = await hotelButtonsStore.$getAllHotelButtons();
-        buttons.value = response.data.visible;
-        buttonsHidden.value = response.data.hidden;
-    }
+  const getHotelButtons = async () => {
+      const response = await hotelButtonsStore.$getAllHotelButtons();
+      buttons.value = response.data.visible;
+      buttonsHidden.value = response.data.hidden;
+  }
 
-    const updateButtonVisibility = async (button) => {
-        try {
-            const payload = {
-                visible: buttons.value
-                    .filter(btn => btn.is_visible)
-                    .map(btn => ({ id: btn.id })),
-                hidden: buttons.value
-                    .filter(btn => !btn.is_visible)
-                    .map(btn => ({ id: btn.id }))
-            };
+  const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
+  const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
+  const hoverCardLogo = ref(null);
+  const modalGaleryRef = ref(null);
+  const isloadingForm = ref(false);
+  const formInvalid = false;
+  const initialState = reactive({});
+  const isDisabled = ref(false);
 
-            console.log(payload, 'payload')
-            
-            // Llamada a la API con el nuevo formato
-            await hotelButtonsStore.$updateOrderButtons(payload);
-            toast.warningToast('Visibilidad actualizada con éxito', 'top-right');
-        } catch (error) {
-            console.error('Error updating button visibility:', error);
-            // Revertir el cambio en caso de error
-            button.is_visible = !button.is_visible;
-            toast.warningToast('Error al actualizar la visibilidad', 'top-right');
-        }
-    };
+  const previewUrl = ref('');
+  const isPreviewOpen = ref(false);
 
-    const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
-    const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
-    const hoverCardLogo = ref(null);
-    const modalGaleryRef = ref(null);
-    const isloadingForm = ref(false);
-    const formInvalid = false;
-    const initialState = reactive({});
-    const isDisabled = ref(false);
+  const isChanged = computed(() => {
+      return (
+          form.show_wifi !== initialState.show_wifi ||
+          form.show_all !== initialState.show_all ||
+          (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
+          (!initialImage.value && imgSelected.value) 
+      );
+  });
 
-    const previewUrl = ref('');
-    const isPreviewOpen = ref(false);
-
-    const isChanged = computed(() => {
-        return (
-            form.show_wifi !== initialState.show_wifi ||
-            form.show_all !== initialState.show_all ||
-            (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
-            (!initialImage.value && imgSelected.value) 
-        );
-    });
-
-    function getTypeImg (url) {
-        if (!url) return;
-        let type = url?.includes('https://') ? 'CDN' : 'STORAGE'
-        return type
-    }
+  function getTypeImg (url) {
+      if (!url) return;
+      let type = url?.includes('https://') ? 'CDN' : 'STORAGE'
+      return type
+  }
 
 
-    function openPreview(url) {
-        // console.log(url,'url');
-        previewUrl.value = url;
-        isPreviewOpen.value = true;
-    }
+  function openPreview(url) {
+      // console.log(url,'url');
+      previewUrl.value = url;
+      isPreviewOpen.value = true;
+  }
 
-    function closePreviewImage () {
-        previewUrl.value = null;
-        isPreviewOpen.value = false;
-    }
-
-
-    const initialImage = ref(null);
-
-    onMounted(() => {
-        mockupStore.$setIframeUrl('')
-        imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
-        initialImage.value = { ...imgSelected.value };
-        Object.assign(initialState, form);
-        loadHotel()
-        getHotelButtons()
-    });
-
-    const openModelGallery = () => {
-        modalGaleryRef.value.openModal();
-    };
-
-    const addNewsImages = (images) => {
-        imgSelected.value = { ...images };
-    };
-
-    const cancelChanges = () => {
-        window.location.reload();
-    };
-
-    const submit = async () => {
-        const body = {
-            buttons: {
-                show_wifi: form.show_wifi,
-                show_all: form.show_all
-            },
-            image: imgSelected.value.url ?? null
-        };
-
-        const response = await hotelStorage.$updateShowButtons(body);
-        // ... resto del código del submit ...
-    };
-    async function loadHotel () {
-        const hotel = await hotelStorage.$findByParams()
-
-        Object.assign(hotelData, hotel)
-        loadForm(hotel) 
-
-        // Guardar los valores iniciales una vez que los datos del hotel se han cargado
-        Object.assign(initialState, { ...form });
-        initialImage.value = { ...imgSelected.value };
-    }
-
-    const loadForm = (hotel) => {
-
-        imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
-
-        isDisabled.value = hotel.legal;
-
-        //console.log(hotel.legal, 'hotel')
-    };
-
-    const $formatImage = (payload) => {
-        const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
-        let { url, type, urlDefault } = payload;
-        if (!url || !URL_STORAGE) return;
-        if (urlDefault) return url;
-        let type_d = url.includes('https://') ? 'CDN' : 'STORAGE';
-        type = type ?? type_d;
-        return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
-    };
+  function closePreviewImage () {
+      previewUrl.value = null;
+      isPreviewOpen.value = false;
+  }
 
 
+  const initialImage = ref(null);
 
-    const hoverWifi = ref(false);
+  onMounted(() => {
+      mockupStore.$setIframeUrl('')
+      imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
+      initialImage.value = { ...imgSelected.value };
+      Object.assign(initialState, form);
+      loadHotel()
+      getHotelButtons()
+  });
 
-    /* watch(() => buttons.value, (newButtons) => {
-        console.log(newButtons, 'newButtons')
-        const allVisible = newButtons.every(button => button.is_visible);
-        form.show_all = allVisible;
-    }, { deep: true }); */
+  const openModelGallery = () => {
+      modalGaleryRef.value.openModal();
+  };
 
-    watch(() => form.show_all, (newVal) => {
-        buttons.value.forEach(button => {
-            button.is_visible = newVal;
-        });
-    });
+  const addNewsImages = (images) => {
+      imgSelected.value = { ...images };
+  };
 
-    const handleButtonsUpdate = async (newButtons) => {
-        buttons.value = newButtons;
-        //await getHotelButtons();
-    };
+  const cancelChanges = () => {
+      window.location.reload();
+  };
+
+  const submit = async () => {
+      const body = {
+          buttons: {
+              show_wifi: form.show_wifi,
+              show_all: form.show_all
+          },
+          image: imgSelected.value.url ?? null
+      };
+
+      const response = await hotelStorage.$updateShowButtons(body);
+      // ... resto del código del submit ...
+  };
+  async function loadHotel () {
+      const hotel = await hotelStorage.$findByParams()
+
+      Object.assign(hotelData, hotel)
+      loadForm(hotel) 
+
+      // Guardar los valores iniciales una vez que los datos del hotel se han cargado
+      Object.assign(initialState, { ...form });
+      initialImage.value = { ...imgSelected.value };
+  }
+
+  const loadForm = (hotel) => {
+
+      imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
+
+      isDisabled.value = hotel.legal;
+
+      //console.log(hotel.legal, 'hotel')
+  };
+
+  const $formatImage = (payload) => {
+      const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
+      let { url, type, urlDefault } = payload;
+      if (!url || !URL_STORAGE) return;
+      if (urlDefault) return url;
+      let type_d = url.includes('https://') ? 'CDN' : 'STORAGE';
+      type = type ?? type_d;
+      return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
+  };
+
+
+  watch(() => form.show_all, (newVal) => {
+      buttons.value.forEach(button => {
+          button.is_visible = newVal;
+      });
+  });
+
+  const handleButtonsUpdate = async (newButtons) => {
+      buttons.value = newButtons;
+      //await getHotelButtons();
+  };
 </script>
   
 <style lang="scss" scoped>
@@ -388,36 +355,6 @@
       &:hover {
         transform: scale(1.1);
       }
-    }
-
-    .button-card {
-      height: 141px;
-      transition: all 0.2s ease;
-      
-      &.is-dragging {
-        opacity: 0.5;
-        transform: scale(1.05);
-        cursor: grabbing;
-        z-index: 10;
-      }
-      
-      &.shift-left {
-        transform: translateX(-128px);
-        transition: transform 0.2s ease;
-      }
-      
-      &.shift-right {
-        transform: translateX(128px);
-        transition: transform 0.2s ease;
-      }
-    }
-
-    // Agregar animación para el grid
-    .grid {
-      display: grid;
-      grid-auto-flow: dense;
-      transition: all 0.2s ease;
-      position: relative;
     }
 
 </style>
