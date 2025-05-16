@@ -133,7 +133,7 @@ button:focus {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 11000;
+  z-index: 21000;
 }
 
 /* custom toast error */
@@ -147,6 +147,7 @@ button:focus {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 21000;
 }
 
 /* Estilos para el cuerpo del toast */
@@ -156,6 +157,7 @@ button:focus {
   line-height: 110%;
   color:#333;
   white-space: nowrap; 
+  z-index: 21000;
 }
 
 .position-center {

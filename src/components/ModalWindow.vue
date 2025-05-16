@@ -2,7 +2,7 @@
   <transition name="modal-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 flex items-center justify-center z-[10000]"
+      class="fixed inset-0 flex items-center justify-center z-[9500]"
       :class="{'bg-[#00000088]': showOverlay}"
       @click.self="closeModal"
     >
