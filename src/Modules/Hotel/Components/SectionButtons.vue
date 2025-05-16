@@ -95,7 +95,81 @@
               <div class="mr-2 text-[#333] font-semibold text-[10px]">
                 Visible
               </div>
+              <BaseTooltipResponsive 
+                v-if="!checkConfig(button.name)" 
+                size="s" 
+                :top="-75" 
+                :left="-70"
+                :show="button.hover"
+              >
+                <template #button>
+                  <div class="cursor-not-allowed">
+                    <BaseSwichInput
+                      v-model="button.is_visible"
+                      :id="`swich-visible-button-${index}`"
+                      @change:value="updateButtonVisibility(button)"
+                      @click="handlerClickSwichVisibility"
+                      :disabled="!checkConfig(button.name)"
+                    />
+                  </div>
+                </template>
+                <template #content>
+                  <div class="text-sm leading-[150%] font-normal">
+                    <span v-if="button.name === 'Normas del alojamiento'">
+                      Registra las 
+                      <a 
+                        @click.prevent="goToConfig('GeneralLegal')" 
+                        class="text-sm font-semibold underline cursor-pointer"
+                      >
+                        Normas del alojamiento
+                      </a> 
+                      para mostrar este botón
+                    </span>
+                    <span v-else-if="button.name === 'Redes WiFi'">
+                      Añade al menos una
+                      <a 
+                        @click.prevent="goToConfig('wifi')" 
+                        class="text-sm font-semibold underline cursor-pointer"
+                      >
+                        Red de WiFi
+                      </a> 
+                      para mostrar este botón
+                    </span>
+                    <span v-else-if="button.name === 'Programa de referidos'">
+                      Activa el 
+                      <a 
+                        @click.prevent="goToConfig('referrals')" 
+                        class="text-sm font-semibold underline cursor-pointer"
+                      >
+                        Programa de referidos
+                      </a> 
+                      para mostrar este botón
+                    </span>
+                    <span v-else-if="button.name === 'Check-in'">
+                      Activa 
+                      <a 
+                        @click.prevent="goToConfig('checkin')" 
+                        class="text-sm font-semibold underline cursor-pointer"
+                      >
+                        Check-in
+                      </a> 
+                      para poder mostrar este botón
+                    </span>
+                    <span v-else-if="button.name === 'Reserva tu estancia'">
+                      Indica una
+                      <a 
+                        @click.prevent="goToConfig('website')" 
+                        class="text-sm font-semibold underline cursor-pointer"
+                      >
+                        URL de tu sitio web
+                      </a>
+                      para que tus huéspedes puedan reservar
+                    </span>
+                  </div>
+                </template>
+              </BaseTooltipResponsive>
               <BaseSwichInput
+                v-else
                 v-model="button.is_visible"
                 :id="`swich-visible-button-${index}`"
                 @change:value="updateButtonVisibility(button)"
@@ -140,8 +214,15 @@ import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useHotelButtonsStore } from '@/stores/modules/hotelButtons';
 import { state } from "@formkit/drag-and-drop";
-
+import { useHotelStore } from '@/stores/modules/hotel';
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
+import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const hotelStorage = useHotelStore();
+const { hotelData } = hotelStorage;
 
 const toast = useToastAlert();
 const hotelButtonsStore = useHotelButtonsStore();
@@ -286,6 +367,47 @@ const updateButtonVisibility = async (button) => {
     console.error('Error updating button visibility:', error);
     button.is_visible = !button.is_visible;
     toast.warningToast('Error al actualizar la visibilidad', 'top-right');
+  }
+};
+
+
+const checkConfig = (name) => {
+  if (!hotelData) return false;
+  
+  switch(name) {
+    case 'Normas del alojamiento':
+      return hotelData.policies && hotelData.policies.length > 0;
+    case 'Redes WiFi':
+      return hotelData.with_wifi;
+    case 'Programa de referidos':
+      return hotelData.show_referrals;
+    case 'Check-in':
+      return hotelData.show_checkin_stay;
+    case 'Reserva tu estancia':
+      return hotelData.website_google;
+    default:
+      return true;
+  }
+};
+
+const goToConfig = (name) => {
+  //el redirect es con el name de la ruta
+  switch(name) {
+    case 'GeneralLegal':
+      router.push({ name: 'GeneralLegal' });
+      break;
+    case 'wifi':
+      router.push('/alojamiento/perfil#checkin-checkout-section');
+      break;
+    case 'referrals':
+      router.push('/webapp/referidos');
+      break;
+    case 'checkin':
+      router.push({ name: 'CheckinGeneral' });
+      break;
+    case 'website':
+      router.push('/alojamiento/perfil#email-section');
+      break;
   }
 };
 </script>

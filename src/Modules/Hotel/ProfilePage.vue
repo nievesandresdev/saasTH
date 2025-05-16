@@ -103,7 +103,7 @@
                         />
                     </div>
                 </div> -->
-                <div class="w-[706px]">
+                <div class="w-[706px]" id="email-section">
                     <BaseTextField
                         text-label="Email"
                         v-model="form.email"
@@ -113,7 +113,7 @@
                         @blur:validate="validate('email')"
                     />
                 </div>
-                <div class="w-[706px]">
+                <div class="w-[706px]" id="website-section">
                     <BaseTextField
                         text-label="Sitio web - URL"
                         v-model="form.website_google"
@@ -135,7 +135,7 @@
                 class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4"
                 id="checkin-checkout"
             >
-                <div class="max-w-profile">
+                <div class="max-w-profile" id="checkin-checkout-section">
                     <h2 class="font-medium text-lg">Horario Check-in / Check-out</h2>
                     <p class="text-sm htext-gray-500 text-justify mt-2">
                         Este será el horario predeterminado para todas las estancias, pero recuerda que puedes personalizar el 
