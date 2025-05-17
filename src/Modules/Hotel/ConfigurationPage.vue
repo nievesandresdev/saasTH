@@ -285,12 +285,11 @@
         image: imgSelected.value.url ?? null
       };
 
-      console.log(body, 'body')
-
       const response = await hotelStorage.$updateShowButtons(body);
       if (response.ok) {
         toast.warningToast('Configuración actualizada correctamente');
         loadHotel()
+        mockupStore.$reloadIframe();
       } else {
         toast.errorToast('Error al actualizar la configuración');
       }
