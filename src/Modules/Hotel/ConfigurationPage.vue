@@ -67,13 +67,43 @@
   
         <SectionConfig >
           <template #title>
-            <div class="flex justify-between">
+            <div class="flex  items-center justify-between px-2 py-4 bg-[#FFF2CC] rounded-[10px]" v-if="!form.buttons_home">
+                <div class="flex gap-2 items-center">
+                  <img src="/assets/icons/1.TH.INFO.svg" class="w-4 h-4">
+                  <span class="text-sm font-normal text-[#333]">La botonera se encuentra oculta y tus huéspedes no podrán verla. Para mostrarla, activa el botón Mostrar en la WebApp</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
+                  <BaseTooltipResponsive 
+                    v-if="allButtonsHidden"
+                    size="s" 
+                    :top="-86" 
+                    :right="0"
+                  >
+                    <template #button>
+                      <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" />
+                    </template>
+                    <template #content>
+                      <p class="text-sm leading-[150%] font-normal">
+                        Activa al menos un botón para mostrar la botonera
+                      </p>
+                    </template>
+                  </BaseTooltipResponsive>
+                  <Toggle 
+                    v-else
+                    v-model="form.buttons_home" 
+                    :show-tooltip="false" 
+                    :margin-right="'mr-0'" 
+                  />
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
+              
               <span class="font-medium text-base">Botonera</span>
-              <div class="flex items-center">
-                <!-- <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div> -->
-                <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
-                <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
-              </div>
+              <div class="flex items-center" v-if="form.buttons_home">
+                  <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
+                  <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" />
+                </div>
             </div>
             <p class="font-normal text-sm mb-6">
               Elige los accesos rápidos que deseas para optimizar el uso de tu WebApp.
@@ -149,14 +179,14 @@
 
   const form = reactive({
       show_wifi: false,
-      show_all: false
+      buttons_home: false
   });
 
   const checkAllHidden = () => {
       if (!form.show_wifi) {
-          form.show_all = false;
+          form.buttons_home = false;
       } else {
-          form.show_all = true;
+          form.buttons_home = true;
       }
   };
 
@@ -164,7 +194,7 @@
       checkAllHidden();
   });
 
-  watch(() => form.show_all, (newVal) => {
+  watch(() => form.buttons_home, (newVal) => {
       if (newVal) {
           if (!form.show_wifi) {
               form.show_wifi = true;
@@ -176,11 +206,15 @@
 
   const buttons = ref([]);
   const buttonsHidden = ref([]);
+  const allButtonsHidden = ref(true);
+
+
 
   const getHotelButtons = async () => {
       const response = await hotelButtonsStore.$getAllHotelButtons();
       buttons.value = response.data.visible;
       buttonsHidden.value = response.data.hidden;
+      allButtonsHidden.value = response.data.total === response.data.totalHidden;
   }
 
   const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
@@ -197,8 +231,7 @@
 
   const isChanged = computed(() => {
       return (
-          form.show_wifi !== initialState.show_wifi ||
-          form.show_all !== initialState.show_all ||
+          form.buttons_home !== initialState.buttons_home ||
           (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
           (!initialImage.value && imgSelected.value) 
       );
@@ -248,21 +281,28 @@
 
   const submit = async () => {
       const body = {
-          buttons: {
-              show_wifi: form.show_wifi,
-              show_all: form.show_all
-          },
-          image: imgSelected.value.url ?? null
+        buttons_home: form.buttons_home,
+        image: imgSelected.value.url ?? null
       };
 
+      console.log(body, 'body')
+
       const response = await hotelStorage.$updateShowButtons(body);
-      // ... resto del código del submit ...
+      if (response.ok) {
+        toast.warningToast('Configuración actualizada correctamente');
+        loadHotel()
+      } else {
+        toast.errorToast('Error al actualizar la configuración');
+      }
   };
   async function loadHotel () {
       const hotel = await hotelStorage.$findByParams()
 
       Object.assign(hotelData, hotel)
       loadForm(hotel) 
+
+      // Actualizamos form.buttons_home después de cargar los datos
+      form.buttons_home = Boolean(hotel.buttons_home)
 
       // Guardar los valores iniciales una vez que los datos del hotel se han cargado
       Object.assign(initialState, { ...form });
@@ -289,7 +329,7 @@
   };
 
 
-  watch(() => form.show_all, (newVal) => {
+  watch(() => form.buttons_home, (newVal) => {
       buttons.value.forEach(button => {
           button.is_visible = newVal;
       });
