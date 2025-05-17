@@ -118,7 +118,7 @@
                     <span v-if="button.name === 'Normas del alojamiento'">
                       Registra las 
                       <a 
-                        @click.prevent="goToConfig('GeneralLegal')" 
+                        @click.prevent="goToConfig('PoliciesLegal')" 
                         class="text-sm font-semibold underline cursor-pointer"
                       >
                         Normas del alojamiento
@@ -361,7 +361,25 @@ const updateButtonVisibility = async (button) => {
       id: button.id,
     };
     await hotelButtonsStore.$updateButtonVisibility(payload);
-    //toast.warningToast('Visibilidad actualizada con éxito', 'top-right');
+    
+    // Reordenar los botones: visibles primero, ocultos al final
+    const updatedButtons = [...props.buttons];
+    const buttonIndex = updatedButtons.findIndex(b => b.id === button.id);
+    
+    if (buttonIndex !== -1) {
+      const [movedButton] = updatedButtons.splice(buttonIndex, 1);
+      if (movedButton.is_visible) {
+        // Si el botón está visible, mantenerlo al principio
+        updatedButtons.unshift(movedButton);
+      } else {
+        // Si el botón está oculto, moverlo al final
+        updatedButtons.push(movedButton);
+      }
+      
+      // Actualizar el estado local
+      emit('updateButtons', updatedButtons);
+    }
+    
     emit('getButtons');
   } catch (error) {
     console.error('Error updating button visibility:', error);
@@ -393,8 +411,8 @@ const checkConfig = (name) => {
 const goToConfig = (name) => {
   //el redirect es con el name de la ruta
   switch(name) {
-    case 'GeneralLegal':
-      router.push({ name: 'GeneralLegal' });
+    case 'PoliciesLegal':
+      router.push({ name: 'PoliciesLegal' });
       break;
     case 'wifi':
       router.push('/alojamiento/perfil#checkin-checkout-section');
