@@ -81,7 +81,7 @@
                     :right="0"
                   >
                     <template #button>
-                      <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" />
+                      <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" toggle-disabled />
                     </template>
                     <template #content>
                       <p class="text-sm leading-[150%] font-normal">
@@ -98,7 +98,6 @@
                 </div>
             </div>
             <div class="flex justify-between mt-4">
-              
               <span class="font-medium text-base">Botonera</span>
               <div class="flex items-center" v-if="form.buttons_home">
                   <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
