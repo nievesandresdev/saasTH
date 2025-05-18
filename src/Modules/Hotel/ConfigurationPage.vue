@@ -214,6 +214,8 @@
       buttons.value = response.data.visible;
       buttonsHidden.value = response.data.hidden;
       allButtonsHidden.value = response.data.total === response.data.totalHidden;
+
+      mockupStore.$reloadIframe();
   }
 
   const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });

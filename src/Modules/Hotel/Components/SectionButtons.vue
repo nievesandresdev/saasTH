@@ -260,7 +260,7 @@ const showDragButtons = ref(true);
 const isDragging = ref(false);
 
 state.on('dragStarted', () => {
-  console.log('dragStarted', props.buttons);
+ console.log('dragStarted', props.buttons);
   showOverlays.value = false;
   showDragButtons.value = false;
   isDragging.value = true;
@@ -394,7 +394,7 @@ const checkConfig = (name) => {
   
   switch(name) {
     case 'Normas del alojamiento':
-      return hotelData.policies && hotelData.policies.length > 0;
+      return hotelData.policies_count && hotelData.policies_count > 0;
     case 'Redes WiFi':
       return hotelData.with_wifi;
     case 'Programa de referidos':
