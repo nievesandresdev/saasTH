@@ -125,7 +125,7 @@
                 </div>
                 <template v-else>
                     <div class="flex flex-col gap-2 mb-4">
-                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-205'" :tooltip-left="'-125'" :disabled-tooltip="disabledInput.url" />
+                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-205'" :tooltip-left="'-125'" :disabled-tooltip="!disabledInput.url" />
                         <BaseTextField 
                             v-model="form.url" 
                             :placeholder="placeholderUrl"
