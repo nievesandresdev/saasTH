@@ -1,6 +1,6 @@
 <template>
    <div class="flex flex-col gap-2">
-    <span class="text-sm font-semibold">Botones visibles ({{ countButtons }})</span>
+    <span class="text-sm font-semibold">Botones visibles ({{ buttons.length }})</span>
     <TransitionGroup 
       name="list" 
       tag="div" 
@@ -68,7 +68,7 @@
   <div class="border-t border-[#E9E9E9] mt-4 mb-4"></div>
   
   <div class="flex flex-col gap-2">
-    <span class="text-sm font-semibold">Botones ocultos ({{ countButtonsHidden }})</span>
+    <span class="text-sm font-semibold">Botones ocultos ({{ buttonsHidden.length }})</span>
     <TransitionGroup 
       name="list" 
       tag="div" 
@@ -236,14 +236,7 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  countButtons: {
-    type: Number,
-    required: true
-  },
-  countButtonsHidden: {
-    type: Number,
-    required: true
-  }
+  countButtons: Number,
 });
 
 const emit = defineEmits(['updateButtons', 'getButtons']);

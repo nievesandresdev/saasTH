@@ -112,8 +112,6 @@
             <SectionButtons 
               v-model:buttons="buttons"
               :buttons-hidden="buttonsHidden"
-              :count-buttons="buttons.length"
-              :count-buttons-hidden="buttonsHidden.length"
               @updateButtons="handleButtonsUpdate"
               @getButtons="getHotelButtons"
             />
@@ -211,8 +209,8 @@
 
   const getHotelButtons = async (type = 'xxx') => {
       const response = await hotelButtonsStore.$getAllHotelButtons();
-      buttons.value = response.data.visible;
-      buttonsHidden.value = response.data.hidden;
+      buttons.value = Array.isArray(response.data.visible) ? response.data.visible : [];
+      buttonsHidden.value = Array.isArray(response.data.hidden) ? response.data.hidden : [];
       allButtonsHidden.value = response.data.total === response.data.totalHidden;
       console.log(type, 'buttons')
       mockupStore.$reloadIframe();
