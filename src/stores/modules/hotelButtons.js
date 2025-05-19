@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import * as hotelButtonsServices from '@/api/services/hotel.buttons.services'
 
 
