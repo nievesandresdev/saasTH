@@ -325,7 +325,6 @@ state.on('dragEnded', async () => {
     //console.log('Actualización completada exitosamente');
     //toast.warningToast('Orden actualizado con éxito', 'top-right');
     emit('getButtons');
-    alert('actualizado')
   } catch (error) {
     console.error('Error en la actualización:', error);
     // Si falla la actualización, revertimos el estado local
@@ -336,9 +335,9 @@ state.on('dragEnded', async () => {
 });
 
 // Sincronizar los botones del drag and drop con los props
-/* watch(() => props.buttons, (newButtons) => {
+watch(() => props.buttons, (newButtons) => {
   dragButtons.value = [...newButtons];
-}, { deep: true }); */
+}, { deep: true });
 
 // Sincronizar los cambios del drag and drop con el componente padre
 watch(() => dragButtons.value, (newButtons) => {
@@ -382,7 +381,6 @@ const updateButtonVisibility = async (button) => {
     }
     
     emit('getButtons');
-    alert('actualizado2')
   } catch (error) {
     console.error('Error updating button visibility:', error);
     button.is_visible = !button.is_visible;

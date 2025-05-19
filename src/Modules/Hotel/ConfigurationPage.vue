@@ -209,7 +209,7 @@
 
 
 
-  const getHotelButtons = async (type = false) => {
+  const getHotelButtons = async (type = 'xxx') => {
       const response = await hotelButtonsStore.$getAllHotelButtons();
       buttons.value = response.data.visible;
       buttonsHidden.value = response.data.hidden;
@@ -264,8 +264,8 @@
       imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
       initialImage.value = { ...imgSelected.value };
       Object.assign(initialState, form);
-      loadHotel()
-       getHotelButtons(true)
+      //loadHotel()
+      getHotelButtons('ss')
   });
 
   const openModelGallery = () => {
