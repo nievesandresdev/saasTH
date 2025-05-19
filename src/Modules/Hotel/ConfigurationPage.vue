@@ -265,7 +265,7 @@
       initialImage.value = { ...imgSelected.value };
       Object.assign(initialState, form);
       //loadHotel()
-      getHotelButtons()
+      //getHotelButtons()
   });
 
   const openModelGallery = () => {
