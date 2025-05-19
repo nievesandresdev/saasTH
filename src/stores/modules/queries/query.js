@@ -6,7 +6,8 @@ import {
     getFeedbackSummaryByGuestApi,
     togglePendingStateApi,
     countPendingByHotelApi,
-    pendingCountByStayApi
+    pendingCountByStayApi,
+    getGeneralReportApi
 } from '@/api/services/queries/query.services'
 
 export const useQueryStore = defineStore('query', () => {
@@ -49,12 +50,22 @@ export const useQueryStore = defineStore('query', () => {
             return response.data
         }
     }
+
+    async function $getGeneralReport (data) {
+        const response = await getGeneralReportApi(data)
+        console.log('test getGeneralReport',response)
+        const { ok } = response   
+        if(ok){
+            return response.data
+        }
+    }
     
     return {
         $getFeedbackSummaryByGuest,
         $togglePendingState,
         $countPendingByHotel,
-        $pendingCountByStay
+        $pendingCountByStay,
+        $getGeneralReport
     }
 
 })

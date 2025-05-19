@@ -1,24 +1,25 @@
 <template>
-    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'440px'" padding-content="p-0" footer="true" >
+    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
                     Configura la integración con Airbnb
                 </span>
-                <button @click="closeModalAirbnb">
+                <button @click="closeModalAirbnbSoft">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
                 </button>
             </div>
             <hr>
             <div class="p-4">
-                <div class="flex flex-col gap-2 mb-4">
+                <div class="flex flex-col gap-2 mb-4 max-h-[300px] overflow-y-auto pr-2">
                     <div v-for="(url, index) in displayedUrls" :key="url._id || index" class="flex items-start gap-2">
                         <div class="flex-grow">
                             <LabelIntegrations 
                                 :label="index === 0 ? 'URL de Airbnb' : 'URL adicional'" 
                                 :tooltip="tooltips.url" 
-                                :tooltip-top="'-172'" 
+                                :tooltip-top="'-196'" 
                                 :tooltip-left="'-55'" 
+                                :disabled-tooltip="url.url !== ''"
                             />
                             <BaseTextField 
                                 v-model="url.url" 
@@ -36,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-start items-center gap-2 cursor-pointer" @click="addAnotherUrlAirbnb">
+                    <div class="flex justify-start items-center gap-2 cursor-pointer mt-[-2.5px]" @click="addAnotherUrlAirbnb">
                         <img src="/assets/icons/1.TH.PLUS.svg" class="w-4 h-4">
                         <span class="text-xs font-medium">
                             Añadir otro enlace
@@ -68,12 +69,11 @@
                             </div>
                         </section>
                     </div>
-                    <div v-else class="flex flex-col gap-2 mb-4">
-                       
+                    <div v-else class="flex flex-col mb-4">
                         <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2 mb-4">
+                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col">
                         <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
                         <div class="relative">
                             <BaseTextField 
@@ -145,7 +145,7 @@ const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
 
 
-const emit = defineEmits(['closeModalAirbnb']);
+const emit = defineEmits(['closeModalAirbnb', 'closeModalAirbnbSoft']);
 
 const props = defineProps({
     open: {
@@ -261,7 +261,7 @@ const togglePasswordVisibility = () => {
 const closeModalAirbnb = () => {
     if (hasChanges.value) {
         openModalNoSave.value = true;
-        console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
+        //console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
         return false;
     }
     emit('closeModalAirbnb');
@@ -269,6 +269,10 @@ const closeModalAirbnb = () => {
 
 const forceCloseModalAirbnb = () => {
     emit('closeModalAirbnb');
+}
+
+const closeModalAirbnbSoft = () => {
+    emit('closeModalAirbnbSoft');
 }
 
 const submit = async () => {
@@ -300,7 +304,7 @@ const submit = async () => {
         credentialsByOtas: {
             AIRBNB: {
                 email: form.value.email || '',
-                password: form.value.password || ''
+                password: btoa(form.value.password) || ''
             }
         },
         urls: urlsPayload
@@ -308,16 +312,17 @@ const submit = async () => {
 
     console.log('Datos a enviar:', dataToSubmit);
     const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
+    console.log('Respuesta:', response);
 
     if (response.ok) {
-        toast.warningToast('Cambios guardados con éxito', 'top-right');
+        //toast.warningToast('Cambios guardados con éxito', 'top-right');
         //closeModalAirbnb();
         emit('closeModalAirbnb');
-        setTimeout(() => {
+        /* setTimeout(() => {
             location.reload();
-        }, 1100);
+        }, 1100); */
     } else {
-        toast.errorToast(response.message.text, 'top-right');
+        toast.errorToast('Error al guardar los cambios', 'top-right');
     }
 }
 

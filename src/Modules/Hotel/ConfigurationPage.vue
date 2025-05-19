@@ -65,72 +65,58 @@
           </template>
         </SectionConfig>
   
-        <SectionConfig class="hidden">
+        <SectionConfig >
           <template #title>
-            <div class="flex justify-between">
+            <div class="flex  items-center justify-between px-2 py-4 bg-[#FFF2CC] rounded-[10px]" v-if="!form.buttons_home">
+                <div class="flex gap-2 items-center">
+                  <img src="/assets/icons/1.TH.INFO.svg" class="w-4 h-4">
+                  <span class="text-sm font-normal text-[#333]">La botonera se encuentra oculta y tus huéspedes no podrán verla. Para mostrarla, activa el botón Mostrar en la WebApp</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
+                  <BaseTooltipResponsive 
+                    v-if="allButtonsHidden"
+                    size="s" 
+                    :top="-86" 
+                    :right="0"
+                  >
+                    <template #button>
+                      <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" toggle-disabled />
+                    </template>
+                    <template #content>
+                      <p class="text-sm leading-[150%] font-normal">
+                        Activa al menos un botón para mostrar la botonera
+                      </p>
+                    </template>
+                  </BaseTooltipResponsive>
+                  <Toggle 
+                    v-else
+                    v-model="form.buttons_home" 
+                    :show-tooltip="false" 
+                    :margin-right="'mr-0'" 
+                  />
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
               <span class="font-medium text-base">Botonera</span>
-              <div class="flex items-center">
-                <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_all ? 'Visible' : 'Oculto' }}</div>
-                <!-- Toggle para mostrar todos -->
-                <Toggle v-model="form.show_all" :show-tooltip="false" :margin-right="'mr-0'" />
-              </div>
+              <div class="flex items-center" v-if="form.buttons_home">
+                  <div class="mr-2 text-[#333] font-semibold text-sm">Mostrar en la WebApp</div>
+                  <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" />
+                </div>
             </div>
             <p class="font-normal text-sm mb-6">
-              Elige y controla la visibilidad de los botones para la botonera de la Home de tu WebApp.
+              Elige los accesos rápidos que deseas para optimizar el uso de tu WebApp.
             </p>
           </template>
           <template #content>
-            <div class="grid grid-cols-3 3xl:w-3/5 1x1:w-full gap-4">
-              <!-- Toggle para WIFI -->
-              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
-                <div class="flex justify-end">
-                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_wifi ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle  v-model="form.show_wifi" :show-tooltip="false" :margin-right="'mr-0'" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img src="/assets/icons/1.TH.WiFi.png" alt="Wifi" class="h-6 w-6 " :class="{
-                    'opacity-50': !form.show_wifi
-                  }" />
-                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_wifi, 'text-[#A0A0A0]': !form.show_wifi }]">Información de WiFi</h3>
-                </div>
-              </div>
-  
-              <!-- Toggle para Llamar al hotel -->
-              <div class="bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between">
-                <div class="flex justify-end">
-                  <div class="mr-2 text-[#333] font-semibold text-[10px]">{{ form.show_call ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle  v-model="form.show_call" :show-tooltip="false" :margin-right="'mr-0'" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img src="/assets/icons/1.TH.PHONE.svg" alt="Llamar" class="h-6 w-6" :class="{
-                    'opacity-50': !form.show_call
-                  }" />
-                  <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': form.show_call, 'text-[#A0A0A0]': !form.show_call }]">Llamar al hotel</h3>
-                </div>
-              </div>
-  
-              <!-- Toggle para Normas del hotel -->
-              <div :class="['bg-white rounded-lg shadow-md py-4 px-4 h-[141px] w-[224px] flex flex-col justify-between']">
-                <div class="flex justify-end">
-                  <div :class="['mr-2 font-semibold text-[10px]', { 'text-[#333]': !isDisabled, 'text-[#A0A0A0]': isDisabled }]">{{ form.show_legal_text ? 'Visible' : 'Oculto' }}</div>
-                  <Toggle v-model="form.show_legal_text" :show-tooltip="false" :margin-right="'mr-0'" :toggleDisabled="isDisabled" />
-                </div>
-                <div class="flex flex-col justify-start mt-auto gap-2">
-                  <img :class="['h-6 w-6', { 'text-[#333]': !isDisabled, 'opacity-50': isDisabled || !form.show_legal_text, }]" src="/assets/icons/1.TH.SEGUIMIENTO.svg" alt="Normas" />
-                  <div class="flex flex-col">
-                    <h3 :class="['text-base font-medium leading-3', { 'text-[#333]': !isDisabled || form.show_legal_text, 'text-[#A0A0A0]': isDisabled || !form.show_legal_text }]">Normas del hotel</h3>
-                    <div class="flex mt-2" v-if="isDisabled">
-                      <img
-                          src="/assets/icons/1.TH.WARNING.RED.svg"
-                          alt="icon alert red"
-                          class="inline w-4 h-4 mr-1"
-                      />
-                      <span  class="text-[12px] font-semibold text-[#FF6666]">Carga las normas del hotel</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SectionButtons 
+              v-model:buttons="buttons"
+              :buttons-hidden="buttonsHidden"
+              :count-buttons="buttons.length"
+              :count-buttons-hidden="buttonsHidden.length"
+              @updateButtons="handleButtonsUpdate"
+              @getButtons="getHotelButtons"
+            />
           </template>
         </SectionConfig>
       </div>
@@ -170,183 +156,190 @@
 </template>
   
 <script setup>
-    import { reactive, ref, onMounted, computed,watch } from 'vue';
-    import Toggle from '@/components/Toggle.vue';
-    import SectionConfig from '@/components/SectionConfig.vue';
-    import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
-    import ModalGallery from '@/components/ModalGallery.vue';
-    import { useHotelStore } from '@/stores/modules/hotel';
-    import { useToastAlert } from '@/composables/useToastAlert'
-    import BasePreviewImage from '@/components/BasePreviewImage.vue';
+  import { reactive, ref, onMounted, computed,watch, nextTick } from 'vue';
+  import Toggle from '@/components/Toggle.vue';
+  import SectionConfig from '@/components/SectionConfig.vue';
+  import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
+  import ModalGallery from '@/components/ModalGallery.vue';
+  import { useHotelStore } from '@/stores/modules/hotel';
+  import { useToastAlert } from '@/composables/useToastAlert'
+  import BasePreviewImage from '@/components/BasePreviewImage.vue';
+  import SectionButtons from '@/Modules/Hotel/Components/SectionButtons.vue';
 
-    import { useMockupStore } from '@/stores/modules/mockup'
-    const mockupStore = useMockupStore();
+  import { useHotelButtonsStore } from '@/stores/modules/hotelButtons'
+  const hotelButtonsStore = useHotelButtonsStore();
 
-    const toast = useToastAlert();
-    const hotelStorage = useHotelStore();
-    const { hotelData } = hotelStorage;
+  import { useMockupStore } from '@/stores/modules/mockup'
+  const mockupStore = useMockupStore();
 
-    const form = reactive({
-        show_wifi: false,
-        show_call: false,
-        show_legal_text: false,
-        show_all: false
-    });
+  const toast = useToastAlert();
+  const hotelStorage = useHotelStore();
+  const { hotelData } = hotelStorage;
 
-    const checkAllHidden = () => {
-        if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
-            form.show_all = false; // Ocultar si todos los botones están ocultos
-        } else {
-            form.show_all = true; // Marcar Visible si al menos un botón está activo
-        }
-    };
+  const form = reactive({
+      show_wifi: false,
+      buttons_home: false
+  });
 
-    watch([() => form.show_wifi, () => form.show_call, () => form.show_legal_text], () => {
-        checkAllHidden();
-    });
+  const checkAllHidden = () => {
+      if (!form.show_wifi) {
+          form.buttons_home = false;
+      } else {
+          form.buttons_home = true;
+      }
+  };
 
-    watch(() => form.show_all, (newVal) => {
-        if (newVal) {
-            if (!form.show_wifi && !form.show_call && !form.show_legal_text) {
-                form.show_wifi = true;
-                form.show_call = true;
-                form.show_legal_text = isDisabled.value ? false : true;
-            }
-        } else {
-            form.show_wifi = false;
-            form.show_call = false;
-            form.show_legal_text = false;
-        }
-    });
+  watch(() => form.show_wifi, () => {
+      checkAllHidden();
+  });
 
-    const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
-    const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
-    const hoverCardLogo = ref(null);
-    const modalGaleryRef = ref(null);
-    const isloadingForm = ref(false);
-    const formInvalid = false;
-    const initialState = reactive({});
-    const isDisabled = ref(false);
+  watch(() => form.buttons_home, (newVal) => {
+      if (newVal) {
+          if (!form.show_wifi) {
+              form.show_wifi = true;
+          }
+      } else {
+          form.show_wifi = false;
+      }
+  });
 
-    const previewUrl = ref('');
-    const isPreviewOpen = ref(false);
-
-    const isChanged = computed(() => {
-        return (
-        form.show_wifi !== initialState.show_wifi ||
-        form.show_call !== initialState.show_call ||
-        form.show_legal_text !== initialState.show_legal_text ||
-        form.show_all !== initialState.show_all ||
-        (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
-        (!initialImage.value && imgSelected.value) 
-        );
-    });
-
-    function getTypeImg (url) {
-        if (!url) return;
-        let type = url?.includes('https://') ? 'CDN' : 'STORAGE'
-        return type
-    }
+  const buttons = ref([]);
+  const buttonsHidden = ref([]);
+  const allButtonsHidden = ref(true);
 
 
-    function openPreview(url) {
-        // console.log(url,'url');
-        previewUrl.value = url;
-        isPreviewOpen.value = true;
-    }
 
-    function closePreviewImage () {
-        previewUrl.value = null;
-        isPreviewOpen.value = false;
-    }
+  const getHotelButtons = async () => {
+      const response = await hotelButtonsStore.$getAllHotelButtons();
+      buttons.value = response.data.visible;
+      buttonsHidden.value = response.data.hidden;
+      allButtonsHidden.value = response.data.total === response.data.totalHidden;
 
-    
+      mockupStore.$reloadIframe();
+  }
 
-    const initialImage = ref(null);
+  const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
+  const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
+  const hoverCardLogo = ref(null);
+  const modalGaleryRef = ref(null);
+  const isloadingForm = ref(false);
+  const formInvalid = false;
+  const initialState = reactive({});
+  const isDisabled = ref(false);
 
-    onMounted(() => {
-        mockupStore.$setIframeUrl('')
-        imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
-        initialImage.value = { ...imgSelected.value };
-        Object.assign(initialState, form);
+  const previewUrl = ref('');
+  const isPreviewOpen = ref(false);
+
+  const isChanged = computed(() => {
+      return (
+          form.buttons_home !== initialState.buttons_home ||
+          (initialImage.value && imgSelected.value?.url !== initialImage.value?.url) ||
+          (!initialImage.value && imgSelected.value) 
+      );
+  });
+
+  function getTypeImg (url) {
+      if (!url) return;
+      let type = url?.includes('https://') ? 'CDN' : 'STORAGE'
+      return type
+  }
+
+
+  function openPreview(url) {
+      // console.log(url,'url');
+      previewUrl.value = url;
+      isPreviewOpen.value = true;
+  }
+
+  function closePreviewImage () {
+      previewUrl.value = null;
+      isPreviewOpen.value = false;
+  }
+
+
+  const initialImage = ref(null);
+
+  onMounted(async () => {
+      
+      imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
+      initialImage.value = { ...imgSelected.value };
+      Object.assign(initialState, form);
+      //await loadHotel()
+      await getHotelButtons()
+      mockupStore.$setIframeUrl('')
+  });
+
+  const openModelGallery = () => {
+      modalGaleryRef.value.openModal();
+  };
+
+  const addNewsImages = (images) => {
+      imgSelected.value = { ...images };
+  };
+
+  const cancelChanges = () => {
+      window.location.reload();
+  };
+
+  const submit = async () => {
+      const body = {
+        buttons_home: form.buttons_home,
+        image: imgSelected.value.url ?? null
+      };
+
+      const response = await hotelStorage.$updateShowButtons(body);
+      if (response.ok) {
+        toast.warningToast('Configuración actualizada correctamente');
         loadHotel()
-    });
+        mockupStore.$reloadIframe();
+      } else {
+        toast.errorToast('Error al actualizar la configuración');
+      }
+  };
+  async function loadHotel () {
+      const hotel = await hotelStorage.$findByParams()
 
-    const openModelGallery = () => {
-        modalGaleryRef.value.openModal();
-    };
+      Object.assign(hotelData, hotel)
+      loadForm(hotel) 
 
-    const addNewsImages = (images) => {
-        imgSelected.value = { ...images };
-    };
+      // Actualizamos form.buttons_home después de cargar los datos
+      form.buttons_home = Boolean(hotel.buttons_home)
 
-    const cancelChanges = () => {
-        window.location.reload();
-    };
+      // Guardar los valores iniciales una vez que los datos del hotel se han cargado
+      Object.assign(initialState, { ...form });
+      initialImage.value = { ...imgSelected.value };
+  }
 
-    const submit = async () => {
-        const body = {
-            buttons: {
-            show_wifi: form.show_wifi,
-            show_call: form.show_call,
-            show_legal_text: form.show_legal_text,
-            show_all: form.show_all
-            },
-            image: imgSelected.value.url ?? null
-        };
+  const loadForm = (hotel) => {
 
-        const response  = await hotelStorage.$updateShowButtons(body);
-            // console.log(response, 'response')
-            const  {ok, data} = response ?? {}
-            await loadHotel()
-            isloadingForm.value = false
-            if (ok) {
-                toast.warningToast('Cambios guardados con éxito','top-right');
-            } else {
-                toast.warningToast(data?.message,'top-right');
-            }
-            mockupStore.$reloadIframe();
+      imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
-        
-    };
-    async function loadHotel () {
-        const hotel = await hotelStorage.$findByParams()
+      isDisabled.value = hotel.legal;
 
-        Object.assign(hotelData, hotel)
-        loadForm(hotel)
+      //console.log(hotel.legal, 'hotel')
+  };
 
-        
+  const $formatImage = (payload) => {
+      const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
+      let { url, type, urlDefault } = payload;
+      if (!url || !URL_STORAGE) return;
+      if (urlDefault) return url;
+      let type_d = url.includes('https://') ? 'CDN' : 'STORAGE';
+      type = type ?? type_d;
+      return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
+  };
 
-        // Guardar los valores iniciales una vez que los datos del hotel se han cargado
-        Object.assign(initialState, { ...form });
-        initialImage.value = { ...imgSelected.value };
-    }
 
-    const loadForm = (hotel) => {
-        /* form.show_wifi = hotel.buttons_home.show_wifi || false;
-        form.show_call = hotel.buttons_home.show_call || false;
-        form.show_legal_text = hotel.buttons_home.show_legal_text || false;
-        form.show_all = hotel.buttons_home.show_all || false; */
-        imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
+  watch(() => form.buttons_home, (newVal) => {
+      buttons.value.forEach(button => {
+          button.is_visible = newVal;
+      });
+  });
 
-        isDisabled.value = hotel.legal;
-
-        //console.log(hotel.legal, 'hotel')
-    };
-
-    const $formatImage = (payload) => {
-        const URL_STORAGE = process.env.VUE_APP_STORAGE_URL;
-        let { url, type, urlDefault } = payload;
-        if (!url || !URL_STORAGE) return;
-        if (urlDefault) return url;
-        let type_d = url.includes('https://') ? 'CDN' : 'STORAGE';
-        type = type ?? type_d;
-        return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
-    };
-
-    /* const removeLogo = () => {
-        imgSelected.value = {...bgDefault};
-    }; */
+  const handleButtonsUpdate = async (newButtons) => {
+      buttons.value = newButtons;
+      //await getHotelButtons();
+  };
 </script>
   
 <style lang="scss" scoped>
@@ -388,6 +381,21 @@
             }
 
         }
+    }
+
+    .shadow-card {
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .shadow-draginng {
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+
+    .buttom-drag {
+      transition: all 0.2s ease;
+      &:hover {
+        transform: scale(1.1);
+      }
     }
 
 </style>

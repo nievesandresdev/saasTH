@@ -208,9 +208,9 @@ const handleClose = () => {
 
 const closeModal = () => {
   showModalNoSave.value = false;
+  emits('close');
   resetForm();
   console.log('test closeModal')
-  emits('close');
 };
 
 const closeModalNoSave = () => {
@@ -219,11 +219,12 @@ const closeModalNoSave = () => {
 };
 
 const submit = () => {
+  console.log('test submit',form)
   attemptedSending.value = true;
   validateForm();
   if (valid.value) {
       attemptedSending.value = false;
-      emits('store', form);
+      emits('store', {...form});
       closeModal();
   }
 };

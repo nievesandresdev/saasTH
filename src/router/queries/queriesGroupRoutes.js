@@ -11,6 +11,12 @@ const queriesGroupRoutes = [
     children: [
       ...querySettingsRoutes,
     ]
+  },
+  {
+    path: '/seguimiento/general-report',
+    component: () => import('@/Modules/Queries/GeneralReport.vue'),
+    meta: { sidebar: null, sidebarWidth: null },
+    props: (route) => ({ queryRouter: {...route.query} }),
   }
 ];
 
