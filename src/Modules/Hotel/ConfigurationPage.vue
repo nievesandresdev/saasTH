@@ -259,13 +259,13 @@
 
   const initialImage = ref(null);
 
-  onMounted(() => {
+  onMounted(async () => {
       mockupStore.$setIframeUrl('')
       imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
       initialImage.value = { ...imgSelected.value };
       Object.assign(initialState, form);
-      loadHotel()
-      getHotelButtons()
+      await loadHotel()
+      await getHotelButtons()
   });
 
   const openModelGallery = () => {
