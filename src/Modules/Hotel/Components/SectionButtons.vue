@@ -276,28 +276,29 @@ state.on('dragEnded', async () => {
   const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
   
   if (isInNoDragZone) {
-    // Si está en la zona de no-drag, solo actualizamos la UI sin hacer la petición
     showOverlays.value = true;
     showDragButtons.value = true;
     isDragging.value = false;
     return;
   }
 
-  console.log('dragEnded', props.buttons);
-  // Wait for the next tick to ensure animations are complete
+  // Verificar si ya hay una petición en curso
+  if (hotelButtonsStore.isRequestPending) {
+    toast.warningToast('Esperando respuesta del servidor...');
+    return;
+  }
+
   await nextTick();
   
   showOverlays.value = true;
   showDragButtons.value = true;
   isDragging.value = false;
   
-  // Reset hover states and trigger hover for the current element
   const updatedButtons = props.buttons.map(button => ({
     ...button,
     hover: false
   }));
   
-  // Find the element under the cursor and trigger its hover
   const buttonCard = elements.find(el => el.classList.contains('button-card'));
   if (buttonCard) {
     const index = Array.from(buttonCard.parentNode.children).indexOf(buttonCard);
@@ -306,42 +307,48 @@ state.on('dragEnded', async () => {
     }
   }
   
-  // Actualizamos el estado local primero
-  emit('updateButtons', updatedButtons);
-  
-  // Luego actualizamos la base de datos
-  try {
-    const payload = {
-      visible: updatedButtons
-        .filter(button => button.is_visible)
-        .map(button => ({ id: button.id })),
-      hidden: updatedButtons
-        .filter(button => !button.is_visible)
-        .map(button => ({ id: button.id }))
-    };
+  // Solo emitir si hay cambios reales
+  if (JSON.stringify(props.buttons) !== JSON.stringify(updatedButtons)) {
+    emit('updateButtons', updatedButtons);
     
-    console.log('Enviando payload al servidor:', payload);
-    await hotelButtonsStore.$updateOrderButtons(payload);
-    //console.log('Actualización completada exitosamente');
-    //toast.warningToast('Orden actualizado con éxito', 'top-right');
-    //emit('getButtons');
-  } catch (error) {
-    console.error('Error en la actualización:', error);
-    // Si falla la actualización, revertimos el estado local
-    const revertedButtons = [...props.buttons];
-    emit('updateButtons', revertedButtons);
-    toast.warningToast('Error al actualizar el orden', 'top-right');
+    try {
+      const payload = {
+        visible: updatedButtons
+          .filter(button => button.is_visible)
+          .map(button => ({ id: button.id })),
+        hidden: updatedButtons
+          .filter(button => !button.is_visible)
+          .map(button => ({ id: button.id }))
+      };
+      
+      const response = await hotelButtonsStore.$updateOrderButtons(payload);
+      
+      if (!response?.ok) {
+        throw new Error(response?.error || 'Error al actualizar el orden');
+      }
+    } catch (error) {
+      console.error('Error en la actualización:', error);
+      const revertedButtons = [...props.buttons];
+      emit('updateButtons', revertedButtons);
+      toast.errorToast(error.message || 'Error al actualizar el orden');
+    }
   }
 });
 
 // Sincronizar los botones del drag and drop con los props
 watch(() => props.buttons, (newButtons) => {
-  dragButtons.value = [...newButtons];
+    // Solo actualizar si hay cambios reales
+    if (JSON.stringify(dragButtons.value) !== JSON.stringify(newButtons)) {
+        dragButtons.value = [...newButtons];
+    }
 }, { deep: true });
 
 // Sincronizar los cambios del drag and drop con el componente padre
 watch(() => dragButtons.value, (newButtons) => {
-  emit('updateButtons', newButtons);
+    // Solo emitir si hay cambios reales
+    if (JSON.stringify(props.buttons) !== JSON.stringify(newButtons)) {
+        emit('updateButtons', newButtons);
+    }
 }, { deep: true });
 
 const dragStartIndex = ref(null);
@@ -357,10 +364,21 @@ const handlerClickSwichVisibility = (event) => {
 
 const updateButtonVisibility = async (button) => {
   try {
+    // Verificar si ya hay una petición en curso
+    if (hotelButtonsStore.isRequestPending) {
+      toast.warningToast('Esperando respuesta del servidor...');
+      return;
+    }
+
     const payload = {
       id: button.id,
     };
-    await hotelButtonsStore.$updateButtonVisibility(payload);
+    
+    const response = await hotelButtonsStore.$updateButtonVisibility(payload);
+    
+    if (!response?.ok) {
+      throw new Error(response?.error || 'Error al actualizar la visibilidad');
+    }
     
     // Reordenar los botones: visibles primero, ocultos al final
     const updatedButtons = [...props.buttons];
@@ -369,22 +387,20 @@ const updateButtonVisibility = async (button) => {
     if (buttonIndex !== -1) {
       const [movedButton] = updatedButtons.splice(buttonIndex, 1);
       if (movedButton.is_visible) {
-        // Si el botón está visible, mantenerlo al principio
         updatedButtons.unshift(movedButton);
       } else {
-        // Si el botón está oculto, moverlo al final
         updatedButtons.push(movedButton);
       }
       
-      // Actualizar el estado local
-      emit('updateButtons', updatedButtons);
+      // Solo emitir si hay cambios reales
+      if (JSON.stringify(props.buttons) !== JSON.stringify(updatedButtons)) {
+        emit('updateButtons', updatedButtons);
+      }
     }
-    
-    //emit('getButtons');
   } catch (error) {
     console.error('Error updating button visibility:', error);
-    button.is_visible = !button.is_visible;
-    toast.warningToast('Error al actualizar la visibilidad', 'top-right');
+    button.is_visible = !button.is_visible; // Revertir el cambio
+    toast.errorToast(error.message || 'Error al actualizar la visibilidad');
   }
 };
 
