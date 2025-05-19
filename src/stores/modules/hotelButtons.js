@@ -5,9 +5,24 @@ import * as hotelButtonsServices from '@/api/services/hotel.buttons.services'
 export const useHotelButtonsStore = defineStore('hotelButtons', () => {
     const isRequestPending = ref(false);
     const lastError = ref(null);
+    const requestTimeout = ref(null);
+
+    const clearRequestTimeout = () => {
+        if (requestTimeout.value) {
+            clearTimeout(requestTimeout.value);
+            requestTimeout.value = null;
+        }
+    };
+
+    const setRequestTimeout = () => {
+        clearRequestTimeout();
+        requestTimeout.value = setTimeout(() => {
+            isRequestPending.value = false;
+            lastError.value = 'La petición ha excedido el tiempo de espera';
+        }, 10000); // 10 segundos de timeout
+    };
 
     async function $getAllHotelButtons() {
-        // Si ya hay una petición pendiente, no hacer nada
         if (isRequestPending.value) {
             return { ok: false, error: 'Ya hay una petición en curso' };
         }
@@ -15,13 +30,15 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
         try {
             isRequestPending.value = true;
             lastError.value = null;
+            setRequestTimeout();
 
             const response = await hotelButtonsServices.getHotelButtonsApi();
             
-            // Si la respuesta es 202, esperar un momento y reintentar
             if (response?.status === 202) {
+                // Si recibimos 202, esperamos y reintentamos una vez
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                return await $getAllHotelButtons();
+                const retryResponse = await hotelButtonsServices.getHotelButtonsApi();
+                return retryResponse;
             }
 
             return response;
@@ -30,6 +47,7 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
             lastError.value = error.message;
             return { ok: false, error: error.message };
         } finally {
+            clearRequestTimeout();
             isRequestPending.value = false;
         }
     }
@@ -42,13 +60,23 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
         try {
             isRequestPending.value = true;
             lastError.value = null;
+            setRequestTimeout();
+
             const response = await hotelButtonsServices.updateOrderButtonsApi(data);
+            
+            if (response?.status === 202) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const retryResponse = await hotelButtonsServices.updateOrderButtonsApi(data);
+                return retryResponse;
+            }
+
             return response;
         } catch (error) {
             console.error('Error in updateOrderButtons:', error);
             lastError.value = error.message;
             return { ok: false, error: error.message };
         } finally {
+            clearRequestTimeout();
             isRequestPending.value = false;
         }
     }
@@ -61,13 +89,23 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
         try {
             isRequestPending.value = true;
             lastError.value = null;
+            setRequestTimeout();
+
             const response = await hotelButtonsServices.updateButtonVisibilityApi(data);
+            
+            if (response?.status === 202) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const retryResponse = await hotelButtonsServices.updateButtonVisibilityApi(data);
+                return retryResponse;
+            }
+
             return response;
         } catch (error) {
             console.error('Error in updateButtonVisibility:', error);
             lastError.value = error.message;
             return { ok: false, error: error.message };
         } finally {
+            clearRequestTimeout();
             isRequestPending.value = false;
         }
     }
