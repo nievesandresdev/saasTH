@@ -27,7 +27,7 @@
             </p>
           </template>
           <template #content>
-            <div class="max-w-[611px]">
+            <!-- <div class="max-w-[611px]">
               <div class="mt-4">
                     <div
                         class="card-logo mt-4 rounded-[6px] flex justify-center items-center relative hbg-gray-100  hborder-gray-400"
@@ -61,7 +61,7 @@
                       >
                 </div>
               </div>
-            </div>
+            </div> -->
           </template>
         </SectionConfig>
   
