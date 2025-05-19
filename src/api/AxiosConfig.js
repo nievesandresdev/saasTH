@@ -135,6 +135,14 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
   const HAS_HOTEL = await generateHash(subdomain ?? '');
   const HAS_USER = await generateHash(localStorage.getItem('token') ?? '');
 
+  const newNumbersRandom = Math.floor(Math.random() * 10000000000000000);
+  let numbersRandom = localStorage.getItem('reset-cache') ?? null;
+  if (RESET_CACHE || !numbersRandom) {
+    numbersRandom = newNumbersRandom;
+    localStorage.setItem('reset-cache', numbersRandom);
+  }
+  // console.log(`reset-cache: ${numbersRandom}, endpoint: ${endpoint}`)
+
   let formatHeader = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
@@ -143,7 +151,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'Hash-Hotel': HAS_HOTEL,
     'Hash-User': HAS_USER,
     'Origin-Component': 'HOSTER',
-    'Reset-Cache': RESET_CACHE ? 1 : 0,
+    'Reset-Cache': numbersRandom,
     //'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
     'x-key-api':  X_KEY_API,
   };
