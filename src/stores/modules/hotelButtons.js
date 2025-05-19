@@ -57,32 +57,11 @@ export const useHotelButtonsStore = defineStore('hotelButtons', () => {
     }
 
     async function $updateButtonVisibility(data) {
-        if (isRequestPending.value) {
-            return { ok: false, error: 'Ya hay una petición en curso' };
-        }
-
-        try {
-            isRequestPending.value = true;
-            lastError.value = null;
-            setRequestTimeout();
+       
 
             const response = await hotelButtonsServices.updateButtonVisibilityApi(data);
             
-            if (response?.status === 202) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const retryResponse = await hotelButtonsServices.updateButtonVisibilityApi(data);
-                return retryResponse;
-            }
-
             return response;
-        } catch (error) {
-            console.error('Error in updateButtonVisibility:', error);
-            lastError.value = error.message;
-            return { ok: false, error: error.message };
-        } finally {
-            clearRequestTimeout();
-            isRequestPending.value = false;
-        }
     }
 
     return {
