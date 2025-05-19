@@ -280,7 +280,7 @@
       window.location.reload();
   };
 
-  cont submit = async () => {
+  const submit = async () => {
       const body = {
         buttons_home: form.buttons_home,
         image: imgSelected.value.url ?? null
