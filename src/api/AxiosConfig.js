@@ -100,7 +100,7 @@ let paramAxios = {
   return serviceResponse
 } */
 
-export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL', IS_FORM_DATA = false, resetCache = false) => {
+export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = 'API_GENERAL', IS_FORM_DATA = false, RESET_CACHE = false) => {
   // switch
   //console.log('SLUG_API', SLUG_API)
   const url_backend = () => {
@@ -143,7 +143,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     'Hash-Hotel': HAS_HOTEL,
     'Hash-User': HAS_USER,
     'Origin-Component': 'HOSTER',
-    'reset-cache': resetCache ? 1 : 0,
+    'Reset-Cache': RESET_CACHE ? 1 : 0,
     //'x-key-api': SLUG_API === 'API_REVIEW' ? X_KEY_API_REVIEW : X_KEY_API,
     'x-key-api':  X_KEY_API,
   };
