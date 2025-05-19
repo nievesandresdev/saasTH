@@ -266,7 +266,7 @@
       Object.assign(initialState, form);
       //await loadHotel()
       await getHotelButtons()
-      mockupStore.$setIframeUrl('')
+      //mockupStore.$setIframeUrl('')
   });
 
   const openModelGallery = () => {
