@@ -277,7 +277,8 @@
           // Cargar datos en paralelo
           await Promise.all([
               loadHotel(),
-              getHotelButtons()
+              //getHotelButtons()
+              
           ]);
       } catch (error) {
           console.error('Error in onMounted:', error);
