@@ -183,7 +183,7 @@ const form = reactive({
 
 
 
-watch(() => form.buttons_home, (newVal) => {
+/* watch(() => form.buttons_home, (newVal) => {
     if (newVal) {
         if (!form.show_wifi) {
             form.show_wifi = true;
@@ -191,7 +191,7 @@ watch(() => form.buttons_home, (newVal) => {
     } else {
         form.show_wifi = false;
     }
-});
+}); */
 
 const buttons = ref([]);
 const buttonsHidden = ref([]);
@@ -319,11 +319,11 @@ const $formatImage = (payload) => {
 };
 
 
-watch(() => form.buttons_home, (newVal) => {
+/* watch(() => form.buttons_home, (newVal) => {
     buttons.value.forEach(button => {
         button.is_visible = newVal;
     });
-});
+}); */
 
 const handleButtonsUpdate = async (newButtons) => {
     //buttons.value = newButtons;
