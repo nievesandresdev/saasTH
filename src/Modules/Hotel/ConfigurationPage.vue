@@ -246,11 +246,21 @@
   const getHotelButtons = async () => {
       try {
           isLoadingButtons.value = true;
+          
+          // Verificar si ya hay una petición en curso
+          if (hotelButtonsStore.isRequestPending) {
+              toast.warningToast('Esperando respuesta del servidor...');
+              return;
+          }
+
           const response = await hotelButtonsStore.$getAllHotelButtons();
+          
           if (response?.ok && response?.data) {
               buttons.value = response.data.visible;
               buttonsHidden.value = response.data.hidden;
               allButtonsHidden.value = response.data.total === response.data.totalHidden;
+          } else if (response?.error) {
+              toast.errorToast(response.error);
           } else {
               toast.errorToast('Error al cargar los botones');
           }
@@ -276,6 +286,9 @@
           
           // Cargar primero los datos del hotel
           await loadHotel();
+          
+          // Esperar un momento antes de cargar los botones
+          await new Promise(resolve => setTimeout(resolve, 500));
           
           // Después de cargar el hotel, cargar los botones
           await getHotelButtons();
