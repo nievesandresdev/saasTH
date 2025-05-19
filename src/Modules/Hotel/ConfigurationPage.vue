@@ -326,8 +326,8 @@ watch(() => form.buttons_home, (newVal) => {
 });
 
 const handleButtonsUpdate = async (newButtons) => {
-    buttons.value = newButtons;
-    console.log(buttons.value, 'buttons')
+    //buttons.value = newButtons;
+    //console.log(buttons.value, 'buttons')
     //await getHotelButtons();
 };
 </script>
