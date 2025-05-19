@@ -207,25 +207,36 @@
   const buttonsHidden = ref([]);
   const allButtonsHidden = ref(true);
 
-
+  const isloadingForm = ref(false);
+  const isLoadingButtons = ref(false);
+  const isLoadingHotel = ref(false);
+  const formInvalid = false;
+  const initialState = reactive({});
+  const isDisabled = ref(false);
 
   const getHotelButtons = async () => {
-      const response = await hotelButtonsStore.$getAllHotelButtons();
-      buttons.value = response.data.visible;
-      buttonsHidden.value = response.data.hidden;
-      allButtonsHidden.value = response.data.total === response.data.totalHidden;
-
-      //mockupStore.$reloadIframe();
+      try {
+          isLoadingButtons.value = true;
+          const response = await hotelButtonsStore.$getAllHotelButtons();
+          if (response?.data) {
+              buttons.value = response.data.visible;
+              buttonsHidden.value = response.data.hidden;
+              allButtonsHidden.value = response.data.total === response.data.totalHidden;
+          } else {
+              toast.errorToast('Error al cargar los botones');
+          }
+      } catch (error) {
+          console.error('Error loading buttons:', error);
+          toast.errorToast('Error al cargar los botones');
+      } finally {
+          isLoadingButtons.value = false;
+      }
   }
 
   const imgSelected = ref({ url: hotelData.image, type: getTypeImg(hotelData.image) });
   const bgDefault = {url: '/storage/gallery/general-1.jpg', type: 'STORAGE', default: true}
   const hoverCardLogo = ref(null);
   const modalGaleryRef = ref(null);
-  const isloadingForm = ref(false);
-  const formInvalid = false;
-  const initialState = reactive({});
-  const isDisabled = ref(false);
 
   const previewUrl = ref('');
   const isPreviewOpen = ref(false);
@@ -244,9 +255,7 @@
       return type
   }
 
-
   function openPreview(url) {
-      // console.log(url,'url');
       previewUrl.value = url;
       isPreviewOpen.value = true;
   }
@@ -256,16 +265,24 @@
       isPreviewOpen.value = false;
   }
 
-
   const initialImage = ref(null);
 
   onMounted(async () => {
-      mockupStore.$setIframeUrl('')
-      imgSelected.value ={ url: hotelData.image, type: getTypeImg(hotelData.image) }; 
-      initialImage.value = { ...imgSelected.value };
-      Object.assign(initialState, form);
-      await loadHotel()
-      await getHotelButtons()
+      try {
+          mockupStore.$setIframeUrl('');
+          imgSelected.value = { url: hotelData.image, type: getTypeImg(hotelData.image) };
+          initialImage.value = { ...imgSelected.value };
+          Object.assign(initialState, form);
+          
+          // Cargar datos en paralelo
+          await Promise.all([
+              loadHotel(),
+              getHotelButtons()
+          ]);
+      } catch (error) {
+          console.error('Error in onMounted:', error);
+          toast.errorToast('Error al cargar los datos iniciales');
+      }
   });
 
   const openModelGallery = () => {
@@ -281,41 +298,54 @@
   };
 
   const submit = async () => {
-      const body = {
-        buttons_home: form.buttons_home,
-        image: imgSelected.value.url ?? null
-      };
+      try {
+          isloadingForm.value = true;
+          const body = {
+              buttons_home: form.buttons_home,
+              image: imgSelected.value.url ?? null
+          };
 
-      const response = await hotelStorage.$updateShowButtons(body);
-      if (response.ok) {
-        toast.warningToast('Configuración actualizada correctamente');
-        loadHotel()
-        mockupStore.$reloadIframe();
-      } else {
-        toast.errorToast('Error al actualizar la configuración');
+          const response = await hotelStorage.$updateShowButtons(body);
+          if (response.ok) {
+              toast.warningToast('Configuración actualizada correctamente');
+              await loadHotel();
+              mockupStore.$reloadIframe();
+          } else {
+              toast.errorToast('Error al actualizar la configuración');
+          }
+      } catch (error) {
+          console.error('Error updating configuration:', error);
+          toast.errorToast('Error al actualizar la configuración');
+      } finally {
+          isloadingForm.value = false;
       }
   };
-  async function loadHotel () {
-      const hotel = await hotelStorage.$findByParams()
 
-      Object.assign(hotelData, hotel)
-      loadForm(hotel) 
-
-      // Actualizamos form.buttons_home después de cargar los datos
-      form.buttons_home = Boolean(hotel.buttons_home)
-
-      // Guardar los valores iniciales una vez que los datos del hotel se han cargado
-      Object.assign(initialState, { ...form });
-      initialImage.value = { ...imgSelected.value };
+  async function loadHotel() {
+      try {
+          isLoadingHotel.value = true;
+          const hotel = await hotelStorage.$findByParams();
+          
+          if (hotel) {
+              Object.assign(hotelData, hotel);
+              loadForm(hotel);
+              form.buttons_home = Boolean(hotel.buttons_home);
+              Object.assign(initialState, { ...form });
+              initialImage.value = { ...imgSelected.value };
+          } else {
+              toast.errorToast('Error al cargar los datos del hotel');
+          }
+      } catch (error) {
+          console.error('Error loading hotel:', error);
+          toast.errorToast('Error al cargar los datos del hotel');
+      } finally {
+          isLoadingHotel.value = false;
+      }
   }
 
   const loadForm = (hotel) => {
-
       imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
-
       isDisabled.value = hotel.legal;
-
-      //console.log(hotel.legal, 'hotel')
   };
 
   const $formatImage = (payload) => {
@@ -328,7 +358,6 @@
       return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
   };
 
-
   watch(() => form.buttons_home, (newVal) => {
       buttons.value.forEach(button => {
           button.is_visible = newVal;
@@ -337,7 +366,6 @@
 
   const handleButtonsUpdate = async (newButtons) => {
       buttons.value = newButtons;
-      //await getHotelButtons();
   };
 </script>
   
