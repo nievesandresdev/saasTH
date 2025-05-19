@@ -10,7 +10,7 @@ export const getTypePlacesApi = (params = {}) => apiHttp('GET', `${placePath}/ge
 export const getAllApi = (data) => apiHttp('POST', `${saasPlacePath}/getPlacesSectionPlataform`, data, { showPreloader: false }, 'API_HELPER');
 export const getDataUtilApi = (data) => apiHttp('POST', `${saasPlacePath}/getDataSectionPlataform`, data, { showPreloader: false }, 'API_HELPER');
 
-export const updateVisibilityApi = (data) => apiHttp('POST', `${saasPlacePath}/visibility`, data, { showPreloader: false }, 'API_HELPER');
-export const updateRecommendationApi = (data) => apiHttp('POST', `${saasPlacePath}/recommendation`, data, { showPreloader: false }, 'API_HELPER');
-export const updatePositionApi = (data) => apiHttp('POST', `${saasPlacePath}/position`, data, { showPreloader: false }, 'API_HELPER');
-export const updateApi = (data) => apiHttp('POST', `${saasPlacePath}`, data, { showPreloader: false }, 'API_HELPER');
+export const updateVisibilityApi = (data) => apiHttp('POST', `${saasPlacePath}/visibility`, data, { showPreloader: false }, 'API_HELPER', false, true);
+export const updateRecommendationApi = (data) => apiHttp('POST', `${saasPlacePath}/recommendation`, data, { showPreloader: false }, 'API_HELPER', false, true);
+export const updatePositionApi = (data) => apiHttp('POST', `${saasPlacePath}/position`, data, { showPreloader: false }, 'API_HELPER', false, true);
+export const updateApi = (data) => apiHttp('POST', `${saasPlacePath}`, data, { showPreloader: false }, 'API_HELPER', false, true);
