@@ -324,7 +324,7 @@ state.on('dragEnded', async () => {
     await hotelButtonsStore.$updateOrderButtons(payload);
     //console.log('Actualización completada exitosamente');
     //toast.warningToast('Orden actualizado con éxito', 'top-right');
-    emit('getButtons');
+    //emit('getButtons');
   } catch (error) {
     console.error('Error en la actualización:', error);
     // Si falla la actualización, revertimos el estado local
@@ -380,7 +380,7 @@ const updateButtonVisibility = async (button) => {
       emit('updateButtons', updatedButtons);
     }
     
-    emit('getButtons');
+    //emit('getButtons');
   } catch (error) {
     console.error('Error updating button visibility:', error);
     button.is_visible = !button.is_visible;
