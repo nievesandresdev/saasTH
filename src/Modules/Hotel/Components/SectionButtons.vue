@@ -32,7 +32,6 @@
                :id="`swich-visible-button-${index}`"
                @change:value="updateButtonVisibility(button)"
                @click="handlerClickSwichVisibility"
-               :disabled="!checkConfig(button.name)"
              />
            </div>
          </div>
@@ -109,6 +108,7 @@
                      v-model="button.is_visible"
                      :id="`swich-visible-button-${index}`"
                      @change:value="updateButtonVisibility(button)"
+                     :disabled="!checkConfig(button.name)"
                    />
                  </div>
                </template>
