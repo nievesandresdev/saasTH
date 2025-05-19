@@ -307,39 +307,48 @@ state.on('dragEnded', async () => {
     }
   }
   
-  emit('updateButtons', updatedButtons);
-  
-  try {
-    const payload = {
-      visible: updatedButtons
-        .filter(button => button.is_visible)
-        .map(button => ({ id: button.id })),
-      hidden: updatedButtons
-        .filter(button => !button.is_visible)
-        .map(button => ({ id: button.id }))
-    };
+  // Solo emitir si hay cambios reales
+  if (JSON.stringify(props.buttons) !== JSON.stringify(updatedButtons)) {
+    emit('updateButtons', updatedButtons);
     
-    const response = await hotelButtonsStore.$updateOrderButtons(payload);
-    
-    if (!response?.ok) {
-      throw new Error(response?.error || 'Error al actualizar el orden');
+    try {
+      const payload = {
+        visible: updatedButtons
+          .filter(button => button.is_visible)
+          .map(button => ({ id: button.id })),
+        hidden: updatedButtons
+          .filter(button => !button.is_visible)
+          .map(button => ({ id: button.id }))
+      };
+      
+      const response = await hotelButtonsStore.$updateOrderButtons(payload);
+      
+      if (!response?.ok) {
+        throw new Error(response?.error || 'Error al actualizar el orden');
+      }
+    } catch (error) {
+      console.error('Error en la actualización:', error);
+      const revertedButtons = [...props.buttons];
+      emit('updateButtons', revertedButtons);
+      toast.errorToast(error.message || 'Error al actualizar el orden');
     }
-  } catch (error) {
-    console.error('Error en la actualización:', error);
-    const revertedButtons = [...props.buttons];
-    emit('updateButtons', revertedButtons);
-    toast.errorToast(error.message || 'Error al actualizar el orden');
   }
 });
 
 // Sincronizar los botones del drag and drop con los props
 watch(() => props.buttons, (newButtons) => {
-  dragButtons.value = [...newButtons];
+    // Solo actualizar si hay cambios reales
+    if (JSON.stringify(dragButtons.value) !== JSON.stringify(newButtons)) {
+        dragButtons.value = [...newButtons];
+    }
 }, { deep: true });
 
 // Sincronizar los cambios del drag and drop con el componente padre
 watch(() => dragButtons.value, (newButtons) => {
-  emit('updateButtons', newButtons);
+    // Solo emitir si hay cambios reales
+    if (JSON.stringify(props.buttons) !== JSON.stringify(newButtons)) {
+        emit('updateButtons', newButtons);
+    }
 }, { deep: true });
 
 const dragStartIndex = ref(null);
@@ -383,7 +392,10 @@ const updateButtonVisibility = async (button) => {
         updatedButtons.push(movedButton);
       }
       
-      emit('updateButtons', updatedButtons);
+      // Solo emitir si hay cambios reales
+      if (JSON.stringify(props.buttons) !== JSON.stringify(updatedButtons)) {
+        emit('updateButtons', updatedButtons);
+      }
     }
   } catch (error) {
     console.error('Error updating button visibility:', error);

@@ -245,6 +245,11 @@
 
   const getHotelButtons = async () => {
       try {
+          // Evitar múltiples llamadas simultáneas
+          if (isLoadingButtons.value) {
+              return;
+          }
+          
           isLoadingButtons.value = true;
           
           // Verificar si ya hay una petición en curso
@@ -256,9 +261,16 @@
           const response = await hotelButtonsStore.$getAllHotelButtons();
           
           if (response?.ok && response?.data) {
-              buttons.value = response.data.visible;
-              buttonsHidden.value = response.data.hidden;
-              allButtonsHidden.value = response.data.total === response.data.totalHidden;
+              // Solo actualizar si hay cambios reales
+              const newVisible = response.data.visible;
+              const newHidden = response.data.hidden;
+              
+              if (JSON.stringify(buttons.value) !== JSON.stringify(newVisible) ||
+                  JSON.stringify(buttonsHidden.value) !== JSON.stringify(newHidden)) {
+                  buttons.value = newVisible;
+                  buttonsHidden.value = newHidden;
+                  allButtonsHidden.value = response.data.total === response.data.totalHidden;
+              }
           } else if (response?.error) {
               toast.errorToast(response.error);
           } else {
@@ -364,13 +376,20 @@
   };
 
   watch(() => form.buttons_home, (newVal) => {
-      buttons.value.forEach(button => {
-          button.is_visible = newVal;
-      });
+      // Solo actualizar si realmente hay un cambio
+      if (buttons.value.some(button => button.is_visible !== newVal)) {
+          buttons.value = buttons.value.map(button => ({
+              ...button,
+              is_visible: newVal
+          }));
+      }
   });
 
   const handleButtonsUpdate = async (newButtons) => {
-      buttons.value = newButtons;
+      // Solo actualizar si realmente hay cambios
+      if (JSON.stringify(buttons.value) !== JSON.stringify(newButtons)) {
+          buttons.value = newButtons;
+      }
   };
 </script>
   
