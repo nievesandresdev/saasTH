@@ -19,7 +19,7 @@
                                     :label="index === 0 ? 'URL de Airbnb' : 'URL adicional'" 
                                     class="mb-2"
                                     :tooltip="tooltips.url" 
-                                    :tooltip-top="'-196'" 
+                                    :tooltip-top="'20'" 
                                     :tooltip-left="'-55'" 
                                     :disabled-tooltip="url._id == ''"
                                 />
@@ -145,7 +145,6 @@ import { platformsExternalStore } from '@/stores/modules/platformsExternal/platf
 import { useToastAlert } from '@/composables/useToastAlert';
 import ModalDeleteURL from '@/Modules/User/Settings/components/ModalDeleteURL.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
-
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
 
