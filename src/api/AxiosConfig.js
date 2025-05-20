@@ -134,16 +134,14 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
 
   const HAS_HOTEL = await generateHash(subdomain ?? '');
   const HAS_USER = await generateHash(localStorage.getItem('token') ?? '');
+  
+  let numbersRandom = localStorage.getItem('reset-cache');
 
-  const newNumbersRandom = Math.floor(Math.random() * 10000000000000000);
-  let numbersRandom = localStorage.getItem('reset-cache') ?? null;
-  if (RESET_CACHE) {
-    numbersRandom = newNumbersRandom;
-    localStorage.setItem('reset-cache', numbersRandom);
-  } else if (!numbersRandom) {
-    numbersRandom = newNumbersRandom;
+  if (RESET_CACHE || !numbersRandom) {
+    const numbersRandom  = Math.floor(Math.random() * 10000000000000000);
     localStorage.setItem('reset-cache', numbersRandom);
   }
+
   // console.log(`reset-cache: ${numbersRandom}, endpoint: ${endpoint}`);
   let formatHeader = {
     'Content-Type': 'application/json',
