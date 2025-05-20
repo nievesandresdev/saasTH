@@ -297,9 +297,9 @@ const handlesubmitData = async() => {
     changes.value = false;
     await hotelStore.reloadHotel();
 
-    /* setTimeout(() => {
+    setTimeout(() => {
         location.reload();
-    }, 450); */
+    }, 250);
     
 }
 
