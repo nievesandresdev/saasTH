@@ -141,8 +141,8 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
     numbersRandom = newNumbersRandom;
     localStorage.setItem('reset-cache', numbersRandom);
   }
-  // console.log(`reset-cache: ${numbersRandom}, endpoint: ${endpoint}`)
 
+  // console.log(`reset-cache: ${numbersRandom}, endpoint: ${endpoint}`);
   let formatHeader = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
@@ -161,7 +161,7 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
   }
 
   const defaultHeaders = {...formatHeader};
-
+  // console.log('defaultHeaders', defaultHeaders)
   if (!options.hasOwnProperty('headers')) {
     options.headers = defaultHeaders;
   } else {

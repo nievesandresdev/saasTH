@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 import { $urlBaseWebapp } from '@/utils/helpers';
+import { addPropertyResetCacheInQuery } from '@/utils/treatmentCache';
+
 
 import { useHotelStore } from '@/stores/modules/hotel';
 
@@ -19,14 +21,18 @@ export const useMockupStore = defineStore('mockupStore', () => {
   const showGoWebappRef = ref(false);
 
   function $setIframeUrl(uri, params = 'test=x',lang = 'es') {
+     
       let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
       let slugHotel = hotelStore?.hotelData?.subdomain;
       let urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
       // if(ENVIROMENT == 'test'){
       //   urlBase = `https://${subdomain}.test.thehoster.io/webapp`;
       // }
+      
       let completeURL =urlBase+`${uri}?chainsubdomain=${subdomainChain}&subdomain=${slugHotel}&lang=${lang}&mockup=true&${params}`;
-      iframeUrlRef.value = completeURL;
+      const completeURLWithResetCache = addPropertyResetCacheInQuery(completeURL);
+      // console.log('completeURL', completeURL)
+      iframeUrlRef.value = completeURLWithResetCache;
   }
 
   function $setIframeUrlUsable(subdomainChain, subdomainHotel, params = 'test=x',lang = 'es') {
@@ -40,7 +46,8 @@ export const useMockupStore = defineStore('mockupStore', () => {
       const currentUrl = iframeUrlRef.value;
       iframeUrlRef.value = '';
       setTimeout(() => {
-          iframeUrlRef.value = currentUrl;
+          const completeURLWithResetCache = addPropertyResetCacheInQuery(currentUrl);
+          iframeUrlRef.value = completeURLWithResetCache;
       }, 100);
   }
 
