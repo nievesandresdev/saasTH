@@ -6,7 +6,7 @@
       :class="{'bg-[#00000088]': showOverlay}"
       @click.self="closeModal"
     >
-      <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all relative">
+      <div :style="{ width: modalWidth, top: modalTop }" class="bg-white rounded-[10px] shadow mx-auto transform transition-all relative ">
         <slot name="header"></slot>
         <div :class="computedPaddingContent">
           <slot name="content"></slot>

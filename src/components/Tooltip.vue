@@ -65,21 +65,23 @@
         position: absolute;
         border: none;
         background-color: #fff;
-        z-index:500;
+        z-index: 10000;
         color: #000;
         padding: 16px;
         text-align: left;
         min-height: 30px;
         border-radius: 10px;
         box-shadow: 0px 3.27806px 6.55612px rgba(0, 0, 0, 0.15);
-        /* right: -15px;
-        top: 25px; */
         display: none;
+        pointer-events: none;
     }
 
-    /* .icon:hover {
-        color: #ff9c06;
-    } */
+    .icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
     .icon:hover .tooltipp {
         display: block;
     }
