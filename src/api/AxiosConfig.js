@@ -137,11 +137,13 @@ export const apiHttp = async (method, endpoint, data, options = {}, SLUG_API = '
 
   const newNumbersRandom = Math.floor(Math.random() * 10000000000000000);
   let numbersRandom = localStorage.getItem('reset-cache') ?? null;
-  if (RESET_CACHE || !numbersRandom) {
+  if (RESET_CACHE) {
+    numbersRandom = newNumbersRandom;
+    localStorage.setItem('reset-cache', numbersRandom);
+  } else if (!numbersRandom) {
     numbersRandom = newNumbersRandom;
     localStorage.setItem('reset-cache', numbersRandom);
   }
-
   // console.log(`reset-cache: ${numbersRandom}, endpoint: ${endpoint}`);
   let formatHeader = {
     'Content-Type': 'application/json',
