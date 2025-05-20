@@ -111,7 +111,7 @@
                 <span class="text-[18px] font-medium">
                     Configura la integración con {{ selectedOtaCapitalize }}
                 </span>
-                <button @click="closeModalIntegration">
+                <button @click="closeModalIntegration" class="cursor-pointer hover:bg-gray-100 rounded-full p-1">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
                 </button>
             </div>
@@ -214,6 +214,7 @@
     <ModalNoSave
         :id="'not-saved'"
         :open="openModalNoSave"
+        title="¿Descartar cambios?"
         text="Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?"
         textbtn="Guardar cambios"
         @saveChanges="submit"
@@ -412,8 +413,10 @@ const hasChanges = computed(() => {
     
     // Si hay cambios pero los campos están vacíos, no permitir guardar
     if (hasEmptyFields) return false;
+
+    const isEmailValid = !form.value.email || isValidEmail(form.value.email);
     
-    return hasUrlChanges || hasCredentialChanges;
+    return (hasUrlChanges || hasCredentialChanges) && isEmailValid;
 });
 
 // Modificar el watch para validar la URL solo cuando cambia
@@ -660,6 +663,12 @@ const closeModalAirbnbSoft = async () => {
 watch([() => form.value.email, () => form.value.password], () => {
     validateCredentials();
 });
+
+const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
 
 </script>
 

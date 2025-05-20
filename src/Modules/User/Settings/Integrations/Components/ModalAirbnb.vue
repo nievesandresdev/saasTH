@@ -1,11 +1,11 @@
 <template>
-    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" >
+    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" @close="closeModalAirbnb" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
                     Configura la integración con Airbnb
                 </span>
-                <button @click="closeModalAirbnbSoft">
+                <button @click="closeModalAirbnbSoft" class="cursor-pointer hover:bg-gray-100 rounded-full p-1">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
                 </button>
             </div>
@@ -36,7 +36,7 @@
                                 <p class="text-red-500">{{ url.errorMessage }}</p>
                             </div>
                         </div>
-                        <div v-if="index > 0" class="mt-5">
+                        <div v-if="url._id === ''" class="mt-5">
                             <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="openDeleteModal(index)">
                                 <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-6 h-6">
                             </div>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <template v-else>
-                    <div v-if="credentialsByAirbnb && credentialsByAirbnb.email !== '' && credentialsByAirbnb.password !== ''" class="flex flex-col gap-2 mb-4">
+                    <div v-if="credentialsByAirbnb && credentialsByAirbnb.email !== '' && credentialsByAirbnb.password !== ''" class="flex flex-col gap-2">
                         <section>
                             <div class="flex flex-col gap-[6px]">
                                 <span class="text-sm font-medium">
@@ -76,7 +76,14 @@
                     </div>
                     <div v-else class="flex flex-col mb-4 gap-2">
                         <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'-165'" :tooltip-left="'-225'" size-tooltip="s" />
-                        <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
+                        <BaseTextField 
+                            v-model="form.email" 
+                            placeholder="correo@tu-hotel.com" 
+                        />
+                        <!-- <div v-if="errors.email" class="flex items-center text-red-500 text-[12px] font-semibold mt-1">
+                            <img src="/assets/icons/1.TH.WARNING-RED.svg" class="w-4 h-4 mr-2" alt="Warning">
+                            <p class="text-red-500">{{ errorMessage.email }}</p>
+                        </div> -->
                     </div>
                     <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2">
                         <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'-140'" :tooltip-left="'-195'" size-tooltip="s" />
@@ -118,6 +125,7 @@
             </div>
         </template>
     </ModalWindow>
+
     <ModalDeleteURL 
         :open="openModalDeleteURL" 
         :nameOTA="nameOtaDelete" 
@@ -182,7 +190,13 @@ const nameOtaDelete = ref('');
 const indexToDelete = ref(null);
 const openModalNoSave = ref(false);
 
-// Agregar después de la definición de form
+
+const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+
 const errors = ref({
     email: false,
     password: false
@@ -191,6 +205,17 @@ const errors = ref({
 const errorMessage = ref({
     email: '',
     password: ''
+});
+
+
+watch(() => form.value.email, (newEmail) => {
+    if (newEmail && !isValidEmail(newEmail)) {
+        errors.value.email = true;
+        errorMessage.value.email = 'Por favor, introduce un email válido';
+    } else {
+        errors.value.email = false;
+        errorMessage.value.email = '';
+    }
 });
 
 // Función para inicializar las URLs
@@ -268,14 +293,20 @@ const closeModalAirbnb = () => {
         //console.log('Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?');
         return false;
     }
-    emit('closeModalAirbnb');
+    form.value.email = '';
+    form.value.password = '';
+    emit('closeModalAirbnbSoft');
 };
 
 const forceCloseModalAirbnb = () => {
-    emit('closeModalAirbnb');
+    form.value.email = '';
+    form.value.password = '';
+    emit('closeModalAirbnbSoft');
 }
 
 const closeModalAirbnbSoft = () => {
+    form.value.email = '';
+    form.value.password = '';
     emit('closeModalAirbnbSoft');
 }
 
@@ -423,7 +454,10 @@ const hasChanges = computed(() => {
         (currentState.form.email && currentState.form.email !== initialState.form.email) || 
         (currentState.form.password && currentState.form.password !== initialState.form.password); 
     
-    return hasUrlChanges || hasCredentialChanges;
+    // Check if email is valid when there are changes
+    const isEmailValid = !form.value.email || isValidEmail(form.value.email);
+    
+    return (hasUrlChanges || hasCredentialChanges) && isEmailValid;
 });
 
 </script>
