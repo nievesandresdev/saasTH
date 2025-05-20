@@ -1,5 +1,5 @@
 <template>
-    <ModalWindow v-if="open" :isVisible="open"  :width="'369px'" padding-content="p-6" footer="true" :showOverlay="false">
+    <ModalWindow v-if="open" :isVisible="open"  :width="'369px'" padding-content="p-6" footer="true">
         <template #content>
             <div>
                 <div class="flex justify-end w-full ">
