@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <ModalWindow v-if="open" :isVisible="open"  :width="'480px'" padding-content="p-0" footer="true" >
+    <ModalWindow v-if="open" :isVisible="open"  :width="'480px'" padding-content="p-0" footer="true" @close="closeModalIntegration" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
@@ -138,11 +138,11 @@
                         </div>
                     </div>
                     <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
-                        <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
+                        <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-165'" :tooltip-left="'-255'" size-tooltip="s" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
                     <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2">
-                        <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
+                        <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'-160'" :tooltip-left="'-195'" size-tooltip="s" />
                         <div class="relative">
                             <BaseTextField 
                                 v-model="form.password" 
