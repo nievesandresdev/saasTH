@@ -1,16 +1,18 @@
 <template>
     <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" @close="closeModalAirbnb" >
         <template #content>
-            <div class="flex justify-between p-4">
-                <span class="text-[18px] font-medium">
-                    Configura la integración con Airbnb
-                </span>
-                <button @click="closeModalAirbnbSoft" class="cursor-pointer hover:bg-gray-100 rounded-full p-1">
-                    <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
-                </button>
+            <div class="sticky top-0 bg-white z-10" :class="{ 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]': isScrolled }">
+                <div class="flex justify-between p-4 items-center">
+                    <span class="text-[18px] font-medium">
+                        Configura la integración con Airbnb
+                    </span>
+                    <button @click="closeModalAirbnbSoft" class="cursor-pointer hover:bg-gray-100 rounded-full p-1">
+                        <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
+                    </button>
+                </div>
+                <hr>
             </div>
-            <hr>
-            <div class="p-4 max-h-[500px] overflow-y-auto pr-2 relative">
+            <div class="p-4 max-h-[500px] overflow-y-auto pr-2 relative" @scroll="handleScroll">
                 <div class="flex flex-col gap-2 mb-4 pr-2">
                     <div v-for="(url, index) in displayedUrls" :key="url._id || index" class="flex items-center gap-2">
                         <div class="flex-grow">
@@ -189,6 +191,7 @@ const openModalDeleteURL = ref(false);
 const nameOtaDelete = ref('');
 const indexToDelete = ref(null);
 const openModalNoSave = ref(false);
+const isScrolled = ref(false);
 
 
 const isValidEmail = (email) => {
@@ -459,6 +462,10 @@ const hasChanges = computed(() => {
     
     return (hasUrlChanges || hasCredentialChanges) && isEmailValid;
 });
+
+const handleScroll = (event) => {
+    isScrolled.value = event.target.scrollTop > 0;
+};
 
 </script>
 
