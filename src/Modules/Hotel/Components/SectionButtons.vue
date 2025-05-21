@@ -19,7 +19,7 @@
      class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
    >
      <div 
-       v-for="(button, index) in localButtons" 
+       v-for="(button, index) in localButtonsVisible" 
        :key="button.id"
        class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
        :class="{
@@ -76,7 +76,6 @@
      
 
    </TransitionGroup>
-   <pre>{{ localButtons }}</pre>
  </div>
 
  <div class="border-t border-[#E9E9E9] mt-4 mb-4"></div>
@@ -220,14 +219,6 @@
    </TransitionGroup>
  </div>
 
- <!-- Debug info -->
- <div class="mt-4 p-4 bg-gray-100 rounded">
-   <h3 class="font-bold mb-2">Estado Local:</h3>
-   <pre>{{ localButtons }}</pre>
-   
-   <h3 class="font-bold mb-2 mt-4">Estado Drag and Drop:</h3>
-   <pre>{{ dragButtons }}</pre>
- </div>
 </template>
 
 <script setup>
@@ -272,6 +263,8 @@ const emit = defineEmits(['updateButtons', 'getButtons']);
 
 // Estado local para los botones
 const localButtons = ref([...props.buttons]);
+// estado local para los botones pero buscando el is_visible true de props.buttons
+const localButtonsVisible = ref([...props.buttons.filter(button => button.is_visible)]);
 
 // Inicializar el drag and drop con el estado local
 const [parent, dragButtons] = useDragAndDrop(localButtons.value, {
@@ -282,16 +275,20 @@ const [parent, dragButtons] = useDragAndDrop(localButtons.value, {
 
 // Sincronizar los botones del drag and drop con el estado local
 watch(() => dragButtons.value, (newButtons) => {
- localButtons.value = [...newButtons];
- emit('updateButtons', newButtons);
+  localButtons.value = [...newButtons];
+  localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
 }, { deep: true });
 
 // Sincronizar props con estado local cuando cambien los props
 watch(() => props.buttons, (newButtons) => {
- if (!isDragging.value) {
-   localButtons.value = [...newButtons];
-   dragButtons.value = [...newButtons];
- }
+  
+  if (!isDragging.value) {
+    console.log('watch')
+    localButtons.value = [...newButtons];
+    dragButtons.value = [...newButtons];
+    
+  }
+  //localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
 }, { deep: true });
 
 const showOverlays = ref(true);
@@ -299,59 +296,66 @@ const showDragButtons = ref(true);
 const isDragging = ref(false);
 
 state.on('dragStarted', () => {
- showOverlays.value = false;
- showDragButtons.value = false;
- isDragging.value = true;
- localButtons.value.forEach(button => {
-   button.hover = false;
- });
+  showOverlays.value = false;
+  showDragButtons.value = false;
+  isDragging.value = true;
+  localButtons.value.forEach(button => {
+    button.hover = false;
+  });
 });
 
 state.on('dragEnded', async () => {
- const elements = document.elementsFromPoint(event.clientX, event.clientY);
- const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
- 
- if (isInNoDragZone) {
-   showOverlays.value = true;
-   showDragButtons.value = true;
-   isDragging.value = false;
-   return;
- }
+  const elements = document.elementsFromPoint(event.clientX, event.clientY);
+  const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
+  
+  if (isInNoDragZone) {
+    showOverlays.value = true;
+    //showDragButtons.value = true;
+    //isDragging.value = false;
+    return;
+  }
 
- await nextTick();
- 
- showOverlays.value = true;
- showDragButtons.value = true;
- isDragging.value = false;
- 
- // Usar el nuevo orden de los botones del dragButtons
- const updatedButtons = [...dragButtons.value];
- 
- // Actualizamos el estado local primero
- localButtons.value = updatedButtons;
- emit('updateButtons', updatedButtons);
- 
- // Luego actualizamos la base de datos
- try {
-   const payload = {
-     visible: updatedButtons
-       .filter(button => button.is_visible)
-       .map(button => ({ id: button.id })),
-     hidden: updatedButtons
-       .filter(button => !button.is_visible)
-       .map(button => ({ id: button.id }))
-   };
-   
-   await hotelButtonsStore.$updateOrderButtons(payload);
-   emit('getButtons');
- } catch (error) {
-   console.error('Error en la actualización:', error);
-   // Revertir al estado anterior
-   localButtons.value = [...props.buttons];
-   dragButtons.value = [...props.buttons];
-   emit('updateButtons', [...props.buttons]);
-   toast.warningToast('Error al actualizar el orden', 'top-right');
- }
+  await nextTick();
+  
+  showOverlays.value = true;
+  //showDragButtons.value = true;
+  //isDragging.value = false;
+  
+  // Usar el nuevo orden de los botones del dragButtons
+  //const updatedButtons = [...dragButtons.value];
+  
+  // Actualizamos el estado local inmediatamente
+/*   localButtons.value = updatedButtons;
+  emit('updateButtons', updatedButtons); */
+  
+  // Llamada al endpoint en segundo plano
+  const updateOrder = async () => {
+    try {
+/*       const payload = {
+        visible: updatedButtons
+          .filter(button => button.is_visible)
+          .map(button => ({ id: button.id })),
+        hidden: updatedButtons
+          .filter(button => !button.is_visible)
+          .map(button => ({ id: button.id }))
+      }; */
+      
+      await hotelButtonsStore.$updateOrderButtons(localButtons.value);
+      // Solo emitimos getButtons si la actualización fue exitosa
+      emit('getButtons');
+      //localButtons.value = [...props.buttons];
+    } catch (error) {
+      console.error('Error en la actualización:', error);
+      // Revertir al estado anterior solo si hay error
+      localButtons.value = [...props.buttons];
+      dragButtons.value = [...props.buttons];
+      emit('updateButtons', [...props.buttons]);
+      toast.warningToast('Error al actualizar el orden', 'top-right');
+    }
+  };
+
+  // Ejecutar la actualización en segundo plano sin esperar
+  updateOrder();
 });
 
 const dragStartIndex = ref(null);
@@ -366,7 +370,7 @@ const handlerClickSwichVisibility = (event) => {
 };
 
 const updateButtonVisibility = async (button) => {
-  console.log('updateButtonVisibility')
+  //console.log('updateButtonVisibility')
   try {
     const payload = {
       id: button.id,
@@ -377,8 +381,10 @@ const updateButtonVisibility = async (button) => {
     const updatedButtons = [...props.buttons];
     const buttonIndex = updatedButtons.findIndex(b => b.id === button.id);
     
+    
     if (buttonIndex !== -1) {
       const [movedButton] = updatedButtons.splice(buttonIndex, 1);
+      //localButtons.value = updatedButtons.splice(buttonIndex, 1);
       if (movedButton.is_visible) {
         // Si el botón está visible, mantenerlo al principio
         updatedButtons.unshift(movedButton);
@@ -389,9 +395,13 @@ const updateButtonVisibility = async (button) => {
       
       // Actualizar el estado local
       emit('updateButtons', updatedButtons);
+      //localButtonsVisible.value = [...props.buttons.filter(button => button.is_visible)];
+      //localButtons.value = [...movedButton];
     }
     
     emit('getButtons');
+    //emit('updateButtons', updatedButtons);
+    //localButtonsVisible.value = [...props.buttons.filter(button => button.is_visible)];
   } catch (error) {
     console.error('Error updating button visibility:', error);
     button.is_visible = !button.is_visible;
