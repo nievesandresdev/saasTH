@@ -1,6 +1,17 @@
 <template>
   <div class="flex flex-col gap-2">
+
+
+  <ul ref="parentTest">
+    <li v-for="tape in tapes" :key="tape" class="cassette">
+      {{ tape }}
+    </li>
+  </ul>
+  {{ tapes }}
+
+
    <span class="text-sm font-semibold">Botones visibles ({{ countButtons }})</span>
+   
    <TransitionGroup 
      name="list" 
      tag="div" 
@@ -8,7 +19,7 @@
      class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
    >
      <div 
-       v-for="(button, index) in buttons" 
+       v-for="(button, index) in localButtons" 
        :key="button.id"
        class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
        :class="{
@@ -62,7 +73,10 @@
          <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
        </button>
      </div>
+     
+
    </TransitionGroup>
+   <pre>{{ localButtons }}</pre>
  </div>
 
  <div class="border-t border-[#E9E9E9] mt-4 mb-4"></div>
@@ -205,6 +219,15 @@
 
    </TransitionGroup>
  </div>
+
+ <!-- Debug info -->
+ <div class="mt-4 p-4 bg-gray-100 rounded">
+   <h3 class="font-bold mb-2">Estado Local:</h3>
+   <pre>{{ localButtons }}</pre>
+   
+   <h3 class="font-bold mb-2 mt-4">Estado Drag and Drop:</h3>
+   <pre>{{ dragButtons }}</pre>
+ </div>
 </template>
 
 <script setup>
@@ -247,22 +270,39 @@ const props = defineProps({
 
 const emit = defineEmits(['updateButtons', 'getButtons']);
 
-const [parent, dragButtons] = useDragAndDrop(props.buttons, {
+// Estado local para los botones
+const localButtons = ref([...props.buttons]);
+
+// Inicializar el drag and drop con el estado local
+const [parent, dragButtons] = useDragAndDrop(localButtons.value, {
  draggable: (el) => {
    return !el.closest('#no-drag') && el.id !== 'no-drag';
  }
 });
 
+// Sincronizar los botones del drag and drop con el estado local
+watch(() => dragButtons.value, (newButtons) => {
+ localButtons.value = [...newButtons];
+ emit('updateButtons', newButtons);
+}, { deep: true });
+
+// Sincronizar props con estado local cuando cambien los props
+watch(() => props.buttons, (newButtons) => {
+ if (!isDragging.value) {
+   localButtons.value = [...newButtons];
+   dragButtons.value = [...newButtons];
+ }
+}, { deep: true });
+
 const showOverlays = ref(true);
 const showDragButtons = ref(true);
 const isDragging = ref(false);
-const dragStartIndex = ref(null);
 
 state.on('dragStarted', () => {
  showOverlays.value = false;
  showDragButtons.value = false;
  isDragging.value = true;
- props.buttons.forEach(button => {
+ localButtons.value.forEach(button => {
    button.hover = false;
  });
 });
@@ -284,10 +324,14 @@ state.on('dragEnded', async () => {
  showDragButtons.value = true;
  isDragging.value = false;
  
+ // Usar el nuevo orden de los botones del dragButtons
  const updatedButtons = [...dragButtons.value];
  
+ // Actualizamos el estado local primero
+ localButtons.value = updatedButtons;
  emit('updateButtons', updatedButtons);
  
+ // Luego actualizamos la base de datos
  try {
    const payload = {
      visible: updatedButtons
@@ -302,18 +346,16 @@ state.on('dragEnded', async () => {
    emit('getButtons');
  } catch (error) {
    console.error('Error en la actualización:', error);
+   // Revertir al estado anterior
+   localButtons.value = [...props.buttons];
+   dragButtons.value = [...props.buttons];
    emit('updateButtons', [...props.buttons]);
    toast.warningToast('Error al actualizar el orden', 'top-right');
  }
 });
 
-watch(() => props.buttons, (newButtons) => {
- dragButtons.value = [...newButtons];
-}, { deep: true });
+const dragStartIndex = ref(null);
 
-watch(() => dragButtons.value, (newButtons) => {
- emit('updateButtons', newButtons);
-}, { deep: true });
 
 const setDragStart = (index) => {
  dragStartIndex.value = index;
