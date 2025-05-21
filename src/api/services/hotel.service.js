@@ -12,7 +12,7 @@ export const deleteImageByHotelApi = (data) => apiHttp('POST', `${hotelPath}/${h
 export const getAllApi = (data) => apiHttp('GET', `${hotelPath}/getAll`, data);
 export const getHotelsByUser = () => apiHttp('GET', `${hotelPath}/getHotelsByUser`);
 export const updateDefaultHotel = (data) => apiHttp('POST', `${hotelPath}/updateDefaultHotel`, data , 'API_GENERAL', false, true);
-export const findByParamsApi = (params, config = {}) => apiHttp('GET', `${hotelPath}/findByParams`, params, {showPreloader: true });
+export const findByParamsApi = (params, config = { showPreloader: true }) => apiHttp('GET', `${hotelPath}/findByParams`, params, config, 'API_GENERAL', false, true);
 export const updateProfileApi = (data) => apiHttp('POST', `${hotelPath}/profile`, data, {showPreloader: false }, 'API_GENERAL', false, true);
 export const updateSenderMailMaskApi = (data) => apiHttp('POST', `${hotelPath}/updateSenderMailMask`, data, {showPreloader: false }, 'API_GENERAL', false, true);
 export const updateVisivilityServiceApi = (data) => apiHttp('POST', `${hotelPath}/serviceVisivility`, data, {showPreloader: false }, 'API_GENERAL', false, true);

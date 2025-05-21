@@ -143,7 +143,7 @@
                         </a>
                     </template>
                 </CardSectionHome>
-                <CardSectionHome title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
+                <CardSectionHome v-show="checkEmailEnable" title="Check-in Huésped - Huésped" :multichannel="['material-symbols-light_mail-outline','Frame 2613489','Frame 2613488','Frame 2613557']">
                     <template #msg>Tus huéspedes podrán invitarse entre sí a realizar su Check-in online en tu WebApp</template>
                     <template #canal>
                         <div class="h-full w-full py-2">
@@ -163,37 +163,48 @@
             </div>
         </div>
     </section>
-    <SidePanel />
+    <SidePanel  />
 </template>
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, onMounted, computed } from 'vue'
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
 import TooltipLanguages from "@/components/TooltipLanguages.vue";
 import CardSectionHome from "./CardSectionHome.vue";
 import SidePanel from "./components/SidePanel.vue";
 
 import { useHotelStore } from '@/stores/modules/hotel';
-const hotelStorage = useHotelStore();
+const hotelStore = useHotelStore();
 
 const isOpenSidePanel = ref(false)
 const conceptPanel = ref(null)
 const maskEmail = ref("no-reply@thehoster.es")
 
+const showEmailField = ref(true)
+
 const openSidePanel = (concept) =>{
     conceptPanel.value = concept;
     isOpenSidePanel.value = true;
+
+    if(concept === 'checkInGuestGuest' || concept === 'betweenGuests'){
+        showEmailField.value = false;
+    }
 }
 
 onMounted(async() => {
     // {subdomain: sessionStorage.getItem('current_subdomain')}
-    let dataHotel = await hotelStorage.$findByParams()
+    let dataHotel = await hotelStore.$findByParams()
     if(dataHotel.sender_mail_mask){
         maskEmail.value = dataHotel.sender_mail_mask;
     }
+})
+
+const checkEmailEnable = computed(() => {
+    return hotelStore.hotelData.checkin_service_enabled
 })
 
 
 provide('isOpenSidePanel',isOpenSidePanel)
 provide('conceptPanel',conceptPanel)
 provide('maskEmail',maskEmail)
+provide('showEmailField',showEmailField)
 </script>

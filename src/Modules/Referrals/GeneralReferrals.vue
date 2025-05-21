@@ -299,7 +299,7 @@ const handlesubmitData = async() => {
 
     setTimeout(() => {
         location.reload();
-    }, 450);
+    }, 250);
     
 }
 
