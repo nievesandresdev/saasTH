@@ -10,9 +10,10 @@
         </p>
     </section>
 
+    <!-- question="¿Cómo calificarías tu nivel de satisfacción con tu estancia hasta ahora?" -->
     <QueryTerms 
         status="Stay"
-        question="¿Cómo calificarías tu nivel de satisfacción con tu estancia hasta ahora?"    
+        question="¿Qué tal [nombreHuésped]?"     
         questionOptions="Muy malo/Malo/Normal/Bueno/Muy bueno" 
         queryTrigger="Se enviará un día después del check-in"    
         whenAvailable="Hasta el día del check-out"   
