@@ -108,6 +108,7 @@
                      v-model="button.is_visible"
                      :id="`swich-visible-button-${index}`"
                      @change:value="updateButtonVisibility(button)"
+                     @mouseenter="checkConfig(button.name)"
                      :disabled="!checkConfig(button.name)"
                    />
                  </div>
@@ -397,7 +398,7 @@ const checkConfig = (name) => {
      //return hotelData.policies && hotelData.policies.length > 0;
      return hotelData.policies_count && hotelData.policies_count > 0;
    case 'Redes WiFi':
-     return hotelData.with_wifi;
+     return hotelData.with_wifi && hotelData.wifi_count > 0;
    case 'Programa de referidos':
      return hotelData.show_referrals;
    case 'Check-in':
