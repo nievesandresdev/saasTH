@@ -1,7 +1,7 @@
 <template>
-    <div class="flex justify-start gap-2 mb-2">
+    <div class="flex justify-start gap-2 ">
         <label class="text-sm font-medium">{{ props.label }}</label>
-        <Tooltip size="m" :top="props.tooltipTop" :left="props.tooltipLeft" v-if="!props.disabledTooltip">
+        <Tooltip :size="props.sizeTooltip" :top="props.tooltipTop" :left="props.tooltipLeft" v-if="!props.disabledTooltip">
             <template v-slot:button>
                 <img class="w-4 h-4" src="/assets/icons/info.blue.svg">
             </template>
@@ -21,6 +21,10 @@ const props = defineProps({
     tooltipTop: String,
     tooltipLeft: String,
     disabledTooltip: Boolean,
+    sizeTooltip: {
+        type: String,
+        default: 'm'
+    },
 })
 </script>
 

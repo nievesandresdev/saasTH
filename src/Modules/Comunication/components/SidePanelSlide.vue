@@ -3,7 +3,7 @@
         <!-- head -->
         <div class="py-5 px-6 flex items-center justify-between border-b hborder-gray-400">
             <h2 class="text-[22px] font-medium leading-[110%]">{{dataPanel.title}}</h2>
-            <img @click="isOpenSidePanel = false" class="cursor-pointer w-6 h-6" src="/assets/icons/1.TH.CLOSE.svg" alt="">
+            <img @click="closeModal" class="cursor-pointer w-6 h-6" src="/assets/icons/1.TH.CLOSE.svg" alt="">
         </div>
         <!-- content info -->
         <div class="px-6 pt-6 pb-8 overflow-y-auto" :class="{'h-[79vh]':existingChanges,'h-[91vh]':!existingChanges}">
@@ -43,20 +43,20 @@
                 <p class="text-sm font-semibold leading-[120%]">Asunto</p>
                 <p class="text-sm leading-[140%] mt-2">{{dataPanel.issue}}</p>
             </div>
-
-            <div class="border-b hborder-gray-400 my-4"></div>
-
-            <h2 class="text-sm font-medium leading-[140%] mb-2">Correo electrónico para el envío</h2>
-            <BaseEmailField
-                placeholder="Escribe direccion de correo electronico"
-                v-model="email"
-                @handleError="EmailFieldError = $event"    
-            />
-            <div v-if="maskEmail && !email" class="flex items-center gap-2 mt-2">
-                <img class="w-4 h-4" src="/assets/icons/1.TH.WARNING-RED.svg" alt="">
-                <p class="text-xs leading-[90%] htext-alert-negative">Es esencial disponer de una dirección de correo electrónico.</p>
-            </div>
-            <p class="text-sm leading-[140%] mt-2 text-[#858181]">NOTA: Este es el email de envío por defecto para todas las comunicaciones.</p>
+            <section v-if="showEmailField">
+                <div class="border-b hborder-gray-400 my-4"></div>
+                <h2 class="text-sm font-medium leading-[140%] mb-2">Correo electrónico para el envío</h2>
+                <BaseEmailField
+                    placeholder="Escribe direccion de correo electronico"
+                    v-model="email"
+                    @handleError="EmailFieldError = $event" 
+                />
+                <div v-if="maskEmail && !email" class="flex items-center gap-2 mt-2">
+                    <img class="w-4 h-4" src="/assets/icons/1.TH.WARNING-RED.svg" alt="">
+                    <p class="text-xs leading-[90%] htext-alert-negative">Es esencial disponer de una dirección de correo electrónico.</p>
+                </div>
+                <p class="text-sm leading-[140%] mt-2 text-[#858181]">NOTA: Este es el email de envío por defecto para todas las comunicaciones.</p>
+            </section>
         </div>
         <!-- changes bar -->
         <div class="mt-auto" v-if="existingChanges">
@@ -72,16 +72,19 @@
 <script setup>
 import BaseEmailField from '@/components/Forms/BaseEmailField.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
-import { ref, inject, computed, onMounted } from 'vue';
+import { ref, inject, computed, onMounted, defineEmits } from 'vue';
 import { useHotelStore } from '@/stores/modules/hotel';
 import { useToastAlert } from '@/composables/useToastAlert'
 
+
+const emit = defineEmits(['closeModal']);
 const toast = useToastAlert();
 const hotelStorage = useHotelStore();
 
 const isOpenSidePanel = inject('isOpenSidePanel');
 const conceptPanel = inject('conceptPanel');
 const maskEmail = inject('maskEmail');
+const showEmailField = inject('showEmailField');
 const EmailFieldError = ref(false);
 const email = ref(null);
 
@@ -110,9 +113,14 @@ const existingChanges = computed(()=>{
 })
 
 const dataPanel = computed(()=>{
-    console.log('conceptPanel',conceptPanel.value)
+    //console.log('conceptPanel',conceptPanel.value)
     return values[conceptPanel.value];
 })
+
+const closeModal = () =>{
+    isOpenSidePanel.value = false;
+    emit('closeModal');
+}
 
 
 const values = {

@@ -168,7 +168,7 @@ const toast = useToastAlert();
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
 
-const hotelData = ref(hotelStore.hotelData);
+const hotelData = computed(() => hotelStore.hotelData);
 const dataFormDefault ={
     subdomain_chain: '',
     slug_hotel: '',
@@ -247,7 +247,6 @@ function loadMockup () {
 
 async function reloadHotel () {
     const hotel = await hotelStore.reloadHotel();
-    Object.assign(hotelData.value, hotel);
     initializeForm(hotel);
 }
 

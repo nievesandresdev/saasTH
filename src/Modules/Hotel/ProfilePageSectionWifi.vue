@@ -1,5 +1,5 @@
 <template>
-    <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4">
+    <section class="shadow-md px-4 py-6 mt-6 bg-white rounded-[10px] hborder-black-100 space-y-4" id="wifi-section">
         <div class="max-w-profile">
             <div class="flex mt-2 items-center relative">
                 <h2 class="font-medium text-lg">Servicio de WiFi</h2>

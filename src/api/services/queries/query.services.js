@@ -5,7 +5,7 @@ import {
 } from '../../config/apiRoute'
 
 export const getFeedbackSummaryByGuestApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getFeedbackSummaryByGuest`, data, { showPreloader: false })
-export const togglePendingStateApi = (data) => apiHttp('POST', `${queryPath}/${hosterPath}/togglePendingState`, data, { showPreloader: false })
+export const togglePendingStateApi = (data) => apiHttp('POST', `${queryPath}/${hosterPath}/togglePendingState`, data, { showPreloader: true }, 'API_GENERAL', false, true)
 export const countPendingByHotelApi = () => apiHttp('GET', `${queryPath}/${hosterPath}/countPendingByHotel`, null, { showPreloader: false })
 export const pendingCountByStayApi = (stayId) => apiHttp('GET', `${queryPath}/${hosterPath}/pendingCountByStay/${stayId}`, null, { showPreloader: false })
 export const getGeneralReportApi = (data) => apiHttp('GET', `${queryPath}/${hosterPath}/getGeneralReport`, data, { showPreloader: false })

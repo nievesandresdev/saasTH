@@ -6,7 +6,7 @@ import {
 } from '../../config/apiRoute'
 
 export const getAllApi = () => apiHttp('GET', `${chatPath}/${hosterPath}/${chatSettingsPath}/getAll`, [])
-export const updateNotificationsEmailApi = (data) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateNotificationsEmail`, data)
+export const updateNotificationsEmailApi = (data) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateNotificationsEmail`, data, { showPreloader: false }, 'API_GENERAL', false, true)
 
 
 
@@ -14,10 +14,10 @@ export const updateNotificationsEmailApi = (data) => apiHttp('POST', `${chatPath
 //Settings Chat
 export const getSettings = () => apiHttp('GET', `${chatPath}/${hosterPath}/${chatSettingsPath}/getSettings`, [])
 //searchLang
-export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/searchLang`, params,{ showPreloader: false })
+export const searchLang = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/searchLang`, params,{ showPreloader: false }, 'API_GENERAL', false, true)
 //storeGeneralSetting
-export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params,{ showPreloader: true })
+export const storeGeneralSetting = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/storeGeneralSetting`, params,{ showPreloader: true }, 'API_GENERAL', false, true)
 //updateAvailability
-export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params,{ showPreloader: true })
+export const updateAvailability = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateAvailability`, params,{ showPreloader: true }, 'API_GENERAL', false, true)
 //updateResponses
-export const updateResponses = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateResponses`, params,{ showPreloader: true })
+export const updateResponses = (params) => apiHttp('POST', `${chatPath}/${hosterPath}/${chatSettingsPath}/updateResponses`, params,{ showPreloader: true }, 'API_GENERAL', false, true)

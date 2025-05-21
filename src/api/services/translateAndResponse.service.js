@@ -3,4 +3,4 @@ import {
     translateAndResponsePath,
 } from '../config/apiRoute'
 
-export const findByReviewIdApi = (params, config = {}) => apiHttp('GET', `${translateAndResponsePath}/findByReviewId`, params, config, 'API_REVIEW');
+export const findByReviewIdApi = (params, config = {}) => apiHttp('GET', `${translateAndResponsePath}/findByReviewId`, params, config, 'API_REVIEW', false, true);

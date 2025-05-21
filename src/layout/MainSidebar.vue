@@ -492,7 +492,7 @@ const menu_links = computed(() => [
       {
         title: 'Backoffice',
         icon: '1.TH.MM.HOSTER',
-        include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
+        include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms','Integrations'],
         url: '/equipo/configuracion/usuarios',
         permissionName: 'hoster',
         subscription : false,

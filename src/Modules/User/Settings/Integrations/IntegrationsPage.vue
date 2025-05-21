@@ -105,13 +105,13 @@
         </div>
     </div>
 
-    <ModalWindow v-if="open" :isVisible="open"  :width="'480px'" padding-content="p-0" footer="true" >
+    <ModalWindow v-if="open" :isVisible="open"  :width="'480px'" padding-content="p-0" footer="true" @close="closeModalIntegration" >
         <template #content>
             <div class="flex justify-between p-4">
                 <span class="text-[18px] font-medium">
                     Configura la integración con {{ selectedOtaCapitalize }}
                 </span>
-                <button @click="closeModalIntegration">
+                <button @click="closeModalIntegration" class="cursor-pointer hover:bg-gray-100 rounded-full p-1">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="1.TH.CLOSE" class="h-6 w-6">
                 </button>
             </div>
@@ -125,7 +125,7 @@
                 </div>
                 <template v-else>
                     <div class="flex flex-col gap-2 mb-4">
-                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-205'" :tooltip-left="'-125'" :disabled-tooltip="disabledInput.url" />
+                        <LabelIntegrations :label="'URL de ' + selectedOtaCapitalize" :tooltip="tooltips.url" :tooltip-top="'-205'" :tooltip-left="'-125'" :disabled-tooltip="!disabledInput.url" />
                         <BaseTextField 
                             v-model="form.url" 
                             :placeholder="placeholderUrl"
@@ -138,11 +138,11 @@
                         </div>
                     </div>
                     <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
-                        <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-125'" :tooltip-left="'-55'" />
+                        <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-165'" :tooltip-left="'-255'" size-tooltip="s" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
                     <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2">
-                        <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'22'" :tooltip-left="'-55'" />
+                        <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'-160'" :tooltip-left="'-195'" size-tooltip="s" />
                         <div class="relative">
                             <BaseTextField 
                                 v-model="form.password" 
@@ -214,6 +214,7 @@
     <ModalNoSave
         :id="'not-saved'"
         :open="openModalNoSave"
+        title="¿Descartar cambios?"
         text="Tienes cambios sin guardar que se perderán si cancelas. ¿Estas seguro de que quieres cancelar?"
         textbtn="Guardar cambios"
         @saveChanges="submit"
@@ -412,8 +413,10 @@ const hasChanges = computed(() => {
     
     // Si hay cambios pero los campos están vacíos, no permitir guardar
     if (hasEmptyFields) return false;
+
+    const isEmailValid = !form.value.email || isValidEmail(form.value.email);
     
-    return hasUrlChanges || hasCredentialChanges;
+    return (hasUrlChanges || hasCredentialChanges) && isEmailValid;
 });
 
 // Modificar el watch para validar la URL solo cuando cambia
@@ -660,6 +663,12 @@ const closeModalAirbnbSoft = async () => {
 watch([() => form.value.email, () => form.value.password], () => {
     validateCredentials();
 });
+
+const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
 
 </script>
 
