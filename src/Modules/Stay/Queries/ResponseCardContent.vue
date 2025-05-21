@@ -42,7 +42,7 @@
                     <img
                         v-if="data.qualification"
                         class="w-10 h-10 mr-2"
-                        :src="`/assets/icons/emojis/1.TH.Emojis${data.qualification}.svg`"
+                        :src="`/assets/icons/emojis/colors/1.TH.Emojis${data.qualification}.svg`"
                     >
 
                     <p v-if="selectedLang" class="text-sm leading-[150%]">

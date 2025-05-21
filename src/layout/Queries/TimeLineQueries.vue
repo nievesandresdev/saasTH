@@ -59,7 +59,7 @@
             <img
                 v-if="feed.feeling"
                 class="w-6 h-6"
-                :src="`/assets/icons/emojis/1.TH.Emojis${feed.feeling}.svg`"
+                :src="`/assets/icons/emojis/colors/1.TH.Emojis${feed.feeling}.svg`"
             >
           </div>
           <div class="text-[#333333] text-xs font-semibold">{{ qualification(index,feed)  }}</div>
