@@ -4,8 +4,8 @@ import {
     experiencePath,
 } from '../config/apiRoute'
 
-export const getAllApi = (params, confing) => apiHttp('POST', `${saasExperiencePath}/getAll`, params, { showPreloader: false }, 'API_HELPER');
-export const getNumbersByFiltersApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/getNumbersByFilters`, data, config, 'API_HELPER');
+export const getAllApi = (params, confing) => apiHttp('POST', `${saasExperiencePath}/getAll`, params, { showPreloader: false }, 'API_HELPER', false, true);
+export const getNumbersByFiltersApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/getNumbersByFilters`, data, config, 'API_HELPER', false, true);
 
 export const updateVisibilityApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/visibility`, data, { showPreloader: false }, 'API_HELPER', false, true);
 export const updateRecommendationApi = (data, config = {}) => apiHttp('POST', `${saasExperiencePath}/recommendation`, data, config, 'API_HELPER', false, true);
