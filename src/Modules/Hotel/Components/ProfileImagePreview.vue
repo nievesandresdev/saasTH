@@ -50,7 +50,7 @@
   const currentIndex = ref(props.initialImageIndex);
   
   const currentImage = computed(() => {
-    console.log('test props.images',props.images)
+    //console.log('test props.images',props.images)
     return props.images[Number(currentIndex.value)]
   });
   

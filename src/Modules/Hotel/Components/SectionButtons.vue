@@ -12,6 +12,7 @@
        :key="button.id"
        class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
        :class="{
+         'cursor-grabbing': dragStartIndex === index
        }"
        @mouseenter="button.hover = true"
        @mouseleave="button.hover = false"
@@ -61,7 +62,6 @@
          <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
        </button>
      </div>
-
    </TransitionGroup>
  </div>
 
@@ -247,9 +247,8 @@ const props = defineProps({
 
 const emit = defineEmits(['updateButtons', 'getButtons']);
 
-const [ parent, dragButtons ] = useDragAndDrop(props.buttons, {
+const [parent, dragButtons] = useDragAndDrop(props.buttons, {
  draggable: (el) => {
-   // Solo permitir drag en elementos que no estén dentro del contenedor de botones ocultos
    return !el.closest('#no-drag') && el.id !== 'no-drag';
  }
 });
@@ -257,59 +256,38 @@ const [ parent, dragButtons ] = useDragAndDrop(props.buttons, {
 const showOverlays = ref(true);
 const showDragButtons = ref(true);
 const isDragging = ref(false);
+const dragStartIndex = ref(null);
 
 state.on('dragStarted', () => {
- console.log('dragStarted', props.buttons);
-console.log('dragStarted', props.buttons);
  showOverlays.value = false;
  showDragButtons.value = false;
  isDragging.value = true;
- // Disable hover and hide overlay for all buttons during drag
  props.buttons.forEach(button => {
    button.hover = false;
  });
 });
 
 state.on('dragEnded', async () => {
- // Verificar si el elemento arrastrado está dentro de la zona de no-drag
  const elements = document.elementsFromPoint(event.clientX, event.clientY);
  const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
  
  if (isInNoDragZone) {
-   // Si está en la zona de no-drag, solo actualizamos la UI sin hacer la petición
    showOverlays.value = true;
    showDragButtons.value = true;
    isDragging.value = false;
    return;
  }
 
- console.log('dragEnded', props.buttons);
- // Wait for the next tick to ensure animations are complete
  await nextTick();
  
  showOverlays.value = true;
  showDragButtons.value = true;
  isDragging.value = false;
  
- // Reset hover states and trigger hover for the current element
- const updatedButtons = props.buttons.map(button => ({
-   ...button,
-   hover: false
- }));
+ const updatedButtons = [...dragButtons.value];
  
- // Find the element under the cursor and trigger its hover
- const buttonCard = elements.find(el => el.classList.contains('button-card'));
- if (buttonCard) {
-   const index = Array.from(buttonCard.parentNode.children).indexOf(buttonCard);
-   if (index !== -1 && updatedButtons[index]) {
-     updatedButtons[index].hover = true;
-   }
- }
- 
- // Actualizamos el estado local primero
  emit('updateButtons', updatedButtons);
  
- // Luego actualizamos la base de datos
  try {
    const payload = {
      visible: updatedButtons
@@ -320,32 +298,22 @@ state.on('dragEnded', async () => {
        .map(button => ({ id: button.id }))
    };
    
-   console.log('Enviando payload al servidor:', payload);
    await hotelButtonsStore.$updateOrderButtons(payload);
-   //console.log('Actualización completada exitosamente');
-   //toast.warningToast('Orden actualizado con éxito', 'top-right');
    emit('getButtons');
  } catch (error) {
    console.error('Error en la actualización:', error);
-   // Si falla la actualización, revertimos el estado local
-   const revertedButtons = [...props.buttons];
-   emit('updateButtons', revertedButtons);
+   emit('updateButtons', [...props.buttons]);
    toast.warningToast('Error al actualizar el orden', 'top-right');
  }
 });
 
-// Sincronizar los botones del drag and drop con los props
 watch(() => props.buttons, (newButtons) => {
  dragButtons.value = [...newButtons];
 }, { deep: true });
 
-// Sincronizar los cambios del drag and drop con el componente padre
 watch(() => dragButtons.value, (newButtons) => {
  emit('updateButtons', newButtons);
 }, { deep: true });
-
-const dragStartIndex = ref(null);
-
 
 const setDragStart = (index) => {
  dragStartIndex.value = index;
