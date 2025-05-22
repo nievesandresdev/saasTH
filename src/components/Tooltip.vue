@@ -92,7 +92,10 @@
     .width-m {
         width: 395px;
     }
+
+
     .width-l {
         width: 500px;
     }
+
 </style>

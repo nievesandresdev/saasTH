@@ -1,5 +1,5 @@
 <template>
-    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" @close="closeModalAirbnb" >
+    <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'630px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" @close="closeModalAirbnb" >
         <template #content>
             <div class="sticky top-0 bg-white z-10 rounded-[10px]" :class="{ 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]': isScrolled }">
                 <div class="flex justify-between p-4 items-center">
@@ -21,8 +21,8 @@
                                     :label="index === 0 ? 'URL de Airbnb' : 'URL adicional'" 
                                     class="mb-2"
                                     :tooltip="tooltips.url" 
-                                    :tooltip-top="'27'" 
-                                    :tooltip-left="'-116'" 
+                                    :tooltip-top="index === displayedUrls.length - 1 ? '-125' : '27'" 
+                                    :tooltip-left="index === displayedUrls.length - 1 ? '25' : '-116'" 
                                     :disabled-tooltip="url._id == ''"
                                 />
                             </div>
@@ -38,7 +38,7 @@
                                 <p class="text-red-500">{{ url.errorMessage }}</p>
                             </div>
                         </div>
-                        <div v-if="url._id === '' && index != 0" class="mt-5">
+                        <div v-if="url._id === '' && index != 0" class="mt-6">
                             <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="removeUrl(index)">
                                 <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-6 h-6">
                             </div>
@@ -64,7 +64,7 @@
                                 <span class="text-sm font-medium">
                                     Tus credenciales de Airbnb
                                 </span>
-                                <div class="flex justify-between items-center">
+                                <div class="flex justify-between items-center mr-[5px]">
                                     <div class="flex justify-start gap-2">
                                         <img src="/assets/icons/TH.CHECK.svg" class="w-4 h-4">
                                         <span class="text-[#333333] text-xs font-medium">Credenciales actualizadas</span>
