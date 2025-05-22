@@ -78,7 +78,8 @@ const $nameLanguage = (lang) => {
     'fi':'Finés',
     'hu':'Húngaro',
     'no':'Noruego',
-    'sk':'Eslovaco'
+    'sk':'Eslovaco',
+    'others':'Otros'
   }
   let result = 'Desconocido';
   if(lang && languages[lang]){
