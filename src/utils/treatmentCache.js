@@ -1,13 +1,13 @@
-export const getValueResetCache = (url) => {
+export const getValueResetCache = () => {
     return localStorage.getItem('reset-cache') ?? null;
 }
 
 export const addPropertyResetCacheInQuery = (url) => {
     const urlObj = new URL(url);
-    let existResetCache = urlObj.searchParams.get('rc');
-    if (!existResetCache) {
-        const valueResetCache = getValueResetCache(url);
-        urlObj.searchParams.set('rc', valueResetCache);
-    }
+    //let existResetCache = urlObj.searchParams.get('rc');
+
+    const valueResetCache = getValueResetCache();
+    urlObj.searchParams.set('rc', valueResetCache);
+
     return urlObj.toString();
 }

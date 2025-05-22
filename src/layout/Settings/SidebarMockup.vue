@@ -9,7 +9,11 @@
             <!-- mockup -->
             <div id="mockup" class="relative h-[520px] w-[258px]">
                 <div id="content-mockup" class="hbg-gray-100 absolute z-[51] top-11 left-5">
-                    <iframe class="w-full h-full" :src="store.iframeUrl"></iframe>
+                    <iframe 
+                        class="w-full h-full" 
+                        :src="store.iframeUrl"
+                        :key="store.iframeUrl"
+                    ></iframe>
                 </div>
                 <img class="w-full absolute left-0 top-0 h-full z-50" src="/assets/img/1.TH.DEV.MOCKUPTRANSPARENTE.svg" alt="">
             </div>
