@@ -7,7 +7,7 @@
                 timeLineData[timeLineData.currentPeriod].feeling
             "
             class="w-full h-full"
-            :src="`/assets/icons/emojis/1.TH.Emojis${ timeLineData[timeLineData.currentPeriod].feeling }.svg`"
+            :src="`/assets/icons/emojis/colors/1.TH.Emojis${ timeLineData[timeLineData.currentPeriod].feeling }.svg`"
         >
         <!-- (timeLineData.currentPeriod == 'in-stay' || timeLineData.currentPeriod == 'post-stay') && -->
         <img
