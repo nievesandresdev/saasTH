@@ -125,7 +125,8 @@
   onMounted(async () => {
     try {
       const response = await hotelStore.$findByParams({subdomain: subdomain,stayDemo:true});
-      mockupStore.$setIframeUrlUsable(response.hotel.chain.subdomain, response.hotel.subdomain,`e=${response.demo_stay.stay_id}&g=${response.demo_stay.guest_id}`);
+      const rc  = Math.floor(Math.random() * 10000000000000000);
+      mockupStore.$setIframeUrlUsable(response.hotel.chain.subdomain, response.hotel.subdomain,`e=${response.demo_stay.stay_id}&g=${response.demo_stay.guest_id}&rc=${rc}`);
       hotelData.value = response.hotel;
       //urlQrCode.value = $urlBaseWebapp(response.hotel.chain.subdomain, response.hotel.subdomain);
     } catch (error) {
