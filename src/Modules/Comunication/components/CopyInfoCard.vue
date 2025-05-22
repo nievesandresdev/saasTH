@@ -41,7 +41,7 @@ export default {
             type: String,
             default: () => {
                 
-                return `Estimado huésped, Deseamos que su estancia sea cómoda y placentera. Nuestro equipo está a su disposición para cualquier necesidad que pueda surgir. Te invitamos a explorar nuestra WebApp, donde encontrarás la información sobre nuestras instalaciones y servicios. Además, descubre nuestras recomendaciones de experiencias y restaurantes seleccionados. Lo mejor de la ciudad, sin necesidad de descargar nada. Prueba nuestra WebApp click ${urlBase}.`;
+                return `Estimado huésped, Deseamos que su estancia sea cómoda y placentera. Nuestro equipo está a su disposición para cualquier necesidad que pueda surgir. Te invitamos a explorar nuestra WebApp, donde encontrarás la información sobre nuestras instalaciones y servicios. Además, descubre nuestras recomendaciones de experiencias y restaurantes seleccionados. Lo mejor de la ciudad, sin necesidad de descargar nada. Prueba nuestra WebApp : ${urlBase}.`;
             }
         }
     }
