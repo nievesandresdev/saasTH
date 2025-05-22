@@ -256,7 +256,7 @@ function mergeDataFormInUrlMockup (stringQuery, dataForm) {
 function loadMockup (experienceSlug = null) {
     let query = null;
     if (experienceSlug) {
-        console.log(experienceSlug)
+        // console.log(experienceSlug)
         if (typeActivityEditing.value == 'viator') {
             mockupStore.$setIframeUrl(`/servicios/activity-externa/${experienceSlug}`);
         } else {

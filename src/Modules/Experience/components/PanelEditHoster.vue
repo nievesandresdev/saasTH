@@ -377,7 +377,6 @@ async function submitDelete () {
 async function edit ({action, experience}) {
     if (action === 'EDIT') {
         let { id, title, description, type, hire, url, type_price, from_price, images, languages, fields_visibles, duration, availability, address, requeriment, subservices } = experience;
-        console.log(experience);
         if (languages?.length) {
             let languagesArray = languagesData.value.map(item => {
                 return {
