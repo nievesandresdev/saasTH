@@ -12,7 +12,8 @@
             :placeholder="placeholderText"
             :value="modelValue"
             @input="onInput"
-            @blur="$emit('blur')"
+            @blur="onBlur"
+            @focus="onFocus"
             autocomplete="nope"
             :disabled="disabled"
         >
@@ -24,18 +25,18 @@
             />
             {{ errorMessage }}
         </p> -->
-        <p v-if="isChecking" class="mt-2 text-xs text-gray-500 flex items-center">
+        <!-- <p v-if="isChecking" class="mt-2 text-xs text-gray-500 flex items-center">
             <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
             </svg>
             Verificando...
-        </p>
+        </p> -->
     </div>
-    <div v-if="hasError" class="flex items-center mt-1">
+    <!-- <div v-if="hasError" class="flex items-center mt-1">
         <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
         <p class="text-xs leading-[90%] htext-alert-negative">{{ currentErrorMessage }}</p>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -136,7 +137,7 @@ export default {
         },
         activeError(newVal) {
             if (newVal) {
-                this.currentErrorMessage = this.textError;
+                //this.currentErrorMessage = this.textError;
                 this.hasError = true;
             } else {
                 this.currentErrorMessage = '';
@@ -156,29 +157,53 @@ export default {
 
             // Resetear estados de verificación
             this.hasError = false;
-            this.currentErrorMessage = this.textError;
 
             // Limpiar el timeout anterior si existe
             if (this.debounceTimeout) {
                 clearTimeout(this.debounceTimeout);
             }
 
-            // Validar el email
+            // Solo verificar existencia si el email no está vacío
+            if (email && this.enableLiveCheck) {
+                const params = { email, userId: this.userId };
+                this.debounceTimeout = setTimeout(() => {
+                    this.validateEmail(params);
+                }, 750);
+            }
+        },
+        onFocus(event) {
+            const email = event.target.value;
+            
+            if (!email) {
+                return;
+            }
+
+            // Validar el formato del email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (email) {
-                this.hasError = !emailRegex.test(email);
-                if (this.hasError) {
-                    this.currentErrorMessage = this.textError;
-                } else if (this.enableLiveCheck) {
-                    const params = { email, userId: this.userId };
-                    // Si es correcto y se habilita la verificación en vivo, verificar la existencia con debounce
-                    this.debounceTimeout = setTimeout(() => {
-                        this.validateEmail(params);
-                    }, 500); 
-                }
-            } else {
+            if (!emailRegex.test(email)) {
+                return;
+            }
+
+            // Si el formato es válido y está habilitada la verificación en vivo, verificar existencia
+            if (this.enableLiveCheck) {
+                const params = { email, userId: this.userId };
+                this.validateEmail(params);
+            }
+        },
+        onBlur(event) {
+            const email = event.target.value;
+            
+            if (!email) {
                 this.hasError = false;
-                this.currentErrorMessage = this.textError;
+                return;
+            }
+
+            // Validar el formato del email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                this.hasError = true;
+                this.currentErrorMessage = 'Introduce un email correcto';
+                return;
             }
         },
         async validateEmail(email) {
@@ -196,7 +221,6 @@ export default {
                 }
 
             } catch (error) {
-                // Manejar errores de la API
                 console.error('Error al verificar el correo electrónico:', error);
                 this.hasError = true;
                 this.currentErrorMessage = 'Error al verificar el correo electrónico.';
@@ -205,7 +229,7 @@ export default {
             }
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // Limpiar el timeout
         if (this.debounceTimeout) {
             clearTimeout(this.debounceTimeout);

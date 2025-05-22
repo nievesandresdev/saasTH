@@ -124,14 +124,15 @@
                             v-model="form.email"
                             :enableLiveCheck="true"
                             @errorMessage="errorEmailText = $event"
-                            @handleError="errorEmail = $event"    
+                            @handleError="errorEmail = $event"
+                            @blur="handleEmailBlur"    
                         />
-                        <!-- <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="mt-4">
@@ -545,7 +546,7 @@ const adminAccess = ref([
 
 const isFormIncomplete = computed(() => {
     // Email
-    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
+    const isValidEmail = form.value.email ? validateEmail(form.value.email) : false;
 
     // Contraseña
     const isValidPassword = form.value.password && form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
@@ -558,6 +559,7 @@ const isFormIncomplete = computed(() => {
     } else if (currentStep.value === 3) {
       return !form.value.access.length;
     }
+    return false;
 });
 
 
@@ -585,11 +587,30 @@ const isFormIncomplete = computed(() => {
 
   const errorEmailText = ref(false);
 
-  watch(() => form.value.email, (newVal) => {
-      const emailRegex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      errorEmail.value = !emailRegex.test(newVal);
-      errorEmailText.value = 'Introduce un email correcto';
-  });
+  // Agregar función de validación de email
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  // Agregar el método handleEmailBlur
+  const handleEmailBlur = () => {
+    if (!form.value.email) {
+        errorEmail.value = true;
+        errorEmailText.value = 'El correo electrónico es requerido';
+        return;
+    }
+    
+    // Solo validamos el formato, la verificación de existencia la hace el componente
+    const isValidFormat = validateEmail(form.value.email);
+    if (!isValidFormat) {
+        errorEmail.value = true;
+        errorEmailText.value = 'Introduce un email correcto';
+    } else {
+        errorEmail.value = false;
+        errorEmailText.value = '';
+    }
+  };
 
   const handleChecked = ref(false)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
