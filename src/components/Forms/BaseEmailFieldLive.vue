@@ -164,7 +164,7 @@ export default {
             }
 
             // Solo verificar existencia si el email no está vacío
-            if (email && this.enableLiveCheck) {
+            if (email && this.enableLiveCheck && !this.hasError) {
                 const params = { email, userId: this.userId };
                 this.debounceTimeout = setTimeout(() => {
                     this.validateEmail(params);
@@ -204,6 +204,8 @@ export default {
                 this.hasError = true;
                 this.currentErrorMessage = 'Introduce un email correcto';
                 return;
+            }else{
+                this.hasError = false;
             }
         },
         async validateEmail(email) {
