@@ -22,8 +22,14 @@
         />
         <div class="w-full h-32 relative">
             <img
+                v-if="item.image"
                 class="w-full object-cover rounded-t-lg h-full"
                 :src="facilityStore.formatImage(item.image)"
+            />
+            <img
+                v-else
+                class="w-full object-cover rounded-t-lg h-full"
+                :src="facilityStore.formatImage({url: hotelStore.hotelData.image})"
             />
             
         </div>
@@ -44,6 +50,7 @@ const emit = defineEmits(['update:reloadItems', 'click:editFacility']);
 // DATA
 const selectedCard = ref(null);
 const mockupStore = inject('mockupStore');
+const hotelStore = inject('hotelStore')
 //
 const hoverItem = ref(null);
 

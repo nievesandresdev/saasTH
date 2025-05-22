@@ -28,7 +28,7 @@ export const disableUser = (data) => apiHttp('POST', `${userPath}/disabled`, dat
 export const getSubscriptionStatus = () => apiHttp('GET', `${userPath}/get-subscription-status`)
 
 //verifyExistMail
-export const verifyExistMail = (data) => apiHttp('POST', `${userPath}/verifyExistMail`, data,{ showPreloader: true }, 'API_GENERAL', false, true)
+export const verifyExistMail = (data) => apiHttp('POST', `${userPath}/verifyExistMail`, data,{ showPreloader: false }, 'API_GENERAL', false, true)
 
 
 

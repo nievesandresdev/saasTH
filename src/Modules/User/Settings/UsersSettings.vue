@@ -46,7 +46,7 @@
               @mouseover="hoverTable(index)"
               @mouseleave="hoverTable(index)"
               :key="user.id"
-              class="border-b hover:bg-[#F1F1F1]"
+              class="border-b hover:bg-[#F1F1F1] cursor-pointer"
               :class="{
                 'bg-[#ECF9F5]': selectedShow == user.id,
                 'hover:bg-[#F1F1F1]': selectedUser?.id != user.id,
