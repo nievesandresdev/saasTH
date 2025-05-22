@@ -56,7 +56,9 @@
     const hotelStore = useHotelStore();
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
-    
+    import { useMockupStore } from '@/stores/modules/mockup'
+    const mockupStore = useMockupStore();
+
     const form = reactive({
         contact_email: '',
     })
@@ -67,6 +69,9 @@
     const submitLoading = ref(false)
     
     onMounted(async () => {
+        mockupStore.$setIframeUrl('','openContactModal=true')
+        mockupStore.$setInfo1('Guarda para ver los cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+        mockupStore.$setLanguageTooltip(true)
         const response = await hotelStore.$getProfileEmail()
         // console.log('test response',response)
         originalForm.contact_email = response.data.contact_email
@@ -84,6 +89,7 @@
     const { errors, validateField, formInvalid } = useFormValidation(form, formRules);
     
     const changes = computed(() => {
+        if(originalForm.contact_email?.trim() == undefined && !form.contact_email?.trim()) return false;
         return originalForm.contact_email?.trim() !== form.contact_email?.trim();
     })
     
@@ -101,6 +107,7 @@
         const response = await hotelStore.$updateContactEmail(form)
         if(response.ok){
             originalForm.contact_email = response.data.contact_email
+            mockupStore.$reloadIframe();
             toast.warningToast('Cambios guardados con éxito','top-right');
         }else{
             toast.errorToast('Error al actualizar el email', 'top-right')

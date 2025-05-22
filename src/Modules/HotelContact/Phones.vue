@@ -61,12 +61,13 @@ import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import ModalNoSave from '@/components/ModalNoSave.vue'
 import { useFormValidation } from '@/composables/useFormValidation'
 import { $formatTypeLodging } from '@/utils/helpers';
-
 //
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
 import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
+import { useMockupStore } from '@/stores/modules/mockup'
+const mockupStore = useMockupStore();
 
 const form = reactive({
     phone: '',
@@ -87,6 +88,9 @@ onMounted(async () => {
     // console.log('test', response)
     form.phone = response.data.phone
     form.phone_optional = response.data.phone_optional
+    mockupStore.$setIframeUrl('','openContactModal=true')
+    mockupStore.$setInfo1('Guarda para ver los cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+    mockupStore.$setLanguageTooltip(true)
 })
 
 const formRules = reactive({
@@ -124,6 +128,7 @@ const submit = async () => {
     if(response.ok){
         originalForm.phone = response.data.phone
         originalForm.phone_optional = response.data.phone_optional
+        mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }else{
         toast.errorToast('Error al actualizar el teléfono', 'top-right')

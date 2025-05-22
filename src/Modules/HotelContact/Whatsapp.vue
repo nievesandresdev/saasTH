@@ -12,7 +12,7 @@
                 <p class="mt-2 text-sm font-medium leading-[140%]">
                     Mejora el contacto con tus huéspedes facilitando la comunicación vía WhatsApp
                 </p>
-                <div class="mt-4 h-[56px] flex items-center gap-2 px-2">
+                <div class="mt-4 h-[56px] flex items-center gap-2 px-2 rounded-[10px] bg-[#f2f2f2]">
                     <img src="/assets/icons/1.TH.INFO.svg" alt="Whatsapp" class="w-4 h-4">
                     <p class="text-sm leading-[140%]">
                         Generaremos automáticamente el link a WhatsApp a partir del número que ingreses aquí.
@@ -66,7 +66,9 @@
     const hotelStore = useHotelStore();
     import { useToastAlert } from '@/composables/useToastAlert'
     const toast = useToastAlert();
-    
+    import { useMockupStore } from '@/stores/modules/mockup'
+    const mockupStore = useMockupStore();
+
     const form = reactive({
         contact_whatsapp_number: '',
     })
@@ -78,6 +80,9 @@
     const submitLoading = ref(false)
     
     onMounted(async () => {
+        mockupStore.$setIframeUrl('','openContactModal=true')
+        mockupStore.$setInfo1('Guarda para ver los cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+        mockupStore.$setLanguageTooltip(true)
         const response = await hotelStore.$getProfileWhatsapp()
         originalForm.contact_whatsapp_number = response.data.contact_whatsapp_number
         form.contact_whatsapp_number = response.data.contact_whatsapp_number
@@ -113,6 +118,7 @@
         const response = await hotelStore.$updateContactWhatsapp(form)
         if(response.ok){
             originalForm.contact_whatsapp_number = response.data.contact_whatsapp_number
+            mockupStore.$reloadIframe();
             toast.warningToast('Cambios guardados con éxito','top-right');
         }else{
             toast.errorToast('Error al actualizar el teléfono', 'top-right')
