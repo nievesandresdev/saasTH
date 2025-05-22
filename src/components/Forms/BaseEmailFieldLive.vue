@@ -150,6 +150,10 @@ export default {
         }
     },
     methods: {
+        validateEmailFormat(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        },
         onInput(event) {
             const email = event.target.value;
             this.$emit('input:typing');
@@ -163,8 +167,8 @@ export default {
                 clearTimeout(this.debounceTimeout);
             }
 
-            // Solo verificar existencia si el email no está vacío
-            if (email && this.enableLiveCheck && !this.hasError) {
+            // Solo verificar existencia si el email no está vacío y tiene formato válido
+            if (email && this.enableLiveCheck && this.validateEmailFormat(email)) {
                 const params = { email, userId: this.userId };
                 this.debounceTimeout = setTimeout(() => {
                     this.validateEmail(params);
@@ -199,12 +203,17 @@ export default {
             }
 
             // Validar el formato del email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!this.validateEmailFormat(email)) {
                 this.hasError = true;
                 this.currentErrorMessage = 'Introduce un email correcto';
                 return;
-            }else{
+            }
+
+            // Si el formato es válido y está habilitada la verificación en vivo, verificar existencia
+            if (this.enableLiveCheck) {
+                const params = { email, userId: this.userId };
+                this.validateEmail(params);
+            } else {
                 this.hasError = false;
             }
         },
