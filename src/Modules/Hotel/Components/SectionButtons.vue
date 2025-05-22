@@ -267,10 +267,10 @@ const localButtons = ref([...props.buttons]);
 const localButtonsVisible = ref([...props.buttons.filter(button => button.is_visible)]);
 
 // Inicializar el drag and drop con el estado local
-const [parent, dragButtons] = useDragAndDrop(localButtons.value, {
- draggable: (el) => {
-   return !el.closest('#no-drag') && el.id !== 'no-drag';
- }
+const [parent, dragButtons] = useDragAndDrop(localButtonsVisible.value, {
+  draggable: (el) => {
+    return !el.closest('#no-drag') && el.id !== 'no-drag';
+  }
 });
 
 // Sincronizar los botones del drag and drop con el estado local
@@ -281,14 +281,11 @@ watch(() => dragButtons.value, (newButtons) => {
 
 // Sincronizar props con estado local cuando cambien los props
 watch(() => props.buttons, (newButtons) => {
-  
   if (!isDragging.value) {
-    console.log('watch')
     localButtons.value = [...newButtons];
     dragButtons.value = [...newButtons];
-    
+    localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
   }
-  //localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
 }, { deep: true });
 
 const showOverlays = ref(true);
@@ -370,21 +367,29 @@ const handlerClickSwichVisibility = (event) => {
 };
 
 const updateButtonVisibility = async (button) => {
-  //console.log('updateButtonVisibility')
   try {
     const payload = {
       id: button.id,
     };
     await hotelButtonsStore.$updateButtonVisibility(payload);
     
+    // Actualizar el estado local inmediatamente
+    if (button.is_visible) {
+      // Si el botón está visible, añadirlo a localButtonsVisible
+      if (!localButtonsVisible.value.find(b => b.id === button.id)) {
+        localButtonsVisible.value.push(button);
+      }
+    } else {
+      // Si el botón está oculto, quitarlo de localButtonsVisible
+      localButtonsVisible.value = localButtonsVisible.value.filter(b => b.id !== button.id);
+    }
+    
     // Reordenar los botones: visibles primero, ocultos al final
     const updatedButtons = [...props.buttons];
     const buttonIndex = updatedButtons.findIndex(b => b.id === button.id);
     
-    
     if (buttonIndex !== -1) {
       const [movedButton] = updatedButtons.splice(buttonIndex, 1);
-      //localButtons.value = updatedButtons.splice(buttonIndex, 1);
       if (movedButton.is_visible) {
         // Si el botón está visible, mantenerlo al principio
         updatedButtons.unshift(movedButton);
@@ -394,14 +399,11 @@ const updateButtonVisibility = async (button) => {
       }
       
       // Actualizar el estado local
+      localButtons.value = updatedButtons;
       emit('updateButtons', updatedButtons);
-      //localButtonsVisible.value = [...props.buttons.filter(button => button.is_visible)];
-      //localButtons.value = [...movedButton];
     }
     
     emit('getButtons');
-    //emit('updateButtons', updatedButtons);
-    //localButtonsVisible.value = [...props.buttons.filter(button => button.is_visible)];
   } catch (error) {
     console.error('Error updating button visibility:', error);
     button.is_visible = !button.is_visible;
