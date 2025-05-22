@@ -12,6 +12,7 @@
       <!-- links -->
       <router-link
         @mousemove="handleMouseMove('Dashboard')"
+        @click="handleMenuItemClick('Dashboard')"
         class="rounded-[10px]  flex items-center p-2 mt-6"
         :class="
         {
@@ -53,6 +54,7 @@
             class="flex items-center p-2 relative rounded-[10px]"
             @mouseover="handleMouseOverTooltip(link, indexLink,props.subscription.status)"
             @mouseleave="handleMouseLeaveTooltip(link, indexLink,props.subscription.status)"
+            @click="handleMenuItemClick($event, link, indexLink)"
             :class="classessLink(link, indexLink, section)"
           >
           <!-- notification icon -->
@@ -602,6 +604,16 @@ function handleMouseEnter () {
 function handleMouseLeave () {
   onHoverMainMenu.value = false;
   isMouseMoving.value = false;
+}
+
+const handleMenuItemClick = (nameButtom) => {
+  isMouseMoving.value = false;
+  if (nameButtom === 'Ayuda') {
+    emit('openmodalHelp')
+  }
+  if (nameButtom === 'Novedades') {
+    isNotifyPanelVisible.value = true;   
+  }
 }
 
 
