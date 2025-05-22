@@ -14,14 +14,18 @@ import { $urlBaseWebapp } from '@/utils/helpers';
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore();
 
+let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+let slugHotel = hotelStore?.hotelData?.subdomain;
+const urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
+
 export default {
     props: {
         text: {
             type: String,
             default: () => {
-                let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
+                /* let subdomainChain = hotelStore?.hotelData?.chain?.subdomain;
                 let slugHotel = hotelStore?.hotelData?.subdomain;
-                const urlBase = $urlBaseWebapp(subdomainChain, slugHotel);
+                const urlBase = $urlBaseWebapp(subdomainChain, slugHotel); */
                 return `
                     <p style="font-size:14px;font-weight: 500;line-height: 140%;">
                         Estimado huésped,<br/>
@@ -36,7 +40,8 @@ export default {
         textNotHtml: {
             type: String,
             default: () => {
-                return 'Estimado huésped, Deseamos que su estancia sea cómoda y placentera. Nuestro equipo está a su disposición para cualquier necesidad que pueda surgir. Te invitamos a explorar nuestra WebApp, donde encontrarás la información sobre nuestras instalaciones y servicios. Además, descubre nuestras recomendaciones de experiencias y restaurantes seleccionados. Lo mejor de la ciudad, sin necesidad de descargar nada. Prueba nuestra WebApp click aquí.';
+                
+                return `Estimado huésped, Deseamos que su estancia sea cómoda y placentera. Nuestro equipo está a su disposición para cualquier necesidad que pueda surgir. Te invitamos a explorar nuestra WebApp, donde encontrarás la información sobre nuestras instalaciones y servicios. Además, descubre nuestras recomendaciones de experiencias y restaurantes seleccionados. Lo mejor de la ciudad, sin necesidad de descargar nada. Prueba nuestra WebApp click ${urlBase}.`;
             }
         }
     }
@@ -63,3 +68,4 @@ const copyTextToClipboard = async () => {
     }
 }
 </script>
+
