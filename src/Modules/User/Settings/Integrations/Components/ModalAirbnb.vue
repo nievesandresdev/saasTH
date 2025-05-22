@@ -1,7 +1,7 @@
 <template>
     <ModalWindow v-if="props.open" :isVisible="props.open"  :width="'510px'" padding-content="p-0" footer="true" :show-overlay="!openModalDeleteURL" @close="closeModalAirbnb" >
         <template #content>
-            <div class="sticky top-0 bg-white z-10" :class="{ 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]': isScrolled }">
+            <div class="sticky top-0 bg-white z-10 rounded-[10px]" :class="{ 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]': isScrolled }">
                 <div class="flex justify-between p-4 items-center">
                     <span class="text-[18px] font-medium">
                         Configura la integración con Airbnb
@@ -12,8 +12,8 @@
                 </div>
                 <hr>
             </div>
-            <div class="p-4 max-h-[500px] overflow-y-auto pr-2 relative" @scroll="handleScroll">
-                <div class="flex flex-col gap-2 mb-4 pr-2">
+            <div class="p-4 max-h-[500px] overflow-y-auto relative" @scroll="handleScroll">
+                <div class="flex flex-col gap-2 mb-4">
                     <div v-for="(url, index) in displayedUrls" :key="url._id || index" class="flex items-center gap-2">
                         <div class="flex-grow">
                             <div class="relative">
@@ -21,8 +21,8 @@
                                     :label="index === 0 ? 'URL de Airbnb' : 'URL adicional'" 
                                     class="mb-2"
                                     :tooltip="tooltips.url" 
-                                    :tooltip-top="'20'" 
-                                    :tooltip-left="'-55'" 
+                                    :tooltip-top="'27'" 
+                                    :tooltip-left="'-116'" 
                                     :disabled-tooltip="url._id == ''"
                                 />
                             </div>
@@ -38,8 +38,8 @@
                                 <p class="text-red-500">{{ url.errorMessage }}</p>
                             </div>
                         </div>
-                        <div v-if="url._id === ''" class="mt-5">
-                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="openDeleteModal(index)">
+                        <div v-if="url._id === '' && index != 0" class="mt-5">
+                            <div class="rounded-full p-1 hover:bg-gray-100 cursor-pointer" @click="removeUrl(index)">
                                 <img src="/assets/icons/1.TH.DELETE.OUTLINE.svg" class="w-6 h-6">
                             </div>
                         </div>
@@ -76,8 +76,8 @@
                             </div>
                         </section>
                     </div>
-                    <div v-else class="flex flex-col mb-4 gap-2">
-                        <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'-165'" :tooltip-left="'-225'" size-tooltip="s" />
+                    <div v-else class="flex flex-col mb-4 gap-2 ">
+                        <LabelIntegrations :label="'Tu dirección de correo de Airbnb'" :tooltip="tooltips.email" :tooltip-top="'28'" :tooltip-left="'-251'" size-tooltip="m" />
                         <BaseTextField 
                             v-model="form.email" 
                             placeholder="correo@tu-hotel.com" 
@@ -87,8 +87,8 @@
                             <p class="text-red-500">{{ errorMessage.email }}</p>
                         </div> -->
                     </div>
-                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2">
-                        <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'-140'" :tooltip-left="'-195'" size-tooltip="s" />
+                    <div v-if="!credentialsByAirbnb || credentialsByAirbnb.email == '' || credentialsByAirbnb.password == ''" class="flex flex-col gap-2 ">
+                        <LabelIntegrations :label="'Tu contraseña de Airbnb'" :tooltip="tooltips.password" :tooltip-top="'-148'" :tooltip-left="'-195'" size-tooltip="s" />
                         <div class="relative">
                             <BaseTextField 
                                 v-model="form.password" 
@@ -426,8 +426,8 @@ const removeUrl = (index) => {
 };
 
 const openDeleteModal = (index) => {
-    nameOtaDelete.value = 'AIRBNB';
-    openModalDeleteURL.value = true;
+    /* nameOtaDelete.value = 'AIRBNB';
+    openModalDeleteURL.value = true; */
     // Guardar el índice para usarlo cuando se confirme la eliminación
     indexToDelete.value = index;
 };
