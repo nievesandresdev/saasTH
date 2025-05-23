@@ -138,19 +138,6 @@
                 <div class="mt-4">
                     <label class="text-sm font-medium">Contraseña *</label>
                     <div class="relative">
-                        <!-- <input
-                            v-model="form.password"
-                            type="password"
-                            class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
-                            :class="{
-                              'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                              'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
-                              'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
-                              'hinput-green' : !errorPassword
-                            }"
-                            placeholder="Contraseña de acceso al sistema"
-                            autocomplete="nope"
-                        /> -->
                         <input
                             v-model="form.password"
                             type="password"
@@ -158,6 +145,7 @@
                             :class="{'border-input-error' : errorPassword}"
                             placeholder="Contraseña de acceso al sistema"
                             autocomplete="nope"
+                            @blur="handlePasswordBlur"
                         />
                         <div v-if="errorPassword" class="flex items-center mt-1">
                             <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
@@ -175,20 +163,8 @@
                             :class="{'border-input-error' : errorPasswordMatch}"
                             placeholder="Confirmar Contraseña"
                             autocomplete="nope"
+                            @blur="handlePasswordConfirmationBlur"
                         />
-                        <!-- <input
-                            v-model="form.password_confirmation"
-                            type="password"
-                            class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
-                            :class="{
-                              'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                              'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                              'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
-                              'hinput-green' : !errorPasswordMatch
-                            }"
-                            placeholder="Confirmar Contraseña"
-                            autocomplete="nope"
-                        /> -->
                         <div v-if="errorPasswordMatch" class="flex items-center mt-1">
                             <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                             <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
@@ -570,20 +546,32 @@ const isFormIncomplete = computed(() => {
   const errorPasswordMatchMessage = ref('');
 
 
-  watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword]) => {
-      errorPassword.value = !(newPassword.length >= 8);
-  });
+  const handlePasswordBlur = () => {
+    if (form.value.password) {
+      errorPassword.value = !(form.value.password.length >= 8);
+      // Si la confirmación ya tiene valor, validamos también la coincidencia
+      if (form.value.password_confirmation) {
+        validatePasswordMatch();
+      }
+    }
+  };
 
-  watch([() => form.value.password_confirmation], ([newPasswordConfirmation]) => {
+  const handlePasswordConfirmationBlur = () => {
+    if (form.value.password_confirmation) {
+      validatePasswordMatch();
+    }
+  };
+
+  const validatePasswordMatch = () => {
     errorPasswordMatch.value = false;
-    if(newPasswordConfirmation.length < 8 ){
+    if (form.value.password_confirmation.length < 8) {
       errorPasswordMatch.value = true;
       errorPasswordMatchMessage.value = 'Debe tener minimo 8 caracteres';
-    }else if(newPasswordConfirmation !== form.value.password){
+    } else if (form.value.password_confirmation !== form.value.password) {
       errorPasswordMatch.value = true;
       errorPasswordMatchMessage.value = 'Las contraseñas no coinciden';
     }
-  });
+  };
 
   const errorEmailText = ref(false);
 
