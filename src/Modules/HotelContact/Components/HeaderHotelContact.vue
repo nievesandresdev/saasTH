@@ -91,7 +91,6 @@ const updateContact = ref(false)
 
 onMounted(async() => {
     let response = await hotelStore.$getShowContact();
-    console.log('test res', response)
     showContact.value = response.data;
 })
 
