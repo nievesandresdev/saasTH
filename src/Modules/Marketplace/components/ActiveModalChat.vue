@@ -3,7 +3,7 @@
         <template #header>
             <div class="p-6 flex justify-between">
                 <div class="flex items-center gap-2">
-                    <img class="w-[56px] h-[56px]" src="/assets/icons/webapp/1.TH.Icon.Header.Chat.svg" alt="">
+                    <img class="w-[56px] h-[56px]" src="/assets/icons/1.TH.chat-fill-green.svg" alt="">
                     <div>
                         <h1 class="text-[22px] font-medium leading-[110%]">Chat</h1>
                         <p class="text-[14px] font-medium leading-[140%]">Tus huéspedes podrán comunicarse directamente con el staff de tu alojamiento</p>

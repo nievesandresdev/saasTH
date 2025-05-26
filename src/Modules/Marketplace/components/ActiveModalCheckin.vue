@@ -3,7 +3,7 @@
         <template #header>
             <div class="p-6 flex justify-between">
                 <div class="flex items-center gap-2">
-                    <img class="w-[56px] h-[56px]" src="/assets/icons/webapp/checkin.svg" alt="">
+                    <img class="w-[56px] h-[56px]" src="/assets/icons/1.TH.checkin-fill-green.svg" alt="">
                     <div>
                         <h1 class="text-[22px] font-medium leading-[110%]">Check-in</h1>
                         <p class="text-[14px] font-medium leading-[140%]">Permite que tus huéspedes completen su proceso de registro online desde la WebApp antes de su llegada</p>
@@ -63,7 +63,7 @@
                             <img class="rounded-[10px] w-[431px] h-[258px]" src="/assets/img/MarketplaceChekin2.png" alt="">
                         </div>
                         <div class="rounded-[10px] border border-[#e9e9e9] flex-shrink-0">
-                            <img class="rounded-[10px] w-[431px] h-[258px]" src="/assets/img/MarketplaceChekin3.png" alt="">
+                            <img class="rounded-[10px] w-[431px] h-[258px]" src="/assets/img/MarketplaceChekin3Change.png" alt="">
                         </div>
                     </div>
                 </div>

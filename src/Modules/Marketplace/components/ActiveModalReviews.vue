@@ -70,7 +70,7 @@
                         <div class="mt-6">
                             <router-link 
                                 class="flex items-center gap-2 justify-end text-sm font-medium leading-[110%] underline hover:underline container-icon-green hover-htext-green-600"
-                                v-if="hotelStore.hotelData.checkin_service_enabled"
+                                v-if="hotelStore.hotelData.reviews_service_enabled"
                                 :to="{name:'Reviews'}"
                                 @click="closeModal"
                             >
