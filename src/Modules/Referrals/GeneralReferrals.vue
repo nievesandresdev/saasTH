@@ -30,11 +30,11 @@
         <SectionConfig :marginTop="'24px'">
             <template #title>
                 <div class="flex justify-between">
-                    <h1 class="text-base font-semibold mb-2">Beneficios para el referente</h1>
+                    <h1 class="text-base font-semibold mb-2">Beneficios para el referente </h1>
                     <div class="flex items-center">
                         <div class="mr-1 text-gray-700 font-semibold text-sm" :class="{ 'opacity-25' : isObjectEmpty(benefitReferent) || !benefitReferent.used }">Ofrecer beneficios</div>
                             <BaseSwichInput
-                                v-model="hotelData.offer_benefits"
+                                v-model="offerBenefitsModel"
                                 class="mr-4"
                                 :id="'offer_benefits'"
                                 :disabled="isObjectEmpty(benefitReferent) || !benefitReferent.used"
@@ -110,7 +110,7 @@
     />
 </template>
 <script setup>
-import { ref,provide,onMounted,watch } from 'vue';
+import { ref,provide,onMounted,watch, computed } from 'vue';
 import ListPageHeader from './Components/ListPageHeader.vue';
 import BannerShow from './Components/BannerShow.vue';
 import SectionConfig from '@/components/SectionConfig.vue'
@@ -144,8 +144,18 @@ import { useToastAlert } from '@/composables/useToastAlert';
 const toast = useToastAlert();
 provide('toast', toast);
 
-const { hotelData } = hotelStore;
+// Mantener la reactividad usando directamente hotelStore.hotelData en lugar de desestructurar
+const hotelData = computed(() => hotelStore.hotelData);
 
+// Computed property para manejar el v-model de offer_benefits
+const offerBenefitsModel = computed({
+    get() {
+        return hotelData.value.offer_benefits;
+    },
+    set(value) {
+        hotelStore.hotelData.offer_benefits = value;
+    }
+});
 
 const isOpenSidePanel = ref(false);
 const isOpenEditPanel = ref(false);
@@ -154,7 +164,7 @@ const benefitSReferrals = ref({});
 const benefitReferent = ref({});
 const initialBenefitSReferrals = ref({});
 const initialBenefitSReferent = ref({});
-const initialOfferBenefits = ref(!!hotelData.offer_benefits);
+const initialOfferBenefits = ref(null);
 const selectedGiftData = ref({});
 
 const typeModal = ref(null)
@@ -187,9 +197,8 @@ const changesOfferBenefits = ref(false);
 
 const checkChanges = () => {
     // Detecta cambios en el switch
-    //const hasOfferBenefitsChanged = hotelData.offer_benefits !== initialOfferBenefits.value;
+    const hasOfferBenefitsChanged = hotelData.value.offer_benefits !== initialOfferBenefits.value;
     
-
     // Detecta cambios en los JSON
     const hasBenefitSReferralsChanged = !isEqual(
         JSON.parse(JSON.stringify(benefitSReferrals.value)),
@@ -201,20 +210,16 @@ const checkChanges = () => {
         JSON.parse(JSON.stringify(initialBenefitSReferent.value))
     );
     
-
-    changes.value = (hasBenefitSReferralsChanged || hasBenefitSReferentChanged) ;
-    //checkChangesOfferBenefits();
-
+    // Actualizar ambos estados
+    changes.value = (hasBenefitSReferralsChanged || hasBenefitSReferentChanged);
+    changesOfferBenefits.value = hasOfferBenefitsChanged;
 };
 
-const checkChangesOfferBenefits = () => {
-    changesOfferBenefits.value = hotelData.offer_benefits !== initialOfferBenefits.value;
-}
-
+// Watcher para detectar cambios en offer_benefits
 watch(
-    () => hotelData.offer_benefits,
+    () => hotelData.value.offer_benefits,
     () => {
-        checkChangesOfferBenefits();
+        checkChanges();
     }
 );
 
@@ -246,13 +251,13 @@ const isObjectEmpty = (obj) => {
 
 
 function loadMockup () {
-    if(hotelData.show_referrals == 0){
+    if(hotelData.value.show_referrals == 0){
         mockupStore.$setIframeUrl('');
         mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar en la WebApp', '/assets/icons/info.svg')
-    }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 0){
+    }else if(hotelData.value.show_referrals == 1 && hotelData.value.offer_benefits == 0){
         mockupStore.$setIframeUrl('/perfil','referrals=true');
         mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
-    }else if(hotelData.show_referrals == 1 && hotelData.offer_benefits == 1){
+    }else if(hotelData.value.show_referrals == 1 && hotelData.value.offer_benefits == 1){
         mockupStore.$setIframeUrl('/perfil','referent=true');
         mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
     }
@@ -288,33 +293,53 @@ const editGift = (type,data) => {
 
 const handlesubmitData = async() => {
     let params = {
-        offer_benefits: hotelData.offer_benefits,
+        offer_benefits: hotelData.value.offer_benefits,
         benefitSReferrals: benefitSReferrals.value,
         benefitReferent: benefitReferent.value
     }
-    rewardStore.$storeRewards(params);
-    toast.warningToast('Cambios guardados con éxito','top-right')
-    changes.value = false;
-    await hotelStore.reloadHotel();
-
-    setTimeout(() => {
-        location.reload();
-    }, 650);
     
+    try {
+        await rewardStore.$storeRewards(params);
+        await hotelStore.reloadHotel();
+        
+        // Actualizar los valores iniciales después de guardar exitosamente
+        initialOfferBenefits.value = hotelData.value.offer_benefits;
+        initialBenefitSReferrals.value = JSON.parse(JSON.stringify(benefitSReferrals.value));
+        initialBenefitSReferent.value = JSON.parse(JSON.stringify(benefitReferent.value));
+        
+        // Resetear ambos estados de cambios
+        changes.value = false;
+        changesOfferBenefits.value = false;
+        
+        toast.warningToast('Cambios guardados con éxito','top-right');
+        
+        // Actualizar mockup después de guardar
+        loadMockup();
+        
+    } catch (error) {
+        console.error('Error al guardar:', error);
+        toast.errorToast('Error al guardar los cambios','top-right');
+    }
 }
 
-const offerBenefits = ref(null);
 //mounted
 onMounted(async () => {
     loadMockup();
     const response = await rewardStore.$getAllRewards();
+    await hotelStore.reloadHotel();
+    
+    // Establecer el valor inicial para detectar cambios
+    initialOfferBenefits.value = hotelData.value.offer_benefits;
+    
     const {  data } = response;
 
     if(data) {
         benefitSReferrals.value = data?.benefitSReferrals ?? {};
         benefitReferent.value = data?.benefitReferent ?? {};
-        //offerBenefits.value = data?.benefitReferent ?? 0;
         
+        // Establecer valores iniciales para detectar cambios
+        initialBenefitSReferrals.value = JSON.parse(JSON.stringify(data?.benefitSReferrals ?? {}));
+        initialBenefitSReferent.value = JSON.parse(JSON.stringify(data?.benefitReferent ?? {}));
     }
 
     if(data?.benefitSReferrals) {
