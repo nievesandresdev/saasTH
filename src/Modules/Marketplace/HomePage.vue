@@ -56,6 +56,7 @@ import Tooltip from '@/components/Tooltip.vue'
 import ActiveModalChat from './components/ActiveModalChat.vue'
 import ActiveModalCheckin from './components/ActiveModalCheckin.vue'
 import ActiveModalReviews from './components/ActiveModalReviews.vue'
+import { $formatTypeLodging } from '@/utils/helpers'
 //stores
 import { useHotelStore } from '@/stores/modules/hotel'
 const hotelStore = useHotelStore();
@@ -66,20 +67,20 @@ provide('openModal', openModal)
 const modules = computed(() => [
     {
         name: 'Chat',
-        icon: '/assets/icons/webapp/1.TH.Icon.Header.Chat.svg',
-        description: 'Tus huéspedes podrán comunicarse directamente con el staff de tu hotel a través de la WebApp',
+        icon: '/assets/icons/1.TH.chat-fill-green.svg',
+        description: 'Tus huéspedes podrán comunicarse directamente con el staff de tu '+$formatTypeLodging()+' a través de la WebApp',
         active: hotelStore.hotelData.chat_service_enabled,
     },
     {
         name: 'Check-in',
-        icon: '/assets/icons/webapp/checkin.svg',
+        icon: '/assets/icons/1.TH.checkin-fill-green.svg',
         description: 'Permite que tus huéspedes completen su proceso de registro online desde la WebApp antes de su llegada',
         active: hotelStore.hotelData.checkin_service_enabled,
     },  
     {
         name: 'Reseñas',
         icon: '/assets/icons/1.TH.reseñas-fill.svg',
-        description: 'Gestiona y genera las reseñas de tus huéspedes desde un único lugar, centralizando la reputación de tu hotel',
+        description: 'Gestiona y genera las reseñas de tus huéspedes desde un único lugar, centralizando la reputación de tu '+$formatTypeLodging(),
         active: hotelStore.hotelData.reviews_service_enabled,
     },
 ])
