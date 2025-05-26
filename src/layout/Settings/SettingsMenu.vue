@@ -214,6 +214,7 @@ const hotelStore = useHotelStore();
 
 
 
+
 const menu_section = reactive([
   {
       title: '',
@@ -227,7 +228,7 @@ const menu_section = reactive([
             
           },
           {
-              title: 'Alojamiento',
+              title: $formatTypeLodging(true),
               // title: $formatTypeLodging(true),
               icon: '/assets/icons/1.TH.icon.instalaciones.svg',
               expanded: ['Perfil','Facilities','Configuration'].includes(route.name),

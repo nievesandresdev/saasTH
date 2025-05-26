@@ -125,6 +125,20 @@
                             </router-link>
                         </div>
 
+                        <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white">
+                            <router-link :to="{ path: '/webapp/contacto/telefonos' }" class="block p-4">
+                                <div class="flex items-center">
+                                    <img src="/assets/icons/webapp/contacto.svg" alt="icon" class="w-8 h-8">
+                                    <div class="ml-2 h-[32px] items-center flex">
+                                        <h3 class="text-[16px] font-medium group-hover:text-[#34A98F]">Contacto</h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <p class="text-sm">Facilita la comunicación a tus huéspedes desde distintos canales</p>
+                                </div>
+                            </router-link>
+                        </div>
+
                         <div 
                             class="fixed-card hover:shadow-outline-34A98F hover:rounded-md hover:border-[#34A98F] transition duration-200 group hover:bg-white"
                             v-if="hotelStore.hotelData?.chat_service_enabled"
