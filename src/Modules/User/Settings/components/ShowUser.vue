@@ -1,10 +1,15 @@
 <template>
+  <div 
+      v-if="modalShow" 
+      class="fixed z-[2000] bg-[#00000080] top-0 left-0 h-screen w-screen"
+      @click="closeModal"
+    ></div>
     <transition>
       <div
         v-if="modalShow"
         class="absolute bg-white shadow-xl add flex flex-col"
         :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
-        :style="`right: 0; z-index: 600`"
+        :style="`right: 0; z-index: 2000`"
         ref="ref_section_show"
       >
         <div class="overflow-y-auto scrolling-sticky" style="height: calc(100% - 72px)">
