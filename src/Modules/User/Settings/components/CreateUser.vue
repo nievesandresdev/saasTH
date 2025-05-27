@@ -314,9 +314,7 @@
   import Notifications from './Notifications.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
-  import {  useRouter } from 'vue-router';
 
-  const router = useRouter();
   const intendedRoute = ref(null);
   const userStore = useUserStore();
   //const authStore = useAuthStore();
@@ -330,7 +328,7 @@
     workPositions: Array
   });
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   if(to.fullPath !== from.fullPath && props.modalAdd) {
     showModalNoSave.value = false
     intendedRoute.value = to.fullPath;
@@ -338,7 +336,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 
-});
+}); */
 
 const isDeleteWorkPositions = ref(false);
 const dataDeleteWP = ref({});
@@ -373,7 +371,7 @@ const closeModalSaveCreate = () => {
 // Añadir los event listeners cuando el componente se monte
 onMounted(() => {
   window.addEventListener('mousedown', handleMouseDown);
-  handleSelectAll(selectAllHotels)
+  // Remover handleSelectAll de aquí
   //window.addEventListener('mouseup', handleMouseUp);
 });
 
@@ -636,7 +634,7 @@ const handleSelectAll = (initial = false) => {
 
 // Método de selección individual
 const handleSelection = (hotelId, add = null) => {
-    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
+    const index = jsonHotel.value.findIndex(item => Object.prototype.hasOwnProperty.call(item, hotelId));
 
     // Si add es null, verificamos si el hotel está seleccionado
     if (add === null) {
@@ -680,7 +678,7 @@ const handleSelection = (hotelId, add = null) => {
 
 const handleCheckPermission = (permissionName, isSelected) => {
     form.value.hotels.forEach(hotelId => {
-        const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
+        const index = jsonHotel.value.findIndex(hotel => Object.prototype.hasOwnProperty.call(hotel, hotelId));
         
         if (index !== -1) { 
             if (!isSelected) {
@@ -840,12 +838,17 @@ watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
       if(newVal) {
+        // Capturar el estado inicial del formulario ANTES de cualquier modificación
+        initialForm.value = JSON.stringify(form.value);
+        
         errorEmail.value = false;
         errorPassword.value = false;
         errorPasswordMatch.value = false;
         errorPhone.value = false;
         rolAlert.value = 0;
         
+        // Ejecutar handleSelectAll DESPUÉS de capturar el estado inicial
+        handleSelectAll(selectAllHotels.value);
       }
     });
   }
@@ -855,16 +858,14 @@ const initialForm = ref(null);
 const showModalNoSave = ref(false);
 
 const changes = computed(() => {
-  return JSON.stringify(form) !== initialForm.value;
+  return JSON.stringify(form.value) !== initialForm.value;
 });
-
-onMounted(async () => {
-  await nextTick();
-  initialForm.value = JSON.stringify(form);
-});
-
 
 function closeModal() {
+  console.log('closeModal - changes.value:', changes.value);
+  console.log('closeModal - selectedText.value:', selectedText.value);
+  console.log('closeModal - mouseDownInside.value:', mouseDownInside.value);
+  
   if (changes.value) {
     if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
       showModalNoSave.value = true;
