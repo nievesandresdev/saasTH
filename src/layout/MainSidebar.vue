@@ -466,6 +466,9 @@ const menu_links = computed(() => [
           'ComunicationSignage',
           'ComunicationFromQRTV',
           'ComunicationFromYourWeb',
+          'ContactPhones',
+          'ContactWhatsapp',
+          'ContactEmail',
           //legaltexts
           'GeneralLegal',
           'Referrals',
