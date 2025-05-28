@@ -52,6 +52,11 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
-        mockupStore.$reloadIframe();
+        if (hotelData.show_experiences) {
+            mockupStore.$setIframeUrl('/servicios/activity');
+        } else {
+            mockupStore.$setIframeUrl('/');
+        }
+        // mockupStore.$reloadIframe();
     }
 </script>
