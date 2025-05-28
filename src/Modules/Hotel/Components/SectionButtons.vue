@@ -1,15 +1,5 @@
 <template>
   <div class="flex flex-col gap-2">
-
-
-  <ul ref="parentTest">
-    <li v-for="tape in tapes" :key="tape" class="cassette">
-      {{ tape }}
-    </li>
-  </ul>
-  {{ tapes }}
-
-
    <span class="text-sm font-semibold">Botones visibles ({{ countButtons }})</span>
    
    <TransitionGroup 
@@ -19,7 +9,7 @@
      class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
    >
      <div 
-       v-for="(button, index) in localButtonsVisible" 
+       v-for="(button, index) in visibleButtons" 
        :key="button.id"
        class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
        :class="{
@@ -28,7 +18,7 @@
        @mouseenter="button.hover = true"
        @mouseleave="button.hover = false"
      >
-       <!-- Overlay negro en hover con toggle -->
+       <!-- Overlay negro en hover -->
        <div 
          v-if="button.hover && showOverlays" 
          class="overlay-drag absolute inset-0 bg-black bg-opacity-25 rounded-lg"
@@ -36,7 +26,6 @@
          <div class="flex justify-end p-2">
            <div class="flex items-center bg-white p-1 rounded-[10px] z-20">
              <div class="mr-2 text-[#333] font-semibold text-[10px]">
-               <!-- {{ button.is_visible ? 'Visible' : 'Oculto' }} -->
                  Visible
              </div>
              <BaseSwichInput
@@ -90,11 +79,9 @@
      class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
    >
      <div 
-       v-for="(button, index) in buttonsHidden" 
+       v-for="(button, index) in hiddenButtons" 
        :key="button.id"
        class="button-card bg-[#FAFAFA] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
-       :class="{
-       }"
        @mouseenter="button.hover = true"
        @mouseleave="button.hover = false"
      >
@@ -222,7 +209,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, watch } from 'vue';
+import { ref, nextTick, watch, computed, defineProps, defineEmits } from 'vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
 import { useToastAlert } from '@/composables/useToastAlert';
 import { useHotelButtonsStore } from '@/stores/modules/hotelButtons';
@@ -261,37 +248,70 @@ const props = defineProps({
 
 const emit = defineEmits(['updateButtons', 'getButtons']);
 
-// Estado local para los botones
-const localButtons = ref([...props.buttons]);
-// estado local para los botones pero buscando el is_visible true de props.buttons
-const localButtonsVisible = ref([...props.buttons.filter(button => button.is_visible)]);
+// Variables de estado
+const showOverlays = ref(true);
+const showDragButtons = ref(true);
+const isDragging = ref(false);
+const dragStartIndex = ref(null);
 
-// Inicializar el drag and drop con el estado local
-const [parent, dragButtons] = useDragAndDrop(localButtonsVisible.value, {
+// Estado local unificado - copia profunda para evitar mutaciones de props
+const localButtons = ref([]);
+
+// Computed properties reactivos
+const visibleButtons = computed(() => 
+  localButtons.value.filter(button => button.is_visible)
+);
+
+const hiddenButtons = computed(() => 
+  localButtons.value.filter(button => !button.is_visible)
+);
+
+// Inicializar drag and drop con array vacío
+const [parent, dragButtons] = useDragAndDrop([], {
   draggable: (el) => {
     return !el.closest('#no-drag') && el.id !== 'no-drag';
   }
 });
 
-// Sincronizar los botones del drag and drop con el estado local
-watch(() => dragButtons.value, (newButtons) => {
-  localButtons.value = [...newButtons];
-  localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
-}, { deep: true });
+// Función para inicializar el estado local
+const initializeLocalState = () => {
+  // Crear copia profunda de todos los botones
+  const allButtons = [
+    ...props.buttons.map(btn => ({ ...btn, hover: false })),
+    ...props.buttonsHidden.map(btn => ({ ...btn, hover: false }))
+  ];
+  
+  localButtons.value = allButtons;
+  
+  // Inicializar drag and drop solo con botones visibles
+  const visibleOnly = allButtons.filter(button => button.is_visible);
+  dragButtons.value = visibleOnly;
+};
 
-// Sincronizar props con estado local cuando cambien los props
-watch(() => props.buttons, (newButtons) => {
+// Sincronizar cuando cambian los props (solo si no estamos arrastrando)
+watch(() => [props.buttons, props.buttonsHidden], () => {
   if (!isDragging.value) {
-    localButtons.value = [...newButtons];
-    dragButtons.value = [...newButtons];
-    localButtonsVisible.value = [...newButtons.filter(button => button.is_visible)];
+    initializeLocalState();
+  }
+}, { deep: true, immediate: true });
+
+// Sincronizar drag and drop con estado local durante el arrastre
+watch(() => dragButtons.value, (newDragButtons) => {
+  if (isDragging.value) {
+    // Solo actualizar el orden de los botones visibles
+    const hiddenButtonsArray = localButtons.value.filter(button => !button.is_visible);
+    
+    // Mantener las propiedades originales pero con el nuevo orden
+    const reorderedVisible = newDragButtons.map(dragBtn => {
+      const originalBtn = localButtons.value.find(btn => btn.id === dragBtn.id);
+      return { ...originalBtn };
+    });
+    
+    localButtons.value = [...reorderedVisible, ...hiddenButtonsArray];
   }
 }, { deep: true });
 
-const showOverlays = ref(true);
-const showDragButtons = ref(true);
-const isDragging = ref(false);
-
+// Eventos de drag and drop
 state.on('dragStarted', () => {
   showOverlays.value = false;
   showDragButtons.value = false;
@@ -305,58 +325,41 @@ state.on('dragEnded', async () => {
   const elements = document.elementsFromPoint(event.clientX, event.clientY);
   const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
   
-  if (isInNoDragZone) {
-    showOverlays.value = true;
-    //showDragButtons.value = true;
-    //isDragging.value = false;
-    return;
-  }
-
   await nextTick();
   
   showOverlays.value = true;
-  //showDragButtons.value = true;
-  //isDragging.value = false;
+  showDragButtons.value = true;
+  isDragging.value = false;
   
-  // Usar el nuevo orden de los botones del dragButtons
-  //const updatedButtons = [...dragButtons.value];
+  if (isInNoDragZone) {
+    return;
+  }
   
-  // Actualizamos el estado local inmediatamente
-/*   localButtons.value = updatedButtons;
-  emit('updateButtons', updatedButtons); */
-  
-  // Llamada al endpoint en segundo plano
-  const updateOrder = async () => {
-    try {
-/*       const payload = {
-        visible: updatedButtons
-          .filter(button => button.is_visible)
-          .map(button => ({ id: button.id })),
-        hidden: updatedButtons
-          .filter(button => !button.is_visible)
-          .map(button => ({ id: button.id }))
-      }; */
-      
-      await hotelButtonsStore.$updateOrderButtons(localButtons.value);
-      // Solo emitimos getButtons si la actualización fue exitosa
-      emit('getButtons');
-      //localButtons.value = [...props.buttons];
-    } catch (error) {
-      console.error('Error en la actualización:', error);
-      // Revertir al estado anterior solo si hay error
-      localButtons.value = [...props.buttons];
-      dragButtons.value = [...props.buttons];
-      emit('updateButtons', [...props.buttons]);
-      toast.warningToast('Error al actualizar el orden', 'top-right');
-    }
-  };
-
-  // Ejecutar la actualización en segundo plano sin esperar
-  updateOrder();
+  // Actualizar orden en segundo plano sin bloquear la UI
+  updateOrderInBackground();
 });
 
-const dragStartIndex = ref(null);
-
+// actualizar el orden en segundo plano
+const updateOrderInBackground = async () => {
+  try {
+    // Preparar payload solo con los IDs y su estado de visibilidad actual
+    const payload = localButtons.value.map(button => ({
+      id: button.id,
+      is_visible: button.is_visible
+    }));
+    
+    await hotelButtonsStore.$updateOrderButtons(payload);
+    
+    // Opcional: refrescar datos del servidor para sincronizar
+    // emit('getButtons');
+  } catch (error) {
+    console.error('Error actualizando orden:', error);
+    toast.warningToast('Error al actualizar el orden', 'top-right');
+    
+    // En caso de error, revertir al estado del servidor
+    initializeLocalState();
+  }
+};
 
 const setDragStart = (index) => {
  dragStartIndex.value = index;
@@ -367,57 +370,47 @@ const handlerClickSwichVisibility = (event) => {
 };
 
 const updateButtonVisibility = async (button) => {
+  const originalVisibility = button.is_visible;
+  
+  // Actualizar inmediatamente la UI (reactividad local)
+  button.is_visible = !button.is_visible;
+  
+  // Reorganizar localmente
+  const visibleButtonsArray = localButtons.value.filter(b => b.is_visible);
+  const hiddenButtonsArray = localButtons.value.filter(b => !b.is_visible);
+  localButtons.value = [...visibleButtonsArray, ...hiddenButtonsArray];
+  
+  // Actualizar drag and drop
+  dragButtons.value = visibleButtonsArray;
+  
+  // Llamada al backend en segundo plano
   try {
-    const payload = {
-      id: button.id,
-    };
+    const payload = { id: button.id };
     await hotelButtonsStore.$updateButtonVisibility(payload);
     
-    // Actualizar el estado local inmediatamente
-    if (button.is_visible) {
-      // Si el botón está visible, añadirlo a localButtonsVisible
-      if (!localButtonsVisible.value.find(b => b.id === button.id)) {
-        localButtonsVisible.value.push(button);
-      }
-    } else {
-      // Si el botón está oculto, quitarlo de localButtonsVisible
-      localButtonsVisible.value = localButtonsVisible.value.filter(b => b.id !== button.id);
-    }
-    
-    // Reordenar los botones: visibles primero, ocultos al final
-    const updatedButtons = [...props.buttons];
-    const buttonIndex = updatedButtons.findIndex(b => b.id === button.id);
-    
-    if (buttonIndex !== -1) {
-      const [movedButton] = updatedButtons.splice(buttonIndex, 1);
-      if (movedButton.is_visible) {
-        // Si el botón está visible, mantenerlo al principio
-        updatedButtons.unshift(movedButton);
-      } else {
-        // Si el botón está oculto, moverlo al final
-        updatedButtons.push(movedButton);
-      }
-      
-      // Actualizar el estado local
-      localButtons.value = updatedButtons;
-      emit('updateButtons', updatedButtons);
-    }
-    
+    // sincronizar con el servidor
     emit('getButtons');
   } catch (error) {
     console.error('Error updating button visibility:', error);
-    button.is_visible = !button.is_visible;
+    
+    // Revertir cambios si hay error
+    button.is_visible = originalVisibility;
+    
+    // Reorganizar de nuevo
+    const revertedVisible = localButtons.value.filter(b => b.is_visible);
+    const revertedHidden = localButtons.value.filter(b => !b.is_visible);
+    localButtons.value = [...revertedVisible, ...revertedHidden];
+    dragButtons.value = revertedVisible;
+    
     toast.warningToast('Error al actualizar la visibilidad', 'top-right');
   }
 };
-
 
 const checkConfig = (name) => {
  if (!hotelData) return false;
  
  switch(name) {
    case 'Normas del alojamiento':
-     //return hotelData.policies && hotelData.policies.length > 0;
      return hotelData.policies_count && hotelData.policies_count > 0;
    case 'Redes WiFi':
      return hotelData.with_wifi && hotelData.wifi_count > 0;
@@ -433,7 +426,6 @@ const checkConfig = (name) => {
 };
 
 const goToConfig = (name) => {
- //el redirect es con el name de la ruta
  switch(name) {
    case 'PoliciesLegal':
      router.push({ name: 'PoliciesLegal' });

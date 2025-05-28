@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed,watch, nextTick } from 'vue';
+import { reactive, ref, onMounted, computed } from 'vue';
 import Toggle from '@/components/Toggle.vue';
 import SectionConfig from '@/components/SectionConfig.vue';
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
@@ -181,23 +181,9 @@ const form = reactive({
     buttons_home: false
 });
 
-
-
-/* watch(() => form.buttons_home, (newVal) => {
-    if (newVal) {
-        if (!form.show_wifi) {
-            form.show_wifi = true;
-        }
-    } else {
-        form.show_wifi = false;
-    }
-}); */
-
 const buttons = ref([]);
 const buttonsHidden = ref([]);
 const allButtonsHidden = ref(true);
-
-
 
 const getHotelButtons = async () => {
       const response = await hotelButtonsStore.$getAllHotelButtons();
@@ -234,9 +220,7 @@ function getTypeImg (url) {
     return type
 }
 
-
 function openPreview(url) {
-    // console.log(url,'url');
     previewUrl.value = url;
     isPreviewOpen.value = true;
 }
@@ -245,7 +229,6 @@ function closePreviewImage () {
     previewUrl.value = null;
     isPreviewOpen.value = false;
 }
-
 
 const initialImage = ref(null);
 
@@ -291,21 +274,16 @@ async function loadHotel () {
     Object.assign(hotelData, hotel)
     loadForm(hotel) 
 
-    // Actualizamos form.buttons_home después de cargar los datos
     form.buttons_home = Boolean(hotel.buttons_home)
 
-    // Guardar los valores iniciales una vez que los datos del hotel se han cargado
     Object.assign(initialState, { ...form });
     initialImage.value = { ...imgSelected.value };
 }
 
 const loadForm = (hotel) => {
-
     imgSelected.value = { url: hotel.image, type: getTypeImg(hotel.image) };
 
     isDisabled.value = hotel.legal;
-
-    //console.log(hotel.legal, 'hotel')
 };
 
 const $formatImage = (payload) => {
@@ -318,17 +296,9 @@ const $formatImage = (payload) => {
     return type === 'CDN' || type === 'image-hotel-scraper' ? url : URL_STORAGE + url;
 };
 
-
-/* watch(() => form.buttons_home, (newVal) => {
-    buttons.value.forEach(button => {
-        button.is_visible = newVal;
-    });
-}); */
-
-const handleButtonsUpdate = async (newButtons) => {
-    //buttons.value = newButtons;
-    //console.log(buttons.value, 'buttons')
-    //await getHotelButtons();
+const handleButtonsUpdate = async () => {
+    // Esta función se mantiene para compatibilidad pero ya no necesita parámetros
+    // La gestión del estado se hace internamente en SectionButtons
 };
 </script>
 
