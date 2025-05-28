@@ -383,7 +383,7 @@ const updateButtonVisibility = async (button) => {
   // Actualizar drag and drop
   dragButtons.value = visibleButtonsArray;
   
-  // Llamada al backend en segundo plano
+  //  segundo plano
   try {
     const payload = { id: button.id };
     await hotelButtonsStore.$updateButtonVisibility(payload);
