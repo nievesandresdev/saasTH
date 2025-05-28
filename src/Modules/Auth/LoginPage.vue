@@ -10,7 +10,7 @@
               <div class="p-6 text-center border border-gray-300 rounded-xl my-10 mx-auto">
                 <h3 class="text-lg font-medium">¿Necesitas ayuda?</h3>
                 <p class="text-sm mt-2">Encontrarás atención especializada enviando un whatsapp al siguiente teléfono:</p>
-                <h3 class="text-base font-medium mt-2">(+34) 624 149 605</h3>
+                <h3 class="text-base font-medium mt-2">(+34) 644 237 564</h3>
                 <p class="text-sm mt-2">Horario de atención:</p>
                 <p class="text-sm">8:30 - 14:30</p>
               </div>
