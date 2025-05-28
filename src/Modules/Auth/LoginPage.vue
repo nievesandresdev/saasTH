@@ -43,13 +43,13 @@
                 </div>
               </div>
               <div class="mb-2">
-                <label class="font-medium text-sm mb-1">Contraseña</label>
+                <label class="font-medium text-sm mb-1">Contraseña {{ visiblePass }}</label>
                 <div class="relative w-100 collaborator-box">
-                  <!-- <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-6" src="/assets/img/hoster/icons/hideeye.svg">
-                  <img v-if="form.password !== '' && visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
-                  <img v-if="form.password !== '' && !visible_pass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)"> -->
+                  <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/hideeye.svg">
+                  <img v-if="form.password !== '' && visiblePass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
+                  <img v-if="form.password !== '' && !visiblePass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/disableeye.svg" @click="showPass('password',true)">
                   <input 
-                    :type="visible_pass ? 'text' : 'password'"
+                    :type="visiblePass ? 'text' : 'password'"
                     class="w-full rounded h-11 lg:h-14 py-4 px-4 text-sm border placeholder-gray-400 text-black border-black focus:border-black" 
                     id="password" 
                     :placeholder="placeholderPassword"
