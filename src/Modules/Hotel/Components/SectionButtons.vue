@@ -11,7 +11,7 @@
      <div 
        v-for="(button, index) in visibleButtons" 
        :key="button.id"
-       class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-pointer"
+       class="button-card bg-[#FFF] rounded-[10px] py-4 px-4 w-[128px] flex flex-col relative cursor-grab"
        :class="{
          'cursor-grabbing': dragStartIndex === index
        }"
@@ -52,7 +52,7 @@
          </h3>
        </div>
 
-       <button
+       <!-- <button
          v-if="button.hover && button.is_visible && showDragButtons && !isDragging"
          class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
          :class="{'cursor-grabbing': dragStartIndex == index}"
@@ -60,7 +60,7 @@
          :draggable="button.is_visible"
        >
          <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
-       </button>
+       </button> -->
      </div>
      
 
@@ -145,7 +145,7 @@
                      </a> 
                      para mostrar este botón
                    </span>
-                   <span v-else-if="button.name === 'Check-in'">
+                   <span v-else-if="button.name === 'Check-In'">
                      Activa 
                      <a 
                        @click.prevent="goToConfig('checkin')" 
@@ -416,7 +416,7 @@ const checkConfig = (name) => {
      return hotelData.with_wifi && hotelData.wifi_count > 0;
    case 'Programa de referidos':
      return hotelData.show_referrals;
-   case 'Check-in':
+   case 'Check-In':
      return hotelData.show_checkin_stay;
    case 'Reserva tu estancia':
      return hotelData.website_google;
