@@ -221,6 +221,9 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
+import { useMockupStore } from '@/stores/modules/mockup'
+const mockupStore = useMockupStore();
+
 const hotelStorage = useHotelStore();
 const { hotelData } = hotelStorage;
 
@@ -349,6 +352,7 @@ const updateOrderInBackground = async () => {
     }));
     
     await hotelButtonsStore.$updateOrderButtons(payload);
+    mockupStore.$reloadIframe();
     
     // Opcional: refrescar datos del servidor para sincronizar
     // emit('getButtons');
