@@ -104,8 +104,11 @@
                 <Toggle v-model="form.buttons_home" :show-tooltip="false" :margin-right="'mr-0'" />
               </div>
           </div>
-          <p class="font-normal text-sm mb-6">
+          <p class="font-normal text-sm">
             Elige los accesos rápidos que deseas para optimizar el uso de tu WebApp.
+          </p>
+          <p class="font-normal text-sm mb-6">
+            Arrastra y suelta los botones según deseas que se ordenen en la Home de tu WebApp.
           </p>
         </template>
         <template #content>

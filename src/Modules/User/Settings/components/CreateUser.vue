@@ -314,6 +314,7 @@
   import Notifications from './Notifications.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
+  //import router from '@/router';
 
   const intendedRoute = ref(null);
   const userStore = useUserStore();
@@ -328,7 +329,7 @@
     workPositions: Array
   });
 
-/* router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
   if(to.fullPath !== from.fullPath && props.modalAdd) {
     showModalNoSave.value = false
     intendedRoute.value = to.fullPath;
@@ -360,7 +361,8 @@ const handlePrintNameWP = (name) => {
 
 const handleCloseModal = () => {
   showModalNoSave.value = false;
-  emits('close');
+  //alert('close');
+  //emits('close');
 }
 
 const closeModalSaveCreate = () => {
