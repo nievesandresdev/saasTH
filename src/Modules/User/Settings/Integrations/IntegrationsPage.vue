@@ -137,11 +137,11 @@
                             <p class="text-red-500">{{ errorMessage.url }}</p>
                         </div>
                     </div>
-                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.email == null || credentialsOta.password == '' || credentialsOta.password == null)" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-166'" :tooltip-left="'-265'" size-tooltip="s" />
                         <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                     </div>
-                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.password == '')" class="flex flex-col gap-2 mb-4">
+                    <div v-if="(serviceSelected === 'expedia' || serviceSelected === 'booking') && (!credentialsOta || credentialsOta.email == '' || credentialsOta.email == null || credentialsOta.password == '' || credentialsOta.password == null)" class="flex flex-col gap-2 mb-4">
                         <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'-166'" :tooltip-left="'-207'" size-tooltip="s" />
                         <div class="relative">
                             <BaseTextField 
@@ -163,7 +163,7 @@
                             >
                         </div>
                     </div>
-                    <section v-if="credentialsOta && (credentialsOta.email !== '' || credentialsOta.email !== null) && (credentialsOta.password !== '' || credentialsOta.password !== null)" class="mb-4">
+                    <section v-if="credentialsOta && credentialsOta.email && credentialsOta.password" class="mb-4">
                         <div class="flex flex-col gap-[6px]">
                             <span class="text-sm font-medium">
                                 Tus credenciales de {{ selectedOtaCapitalize }}
@@ -539,6 +539,8 @@ const placeholderUrl = computed(() => {
             return 'hhttps://maps.google.com/hotel/nombre-del-hotel';
         case 'airbnb':
             return 'https://www.airbnb.com/hotel/nombre-del-hotel';
+        default:
+            return '';
     }
 });
 
@@ -557,10 +559,6 @@ const tooltips = computed(() => {
             <p style="margin-top: 8px;">Si no la recuerdas, puedes verificarla o restablecerla desde el sitio de ${selectedOtaCapitalize.value}.</p>
         </div>`
     };
-});
-
-const withCredentialsOta = computed(() => {
-    return dataOTAS.value?.otas?.filter(ota => ota.ota === serviceSelected?.value) || [];
 });
 
 const submit = async () => {
