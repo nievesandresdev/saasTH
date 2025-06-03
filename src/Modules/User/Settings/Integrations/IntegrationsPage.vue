@@ -163,7 +163,7 @@
                             >
                         </div>
                     </div>
-                    <section v-if="credentialsOta && credentialsOta.email !== '' && credentialsOta.password !== ''" class="mb-4">
+                    <section v-if="credentialsOta && (credentialsOta.email !== '' || credentialsOta.email !== null) && (credentialsOta.password !== '' || credentialsOta.password !== null)" class="mb-4">
                         <div class="flex flex-col gap-[6px]">
                             <span class="text-sm font-medium">
                                 Tus credenciales de {{ selectedOtaCapitalize }}
