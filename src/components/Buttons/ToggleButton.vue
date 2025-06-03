@@ -33,7 +33,7 @@
   </template>
   
   <script setup>
-  import { ref, watch, computed } from 'vue'
+  import { ref, watch, computed, onMounted } from 'vue'
   
   const props = defineProps({
     modelValue: Boolean,
@@ -82,6 +82,13 @@
   }
   
   const id = computed(() => props.id || `toggle-${Math.random().toString(36).substr(2, 9)}`)
+
+  onMounted(() => {
+    // console.log('toffle '+props.id, props.disabled)
+    if(props.disabled){
+      internalValue.value = false;
+    }
+  })
   </script>
   
   <style scoped>
