@@ -338,11 +338,10 @@ state.on('dragEnded', async () => {
     return;
   }
   
-  // Actualizar orden en segundo plano sin bloquear la UI
   updateOrderInBackground();
 });
 
-// actualizar el orden en segundo plano
+// actualizar en segundo plano
 const updateOrderInBackground = async () => {
   try {
     // Preparar payload solo con los IDs y su estado de visibilidad actual
@@ -354,8 +353,6 @@ const updateOrderInBackground = async () => {
     await hotelButtonsStore.$updateOrderButtons(payload);
     mockupStore.$reloadIframe();
     
-    // Opcional: refrescar datos del servidor para sincronizar
-    // emit('getButtons');
   } catch (error) {
     console.error('Error actualizando orden:', error);
     toast.warningToast('Error al actualizar el orden', 'top-right');
@@ -376,13 +373,15 @@ const handlerClickSwichVisibility = (event) => {
 const updateButtonVisibility = async (button) => {
   const originalVisibility = button.is_visible;
   
-  // Actualizar inmediatamente la UI (reactividad local)
+  // Actualizar inmediatamente 
   button.is_visible = !button.is_visible;
   
   // Reorganizar localmente
   const visibleButtonsArray = localButtons.value.filter(b => b.is_visible);
   const hiddenButtonsArray = localButtons.value.filter(b => !b.is_visible);
   localButtons.value = [...visibleButtonsArray, ...hiddenButtonsArray];
+
+
   
   // Actualizar drag and drop
   dragButtons.value = visibleButtonsArray;
@@ -392,7 +391,6 @@ const updateButtonVisibility = async (button) => {
     const payload = { id: button.id };
     await hotelButtonsStore.$updateButtonVisibility(payload);
     
-    // sincronizar con el servidor
     emit('getButtons');
   } catch (error) {
     console.error('Error updating button visibility:', error);

@@ -194,6 +194,11 @@ const getHotelButtons = async () => {
       buttonsHidden.value = Object.values(response.data.hidden);
       allButtonsHidden.value = response.data.total === response.data.totalHidden;
 
+      if(response.data.totalHidden === response.data.total) {
+        form.buttons_home = false;
+        submit();
+      }
+
       mockupStore.$reloadIframe();
   }
 
@@ -255,6 +260,7 @@ const addNewsImages = (images) => {
 const cancelChanges = () => {
     window.location.reload();
 };
+
 
 const submit = async () => {
     const body = {

@@ -3,7 +3,6 @@
       class="bg-white pt-5 pb-4 px-4 rounded-[10px] shadow-hoster"
       :id="$translatePeriod(data.period)"
     >
-        
         <!-- toggle button and title -->
         <div class="flex items-center mb-4">
             <h2 class="text-base font-medium">Feedback en {{ $capitalizeFirstLetter($translatePeriod(data.period))}}</h2>
