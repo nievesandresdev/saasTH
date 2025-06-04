@@ -73,9 +73,12 @@
                   class="text-sm font-medium leading-[110%] underline cursor-pointer"  
                   @click="selectedLang = data.response_lang"
                 >Mostrar original</span>
-              <button class="text-base font-semibold leading-[110%] underline ml-auto mt-auto">
+              <button class="text-base font-semibold leading-[110%] underline ml-auto mt-auto" v-if="report">
                 Ver la estancia
               </button>
+              <a v-if="!report && data.period !== 'pre-stay'" class="text-sm font-medium leading-[110%]  ml-auto mt-auto underline hover:underline focus:underline" :href="`mailto:${data.guest.email}`">
+                  Responder al huésped
+              </a>
             </div>
         </div>
     </div>
@@ -96,6 +99,10 @@ const props = defineProps({
   stay: {
     type: Object,
     default: null
+  },
+  report: {
+    type: Boolean,
+    default: false
   }
 })
 

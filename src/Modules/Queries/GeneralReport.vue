@@ -109,6 +109,7 @@
                         :data="item" 
                         :stay="{check_in: item.check_in, check_out: item.check_out}"
                         :period="item.period"
+                        report
                     />
                 </div>
             </template>
