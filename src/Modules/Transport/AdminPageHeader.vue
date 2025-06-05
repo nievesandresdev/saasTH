@@ -44,7 +44,11 @@
         } else {
             toast.warningToast(data?.message,'top-right');
         }
-        mockupStore.$setIframeUrl('/');
-        mockupStore.$reloadIframe();
+        if (hotelData.show_transport) {
+            mockupStore.$setIframeUrl('/servicios/transport');
+        } else {
+            mockupStore.$setIframeUrl('/');
+        }
+        // mockupStore.$reloadIframe();
     }
 </script>

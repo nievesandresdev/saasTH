@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div class="mb-2">
-                <label class="font-medium text-sm mb-1">Contraseña {{ visiblePass }}</label>
+                <label class="font-medium text-sm mb-1">Contraseña</label>
                 <div class="relative w-100 collaborator-box">
                   <img v-if="form.password == ''" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/hideeye.svg">
                   <img v-if="form.password !== '' && visiblePass" class="absolute cursor-pointer w-5 right-2.5 top-4 2xl:top-5" src="/assets/img/hoster/icons/showeye.svg" @click="showPass('password',false)">
