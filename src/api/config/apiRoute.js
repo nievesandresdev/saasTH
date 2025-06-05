@@ -20,6 +20,7 @@ export const utilityPath = 'utility'
 export const rewardsPath = 'rewards'
 export const cityPath = 'city'
 
+export const hotelButtonsPath = 'buttons'
 export const guestPath = 'guest'
 export const chatPath = 'chat'
 export const utilsPath = 'utils'

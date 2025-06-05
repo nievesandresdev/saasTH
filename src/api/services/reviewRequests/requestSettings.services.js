@@ -6,5 +6,5 @@ import {
 
 export const getAllApi = () => apiHttp('GET', `${requestSettingsPath}/getAll`, [])
 export const getPostStayRequestDataApi = () => apiHttp('GET', `${requestSettingsPath}/getPostStayRequestData`, [])
-export const updateDataApi = (data) => apiHttp('POST', `${requestSettingsPath}/${hosterPath}/updateData`, data)
-export const updateDataInStayApi = (data) => apiHttp('POST', `${requestSettingsPath}/${hosterPath}/updateDataInStay`, data)
+export const updateDataApi = (data) => apiHttp('POST', `${requestSettingsPath}/${hosterPath}/updateData`, data, { showPreloader: true }, 'API_GENERAL', false, true)
+export const updateDataInStayApi = (data) => apiHttp('POST', `${requestSettingsPath}/${hosterPath}/updateDataInStay`, data, { showPreloader: true }, 'API_GENERAL', false, true)

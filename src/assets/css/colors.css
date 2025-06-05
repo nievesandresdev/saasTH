@@ -45,6 +45,7 @@
     --text-read-only-desactivated: #33333340;/*es igual a rgba(51, 51, 51, 0.25)*/
     --Input-border-read-only: #bfbfbf80;/*es igual a rgba(191, 191, 191, 0.50)*/
     --Input-surface-read-only: #fafafa80;/*es igual a rgba(250, 250, 250, 0.50)*/
+    --Border-secondary: #E9E9E9;
 }
 
 
@@ -65,9 +66,17 @@
 
     /*
         ***
-        font-secondary
+        secondary
         ***
     */
+    .bg-border-secondary{
+        background-color: var(--Border-secondary);
+    }
+
+    .htext-secondary{
+        color: var(--Border-secondary);
+    }
+    
     .htext-font-secondary{
         color: var(--font-secondary);
     }

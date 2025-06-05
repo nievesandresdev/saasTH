@@ -199,7 +199,7 @@ const handleClose = () => {
 const submit = () => {
     validateForm();
     if (!errors.title && !errors.description && !errors.penalizationDetails) {
-        emits('store', form);
+        emits('store', {...form});
         onlyCloseModal();
     }
 };

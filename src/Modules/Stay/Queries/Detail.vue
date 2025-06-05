@@ -41,6 +41,7 @@ const session = ref(null);
 
 onMounted(async() => {
     data.value = await stayStore.$getDetailQueryByGuest(stayId.value,guestId.value);
+    console.log('test data',data.value)
 })
 
 

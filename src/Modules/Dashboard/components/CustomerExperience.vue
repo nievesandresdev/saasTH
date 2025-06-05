@@ -137,10 +137,16 @@ const guestsPostStay = ref(0);
 const languages = ref({});
 
 // Define todos los idiomas posibles aquí
-const allLanguages = ["es", "en", "fr"];
+const allLanguages = ["es", "en", "others"];
 
 // Computed property to process languages and fill in missing ones
 const processedLanguages = computed(() => {
+
+    //sumar porcentajes de los idiomas que no están en allLanguages
+    const othersPercentage = Object.entries(languages.value)
+        .filter(([key]) => !allLanguages.includes(key))
+        .reduce((sum, [, data]) => sum + (data.percentaje || 0), 0);
+
     return allLanguages.map(lang => {
         if (languages.value[lang]) {
             return {
@@ -150,8 +156,8 @@ const processedLanguages = computed(() => {
             };
         } else {
             return {
-                name: null,
-                percentaje: "--",
+                name: othersPercentage ? 'others' : null,
+                percentaje: othersPercentage || '--',
                 icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
             };
         }

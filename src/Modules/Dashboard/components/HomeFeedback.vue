@@ -69,7 +69,7 @@
                     <!-- Booking -->
                     <div class="flex items-center">
                         <div class="flex gap-1 items-center w-[108px]">
-                            <img src="/assets/icons/otas/Booking.svg" alt="Booking">
+                            <img src="/assets/icons/otas/Booking.svg" class="w-6 h-6" alt="Booking">
                             <span class="text-sm font-medium">Booking</span>
                         </div>
                         <template v-if="bookingReview?.data_review?.reviews_rating">

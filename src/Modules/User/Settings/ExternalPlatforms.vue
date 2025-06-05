@@ -255,7 +255,7 @@ import { $getPropertyInUrl } from '@/utils/helpers';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import {
     requestChangeUrlApi,
-} from '@/api/services/platforms/platformsServices'
+} from '@/api/services/platforms/platforms.service'
 
 const platformsStore = platformsExternalStore();
 const authStore = useAuthStore();
@@ -633,7 +633,7 @@ const submit = async () => {
 
     console.log('paramsTESTEXTERNAL', params);
 
-     const response = await platformsStore.$bulkUpdateOTAS(params);
+     /* const response = await platformsStore.$bulkUpdateOTAS(params);
 
     if (response.ok) {
         toast.warningToast('Cambios aplicados con éxito', 'top-right');
@@ -644,7 +644,7 @@ const submit = async () => {
         }, 1000);
     } else {
         toast.errorToast(response.data.message, 'top-right');
-    }
+    } */
 
     // Actualizamos initialForm
     initialForm.value = JSON.stringify({ ...form, additionalLinks: additionalLinks.value });

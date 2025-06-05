@@ -19,7 +19,7 @@
                 </div>
                 <div class="space-y-2">
                     <p class=" text-sm leading-[150%] htext-black-100">Si necesitas añadir otro alojamiento, ponte en contacto con nosotros.</p>
-                    <p class=" text-sm leading-[150%] htext-black-100">Encontrarás atención personalizada llamando al teléfono  +34 624 149 605 o a la direccón de correo electrónico info@thehoster.io</p>
+                    <p class=" text-sm leading-[150%] htext-black-100">Encontrarás atención personalizada llamando al teléfono +34 644 237 564 o a la direccón de correo electrónico info@thehoster.io</p>
                     <p class=" text-sm leading-[150%] htext-black-100">Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30. Estaremos encantados de poder ayudarte</p>
                 </div>
             </div>

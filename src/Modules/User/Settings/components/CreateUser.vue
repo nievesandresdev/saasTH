@@ -124,32 +124,20 @@
                             v-model="form.email"
                             :enableLiveCheck="true"
                             @errorMessage="errorEmailText = $event"
-                            @handleError="errorEmail = $event"    
+                            @handleError="errorEmail = $event"
+                            @blur="handleEmailBlur"    
                         />
-                        <!-- <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
+                        <div class="flex mt-2 htext-alert-negative justify-left" v-if="errorEmail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
                               <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                             </svg>
                             <p class="text-xs htext-alert-negative" v-text="errorEmailText"></p>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="mt-4">
                     <label class="text-sm font-medium">Contraseña *</label>
                     <div class="relative">
-                        <!-- <input
-                            v-model="form.password"
-                            type="password"
-                            class="w-full h-10 p-3 mt-1 text-sm font-medium  border rounded-6 hoverForm rounded-md "
-                            :class="{
-                              'hborder-black-100 htext-black-100 font-medium': form.password && !errorPassword,
-                              'hborder-gray-400 htext-gray-500 ': !form.password || errorPassword,
-                              'hborder-negative placeholder:text-[#FF6666]' : errorPassword,
-                              'hinput-green' : !errorPassword
-                            }"
-                            placeholder="Contraseña de acceso al sistema"
-                            autocomplete="nope"
-                        /> -->
                         <input
                             v-model="form.password"
                             type="password"
@@ -157,6 +145,7 @@
                             :class="{'border-input-error' : errorPassword}"
                             placeholder="Contraseña de acceso al sistema"
                             autocomplete="nope"
+                            @blur="handlePasswordBlur"
                         />
                         <div v-if="errorPassword" class="flex items-center mt-1">
                             <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
@@ -174,20 +163,8 @@
                             :class="{'border-input-error' : errorPasswordMatch}"
                             placeholder="Confirmar Contraseña"
                             autocomplete="nope"
+                            @blur="handlePasswordConfirmationBlur"
                         />
-                        <!-- <input
-                            v-model="form.password_confirmation"
-                            type="password"
-                            class="w-full h-10 mt-1 p-3 text-sm font-medium  border rounded-6 hoverForm rounded-md"
-                            :class="{
-                              'hborder-black-100 htext-black-100 font-medium': form.password_confirmation && !errorPasswordMatch,
-                              'hborder-gray-400 htext-gray-500': !form.password_confirmation || errorPasswordMatch,
-                              'hborder-negative placeholder:text-[#FF6666]' : errorPasswordMatch,
-                              'hinput-green' : !errorPasswordMatch
-                            }"
-                            placeholder="Confirmar Contraseña"
-                            autocomplete="nope"
-                        /> -->
                         <div v-if="errorPasswordMatch" class="flex items-center mt-1">
                             <img class="inline w-4 h-4 mr-2" src="/assets/icons/1.TH.WARNING.RED.svg">
                             <p class="text-xs leading-[90%] htext-alert-negative">{{ errorPasswordMatchMessage }}</p>
@@ -337,9 +314,8 @@
   import Notifications from './Notifications.vue';
 
   import ModalNoSave from '@/components/ModalNoSave.vue';
-  import {  useRouter } from 'vue-router';
+  //import router from '@/router';
 
-  const router = useRouter();
   const intendedRoute = ref(null);
   const userStore = useUserStore();
   //const authStore = useAuthStore();
@@ -353,7 +329,7 @@
     workPositions: Array
   });
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
   if(to.fullPath !== from.fullPath && props.modalAdd) {
     showModalNoSave.value = false
     intendedRoute.value = to.fullPath;
@@ -361,7 +337,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 
-});
+}); */
 
 const isDeleteWorkPositions = ref(false);
 const dataDeleteWP = ref({});
@@ -385,7 +361,8 @@ const handlePrintNameWP = (name) => {
 
 const handleCloseModal = () => {
   showModalNoSave.value = false;
-  emits('close');
+  //alert('close');
+  //emits('close');
 }
 
 const closeModalSaveCreate = () => {
@@ -396,7 +373,7 @@ const closeModalSaveCreate = () => {
 // Añadir los event listeners cuando el componente se monte
 onMounted(() => {
   window.addEventListener('mousedown', handleMouseDown);
-  handleSelectAll(selectAllHotels)
+  // Remover handleSelectAll de aquí
   //window.addEventListener('mouseup', handleMouseUp);
 });
 
@@ -470,6 +447,11 @@ window.addEventListener('mouseup', () => { // evento que se dispara al soltar el
         pendingFeedback30: false,
         pendingFeedback60: false,
         new_reviews: false,
+        informGeneral: true,
+        informDiscontent: true,
+      },
+      informGeneral: {
+        periodicity: 1,
       },
 
   },
@@ -545,7 +527,7 @@ const adminAccess = ref([
 
 const isFormIncomplete = computed(() => {
     // Email
-    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
+    const isValidEmail = form.value.email ? validateEmail(form.value.email) : false;
 
     // Contraseña
     const isValidPassword = form.value.password && form.value.password.length >= 8 && form.value.password === form.value.password_confirmation;
@@ -558,6 +540,7 @@ const isFormIncomplete = computed(() => {
     } else if (currentStep.value === 3) {
       return !form.value.access.length;
     }
+    return false;
 });
 
 
@@ -568,28 +551,59 @@ const isFormIncomplete = computed(() => {
   const errorPasswordMatchMessage = ref('');
 
 
-  watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword]) => {
-      errorPassword.value = !(newPassword.length >= 8);
-  });
+  const handlePasswordBlur = () => {
+    if (form.value.password) {
+      errorPassword.value = !(form.value.password.length >= 8);
+      // Si la confirmación ya tiene valor, validamos también la coincidencia
+      if (form.value.password_confirmation) {
+        validatePasswordMatch();
+      }
+    }
+  };
 
-  watch([() => form.value.password_confirmation], ([newPasswordConfirmation]) => {
+  const handlePasswordConfirmationBlur = () => {
+    if (form.value.password_confirmation) {
+      validatePasswordMatch();
+    }
+  };
+
+  const validatePasswordMatch = () => {
     errorPasswordMatch.value = false;
-    if(newPasswordConfirmation.length < 8 ){
+    if (form.value.password_confirmation.length < 8) {
       errorPasswordMatch.value = true;
       errorPasswordMatchMessage.value = 'Debe tener minimo 8 caracteres';
-    }else if(newPasswordConfirmation !== form.value.password){
+    } else if (form.value.password_confirmation !== form.value.password) {
       errorPasswordMatch.value = true;
       errorPasswordMatchMessage.value = 'Las contraseñas no coinciden';
     }
-  });
+  };
 
   const errorEmailText = ref(false);
 
-  watch(() => form.value.email, (newVal) => {
-      const emailRegex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      errorEmail.value = !emailRegex.test(newVal);
-      errorEmailText.value = 'Introduce un email correcto';
-  });
+  // Agregar función de validación de email
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  // Agregar el método handleEmailBlur
+  const handleEmailBlur = () => {
+    if (!form.value.email) {
+        errorEmail.value = true;
+        errorEmailText.value = 'El correo electrónico es requerido';
+        return;
+    }
+    
+    // Solo validamos el formato, la verificación de existencia la hace el componente
+    const isValidFormat = validateEmail(form.value.email);
+    if (!isValidFormat) {
+        errorEmail.value = true;
+        errorEmailText.value = 'Introduce un email correcto';
+    } else {
+        errorEmail.value = false;
+        errorEmailText.value = '';
+    }
+  };
 
   const handleChecked = ref(false)
   const jsonHotel = ref([]) // este es el que valida si el hotel esta seleccionado
@@ -622,7 +636,7 @@ const handleSelectAll = (initial = false) => {
 
 // Método de selección individual
 const handleSelection = (hotelId, add = null) => {
-    const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
+    const index = jsonHotel.value.findIndex(item => Object.prototype.hasOwnProperty.call(item, hotelId));
 
     // Si add es null, verificamos si el hotel está seleccionado
     if (add === null) {
@@ -666,7 +680,7 @@ const handleSelection = (hotelId, add = null) => {
 
 const handleCheckPermission = (permissionName, isSelected) => {
     form.value.hotels.forEach(hotelId => {
-        const index = jsonHotel.value.findIndex(hotel => hotel.hasOwnProperty(hotelId));
+        const index = jsonHotel.value.findIndex(hotel => Object.prototype.hasOwnProperty.call(hotel, hotelId));
         
         if (index !== -1) { 
             if (!isSelected) {
@@ -826,12 +840,17 @@ watch(() => props.modalAdd, (newVal) => {
   if (newVal) {
     nextTick(() => {
       if(newVal) {
+        // Capturar el estado inicial del formulario ANTES de cualquier modificación
+        initialForm.value = JSON.stringify(form.value);
+        
         errorEmail.value = false;
         errorPassword.value = false;
         errorPasswordMatch.value = false;
         errorPhone.value = false;
         rolAlert.value = 0;
         
+        // Ejecutar handleSelectAll DESPUÉS de capturar el estado inicial
+        handleSelectAll(selectAllHotels.value);
       }
     });
   }
@@ -841,16 +860,14 @@ const initialForm = ref(null);
 const showModalNoSave = ref(false);
 
 const changes = computed(() => {
-  return JSON.stringify(form) !== initialForm.value;
+  return JSON.stringify(form.value) !== initialForm.value;
 });
-
-onMounted(async () => {
-  await nextTick();
-  initialForm.value = JSON.stringify(form);
-});
-
 
 function closeModal() {
+  console.log('closeModal - changes.value:', changes.value);
+  console.log('closeModal - selectedText.value:', selectedText.value);
+  console.log('closeModal - mouseDownInside.value:', mouseDownInside.value);
+  
   if (changes.value) {
     if (!selectedText.value) { //validar que no haya texto seleccionado, para que salga el alert de cambios sin guardar
       showModalNoSave.value = true;

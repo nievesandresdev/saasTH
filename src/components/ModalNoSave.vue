@@ -28,7 +28,7 @@
           </div>
           <div class="mt-4 flex justify-between" v-if="type === 'exit_save'">
               <button @click.stop="closeModal" class="hbtn-tertiary text-sm font-medium underline my-auto">
-                  Salir sin guardar
+                  Descartar
               </button>
               
               <button  @click.stop="saveChanges" class="hbtn-primary px-4 py-3 text-sm leading-[110%] font-medium">

@@ -88,7 +88,8 @@
                           :enableLiveCheck="true"
                           :userId="form.user_id"
                           @errorMessage="errorEmailText = $event"
-                          @handleError="errorEmail = $event"    
+                          @handleError="errorEmail = $event"
+                          @blur="handleEmailBlur"    
                       />
                       <div class="flex mt-2 justify-left htext-alert-negative" v-if="errorEmail">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-exclamation-triangle-fill w-4 h-4" viewBox="0 0 16 16">
@@ -454,7 +455,7 @@ const isModalCrudOpen = ref(false);
   const adminAccess = ref([
       { name: 'WebApp', selected: false , value: 'webapp' },
       { name: 'Comunicaciones', selected: false , value: 'comunicaciones' },
-      { name: 'Plataformas externas', selected: false , value: 'plataformas_externas' },
+      { name: 'Integraciones', selected: false , value: 'plataformas_externas' },
       { name: 'Datos', selected: false , value: 'datos' },
       { name: 'Equipo', selected: false , value: 'equipo' },
   ]);
@@ -531,12 +532,43 @@ const selectWorkPosition = (position) => {
 
 
 
-const isFormIncomplete = computed(() => {
-    //email
-    const isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.value.email);
-    
-    return !form.value.name || !form.value.lastname || !form.value.email || !isValidEmail || errorEmail.value || !form.value.hotels.length;
+const errorEmailText = ref(false);
 
+// Agregar función de validación de email
+const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+};
+
+// Modificar el método handleEmailBlur para solo validar el formato
+const handleEmailBlur = () => {
+    if (!form.value.email) {
+        errorEmail.value = true;
+        errorEmailText.value = 'El correo electrónico es requerido';
+        return;
+    }
+    
+    // Solo validamos el formato, la verificación de existencia la hace el componente
+    const isValidFormat = validateEmail(form.value.email);
+    if (!isValidFormat) {
+        errorEmail.value = true;
+        errorEmailText.value = 'Introduce un email correcto';
+    }
+};
+
+const isFormIncomplete = computed(() => {
+    // Required fields validation
+    const requiredFields = {
+        name: form.value.name?.trim(),
+        lastname: form.value.lastname?.trim(),
+        email: form.value.email?.trim(),
+        hotels: form.value.hotels?.length > 0
+    };
+
+    // Check if any required field is empty
+    const hasEmptyRequiredFields = Object.values(requiredFields).some(value => !value);
+    
+    return hasEmptyRequiredFields || errorEmail.value;
 });
 
 
@@ -555,14 +587,6 @@ watch(() => form.value.prefix, (newVal) => {
 watch([() => form.value.password, () => form.value.password_confirmation], ([newPassword, newPasswordConfirmation]) => {
     errorPassword.value = !(newPassword.length >= 8 && newPassword.length <= 12);
     errorPasswordMatch.value = !(newPassword === newPasswordConfirmation);
-});
-
-const errorEmailText = ref(false);
-
-watch(() => form.value.email, (newVal) => {
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    errorEmail.value = !emailRegex.test(newVal);
-    errorEmailText.value = 'Introduce un email correcto';
 });
 
 
@@ -642,9 +666,7 @@ const handleSelectAll = (initial = false) => {
 
 // Método de selección individual
 const handleSelection = (hotelId, add = null) => {
-    //const index = jsonHotel.value.findIndex(item => item.hasOwnProperty(hotelId));
-
-    const index = 0
+    const index = jsonHotel.value.findIndex(item => Object.hasOwn(item, hotelId));
 
     // Si add es null, verificamos si el hotel está seleccionado
     if (add === null) {
@@ -680,9 +702,9 @@ const handleSelection = (hotelId, add = null) => {
     // Lógica para desmarcar "Todos los alojamientos" si no están seleccionados todos
     const totalHotels = userStore.$getHotels(['id', 'name']).length;
     if (form.value.hotels.length < totalHotels) {
-        selectAllHotels.value = false;  // Desmarcar el checkbox de "Todos los alojamientos"
+        selectAllHotels.value = false;
     } else if (form.value.hotels.length === totalHotels) {
-        selectAllHotels.value = true;  // Marcar "Todos los alojamientos" si están seleccionados todos
+        selectAllHotels.value = true;
     }
 };
 
