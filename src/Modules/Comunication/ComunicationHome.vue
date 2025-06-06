@@ -267,7 +267,7 @@ const openSidePanel = (concept) =>{
 }
 
 const toggleOptions = ref({
-    welcome_email: true,
+    welcome_email: false,
     pre_checkin_email: true,
     post_checkin_email: false,
     checkout_email: false,
