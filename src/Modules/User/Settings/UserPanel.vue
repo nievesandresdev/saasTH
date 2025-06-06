@@ -47,7 +47,7 @@
                                     placeholderPhone="Introduce número de teléfono"
                                     @handlePhoneError="errorPhone = $event"
                                     mandatory
-                                    :error="!form.phone.trim() && attemptedSending"
+                                    :error="!form.phone?.trim() && attemptedSending"
                                 />
                             </div>
                             <!-- password -->
