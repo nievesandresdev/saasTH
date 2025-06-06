@@ -99,7 +99,7 @@ const openModalHelp = () => {
 }
 
 onMounted(async() => {
-    //await userStore.$getSubscriptionStatus();
+    await userStore.$getSubscriptionStatus();
     //userStore.$getSubscriptionStatus();
 })
 
