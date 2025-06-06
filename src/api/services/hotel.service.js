@@ -28,7 +28,7 @@ export const handleShowReferrals = () => apiHttp('POST', `${hotelPath}/handleSho
 
 
 //communication
-export const getHotelCommunication = () => apiHttp('POST', `${hotelPath}/communication/getHotelCommunication`, {showPreloader: false });
+export const getHotelCommunication = () => apiHttp('POST', `${hotelPath}/communication/getHotelCommunication`, {},{showPreloader: false }, 'API_GENERAL', false, true);
 export const updateOrStoreHotelCommunication = (data) => apiHttp('POST', `${hotelPath}/communication/updateOrStoreHotelCommunication`, data, {showPreloader: false }, 'API_GENERAL', false, true);
 
 
