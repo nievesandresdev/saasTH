@@ -177,7 +177,7 @@ const hotelStore = useHotelStore();
 
 const isOpenSidePanel = ref(false)
 const conceptPanel = ref(null)
-const maskEmail = ref("no-reply@thehoster.es")
+const maskEmail = ref("no-reply@thehoster.com")
 
 const showEmailField = ref(true)
 
