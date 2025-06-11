@@ -19,20 +19,21 @@
         <div :style="{ opacity: disabledGeneral ? 0.5 : 1, cursor: disabledGeneral ? 'not-allowed' : 'default' }">
           <span class="block mb-2 font-semibold text-sm mt-4">Operación</span>
           <div class="space-y-2 ml-2">
-            <div
-              v-for="item in operationAccess"
-              :key="item.name"
-              class="flex items-center justify-between rounded-lg"
-            >
-              <span class="text-sm font-[500]">{{ item.name }}</span>
-              <input
-                type="checkbox"
-                :checked="item.selected"
-                @change="togglePermission(item)"
-                class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"
-                :disabled="disabledGeneral || isDisabled || item.disabled"
-              >
-            </div>
+            <template v-for="item in operationAccess" :key="item.name">
+              <div
+                  class="flex items-center justify-between rounded-lg"
+                  :class="{ 'hidden': item.name == 'Reseñas' && !hotelStore.hotelData?.reviews_service_enabled}"
+                >
+                <span class="text-sm font-[500]">{{ item.name }}</span>
+                <input
+                  type="checkbox"
+                  :checked="item.selected"
+                  @change="togglePermission(item)"
+                  class="hcheckbox h-5 w-5 text-[#34A98F] rounded focus:ring-[#34A98F] disabled:opacity-50"
+                  :disabled="disabledGeneral || isDisabled || item.disabled"
+                >
+              </div>
+            </template>
           </div>
         </div>
       <!-- Sección de Administración -->
@@ -63,6 +64,8 @@
 import { ref, onMounted, defineProps, defineEmits, computed,watch } from 'vue';
 import BaseTooltipResponsive from '@/components/BaseTooltipResponsive.vue';
 import BaseSwichInput from "@/components/Forms/BaseSwichInput.vue";
+import { useHotelStore } from '@/stores/modules/hotel';
+const hotelStore = useHotelStore();
 
 const props = defineProps({
   permissions: {

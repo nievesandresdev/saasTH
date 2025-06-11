@@ -79,6 +79,7 @@ onMounted(async() => {
         const textarea = messageTextarea.value;
         textarea.style.height = '34px'; 
     });
+    console.log('test stayid', route.params.stayId)
 })
 
 onUnmounted(() => {
@@ -133,7 +134,7 @@ const suscribePusher = (guestId) => {
     channelChat.value.bind('App\\Events\\UpdateChatEvent', async function (data) {
         console.log('test UpdateChatEvent', data)
         dataChat.value = data.chatData;
-        if(data.message.by == 'Guest' || (data.message.by == "Hoster" && data.message.automatic)){    
+        if(data.message.by == 'Guest' || (data.message.by == "Hoster" && data.message.automatic && data.chatData.stay_id == route.params.stayId)){    
             await chatStore.$addMessage(data.message);
         }
         listGuests.value = await chatStore.$getGuestListWNoti(route.params.stayId, false);

@@ -10,7 +10,7 @@
                 <img
                     v-if=" timeLineData[period].feeling"
                     class="w-6 h-6"
-                    :src="`/assets/icons/emojis/1.TH.Emojis${ timeLineData[period].feeling}.svg`"
+                    :src="`/assets/icons/emojis/colors/1.TH.Emojis${ timeLineData[period].feeling}.svg`"
                 >
                 <img v-else class="w-6 h-6" src="/assets/icons/Time-line-icons-check.svg" alt="">
             </template>

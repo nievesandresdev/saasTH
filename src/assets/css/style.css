@@ -17,6 +17,11 @@ body {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 16px;
  }
+
+ .font-caveat{  
+    font-family: 'Caveat', cursive !important;
+ }
+
  a:hover {
      text-decoration: none;
  }

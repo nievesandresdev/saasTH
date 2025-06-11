@@ -34,6 +34,7 @@ const  $capitalizeFirstLetter = (string) => {
 }
 
 const  $removeSpaces = (string) => {
+    if (!string) return '';
     let newString = string.replace(/\s+/g, "");
     return newString;
 }

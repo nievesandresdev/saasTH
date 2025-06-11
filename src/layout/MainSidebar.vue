@@ -33,7 +33,7 @@
           :class="`mt-4 py-2.5 min-h-[40px] h-10 ${widthMenu} ${displayedMenu ? 'pl-3' : 'group-hover:pl-3'}`"
         >
           <p class="text-sm font-semibold">
-            {{ section.title }}
+            {{ section.title }} {{ menuOperationCount }}
           </p>
         </div>
         <div 
@@ -42,38 +42,27 @@
           :class="[
             'bg-[#E2F8F2]',
             checkPermission(link) || checkSubscriptionStatus(link) ? 'bg-opacity-50' : '',
-            indexLink === 0 ? 'rounded-t-[10px]' : '',
-            indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : ''
+            indexLink === 0 && countActiveItemsMenu(section) > 1 ? 'rounded-t-[10px]' : '',
+            indexLink === section.group.length - 1  && countActiveItemsMenu(section) > 1? 'rounded-b-[10px]' : '',
+            countActiveItemsMenu(section) > 1 ? '' : 'rounded-[10px]'
           ]"
         >
+        <!-- @click="handleMenuItemClick($event, link, indexLink)" -->
           <router-link
+            v-if="link.active"
             :to="checkPermission(link) || checkSubscriptionStatus(link) ? '#' : link.url"
-            @click="handleMenuItemClick($event, link, indexLink)"
             class="flex items-center p-2 relative rounded-[10px]"
             @mouseover="handleMouseOverTooltip(link, indexLink,props.subscription.status)"
             @mouseleave="handleMouseLeaveTooltip(link, indexLink,props.subscription.status)"
-            :class="[
-              link.include.includes($route.name) ? 
-                [
-                  'hbg-green-600 shadow-lg',
-                  indexLink === 0 ? 'rounded-t-[10px]' : '',
-                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
-                ] 
-                : 
-                [
-                  checkPermission(link) || checkSubscriptionStatus(link) ? '' : 'hover:bg-gray-100',
-                  indexLink === 0 ? 'rounded-t-[10px]' : '',
-                  indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
-                ],
-              checkPermission(link) || checkSubscriptionStatus(link) ? 'cursor-not-allowed' : 'cursor-pointer',
-            ]"
+            @click="handleMenuItemClick($event, link, indexLink)"
+            :class="classessLink(link, indexLink, section)"
           >
           <!-- notification icon -->
           <img 
               class="w-2.5 h-2.5 absolute top-1.5 left-5 z-10" 
               src="/assets/icons/1.TH.DOT.NOTIFICATION.svg" 
               alt="notification icon"
-              v-if="(link.title == 'Estancias' && (countPendingQueries > 0 || countPendingChats > 0)) || (link.title == 'Reseñas' && conuntReviewsPending > 0)"
+              v-if="showNotificationBadge(link)"
             >
             <!-- Icono -->
             <img 
@@ -144,18 +133,18 @@
         <button 
           v-for="(button, indexButton) in user_buttons" :key="indexButton"
           @mousemove="handleMouseMove(button.title)"
-          @click="handleMenuItemClick(button.title)"
+          @click="handleItemUserClick(button.title, button.url)"
           class="rounded-[10px] flex items-center p-1 h-[44px]"
-          :class="{'hbg-green-600 shadow-lg': button.active, 'hover-gray-100': !button.active}"
+          :class="{'hbg-green-600 shadow-lg': button.active || button.include.includes($route.name), 'hover-hbg-gray-200': !button.active && !button.include.includes($route.name)}"
         >
           <img 
             class="w-8 h-8 rounded-full" :src="button.icon"
-            :class="{'icon-white': false, 'border border-white': button.active}"
+            :class="{'icon-white':  button.include.includes($route.name), 'border border-white': button.active}"
           >
           <div :class="widthMenu">
             <p 
               class="text-sm font-semibold ml-2 text-left leading-[120%]"
-              :class="{'text-white': button.active}"
+              :class="{'text-white': button.active || button.include.includes($route.name)}"
             >{{button.title}}</p>
           </div>
         </button>
@@ -263,6 +252,39 @@ function handleMouseLeaveTooltip(link, indexLink,status = null) {
   if (!permissions[link.permissionName] && Object.keys(permissions.value).length > 0) {
     showTooltip[link.permissionName] = false;
   }
+}
+
+function showNotificationBadge(link){
+  let stayCondition = link.title == 'Estancias' && 
+  (countPendingQueries.value > 0 || (countPendingChats.value > 0 && hotelStore.hotelData?.chat_service_enabled));
+
+  let reviewCondition = link.title == 'Reseñas' && (conuntReviewsPending.value > 0 && hotelStore.hotelData?.reviews_service_enabled);
+  if(stayCondition || reviewCondition){
+    return true
+  }
+  return false
+}
+
+const classessLink = (link, indexLink, section) => {
+  return [
+      link.include.includes(route.name) ? 
+        [
+          `hbg-green-600 shadow-lg ${countActiveItemsMenu(section) > 1 ? '' : 'rounded-[10px]'}`,
+          indexLink === 0 ? 'rounded-t-[10px]' : '',
+          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+        ] 
+        : 
+        [
+          checkPermission(link) || checkSubscriptionStatus(link) ? '' : 'hover:bg-gray-100',
+          indexLink === 0 ? 'rounded-t-[10px]' : '',
+          indexLink === section.group.length - 1 ? 'rounded-b-[10px]' : '',
+        ],
+      checkPermission(link) || checkSubscriptionStatus(link) ? 'cursor-not-allowed' : 'cursor-pointer',
+  ];
+}
+
+const countActiveItemsMenu = (section) => {
+  return section.group.filter(item => item.active == true).length
 }
 
 const checkSubscriptionStatus = (link) => {
@@ -374,18 +396,19 @@ const notifyChat = (data) =>{
   }
 }
 
-const handleMenuItemClick = (nameButtom) => {
+const handleItemUserClick = (nameButtom, url) => {
   isMouseMoving.value = false;
   if (nameButtom === 'Ayuda') {
     emit('openmodalHelp')
-  }
-  if (nameButtom === 'Novedades') {
+  }else if (nameButtom === 'Novedades') {
     isNotifyPanelVisible.value = true;   
+  }else{
+    router.push(url)
   }
+
 }
 
-
-const menu_links = ref([
+const menu_links = computed(() => [
   {
     title: 'Operación',
     group: [
@@ -395,7 +418,8 @@ const menu_links = ref([
         include: ['StayHomePage','StayChatRoom','StayQueryDetail','StayDetailPage','CheckinDetail'],
         url: '/estancias',
         permissionName: 'estancias',
-        subscription: true
+        subscription: true,
+        active: true
       },
       {
         title: 'Reseñas',
@@ -403,7 +427,8 @@ const menu_links = ref([
         include: ['Reviews','ReviewDetail'],
         url: '/resenas',
         permissionName: 'resenas',
-        subscription: true
+        subscription: true,
+        active: hotelStore.hotelData?.reviews_service_enabled
       },
     ],
   },
@@ -441,6 +466,9 @@ const menu_links = ref([
           'ComunicationSignage',
           'ComunicationFromQRTV',
           'ComunicationFromYourWeb',
+          'ContactPhones',
+          'ContactWhatsapp',
+          'ContactEmail',
           //legaltexts
           'GeneralLegal',
           'Referrals',
@@ -457,7 +485,8 @@ const menu_links = ref([
         ],
         url: '/webapp',
         permissionName: 'webapp',
-        subscription : false
+        subscription : false,
+        active: true
       },
       /* {
         title: 'Comunicaciones',
@@ -468,9 +497,11 @@ const menu_links = ref([
       {
         title: 'Backoffice',
         icon: '1.TH.MM.HOSTER',
-        include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms'],
+        include: ['UserNotificationsSettings', 'UsersSettings','ExternalPlatforms','Integrations'],
         url: '/equipo/configuracion/usuarios',
-        permissionName: 'hoster'
+        permissionName: 'hoster',
+        subscription : false,
+        active: true
       },
     ],
   },
@@ -481,6 +512,12 @@ const user_buttons = ref([
     title: 'Ayuda',
     icon: '/assets/icons/1.TH.AYUDA.MM.svg',
     include: ['-'],
+  },
+  {
+    title: 'Marketplace',
+    icon: '/assets/icons/1.TH.MM.MARKETPLACE.svg',
+    include: ['Marketplace'],
+    url: '/marketplace',
   },
   {
     title: 'Novedades',
@@ -570,6 +607,16 @@ function handleMouseEnter () {
 function handleMouseLeave () {
   onHoverMainMenu.value = false;
   isMouseMoving.value = false;
+}
+
+const handleMenuItemClick = (nameButtom) => {
+  isMouseMoving.value = false;
+  if (nameButtom === 'Ayuda') {
+    emit('openmodalHelp')
+  }
+  if (nameButtom === 'Novedades') {
+    isNotifyPanelVisible.value = true;   
+  }
 }
 
 

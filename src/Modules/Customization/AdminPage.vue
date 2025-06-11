@@ -56,7 +56,7 @@
                                 </template>
                                 <template v-slot:content>
                                     <p class="text-sm font-normal mb-4">Para usar tu propio subdominio, por favor solicítalo contactando a atención al cliente.</p>
-                                    <p class="text-sm font-normal mb-4">Puedes contactarnos en el +34 624 149 605 o vía email a la dirección de correo info@thehoster.es</p>
+                                    <p class="text-sm font-normal mb-4">Puedes contactarnos en el +34 644 237 564 o vía email a la dirección de correo info@thehoster.io</p>
                                     <p class="text-sm font-normal">Nuestro horario de atención es de lunes a jueves de 8:30 a 18:30 y los viernes de 8:30 a 14:30.</p>
                                 </template>
                             </BaseTooltipResponsive>
@@ -168,7 +168,7 @@ const toast = useToastAlert();
 import { useFormValidation } from '@/composables/useFormValidation'
 import * as rules from '@/utils/rules';
 
-const hotelData = ref(hotelStore.hotelData);
+const hotelData = computed(() => hotelStore.hotelData);
 const dataFormDefault ={
     subdomain_chain: '',
     slug_hotel: '',
@@ -247,7 +247,6 @@ function loadMockup () {
 
 async function reloadHotel () {
     const hotel = await hotelStore.reloadHotel();
-    Object.assign(hotelData.value, hotel);
     initializeForm(hotel);
 }
 

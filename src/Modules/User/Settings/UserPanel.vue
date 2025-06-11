@@ -47,7 +47,7 @@
                                     placeholderPhone="Introduce número de teléfono"
                                     @handlePhoneError="errorPhone = $event"
                                     mandatory
-                                    :error="!form.phone.trim() && attemptedSending"
+                                    :error="!form.phone?.trim() && attemptedSending"
                                 />
                             </div>
                             <!-- password -->
@@ -243,7 +243,7 @@ const changes = computed(() => {
     let ch = form.name !== authStore.user?.name || form.lastname !== authStore.user?.lastname || form.email !== authStore.user?.email || 
         $removeSpaces(form.phone) !== $removeSpaces(authStore.user?.phone);
     if (changePassword.value) {
-        ch = ch || (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
+        ch = ch || (form.current_password?.trim() && form.new_password?.trim() && confirmPassword.value);
     }
     return ch;
 });
@@ -251,11 +251,11 @@ const changes = computed(() => {
 
 const valid = computed(()=>{
     
-    let val = changes.value && form.name.trim() && form.email.trim() && form.phone.trim() && 
+    let val = changes.value && form.name?.trim() && form.email?.trim() && form.phone?.trim() && 
                 !errorPhone.value && !EmailFieldError.value;
     
     if(changePassword.value){
-        val = val && (form.current_password.trim() && form.new_password.trim() && confirmPassword.value);
+        val = val && (form.current_password?.trim() && form.new_password?.trim() && confirmPassword.value);
     }
     return val;
 })
@@ -263,8 +263,8 @@ const valid = computed(()=>{
 const confirmPassword = computed(() => {
     passError.value = null;
     if(changePassword.value){
-        return form.new_password.trim() &&  form.confirm_new_password.trim() 
-        && (form.new_password.trim() === form.confirm_new_password.trim());
+        return form.new_password?.trim() &&  form.confirm_new_password?.trim() 
+        && (form.new_password?.trim() === form.confirm_new_password?.trim());
     }
     return false;
 });

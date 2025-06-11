@@ -3,7 +3,7 @@
         class="icon relative flex items-center leading-3"
     >
         <slot name="button"></slot>
-        <div class="tooltipp " :class="sizeCustom ? `w-[${sizeCustom}px]` : `width-${size}`" :style="styles">
+        <div v-if="show" class="tooltipp " :class="sizeCustom ? `w-[${sizeCustom}px]` : `width-${size}`" :style="styles">
             <slot name="content"></slot>
         </div>
     </span>
@@ -11,7 +11,7 @@
 
 <script setup>
     import { ref } from 'vue'
-    const { size, top, right, left, color, sizeCustom } = defineProps({
+    const { size, top, right, left, color, sizeCustom, show } = defineProps({
         //S M L
         size: {
             type: String,
@@ -36,6 +36,10 @@
             type: String,
             default: '#fff'
         },
+        show: {
+            type: Boolean,
+            default: true
+        }
     })
 
     const styles = ref(left == null ? {top: `${top}px !important`, right: `${right}px`, backgroundColor: `${color}`} :{top: `${top}px !important`, left: `${left}px`, backgroundColor: `${color}`});
@@ -56,7 +60,7 @@
         box-shadow: 0px 3.27806px 6.55612px rgba(0, 0, 0, 0.15);
         /* right: -15px;
         top: 25px; */
-        display: none;
+        display: block;
     }
 
     /* .icon:hover {

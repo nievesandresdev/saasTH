@@ -76,6 +76,7 @@ const props = defineProps({
     }
 })
 
+
 const toggleDescription = () => {
     showDescription.value = !showDescription.value
 }

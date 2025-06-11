@@ -9,10 +9,10 @@
             La obtención del sentimiento en post-stay no puede desactivarse debido a que es crucial para conocer la experiencia de los huéspedes. Teniendo como objetivo la obtención de la reseña positiva o para la prevención de una posible valoración negativa.
         </p>
     </section>
-
+    <!-- question="¿Cómo ha sido tu experiencia con nosotros?"     -->
     <QueryTerms 
         status="Post-Stay"
-        question="¿Cómo ha sido tu experiencia con nosotros?"    
+        question="¿Qué tal lo hemos hecho?"    
         questionOptions="Muy mala/Buena/Normal/Buena/Muy buena" 
         queryTrigger="Se enviará el día del check-out"    
         whenAvailable="Hasta ser respondida"   

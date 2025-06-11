@@ -42,7 +42,7 @@
                     <img
                         v-if="data.qualification"
                         class="w-10 h-10 mr-2"
-                        :src="`/assets/icons/emojis/1.TH.Emojis${data.qualification}.svg`"
+                        :src="`/assets/icons/emojis/colors/1.TH.Emojis${data.qualification}.svg`"
                     >
 
                     <p v-if="selectedLang" class="text-sm leading-[150%]">
@@ -58,21 +58,27 @@
             <!-- translate -->
             <p class="text-xs font-medium mb-2 mt-4 leading-[90%]" v-if="data.languages?.length > 0">Traducir al:</p>
             <div class="flex gap-4 items-center">  
-            <div
-                v-for="lang in data.languages" :key="lang?.code"
-                class="py-2 px-3 flex rounded-[6px] items-center cursor-pointer chip-primary h-8"
-                :class="{'border-[1px] hborder-green-700 bg-[#ECF9F5]':selectedLang == lang?.code}"
-                @click="selectedLang = lang?.code"
-                v-show="lang?.code != data.response_lang"
-            >
-                <img v-if="lang.name !== 'Desconocido'" class="w-4 h-4" :src="`/assets/icons/flags/${lang?.code}.svg`" alt="">
-                <p class="text-sm font-medium ml-2 leading-[110%] chip-text">{{ lang.name }}</p>
-            </div>
-            <span 
-                v-if="data.languages?.length > 0 && selectedLang != data.response_lang" 
-                class="text-sm font-medium leading-[110%] underline cursor-pointer"  
-                @click="selectedLang = data.response_lang"
-              >Mostrar original</span>
+              <div
+                  v-for="lang in data.languages" :key="lang?.code"
+                  class="py-2 px-3 flex rounded-[6px] items-center cursor-pointer chip-primary h-8"
+                  :class="{'border-[1px] hborder-green-700 bg-[#ECF9F5]':selectedLang == lang?.code}"
+                  @click="selectedLang = lang?.code"
+                  v-show="lang?.code != data.response_lang"
+              >
+                  <img v-if="lang.name !== 'Desconocido'" class="w-4 h-4" :src="`/assets/icons/flags/${lang?.code}.svg`" alt="">
+                  <p class="text-sm font-medium ml-2 leading-[110%] chip-text">{{ lang.name }}</p>
+              </div>
+              <span 
+                  v-if="data.languages?.length > 0 && selectedLang != data.response_lang" 
+                  class="text-sm font-medium leading-[110%] underline cursor-pointer"  
+                  @click="selectedLang = data.response_lang"
+                >Mostrar original</span>
+              <button class="text-base font-semibold leading-[110%] underline ml-auto mt-auto" v-if="report">
+                Ver la estancia
+              </button>
+              <a v-if="!report && data.period !== 'pre-stay'" class="text-sm font-medium leading-[110%]  ml-auto mt-auto underline hover:underline focus:underline" :href="`mailto:${data.guest.email}`">
+                  Responder al huésped
+              </a>
             </div>
         </div>
     </div>
@@ -93,6 +99,10 @@ const props = defineProps({
   stay: {
     type: Object,
     default: null
+  },
+  report: {
+    type: Boolean,
+    default: false
   }
 })
 

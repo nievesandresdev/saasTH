@@ -7,7 +7,7 @@
         >
           <img
             :class="form.type && form.type !== 'WRONG' ? 'w-8 h-8' : 'w-full h-full'"
-            :src="`/assets/icons/emojis/1.TH.EMOJI.${state_emojis?.WRONG?.face}.${state_emojis?.WRONG?.mode}.svg`"
+            :src="`/assets/icons/emojis/colors/1.TH.EMOJI.${state_emojis?.WRONG?.face}.${state_emojis?.WRONG?.mode}.svg`"
             alt="1.TH.EMOJI.WRONG"
           />
         </button>
@@ -19,7 +19,7 @@
         >
           <img
             :class="form.type && form.type !== 'NORMAL' ? 'w-8 h-8' : 'w-full h-full'"
-            :src="`/assets/icons/emojis/1.TH.EMOJI.${state_emojis?.NORMAL?.face}.${state_emojis?.NORMAL?.mode}.svg`"
+            :src="`/assets/icons/emojis/colors/1.TH.EMOJI.${state_emojis?.NORMAL?.face}.${state_emojis?.NORMAL?.mode}.svg`"
             alt="1.TH.EMOJI.NORMAL"
           />
         </button>
@@ -31,7 +31,7 @@
         >
           <img
             :class="form.type && form.type !== 'GOOD' ? 'w-8 h-8' : 'w-full h-full'"
-            :src="`/assets/icons/emojis/1.TH.EMOJI.${state_emojis?.GOOD?.face}.${state_emojis?.GOOD?.mode}.svg`"
+            :src="`/assets/icons/emojis/colors/1.TH.EMOJI.${state_emojis?.GOOD?.face}.${state_emojis?.GOOD?.mode}.svg`"
             alt="1.TH.EMOJI.GOOD"
           />
         </button>

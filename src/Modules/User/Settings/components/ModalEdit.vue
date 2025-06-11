@@ -125,7 +125,12 @@ const form = reactive({
       pendingFeedback30: false,
       pendingFeedback60: false,
       new_reviews: false,
+      informGeneral: true,
+      informDiscontent: true,
     },
+  },
+  informGeneral: {
+    periodicity: 1,
   },
 });
 

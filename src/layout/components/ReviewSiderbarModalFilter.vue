@@ -60,7 +60,6 @@
                             <span class="text-sm font-medium">Todas</span>
                             <input
                                 :checked="(formModalFilter.otas.length == reviewStore.numbersOtasWithUrls) && (formModalFilter.otas.length == reviewStore.otas.length)"
-                                :disabled="formModalFilter.otas.length != reviewStore.otas.length"
                                 type="checkbox"
                                 class="w-5 h-5 rounded mr-2 hcheckbox"
                                 @change="selectedAllOtas"
@@ -108,7 +107,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="p-4 border-t hborder-gray-400 flex justify-between">
                 <button
@@ -228,10 +226,14 @@ watch(formModalFilter, (valNew, valOld) => {
 
 const emptyformModalFilter = computed(() => {
     return !formModalFilter.search &&
-        formModalFilter.otas?.length === filtersSelected.otas.length &&
+        isequalOtasFilterSelected.value &&
         !formModalFilter.statusResponse &&
         !formModalFilter.scoreRange &&
         !formModalFilter.language;
+});
+
+const isequalOtasFilterSelected = computed(() => {
+    return (JSON.stringify(formModalFilter.otas.sort()) === JSON.stringify(filtersSelected.otas.sort()));
 });
 
 // FUNCTIONS    

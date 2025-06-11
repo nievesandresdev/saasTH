@@ -1,5 +1,5 @@
 <template>
-    <label class="relative cursor-pointer mb-0" :class="marginRight">
+    <label class="relative  mb-0" :class="marginRight" :disabled="toggleDisabled" :style="{ cursor: toggleDisabled ? 'not-allowed' : 'pointer' }">
       <input
         :checked="modelValue"
         type="checkbox"

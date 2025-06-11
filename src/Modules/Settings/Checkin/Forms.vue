@@ -158,7 +158,7 @@
     </section>
 
     <section class="px-6 mt-[30px] mb-11">
-        <div class="rounded-[10px] bg-white shadow-hoster pb-6 px-4">
+        <div class="rounded-[10px] bg-white shadow-hoster pb-6 px-4" v-if="querySetting">
             <div class="flex items-center">
                 <h1 class="text-base font-semibold leading-[120%] pt-6">Paso 3: Adjuntar la consulta Pre-stay de seguimiento</h1>
                 <div 
@@ -168,6 +168,7 @@
                 >
                     <span class="text-sm font-semibold leading-[120%]"  :class="{'opacity-25':querySetting && !querySetting?.pre_stay_activate}">Activo</span>
                     <ToggleButton 
+                        id="togglePrestayQuery"
                         v-model="showPrestayQuery"
                         :disabled="querySetting && !querySetting?.pre_stay_activate"
                     />

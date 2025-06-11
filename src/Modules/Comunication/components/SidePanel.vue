@@ -3,14 +3,14 @@
     <div 
         v-if="isOpenSidePanel" 
         class="fixed z-[2000] bg-[#00000080] top-0 left-0 h-screen w-screen"
-        @click="isOpenSidePanel = false"
+        @click="closeModalSidePanel"
     ></div>
     </Transition>
     
     <Transition name="slide">
       <!-- right-[354px] -->
         <div v-if="showSlidePanel" class="w-[500px] h-full bg-white fixed top-0 z-[5001] right-0">
-            <Slide />
+            <Slide @closeModal="closeModalSidePanel" />
         </div>
     </Transition>
     <!-- <Transition>
@@ -27,7 +27,9 @@ import Panel from './SidePanelPanel.vue'
 const showPanel = ref(false)
 const showSlidePanel = ref(false)
 
+
 const isOpenSidePanel = inject('isOpenSidePanel');
+const showEmailField = inject('showEmailField');
 
 watch(() => isOpenSidePanel.value, (newVal, oldVal) => {
     if(newVal){
@@ -37,7 +39,12 @@ watch(() => isOpenSidePanel.value, (newVal, oldVal) => {
         setTimeout(() => {showSlidePanel.value = isOpenSidePanel.value}, 200);
         setTimeout(() => {showPanel.value = isOpenSidePanel.value}, 400);
     }
-});     
+});   
+
+const closeModalSidePanel = () =>{
+    isOpenSidePanel.value = false;
+    //setTimeout(() => {showEmailField.value = false}, 300);
+}
 
 </script>
 <style scoped>

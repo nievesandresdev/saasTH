@@ -21,9 +21,15 @@ import reviewRoutes from './reviewRoutes'
 import comunicationRoutes from './comunication'
 import serviceRoutes from './serviceRoutes'
 import settingsCheckinRoutes from './settings/settingsCheckinRoutes.js';
+import marketplaceRoutes from './marketplaceRoutes';
+import contactRoutes from './hotel/contactRoutes';
+
 
 // Lazy loading de componentes con webpackChunkName que ayuda a agrupar los componentes compilados.
 const NotFoundPage = () => import(/* webpackChunkName: "home" */ '@/shared/NotFoundPage.vue');
+
+//stores
+import { useAuthStore } from '@/stores/modules/auth/login';
 
 // Función para verificar si los datos críticos existen en localStorage
 function isAuthenticated() {
@@ -38,6 +44,7 @@ function isAuthenticated() {
 // Configuración de rutas
 const routes = [
   { path: '/', redirect: '/login' }, // Redirigir la raíz a /login
+  { path: '/:subdomain', name: 'WebAppUsable', component: () => import(/* webpackChunkName: "subdomain" */ '@/Modules/WebApp/UsableWebApp.vue') },
   ...authRoutes,
   ...dashboardRoutes,
   ...comunicationRoutes,
@@ -58,6 +65,8 @@ const routes = [
   ...reviewRoutes,
   ...legalTextGroupRoutes,
   ...settingsCheckinRoutes,
+  ...marketplaceRoutes,
+  ...contactRoutes,
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundPage }, // Capturar todas las rutas no definidas
 ];
 
@@ -74,8 +83,25 @@ const router = createRouter({
 });
 
 // Middleware de navegación auth
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  /*
+  esto sirve para inciar sesion a cualquier url con un codigo de usuario
+  */ 
+  const authStore = useAuthStore();
+  if(to.query?.redirect == 'view' && to.query.code){
+    const toQueryWithout = { ...to.query };
+    delete toQueryWithout.redirect;
+    delete toQueryWithout.code;
+    await authStore.$loginByCode(to.query.code);
+    return next({ path: to.path, query: toQueryWithout });
+  }
+
   const isAuth = isAuthenticated();
+
+  // Permitir acceso a la ruta de subdominio sin autenticación
+  if (to.name === 'Subdomain') {
+    return next();
+  }
 
   // Evita que el middleware afecte la ruta de restablecimiento de contraseña
   if (to.name === 'ResetPassword') {

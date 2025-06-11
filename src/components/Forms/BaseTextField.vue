@@ -46,6 +46,7 @@
         @blur="handleBlur"
         @focus="handleFocus"
         :disabled="disabled"
+        autocomplete="off"
       >
       <div v-if="(safeErrors[name] && safeErrors[name] != true) || max" class="flex w-full" :class="!(safeErrors[name] && safeErrors[name] != true) && max ? 'justify-end' : 'justify-between'">
         <p v-if="safeErrors[name] && safeErrors[name] != true" class="text-xs leading-[90%] text-left mt-1 flex items-center htext-alert-negative">
