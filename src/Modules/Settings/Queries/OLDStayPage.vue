@@ -11,13 +11,13 @@
     </section>
 
     <!-- question="¿Cómo calificarías tu nivel de satisfacción con tu estancia hasta ahora?" -->
-    <QueryTerms 
+    <!-- <QueryTerms 
         status="Stay"
         question="¿Qué tal [nombreHuésped]?"     
         questionOptions="Muy malo/Malo/Normal/Bueno/Muy bueno" 
         queryTrigger="Se enviará un día después del check-in"    
         whenAvailable="Hasta el día del check-out"   
-    />
+    /> -->
 
     <section class="px-6 mt-6">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
@@ -137,7 +137,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, provide } from 'vue'
 import Head from './components/HeadSettings.vue'
-import QueryTerms from './components/QueryTerms.vue'
+// import QueryTerms from './components/QueryTerms.vue'
 import AutoTextArea from '@/components/Forms/AutoTextArea.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import TitleAndActivate from './components/TitleAndActivate.vue'
