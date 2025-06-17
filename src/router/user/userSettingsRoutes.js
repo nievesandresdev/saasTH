@@ -4,6 +4,7 @@ const UsersSettings = () => import('@/Modules/User/Settings/UsersSettings');
 const UserPanel = () => import('@/Modules/User/Settings/UserPanel');
 const ExternalPlatform = () => import('@/Modules/User/Settings/ExternalPlatforms');
 const Integrations = () => import('@/Modules/User/Settings/Integrations/IntegrationsPage');
+const IntegrationsPMS = () => import('@/Modules/User/Settings/Integrations/IntegrationsPMS');
 
 const userSettingsRoutes = [
   {
@@ -34,6 +35,11 @@ const userSettingsRoutes = [
         name: 'Integrations',
         path: 'integraciones',
         component : Integrations
+      },
+      {
+        name: 'IntegrationsPMS',
+        path: 'integraciones-pms',
+        component : IntegrationsPMS
       }
     ],
   },
