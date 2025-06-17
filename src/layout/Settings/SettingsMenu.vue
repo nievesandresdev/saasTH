@@ -351,15 +351,30 @@ const menu_section = reactive([
               expanded: ['ReviewRequestSettingsIndex','SettingsPreStayPage','StayPage','SettingsPostStayPage'].includes(route.name),
               group: [
                   {
-                      title: 'Sentimiento',
+                      title: 'Pre-stay',
                       to: 'SettingsPreStayPage',
-                      selectedArr: ['SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
+                      selectedArr: ['SettingsPreStayPage']
                   },
                   {
-                      title: 'Solicitudes',
-                      to: 'ReviewRequestSettingsIndex',
-                      selectedArr: ['ReviewRequestSettingsIndex','ReviewRequestSettingsPostStay']
+                      title: 'Stay',
+                      to: 'SettingsStayVeryGoodPage',
+                      selectedArr: ['SettingsStayGoodPage','SettingsStayVeryGoodPage','SettingsStayNormalPage']
                   },
+                  {
+                      title: 'Post-stay',
+                      to: 'SettingsPostStayVeryGoodPage',
+                      selectedArr: ['SettingsPostStayVeryGoodPage','SettingsPostStayGoodPage','SettingsPostStayNormalPage']
+                  },
+                  // {
+                  //     title: 'Sentimiento',
+                  //     to: 'SettingsPreStayPage',
+                  //     selectedArr: ['SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
+                  // },
+                  // {
+                  //     title: 'Solicitudes',
+                  //     to: 'ReviewRequestSettingsIndex',
+                  //     selectedArr: ['ReviewRequestSettingsIndex','ReviewRequestSettingsPostStay']
+                  // },
               ],
               selectedArr: ['ReviewRequestSettingsIndex','SettingsPreStayPage','SettingsStayPage','SettingsPostStayPage']
           }

@@ -1,29 +1,30 @@
 <template>
     <div class="h-full flex flex-col">
-        <Head />
+        <Head period="Pre-stay"/>
         <section class="px-6">
             <TitleAndActivate 
                 :defaultToggle="form.pre_stay_activate"
                 @onchange="(value) => form.pre_stay_activate = value"
             />
             <p class="text-sm mt-2">
-                Nos enfocamos en conocer las preferencias e inquietudes de los huéspedes antes de su llegada, teniendo como objetivo igualar o superar sus expectativas.
+                Antes de su estancia, consultaremos a tus huéspedes si tienen alguna petición en especial para el comienzo de la misma, con la pregunta: 
+                <strong>“¿Hay algo que podamos hacer para tu llegada al {{$formatTypeLodging()}}?”</strong>
             </p>
         </section>
 
-        <QueryTerms />
+        <!-- <QueryTerms /> -->
 
         <section class="px-6 my-6">
             <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
                 <h1 class="text-base font-semibold leading-[120%]">Mensaje de respuesta</h1>
-                <p class="text-sm mt-2">Configura el mensaje de respuesta del {{$formatTypeLodging()}}, que aparecerá cuando el huésped proporcione su feedback.</p>
-                <div class="mt-4" v-if="form.pre_stay_thanks">
-                    <p class="text-sm font-semibold leading-[120%] mb-2">Mensaje de respuesta cuando el huésped proporcione el feedback</p>
+                <p class="text-sm mt-2 leading-[140%]">Configura el mensaje de respuesta que verán tus huéspedes al responder a la consulta.</p>
+                <div class="mt-4" v-if="form.pre_stay_comment">
+                    <p class="text-sm font-semibold leading-[120%] mb-2">Texto del mensaje</p>
                     <AutoTextArea 
                         :key="forceUpdate"
                         @empty="event => handleEmpty(event,'thanksEmpty')"
                         :id="'AutoTextArea1'"
-                        v-model="form.pre_stay_thanks.es" 
+                        v-model="form.pre_stay_comment.es" 
                         :wordLimit="150"
                         mandatory
                     />
@@ -72,7 +73,7 @@
 import { ref, reactive, onMounted, computed, provide } from 'vue'
 import { $formatTypeLodging } from '@/utils/helpers'
 import Head from './components/HeadSettings.vue'
-import QueryTerms from './components/QueryTerms.vue'
+// import QueryTerms from './components/QueryTerms.vue'
 import AutoTextArea from '@/components/Forms/AutoTextArea.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import TitleAndActivate from './components/TitleAndActivate.vue'
@@ -94,13 +95,13 @@ const anyEmpty = ref([]);
 const copyTexts = ref(null);
 const form = reactive({
     pre_stay_activate:null,
-    pre_stay_thanks:null
+    pre_stay_comment:null
 })
 const forceUpdate = ref(0);
 
 onMounted(async() => {
     queriesTexts.value = await querySettingsStore.$getPreStaySettings();
-    // console.log('queriesTexts.value',queriesTexts.value)
+    console.log('queriesTexts.value',queriesTexts.value)
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
     defineMockup(queriesTexts.value.pre_stay_activate)
@@ -111,7 +112,7 @@ onMounted(async() => {
 function assignValuesToForm(){
     if (queriesTexts.value) {
         form.pre_stay_activate = queriesTexts.value.pre_stay_activate;
-        form.pre_stay_thanks = queriesTexts.value.pre_stay_thanks;
+        form.pre_stay_comment = queriesTexts.value.pre_stay_comment;
     }
 }
 
@@ -136,7 +137,7 @@ function handleEmpty(event,input) {
 function cancelChanges(){
     const oldValues = JSON.parse(copyTexts.value);
     form.pre_stay_activate = oldValues.pre_stay_activate;
-    form.pre_stay_thanks = { ...oldValues.pre_stay_thanks };
+    form.pre_stay_comment = { ...oldValues.pre_stay_comment };
     forceUpdate.value++;
 }
 
