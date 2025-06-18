@@ -112,7 +112,13 @@ onMounted(async() => {
     assignValuesToForm();
     // queriesTexts.value.in_stay_good_request_activate = String(form.in_stay_good_request_activate);
     copyTexts.value = JSON.stringify(queriesTexts.value);
+    defineMockup()
 })
+
+function defineMockup(){
+    mockupStore.$setIframeUrl('','period=post-stay&openFakeMsg=true&qualification=NORMAL')
+    mockupStore.$setInfo1('Edita y guardar para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
+}
 
 
 const form = reactive({
@@ -124,8 +130,7 @@ const submit = async () =>{
     let res  = await querySettingsStore.$updatePostStayBadSettings(form);
     if(res){
         copyTexts.value = JSON.stringify(form);
-        // defineMockup(form.pre_stay_activate)
-        // mockupStore.$reloadIframe();
+        mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
 }
