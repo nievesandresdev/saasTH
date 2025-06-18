@@ -1,6 +1,7 @@
 <template>
     <div class="px-6 flex-grow min-h-screen">
-        <HeaderIntegrations />
+        <!-- <HeaderIntegrations /> -->
+        <TabsIntegration />
         <div class="grid grid-cols-3 3xl:grid-cols-4 gap-4">
             <div @click="openModalIntegrations('booking')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
@@ -233,6 +234,7 @@ import { platformsExternalStore } from '@/stores/modules/platformsExternal/platf
 import { useToastAlert } from '@/composables/useToastAlert';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalNotEdit from './Components/ModalNotEdit.vue';
+import TabsIntegration from '../components/TabsIntegration.vue';
 
 const platformsStore = platformsExternalStore();
 const toast = useToastAlert();
