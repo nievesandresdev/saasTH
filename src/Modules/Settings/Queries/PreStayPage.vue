@@ -104,7 +104,7 @@ onMounted(async() => {
     console.log('queriesTexts.value',queriesTexts.value)
     assignValuesToForm();
     copyTexts.value = JSON.stringify(queriesTexts.value);
-    defineMockup(queriesTexts.value.pre_stay_activate)
+    defineMockup()
     mockupStore.$setLanguageTooltip(true)
 })
 
@@ -120,7 +120,6 @@ async function submit(){
     let request  = await querySettingsStore.$updatePreStaySettings(form);
     if(request){
         copyTexts.value = JSON.stringify(form);
-        defineMockup(form.pre_stay_activate)
         mockupStore.$reloadIframe();
         toast.warningToast('Cambios guardados con éxito','top-right');
     }
@@ -141,15 +140,9 @@ function cancelChanges(){
     forceUpdate.value++;
 }
 
-function defineMockup(bool){
-    if(bool){
-        mockupStore.$setIframeUrl('/inbox/fake','period=pre-stay')
-        mockupStore.$setInfo1('Edita y guarda para aplicar tus cambios', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
-    }else{
-        mockupStore.$setIframeUrl('')
-        mockupStore.$setInfo1('Para visualizar, activa la opción de mostrar feedback al huésped', '/assets/icons/1.TH.MOBILE.svg')
-    }
-    
+function defineMockup(){
+    mockupStore.$setIframeUrl('','period=pre-stay&openFakeMsg=true')
+    mockupStore.$setInfo1('Edita y guardar para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 }
 
 //computed
