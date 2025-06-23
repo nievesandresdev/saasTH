@@ -16,12 +16,15 @@
             <img src="/assets/icons/1.TH.SEARCH.svg" class="w-6 h-6" alt="search icon">
             </div>
         </div>
-        <span class="text-sm font-medium">xxxx PMS encontrados</span>
-        <div class="grid grid-cols-3 3xl:grid-cols-4 gap-4 mt-4">
-            <div @click="openModalIntegrations('siteminder')" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
+        <span class="text-sm font-medium">{{ dataPMS.length }} PMS encontrados</span>
+        <div v-if="loading" class="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+        <div v-else-if="!loading && dataPMS.length > 0" class="grid grid-cols-3 3xl:grid-cols-4 gap-4 mt-4">
+            <div v-for="pms in dataPMS" :key="pms.id" @click="openModalIntegrations(pms)" class="rounded-[10px] border border-[#E9E9E9] bg-white p-4 hover:shadow-[0px_3.5px_7px_0px_rgba(0,0,0,0.15)] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] cursor-pointer">
                 <div class="flex items-center gap-2">
-                    <img src="/assets/icons/2.TH.SiteMander.svg" class="w-8 h-8">
-                    <span class="text-[#333333] text-base font-medium">SiteMinder</span>
+                    <img :src="`/assets/icons/pms/${pms.icon_pms}.svg`" class="w-8 h-8">
+                    <span class="text-[#333333] text-base font-medium">{{ pms.name_pms }}</span>
                 </div>
                 <div class="flex items-center gap-2 mt-2">
                     <img src="/assets/icons/TH.CHECK.svg" class="w-[16px] h-[16px]">
@@ -29,7 +32,7 @@
                         No requiere URL
                     </span>
                 </div>
-                <div class="flex items-center gap-2 mt-2" v-if="true">
+                <div class="flex items-center gap-2 mt-2" v-if="!pms.with_credentials">
                     <img src="/assets/icons/1.TH.WARNING.svg" class="w-[16px] h-[16px]">
                     <span class="text-[#333333] text-[12px] font-medium">Sin credenciales</span>
                 </div>
@@ -40,6 +43,12 @@
 
             </div>
 
+        </div>
+        <div v-else class="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
+            <img src="/assets/img/2.TH.empty-integraciones.svg" alt="No PMS found" class="w-auto h-auto">
+            <span class="mt-4 text-[#A0A0A0] text-base font-normal">
+                No se han encontrado PMS intenta con otra búsqueda
+            </span>
         </div>
     </div>
 
@@ -55,11 +64,11 @@
             </div>
             <hr>
             <div class="px-4 pt-4">
-                <div  class="flex flex-col gap-2 mb-4">
+                <div  class="flex flex-col gap-2 mb-4" v-if="!dataSelected.with_credentials">
                     <LabelIntegrations :label="'Tu dirección de correo de ' + selectedOtaCapitalize" :tooltip="tooltips.email" :tooltip-top="'-166'" :tooltip-left="'-265'" size-tooltip="s" />
                     <BaseTextField v-model="form.email" placeholder="correo@tu-hotel.com" />
                 </div>
-                <div  class="flex flex-col gap-2 mb-4">
+                <div  class="flex flex-col gap-2 mb-4" v-if="!dataSelected.with_credentials">
                     <LabelIntegrations :label="'Tu contraseña de ' + selectedOtaCapitalize" :tooltip="tooltips.password" :tooltip-top="'-166'" :tooltip-left="'-207'" size-tooltip="s" />
                     <div class="relative">
                         <BaseTextField 
@@ -81,7 +90,7 @@
                         >
                     </div>
                 </div>
-                <section v-if="credentialsOta && credentialsOta.email && credentialsOta.password" class="mb-4">
+                <section v-else class="mb-4">
                     <div class="flex flex-col gap-[6px]">
                         <span class="text-sm font-medium">
                             Tus credenciales de {{ selectedOtaCapitalize }}
@@ -107,7 +116,7 @@
                 <button 
                     @click="submit" 
                     class="hbtn-cta px-4 py-3 text-sm leading-[110%] font-medium"
-                    :disabled="!hasChanges"
+                    :disabled="!hasChanges || dataSelected.with_credentials"
                 >
                     Guardar
                 </button>
@@ -128,44 +137,45 @@
     />
 </template>
 <script setup>
-import { ref, onMounted, computed, watch, nextTick } from 'vue';
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue';
 import ModalWindow from '@/components/ModalWindow';
 import BaseTextField from '@/components/Forms/BaseTextField';
 import LabelIntegrations from './Components/LabelIntegrations.vue';
-import { platformsExternalStore } from '@/stores/modules/platformsExternal/platformsExternal';
 import { useToastAlert } from '@/composables/useToastAlert';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import TabsIntegration from '../components/TabsIntegration.vue';
+import { usePmsIntegrationStore } from '@/stores/modules/pmsIntegration';
+import { debounce } from 'lodash';
 
-const platformsStore = platformsExternalStore();
+const pmsIntegrationStore = usePmsIntegrationStore();
+
 const toast = useToastAlert();
 
-const current_hotel = ref(JSON.parse(localStorage.getItem('current_hotel')));
-const dataOTAS = ref([]);
+
+const dataPMS = ref([]);
 const open = ref(false);
-const openAirbnb = ref(false);
+
 const serviceSelected = ref(null);
+const dataSelected = ref({});
 const loading = ref(false);
 const credentialsOta = ref(null);
 const openModalNoSave = ref(false);
 
-const openModalNotEdit = ref(false);
+//const openModalNotEdit = ref(false);
 
 
 const closeModalIntegrationPMS = () => {
-    if (hasChanges.value) {
+    if (hasChanges.value && !form.value.email && !form.value.password) {
         openModalNoSave.value = true;
     } else {
         open.value = false;
-        disabledInput.value.url = false;
     }
 }
 
 
 const forceCloseModalIntegrationPMS = () => {
     openModalNoSave.value = false;
-    open.value = false;
-    disabledInput.value.url = false;
+    open.value = false
 }
 
 const form = ref({
@@ -179,10 +189,6 @@ const form_filter = ref({
     search_terms: ''
 });
 
-// Agregar estado para controlar si el input de URL debe estar deshabilitado
-const disabledInput = ref({
-    url: false
-});
 
 // Agregar estado inicial del formulario para comparar cambios
 const initialForm = ref(null);
@@ -200,10 +206,30 @@ const errorMessage = ref({
     password: ''
 });
 
-const updateSearchTerms = () => {
-    console.log('updateSearchTerms', form_filter.value.search_terms);
-}
+const searchPms = async (searchTerm) => {
+    loading.value = true;
+    try {
+        const response = await pmsIntegrationStore.$getPmsWithFilters(searchTerm);
+        dataPMS.value = response.data;
+    } catch (error) {
+        console.error('Error searching PMS:', error);
+        toast.errorToast('Error al buscar PMS', 'top-right');
+    } finally {
+        loading.value = false;
+    }
+};
 
+// debounce search
+const debouncedSearch = debounce(searchPms, 350);
+
+const updateSearchTerms = () => {
+    debouncedSearch(form_filter.value.search_terms);
+};
+
+// limpiar
+onUnmounted(() => {
+    debouncedSearch.cancel();
+});
 
 // Modificar la validación de credenciales
 const validateCredentials = () => {
@@ -235,32 +261,27 @@ const hasChanges = computed(() => {
     if (!initialForm.value) return false;
     
     const currentState = {
-        url: form.value.url,
         email: form.value.email,
         password: form.value.password
     };
     
     const initialState = JSON.parse(initialForm.value);
     
-    // Verificar cambios en la URL solo si no está deshabilitada
-    const hasUrlChanges = !disabledInput.value.url && currentState.url !== initialState.url;
-    
-    // Verificar cambios en las credenciales
+    // Verificar si hay cambios en las credenciales
     const hasCredentialChanges = 
-        (initialState.email && !currentState.email) || // Se eliminó el email
-        (initialState.password && !currentState.password) || // Se eliminó la contraseña
-        (currentState.email && currentState.email !== initialState.email) || // Se modificó el email
-        (currentState.password && currentState.password !== initialState.password); // Se modificó la contraseña
+        (currentState.email !== initialState.email) || // Se modificó el email
+        (currentState.password !== initialState.password); // Se modificó la contraseña
     
-    // Verificar si los campos están vacíos
-    const hasEmptyFields = !currentState.url;
+    // Validar que ambos campos tengan contenido
+    const hasContent = Boolean(currentState.email) && Boolean(currentState.password) &&
+        currentState.email.trim() !== '' && currentState.password.trim() !== '';
     
-    // Si hay cambios pero los campos están vacíos, no permitir guardar
-    if (hasEmptyFields) return false;
-
-    const isEmailValid = !form.value.email || isValidEmail(form.value.email);
+    // Validar que la contraseña tenga más de 3 caracteres
+    const isPasswordValid = Boolean(currentState.password) && currentState.password.trim().length > 3;
     
-    return (hasUrlChanges || hasCredentialChanges) && isEmailValid;
+    const isEmailValid = !currentState.email || isValidEmail(currentState.email);
+    
+    return hasCredentialChanges && hasContent && isEmailValid && isPasswordValid;
 });
 
 
@@ -271,92 +292,40 @@ const togglePasswordVisibility = () => {
     visiblePassword.value = !visiblePassword.value;
 };
 
-const openModalIntegrations = (service) => {
-   let serviceUpper = service.toUpperCase();
-   if(service === 'tripadvisor' || service === 'google'){
-    if(dataOTAS?.value?.otas?.find(ota => ota.ota === serviceUpper)?.url){
-        openModalNotEdit.value = true;
-        return false;
-    }
-   }
-    form.value.email = '';
-    form.value.password = '';
+const openModalIntegrations = (pms) => {
+    form.value.email = pms.email_pms;
+    form.value.password = pms.password_pms;
     errorMessage.value.url = '';
     errorMessage.value.email = '';
     errorMessage.value.password = '';
-    if (service === 'airbnb') {
-        openAirbnb.value = true;
-        serviceSelected.value = service;
-    } else {
-        open.value = true;
-        serviceSelected.value = service;
-        getDataByOta(service);
-        getAllDataByOtas(service);
-    }
+    form.value._id = pms.id;
+    dataSelected.value = pms;
 
-    
+    // Inicializar el estado inicial del formulario
+    initialForm.value = JSON.stringify({
+        email: '',
+        password: ''
+    });
+
+    open.value = true;
+    serviceSelected.value = pms.name_pms;
 };
 
-const getDataByOta = async (ota) => {
-    const params = {
-        googleMapCid: current_hotel.value.code,
-        ota: ota.toUpperCase(),
-    };
-    const response = await platformsStore.$findByParamsOta(params);
-    form.value.url = response.data?.ota?.url;
-    form.value._id = response.data?.ota?._id;
-    
-    // Si existe una URL, deshabilitar el input
-    disabledInput.value.url = !!response.data?.ota?.url;
-    
-    // Guardar estado inicial después de cargar los datos
-    initialForm.value = JSON.stringify({
-        url: form.value.url,
-        email: form.value.email,
-        password: form.value.password
-    });
-}
-
-const getAllDataByOtas = async (ota) => {
-    loading.value = true;
-    let otaCapitalize = ota.toUpperCase();
-    try {
-        const response = await platformsStore.$getAllDataByOtas({ googleMapCid: current_hotel.value.code });
-        credentialsOta.value = response.data.hotelDetail?.credentialsByOtas?.[otaCapitalize];
-
-        if (credentialsOta.value) {
-            form.value.email = credentialsOta.value.email;
-            form.value.password = credentialsOta.value.password;
-            
-            // Actualizar el estado inicial con las credenciales
-            initialForm.value = JSON.stringify({
-                url: form.value.url,
-                email: credentialsOta.value.email,
-                password: credentialsOta.value.password
-            });
-        }
-    } catch (error) {
-        console.error('Error loading credentials:', error);
-    } finally {
-        loading.value = false;
-    }
-}
 
 onMounted(async () => {
-    await getSettings();
+    await getIntegrationPms();
 
 });
 
-const getSettings = async () => {
-    const params = {
-        googleMapCid: current_hotel.value.code,
-    };
-
+const getIntegrationPms = async () => {
+    loading.value = true;
     try {
-        const response = await platformsStore.$getDataOTAS(params);
-        dataOTAS.value = response.data;
+        const response = await pmsIntegrationStore.$getIntegrationPms();
+        dataPMS.value = response.data;
     } catch (error) {
         console.error('Error fetching data:', error);
+    } finally {
+        loading.value = false;
     }
 };
 
@@ -387,80 +356,59 @@ const submit = async () => {
         return;
     }
 
-    const urlsPayload = [];
-    
-    // Si hay una URL existente (aunque esté deshabilitada), incluirla en el payload
-    if (form.value.url) {
-        urlsPayload.push({
-            _id: form.value._id || "",
-            delete: false,
-            ota: serviceSelected.value.toUpperCase(),
-            url: form.value.url
-        });
-    }
 
     const dataToSubmit = {
-        googleMapCid: current_hotel.value.code,
-        credentialsByOtas: serviceSelected.value === 'expedia' || serviceSelected.value === 'booking' 
-            ? {
-                [serviceSelected.value.toUpperCase()]: {
-                    email: form.value.email || '',
-                    password: btoa(form.value.password) || ''
-                }
-            }
-            : {},
-        urls: urlsPayload
-    };
+        pmsId: form.value._id,
+        email: form.value.email,
+        password: form.value.password
+    }
 
     console.log('Datos a enviar:', dataToSubmit);
-    const response = await platformsStore.$bulkUpdateOTAS(dataToSubmit);
 
-    if (response.ok) {
+    const response = await pmsIntegrationStore.$updateOrCreateCredentialsPms(dataToSubmit);
+    //console.log('response', response);
+    if(response.ok){
         toast.warningToast('Cambios guardados con éxito', 'top-right');
-        await getSettings();
-        //closeModalIntegrationPMS();
         open.value = false;
-       /*  setTimeout(() => {
-            location.reload();
-        }, 1100); */
-    } else {
-        toast.errorToast(response.message.text, 'top-right');
+        await getIntegrationPms();
+    }else{
+        toast.errorToast('Error al actualizar las credenciales', 'top-right');
     }
+
 }
 
 const handleDeleteCredentials = async () => {
     try {
         loading.value = true;
         
-        // Guardar el estado actual antes de eliminar
         const currentCredentials = {
-            email: form.value.email,
-            password: form.value.password
+            pmsId: form.value._id
         };
-        
-        // Limpiar las credenciales
-        credentialsOta.value = null;
-        form.value.email = '';
-        form.value.password = '';
-        
+         
         // Actualizar el estado inicial con las credenciales que acabamos de eliminar
         initialForm.value = JSON.stringify({
-            url: form.value.url,
-            email: currentCredentials.email,
-            password: currentCredentials.password
+            email: '',
+            password: ''
         });
-        
-        // Limpiar errores
-        errors.value.url = false;
-        errors.value.email = false;
-        errors.value.password = false;
-        errorMessage.value.url = '';
-        errorMessage.value.email = '';
-        errorMessage.value.password = '';
-        
-        // Forzar una actualización del estado
-        await nextTick();
-        toast.warningToast('Credenciales eliminadas con éxito', 'top-right');
+
+        const response = await pmsIntegrationStore.$deleteCredentialsPms(currentCredentials);
+        if(response.ok){
+            toast.warningToast('Credenciales eliminadas con éxito', 'top-right');
+            errors.value.email = false;
+            errors.value.password = false;
+            errorMessage.value.email = '';
+            errorMessage.value.password = '';
+            form.value.email = '';
+            form.value.password = '';
+            dataSelected.value = {};
+            form.value._id = '';
+            //close modal integration
+            open.value = false;
+            await getIntegrationPms();
+        }else{
+            toast.errorToast('Error al eliminar las credenciales', 'top-right');
+        }
+
     } catch (error) {
        toast.errorToast('Error al eliminar las credenciales', 'top-right');
     } finally {
