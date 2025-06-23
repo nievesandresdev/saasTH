@@ -302,7 +302,7 @@ async function loadMore(){
 async function loadData(showLoadPage = false){
     staysNull.value = false;
     data.value = await stayStore.$getAllByHotel(allFilters.value, showLoadPage);
-    // console.log('test',data.value)
+    console.log('test',data.value)
     countsByPeriod.value = data.value.counts_by_period;
     totalCounts.value = data.value.total_count;
     totalValidCount.value = data.value.total_valid_count;

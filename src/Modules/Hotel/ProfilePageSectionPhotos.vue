@@ -99,12 +99,12 @@
     });
 
     const collapsedImages = computed(() => {
-        if (isCollapsed.value) {
-            const i = images.value.slice(0, maxImagesCollapsed.value);
-            return i;
-        } else {
-            return images.value;
-        }
+        const sorted = [...images.value].sort((a, b) => a.id - b.id);
+        console.log('test sorted',sorted);
+
+        return isCollapsed.value
+            ? sorted.slice(0, maxImagesCollapsed.value)
+            : sorted;
     });
 
     function openModalImage () {

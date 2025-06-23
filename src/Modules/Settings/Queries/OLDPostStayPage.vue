@@ -10,13 +10,13 @@
         </p>
     </section>
     <!-- question="¿Cómo ha sido tu experiencia con nosotros?"     -->
-    <QueryTerms 
+    <!-- <QueryTerms 
         status="Post-Stay"
         question="¿Qué tal lo hemos hecho?"    
         questionOptions="Muy mala/Buena/Normal/Buena/Muy buena" 
         queryTrigger="Se enviará el día del check-out"    
         whenAvailable="Hasta ser respondida"   
-    />
+    /> -->
 
     <section class="px-6 mt-6">
         <div class="bg-white py-6 px-4 rounded-[10px] shadow-hoster">
@@ -135,7 +135,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, provide } from 'vue'
 import Head from './components/HeadSettings.vue'
-import QueryTerms from './components/QueryTerms.vue'
+// import QueryTerms from './components/QueryTerms.vue'
 import AutoTextArea from '@/components/Forms/AutoTextArea.vue'
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import TitleAndActivate from './components/TitleAndActivate.vue'

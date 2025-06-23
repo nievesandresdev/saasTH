@@ -43,7 +43,7 @@
                 <p class="text-sm font-semibold leading-[120%]">Asunto</p>
                 <p class="text-sm leading-[140%] mt-2">{{dataPanel.issue}}</p>
             </div>
-            <section v-if="showEmailField">
+            <section >
                 <div class="border-b hborder-gray-400 my-4"></div>
                 <h2 class="text-sm font-medium leading-[140%] mb-2">Correo electrónico para el envío</h2>
                 <BaseEmailField

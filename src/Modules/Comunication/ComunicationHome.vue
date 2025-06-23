@@ -259,7 +259,7 @@ const toast = useToastAlert();
 
 const isOpenSidePanel = ref(false)
 const conceptPanel = ref(null)
-const maskEmail = ref("no-reply@thehoster.es")
+const maskEmail = ref("no-reply@thehoster.com")
 
 const openSidePanel = (concept) =>{
     conceptPanel.value = concept;
@@ -267,7 +267,7 @@ const openSidePanel = (concept) =>{
 }
 
 const toggleOptions = ref({
-    welcome_email: false,
+    welcome_email: true,
     pre_checkin_email: true,
     post_checkin_email: false,
     checkout_email: false,

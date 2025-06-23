@@ -43,7 +43,7 @@ watch(() => isOpenSidePanel.value, (newVal, oldVal) => {
 
 const closeModalSidePanel = () =>{
     isOpenSidePanel.value = false;
-    setTimeout(() => {showEmailField.value = true}, 300);
+    //setTimeout(() => {showEmailField.value = false}, 300);
 }
 
 </script>
