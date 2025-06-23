@@ -86,6 +86,18 @@ export const useConfortStore = defineStore('confort', () => {
         return [];
     }
 
+    async function $updateVisibility(params) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...params
+        }
+        const response = await confortServices.updateVisibilityApi(newParams, {showPreloader: false});
+        return response;
+        if(response.ok) return response.data;
+        return [];
+    }
+
     //
     return {
         formatImage,
@@ -95,6 +107,7 @@ export const useConfortStore = defineStore('confort', () => {
         $updateOrder,
         $storeOrUpdate,
         $delete,
+        $updateVisibility,
     }
 
 })
