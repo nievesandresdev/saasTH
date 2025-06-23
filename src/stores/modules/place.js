@@ -46,9 +46,9 @@ export const usePlaceStore = defineStore('place', () => {
         return response;
     }
     async function $getAll (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId, latitude, longitude } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: cityId },
+            hotel: { id: idHotel, name: nameName, zone: cityId, latitude, longitude },
             ...params
         }
         const response = await placeService.getAllApi(newParams);
@@ -56,9 +56,9 @@ export const usePlaceStore = defineStore('place', () => {
     }
 
     async function $getDataUtil (params) {
-        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId  } =  hotelStore.hotelData;
+        let { id: idHotel, name: nameName, zone: zoneHotel, city_id: cityId, latitude, longitude } =  hotelStore.hotelData;
         let newParams = {
-            hotel: { id: idHotel, name: nameName, zone: cityId },
+            hotel: { id: idHotel, name: nameName, zone: cityId, latitude, longitude },
             ...params
         }
         const response = await placeService.getDataUtilApi(newParams);

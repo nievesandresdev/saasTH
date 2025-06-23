@@ -12,46 +12,80 @@
                     Crear servicio
                 </h5>
         </label>
-        <div
+        <template
             v-for="(item, index) in transportsData"
             :key="index"
-            @dragover="handlerDragOver"
-            @drop="handlerDrop(index, item)"
-            :draggable="true"
-            @dragstart="handlerDragStart(index, $event)"
-            @dragend="handlerDragEnd"
-            ref="draggableCard"
-            class="rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100"
-            :class="{'shadow-draginng border border-gray-300' : item.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
-            @mouseover="hoverItem = index"
-            @mouseleave="hoverItem = null"
-            @click="editItem(item)"
         >
-            <div class="w-full h-[148px] relative">
-                <img
-
-                    v-if="item.images?.length > 0"
-                    class="w-full object-cover rounded-t-lg h-full"
-                    :src="transportStore.formatImage(item.images?.[0])"
-                />
-            </div>
-            <div class="py-[8px] px-[12px]">
-                <div class=" bg-white truncate-2 h-[40px]">
-                    <h5 class="text-[14px] font-semibold htext-black-100 leading-[120%] truncate-2" v-html="item.name" />
-                </div>
-                <p class="text-[14px] font-semibold htext-black-100 leading-[120%] mt-[12px]">
-                    {{ serviceStore.calPrice(item) }}
-                </p>
-            </div>
-            <button
-                v-if="hoverItem == index"
-                class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
-                :class="{'cursor-grabbing ': dragStartIndex == index}"
-                @mousedown="setDragStart(index)"
+            <div
+                v-if="!item?.visible && transportsData[index-1]?.visible"
+                class="w-[789px] 3xl:w-[1216px] relative"
             >
-                <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
-            </button>
-        </div>
+                <div
+                    class="z-50 flex items-center divider"
+                    style="margin:0 !important; padding:0 !important; "
+                >
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                    <p class="mx-6 w-[240px] text-center text-sm font-medium">
+                        {{numberHidden}}
+                        {{numberHidden > 1 ? 'servicios de transporte ocultos':'servicio de transporte oculto'}}
+
+                    </p>
+                    <div class="flex-grow bg-gray-300 border-t"></div>
+                </div>
+            </div>
+            <div
+                @dragover="handlerDragOver"
+                @drop="handlerDrop(index, item)"
+                :draggable="true"
+                @dragstart="handlerDragStart(index, $event)"
+                @dragend="handlerDragEnd"
+                ref="draggableCard"
+                class="rounded-[10px] cursor-pointer w-[224px] overflow-hidden relative hbg-white-100"
+                :class="{'shadow-draginng border border-gray-300' : item.id == selectedCard, 'shadow-draginng': dragStartIndex == index, 'shadow-card': dragStartIndex != index}"
+                @mouseover="hoverItem = index"
+                @mouseleave="hoverItem = null"
+                @click="editItem(item)"
+            >
+                <div v-if="hoverItem == index" class="hbg-white-100 rounded-[6px] py-1 px-2 flex justify-center items-center space-x-1 inline-block absolute top-2 right-2 z-[100]">
+                    <span class="text-[10px] font-semibold">
+                        {{ item.visible == 1 ? 'Visible' : 'Oculto' }}
+                    </span>
+                    <BaseSwichInput
+                        v-model="item.visible"
+                        :id="`swich-visible-confort-${index}`"
+                        @change:value="updateVisible(item)"
+                        @click="handlerClickSwichVisibility"
+                    />
+                </div>
+                <div
+                    v-if="item.visible == 0"
+                    class="hidden-overlay h-full w-full absolute top-0 left-0 cursor-pointer z-40"
+                />
+                <div class="w-full h-[148px] relative">
+                    <img
+                        v-if="item.images?.length > 0"
+                        class="w-full object-cover rounded-t-lg h-full"
+                        :src="transportStore.formatImage(item.images?.[0])"
+                    />
+                </div>
+                <div class="py-[8px] px-[12px]">
+                    <div class=" bg-white truncate-2 h-[40px]">
+                        <h5 class="text-[14px] font-semibold htext-black-100 leading-[120%] truncate-2" v-html="item.name" />
+                    </div>
+                    <p class="text-[14px] font-semibold htext-black-100 leading-[120%] mt-[12px]">
+                        {{ serviceStore.calPrice(item) }}
+                    </p>
+                </div>
+                <button
+                    v-if="hoverItem == index && item.visible"
+                    class="buttom-drag p-1 shadow-md rounded-full hbg-white-100 absolute right-2 bottom-2 hover:bg-[#F3F3F3] cursor-grab z-10"
+                    :class="{'cursor-grabbing ': dragStartIndex == index}"
+                    @mousedown="setDragStart(index)"
+                >
+                    <img class="w-6 h-6" src="/assets/icons/TH.GRAD.svg" alt="grad">
+                </button>
+            </div>
+        </template>
         <SkeletonCard v-for="card in numberCardsToLoad" />
     </div>
 </div>
@@ -61,10 +95,10 @@
 import { ref, reactive, onMounted, provide, computed, nextTick, inject } from 'vue';
 
 import SkeletonCard from './components/SkeletonCard.vue';
+import BaseSwichInput from '@/components/Forms/BaseSwichInput.vue';
 
-import { $throttle, $isElementVisible } from '@/utils/helpers';
 
-const emit = defineEmits(["click:editItem", "click:editItem", "loadData"]);
+const emit = defineEmits(["click:editItem", "click:editItem", "loadData", 'reloadData']);
 
 // COMPOSABLE
 import { usePaginationScrollInfinite } from '@/composables/usePaginationScrollInfinite';
@@ -82,6 +116,7 @@ const draggableCard = ref(null);
 const defNumberCardsToLoad = ref(20);
 
 // INJECT
+const toast = inject('toast');
 const transportsData = inject('transportsData');
 const transportStore = inject('transportStore');
 const serviceStore = inject('serviceStore');
@@ -90,6 +125,8 @@ const paginateData = inject('paginateData');
 const page = inject('page');
 const firstLoad = inject('firstLoad');
 const isloadingForm = inject('isloadingForm');
+const numberHidden = inject('numberHidden');
+const numberVisible = inject('numberVisible');
 
 // COMPUTED
 
@@ -171,6 +208,28 @@ const { numberCardsToLoad } = usePaginationScrollInfinite(
     isloadingForm,
     loadMore
 );
+
+function handlerClickSwichVisibility (event) {
+    event.stopPropagation();
+}
+async function updateVisible (transport) {
+    isloadingForm.value = true;
+    const data = {
+        visible: transport.visible,
+        id: transport.id,
+    }
+    const response = await transportStore.$updateVisible(data);
+    const { ok } = response;
+    if (ok) {
+        toast.warningToast('Cambios guardados con éxito','top-right');
+    } else {
+        toast.warningToast(data?.message,'top-right');
+    }
+    emit('reloadData');
+    await nextTick();
+    mockupStore.$reloadIframe();
+}
+
 
 </script>
 
