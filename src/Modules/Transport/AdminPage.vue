@@ -8,7 +8,11 @@
                         class="text-sm font-medium mb-6"
                         :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && transportsEmpty}"
                     >{{ searchText }}</p>
-                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadTransports" />
+                    <AdminPageList
+                        @click:editItem="openDrawer"
+                        @loadData="loadTransports"
+                        @reloadData="reloadData"
+                    />
                 </div>
             </div>
             <PanelEdit
@@ -25,7 +29,6 @@
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
-import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 // COMPONENT
  import AdminPageHeader from './AdminPageHeader.vue';
@@ -89,6 +92,8 @@ const paginateData = reactive({
     from_page: 0,
     to: 0,
 });
+const numberVisible = ref(0);
+const numberHidden = ref(0);
 
 const languagesData = ref([]);
 
@@ -113,7 +118,7 @@ const serviceNameCurrent = computed(() => {
 });
 
 const searchText = computed(() => {
-   return paginateData.total == 1 ? `${paginateData.total} servicio de transporte` :  `${paginateData.total} servicios de transporte`;
+   return numberVisible.value == 1 ? `${numberVisible.value} servicio de transporte` :  `${numberVisible.value} servicios de transporte`;
 });
 
 onMounted(async() => {
@@ -126,6 +131,15 @@ onMounted(async() => {
 });
 
 // FUNCTION
+async function reloadData () {
+    firstLoad.value = true;
+    // loadDataFormFilter();
+    page.value = 1;
+    // isOpenModelFilter.value = false;
+    route.push({ name: 'Transports' });
+    transportsData.value = [];
+    loadTransports();
+}
 function loadMockup (id = null) {
     if (!id) {
         mockupStore.$setIframeUrl(`/servicios/transport`);
@@ -135,29 +149,34 @@ function loadMockup (id = null) {
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }
+
 async function loadTransports () {
     isloadingForm.value=true;
     const response = await transportStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
+        numberVisible.value = response.data.numberVisible;
+        numberHidden.value = response.data.numberHidden;
         let paginate = {
-            total: response.data.paginate.total,
-            current_page: response.data.paginate.current_page,
-            per_page: response.data.paginate.per_page,
-            last_page: response.data.paginate.last_page,
-            from_page: response.data.paginate.from,
-            to: response.data.paginate.to,
+            total: response.data.transportServicesCollection.paginate.total,
+            current_page: response.data.transportServicesCollection.paginate.current_page,
+            per_page: response.data.transportServicesCollection.paginate.per_page,
+            last_page: response.data.transportServicesCollection.paginate.last_page,
+            from_page: response.data.transportServicesCollection.paginate.from,
+            to: response.data.transportServicesCollection.paginate.to,
         }
         Object.assign(paginateData, paginate);
         page.value = paginateData.current_page;
-        transportsData.value = [...transportsData.value, ...response.data.data];
+        numberVisible.value = response.data.numberVisible;
+        numberHidden.value = response.data.numberHidden;
+        transportsData.value = [...transportsData.value, ...response.data.transportServicesCollection.data];
     }
     isloadingForm.value = false;
     firstLoad.value = false;
 }
 
-    function goPanelEdit () {
-        modelActive.value = modelActiveHistory.value;
-    }
+function goPanelEdit () {
+    modelActive.value = modelActiveHistory.value;
+}
 
 function openDrawer (payload) {
     modelActiveHistory.value = payload.action;
@@ -192,6 +211,7 @@ function openDrawerSubservice (payload) {
         panelEditSubserviceRef.value.edit(payload);
     });
 }
+
 async function openPanelEditSubservice (payload) {
     modelActive.value = null;
     await nextTick();
@@ -223,6 +243,8 @@ provide('changePendingInFormService', changePendingInFormService);
 provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('modalChangePendinginFormService', modalChangePendinginFormService);
 provide('paginateData', paginateData);
+provide('numberVisible', numberVisible);
+provide('numberHidden', numberHidden);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
 provide('modelSubserviceActive', modelSubserviceActive);
