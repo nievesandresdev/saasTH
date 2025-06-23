@@ -25,7 +25,7 @@
                     style="margin:0 !important; padding:0 !important; "
                 >
                     <div class="flex-grow bg-gray-300 border-t"></div>
-                    <p class="mx-6 w-[210px] text-center text-sm font-medium">
+                    <p class="mx-6 w-[240px] text-center text-sm font-medium">
                         {{numberHidden}}
                         {{numberHidden > 1 ? 'servicios de transporte ocultos':'servicio de transporte oculto'}}
 
