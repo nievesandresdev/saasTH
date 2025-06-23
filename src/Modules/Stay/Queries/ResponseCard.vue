@@ -45,7 +45,7 @@
               <div class="h-[1px] flex-grow"><div class="w-full h-full hbg-gray-400"></div></div>
             </div>
             <div v-if="openHistory" class="mt-4" v-for="(dataQ, index) in data.histories" :key="dataQ.id">
-              <ResponseCardContent :data="dataQ" :period="data?.period" :stay="stay"/>
+              <ResponseCardContent :data="dataQ" :period="data?.period" :stay="stay" isComponent/>
               <div class="my-4 border-b hborder-gray-400" v-if="index < (data.histories.length-1)"></div>
             </div>
         </div>
