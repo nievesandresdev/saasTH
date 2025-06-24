@@ -211,7 +211,7 @@ const fileError = ref(false);
 const validate = (field) => validateField(field);
 
 const documentOptions = [
-  { label: 'No añadir menú o catálogo', value: 'no_add_menu' },
+  { label: 'No añadir menú o catálogo', value: 'no_add_document' },
   { label: 'Subir archivo', value: 'upload_file' },
   { label: 'Insertar URL', value: 'link_document' },
 ];

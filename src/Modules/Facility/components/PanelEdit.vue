@@ -1,14 +1,14 @@
 <template>
     <div
         v-if="modelActive"
-        class="w-full fixed top-0 left-0 z-[40]"
+        class="w-full fixed top-0 left-0 z-[2000] bg-[#00000080]"
         :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
         @click="closeModal"
     ></div>
     <transition name="slide">
         <div
             v-if="modelActive"
-            class="shadow-xl bg-white flex flex-col justify-between z-[50] w-[500px] fixed"
+            class="shadow-xl bg-white flex flex-col justify-between z-[2000] w-[500px] fixed"
             :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
             :style="`right: 353.5px;`"
             
@@ -57,12 +57,6 @@
             </div>
             <div class="py-4 px-6 flex justify-between  hborder-top-gray-400 z-[1000] hbg-white-100 w-full" style="height: 72px;">
                 <template v-if="modelActive === 'EDIT'">
-                    <!-- <button
-                        class="py-3"
-                        @click="changesform ? openModalCancel() : openModalDeleteFacility()"
-                    >
-                        <span class="underline font-medium">{{ changesform ? 'Cancelar' : 'Eliminar instalación' }}</span>
-                    </button> -->
                     <button
                         class="py-3"
                         @click="changesform ? openModalChangeInForm() : openModalDeleteFacility()"
@@ -86,11 +80,10 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :diisabled="isLoadingForm"
+                        :disabled="formInvalid || isLoadingForm || !isFormValid"
                         @click="nextTab"
                     >
                         {{ tabSelected === GALLERY ? 'Crear' : 'Siguiente' }}
-                        
                     </button>
                 </template>
             </div>
@@ -237,7 +230,7 @@ const form = reactive({
     ad_tag: null,
     schedules: [...schedulesDefault],
     always_open: false,
-    document: 'no_add_menu'	,
+    document: 'no_add_document'	,
     text_document_button: null,
     link_document_url: null,
     images: [],
@@ -289,20 +282,43 @@ provide('changePendingInForm', changePendingInForm);
 
 // CHANGE
 const changesform = computed(() => {
-    let schedulesNew = form.schedules;
-    let schedulesOld = itemSelected?.schedules;
     let valid = (normalize(form.title) !== normalize(itemSelected.title)) ||
         (normalize(form.description) !== normalize(itemSelected.description)) ||
         (normalize(form.ad_tag) !== normalize(itemSelected.ad_tag)) ||
         (Boolean(form.always_open) !== Boolean(itemSelected.always_open)) ||
-        // JSON.stringify(toRawObject(form.schedules)) !== JSON.stringify(toRawObject(itemSelected?.schedules)) ||
         !lodash.isEqual(form.schedules, itemSelected?.schedules) ||
-        // !deepEqual(form.schedules, itemSelected?.schedules) ||
-        // (form.images.length !== itemSelected?.images.length) ||
-        !lodash.isEqual(form.images, itemSelected?.images)
-        changePendingInForm.value = valid;
-    return valid
+        !lodash.isEqual(form.images, itemSelected?.images) ||
+        form.document !== itemSelected.document ||
+        normalize(form.text_document_button) !== normalize(itemSelected.text_document_button) ||
+        normalize(form.link_document_url) !== normalize(itemSelected.link_document_url);
+
+    // Validar campos adicionales solo si no es "no_add_document"
+    if (form.document !== 'no_add_document') {
+        if (form.document === 'link_document') {
+            valid = valid && form.link_document_url && form.text_document_button;
+        } else if (form.document === 'upload_file') {
+            valid = valid && form.text_document_button;
+        }
+    }
+
+    changePendingInForm.value = valid;
+    return valid;
 });
+
+const isFormValid = computed(() => {
+    let valid = form.title && form.title.trim();
+
+    if (form.document !== 'no_add_document') {
+        if (form.document === 'link_document') {
+            valid = valid && form.link_document_url && form.text_document_button;
+        } else if (form.document === 'upload_file') {
+            valid = valid && form.text_document_button;
+        }
+    }
+
+    return valid;
+});
+
 function toRawObject(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -356,7 +372,7 @@ function changeTab (val) {
 function editFacility ({action, facility}) {
     urlsimages.value = [];
     if (action === 'EDIT') {
-        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open } = facility;
+        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open, document, text_document_button, link_document_url } = facility;
         let schedulesNew = [];
         if (!!schedules) {
             let scheduleFormated = JSON.parse(schedules);
@@ -368,20 +384,53 @@ function editFacility ({action, facility}) {
         } else {
             schedulesNew = [...schedulesDefault];
         }
+
+        // Crear copias profundas para evitar referencias compartidas
         let itemSelectedSchedules = JSON.parse(JSON.stringify(schedulesNew));
         let formSchedules = JSON.parse(JSON.stringify(schedulesNew));
-        let itemSelectedImages = JSON.parse(JSON.stringify(images));
-        let formImages = JSON.parse(JSON.stringify(images));
-        Object.assign(itemSelected, { id, title, description, schedule,  schedules: itemSelectedSchedules, images: itemSelectedImages, select, ad_tag, always_open });
-        Object.assign(form, { id, title, description, schedule, schedules: formSchedules, images: formImages, select, ad_tag, always_open });
-        images.forEach(img => {
-            urlsimages.value.push(img);
+        let itemSelectedImages = JSON.parse(JSON.stringify(images || []));
+        let formImages = JSON.parse(JSON.stringify(images || []));
+
+        // Asignar todos los valores, incluyendo los campos de documento
+        Object.assign(itemSelected, { 
+            id, 
+            title, 
+            description, 
+            schedule,  
+            schedules: itemSelectedSchedules, 
+            images: itemSelectedImages, 
+            select, 
+            ad_tag, 
+            always_open,
+            document: document || 'no_add_document',
+            text_document_button: text_document_button || null,
+            link_document_url: link_document_url || null
         });
+
+        Object.assign(form, { 
+            id, 
+            title, 
+            description, 
+            schedule, 
+            schedules: formSchedules, 
+            images: formImages, 
+            select, 
+            ad_tag, 
+            always_open,
+            document: document || 'no_add_document',
+            text_document_button: text_document_button || null,
+            link_document_url: link_document_url || null
+        });
+
+        if (images?.length) {
+            images.forEach(img => {
+                urlsimages.value.push(img);
+            });
+        }
     } else {
         Object.assign(itemSelected, {...formDefault});
         Object.assign(form, {...formDefault});
     }
-
 }
 defineExpose({ editFacility });
  
