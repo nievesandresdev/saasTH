@@ -83,6 +83,18 @@ export const useTransportStore = defineStore('transport', () => {
         return [];
     }
 
+    async function $updateVisible (data) {
+        let { id: idHotel, name: nameName, zone: zoneHotel } =  hotelStore.hotelData;
+        let newParams = {
+            hotel: { id: idHotel, name: nameName, zone: zoneHotel },
+            ...data
+        }
+        const response = await transportServices.updateVisibleApi(newParams, {showPreloader: false});
+        return response;
+        if(response.ok) return response.data;
+        return [];
+    }
+
     //
     return {
         formatImage,
@@ -92,6 +104,7 @@ export const useTransportStore = defineStore('transport', () => {
         $updateOrder,
         $storeOrUpdate,
         $delete,
+        $updateVisible,
     }
 
 })

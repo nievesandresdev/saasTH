@@ -601,9 +601,9 @@ const submit = async () => {
         await getSettings();
         //closeModalIntegration();
         open.value = false;
-       /*  setTimeout(() => {
+        setTimeout(() => {
             location.reload();
-        }, 1100); */
+        }, 1050);
     } else {
         toast.errorToast(response.message.text, 'top-right');
     }

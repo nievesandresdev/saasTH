@@ -7,3 +7,4 @@ export const  getAllApi = (params, config = {}) => apiHttp('POST', `${transportP
 export const updateOrderApi = (data, config = {}) => apiHttp('POST', `${transportPath}/order`, data, {showPreloader: false}, 'API_HELPER', false, true);
 export const storeOrUpdateApi = (data, config = {}) => apiHttp('POST', `${transportPath}/storeOrUpdate`, data, {showPreloader: false}, 'API_HELPER', false, true);
 export const deleteApi = (id, data, config = {}) => apiHttp('DELETE', `${transportPath}/${id}`, data, {showPreloader: false}, 'API_HELPER', false, true);
+export const updateVisibleApi = (data, config = {}) => apiHttp('POST', `${transportPath}/visibility`, data, {showPreloader: false}, 'API_HELPER', false, true);
