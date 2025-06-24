@@ -38,7 +38,7 @@
                             Puedes agregar una etiqueta para anunciar información eventual sobre esta instalación. 
                         </p>
                         <p class="mt-2 text-sm leading-[150%] font-normal">
-                            Ej: “Cierre temporal”, “20% Off”, “Happy hour”, etc.
+                            Ej: "Cierre temporal", "20% Off", "Happy hour", etc.
                         </p>
                     </template>
                 </BaseTooltipResponsive>
@@ -50,24 +50,198 @@
                 name="ad_tag"
                 :max="'20'"
             />
+            <label class="text-sm font-medium">Añade un menú o catálogo para tus huéspedes</label>
+            <BaseSelectField
+                v-model="form.document"
+                placeholder="Ingresa tu texto"
+                class-content="flex-1"
+                name="document"
+                :max="'20'"
+                mandatory
+                :options="documentOptions"
+            />
+            <span class="text-xs text-[#333] font-normal" v-if="form.document === 'upload_file'">
+                Tus huéspedes descargarán el archivo desde la WebApp
+                <section class="flex flex-col mt-6">
+                    <div class="w-full">
+                        <input 
+                            type="file" 
+                            accept=".pdf,.jpeg,.jpg,.png" 
+                            class="hidden" 
+                            ref="fileInput"
+                            @change="handleFileUpload"
+                        >
+                        <!-- Vista de archivo cargado -->
+                        <div v-if="fileUploaded" class="flex flex-col w-full">
+                            <div class="flex items-start gap-3 border border-[#333] rounded-[6px] p-4 w-full">
+                                <!-- Thumbnail -->
+                               <!-- Thumbnail -->
+<div class="w-24 h-24 flex items-center justify-center bg-gray-100 rounded overflow-hidden">
+  <template v-if="selectedFileFormat === 'PDF'">
+    <canvas ref="pdfCanvas" class="w-[130px] h-auto rounded"></canvas>
+  </template>
+  <template v-else>
+    <img 
+      :src="getFilePreview" 
+      class="w-[130px] h-[95px] object-cover"
+      alt="Preview"
+    />
+  </template>
+</div>
+
+                                <!-- Información del archivo -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm font-medium">
+                                            {{ selectedFileName }}<span class="text-[#A0A0A0]">.{{ selectedFileFormat }}</span>
+                                        </p>
+                                        <img src="/assets/icons/TH.CHECK.svg" alt="check" class="w-5 h-5">
+                                    </div>
+                                    <p class="text-xs text-[#A0A0A0] mt-1">{{ selectedFileSize }}</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-2">
+                                <button 
+                                    class="flex items-center gap-2 text-[14px] text-[#333] font-medium"
+                                    @click="resetFileUpload"
+                                >
+                                    <img src="/assets/icons/1.TH.DELETE.SHAPE.svg" alt="delete" class="w-5 h-5">
+                                    <span>Eliminar archivo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Botón de carga -->
+                        <div v-else class="flex items-center gap-3">
+                            <button 
+                                class="flex items-center gap-2 border border-[#333] rounded-[6px] px-4 py-4 focus:outline-none focus:border-[#333] active:border-[#333] hover:border-[#333]"
+                                @click="$refs.fileInput.click()"
+                            >
+                                <img src="/assets/icons/1.TH.UPLOAD.svg" alt="upload" class="w-5 h-5">
+                                <span class="text-[16px] font-medium">Cargar archivo</span>
+                            </button>
+                            <p class="text-xs text-[#A0A0A0] font-medium">
+                                Formatos soportados:<br>
+                                PDF, JPEG, PNG hasta 10MB
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </span>
+            <span class="text-xs text-[#333] font-normal" v-if="form.document === 'link_document'">
+                Redirige a tus huéspedes a la página web donde se encuentre el menú
+            </span>
+            <section>
+                
+            </section>
         </div>
     </div>
 </template>
 https://www.google.com/maps/place/WELLDONE+ANTIQUARIUM/@37.3945703,-5.9925358,17z/data=!3m1!4b1!4m9!3m8!1s0xd126c045d138193:0xdc483bf9c7e345b8!5m2!4m1!1i2!8m2!3d37.3945661!4d-5.9899609!16s%2Fg%2F11f3p8rffy?entry=ttu&g_ep=EgoyMDI0MDkwOS4wIKXMDSoASAFQAw%3D%3D
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, inject } from 'vue';
-// COMPONENTS
+import { ref, computed, inject, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import workerSrc from 'pdfjs-dist/build/pdf.worker.entry';
+
+GlobalWorkerOptions.workerSrc = workerSrc;
+
+
+// COMPONENTES
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
 import BaseTextareaField from "@/components/Forms/BaseTextareaField.vue";
 import BaseTooltipResponsive from "@/components/BaseTooltipResponsive.vue";
+import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
 
+// Inyecciones
 const form = inject('form');
 const errors = inject('errors');
 const validateField = inject('validateField');
 
-const validate = (field) => {
-    validateField(field);
-}
+// Refs
+const fileInput = ref(null);
+const selectedFile = ref(null);
+const selectedFileName = ref('');
+const selectedFileSize = ref('');
+const selectedFileFormat = ref('');
+const fileUploaded = ref(false);
+const pdfCanvas = ref(null);
 
+const validate = (field) => validateField(field);
+
+const documentOptions = [
+  { label: 'No añadir menú o catálogo', value: 'no_add_menu' },
+  { label: 'Subir archivo', value: 'upload_file' },
+  { label: 'Insertar URL', value: 'link_document' },
+];
+
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+
+const getFileFormat = (filename) => filename.split('.').pop().toUpperCase();
+
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Validación de tipo
+  const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+  if (!validTypes.includes(file.type)) {
+    alert('Formato de archivo no soportado. Por favor, sube un archivo PDF, JPEG o PNG.');
+    return;
+  }
+
+  // Validación de tamaño
+  if (file.size > 10 * 1024 * 1024) {
+    alert('El archivo es demasiado grande. El tamaño máximo permitido es 10MB.');
+    return;
+  }
+
+  selectedFile.value = file;
+  selectedFileName.value = file.name.split('.')[0];
+  selectedFileSize.value = formatFileSize(file.size);
+  selectedFileFormat.value = getFileFormat(file.name);
+  fileUploaded.value = true;
+
+  // Renderizar PDF si corresponde
+  if (file.type === 'application/pdf') {
+    const fileURL = URL.createObjectURL(file);
+    const pdf = await getDocument(fileURL).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 1.5 });
+
+    await nextTick(); // Esperar a que el canvas exista
+    const canvas = pdfCanvas.value;
+    if (!canvas) return;
+
+    const context = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: context, viewport }).promise;
+  }
+};
+
+const getFilePreview = computed(() => {
+  if (!selectedFile.value) return '';
+  if (selectedFileFormat.value === 'PDF') return '';
+  return URL.createObjectURL(selectedFile.value);
+});
+
+const resetFileUpload = () => {
+  selectedFile.value = null;
+  selectedFileName.value = '';
+  selectedFileSize.value = '';
+  selectedFileFormat.value = '';
+  fileUploaded.value = false;
+};
+
+onBeforeUnmount(() => {
+  if (selectedFile.value && selectedFileFormat.value !== 'PDF') {
+    URL.revokeObjectURL(getFilePreview.value);
+  }
+});
 </script>

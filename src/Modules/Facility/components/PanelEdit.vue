@@ -237,6 +237,7 @@ const form = reactive({
     ad_tag: null,
     schedules: [...schedulesDefault],
     always_open: false,
+    document: 'no_add_menu'	,
     images: [],
 });
 const itemSelected = reactive({
