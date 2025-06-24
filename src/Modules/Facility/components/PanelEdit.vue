@@ -238,6 +238,8 @@ const form = reactive({
     schedules: [...schedulesDefault],
     always_open: false,
     document: 'no_add_menu'	,
+    text_document_button: null,
+    link_document_url: null,
     images: [],
 });
 const itemSelected = reactive({
