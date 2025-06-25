@@ -9,14 +9,15 @@ export const useFacilityStore = defineStore('facility', () => {
     const URL_STORAGE = process.env.VUE_APP_STORAGE_URL
 
     // ACTIONS
-    function formatImage (img) {
+    function formatImage (img,path = 'facility') {
         if (!img) return '';
         let { type, url } = img;
+
 
         // console.log(`'type: '${type}, 'url: '${url}`)
         if (type === 'CDN') return url;
         if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
-        if (!type) return URL_STORAGE+'/storage/facility'+url;
+        if (!type) return URL_STORAGE+'/storage/'+path+'/'+url;
         return `${URL_STORAGE}${url}`;
 
         // url = type != 'CDN' ? `${URL_STORAGE}${url}` : url
