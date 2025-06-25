@@ -99,7 +99,7 @@
                                             </p>
                                             <img src="/assets/icons/TH.CHECK.svg" alt="check" class="w-5 h-5">
                                         </div>
-                                        <p class="text-xs text-[#A0A0A0] mt-1">{{ selectedFileSize }}</p>
+                                        <p v-if="selectedFileSize" class="text-xs text-[#A0A0A0] mt-1">{{ selectedFileSize }}</p>
                                     </div>
                                 </div>
                                 <div class="flex justify-end mt-2">
@@ -180,12 +180,11 @@
 https://www.google.com/maps/place/WELLDONE+ANTIQUARIUM/@37.3945703,-5.9925358,17z/data=!3m1!4b1!4m9!3m8!1s0xd126c045d138193:0xdc483bf9c7e345b8!5m2!4m1!1i2!8m2!3d37.3945661!4d-5.9899609!16s%2Fg%2F11f3p8rffy?entry=ttu&g_ep=EgoyMDI0MDkwOS4wIKXMDSoASAFQAw%3D%3D
 
 <script setup>
-import { ref, computed, inject, onBeforeUnmount, nextTick } from 'vue';
+import { ref, computed, inject, onBeforeUnmount, nextTick, watch } from 'vue';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker.entry';
 
 GlobalWorkerOptions.workerSrc = workerSrc;
-
 
 // COMPONENTES
 import BaseTextField from "@/components/Forms/BaseTextField.vue";
@@ -195,8 +194,10 @@ import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
 
 // Inyecciones
 const form = inject('form');
+const itemSelected = inject('itemSelected');
 const errors = inject('errors');
 const validateField = inject('validateField');
+const facilityStore = inject('facilityStore');
 
 // Refs
 const fileInput = ref(null);
@@ -211,20 +212,82 @@ const fileError = ref(false);
 const validate = (field) => validateField(field);
 
 const documentOptions = [
-  { label: 'No añadir menú o catálogo', value: 'no_add_document' },
-  { label: 'Subir archivo', value: 'upload_file' },
-  { label: 'Insertar URL', value: 'link_document' },
+    { label: 'No añadir menú o catálogo', value: 'no_add_document' },
+    { label: 'Subir archivo', value: 'upload_file' },
+    { label: 'Insertar URL', value: 'link_document' },
 ];
 
+// Funciones auxiliares
 const formatFileSize = (bytes) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
 const getFileFormat = (filename) => filename.split('.').pop().toUpperCase();
+
+const resetFileUpload = () => {
+    selectedFile.value = null;
+    selectedFileName.value = '';
+    selectedFileSize.value = '';
+    selectedFileFormat.value = '';
+    fileUploaded.value = false;
+    fileError.value = false;
+    form.document_file = null;
+    
+    if (fileInput.value) {
+        fileInput.value.value = '';
+    }
+};
+
+// Función para cargar archivo existente
+async function loadExistingFile(fileUrl) {
+    if (!fileUrl) return;
+
+    if (fileUrl.toLowerCase().endsWith('.pdf')) {
+        try {
+            // Asegurarse de que la URL sea válida y accesible
+            const formattedUrl = facilityStore.formatImage({ url: fileUrl }, 'facility_documents');
+            
+            // Agregar un timestamp para evitar el caché
+            const urlWithTimestamp = `${formattedUrl}?t=${Date.now()}`;
+
+            // Primero intentar obtener el PDF como blob
+            const response = await fetch(urlWithTimestamp);
+            if (!response.ok) throw new Error('No se pudo cargar el PDF');
+            
+            const pdfBlob = await response.blob();
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+
+            // Cargar el PDF desde el blob
+            const pdf = await getDocument(pdfUrl).promise;
+            const page = await pdf.getPage(1);
+            const viewport = page.getViewport({ scale: 1.5 });
+
+            await nextTick();
+            const canvas = pdfCanvas.value;
+            if (canvas) {
+                const context = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: context, viewport }).promise;
+            }
+
+            // Limpiar el URL creado
+            URL.revokeObjectURL(pdfUrl);
+        } catch (error) {
+            console.error('Error al cargar el PDF:', error);
+            fileError.value = true;
+            // Resetear el canvas si hay error
+            if (pdfCanvas.value) {
+                const context = pdfCanvas.value.getContext('2d');
+                context.clearRect(0, 0, pdfCanvas.value.width, pdfCanvas.value.height);
+            }
+        }
+    }
+}
 
 const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -252,6 +315,7 @@ const handleFileUpload = async (event) => {
     selectedFileSize.value = formatFileSize(file.size);
     selectedFileFormat.value = getFileFormat(file.name);
     fileUploaded.value = true;
+    form.document_file = file;
 
     // Renderizar PDF si corresponde
     if (file.type === 'application/pdf') {
@@ -260,7 +324,7 @@ const handleFileUpload = async (event) => {
         const page = await pdf.getPage(1);
         const viewport = page.getViewport({ scale: 1.5 });
 
-        await nextTick(); // Esperar a que el canvas exista
+        await nextTick();
         const canvas = pdfCanvas.value;
         if (!canvas) return;
 
@@ -271,27 +335,40 @@ const handleFileUpload = async (event) => {
     }
 };
 
+// Watch para actualizar el estado cuando cambia document_file
+watch(() => form.document_file, (newValue) => {
+    if (newValue) {
+        fileUploaded.value = true;
+        if (typeof newValue === 'string') {
+            // Es una URL existente
+            selectedFileName.value = newValue.split('/').pop().split('.')[0];
+            selectedFileFormat.value = newValue.split('.').pop().toUpperCase();
+            loadExistingFile(newValue);
+        } else if (newValue instanceof File) {
+            // Es un archivo nuevo
+            selectedFileName.value = newValue.name.split('.')[0];
+            selectedFileFormat.value = getFileFormat(newValue.name);
+            selectedFileSize.value = formatFileSize(newValue.size);
+        }
+    } else {
+        resetFileUpload();
+    }
+}, { immediate: true });
+
+// Computed properties
 const getFilePreview = computed(() => {
-  if (!selectedFile.value) return '';
-  if (selectedFileFormat.value === 'PDF') return '';
-  return URL.createObjectURL(selectedFile.value);
+    if (form.document_file instanceof File) {
+        return URL.createObjectURL(form.document_file);
+    }
+    if (typeof form.document_file === 'string') {
+        return facilityStore.formatImage({ url: form.document_file },'facility_documents');
+    }
+    return '';
 });
 
-const resetFileUpload = () => {
-    selectedFile.value = null;
-    selectedFileName.value = '';
-    selectedFileSize.value = '';
-    selectedFileFormat.value = '';
-    fileUploaded.value = false;
-    fileError.value = false;
-    if (fileInput.value) {
-        fileInput.value.value = '';
-    }
-};
-
 onBeforeUnmount(() => {
-  if (selectedFile.value && selectedFileFormat.value !== 'PDF') {
-    URL.revokeObjectURL(getFilePreview.value);
-  }
+    if (selectedFile.value) {
+        URL.revokeObjectURL(getFilePreview.value);
+    }
 });
 </script>

@@ -231,6 +231,7 @@ const form = reactive({
     schedules: [...schedulesDefault],
     always_open: false,
     document: 'no_add_document'	,
+    document_file: null,
     text_document_button: null,
     link_document_url: null,
     images: [],
@@ -292,12 +293,28 @@ const changesform = computed(() => {
         normalize(form.text_document_button) !== normalize(itemSelected.text_document_button) ||
         normalize(form.link_document_url) !== normalize(itemSelected.link_document_url);
 
+    // Detectar cambios en document_file
+    if (form.document === 'upload_file') {
+        // Si el form tiene un nuevo archivo (File object) y el itemSelected tiene una URL o nada
+        if (form.document_file instanceof File && 
+            (typeof itemSelected.document_file === 'string' || !itemSelected.document_file)) {
+            valid = true;
+        }
+        // Si el form tiene una URL diferente a la del itemSelected
+        else if (typeof form.document_file === 'string' && 
+                 typeof itemSelected.document_file === 'string' && 
+                 form.document_file !== itemSelected.document_file) {
+            valid = true;
+        }
+    }
+
     // Validar campos adicionales solo si no es "no_add_document"
     if (form.document !== 'no_add_document') {
         if (form.document === 'link_document') {
             valid = valid && form.link_document_url && form.text_document_button;
         } else if (form.document === 'upload_file') {
-            valid = valid && form.text_document_button;
+            // Asegurarse de que haya un archivo y texto del botón
+            valid = valid && form.document_file && form.text_document_button;
         }
     }
 
@@ -312,7 +329,8 @@ const isFormValid = computed(() => {
         if (form.document === 'link_document') {
             valid = valid && form.link_document_url && form.text_document_button;
         } else if (form.document === 'upload_file') {
-            valid = valid && form.text_document_button;
+            // Validar que exista tanto el archivo como el texto del botón
+            valid = valid && form.document_file && form.text_document_button;
         }
     }
 
@@ -372,7 +390,7 @@ function changeTab (val) {
 function editFacility ({action, facility}) {
     urlsimages.value = [];
     if (action === 'EDIT') {
-        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open, document, text_document_button, link_document_url } = facility;
+        let { id, title, description, schedule, schedules, images, select, ad_tag, always_open, document, document_file, text_document_button, link_document_url } = facility;
         let schedulesNew = [];
         if (!!schedules) {
             let scheduleFormated = JSON.parse(schedules);
@@ -390,6 +408,8 @@ function editFacility ({action, facility}) {
         let formSchedules = JSON.parse(JSON.stringify(schedulesNew));
         let itemSelectedImages = JSON.parse(JSON.stringify(images || []));
         let formImages = JSON.parse(JSON.stringify(images || []));
+        let itemSelectedDocumentFile = JSON.parse(JSON.stringify(document_file || null));
+        let formDocumentFile = JSON.parse(JSON.stringify(document_file || null));
 
         // Asignar todos los valores, incluyendo los campos de documento
         Object.assign(itemSelected, { 
@@ -403,6 +423,7 @@ function editFacility ({action, facility}) {
             ad_tag, 
             always_open,
             document: document || 'no_add_document',
+            document_file: itemSelectedDocumentFile,
             text_document_button: text_document_button || null,
             link_document_url: link_document_url || null
         });
@@ -418,6 +439,7 @@ function editFacility ({action, facility}) {
             ad_tag, 
             always_open,
             document: document || 'no_add_document',
+            document_file: formDocumentFile,
             text_document_button: text_document_button || null,
             link_document_url: link_document_url || null
         });
@@ -436,16 +458,46 @@ defineExpose({ editFacility });
  
 
 async function submitSave () {
-    let body = { ...form };
-    const response = await facilityStore.$storeOrUpdate(body);
+    const formData = new FormData();
+    
+    // Datos básicos
+    formData.append('id', form.id || '');
+    formData.append('title', form.title || '');
+    formData.append('description', form.description || '');
+    formData.append('ad_tag', form.ad_tag || '');
+    formData.append('always_open', form.always_open || 0);
+    formData.append('document', form.document || 'no_add_document');
+    formData.append('text_document_button', form.text_document_button || '');
+    formData.append('link_document_url', form.link_document_url || '');
+    
+    // Manejo especial para el archivo
+    if (form.document === 'upload_file' && form.document_file instanceof File) {
+        console.log('Adjuntando archivo:', form.document_file.name, form.document_file.type);
+        formData.append('document_file', form.document_file, form.document_file.name);
+    }
+    
+    // Arrays y objetos
+    formData.append('images', JSON.stringify(form.images || []));
+    formData.append('schedules', JSON.stringify(form.schedules || []));
+    //formData.append('select', JSON.stringify(form.select || {}));
+
+    // Logs para depuración
+    console.log('Tipo de documento:', form.document);
+    console.log('Archivo adjunto:', form.document_file);
+    console.log('Contenido del FormData:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key, ':', value instanceof File ? `File: ${value.name}` : value);
+    }
+
+    const response = await facilityStore.$storeOrUpdate(formData);
     const { ok, data } = response;
     if (ok) {
         toast.warningToast('Cambios guardados con éxito','top-right');
         resetCompoent();
-        
         location.reload();
     } else {
-        toast.warningToast(data?.message,'top-right');
+        console.error('Error en la respuesta:', data);
+        toast.warningToast(data?.message || 'Error al guardar los cambios','top-right');
     }
 }
 async function submitDeleteFacility () {
