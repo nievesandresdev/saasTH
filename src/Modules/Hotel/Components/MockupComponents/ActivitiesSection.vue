@@ -34,7 +34,7 @@
             <ToggleButton 
                 v-model="rawSections.activitiesSection.visibility" 
                 id="activitiesSection" textLeft="Visible"
-                @change="updateOrderSections"
+                @change="updateOrderSections('activitiesSection')"
             />
         </div>
     </section>
@@ -56,8 +56,8 @@ const hoverSection = ref(false)
 const rawSections = inject('rawSections')
 const currentSection = inject('currentSection')
 
-function updateOrderSections() {
-    emit('updateOrderSections')
+function updateOrderSections(section) {
+    emit('updateOrderSections', section)
 }
 
 </script>

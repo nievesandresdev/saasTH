@@ -32,6 +32,7 @@
             <ToggleButton 
                 v-model="rawSections.socialNetworksSection.visibility" 
                 id="socialNetworksSection" textLeft="Visible"
+                @change="updateOrderSections('socialNetworksSection')"
             />
         </div>
     </section>
@@ -50,7 +51,11 @@ const props = defineProps({
 const hoverSection = ref(false)
 const rawSections = inject('rawSections')
 const currentSection = inject('currentSection') 
+const emit = defineEmits(['updateOrderSections'])
 
+function updateOrderSections(section) {
+    emit('updateOrderSections', section)
+}
 
 const buttons = [
     {

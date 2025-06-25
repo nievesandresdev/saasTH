@@ -9,7 +9,11 @@
             </template>
             <template #content>
               <p class="text-sm leading-[150%] font-normal">
-                En esta sección podrás configurar algunos aspectos de la Home de la WebApp de tu alojamiento.
+                Configura la visibilidad, el orden y el estilo de los módulos de la Home de tu WebApp.
+              </p>
+              <br>
+              <p class="text-sm leading-[150%] font-normal">
+                Arrastra y suelta para ordenarlos.
               </p>
             </template>
           </BaseTooltipResponsive>

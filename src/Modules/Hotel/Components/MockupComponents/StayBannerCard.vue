@@ -1,8 +1,8 @@
 <template>
-    <section>
+    <section class="relative z-[100]">
         <div class="px-4 mt-[-24px]">
             <div 
-            class="flex flex-col p-4 gap-2 w-full rounded-[20px] border border-[#E9E9E9] bg-gradient-to-r from-[#F3F3F3] to-[#FAFAFA] relative shadow-hoster"
+            class="flex flex-col p-4 gap-2 w-full rounded-[20px] border border-[#E9E9E9] bg-gradient-to-r from-[#F3F3F3] to-[#FAFAFA] relative shadow-hoster cursor-not-allowed"
             >
                 <p class="text-base font-bold lato leading-[20px] text-[#333333]">{{ hotelStore.hotelData.name }}</p>
                 <div class="flex mt-3">
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="mt-8 px-4">
-            <div class="flex justify-between items-center p-1 sp:p-4 w-full rounded-[10px] border shadow-guest relative border-[#333] bg-[#fafafa]">
+            <div class="flex justify-between items-center p-1 sp:p-4 w-full rounded-[10px] border shadow-guest relative border-[#333] bg-[#fafafa] cursor-not-allowed">
                 <!-- left container  -->
                 <div class="">
                     <div class="flex items-center">

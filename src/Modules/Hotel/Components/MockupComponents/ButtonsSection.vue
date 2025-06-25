@@ -5,15 +5,15 @@
         }"
         @mouseenter="hoverSection = true" 
         @mouseleave="hoverSection = false" 
-        @click="currentSection = 'ButtonsSection'"
+        @mouseup="panelSelected = 'buttonsSection'"
     >
         <div 
             class="flex items-center justify-between relative box-border border-4 border-transparent" 
             :class="{ 
                 'p-3': !inPanel,
                 'shadow-hoster2 cursor-pointer': hoverSection && !inPanel,
-                'hborder-green-600': currentSection === 'ButtonsSection' && !inPanel,
-                'rounded-[10px]': (currentSection === 'ButtonsSection' || hoverSection) && !inPanel,
+                'hborder-green-600': currentSection === 'buttonsSection' && !inPanel,
+                'rounded-[10px]': (currentSection === 'buttonsSection' || hoverSection) && !inPanel,
             }"
         >
             <div v-for="button in buttons" :key="button.label">
@@ -26,10 +26,12 @@
             <div 
                 class="absolute top-2 right-2 bg-white rounded-[10px] p-1 shadow-hoster2"
                 v-show="hoverSection && !inPanel"
+                @mouseup.stop
             >
                 <ToggleButton 
                     v-model="rawSections.buttonsSection.visibility" 
                     id="buttonsSection" textLeft="Visible"
+                    @change="updateOrderSections('buttonsSection')"
                 />
             </div>
         </div>
@@ -50,7 +52,12 @@ const props = defineProps({
 const hoverSection = ref(false)
 const rawSections = inject('rawSections')
 const currentSection = inject('currentSection')
+const panelSelected = inject('panelSelected')
+const emit = defineEmits(['updateOrderSections'])
 
+function updateOrderSections(section) {
+    emit('updateOrderSections', section)
+}
 
 const buttons = [
     {

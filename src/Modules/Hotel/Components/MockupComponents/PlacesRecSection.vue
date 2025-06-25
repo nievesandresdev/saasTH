@@ -38,10 +38,12 @@
         <div 
             class="absolute top-2 right-2 bg-white rounded-[10px] p-1 shadow-hoster2"
             v-show="hoverSection && !inPanel"
+            @mouseup.stop
         >
             <ToggleButton 
                 v-model="rawSections.placesRecommendationSection.visibility" 
                 id="placesRecommendationSection" textLeft="Visible"
+                @change="updateOrderSections('placesRecommendationSection')"
             />
         </div>
     </section>
@@ -60,4 +62,9 @@ const props = defineProps({
 const hoverSection = ref(false)
 const rawSections = inject('rawSections')
 const currentSection = inject('currentSection')
+const emit = defineEmits(['updateOrderSections'])
+
+function updateOrderSections(section) {
+    emit('updateOrderSections', section)
+}
 </script>
