@@ -9,21 +9,19 @@ export const useFacilityStore = defineStore('facility', () => {
     const URL_STORAGE = process.env.VUE_APP_STORAGE_URL
 
     // ACTIONS
-    function formatImage (img, path = 'facility') {
+    function formatImage (img,path = 'facility') {
         if (!img) return '';
         let { type, url } = img;
 
-        // Handle PDF files differently
-        if (url?.toLowerCase().endsWith('.pdf')) {
-            // For PDFs, return the direct URL without any modifications
-            return url;
-        }
 
-        // Handle images as before
+        // console.log(`'type: '${type}, 'url: '${url}`)
         if (type === 'CDN') return url;
         if (url?.includes('storage/gallery')) return `${URL_STORAGE}${url}`;
         if (!type) return URL_STORAGE+'/storage/'+path+'/'+url;
         return `${URL_STORAGE}${url}`;
+
+        // url = type != 'CDN' ? `${URL_STORAGE}${url}` : url
+        // return url
     }
 
     async function $getAll (params) {
