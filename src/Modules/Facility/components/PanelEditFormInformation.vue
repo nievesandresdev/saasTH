@@ -248,21 +248,8 @@ async function loadExistingFile(fileUrl) {
 
     if (fileUrl.toLowerCase().endsWith('.pdf')) {
         try {
-            // Asegurarse de que la URL sea válida y accesible
-            const formattedUrl = facilityStore.formatImage({ url: fileUrl }, 'facility_documents');
-            
-            // Agregar un timestamp para evitar el caché
-            const urlWithTimestamp = `${formattedUrl}?t=${Date.now()}`;
-
-            // Primero intentar obtener el PDF como blob
-            const response = await fetch(urlWithTimestamp);
-            if (!response.ok) throw new Error('No se pudo cargar el PDF');
-            
-            const pdfBlob = await response.blob();
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-
-            // Cargar el PDF desde el blob
-            const pdf = await getDocument(pdfUrl).promise;
+            // For PDFs, use the direct URL
+            const pdf = await getDocument(fileUrl).promise;
             const page = await pdf.getPage(1);
             const viewport = page.getViewport({ scale: 1.5 });
 
@@ -274,9 +261,6 @@ async function loadExistingFile(fileUrl) {
                 canvas.height = viewport.height;
                 await page.render({ canvasContext: context, viewport }).promise;
             }
-
-            // Limpiar el URL creado
-            URL.revokeObjectURL(pdfUrl);
         } catch (error) {
             console.error('Error al cargar el PDF:', error);
             fileError.value = true;
