@@ -53,18 +53,18 @@
             />
         </div>
             <section> <!-- Añade un menú o catálogo para tus huéspedes -->
-                <label class="text-sm font-medium">Añade un menú o catálogo para tus huéspedes</label>
-                <BaseSelectField
-                    v-model="form.document"
-                    placeholder="Ingresa tu texto"
-                    class-content="flex-1"
-                    name="document"
-                    :max="'20'"
-                    mandatory
-                    :options="documentOptions"
-                />
-                <span class="text-xs text-[#333] font-normal" v-if="form.document === 'upload_file'">
-                    Tus huéspedes descargarán el archivo desde la WebApp
+            <label class="text-sm font-medium">Añade un menú o catálogo para tus huéspedes</label>
+            <BaseSelectField
+                v-model="form.document"
+                placeholder="Ingresa tu texto"
+                class-content="flex-1"
+                name="document"
+                :max="'20'"
+                mandatory
+                :options="documentOptions"
+            />
+            <span class="text-xs text-[#333] font-normal" v-if="form.document === 'upload_file'">
+                Tus huéspedes descargarán el archivo desde la WebApp
                     <section class="flex flex-col mt-6">
                         <div class="w-full">
                             <input 
@@ -135,10 +135,10 @@
                             </div>
                         </div>
                     </section>
-                </span>
-                <span class="text-xs text-[#333] font-normal" v-if="form.document === 'link_document'">
-                    Redirige a tus huéspedes a la página web donde se encuentre el menú
-                </span>
+            </span>
+            <span class="text-xs text-[#333] font-normal" v-if="form.document === 'link_document'">
+                Redirige a tus huéspedes a la página web donde se encuentre el menú
+            </span>
             </section>
             <section v-if="form.document === 'link_document'" class="mt-6">   <!-- URL del documento -->
                 <label class="text-sm font-medium">Añadir URL</label>
@@ -166,7 +166,7 @@
                             </p>
                         </template>
                     </BaseTooltipResponsive>
-                </div>
+        </div>
                 <BaseTextField
                     v-model="form.text_document_button"
                     placeholder='Ej: "Descargar menú", "Ver catálogo", etc.'
