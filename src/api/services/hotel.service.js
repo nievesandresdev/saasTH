@@ -52,4 +52,6 @@ export const getProfileWhatsappApi = () => apiHttp('GET', `${hotelPath}/${hoster
 export const getShowContactApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getShowContact`); 
 export const toggleShowContactApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/toggleShowContact`, data, {showPreloader: false }, 'API_GENERAL', false, true);
 
-    
+//order sections
+export const getOrderSectionsApi = () => apiHttp('GET', `${hotelPath}/${hosterPath}/getOrderSections`);
+export const updateOrderSectionsApi = (data) => apiHttp('POST', `${hotelPath}/${hosterPath}/updateOrderSections`, data, {showPreloader: false }, 'API_GENERAL', false, true);

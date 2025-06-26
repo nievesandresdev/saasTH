@@ -11,8 +11,10 @@
         <div
             v-if="isOpen"
             class="shadow-xl bg-white flex flex-col justify-between z-[2001] w-[500px] fixed"
-            :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'"
-            :style="`right: 353.5px;`"
+            :class="[
+              userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner top-0'
+            ]"
+            :style="`right: ${right};`"
             
             ref="refPanelEdit"
         >
@@ -25,9 +27,7 @@
 
 <script setup>
 import { ref, toRefs } from 'vue';
-
-// COMPONENTS
-
+//
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
 
@@ -37,6 +37,10 @@ const props = defineProps({
     isOpen: {
         type: Boolean,
         default: false
+    },
+    right: {
+        type: String,
+        default: '353.5px'
     }
 });
 

@@ -1,15 +1,15 @@
-const ConfigurationPage = () => import('@/Modules/Hotel/ConfigurationPage');
+const HomeConfigPage = () => import('@/Modules/Hotel/HomeConfigPage');
 const DestacadoPage = () => import('@/Modules/Hotel/DestacadoPage');
 
 const hotelConfigurationRoutes = [
   {
     path: 'configuracion',
     children: [
-      {
-        name: 'Configuracion',
-        path: '',
-        component: ConfigurationPage,
-        meta: { sidebarRight: 'SidebarMockup' }
+      { 
+        name: 'HomeConfigPage',
+        path: 'home',
+        component: HomeConfigPage,
+        // meta: { sidebarRight: 'SidebarMockup' }
       },
       {
         name: 'Destacado',
