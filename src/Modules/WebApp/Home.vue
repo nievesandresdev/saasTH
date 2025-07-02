@@ -59,7 +59,7 @@
                 <div class="mb-4">
                     <div class="grid fixed-grid w-3/5">
                         <div class="fixed-card hover:shadow-outline-34A98F hover:rounded-md transition duration-200 group hover:bg-white mr-">
-                            <router-link :to="{ path: '/alojamiento/configuracion' }" class="block p-4">
+                            <router-link :to="{ path: 'alojamiento/configuracion/home' }" class="block p-4">
                                 <div class="flex items-center">
                                     <img src="/assets/icons/1.TH.Home.svg" alt="icon" class="w-8 h-8 p-1 bg-[#34A98F] rounded-md">
                                     <div class="ml-2 h-[32px] items-center flex">

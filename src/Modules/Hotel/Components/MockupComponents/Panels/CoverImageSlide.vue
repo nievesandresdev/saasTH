@@ -1,13 +1,13 @@
 <template>
     <SlidePanel :isOpen="panelSelected === 'heroSection'" @closePanel="closePanel" :right="0">
         <!-- content -->
-        <div>
+        <div class="h-full flex flex-col">
             <!-- head panel -->
             <section class="px-4 py-6 border-b hborder-gray-400">
                 <h1 class="text-[22px] font-medium leading-[72%]">Imagen de portada</h1>
             </section>
 
-            <section class="px-4 py-6 h-[calc(100vh-153px)] overflow-y-auto">
+            <section class="px-4 py-6 overflow-y-auto flex-grow">
                 <h2 class="text-sm leading-[140%] font-medium htext-gray-500">{{ imagesContainer.length }} imagenes</h2>
                 <div class="grid grid-cols-2 gap-3 mt-2">
                     <label 
@@ -75,7 +75,8 @@ import { useToastAlert } from '@/composables/useToastAlert'
 const toast = useToastAlert();
 import { useHotelStore } from '@/stores/modules/hotel';
 const hotelStore = useHotelStore()
-
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore()
 
 // DATA
 const panelSelected = inject('panelSelected')

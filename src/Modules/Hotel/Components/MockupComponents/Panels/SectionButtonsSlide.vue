@@ -4,7 +4,7 @@
             <!-- head panel -->
             <section class="px-4 py-6 border-b hborder-gray-400 flex items-center justify-between">
                 <h1 class="text-[22px] font-medium leading-[72%]">Botonera</h1>
-                <button @click="closePanel">
+                <button @click="panelSelected = null">
                     <img src="/assets/icons/1.TH.CLOSE.svg" alt="close" class="w-6 h-6">
                 </button>
             </section>

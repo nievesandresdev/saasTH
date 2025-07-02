@@ -1,5 +1,8 @@
 <template>
-<div class="w-[500px] h-screen bg-white fixed top-0 right-0 z-10 shadow-hoster2 overflow-y-auto">
+<div 
+    class="w-[500px] bg-white fixed right-0 z-10 shadow-hoster2 overflow-y-auto"
+    :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
+>
     <section class="px-4 py-6 border-b hborder-gray-400">
         <h1 class="text-[22px] font-medium leading-[72%]">Módulos ocultos</h1>
     </section>
@@ -32,6 +35,9 @@ import placesExploreSection from './PanelCards/PlacesExploreCard.vue';
 import placesRecommendationSection from './PanelCards/PlacesRecommendationCard.vue';
 import activitiesSection from './PanelCards/ActivitiesCard.vue';
 import socialNetworksSection from './PanelCards/SocialNetworksSectionCard.vue';
+// STORES
+import { useUserStore } from '@/stores/modules/users/users'
+const userStore = useUserStore()
 
 const rawSections = inject('rawSections')
 const hiddenKeys = inject('hiddenKeys')

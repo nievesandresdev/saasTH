@@ -1,7 +1,7 @@
 <template>
     <SlidePanel :isOpen="panelSelected === 'placesExploreSection'" @closePanel="closePanel" :right="0">
         <!-- content -->
-        <div class="">
+        <div class="h-full flex flex-col">
             <!-- head panel -->
             <section class="px-4 py-6 border-b hborder-gray-400 flex items-center justify-between">
                 <h1 class="text-[22px] font-medium leading-[72%]">Editar módulo</h1>
@@ -11,7 +11,7 @@
             </section>
             <WarningHiddenSection v-if="rawSections.placesExploreSection.visibility === false" />
 
-            <section class="px-4 mt-6 pb-6 h-[calc(100vh-185px)] overflow-y-auto">
+            <section class="px-4 mt-6 pb-6 overflow-y-auto flex-grow">
                 <!-- card -->
                 <div>
                     <div class="flex items-center gap-1">
@@ -65,13 +65,14 @@
                     </div>
                 </div>
             </section>
+
+            <ChangesBar 
+                :existingChanges="changesExist"
+                :validChanges="changesExist"
+                @cancel="closePanel" 
+                @submit="changeOption"
+            />
         </div>
-        <ChangesBar 
-            :existingChanges="changesExist"
-            :validChanges="changesExist"
-            @cancel="closePanel" 
-            @submit="changeOption"
-        />
     </SlidePanel>
 </template>
 <script setup>

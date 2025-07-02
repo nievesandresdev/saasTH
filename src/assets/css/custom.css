@@ -227,3 +227,7 @@ background-color: #EBF9F0;
 .lato{
   font-family: "Lato", sans-serif !important;
 }
+
+.Vue-Toastification__container{
+  z-index: 11000 !important;
+}
