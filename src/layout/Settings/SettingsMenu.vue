@@ -221,10 +221,10 @@ const menu_section = reactive([
       group: [
           {
               title: 'Home',
-              to: 'Configuracion',
+              to: 'HomeConfigPage',
               icon: '/assets/icons/1.TH.HOME-black.svg',
               include: '/alojamiento/configuracion',
-              selectedArr: ['Configuration'],
+              selectedArr: ['HomeConfigPage'],
             
           },
           {

@@ -105,6 +105,9 @@
     .hborder-green-600 {
         border-color: var(--h-green-600) !important;
     }
+    .houtline-green-600 {
+        outline-color: var(--h-green-600);
+    }
     .hborder-green-700 {
         border-color: var(--h-green-700);
     }
