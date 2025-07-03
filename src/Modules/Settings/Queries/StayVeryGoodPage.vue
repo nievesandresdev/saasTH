@@ -62,7 +62,7 @@
     </div>
 </template>
 <script setup>
-import { reactive, ref, computed, provide, onMounted } from 'vue';
+import { reactive, ref, computed, provide, onMounted, watch } from 'vue';
 import Head from './components/HeadSettings.vue'
 import TabMenu from './components/TabMenu.vue'
 import DescriptionSectionStay from './components/DescriptionSectionStay.vue'
@@ -94,11 +94,16 @@ onMounted(async() => {
     assignValuesToForm();
     // queriesTexts.value.in_stay_good_request_activate = String(form.in_stay_good_request_activate);
     copyTexts.value = JSON.stringify(queriesTexts.value);
-    defineMockup()
+    // defineMockup(valuesForm.request_activate)
 })
 
-function defineMockup(){
-    mockupStore.$setIframeUrl('','period=in-stay&openFakeMsg=true&qualification=VERYGOOD')
+function defineMockup(requestActivate){
+    let activeUrlQuery = 'openFakeMsgActivate=true';
+    if(requestActivate !== 'true'){
+        activeUrlQuery = 'openFakeMsgActivate=false';
+    }
+
+    mockupStore.$setIframeUrl('','period=in-stay&openFakeMsg=true&qualification=VERYGOOD&'+activeUrlQuery)
     mockupStore.$setInfo1('Edita y guardar para ver tus cambios en tiempo real', '/assets/icons/1.TH.EDIT.OUTLINED.svg')
 }
 
@@ -123,6 +128,10 @@ const valuesForm = reactive({
     no_request_thanks_title:null,
     no_request_thanks_msg:null,
 })
+
+watch(valuesForm,(newValue,oldValue)=>{
+    defineMockup(newValue.request_activate)
+},{deep:true})
 
 const submit = async () =>{
     updateGeneralForm();
