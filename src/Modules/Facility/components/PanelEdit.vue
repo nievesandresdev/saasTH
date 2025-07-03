@@ -472,7 +472,6 @@ async function submitSave () {
     
     // Manejo especial para el archivo
     if (form.document === 'upload_file' && form.document_file instanceof File) {
-        console.log('Adjuntando archivo:', form.document_file.name, form.document_file.type);
         formData.append('document_file', form.document_file, form.document_file.name);
     }
     
@@ -481,13 +480,7 @@ async function submitSave () {
     formData.append('schedules', JSON.stringify(form.schedules || []));
     //formData.append('select', JSON.stringify(form.select || {}));
 
-    // Logs para depuración
-    console.log('Tipo de documento:', form.document);
-    console.log('Archivo adjunto:', form.document_file);
-    console.log('Contenido del FormData:');
-    for (let [key, value] of formData.entries()) {
-        console.log(key, ':', value instanceof File ? `File: ${value.name}` : value);
-    }
+   
 
     const response = await facilityStore.$storeOrUpdate(formData);
     const { ok, data } = response;
