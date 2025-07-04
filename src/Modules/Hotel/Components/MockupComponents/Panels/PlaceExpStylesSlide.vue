@@ -29,7 +29,7 @@
                         <div class="bg-[#D9D9D9] rounded-[2px] w-[177px] h-[16px] mt-4"></div>
                         <div class="flex gap-2 mt-4 overflow-hidden">
                             <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
-                                <img src="/assets/icons/WA.monumentos.BlACK.svg" alt="" class="w-[16px] h-[16px]">
+                                <img src="/assets/icons/WA.monumentos.BLACK.svg" alt="" class="w-[16px] h-[16px]">
                                 <p class="lato text-sm leading-[16px]">25 Monumentos</p>
                             </span>
                             <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
