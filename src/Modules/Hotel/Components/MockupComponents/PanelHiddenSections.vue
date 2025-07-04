@@ -1,7 +1,7 @@
 <template>
 <div 
     class="w-[500px] bg-white fixed right-0 z-10 shadow-hoster2 overflow-y-auto"
-    :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'h-without-banner'"
+    :class="userStore.showSuscriptionBanner ? 'top-with-banner h-with-banner' : 'top-0 h-without-banner'"
 >
     <section class="px-4 py-6 border-b hborder-gray-400">
         <h1 class="text-[22px] font-medium leading-[72%]">Módulos ocultos</h1>
