@@ -2,7 +2,7 @@
     <div class="space-y-[24px]">
         <div id="list-confort" class="max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6">
             <label
-                    v-if="!firstLoad"
+                    v-if="!firstLoad && formFilter.visibility !== 'hidden'"
                     for="fileInput"
                     class="relative w-[224px] rounded-[10px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card h-[233px]"
                     @click="addNewItem"
@@ -102,6 +102,7 @@ import BaseSwichInput from '@/components/Forms/BaseSwichInput.vue';
 import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 const toast = inject('toast');
+const formFilter = inject('formFilter');
 
 // COMPOSABLE
 import { usePaginationScrollInfinite } from '@/composables/usePaginationScrollInfinite';

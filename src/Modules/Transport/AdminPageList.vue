@@ -2,7 +2,7 @@
 <div class="space-y-[24px]">
     <div id="list-transport" class="list-component max-w-[720px] 3xl:max-w-[1218px] flex flex-wrap gap-6">
         <label
-            v-if="!firstLoad"
+            v-if="!firstLoad && formFilter.visibility !== 'hidden'"
             for="fileInput"
             class="relative w-[224px] rounded-[10px] border hborder-gray-400 cursor-pointer gallery-file flex justify-center items-center shadow-card h-[233px]"
             @click="addNewItem"
@@ -116,6 +116,7 @@ const draggableCard = ref(null);
 const defNumberCardsToLoad = ref(20);
 
 // INJECT
+const formFilter = inject('formFilter');
 const toast = inject('toast');
 const transportsData = inject('transportsData');
 const transportStore = inject('transportStore');

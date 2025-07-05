@@ -3,11 +3,13 @@
             <div class="pb-[104px]">
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_confort" />
+                <AdminPageTabs @reloadData="reloadData" class="mt-6 px-6" />
                 <div class="mt-[24px] px-[24px]">
                     <p
                         class="text-sm font-medium mb-6"
                         :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && confortsEmpty}"
                     >{{ searchText }}</p>
+
                     <AdminPageList
                         @click:editItem="openDrawer"
                         @loadData="loadConforts"
@@ -36,6 +38,7 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
  import AdminPageBannerShowToGuest from './AdminPageBannerShowToGuest.vue';
  import AdminPageList from './AdminPageList.vue';
  import PanelEdit from './components/PanelEdit.vue';
+ import AdminPageTabs from './AdminPageTabs.vue';
  import PanelEditSubservice from './components/PanelEditSubservice.vue';
 
 // MODULE
@@ -83,7 +86,7 @@ const modalChangePendinginFormService = ref(false);
 const panelEditRef = ref(null);
 const panelEditSubserviceRef = ref(null);
 const formFilter = reactive({
-
+    visibility: null,
 });
 const paginateData = reactive({
     total: 0,
@@ -118,7 +121,26 @@ const serviceNameCurrent = computed(() => {
 });
 
 const searchText = computed(() => {
-   return numberVisible.value == 1 ? `${numberVisible.value} servicio de confort` :  `${numberVisible.value} servicios de confort`;
+    let text = "";
+    let textVisibles = 'servicios visibles';
+    let textHiddens = 'servicios ocultos';
+    let singleHidden = 'oculto';
+
+    numberVisible.value == 1 ? textVisibles = 'servicio visible': '';
+    numberHidden.value == 1 ? textHiddens = 'servicio oculto': '';
+    numberHidden.value == 1 ? singleHidden = 'oculto': '';
+
+    text += `${numberVisible.value} ${textVisibles}`;
+
+    if(formFilter.visibility == 'hidden'){
+        text = `${numberHidden.value} ${textHiddens}`;
+    }
+
+    if(formFilter.visibility == null){
+        text += ` y ${numberHidden.value} ${singleHidden}`;
+    }
+
+    return text;
 });
 
 onMounted(async() => {
@@ -133,6 +155,7 @@ onMounted(async() => {
 
 // FUNCTION
 async function reloadData () {
+    formFilter.visibility = null;
     firstLoad.value = true;
     // loadDataFormFilter();
     page.value = 1;
@@ -236,6 +259,7 @@ provide('confortStore', confortStore);
 provide('serviceStore', serviceStore);
 provide('hotelStore', hotelStore);
 
+provide('formFilter', formFilter);
 provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);

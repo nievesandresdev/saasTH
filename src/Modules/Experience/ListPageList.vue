@@ -169,31 +169,23 @@ onMounted(() => {
 
 const textNumbersExperiencesVisiblesAndHidden = computed(() => {
     let text = null;
-    let visiblesText = 'experiencias visibles';
-    let hiddensText = 'experiencias ocultos';
+    let visiblesText = 'actividades turísticas visibles';
+    let hiddensText = 'actividades turísticas ocultas';
     let hidden = 'ocultos';
     //singular
-    numberExperiencesVisible.value == 1 ? visiblesText = "experiencia visible": '';
-    numberExperiencesHidden.value == 1 ? hiddensText = "experiencia oculto": '';
+    numberExperiencesVisible.value == 1 ? visiblesText = "actividad turística visible": '';
+    numberExperiencesHidden.value == 1 ? hiddensText = "actividad turística oculta": '';
     numberExperiencesHidden.value == 1 ? hidden = "oculto": '';
     //
     if(!formFilter.visibility){
         text = ` ${numberExperiencesVisible.value} ${visiblesText} y ${numberExperiencesHidden.value} ${hidden}`
     }
     if(formFilter.visibility){
-        if(formFilter.visibility.includes('viator')){
-            text =` ${numberExperiencesVisible.value} ${visiblesText}`
-        }
-        if(formFilter.visibility.includes('visible')){
-            text =` ${numberExperiencesVisible.value} ${visiblesText}`
-        }
-        if(formFilter.visibility.includes('recommendated')){
-            text =` ${numberExperiencesVisible.value} ${visiblesText}`
-        }
         if(formFilter.visibility.includes('hidden')){
             text =` ${numberExperiencesHidden.value} ${hiddensText}`
+        } else {
+            text =` ${numberExperiencesVisible.value} ${visiblesText}`
         }
-
     }
     text = `${text} en ${!formFilter.all_cities ? hotelData.zone : 'España'}`
     return text;

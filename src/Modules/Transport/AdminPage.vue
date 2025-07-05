@@ -3,6 +3,7 @@
             <div class="pb-[104px]">
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_transport" />
+                <AdminPageTabs @reloadData="reloadData" class="mt-6 px-6" />
                 <div class="mt-[24px] px-[24px]">
                     <p
                         class="text-sm font-medium mb-6"
@@ -36,6 +37,7 @@ import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vu
  import AdminPageList from './AdminPageList.vue';
  import PanelEdit from './components/PanelEdit.vue';
   import PanelEditSubservice from '@/Modules/Confort/components/PanelEditSubservice.vue';
+  import AdminPageTabs from './AdminPageTabs.vue';
 
 // MODULE
 import { useMockupStore } from '@/stores/modules/mockup';
@@ -82,7 +84,7 @@ const modalChangePendinginFormService = ref(false);
 const panelEditRef = ref(null);
 const panelEditSubserviceRef = ref(null);
 const formFilter = reactive({
-
+    visibility: null,
 });
 const paginateData = reactive({
     total: 0,
@@ -118,7 +120,26 @@ const serviceNameCurrent = computed(() => {
 });
 
 const searchText = computed(() => {
-   return numberVisible.value == 1 ? `${numberVisible.value} servicio de transporte` :  `${numberVisible.value} servicios de transporte`;
+    let text = "";
+    let textVisibles = 'servicios visibles';
+    let textHiddens = 'servicios ocultos';
+    let singleHidden = 'oculto';
+
+    numberVisible.value == 1 ? textVisibles = 'servicio visible': '';
+    numberHidden.value == 1 ? textHiddens = 'servicio oculto': '';
+    numberHidden.value == 1 ? singleHidden = 'oculto': '';
+
+    text += `${numberVisible.value} ${textVisibles}`;
+
+    if(formFilter.visibility == 'hidden'){
+        text = `${numberHidden.value} ${textHiddens}`;
+    }
+
+    if(formFilter.visibility == null){
+        text += ` y ${numberHidden.value} ${singleHidden}`;
+    }
+
+    return text;
 });
 
 onMounted(async() => {
@@ -132,6 +153,7 @@ onMounted(async() => {
 
 // FUNCTION
 async function reloadData () {
+    formFilter.visibility = null;
     firstLoad.value = true;
     // loadDataFormFilter();
     page.value = 1;
@@ -229,6 +251,7 @@ async function loadLanguanges () {
 }
 
 // PROVIDE
+provide('formFilter', formFilter);
 provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);
