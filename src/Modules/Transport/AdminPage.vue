@@ -153,7 +153,6 @@ onMounted(async() => {
 
 // FUNCTION
 async function reloadData () {
-    formFilter.visibility = null;
     firstLoad.value = true;
     // loadDataFormFilter();
     page.value = 1;
@@ -214,6 +213,7 @@ function openDrawer (payload) {
 }
 
 function resetPageData () {
+    formFilter.visibility = null;
     changePendingInForm.value = false;
     changePendingInFormService.value = false;
     //mockupStore.$reloadIframe();
