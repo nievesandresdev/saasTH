@@ -105,9 +105,9 @@
                 <!-- <span class="font-semibold text-sm text-left block mb-2">Idiomas más utilizados por tus huéspedes</span> -->
                 <div class="bg-white border border-[#BFBFBF] rounded-[10px] overflow-hidden flex-1">
                     <div class="p-4 h-full flex flex-col items-start justify-center">
-                        <div v-for="lang in processedLanguages" :key="lang.name" class="flex items-center gap-2">
+                        <div v-for="lang in processedLanguages" :key="lang.code || 'others'" class="flex items-center gap-2">
                             <img :src="lang.icon" class="w-6 h-6">
-                            <span class="text-base font-semibold">{{ lang.percentaje }}%</span>
+                            <span class="text-base font-semibold">{{ lang.percentage }}%</span>
                             <span class="text-sm font-medium">{{ lang.name ? $nameLanguage(lang.name) : '-' }}</span>
                         </div> 
                     </div>
@@ -137,31 +137,40 @@ const guestsPostStay = ref(0);
 const languages = ref({});
 
 // Define todos los idiomas posibles aquí
-const allLanguages = ["es", "en", "others"];
+const allLanguages = ["es", "en"];
 
 // Computed property to process languages and fill in missing ones
 const processedLanguages = computed(() => {
-
-    //sumar porcentajes de los idiomas que no están en allLanguages
+    const result = [];
+    
+    // Agregar idiomas principales si existen
+    allLanguages.forEach(lang => {
+        if (languages.value[lang]) {
+            result.push({
+                code: lang,
+                name: languages.value[lang].name,
+                percentage: languages.value[lang].percentaje || 0,
+                icon: `/assets/icons/flags/${lang}.svg`
+            });
+        }
+    });
+    
+    // Calcular y agregar "others" si hay idiomas adicionales
     const othersPercentage = Object.entries(languages.value)
         .filter(([key]) => !allLanguages.includes(key))
         .reduce((sum, [, data]) => sum + (data.percentaje || 0), 0);
-
-    return allLanguages.map(lang => {
-        if (languages.value[lang]) {
-            return {
-                name: languages.value[lang].name,
-                percentaje: languages.value[lang].percentaje,
-                icon: `/assets/icons/flags/${lang}.svg`
-            };
-        } else {
-            return {
-                name: othersPercentage ? 'others' : null,
-                percentaje: othersPercentage || '--',
-                icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
-            };
-        }
-    });
+    
+    if (othersPercentage > 0) {
+        result.push({
+            code: 'others',
+            name: 'others',
+            percentage: othersPercentage,
+            icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
+        });
+    }
+    
+    // Ordenar por porcentaje descendente
+    return result.sort((a, b) => b.percentage - a.percentage);
 });
 
 onMounted(async () => {
