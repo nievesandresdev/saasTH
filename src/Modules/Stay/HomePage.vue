@@ -102,12 +102,12 @@
                     <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados</h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
                         <div v-for="(item, key, index) in langsPercentage" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
-                            <img v-if="key !== 'others'" :src="`/assets/icons/flags/${key}.svg`" class="w-6 h-6 mr-1">
+                            <img v-if="key !== 'others' && item > 0" :src="`/assets/icons/flags/${key}.svg`" class="w-6 h-6 mr-1">
                             <img v-else src="/assets/icons/1.TH.SINIDIOMA.svg" class="w-6 h-6 mr-1">
                             <span class="text-base font-semibold leading-[120%] mr-1">
-                                {{item}}% 
+                                {{item > 0 ? item : '--'}}% 
                             </span>
-                            <span class="text-sm font-medium"> {{ $nameLanguage(key) }}</span>
+                            <span class="text-sm font-medium"> {{ item > 0 ? $nameLanguage(key) : '-' }}</span>
                         </div> 
                     </div>
                 </div>
