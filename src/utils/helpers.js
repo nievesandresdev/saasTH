@@ -79,6 +79,9 @@ const $nameLanguage = (lang) => {
     'hu':'Húngaro',
     'no':'Noruego',
     'sk':'Eslovaco',
+    'gl':'Gallego',
+    'ca':'Catalán',
+    'eu':'Euskera',
     'others':'Otros'
   }
   let result = 'Desconocido';
