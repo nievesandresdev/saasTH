@@ -143,34 +143,29 @@ const allLanguages = ["es", "en"];
 const processedLanguages = computed(() => {
     const result = [];
     
-    // Agregar idiomas principales si existen
+    // Agregar idiomas principales (siempre se muestran)
     allLanguages.forEach(lang => {
-        if (languages.value[lang]) {
-            result.push({
-                code: lang,
-                name: languages.value[lang].name,
-                percentage: languages.value[lang].percentaje || 0,
-                icon: `/assets/icons/flags/${lang}.svg`
-            });
-        }
+        result.push({
+            code: lang,
+            name: languages.value[lang]?.name || lang,
+            percentage: languages.value[lang]?.percentaje || 0,
+            icon: `/assets/icons/flags/${lang}.svg`
+        });
     });
     
-    // Calcular y agregar "others" si hay idiomas adicionales
+    // Calcular y agregar "others" (siempre se muestra)
     const othersPercentage = Object.entries(languages.value)
         .filter(([key]) => !allLanguages.includes(key))
         .reduce((sum, [, data]) => sum + (data.percentaje || 0), 0);
     
-    if (othersPercentage > 0) {
-        result.push({
-            code: 'others',
-            name: 'others',
-            percentage: othersPercentage,
-            icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
-        });
-    }
+    result.push({
+        code: 'others',
+        name: 'others',
+        percentage: othersPercentage,
+        icon: `/assets/icons/flags/1.TH.SINIDIOMA.svg`
+    });
     
-    // Ordenar por porcentaje descendente
-    return result.sort((a, b) => b.percentage - a.percentage);
+    return result;
 });
 
 onMounted(async () => {
