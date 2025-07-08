@@ -45,15 +45,7 @@
                         <span class="text-base font-medium leading-[140%]">Opción B</span>
                     </div>
                     <div class="p-4 border hborder-gray-400 rounded-[10px] mt-4 w-[375px]">
-                        <div class="flex items-center gap-2">
-                            <img src="/assets/icons/WA.servicios.svg" class="w-6 h-6">
-                            <h2 class="lato text-[20px] font-bold leading-[18px]">Servicios</h2>
-                        </div>
-                        <div 
-                            class="mt-4 rounded-[10px] w-[343px] h-[238px] relative bg-center shadow-hoster" 
-                            style="background-image: url('/assets/img/servicesslide2.svg');"
-                        >    
-                        </div>
+                        <ServicesStyleBCard />
                     </div>
                 </div>
             </section>
@@ -74,6 +66,7 @@ import SlidePanel from '@/components/SlidePanel.vue';
 import RadioButton from '@/components/Forms/RadioButton.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import WarningHiddenSection from '@/Modules/Hotel/Components/WarningHiddenSection.vue';
+import ServicesStyleBCard from '../ServicesStyleBCard.vue';
 // STORES
 import { useGalleryStore } from '@/stores/modules/gallery';
 const galleryStore = useGalleryStore()

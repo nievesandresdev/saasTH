@@ -50,18 +50,7 @@
                         <span class="text-base font-medium leading-[140%]">Opción B</span>
                     </div>
                     <div class="p-4 border hborder-gray-400 rounded-[10px] mt-4 w-[468px]">
-                        <div class="flex items-center gap-2">
-                            <img src="/assets/icons/WA.star.svg" class="w-6 h-6">
-                            <h2 class="lato text-[20px] font-bold leading-[18px]">Destino - Recomendados</h2>
-                        </div>
-                        <div class="mt-4 w-[436px] overflow-x-hidden">
-                            <div class="flex gap-4">
-                                <img v-for="i in 2" :key="i" src="/assets/img/cardExplPlaces.svg" class="w-[245px] h-[80px] flex-shrink-0">
-                            </div>
-                            <div class="flex gap-4 mt-2">
-                                <img v-for="i in 2" :key="i" src="/assets/img/cardExplPlaces.svg" class="w-[245px] h-[80px] flex-shrink-0">
-                            </div>
-                        </div>
+                        <PlacesExpStyleBCard />
                     </div>
                 </div>
             </section>
@@ -81,6 +70,7 @@ import SlidePanel from '@/components/SlidePanel.vue';
 import RadioButton from '@/components/Forms/RadioButton.vue';
 import ChangesBar from '@/components/Forms/ChangesBar.vue'
 import WarningHiddenSection from '@/Modules/Hotel/Components/WarningHiddenSection.vue';
+import PlacesExpStyleBCard from '../PlacesExpStyleBCard.vue';
 // STORES
 import { useGalleryStore } from '@/stores/modules/gallery';
 const galleryStore = useGalleryStore()

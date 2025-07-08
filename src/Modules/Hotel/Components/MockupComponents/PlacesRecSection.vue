@@ -11,6 +11,7 @@
             'rounded-[10px]': (currentSection === 'placesRecommendationSection' || hoverSection) && !inPanel,
         }"
     >
+    <template v-if="rawSections.placesRecommendationSection.style == 1">
         <div class="flex items-center">
             <img src="/assets/icons/WA.star.svg" class="w-[24px] h-[24px] mr-2">
             <h2 class="lato text-[20px] font-bold leading-[28px]">
@@ -34,6 +35,11 @@
                 </div>
             </div>
         </div>
+    </template>
+    <template v-else>
+        <PlacesRecStyleBCard />
+    </template>
+        
 
         <div 
             class="absolute top-2 right-2 bg-white rounded-[10px] p-1 shadow-hoster2"
@@ -51,7 +57,7 @@
 <script setup>
 import { ref, inject } from 'vue'
 import ToggleButton from '@/components/Buttons/ToggleButton.vue'
-
+import PlacesRecStyleBCard from './PlacesRecStyleBCard.vue';        
 const props = defineProps({
     inPanel: {
         type: Boolean,

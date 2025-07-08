@@ -12,31 +12,38 @@
             'cursor-grab': grabbingSection === 'placesExploreSection',
         }"
     >
-        <div class="flex items-center">
-            <img src="/assets/icons/WA.star.svg" class="w-[24px] h-[24px] mr-2">
-            <h2 class="lato text-[20px] font-bold leading-[28px]">
-                Explora tu destino
-            </h2>
-        </div>
-        <div class="mt-4 pb-4" >
-            <img src="/assets/img/mapaMockupExplora.png" class="w-full h-[133px]">
-            <p class="lato text-[14px] font-bold leading-[16px] mt-4">
-                Más de 300 sitios de interés
-            </p>
-            <div class="flex gap-2 mt-4 overflow-hidden">
-                <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
-                    <img src="/assets/icons/WA.monumentos.BLACK.svg" alt="" class="w-[16px] h-[16px]">
-                    <p class="lato text-sm leading-[16px]">25 Monumentos</p>
-                </span>
-                <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
-                    <img src="/assets/icons/WA.restaurantes.svg" alt="" class="w-[16px] h-[16px]">
-                    <p class="lato text-sm leading-[16px]">53 Restaurantes</p>
-                </span>
-                <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
-                    <img src="/assets/icons/WA.Museos.svg" alt="" class="w-[16px] h-[16px]">
-                    <p class="lato text-sm leading-[16px]">18Museos</p>
-                </span>
+        <!-- style A -->
+        <div v-if="rawSections.placesExploreSection.style == 1">
+            <div class="flex items-center">
+                <img src="/assets/icons/WA.star.svg" class="w-[24px] h-[24px] mr-2">
+                <h2 class="lato text-[20px] font-bold leading-[28px]">
+                    Explora tu destino
+                </h2>
             </div>
+            <div class="mt-4 pb-4" >
+                <img src="/assets/img/mapaMockupExplora.png" class="w-full h-[133px]">
+                <p class="lato text-[14px] font-bold leading-[16px] mt-4">
+                    Más de 300 sitios de interés
+                </p>
+                <div class="flex gap-2 mt-4 overflow-hidden">
+                    <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
+                        <img src="/assets/icons/WA.monumentos.BLACK.svg" alt="" class="w-[16px] h-[16px]">
+                        <p class="lato text-sm leading-[16px]">25 Monumentos</p>
+                    </span>
+                    <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
+                        <img src="/assets/icons/WA.restaurantes.svg" alt="" class="w-[16px] h-[16px]">
+                        <p class="lato text-sm leading-[16px]">53 Restaurantes</p>
+                    </span>
+                    <span class="border hborder-disabled-input rounded-[2px] p-1 flex items-center gap-1 flex-shrink-0">
+                        <img src="/assets/icons/WA.Museos.svg" alt="" class="w-[16px] h-[16px]">
+                        <p class="lato text-sm leading-[16px]">18Museos</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- style B -->
+        <div v-else class="overflow-hidden">
+            <PlacesExpStyleBCard />
         </div>
 
         <div 
@@ -55,7 +62,7 @@
 <script setup>
 import { ref, inject } from 'vue'
 import ToggleButton from '@/components/Buttons/ToggleButton.vue'
-
+import PlacesExpStyleBCard from './PlacesExpStyleBCard.vue';
 const props = defineProps({
     inPanel: {
         type: Boolean,
