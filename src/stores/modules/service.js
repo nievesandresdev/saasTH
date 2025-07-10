@@ -25,6 +25,7 @@ export const useServiceStore = defineStore('service', () => {
         address: '',
         requeriment: '',
         subservices: [],
+        visibility: null,
     }
     
     const form = reactive(JSON.parse(JSON.stringify(valueFormDefault)));

@@ -356,9 +356,9 @@ const submit = async () => {
         //toast.warningToast('Cambios guardados con éxito', 'top-right');
         //closeModalAirbnb();
         emit('closeModalAirbnb');
-        /* setTimeout(() => {
+        setTimeout(() => {
             location.reload();
-        }, 1100); */
+        }, 1100);
     } else {
         toast.errorToast('Error al guardar los cambios', 'top-right');
     }

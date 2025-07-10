@@ -3,12 +3,18 @@
             <div class="pb-[104px]">
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_confort" />
+                <AdminPageTabs @reloadData="reloadData" class="mt-6 px-6" />
                 <div class="mt-[24px] px-[24px]">
                     <p
                         class="text-sm font-medium mb-6"
                         :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && confortsEmpty}"
                     >{{ searchText }}</p>
-                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadConforts" />
+
+                    <AdminPageList
+                        @click:editItem="openDrawer"
+                        @loadData="loadConforts"
+                        @reloadData="reloadData"
+                    />
                 </div>
             </div>
             <PanelEdit
@@ -32,6 +38,7 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
  import AdminPageBannerShowToGuest from './AdminPageBannerShowToGuest.vue';
  import AdminPageList from './AdminPageList.vue';
  import PanelEdit from './components/PanelEdit.vue';
+ import AdminPageTabs from './AdminPageTabs.vue';
  import PanelEditSubservice from './components/PanelEditSubservice.vue';
 
 // MODULE
@@ -79,7 +86,7 @@ const modalChangePendinginFormService = ref(false);
 const panelEditRef = ref(null);
 const panelEditSubserviceRef = ref(null);
 const formFilter = reactive({
-
+    visibility: null,
 });
 const paginateData = reactive({
     total: 0,
@@ -89,6 +96,8 @@ const paginateData = reactive({
     from_page: 0,
     to: 0,
 });
+const numberVisible = ref(0);
+const numberHidden = ref(0);
 
 const languagesData = ref([]);
 
@@ -112,7 +121,26 @@ const serviceNameCurrent = computed(() => {
 });
 
 const searchText = computed(() => {
-   return paginateData.total == 1 ? `${paginateData.total} servicio de confort` :  `${paginateData.total} servicios de confort`;
+    let text = "";
+    let textVisibles = 'servicios visibles';
+    let textHiddens = 'servicios ocultos';
+    let singleHidden = 'oculto';
+
+    numberVisible.value == 1 ? textVisibles = 'servicio visible': '';
+    numberHidden.value == 1 ? textHiddens = 'servicio oculto': '';
+    numberHidden.value == 1 ? singleHidden = 'oculto': '';
+
+    text += `${numberVisible.value} ${textVisibles}`;
+
+    if(formFilter.visibility == 'hidden'){
+        text = `${numberHidden.value} ${textHiddens}`;
+    }
+
+    if(formFilter.visibility == null){
+        text += ` y ${numberHidden.value} ${singleHidden}`;
+    }
+
+    return text;
 });
 
 onMounted(async() => {
@@ -126,6 +154,15 @@ onMounted(async() => {
 });
 
 // FUNCTION
+async function reloadData () {
+    firstLoad.value = true;
+    // loadDataFormFilter();
+    page.value = 1;
+    // isOpenModelFilter.value = false;
+    confortsData.value = [];
+    route.push({ name: 'Conforts' });
+    loadConforts();
+}
 function loadMockup (id = null) {
     if (id) {
         mockupStore.$setIframeUrl(`/servicios/confort/${id}`);
@@ -140,19 +177,23 @@ async function loadConforts () {
     // console.log('loadPlaces')
     // isloadingForm.value=true;
     isloadingForm.value=true;
+    // console.log(page.value, 'page');
     const response = await confortStore.$getAll({page: page.value,...formFilter});
+    // console.log(response, 'response');
     if (response.ok) {
+        numberVisible.value = response.data.numberVisible;
+        numberHidden.value = response.data.numberHidden;
         let paginate = {
-            total: response.data.paginate.total,
-            current_page: response.data.paginate.current_page,
-            per_page: response.data.paginate.per_page,
-            last_page: response.data.paginate.last_page,
-            from_page: response.data.paginate.from,
-            to: response.data.paginate.to,
+            total: response.data.confortServicesCollection.paginate.total,
+            current_page: response.data.confortServicesCollection.paginate.current_page,
+            per_page: response.data.confortServicesCollection.paginate.per_page,
+            last_page: response.data.confortServicesCollection.paginate.last_page,
+            from_page: response.data.confortServicesCollection.paginate.from,
+            to: response.data.confortServicesCollection.paginate.to,
         }
         Object.assign(paginateData, paginate);
         page.value = paginateData.current_page;
-        confortsData.value = [...confortsData.value, ...response.data.data];
+        confortsData.value = [...confortsData.value, ...response.data.confortServicesCollection.data];
     }
     firstLoad.value = false;
     isloadingForm.value=false;
@@ -176,6 +217,7 @@ function openDrawer (payload) {
 }
 
 function resetPageData () {
+    formFilter.visibility = null;
     changePendingInForm.value = false;
     changePendingInFormService.value = false;
     //mockupStore.$reloadIframe();
@@ -217,6 +259,7 @@ provide('confortStore', confortStore);
 provide('serviceStore', serviceStore);
 provide('hotelStore', hotelStore);
 
+provide('formFilter', formFilter);
 provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);
@@ -226,6 +269,8 @@ provide('changePendingInFormService', changePendingInFormService);
 provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('modalChangePendinginFormService', modalChangePendinginFormService);
 provide('paginateData', paginateData);
+provide('numberVisible', numberVisible);
+provide('numberHidden', numberHidden);
 provide('confortsData', confortsData);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);

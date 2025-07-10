@@ -6,8 +6,10 @@
      name="list" 
      tag="div" 
      ref="parent"
-     class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
+     id="parentRef"
+     class="parentRef flex flex-wrap gap-4"
    >
+
      <div 
        v-for="(button, index) in visibleButtons" 
        :key="button.id"
@@ -67,7 +69,7 @@
    </TransitionGroup>
  </div>
 
- <div class="border-t border-[#E9E9E9] mt-4 mb-4"></div>
+ <div class="border-t border-[#E9E9E9] my-4"></div>
 
  <div class="flex flex-col gap-2">
    <span class="text-sm font-semibold">Botones ocultos ({{ countButtonsHidden }})</span>
@@ -76,7 +78,7 @@
      tag="div" 
      ref="parentHidden"
      id="no-drag"
-     class="grid grid-cols-4 3xl:grid-cols-6 3xl:w-[850px] 1x1:w-full gap-4 pr-[150px] 3xl:pr-0 max-w-[1920px]"
+     class="flex flex-wrap gap-4"
    >
      <div 
        v-for="(button, index) in hiddenButtons" 
@@ -249,7 +251,7 @@ const props = defineProps({
  }
 });
 
-const emit = defineEmits(['updateButtons', 'getButtons']);
+const emit = defineEmits(['updateButtons', 'getButtons','updateLocalButtons']);
 
 // Variables de estado
 const showOverlays = ref(true);
@@ -316,29 +318,33 @@ watch(() => dragButtons.value, (newDragButtons) => {
 
 // Eventos de drag and drop
 state.on('dragStarted', () => {
-  showOverlays.value = false;
-  showDragButtons.value = false;
-  isDragging.value = true;
-  localButtons.value.forEach(button => {
-    button.hover = false;
-  });
+  if(state.initialParent.el.id === 'parentRef'){
+    showOverlays.value = false;
+    showDragButtons.value = false;
+    isDragging.value = true;
+    localButtons.value.forEach(button => {
+      button.hover = false;
+    });
+  }
 });
 
 state.on('dragEnded', async () => {
-  const elements = document.elementsFromPoint(event.clientX, event.clientY);
-  const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
-  
-  await nextTick();
-  
-  showOverlays.value = true;
-  showDragButtons.value = true;
-  isDragging.value = false;
-  
-  if (isInNoDragZone) {
-    return;
+  if(state.initialParent.el.id === 'parentRef'){
+    const elements = document.elementsFromPoint(event.clientX, event.clientY);
+    const isInNoDragZone = elements.some(el => el.closest('#no-drag'));
+    
+    await nextTick();
+    
+    showOverlays.value = true;
+    showDragButtons.value = true;
+    isDragging.value = false;
+    
+    if (isInNoDragZone) {
+      return;
+    }
+    
+    updateOrderInBackground();
   }
-  
-  updateOrderInBackground();
 });
 
 // actualizar en segundo plano
@@ -350,9 +356,10 @@ const updateOrderInBackground = async () => {
       is_visible: button.is_visible
     }));
     
-    await hotelButtonsStore.$updateOrderButtons(payload);
-    mockupStore.$reloadIframe();
-    
+    let response = await hotelButtonsStore.$updateOrderButtons(payload);
+    console.log('test updateOrderButtons', response);
+    // mockupStore.$reloadIframe();
+    emit('updateLocalButtons',response.data);
   } catch (error) {
     console.error('Error actualizando orden:', error);
     toast.warningToast('Error al actualizar el orden', 'top-right');

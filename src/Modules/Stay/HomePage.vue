@@ -99,15 +99,15 @@
                 </div>
                 <!-- languages card -->
                 <div class="flex-grow flex-1">
-                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados </h3>
+                    <h3 class="text-sm font-semibold leading-[120%]">Idiomas más utilizados</h3>
                     <div class="mt-4 border hborder-gray-400 rounded-[10px] p-4">
-                        <div v-for="(lang,index) in ['es','en','fr']" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
-                            <img v-if="statistics?.percentageLangs && statistics?.percentageLangs[lang]" :src="`/assets/icons/flags/${lang}.svg`" class="w-6 h-6 mr-1">
+                        <div v-for="(item, key, index) in langsPercentage" :key="index" class="flex items-center" :class="{'mt-2':index >0}">
+                            <img v-if="key !== 'others'" :src="`/assets/icons/flags/${key}.svg`" class="w-6 h-6 mr-1">
                             <img v-else src="/assets/icons/1.TH.SINIDIOMA.svg" class="w-6 h-6 mr-1">
                             <span class="text-base font-semibold leading-[120%] mr-1">
-                                {{ statistics?.percentageLangs && statistics?.percentageLangs[lang] > 0 ? statistics?.percentageLangs[lang] : '--' }}% 
+                                {{item}}% 
                             </span>
-                            <span class="text-sm font-medium"> {{ statistics?.percentageLangs && statistics?.percentageLangs[lang] ? $nameLanguage(lang) : '-'}}</span>
+                            <span class="text-sm font-medium"> {{ $nameLanguage(key) == 'Desconocido' ? 'Otros' : $nameLanguage(key) }}</span>
                         </div> 
                     </div>
                 </div>
@@ -133,10 +133,10 @@ const stayColors= {
 
 const statistics = ref([]);
 const openInviteGuest = ref(false);
-
+const langsPercentage = ref([]);
 onMounted(async() => {
     statistics.value = await stayStore.$statisticsByHotel();  
-    // console.log('statistics.value',statistics.value)
+    langsPercentage.value = statistics.value.percentageLangs;
 })
 
 provide('openInviteGuest',openInviteGuest)

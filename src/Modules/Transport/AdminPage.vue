@@ -3,12 +3,17 @@
             <div class="pb-[104px]">
                 <AdminPageHeader />
                 <AdminPageBannerShowToGuest v-if="!hotelData.show_transport" />
+                <AdminPageTabs @reloadData="reloadData" class="mt-6 px-6" />
                 <div class="mt-[24px] px-[24px]">
                     <p
                         class="text-sm font-medium mb-6"
                         :class="{'w-[260px] hbg-gray-500 htext-gray-500 animate-pulse rounded-[6px]':firstLoad, 'hidden':!firstLoad && transportsEmpty}"
                     >{{ searchText }}</p>
-                    <AdminPageList  @click:editItem="openDrawer" @loadData="loadTransports" />
+                    <AdminPageList
+                        @click:editItem="openDrawer"
+                        @loadData="loadTransports"
+                        @reloadData="reloadData"
+                    />
                 </div>
             </div>
             <PanelEdit
@@ -25,7 +30,6 @@
 
 <script setup>
 import { ref, reactive, onMounted, provide, computed, nextTick, watch } from 'vue';
-import { $throttle, $isElementVisible } from '@/utils/helpers';
 
 // COMPONENT
  import AdminPageHeader from './AdminPageHeader.vue';
@@ -33,6 +37,7 @@ import { $throttle, $isElementVisible } from '@/utils/helpers';
  import AdminPageList from './AdminPageList.vue';
  import PanelEdit from './components/PanelEdit.vue';
   import PanelEditSubservice from '@/Modules/Confort/components/PanelEditSubservice.vue';
+  import AdminPageTabs from './AdminPageTabs.vue';
 
 // MODULE
 import { useMockupStore } from '@/stores/modules/mockup';
@@ -79,7 +84,7 @@ const modalChangePendinginFormService = ref(false);
 const panelEditRef = ref(null);
 const panelEditSubserviceRef = ref(null);
 const formFilter = reactive({
-
+    visibility: null,
 });
 const paginateData = reactive({
     total: 0,
@@ -89,6 +94,8 @@ const paginateData = reactive({
     from_page: 0,
     to: 0,
 });
+const numberVisible = ref(0);
+const numberHidden = ref(0);
 
 const languagesData = ref([]);
 
@@ -113,7 +120,26 @@ const serviceNameCurrent = computed(() => {
 });
 
 const searchText = computed(() => {
-   return paginateData.total == 1 ? `${paginateData.total} servicio de transporte` :  `${paginateData.total} servicios de transporte`;
+    let text = "";
+    let textVisibles = 'servicios visibles';
+    let textHiddens = 'servicios ocultos';
+    let singleHidden = 'oculto';
+
+    numberVisible.value == 1 ? textVisibles = 'servicio visible': '';
+    numberHidden.value == 1 ? textHiddens = 'servicio oculto': '';
+    numberHidden.value == 1 ? singleHidden = 'oculto': '';
+
+    text += `${numberVisible.value} ${textVisibles}`;
+
+    if(formFilter.visibility == 'hidden'){
+        text = `${numberHidden.value} ${textHiddens}`;
+    }
+
+    if(formFilter.visibility == null){
+        text += ` y ${numberHidden.value} ${singleHidden}`;
+    }
+
+    return text;
 });
 
 onMounted(async() => {
@@ -126,6 +152,15 @@ onMounted(async() => {
 });
 
 // FUNCTION
+async function reloadData () {
+    firstLoad.value = true;
+    // loadDataFormFilter();
+    page.value = 1;
+    // isOpenModelFilter.value = false;
+    route.push({ name: 'Transports' });
+    transportsData.value = [];
+    loadTransports();
+}
 function loadMockup (id = null) {
     if (!id) {
         mockupStore.$setIframeUrl(`/servicios/transport`);
@@ -135,29 +170,34 @@ function loadMockup (id = null) {
     mockupStore.$setInfo1('Guarda para ver tus cambios en tiempo real', '/assets/icons/info.svg');
     mockupStore.$setLanguageTooltip(true);
 }
+
 async function loadTransports () {
     isloadingForm.value=true;
     const response = await transportStore.$getAll({page: page.value,...formFilter});
     if (response.ok) {
+        numberVisible.value = response.data.numberVisible;
+        numberHidden.value = response.data.numberHidden;
         let paginate = {
-            total: response.data.paginate.total,
-            current_page: response.data.paginate.current_page,
-            per_page: response.data.paginate.per_page,
-            last_page: response.data.paginate.last_page,
-            from_page: response.data.paginate.from,
-            to: response.data.paginate.to,
+            total: response.data.transportServicesCollection.paginate.total,
+            current_page: response.data.transportServicesCollection.paginate.current_page,
+            per_page: response.data.transportServicesCollection.paginate.per_page,
+            last_page: response.data.transportServicesCollection.paginate.last_page,
+            from_page: response.data.transportServicesCollection.paginate.from,
+            to: response.data.transportServicesCollection.paginate.to,
         }
         Object.assign(paginateData, paginate);
         page.value = paginateData.current_page;
-        transportsData.value = [...transportsData.value, ...response.data.data];
+        numberVisible.value = response.data.numberVisible;
+        numberHidden.value = response.data.numberHidden;
+        transportsData.value = [...transportsData.value, ...response.data.transportServicesCollection.data];
     }
     isloadingForm.value = false;
     firstLoad.value = false;
 }
 
-    function goPanelEdit () {
-        modelActive.value = modelActiveHistory.value;
-    }
+function goPanelEdit () {
+    modelActive.value = modelActiveHistory.value;
+}
 
 function openDrawer (payload) {
     modelActiveHistory.value = payload.action;
@@ -173,6 +213,7 @@ function openDrawer (payload) {
 }
 
 function resetPageData () {
+    formFilter.visibility = null;
     changePendingInForm.value = false;
     changePendingInFormService.value = false;
     //mockupStore.$reloadIframe();
@@ -192,6 +233,7 @@ function openDrawerSubservice (payload) {
         panelEditSubserviceRef.value.edit(payload);
     });
 }
+
 async function openPanelEditSubservice (payload) {
     modelActive.value = null;
     await nextTick();
@@ -209,6 +251,7 @@ async function loadLanguanges () {
 }
 
 // PROVIDE
+provide('formFilter', formFilter);
 provide('serviceNameCurrent', serviceNameCurrent);
 provide('languagesData', languagesData);
 provide('toast', toast);
@@ -223,6 +266,8 @@ provide('changePendingInFormService', changePendingInFormService);
 provide('modalChangePendinginForm', modalChangePendinginForm);
 provide('modalChangePendinginFormService', modalChangePendinginFormService);
 provide('paginateData', paginateData);
+provide('numberVisible', numberVisible);
+provide('numberHidden', numberHidden);
 provide('selectedCard', selectedCard);
 provide('modelActive', modelActive);
 provide('modelSubserviceActive', modelSubserviceActive);

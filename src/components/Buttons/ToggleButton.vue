@@ -1,4 +1,6 @@
 <template>
+  <div :class="{'flex items-center gap-1': textLeft || textRight}">
+    <p v-if="textLeft" class="text-[10px] font-semibold leading-[130%] text-[#333333]">{{ textLeft }}</p>
     <div class="relative" :class="{ 'opacity-50 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }">
       <input
         type="checkbox"
@@ -30,7 +32,8 @@
         ></div>
       </label>
     </div>
-  </template>
+  </div>    
+</template>
   
   <script setup>
   import { ref, watch, computed, onMounted } from 'vue'
@@ -61,6 +64,14 @@
       type: String,
       default: '#858181'  // Gris
     },
+    textLeft: {
+      type: String,
+      default: null
+    },
+    textRight: {
+      type: String,
+      default: null
+    }
   })
   
   const emit = defineEmits(['update:modelValue', 'change'])

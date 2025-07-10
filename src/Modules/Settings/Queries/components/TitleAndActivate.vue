@@ -1,8 +1,8 @@
 <template>
     <div class="mt-6 flex justify-between items-center">
-        <h1 class="text-lg font-medium">Sentimiento en {{ status }} </h1>
+        <h1 class="text-lg font-medium leading-[120%]">Consulta de {{ status }} </h1>
         <div class="flex items-center gap-2" v-if="!hideToggleButton">
-            <p class="text-sm font-semibold">Solicitar feedback al huésped</p>
+            <p class="text-sm font-semibold leading-[120%]">Enviar consulta al huésped</p>
             <label for="toggle" id="toggle-input" class="relative cursor-pointer mb-0 group">
                 <input
                     :checked="defaultToggle"

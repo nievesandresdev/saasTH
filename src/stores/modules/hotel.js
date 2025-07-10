@@ -339,6 +339,16 @@ export const useHotelStore = defineStore('hotel', () => {
         return response;
     }
 
+    async function $getOrderSections () {
+        const response = await hotelService.getOrderSectionsApi();
+        return response;
+    }
+
+    async function $updateOrderSections (data) {
+        const response = await hotelService.updateOrderSectionsApi(data);
+        return response;
+    }
+
 
     //
     return {
@@ -380,7 +390,9 @@ export const useHotelStore = defineStore('hotel', () => {
         $getProfileEmail,
         $getProfileWhatsapp,
         $getShowContact,
-        $toggleShowContact
+        $toggleShowContact,
+        $getOrderSections,
+        $updateOrderSections
     }
 
 })
