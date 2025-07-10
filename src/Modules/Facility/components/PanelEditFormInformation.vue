@@ -177,7 +177,6 @@
             </section>
     </div>
 </template>
-https://www.google.com/maps/place/WELLDONE+ANTIQUARIUM/@37.3945703,-5.9925358,17z/data=!3m1!4b1!4m9!3m8!1s0xd126c045d138193:0xdc483bf9c7e345b8!5m2!4m1!1i2!8m2!3d37.3945661!4d-5.9899609!16s%2Fg%2F11f3p8rffy?entry=ttu&g_ep=EgoyMDI0MDkwOS4wIKXMDSoASAFQAw%3D%3D
 
 <script setup>
 import { ref, computed, inject, onBeforeUnmount, nextTick, watch } from 'vue';
@@ -194,7 +193,6 @@ import BaseSelectField from "@/components/Forms/BaseSelectField.vue";
 
 // Inyecciones
 const form = inject('form');
-const itemSelected = inject('itemSelected');
 const errors = inject('errors');
 const validateField = inject('validateField');
 const facilityStore = inject('facilityStore');
@@ -229,6 +227,11 @@ const formatFileSize = (bytes) => {
 const getFileFormat = (filename) => filename.split('.').pop().toUpperCase();
 
 const resetFileUpload = () => {
+    // Limpiar URL si existe
+    if (selectedFile.value && form.document_file instanceof File) {
+        URL.revokeObjectURL(getFilePreview.value);
+    }
+    
     selectedFile.value = null;
     selectedFileName.value = '';
     selectedFileSize.value = '';
@@ -237,54 +240,47 @@ const resetFileUpload = () => {
     fileError.value = false;
     form.document_file = null;
     
+    
+    // Limpiar el input de archivo
     if (fileInput.value) {
         fileInput.value.value = '';
+    }
+    
+    // Limpiar el canvas si existe
+    if (pdfCanvas.value) {
+        const context = pdfCanvas.value.getContext('2d');
+        context.clearRect(0, 0, pdfCanvas.value.width, pdfCanvas.value.height);
     }
 };
 
 // Función para cargar archivo existente
 async function loadExistingFile(fileUrl) {
-    if (!fileUrl) return;
+    if (!fileUrl || !fileUrl.toLowerCase().endsWith('.pdf')) return;
 
-    if (fileUrl.toLowerCase().endsWith('.pdf')) {
-        try {
-            // Asegurarse de que la URL sea válida y accesible
-            const formattedUrl = facilityStore.formatImage({ url: fileUrl }, 'facility_documents');
-            
-            // Agregar un timestamp para evitar el caché
-            const urlWithTimestamp = `${formattedUrl}?t=${Date.now()}`;
+    try {
+        // Usar directamente la URL formateada sin crear blobs adicionales
+        const formattedUrl = facilityStore.formatImage({ url: fileUrl }, 'facility_documents');
+        
+        // Cargar el PDF directamente desde la URL
+        const pdf = await getDocument(formattedUrl).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
 
-            // Primero intentar obtener el PDF como blob
-            const response = await fetch(urlWithTimestamp);
-            if (!response.ok) throw new Error('No se pudo cargar el PDF');
-            
-            const pdfBlob = await response.blob();
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-
-            // Cargar el PDF desde el blob
-            const pdf = await getDocument(pdfUrl).promise;
-            const page = await pdf.getPage(1);
-            const viewport = page.getViewport({ scale: 1.5 });
-
-            await nextTick();
-            const canvas = pdfCanvas.value;
-            if (canvas) {
-                const context = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                await page.render({ canvasContext: context, viewport }).promise;
-            }
-
-            // Limpiar el URL creado
-            URL.revokeObjectURL(pdfUrl);
-        } catch (error) {
-            console.error('Error al cargar el PDF:', error);
-            fileError.value = true;
-            // Resetear el canvas si hay error
-            if (pdfCanvas.value) {
-                const context = pdfCanvas.value.getContext('2d');
-                context.clearRect(0, 0, pdfCanvas.value.width, pdfCanvas.value.height);
-            }
+        await nextTick();
+        const canvas = pdfCanvas.value;
+        if (canvas) {
+            const context = canvas.getContext('2d');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            await page.render({ canvasContext: context, viewport }).promise;
+        }
+    } catch (error) {
+        console.error('Error al cargar el PDF:', error);
+        fileError.value = true;
+        // Limpiar el canvas si hay error
+        if (pdfCanvas.value) {
+            const context = pdfCanvas.value.getContext('2d');
+            context.clearRect(0, 0, pdfCanvas.value.width, pdfCanvas.value.height);
         }
     }
 }
@@ -299,51 +295,68 @@ const handleFileUpload = async (event) => {
     const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
     if (!validTypes.includes(file.type)) {
         fileError.value = true;
-        fileInput.value.value = ''; // Limpiar input
+        if (fileInput.value) fileInput.value.value = ''; // Limpiar input
         return;
     }
 
-    // Validación de tamaño
+    // Validación de tamaño (10MB)
     if (file.size > 10 * 1024 * 1024) {
         fileError.value = true;
-        fileInput.value.value = ''; // Limpiar input
+        if (fileInput.value) fileInput.value.value = ''; // Limpiar input
         return;
     }
 
-    selectedFile.value = file;
-    selectedFileName.value = file.name.split('.')[0];
-    selectedFileSize.value = formatFileSize(file.size);
-    selectedFileFormat.value = getFileFormat(file.name);
-    fileUploaded.value = true;
-    form.document_file = file;
+    try {
+        selectedFile.value = file;
+        selectedFileName.value = file.name.split('.')[0];
+        selectedFileSize.value = formatFileSize(file.size);
+        selectedFileFormat.value = getFileFormat(file.name);
+        fileUploaded.value = true;
+        form.document_file = file;
 
-    // Renderizar PDF si corresponde
-    if (file.type === 'application/pdf') {
-        const fileURL = URL.createObjectURL(file);
-        const pdf = await getDocument(fileURL).promise;
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1.5 });
+        // Renderizar PDF si corresponde
+        if (file.type === 'application/pdf') {
+            const fileURL = URL.createObjectURL(file);
+            try {
+                const pdf = await getDocument(fileURL).promise;
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 1.5 });
 
-        await nextTick();
-        const canvas = pdfCanvas.value;
-        if (!canvas) return;
-
-        const context = canvas.getContext('2d');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        await page.render({ canvasContext: context, viewport }).promise;
+                await nextTick();
+                const canvas = pdfCanvas.value;
+                if (canvas) {
+                    const context = canvas.getContext('2d');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    await page.render({ canvasContext: context, viewport }).promise;
+                }
+            } finally {
+                // Limpiar el URL temporal
+                URL.revokeObjectURL(fileURL);
+            }
+        }
+    } catch (error) {
+        console.error('Error al procesar el archivo:', error);
+        fileError.value = true;
+        resetFileUpload();
     }
 };
 
-// Watch para actualizar el estado cuando cambia document_file
-watch(() => form.document_file, (newValue) => {
+// Watch para actualizar el estado cuando cambia document_file - MEJORADO
+watch(() => form.document_file, (newValue, oldValue) => {
+    // Evitar loops infinitos
+    if (newValue === oldValue) return;
+    
     if (newValue) {
         fileUploaded.value = true;
         if (typeof newValue === 'string') {
             // Es una URL existente
             selectedFileName.value = newValue.split('/').pop().split('.')[0];
             selectedFileFormat.value = newValue.split('.').pop().toUpperCase();
-            loadExistingFile(newValue);
+            // Solo cargar PDF si es diferente al anterior
+            if (newValue !== oldValue) {
+                loadExistingFile(newValue);
+            }
         } else if (newValue instanceof File) {
             // Es un archivo nuevo
             selectedFileName.value = newValue.name.split('.')[0];
@@ -354,6 +367,35 @@ watch(() => form.document_file, (newValue) => {
         resetFileUpload();
     }
 }, { immediate: true });
+
+// Watch para limpiar campos cuando se selecciona "no_add_document"
+watch(() => form.document, (newValue) => {
+    if (newValue === 'no_add_document') {
+        // Limpiar todos los campos relacionados con documentos
+        form.document_file = null;
+        form.text_document_button = null;
+        form.link_document_url = null;
+        
+        // Limpiar el estado del archivo
+        selectedFile.value = null;
+        selectedFileName.value = '';
+        selectedFileSize.value = '';
+        selectedFileFormat.value = '';
+        fileUploaded.value = false;
+        fileError.value = false;
+        
+        // Limpiar el input de archivo
+        if (fileInput.value) {
+            fileInput.value.value = '';
+        }
+        
+        // Limpiar el canvas si existe
+        if (pdfCanvas.value) {
+            const context = pdfCanvas.value.getContext('2d');
+            context.clearRect(0, 0, pdfCanvas.value.width, pdfCanvas.value.height);
+        }
+    }
+});
 
 // Computed properties
 const getFilePreview = computed(() => {
@@ -366,8 +408,10 @@ const getFilePreview = computed(() => {
     return '';
 });
 
+// Cleanup mejorado
 onBeforeUnmount(() => {
-    if (selectedFile.value) {
+    // Limpiar todos los URLs creados
+    if (selectedFile.value && form.document_file instanceof File) {
         URL.revokeObjectURL(getFilePreview.value);
     }
 });

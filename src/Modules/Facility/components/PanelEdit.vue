@@ -65,7 +65,7 @@
                     </button>
                     <button
                         class="hbtn-cta px-4 py-3 font-medium rounded-[6px] leading-[110%]"
-                        :disabled="formInvalid || !changesform || isLoadingForm"
+                        :disabled="formInvalid || !changesform || isLoadingForm || !isFormValid"
                         @click="submitSave"
                     >
                         Guardar
@@ -127,7 +127,7 @@
 
 
 <script setup>
-import { ref, reactive, onMounted, provide, computed, toRefs, inject, nextTick } from 'vue';
+import { ref, reactive, provide, computed, inject, nextTick, defineEmits, defineExpose } from 'vue';
 import lodash from 'lodash';
 
 // COMPONENTS
@@ -136,13 +136,10 @@ import PanelEditFormInformation from './PanelEditFormInformation.vue';
 import PanelEditFormSchedule from './PanelEditFormSchedule.vue';
 import PanelEditFormPhotos from './PanelEditFormPhotos.vue';
 import ModalDeleteFacility from './ModalDeleteFacility.vue';
-import ModalCancelChangeFacility from './ModalCancelChangeFacility.vue';
 import ModalNoSave from '@/components/ModalNoSave.vue';
 import ModalGallery from "@/components/ModalGallery.vue";
 
-
 import { useFormValidation } from '@/composables/useFormValidation'
-import * as rules from '@/utils/rules';
 
 import { useUserStore } from '@/stores/modules/users/users'
 const userStore = useUserStore();
@@ -218,9 +215,7 @@ const modalChangePendinginForm = inject('modalChangePendinginForm');
 const modelActive = inject('modelActive');
 const hotelStore = inject('hotelStore');
 const facilityStore = inject('facilityStore');
-const mockupStore = inject('mockupStore');
 const toast = inject('toast');
-const hotelData = inject('hotelData');
 
 
 const form = reactive({
@@ -308,15 +303,8 @@ const changesform = computed(() => {
         }
     }
 
-    // Validar campos adicionales solo si no es "no_add_document"
-    if (form.document !== 'no_add_document') {
-        if (form.document === 'link_document') {
-            valid = valid && form.link_document_url && form.text_document_button;
-        } else if (form.document === 'upload_file') {
-            // Asegurarse de que haya un archivo y texto del botón
-            valid = valid && form.document_file && form.text_document_button;
-        }
-    }
+    // Los campos adicionales no afectan la detección de cambios
+    // Solo verificamos si hay cambios, no si son válidos
 
     changePendingInForm.value = valid;
     return valid;
@@ -327,40 +315,25 @@ const isFormValid = computed(() => {
 
     if (form.document !== 'no_add_document') {
         if (form.document === 'link_document') {
-            valid = valid && form.link_document_url && form.text_document_button;
+            // Validar que la URL y el texto del botón no estén vacíos
+            valid = valid && 
+                    form.link_document_url && 
+                    form.link_document_url.trim() && 
+                    form.text_document_button && 
+                    form.text_document_button.trim();
         } else if (form.document === 'upload_file') {
             // Validar que exista tanto el archivo como el texto del botón
-            valid = valid && form.document_file && form.text_document_button;
+            valid = valid && 
+                    form.document_file && 
+                    form.text_document_button && 
+                    form.text_document_button.trim();
         }
     }
 
     return valid;
 });
 
-function toRawObject(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-function deepEqual(obj1, obj2) {
-  if (obj1 === obj2) return true;
-
-  if (typeof obj1 !== 'object' || obj1 === null ||
-      typeof obj2 !== 'object' || obj2 === null) {
-    return false;
-  }
-
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-
-  if (keys1.length !== keys2.length) return false;
-
-  for (let key of keys1) {
-    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
-      return false;
-    }
-  }
-
-  return true;
-}
+// Funciones auxiliares eliminadas - no utilizadas
 
 // FUNCTION
 function prevTab () {
@@ -392,7 +365,7 @@ function editFacility ({action, facility}) {
     if (action === 'EDIT') {
         let { id, title, description, schedule, schedules, images, select, ad_tag, always_open, document, document_file, text_document_button, link_document_url } = facility;
         let schedulesNew = [];
-        if (!!schedules) {
+        if (schedules) {
             let scheduleFormated = JSON.parse(schedules);
             if (scheduleFormated?.length != 7) {
                 schedulesNew = [...schedulesDefault];
@@ -504,9 +477,7 @@ async function submitDeleteFacility () {
         toast.warningToast(data?.message,'top-right');
     }
 }
-function openModalCancel () {
-    modalCancelChangeFacilityRef.value.openModal();
-}
+// Función openModalCancel eliminada - no utilizada
 const normalize = (value) => {
     return value === "" || value === null || value === undefined ? null : value;
 }
