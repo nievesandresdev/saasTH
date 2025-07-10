@@ -76,7 +76,7 @@
               <button class="text-base font-semibold leading-[110%] underline ml-auto mt-auto" v-if="report">
                 Ver la estancia
               </button>
-              <a v-if="!report && data.period !== 'pre-stay'" class="text-sm font-medium leading-[110%]  ml-auto mt-auto underline hover:underline focus:underline" :href="`mailto:${data.guest.email}`">
+              <a v-if="!report && data.period !== 'pre-stay' && !isComponent" class="text-sm font-medium leading-[110%]  ml-auto mt-auto underline hover:underline focus:underline" :href="`mailto:${data.guest.email}`">
                   Responder al huésped
               </a>
             </div>
@@ -101,6 +101,10 @@ const props = defineProps({
     default: null
   },
   report: {
+    type: Boolean,
+    default: false
+  },
+  isComponent: {
     type: Boolean,
     default: false
   }
