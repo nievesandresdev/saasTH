@@ -18,6 +18,7 @@
                 </template>
             </Tooltip>
         </div>
+        
         <div class="flex items-center gap-2">
             <p class="text-sm font-semibold">Mostrar en la WebApp</p>
             <ToggleButton
