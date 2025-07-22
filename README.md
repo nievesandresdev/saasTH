@@ -8,6 +8,7 @@
   - `Laravel` (API REST con Service Layer)
 
 - **Features Destacadas**:
+  - ✅ **Dashboard con resumen estadisticos sobre reviews,feedback y reputacion en cada ota** 
   - ✅ **Diseño Personalizado** dentro de esta web el operador puede personalizar, la home en gran parte, ademas de dar colores personalizados a distintos elementos de la webapp.
   - ✅ **Gestion por Estancias** posee una seccion que lista las estancias y provee chats por cada huesped y control de seguimiento de cada feedback del huesped.
   - ✅ **Muchas mas opciones** edicion de info y diferentes secciones a mostrar en webapp.
